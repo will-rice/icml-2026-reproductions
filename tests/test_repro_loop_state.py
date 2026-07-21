@@ -131,6 +131,7 @@ def test_select_paper_records_estimated_cost_without_mutating_state():
     assert selected["current"] == {
         **paper,
         "project_path": "submissions/reliable-reproductions",
+        "polls": [],
     }
 
 
@@ -316,6 +317,30 @@ def test_cli_initializes_shows_selects_and_transitions_state(tmp_path: Path):
     assert json.loads(run_cli("show", str(path)).stdout)["phase"] == "design-pending"
 
 
+def test_cli_updates_current_without_changing_phase(tmp_path: Path):
+    path = tmp_path / "repro-loop.json"
+    run_cli("init", str(path))
+    run_cli("select", str(path), json.dumps(paper()))
+
+    updated = json.loads(
+        run_cli(
+            "update",
+            str(path),
+            json.dumps(
+                {
+                    "last_poll_at": "2026-07-21T18:00:00Z",
+                    "last_poll_status": "pending",
+                    "external_ids": {"submission": "submission-123"},
+                }
+            ),
+        ).stdout
+    )
+
+    assert updated["phase"] == "selected"
+    assert updated["current"]["last_poll_status"] == "pending"
+    assert state_module().load_state(path) == updated
+
+
 def test_cli_init_creates_parent_directory(tmp_path: Path):
     path = tmp_path / "state" / "repro-loop.json"
 
@@ -395,6 +420,315 @@ def test_transition_rejects_estimated_cost_change_after_selection():
             "validated",
             estimated_api_cost_usd=4.0,
         )
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("polls", []),
+        ("last_poll_at", "2026-07-21T18:00:00Z"),
+        ("last_poll_status", "pending"),
+        ("external_ids", {"submission": "submission-123"}),
+    ],
+)
+def test_transition_rejects_operational_field_updates(field: str, value: object):
+    module = state_module()
+
+    with pytest.raises(ValueError, match=field):
+        module.transition(
+            state_in_phase(module, "selected"),
+            "design-pending",
+            **{field: value},
+        )
+
+
+def test_update_current_persists_poll_cost_and_external_ids():
+    module = state_module()
+    state = state_in_phase(module, "judging")
+    external_ids = {"submission": "submission-123", "judge": "judge-456"}
+    identity = {
+        field: state["current"][field]
+        for field in ("paper_id", "title", "slug", "project_path")
+    }
+
+    updated = module.update_current(
+        state,
+        actual_api_cost_usd=2.5,
+        last_poll_at="2026-07-21T18:00:00Z",
+        last_poll_status="pending",
+        external_ids=external_ids,
+    )
+    external_ids["judge"] = "changed"
+
+    assert updated["phase"] == "judging"
+    assert {field: updated["current"][field] for field in identity} == identity
+    assert updated["current"]["actual_api_cost_usd"] == 2.5
+    assert updated["current"]["last_poll_at"] == "2026-07-21T18:00:00Z"
+    assert updated["current"]["last_poll_status"] == "pending"
+    assert updated["current"]["polls"] == [
+        {"at": "2026-07-21T18:00:00Z", "status": "pending"}
+    ]
+    assert updated["current"]["external_ids"] == {
+        "submission": "submission-123",
+        "judge": "judge-456",
+    }
+    assert state["current"].get("actual_api_cost_usd") is None
+
+
+def test_update_current_retains_two_polls_in_order():
+    module = state_module()
+    state = state_in_phase(module, "judging")
+
+    first = module.update_current(
+        state,
+        last_poll_at="2026-07-21T18:00:00Z",
+        last_poll_status="pending",
+    )
+    second = module.update_current(
+        first,
+        last_poll_at="2026-07-21T18:05:00Z",
+        last_poll_status="accepted",
+    )
+
+    assert second["current"]["polls"] == [
+        {"at": "2026-07-21T18:00:00Z", "status": "pending"},
+        {"at": "2026-07-21T18:05:00Z", "status": "accepted"},
+    ]
+    assert second["current"]["last_poll_at"] == "2026-07-21T18:05:00Z"
+    assert second["current"]["last_poll_status"] == "accepted"
+
+
+def test_update_current_merges_external_ids_across_updates():
+    module = state_module()
+    state = state_in_phase(module, "judging")
+
+    first = module.update_current(
+        state, external_ids={"submission": "submission-123"}
+    )
+    second = module.update_current(first, external_ids={"judge": "judge-456"})
+
+    assert second["current"]["external_ids"] == {
+        "submission": "submission-123",
+        "judge": "judge-456",
+    }
+
+
+def test_update_current_rejects_conflicting_external_id():
+    module = state_module()
+    state = module.update_current(
+        state_in_phase(module, "judging"),
+        external_ids={"submission": "submission-123"},
+    )
+
+    with pytest.raises(ValueError, match="external_ids"):
+        module.update_current(
+            state, external_ids={"submission": "different-submission"}
+        )
+
+
+@pytest.mark.parametrize("field", ["last_poll_at", "last_poll_status"])
+def test_update_current_requires_both_poll_fields(field: str):
+    module = state_module()
+    updates = {
+        "last_poll_at": "2026-07-21T18:00:00Z",
+        "last_poll_status": "pending",
+    }
+    updates.pop(field)
+
+    with pytest.raises(ValueError, match=field):
+        module.update_current(state_in_phase(module, "judging"), **updates)
+
+
+@pytest.mark.parametrize("value", [3.0, 10.01, float("nan"), "4.0"])
+def test_update_current_rejects_invalid_actual_cost(value: object):
+    module = state_module()
+    state = module.update_current(
+        state_in_phase(module, "judging"), actual_api_cost_usd=4.0
+    )
+
+    with pytest.raises(ValueError, match="actual_api_cost_usd"):
+        module.update_current(state, actual_api_cost_usd=value)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("phase", "complete"),
+        ("paper_id", "icml-2026-999"),
+        ("title", "Changed Title"),
+        ("slug", "changed-title"),
+        ("project_path", "submissions/changed-title"),
+        ("estimated_api_cost_usd", 1.0),
+        ("design_approved", True),
+        ("deployed_sha", "def456"),
+        ("space_id", "org/other-reproduction"),
+        ("verdict", "accepted"),
+    ],
+)
+def test_update_current_rejects_non_persistence_fields(field: str, value: object):
+    module = state_module()
+
+    with pytest.raises(ValueError, match=field):
+        module.update_current(state_in_phase(module, "judging"), **{field: value})
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("last_poll_at", 123),
+        ("last_poll_status", None),
+        ("external_ids", []),
+        ("external_ids", {}),
+        ("external_ids", {"": "submission-123"}),
+        ("external_ids", {"submission": ""}),
+        ("external_ids", {"submission": 123}),
+    ],
+)
+def test_update_current_rejects_invalid_persistence_values(
+    field: str, value: object
+):
+    module = state_module()
+    updates = {field: value}
+    if field == "last_poll_at":
+        updates["last_poll_status"] = "pending"
+    elif field == "last_poll_status":
+        updates["last_poll_at"] = "2026-07-21T18:00:00Z"
+
+    with pytest.raises(ValueError, match=field):
+        module.update_current(state_in_phase(module, "judging"), **updates)
+
+
+def test_update_current_rejects_idle_state():
+    module = state_module()
+
+    with pytest.raises(ValueError, match="current"):
+        module.update_current(module.new_state(), last_poll_status="pending")
+
+
+@pytest.mark.parametrize(
+    "polls",
+    [
+        {},
+        [{}],
+        [{"at": "", "status": "pending"}],
+        [{"at": "2026-07-21T18:00:00Z", "status": ""}],
+        [{"at": "2026-07-21T18:00:00Z", "status": "pending", "extra": "x"}],
+    ],
+)
+@pytest.mark.parametrize("operation", ["save", "load"])
+def test_persisted_state_rejects_malformed_polls(
+    polls: object, operation: str, tmp_path: Path
+):
+    module = state_module()
+    state = module.select_paper(module.new_state(), paper())
+    state["current"]["polls"] = polls
+    path = tmp_path / "repro-loop.json"
+
+    if operation == "save":
+        with pytest.raises(ValueError, match="polls"):
+            module.save_state(path, state)
+    else:
+        path.write_text(json.dumps(state), encoding="utf-8")
+        with pytest.raises(ValueError, match="polls"):
+            module.load_state(path)
+
+
+@pytest.mark.parametrize(
+    ("polls", "last_values", "field"),
+    [
+        (
+            [],
+            {
+                "last_poll_at": "2026-07-21T18:00:00Z",
+                "last_poll_status": "pending",
+            },
+            "last_poll_at",
+        ),
+        (
+            [{"at": "2026-07-21T18:00:00Z", "status": "pending"}],
+            {
+                "last_poll_at": "2026-07-21T18:05:00Z",
+                "last_poll_status": "pending",
+            },
+            "last_poll_at",
+        ),
+        (
+            [{"at": "2026-07-21T18:00:00Z", "status": "pending"}],
+            {
+                "last_poll_at": "2026-07-21T18:00:00Z",
+                "last_poll_status": "accepted",
+            },
+            "last_poll_status",
+        ),
+        (
+            [{"at": "2026-07-21T18:00:00Z", "status": "pending"}],
+            {"last_poll_at": "2026-07-21T18:00:00Z"},
+            "last_poll_status",
+        ),
+    ],
+)
+@pytest.mark.parametrize("operation", ["save", "load"])
+def test_persisted_state_rejects_last_poll_mismatch(
+    polls: list[dict[str, str]],
+    last_values: dict[str, str],
+    field: str,
+    operation: str,
+    tmp_path: Path,
+):
+    module = state_module()
+    state = module.select_paper(module.new_state(), paper())
+    state["current"]["polls"] = polls
+    state["current"].update(last_values)
+    path = tmp_path / "repro-loop.json"
+
+    if operation == "save":
+        with pytest.raises(ValueError, match=field):
+            module.save_state(path, state)
+    else:
+        path.write_text(json.dumps(state), encoding="utf-8")
+        with pytest.raises(ValueError, match=field):
+            module.load_state(path)
+
+
+def test_persisted_state_accepts_polls_without_last_values(tmp_path: Path):
+    module = state_module()
+    state = module.select_paper(module.new_state(), paper())
+    state["current"]["polls"] = [
+        {"at": "2026-07-21T18:00:00Z", "status": "pending"}
+    ]
+    path = tmp_path / "repro-loop.json"
+
+    module.save_state(path, state)
+
+    assert module.load_state(path) == state
+
+
+@pytest.mark.parametrize(
+    "external_ids",
+    [
+        [],
+        {},
+        {"": "submission-123"},
+        {"submission": ""},
+        {"submission": 123},
+    ],
+)
+@pytest.mark.parametrize("operation", ["save", "load"])
+def test_persisted_state_rejects_malformed_external_ids(
+    external_ids: object, operation: str, tmp_path: Path
+):
+    module = state_module()
+    state = module.select_paper(module.new_state(), paper())
+    state["current"]["external_ids"] = external_ids
+    path = tmp_path / "repro-loop.json"
+
+    if operation == "save":
+        with pytest.raises(ValueError, match="external_ids"):
+            module.save_state(path, state)
+    else:
+        path.write_text(json.dumps(state), encoding="utf-8")
+        with pytest.raises(ValueError, match="external_ids"):
+            module.load_state(path)
 
 
 @pytest.mark.parametrize(

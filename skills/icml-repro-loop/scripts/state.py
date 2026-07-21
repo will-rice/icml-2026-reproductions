@@ -26,6 +26,13 @@ PHASES = {
 STATE_KEYS = {"version", "phase", "current", "history", "total_api_cost_usd"}
 IMMUTABLE_PAPER_FIELDS = {"paper_id", "title", "slug", "project_path"}
 PAPER_COST_FIELDS = {"estimated_api_cost_usd", "actual_api_cost_usd"}
+CURRENT_UPDATE_FIELDS = {
+    "actual_api_cost_usd",
+    "last_poll_at",
+    "last_poll_status",
+    "external_ids",
+}
+OPERATIONAL_FIELDS = {"polls", "last_poll_at", "last_poll_status", "external_ids"}
 SLUG_PATTERN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 ALLOWED = {
     "idle": {"selected"},
@@ -52,6 +59,9 @@ def main() -> None:
     select_parser = commands.add_parser("select")
     select_parser.add_argument("path", type=Path)
     select_parser.add_argument("paper_json")
+    update_parser = commands.add_parser("update")
+    update_parser.add_argument("path", type=Path)
+    update_parser.add_argument("updates_json")
     transition_parser = commands.add_parser("transition")
     transition_parser.add_argument("path", type=Path)
     transition_parser.add_argument("phase", choices=sorted(PHASES))
@@ -67,6 +77,11 @@ def main() -> None:
         state = load_state(arguments.path)
     elif arguments.command == "select":
         state = select_paper(load_state(arguments.path), json.loads(arguments.paper_json))
+        save_state(arguments.path, state)
+    elif arguments.command == "update":
+        state = update_current(
+            load_state(arguments.path), **json.loads(arguments.updates_json)
+        )
         save_state(arguments.path, state)
     else:
         state = transition(
@@ -140,6 +155,7 @@ def select_paper(state: dict, paper: dict) -> dict:
     current = copy.deepcopy(paper)
     current.setdefault("estimated_api_cost_usd", 0.0)
     current["project_path"] = f"submissions/{current['slug']}"
+    current["polls"] = []
     validate_paper_costs(current)
     if any(
         completed.get("project_path") == current["project_path"]
@@ -163,6 +179,9 @@ def transition(state: dict, phase: str, **updates: object) -> dict:
         or phase not in ALLOWED[state["phase"]]
     ):
         raise ValueError("phase")
+    operational_updates = set(updates) & OPERATIONAL_FIELDS
+    if operational_updates:
+        raise ValueError(sorted(operational_updates)[0])
     if state["phase"] == "idle":
         return select_paper(state, updates)
 
@@ -212,6 +231,61 @@ def transition(state: dict, phase: str, **updates: object) -> dict:
     transitioned["phase"] = phase
     validate_state(transitioned)
     return transitioned
+
+
+def update_current(state: dict, **updates: object) -> dict:
+    """Return a copied state with allowed same-phase persistence updates."""
+    validate_state(state)
+    if state["current"] is None:
+        raise ValueError("current")
+    unsupported_fields = set(updates) - CURRENT_UPDATE_FIELDS
+    if unsupported_fields:
+        raise ValueError(sorted(unsupported_fields)[0])
+    has_poll_at = "last_poll_at" in updates
+    has_poll_status = "last_poll_status" in updates
+    if has_poll_at != has_poll_status:
+        missing_field = "last_poll_status" if has_poll_at else "last_poll_at"
+        raise ValueError(missing_field)
+    if has_poll_at:
+        for field in ("last_poll_at", "last_poll_status"):
+            if type(updates[field]) is not str or not updates[field]:
+                raise ValueError(field)
+
+    updated = copy.deepcopy(state)
+    current = updated["current"]
+    if "actual_api_cost_usd" in updates:
+        current["actual_api_cost_usd"] = copy.deepcopy(
+            updates["actual_api_cost_usd"]
+        )
+    if has_poll_at:
+        poll = {
+            "at": updates["last_poll_at"],
+            "status": updates["last_poll_status"],
+        }
+        validate_polls([poll])
+        current.setdefault("polls", []).append(copy.deepcopy(poll))
+        current["last_poll_at"] = poll["at"]
+        current["last_poll_status"] = poll["status"]
+    if "external_ids" in updates:
+        external_ids = updates["external_ids"]
+        validate_external_ids(external_ids)
+        persisted_ids = current.setdefault("external_ids", {})
+        if any(
+            key in persisted_ids and persisted_ids[key] != value
+            for key, value in external_ids.items()
+        ):
+            raise ValueError("external_ids")
+        persisted_ids.update(copy.deepcopy(external_ids))
+
+    validate_state(updated)
+    if (
+        "actual_api_cost_usd" in updates
+        and "actual_api_cost_usd" in state["current"]
+        and updated["current"]["actual_api_cost_usd"]
+        < state["current"]["actual_api_cost_usd"]
+    ):
+        raise ValueError("actual_api_cost_usd")
+    return updated
 
 
 def validate_state(state: dict) -> None:
@@ -280,6 +354,50 @@ def validate_paper_record(
         if paper["space_id"] in space_ids:
             raise ValueError("space_id")
         space_ids.add(paper["space_id"])
+    polls = paper.get("polls", [])
+    validate_polls(polls)
+    has_poll_at = "last_poll_at" in paper
+    has_poll_status = "last_poll_status" in paper
+    if has_poll_at != has_poll_status:
+        missing_field = "last_poll_status" if has_poll_at else "last_poll_at"
+        raise ValueError(missing_field)
+    for field in ("last_poll_at", "last_poll_status"):
+        if field in paper and (type(paper[field]) is not str or not paper[field]):
+            raise ValueError(field)
+    if has_poll_at and not polls:
+        raise ValueError("last_poll_at")
+    if has_poll_at and paper["last_poll_at"] != polls[-1]["at"]:
+        raise ValueError("last_poll_at")
+    if has_poll_status and paper["last_poll_status"] != polls[-1]["status"]:
+        raise ValueError("last_poll_status")
+    if "external_ids" in paper:
+        validate_external_ids(paper["external_ids"])
+
+
+def validate_polls(polls: object) -> None:
+    """Raise ValueError unless polls are exact nonempty string records."""
+    if type(polls) is not list or any(
+        type(poll) is not dict
+        or set(poll) != {"at", "status"}
+        or type(poll["at"]) is not str
+        or not poll["at"]
+        or type(poll["status"]) is not str
+        or not poll["status"]
+        for poll in polls
+    ):
+        raise ValueError("polls")
+
+
+def validate_external_ids(external_ids: object) -> None:
+    """Raise ValueError unless external IDs are nonempty strings."""
+    if type(external_ids) is not dict or not external_ids or any(
+        type(key) is not str
+        or not key
+        or type(value) is not str
+        or not value
+        for key, value in external_ids.items()
+    ):
+        raise ValueError("external_ids")
 
 
 if __name__ == "__main__":
