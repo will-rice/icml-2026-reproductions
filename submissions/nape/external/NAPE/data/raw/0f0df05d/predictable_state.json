@@ -1,0 +1,1746 @@
+{
+  "trajectory_name": "0f0df05d",
+  "predictable_count": 1230,
+  "final_state_size": 1392,
+  "coverage_pct": 88.36,
+  "predictable_properties": {
+    "Sheet1": {
+      "A10": [
+        "value"
+      ],
+      "A11": [
+        "value"
+      ],
+      "A12": [
+        "value"
+      ],
+      "A13": [
+        "value"
+      ],
+      "A14": [
+        "value"
+      ],
+      "A15": [
+        "value"
+      ],
+      "A16": [
+        "value"
+      ],
+      "A17": [
+        "value"
+      ],
+      "A18": [
+        "value"
+      ],
+      "A19": [
+        "value"
+      ],
+      "A20": [
+        "value"
+      ],
+      "A4": [
+        "value"
+      ],
+      "A5": [
+        "value"
+      ],
+      "A6": [
+        "value"
+      ],
+      "A7": [
+        "value"
+      ],
+      "A8": [
+        "value"
+      ],
+      "A9": [
+        "value"
+      ],
+      "B1": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B13": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B15": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B16": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B17": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B18": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B19": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B2": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "B20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B22": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B23": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B24": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B25": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B26": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B3": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B30": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B31": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B32": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B33": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B34": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B35": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B36": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B37": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B38": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "B9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "C10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C13": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C15": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C16": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C17": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C18": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C19": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C22": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C23": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C24": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C25": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C26": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C3": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C30": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C31": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C32": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C33": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C34": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C35": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C36": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C37": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C38": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C39": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C40": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C41": [
+        "Format.horizontalAlignment",
+        "merged_cells"
+      ],
+      "C5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "C9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "D10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D13": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D15": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D16": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D17": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D18": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D19": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D22": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D23": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D24": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D25": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D26": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D3": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D30": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D31": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D32": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D33": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D34": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D35": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D36": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D37": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D38": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D39": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D40": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D41": [
+        "merged_cells"
+      ],
+      "D5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "E10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E13": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E15": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E16": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E17": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E18": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E19": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E2": [
+        "Format.horizontalAlignment"
+      ],
+      "E20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E22": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E23": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E24": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E25": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E26": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E3": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E30": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E31": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E32": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E33": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E34": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "E35": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E36": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E37": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E38": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E39": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E40": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "E9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "F10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F13": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F15": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F16": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F17": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F18": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F19": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F2": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F22": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F23": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F24": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "F25": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F26": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F3": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "F30": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F31": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F32": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F33": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F34": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F35": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F36": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "F37": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "F38": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "F39": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "F4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "F40": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "F41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "F5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "F9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G13": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "G14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G15": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G16": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G17": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G18": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G19": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G2": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "G22": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G23": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G24": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G25": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G26": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G3": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G30": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "G31": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G32": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G33": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "G34": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G35": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "G36": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "G37": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "G38": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "G39": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "G4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G40": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment"
+      ],
+      "G41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.horizontalAlignment"
+      ],
+      "G9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.horizontalAlignment",
+        "value"
+      ]
+    }
+  }
+}

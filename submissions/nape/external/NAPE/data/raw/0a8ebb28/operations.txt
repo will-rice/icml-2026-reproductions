@@ -1,0 +1,377 @@
+FONT_SIZE | Sheet1!A1 | 16.0
+ALIGN_HORIZONTAL | Sheet1!A1 | center
+MERGE | Sheet1!A1:O1 | true
+INPUT | Sheet1!A1 | "Degree Completion Plan"
+INPUT | Sheet1!A2 | "First I. Last"
+FONT_BOLD | Sheet1!A1:A2 | True
+FONT_COLOR | Sheet1!A2 | #FF0000
+MERGE | Sheet1!A2:D2 | true
+ALIGN_HORIZONTAL | Sheet1!E2 | center
+FONT_BOLD | Sheet1!E2:F2 | True
+MERGE | Sheet1!F2:J2 | true
+INPUT | Sheet1!F2 | "Estimted Commissioning Date:"
+INPUT | Sheet1!F3 | "Email address:"
+INPUT | Sheet1!F4 | "Major:"
+FONT_BOLD | Sheet1!K2 | True
+ALIGN_HORIZONTAL | Sheet1!K2 | left
+MERGE | Sheet1!K2:L2 | true
+BORDER_ALL | Sheet1!K2:L2 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!M2 | 9.0
+ALIGN_HORIZONTAL | Sheet1!M2 | center
+FONT_BOLD | Sheet1!M2:N2 | True
+WRAP_TEXT | Sheet1!M2:N2 | True
+INPUT | Sheet1!N2 | "                   Validation Date     Member and NROTC Advisor Init"
+FONT_SIZE | Sheet1!N2 | 8.0
+MERGE | Sheet1!N2:P2 | true
+BORDER_ALL | Sheet1!N2:P4 | Thin, Continuous, #000000
+INPUT | Sheet1!B3 | "Student ID:"
+INPUT | Sheet1!C3 | "123-456-789"
+INPUT | Sheet1!B4 | "Option\\Yeargroup:"
+INPUT | Sheet1!C4 | "USMC\\2029"
+FONT_BOLD | Sheet1!B3:C4 | True
+MERGE | Sheet1!C3:D3 | true
+FONT_COLOR | Sheet1!C3:C4 | #FF0000
+ALIGN_HORIZONTAL | Sheet1!C3:C4 | right
+MERGE | Sheet1!F3:I3 | true
+FONT_BOLD | Sheet1!F3:F6 | True
+ALIGN_HORIZONTAL | Sheet1!J3 | center
+MERGE | Sheet1!J3:L3 | true
+FONT_BOLD | Sheet1!J3:J4 | True
+NUMBER_FORMAT | Sheet1!N3 | d-mmm-yy
+MERGE | Sheet1!N3:P3 | true
+ALIGN_HORIZONTAL | Sheet1!N3:N4 | center
+MERGE | Sheet1!C4:D4 | true
+ALIGN_HORIZONTAL | Sheet1!E4 | center
+FONT_BOLD | Sheet1!E4:E49 | True
+ALIGN_HORIZONTAL | Sheet1!G4:H4 | center
+FONT_BOLD | Sheet1!G4:I4 | True
+INPUT | Sheet1!J4 | "Minor: Naval Science (USMC Option)"
+FONT_BOLD | Sheet1!K4 | True
+ALIGN_HORIZONTAL | Sheet1!K4 | left
+MERGE | Sheet1!K4:L4 | true
+MERGE | Sheet1!N4:P4 | true
+FONT_BOLD | Sheet1!A5:A6 | True
+ALIGN_HORIZONTAL | Sheet1!A5:A6 | left
+FONT_BOLD | Sheet1!C5:D6 | True
+FONT_SIZE | Sheet1!K5:P5 | 12.0
+ALIGN_HORIZONTAL | Sheet1!B6:C6 | center
+INPUT | Sheet1!B6 | "Fall Term 2025"
+INPUT | Sheet1!C6 | "Cr"
+INPUT | Sheet1!D6 | "GRADE"
+FILL_COLOR | Sheet1!B6:D6 | #C0C0C0
+FONT_BOLD | Sheet1!B6:B8 | True
+BORDER_ALL | Sheet1!B6:D15 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!F6:G6 | center
+INPUT | Sheet1!F6 | "Wint. Term 2026"
+INPUT | Sheet1!G6 | "Cr"
+INPUT | Sheet1!H6 | "GRADE"
+FILL_COLOR | Sheet1!F6:H6 | #C0C0C0
+BORDER_ALL | Sheet1!F6:H15 | Thin, Continuous, #000000
+FONT_BOLD | Sheet1!G6:P6 | True
+INPUT | Sheet1!J6 | "Spr. Term 2026"
+INPUT | Sheet1!K6 | "Cr"
+INPUT | Sheet1!L6 | "GRADE"
+FILL_COLOR | Sheet1!J6:L6 | #C0C0C0
+ALIGN_HORIZONTAL | Sheet1!J6:L6 | center
+BORDER_ALL | Sheet1!J6:L15 | Thin, Continuous, #000000
+INPUT | Sheet1!N6 | "Su. Term 2026"
+INPUT | Sheet1!O6 | "Cr"
+INPUT | Sheet1!P6 | "GRADE"
+FILL_COLOR | Sheet1!N6:P6 | #C0C0C0
+BORDER_ALL | Sheet1!N6:P15 | Thin, Continuous, #000000
+INPUT | Sheet1!B7 | "[1] NS 111\\\\Intro to Naval Science"
+INPUT | Sheet1!C7 | 3
+ALIGN_HORIZONTAL | Sheet1!C7:D49 | center
+INPUT | Sheet1!F7 | "[2] NS 112\\\\Sea Power and Maritime Affairs I"
+INPUT | Sheet1!G7 | 3
+ALIGN_HORIZONTAL | Sheet1!G7:H49 | center
+FONT_BOLD | Sheet1!I7:I49 | True
+INPUT | Sheet1!J7 | "[3] NS 113\\\\Sea Power and Maritime Affairs II"
+INPUT | Sheet1!K7 | 3
+ALIGN_HORIZONTAL | Sheet1!K7:L44 | center
+FONT_BOLD | Sheet1!M7:M49 | True
+ALIGN_HORIZONTAL | Sheet1!O7:P20 | center
+ALIGN_HORIZONTAL | Sheet1!M8 | right
+FONT_BOLD | Sheet1!A9 | True
+ALIGN_HORIZONTAL | Sheet1!B14:B15 | right
+INPUT | Sheet1!B14 | "Total Credits"
+INPUT | Sheet1!C14 | "=SUM(C7:C13)"
+INPUT | Sheet1!B15 | "CUM CREDIT"
+INPUT | Sheet1!C15 | "=C14"
+FONT_BOLD | Sheet1!B14:D17 | True
+ALIGN_HORIZONTAL | Sheet1!F14:F15 | right
+INPUT | Sheet1!F14 | "Total Credits"
+INPUT | Sheet1!G14 | "=SUM(G7:G13)"
+INPUT | Sheet1!F15 | "CUM CREDIT"
+INPUT | Sheet1!G15 | "=C15+G14"
+FONT_BOLD | Sheet1!F14:H17 | True
+ALIGN_HORIZONTAL | Sheet1!J14:J15 | right
+INPUT | Sheet1!J14 | "Total Credits"
+INPUT | Sheet1!K14 | "=SUM(K7:K13)"
+INPUT | Sheet1!J15 | "CUM CREDIT"
+INPUT | Sheet1!K15 | "=G15+K14"
+FONT_BOLD | Sheet1!J14:L17 | True
+ALIGN_HORIZONTAL | Sheet1!N14:N15 | right
+INPUT | Sheet1!N14 | "Total Credits"
+INPUT | Sheet1!O14 | "=SUM(O7:O13)"
+INPUT | Sheet1!N15 | "CUM CREDIT"
+INPUT | Sheet1!O15 | "=K15+O14"
+FONT_BOLD | Sheet1!N14:P17 | True
+FONT_BOLD | Sheet1!A17 | True
+ALIGN_HORIZONTAL | Sheet1!A17 | left
+ALIGN_HORIZONTAL | Sheet1!B17 | center
+INPUT | Sheet1!B17 | "Fall Term 2026"
+INPUT | Sheet1!C17 | "Cr"
+INPUT | Sheet1!D17 | "GRADE"
+FILL_COLOR | Sheet1!B17:D17 | #C0C0C0
+BORDER_ALL | Sheet1!B17:D26 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!F17 | center
+INPUT | Sheet1!F17 | "Wint. Term 2027"
+INPUT | Sheet1!G17 | "Cr"
+INPUT | Sheet1!H17 | "GRADE"
+FILL_COLOR | Sheet1!F17:H17 | #C0C0C0
+BORDER_ALL | Sheet1!F17:H26 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!J17 | center
+INPUT | Sheet1!J17 | "Spr. Term 2027"
+INPUT | Sheet1!K17 | "Cr"
+INPUT | Sheet1!L17 | "GRADE"
+FILL_COLOR | Sheet1!J17:L17 | #C0C0C0
+BORDER_ALL | Sheet1!J17:L26 | Thin, Continuous, #000000
+INPUT | Sheet1!N17 | "Su. Term 2027"
+INPUT | Sheet1!O17 | "Cr"
+INPUT | Sheet1!P17 | "GRADE"
+FILL_COLOR | Sheet1!N17:P17 | #C0C0C0
+BORDER_ALL | Sheet1!N17:P26 | Thin, Continuous, #000000
+INPUT | Sheet1!B18 | "[4] NS 211\\\\Leadership and Management"
+INPUT | Sheet1!C18 | 5
+WRAP_TEXT | Sheet1!F19 | True
+ALIGN_HORIZONTAL | Sheet1!P21:P49 | center
+ALIGN_HORIZONTAL | Sheet1!I22 | right
+ALIGN_HORIZONTAL | Sheet1!O23:O49 | center
+ALIGN_HORIZONTAL | Sheet1!B25:B26 | right
+INPUT | Sheet1!B25 | "Total Credits"
+INPUT | Sheet1!C25 | "=SUM(C18:C24)"
+INPUT | Sheet1!B26 | "CUM CREDIT"
+INPUT | Sheet1!C26 | "=O15+C25"
+FONT_BOLD | Sheet1!B25:D28 | True
+ALIGN_HORIZONTAL | Sheet1!F25:F26 | right
+INPUT | Sheet1!F25 | "Total Credits"
+INPUT | Sheet1!G25 | "=SUM(G18:G24)"
+INPUT | Sheet1!F26 | "CUM CREDIT"
+INPUT | Sheet1!G26 | "=C26+G25"
+FONT_BOLD | Sheet1!F25:H28 | True
+ALIGN_HORIZONTAL | Sheet1!J25:J26 | right
+INPUT | Sheet1!J25 | "Total Credits"
+INPUT | Sheet1!K25 | "=SUM(K18:K24)"
+INPUT | Sheet1!J26 | "CUM CREDIT"
+INPUT | Sheet1!K26 | "=G26+K25"
+FONT_BOLD | Sheet1!J25:L28 | True
+ALIGN_HORIZONTAL | Sheet1!N25:N26 | right
+INPUT | Sheet1!N25 | "Total Credits"
+INPUT | Sheet1!O25 | "=SUM(O18:O24)"
+INPUT | Sheet1!N26 | "CUM CREDIT"
+INPUT | Sheet1!O26 | "=K26+O25"
+FONT_BOLD | Sheet1!N25:P28 | True
+FONT_SIZE | Sheet1!A27 | 8.0
+ALIGN_HORIZONTAL | Sheet1!A27:A28 | left
+FONT_BOLD | Sheet1!A28 | True
+ALIGN_HORIZONTAL | Sheet1!B28 | center
+INPUT | Sheet1!B28 | "Fall Term 2027"
+INPUT | Sheet1!C28 | "Cr"
+INPUT | Sheet1!D28 | "GRADE"
+FILL_COLOR | Sheet1!B28:D28 | #C0C0C0
+BORDER_ALL | Sheet1!B28:D37 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!F28 | center
+INPUT | Sheet1!F28 | "Wint. Term 2028"
+INPUT | Sheet1!G28 | "Cr"
+INPUT | Sheet1!H28 | "GRADE"
+FILL_COLOR | Sheet1!F28:H28 | #C0C0C0
+BORDER_ALL | Sheet1!F28:H37 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!J28 | center
+INPUT | Sheet1!J28 | "Spr. Term 2028"
+INPUT | Sheet1!K28 | "Cr"
+INPUT | Sheet1!L28 | "GRADE"
+FILL_COLOR | Sheet1!J28:L28 | #C0C0C0
+BORDER_ALL | Sheet1!J28:L37 | Thin, Continuous, #000000
+INPUT | Sheet1!N28 | "Su. Term 2028"
+INPUT | Sheet1!O28 | "Cr"
+INPUT | Sheet1!P28 | "GRADE"
+FILL_COLOR | Sheet1!N28:P28 | #C0C0C0
+BORDER_ALL | Sheet1!N28:P37 | Thin, Continuous, #000000
+INPUT | Sheet1!B29 | "[5] NS 321\\\\Evolution of Warfare"
+INPUT | Sheet1!C29 | 5
+INPUT | Sheet1!J29 | "[6] NS 323\\\\Marine Corps Option"
+INPUT | Sheet1!K29 | 3
+ALIGN_HORIZONTAL | Sheet1!B36:B37 | right
+INPUT | Sheet1!B36 | "Total Credits"
+INPUT | Sheet1!C36 | "=SUM(C29:C35)"
+INPUT | Sheet1!B37 | "CUM CREDIT"
+INPUT | Sheet1!C37 | "=O26+C36"
+FONT_BOLD | Sheet1!B36:D39 | True
+ALIGN_HORIZONTAL | Sheet1!F36:F37 | right
+INPUT | Sheet1!F36 | "Total Credits"
+INPUT | Sheet1!G36 | "=SUM(G29:G35)"
+INPUT | Sheet1!F37 | "CUM CREDIT"
+INPUT | Sheet1!G37 | "=C37+G36"
+FONT_BOLD | Sheet1!F36:H39 | True
+ALIGN_HORIZONTAL | Sheet1!J36:J37 | right
+INPUT | Sheet1!J36 | "Total Credits"
+INPUT | Sheet1!K36 | "=SUM(K29:K35)"
+INPUT | Sheet1!J37 | "CUM CREDIT"
+INPUT | Sheet1!K37 | "=G37+K36"
+FONT_BOLD | Sheet1!J36:L39 | True
+ALIGN_HORIZONTAL | Sheet1!N36:N37 | right
+INPUT | Sheet1!N36 | "Total Credits"
+INPUT | Sheet1!O36 | "=SUM(O29:O35)"
+INPUT | Sheet1!N37 | "CUM CREDIT"
+INPUT | Sheet1!O37 | "=K37+O36"
+FONT_BOLD | Sheet1!N36:P39 | True
+FONT_BOLD | Sheet1!A39 | True
+ALIGN_HORIZONTAL | Sheet1!A39 | left
+ALIGN_HORIZONTAL | Sheet1!B39 | center
+INPUT | Sheet1!B39 | "Fall Term 2028"
+INPUT | Sheet1!C39 | "Cr"
+INPUT | Sheet1!D39 | "GRADE"
+FILL_COLOR | Sheet1!B39:D39 | #C0C0C0
+BORDER_ALL | Sheet1!B39:D48 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!F39 | center
+INPUT | Sheet1!F39 | "Wint. Term 2029"
+INPUT | Sheet1!G39 | "Cr"
+INPUT | Sheet1!H39 | "GRADE"
+FILL_COLOR | Sheet1!F39:H39 | #C0C0C0
+BORDER_ALL | Sheet1!F39:H48 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!J39 | center
+INPUT | Sheet1!J39 | "Spr. Term 2029"
+INPUT | Sheet1!K39 | "Cr"
+INPUT | Sheet1!L39 | "GRADE"
+FILL_COLOR | Sheet1!J39:L39 | #C0C0C0
+BORDER_ALL | Sheet1!J39:L48 | Thin, Continuous, #000000
+INPUT | Sheet1!N39 | "Su. Term 2029"
+INPUT | Sheet1!O39 | "Cr"
+INPUT | Sheet1!P39 | "GRADE"
+FILL_COLOR | Sheet1!N39:P39 | #C0C0C0
+BORDER_ALL | Sheet1!N39:P48 | Thin, Continuous, #000000
+INPUT | Sheet1!F40 | "[7] NS 421\\\\Fundamentals of Maneuver Warfare"
+INPUT | Sheet1!G40 | 5
+INPUT | Sheet1!J40 | "[8] NS 413 \\\\Leadership and Ethics"
+INPUT | Sheet1!K40 | 4
+ALIGN_HORIZONTAL | Sheet1!I44 | right
+ALIGN_HORIZONTAL | Sheet1!L45:L49 | center
+ALIGN_HORIZONTAL | Sheet1!K46:K49 | center
+INPUT | Sheet1!B47 | "Total Credits"
+INPUT | Sheet1!C47 | "=SUM(C40:C46)"
+INPUT | Sheet1!B48 | "CUM CREDIT"
+INPUT | Sheet1!C48 | "=O37+C47"
+ALIGN_HORIZONTAL | Sheet1!B47:B49 | right
+FONT_BOLD | Sheet1!B47:D49 | True
+INPUT | Sheet1!F47 | "Total Credits"
+INPUT | Sheet1!G47 | "=SUM(G40:G46)"
+INPUT | Sheet1!F48 | "CUM CREDIT"
+INPUT | Sheet1!G48 | "=C48+G47"
+ALIGN_HORIZONTAL | Sheet1!F47:F49 | right
+FONT_BOLD | Sheet1!F47:H49 | True
+INPUT | Sheet1!J47 | "Total Credits"
+INPUT | Sheet1!K47 | "=SUM(K40:K46)"
+INPUT | Sheet1!J48 | "CUM CREDIT"
+INPUT | Sheet1!K48 | "=G48+K47"
+ALIGN_HORIZONTAL | Sheet1!J47:J49 | right
+FONT_BOLD | Sheet1!J47:L49 | True
+INPUT | Sheet1!N47 | "Total Credits"
+INPUT | Sheet1!O47 | "=SUM(O40:O46)"
+INPUT | Sheet1!N48 | "CUM CREDIT"
+INPUT | Sheet1!O48 | "=K48+O47"
+ALIGN_HORIZONTAL | Sheet1!N47:N49 | right
+FONT_BOLD | Sheet1!N47:P49 | True
+INPUT | Sheet1!B50 | "NROTC Advisor Comments:"
+BORDER_OUTSIDE | Sheet1!B50:D53 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!D50 | left
+ALIGN_VERTICAL | Sheet1!D50 | top
+WRAP_TEXT | Sheet1!D50 | True
+MERGE | Sheet1!D50:P52 | true
+BORDER_ALL | Sheet1!E50:P51 | Thin, Continuous, #000000
+BORDER_OUTSIDE | Sheet1!E52:P53 | Thin, Continuous, #000000
+INPUT | Sheet1!B53 | "Member Signature\\Date: ________________________                       University Advisor Signature\\Date _________________________________________________                             NROTC Advisor Signature\\Date: _______________________________"
+ALIGN_HORIZONTAL | Sheet1!B53 | center
+MERGE | Sheet1!B53:P53 | true
+FONT_BOLD | Sheet1!B56:B57 | True
+INPUT | Sheet1!B56 | "Naval Science Course Requirements"
+INPUT | Sheet1!C56 | "☑"
+INPUT | Sheet1!D56 | "Term"
+INPUT | Sheet1!B57 | "(USMC Option)"
+INPUT | Sheet1!C57 | "?"
+INPUT | Sheet1!D57 | "Planned"
+BORDER_OUTSIDE | Sheet1!B56:D57 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B56:D57 | #D9D9D9
+FONT_BOLD | Sheet1!D56:D57 | True
+INPUT | Sheet1!F56 | "Previous or External Coursework"
+FONT_BOLD | Sheet1!F56 | True
+BORDER_OUTSIDE | Sheet1!F56:H56 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!F56:H56 | #D9D9D9
+INPUT | Sheet1!H56 | "Credits"
+FONT_BOLD | Sheet1!H56 | True
+INPUT | Sheet1!J56 | "Additional Notes"
+FILL_COLOR | Sheet1!J56 | #D9D9D9
+FONT_BOLD | Sheet1!J56 | True
+ALIGN_HORIZONTAL | Sheet1!J56 | center
+MERGE | Sheet1!J56:N56 | true
+BORDER_ALL | Sheet1!J56:N56 | Thin, Continuous, #000000
+BORDER_OUTSIDE | Sheet1!F57:G88 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!H57:H88 | Thin, Continuous, #000000
+ALIGN_VERTICAL | Sheet1!J57:N119 | top
+BORDER_OUTSIDE | Sheet1!J57:N125 | Thin, Continuous, #000000
+INPUT | Sheet1!B58 | "[1]  Intro to Naval Science"
+INPUT | Sheet1!B59 | "[2] Sea Power and Maritime Affairs I"
+INPUT | Sheet1!B60 | "[3] Sea Power and Maritime Affairs II"
+INPUT | Sheet1!B61 | "[4] Leadership and Management"
+INPUT | Sheet1!B62 | "[5] Evolution of Warfare"
+INPUT | Sheet1!B63 | "[6] Marine Corps Option"
+INPUT | Sheet1!B64 | "[7] Fundamentals of Maneuver Warfare"
+INPUT | Sheet1!B65 | "[8] Leadership and Ethics"
+BORDER_ALL | Sheet1!B58:D65 | Thin, Continuous, #000000
+INPUT | Sheet1!D58 | "Fall 25"
+INPUT | Sheet1!D59 | "Winter 26"
+INPUT | Sheet1!D60 | "Spring 26"
+INPUT | Sheet1!D61 | "Fall 26"
+INPUT | Sheet1!D62 | "Fall 27"
+INPUT | Sheet1!D63 | "Spring 28"
+INPUT | Sheet1!D64 | "Winter 29"
+INPUT | Sheet1!D65 | "Spring 29"
+FONT_BOLD | Sheet1!F60 | True
+FONT_BOLD | Sheet1!B68:B69 | True
+INPUT | Sheet1!B68 | "Naval Science Program Requirements"
+INPUT | Sheet1!C68 | "☑"
+INPUT | Sheet1!D68 | "Term"
+INPUT | Sheet1!B69 | "(Navy Option) [Letter Grade Required]"
+INPUT | Sheet1!C69 | "?"
+INPUT | Sheet1!D69 | "Planned"
+BORDER_OUTSIDE | Sheet1!B68:D69 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B68:D69 | #D9D9D9
+FONT_BOLD | Sheet1!D68:D69 | True
+BORDER_ALL | Sheet1!B70:D72 | Thin, Continuous, #000000
+INPUT | Sheet1!B70 | "[A1] English - 1/3 Terms"
+INPUT | Sheet1!B71 | "[A2] English - 2/3 Terms"
+INPUT | Sheet1!B72 | "[A3] English - 3/3 Terms"
+INPUT | Sheet1!B73 | "[B] American History or National"
+INPUT | Sheet1!B74 | "Security Policy 1/1 Terms"
+BORDER_OUTSIDE | Sheet1!B73:D74 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B75:D88 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B90 | #D9D9D9
+FONT_BOLD | Sheet1!B90 | True
+ALIGN_HORIZONTAL | Sheet1!B90 | center
+MERGE | Sheet1!B90:H90 | true
+INPUT | Sheet1!B90 | "Instructions"
+INPUT | Sheet1!B91 | "    The Degree Completion Plan (DCP) documents a Naval Reserve Officer Training Corps (NROTC) member's plan throughout their four years.  This is a living document and for most students it will change throughout their years. A well-built plan, reviewed routinely by University and NROTC advisors and kept up to date with your progress both helps keep you on your path and is the only evidence we have that your plan will commission you in time and, as-such is required by students to whom a scholarship has been awarded, Active Duty students for whom the Navy and Marine Corps have interest in the timely completion of requirements, as well as those seeking Advanced Standing or Scholarship for whom the DCP is required for application.  All members of NROTCU Oregon State University fall into one of these categories.\n    If this is your first DCP, before starting the student should have a few different things:\n - A prospective (if incomplete) plan, such as from a departmental worksheet, or prospective guide from their Major's Website\n - A MyDegrees plan, though not required, is preferred and makes this process much easier.\n - A copy of your Oregon State University Transcript\n - The approved OSU NROTCU Course Requirements from https://nrotc.oregonstate.edu/academics-0 - pay attention to when courses must be completed.\n - Microsoft Excel\nRemember, this will change over time and both your University Advisor and your NROTC Advisor will review the document and help identify any issues with your plan.  Don't stress the small stuff.\n\n1. From there, you'll fill in your plan. At first, completion is more important than accuracy, so just try to make sure you meet all of the academic requirements from your BACCOR, your Major, and the Naval Science Minor.\n2. Make sure you put enter both the course number (i.e. NS 111) and the course title (Introduction to Naval Science) in the following format: NS 111\\\\Intro to Naval Science\n3. The next step is to verify all of the Naval Science Course Requirements listed above.  These are the Naval Science Minor requirements, and the Naval Science Program Requirements.  Program requirements differ based upon your program and your option, and there are a variety of courses that meet each option.  For more information on these requirements, check the approved OSU NROTCU Course Requirements decribed above. Notate them with the code in brackets like so:  \"[A1] MTH 251\\\\Differential Calculus\"\n4. You'll need to ensure the timing of your courses make sense. For Naval Science courses, we provide a document that will clarify that here: https://nrotc.oregonstate.edu/file/nrotcadvisortoolpng\nFor other courses, often the departmental handout is a good start, but for any courses you aren't sure about, you should check https://courses.oregonstate.edu/ and see what term those courses are usually offered.  This step is often overlooked by many students and can result in plans going awry.\n5. Flag semesters where you plan to take more than 17 credit hours by highlighting the credit box in yellow.\n6. Have your NROTC Advisor review for formatting, have your University Advisor review for accuracy and sign, then return to your NROTC Advisor for signature and inclusion in your Student Performance File."
+BORDER_ALL | Sheet1!B90:H125 | Thin, Continuous, #000000
+ALIGN_VERTICAL | Sheet1!B91 | top
+WRAP_TEXT | Sheet1!B91 | True
+MERGE | Sheet1!B91:H125 | true
+INPUT | Sheet1!J122 | "* Credit prior to entering the NROTC Program count for course credit, but at least one Calculus or Physics course must be completed at the host institution. See ROD paragraph 3-5.2. https://beav.es/JJZ"
+FONT_COLOR | Sheet1!J122 | #0663C1
+FONT_UNDERLINE | Sheet1!J122 | single
+ALIGN_VERTICAL | Sheet1!J122 | top
+WRAP_TEXT | Sheet1!J122 | True
+MERGE | Sheet1!J122:N123 | true
+INPUT | Sheet1!J124 | "*Calculus requirements meets the requirement for College Algebra. Physics meets the requirements for physical science."
+ALIGN_VERTICAL | Sheet1!J124 | top
+WRAP_TEXT | Sheet1!J124 | True
+MERGE | Sheet1!J124:N125 | true

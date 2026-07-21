@@ -1,0 +1,197 @@
+{
+  "trajectory_name": "1aa12c8a",
+  "predictable_count": 99,
+  "final_state_size": 247,
+  "coverage_pct": 40.08,
+  "predictable_properties": {
+    "Sheet1": {
+      "B2": [
+        "Format.font.bold"
+      ],
+      "B5": [
+        "value"
+      ],
+      "B8": [
+        "value"
+      ],
+      "C2": [
+        "Format.font.bold"
+      ],
+      "C5": [
+        "value"
+      ],
+      "C7": [
+        "value"
+      ],
+      "D2": [
+        "Format.font.bold",
+        "value"
+      ],
+      "D5": [
+        "value"
+      ],
+      "E2": [
+        "Format.font.bold",
+        "value"
+      ],
+      "E8": [
+        "value"
+      ],
+      "F2": [
+        "Format.font.bold"
+      ],
+      "F5": [
+        "value"
+      ],
+      "F8": [
+        "value"
+      ],
+      "G10": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G11": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G12": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G14": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G15": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G16": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G17": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G18": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G2": [
+        "Format.font.bold"
+      ],
+      "G20": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G21": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G22": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G23": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G24": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G25": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G26": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G27": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G29": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G3": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G4": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G5": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G6": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G7": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G8": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "G9": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "H27": [
+        "Format.font.bold"
+      ],
+      "H29": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L9": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "M9": [
+        "value"
+      ]
+    }
+  }
+}

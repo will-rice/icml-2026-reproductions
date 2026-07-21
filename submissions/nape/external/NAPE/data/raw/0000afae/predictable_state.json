@@ -1,0 +1,858 @@
+{
+  "trajectory_name": "0000afae",
+  "predictable_count": 400,
+  "final_state_size": 620,
+  "coverage_pct": 64.52,
+  "predictable_properties": {
+    "Sheet1": {
+      "A15": [
+        "value"
+      ],
+      "A16": [
+        "value"
+      ],
+      "A18": [
+        "value"
+      ],
+      "A19": [
+        "Format.wrapText"
+      ],
+      "A2": [
+        "merged_cells"
+      ],
+      "A20": [
+        "Format.wrapText",
+        "value"
+      ],
+      "A21": [
+        "Format.wrapText"
+      ],
+      "A22": [
+        "Format.wrapText"
+      ],
+      "A23": [
+        "Format.wrapText",
+        "value"
+      ],
+      "A26": [
+        "value"
+      ],
+      "A28": [
+        "value"
+      ],
+      "A29": [
+        "value"
+      ],
+      "A30": [
+        "value"
+      ],
+      "A31": [
+        "value"
+      ],
+      "A33": [
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "A34": [
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "A35": [
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "A36": [
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "A37": [
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "A38": [
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "A41": [
+        "Format.font.color"
+      ],
+      "A43": [
+        "Format.wrapText"
+      ],
+      "A5": [
+        "Format.wrapText",
+        "merged_cells"
+      ],
+      "A6": [
+        "value"
+      ],
+      "A8": [
+        "Format.wrapText"
+      ],
+      "A9": [
+        "Format.borders.bottom"
+      ],
+      "B10": [
+        "Format.horizontalAlignment",
+        "merged_cells"
+      ],
+      "B11": [
+        "number_format"
+      ],
+      "B12": [
+        "number_format"
+      ],
+      "B13": [
+        "number_format"
+      ],
+      "B14": [
+        "number_format"
+      ],
+      "B15": [
+        "number_format"
+      ],
+      "B16": [
+        "number_format"
+      ],
+      "B17": [
+        "number_format"
+      ],
+      "B18": [
+        "number_format"
+      ],
+      "B19": [
+        "number_format"
+      ],
+      "B2": [
+        "merged_cells"
+      ],
+      "B20": [
+        "number_format"
+      ],
+      "B25": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "merged_cells"
+      ],
+      "B26": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B27": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B28": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B29": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B30": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B31": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B32": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B33": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B34": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B35": [
+        "Format.horizontalAlignment",
+        "number_format",
+        "value"
+      ],
+      "B36": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B37": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B38": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "B5": [
+        "merged_cells"
+      ],
+      "B6": [
+        "Format.font.bold",
+        "Format.wrapText"
+      ],
+      "B7": [
+        "Format.font.bold",
+        "Format.wrapText"
+      ],
+      "B8": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "merged_cells"
+      ],
+      "B9": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "C10": [
+        "merged_cells"
+      ],
+      "C11": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C12": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C13": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C14": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C15": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C16": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C17": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C18": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C19": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C2": [
+        "merged_cells"
+      ],
+      "C20": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C21": [
+        "Format.horizontalAlignment"
+      ],
+      "C22": [
+        "Format.horizontalAlignment"
+      ],
+      "C23": [
+        "Format.horizontalAlignment"
+      ],
+      "C25": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "C26": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C27": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C28": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C29": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C30": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C31": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C32": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C33": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C34": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C35": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C36": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C37": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C38": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "C5": [
+        "merged_cells"
+      ],
+      "C6": [
+        "Format.font.bold",
+        "Format.wrapText"
+      ],
+      "C7": [
+        "Format.font.bold",
+        "Format.wrapText"
+      ],
+      "C8": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "C9": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "D10": [
+        "merged_cells"
+      ],
+      "D11": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D12": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D13": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D14": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D15": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D16": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D17": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D18": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D19": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D2": [
+        "merged_cells"
+      ],
+      "D20": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D21": [
+        "Format.horizontalAlignment"
+      ],
+      "D22": [
+        "Format.horizontalAlignment"
+      ],
+      "D23": [
+        "Format.horizontalAlignment"
+      ],
+      "D25": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "D26": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D27": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D28": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D29": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D30": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D31": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D32": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D33": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D34": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D35": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D36": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D37": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "D38": [
+        "Format.horizontalAlignment",
+        "number_format",
+        "value"
+      ],
+      "D5": [
+        "merged_cells"
+      ],
+      "D6": [
+        "Format.font.bold",
+        "Format.wrapText"
+      ],
+      "D7": [
+        "Format.font.bold",
+        "Format.wrapText"
+      ],
+      "D8": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "D9": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "E10": [
+        "merged_cells"
+      ],
+      "E11": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E12": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E13": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E14": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E15": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E16": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E17": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E18": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E19": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E2": [
+        "merged_cells"
+      ],
+      "E20": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E21": [
+        "Format.horizontalAlignment"
+      ],
+      "E22": [
+        "Format.horizontalAlignment"
+      ],
+      "E23": [
+        "Format.horizontalAlignment"
+      ],
+      "E25": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "E26": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E27": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E28": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E29": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E30": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E31": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E32": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E33": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E34": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E35": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E36": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E37": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E38": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "E5": [
+        "merged_cells"
+      ],
+      "E6": [
+        "Format.font.bold"
+      ],
+      "E7": [
+        "Format.font.bold"
+      ],
+      "E9": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment"
+      ],
+      "F10": [
+        "merged_cells"
+      ],
+      "F11": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F12": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F13": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F14": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F15": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F16": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F17": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F18": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F19": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F2": [
+        "merged_cells"
+      ],
+      "F20": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F21": [
+        "Format.horizontalAlignment"
+      ],
+      "F22": [
+        "Format.horizontalAlignment"
+      ],
+      "F23": [
+        "Format.horizontalAlignment"
+      ],
+      "F25": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "F26": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F27": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F28": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F29": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F30": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F31": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F32": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F33": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F34": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F35": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F36": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F37": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F38": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "F5": [
+        "merged_cells"
+      ],
+      "F6": [
+        "Format.font.bold"
+      ],
+      "F7": [
+        "Format.font.bold"
+      ],
+      "F9": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "Format.wrapText"
+      ],
+      "G10": [
+        "merged_cells"
+      ],
+      "G11": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G12": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G13": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G14": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G15": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G16": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G17": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G18": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G19": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G2": [
+        "merged_cells"
+      ],
+      "G20": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G21": [
+        "Format.horizontalAlignment"
+      ],
+      "G22": [
+        "Format.horizontalAlignment"
+      ],
+      "G23": [
+        "Format.horizontalAlignment"
+      ],
+      "G25": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "G26": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G27": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G28": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G29": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G30": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G31": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G32": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G33": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G34": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G35": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G36": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G37": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G38": [
+        "Format.horizontalAlignment",
+        "number_format"
+      ],
+      "G5": [
+        "merged_cells"
+      ],
+      "G6": [
+        "Format.font.bold"
+      ],
+      "G7": [
+        "Format.font.bold"
+      ],
+      "G9": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ]
+    }
+  }
+}

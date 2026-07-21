@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "title": "Reproduction: A Benchmark and Framework for Evaluating Next Action Predictions in Spreadsheets",
+  "emoji": "🎯",
+  "space_id": "wrice/repro-a-benchmark-and-framework-for-evaluating-next-action-predictions-in-spreadsheets",
+  "paper": {
+    "arxiv_id": "2606.13802"
+  },
+  "tags": [
+    "icml2026-repro",
+    "paper-NvPgRwURDC"
+  ],
+  "updated_at": "2026-07-21T17:56:27+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Reproduction: A Benchmark and Framework for Evaluating Next Action Predictions in Spreadsheets",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "executive-summary",
+        "title": "Executive summary",
+        "file": "pages/executive-summary/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-1-benchmark-and-construction",
+        "title": "Claim 1: Benchmark and construction",
+        "file": "pages/claim-1-benchmark-and-construction/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-2-empirical-predictability",
+        "title": "Claim 2: Empirical predictability",
+        "file": "pages/claim-2-empirical-predictability/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-3-online-future-adaptation",
+        "title": "Claim 3: Online future adaptation",
+        "file": "pages/claim-3-online-future-adaptation/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-4-gpt-5-r-results",
+        "title": "Claim 4: GPT-5 R results",
+        "file": "pages/claim-4-gpt-5-r-results/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-5-always-accept-ablation",
+        "title": "Claim 5: Always-accept ablation",
+        "file": "pages/claim-5-always-accept-ablation/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-6-stride-ablation",
+        "title": "Claim 6: Stride ablation",
+        "file": "pages/claim-6-stride-ablation/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      }
+    ]
+  },
+  "agent_view_tokens": 5097,
+  "revision": "1784656587094919000"
+}

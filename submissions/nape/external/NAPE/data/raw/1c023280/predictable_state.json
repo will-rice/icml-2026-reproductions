@@ -1,0 +1,249 @@
+{
+  "trajectory_name": "1c023280",
+  "predictable_count": 111,
+  "final_state_size": 172,
+  "coverage_pct": 64.53,
+  "predictable_properties": {
+    "Sheet1": {
+      "A1": [
+        "Format.borders.left"
+      ],
+      "A10": [
+        "Format.borders.bottom",
+        "Format.horizontalAlignment",
+        "merged_cells",
+        "value"
+      ],
+      "A4": [
+        "merged_cells"
+      ],
+      "A5": [
+        "merged_cells"
+      ],
+      "A6": [
+        "merged_cells"
+      ],
+      "A7": [
+        "merged_cells"
+      ],
+      "A8": [
+        "merged_cells"
+      ],
+      "A9": [
+        "merged_cells"
+      ],
+      "B10": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "B3": [
+        "Format.borders.left"
+      ],
+      "B4": [
+        "merged_cells"
+      ],
+      "B5": [
+        "merged_cells"
+      ],
+      "B6": [
+        "merged_cells"
+      ],
+      "B7": [
+        "merged_cells"
+      ],
+      "B8": [
+        "merged_cells"
+      ],
+      "B9": [
+        "merged_cells"
+      ],
+      "C10": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "C4": [
+        "merged_cells"
+      ],
+      "C5": [
+        "merged_cells"
+      ],
+      "C6": [
+        "merged_cells"
+      ],
+      "C7": [
+        "merged_cells"
+      ],
+      "C8": [
+        "merged_cells"
+      ],
+      "C9": [
+        "merged_cells"
+      ],
+      "D10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "number_format",
+        "value"
+      ],
+      "D3": [
+        "number_format"
+      ],
+      "D4": [
+        "number_format"
+      ],
+      "E1": [
+        "Format.borders.left",
+        "Format.borders.top"
+      ],
+      "E10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "E2": [
+        "Format.borders.left",
+        "value"
+      ],
+      "E3": [
+        "Format.borders.left"
+      ],
+      "E4": [
+        "Format.borders.left"
+      ],
+      "E5": [
+        "Format.borders.left"
+      ],
+      "E6": [
+        "Format.borders.left"
+      ],
+      "E7": [
+        "Format.borders.left"
+      ],
+      "E8": [
+        "Format.borders.left"
+      ],
+      "E9": [
+        "Format.borders.left"
+      ],
+      "F1": [
+        "Format.borders.top"
+      ],
+      "F10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "number_format",
+        "value"
+      ],
+      "F2": [
+        "value"
+      ],
+      "F3": [
+        "number_format",
+        "value"
+      ],
+      "F4": [
+        "number_format",
+        "value"
+      ],
+      "F5": [
+        "number_format",
+        "value"
+      ],
+      "F6": [
+        "number_format",
+        "value"
+      ],
+      "F7": [
+        "number_format",
+        "value"
+      ],
+      "F8": [
+        "number_format",
+        "value"
+      ],
+      "F9": [
+        "number_format",
+        "value"
+      ],
+      "G1": [
+        "Format.horizontalAlignment",
+        "merged_cells"
+      ],
+      "G10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G2": [
+        "value"
+      ],
+      "G3": [
+        "value"
+      ],
+      "G5": [
+        "value"
+      ],
+      "G6": [
+        "value"
+      ],
+      "G7": [
+        "value"
+      ],
+      "G9": [
+        "value"
+      ],
+      "H1": [
+        "merged_cells"
+      ],
+      "H10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "number_format",
+        "value"
+      ],
+      "H2": [
+        "value"
+      ],
+      "H3": [
+        "number_format",
+        "value"
+      ],
+      "H4": [
+        "number_format",
+        "value"
+      ],
+      "H5": [
+        "number_format",
+        "value"
+      ],
+      "H6": [
+        "number_format",
+        "value"
+      ],
+      "H7": [
+        "number_format",
+        "value"
+      ],
+      "H8": [
+        "number_format",
+        "value"
+      ],
+      "H9": [
+        "number_format",
+        "value"
+      ]
+    }
+  }
+}

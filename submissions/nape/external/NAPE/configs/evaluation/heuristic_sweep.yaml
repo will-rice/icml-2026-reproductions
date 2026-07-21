@@ -1,0 +1,72 @@
+# Acceptance-heuristic sweep — multi-action (paper Table 2).
+#
+# Runs each heuristic as a separate online evaluation. Online mode is
+# required because acceptance reshapes the future trajectory; the
+# results for, e.g., "greedy" and "p90" are not derivable from a
+# single shared rollout.
+#
+# Paper-name -> code-name mapping (see configs/README.md):
+#   greedy    -> steps_saved        (ops_saved >= 1)
+#   hybrid-1  -> ideal_user         (prec >= .9 AND ops_saved >= 1)
+#   greedy-2  -> ssav2              (ops_saved >= 2)
+#   hybrid-2  -> ideal_user_strict  (prec == 1 AND ops_saved >= 2)
+#   p100      -> precision_100
+#   p90       -> precision_90
+#   p60       -> precision_60
+#   always    -> accept_all
+#
+# Usage: python scripts/run_sweep.py configs/evaluation/heuristic_sweep.yaml
+
+name: heuristic_sweep
+
+trajectory_paths:
+  - data/trajectories/*.json
+
+output_dir: results/heuristic_sweep
+
+max_runs: null
+
+max_steps: 1200
+max_steps_pct: 1.20
+
+workers: 4
+max_context_ops: 32
+online_mode: true
+repredict_after_accept: false
+
+stride:
+  mode: fixed_interval
+  interval: 1
+
+heuristics:
+  - steps_saved              # base value, overridden by sweep_independent below
+
+context_shortening:
+  enabled: true
+  max_chars: 32
+  corner_cells_dim: 2
+
+solver:
+  type: llm
+  adapter: openai
+  model: <your-model-id>     # e.g. gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 4096
+  num_op_to_pred: null
+  cache_enabled: true
+  cache_path: caches/llm_cache.json
+  emit_intent: false
+  remove_sheet_name: true
+
+# sweep_independent: one variant per value, varying only the named field
+sweep_independent:
+  heuristics:
+    - [steps_saved]
+    - [ideal_user]
+    - [ssav2]
+    - [ideal_user_strict]
+    - [precision_100]
+    - [precision_90]
+    - [precision_60]
+    - [accept_all]
+

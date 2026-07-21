@@ -1,0 +1,266 @@
+INPUT | Sheet1!A1 | "4th Grade _ Spelling Pacing Guide"
+FONT_SIZE | Sheet1!A1 | 18.0
+FONT_BOLD | Sheet1!A1 | True
+FONT_UNDERLINE | Sheet1!A1 | single
+FILL_COLOR | Sheet1!A1:D1 | #FFFF00
+INPUT | Sheet1!A3 | "Semester 1"
+FONT_UNDERLINE | Sheet1!A3 | single
+FONT_BOLD | Sheet1!A3 | True
+FILL_COLOR | Sheet1!A3:G3 | #93CEDD
+INPUT | Sheet1!A5 | "Learning Period # 1"
+FONT_BOLD | Sheet1!A5 | True
+FILL_COLOR | Sheet1!A5:G5 | #D9D9D9
+INPUT | Sheet1!C5 | "8/29 - 10/7"
+FONT_BOLD | Sheet1!C5 | True
+INPUT | Sheet1!C7 | "Week 1"
+INPUT | Sheet1!E7 | "8/29 - 9/2"
+FONT_BOLD | Sheet1!C7 | True
+FILL_COLOR | Sheet1!C7:E7 | #C7DAF1
+INPUT | Sheet1!G7 | "List # 1"
+FONT_BOLD | Sheet1!G7 | True
+INPUT | Sheet1!A9 | "Labor Day"
+FONT_BOLD | Sheet1!A9 | True
+FILL_COLOR | Sheet1!A9:G9 | #B3A2C8
+INPUT | Sheet1!C9 | "No School"
+INPUT | Sheet1!E9 | "Monday, September 5th"
+INPUT | Sheet1!C11 | "Week 2"
+INPUT | Sheet1!E11 | "9/6 - 9/9"
+INPUT | Sheet1!C12 | "Week 3"
+INPUT | Sheet1!E12 | "9/12 - 9/16"
+INPUT | Sheet1!C13 | "Week 4"
+INPUT | Sheet1!E13 | "9/19 - 9/23"
+INPUT | Sheet1!C14 | "Week 5"
+INPUT | Sheet1!E14 | "9/26 -  9/30"
+FONT_BOLD | Sheet1!C11:C14 | True
+FILL_COLOR | Sheet1!C11:E14 | #C7DAF1
+INPUT | Sheet1!G11 | "List # 1"
+INPUT | Sheet1!G12 | "List # 1"
+INPUT | Sheet1!G13 | "List # 2"
+INPUT | Sheet1!G14 | "List # 3"
+FONT_BOLD | Sheet1!G11:G14 | True
+INPUT | Sheet1!A16 | "LP Meeting Week"
+FONT_BOLD | Sheet1!A16 | True
+FILL_COLOR | Sheet1!A16:E16 | #F3DCDC
+INPUT | Sheet1!C16 | "Week 6"
+FONT_BOLD | Sheet1!C16 | True
+INPUT | Sheet1!E16 | "10/3 - 10/7"
+INPUT | Sheet1!G16 | "List # 4"
+FONT_BOLD | Sheet1!G16 | True
+BORDER_TOP | Sheet1!A18:G18 | Thin, Continuous
+INPUT | Sheet1!A19 | "Learning Period # 2"
+FONT_BOLD | Sheet1!A19 | True
+FILL_COLOR | Sheet1!A19:G19 | #D9D9D9
+INPUT | Sheet1!C19 | "10/10 - 11/18"
+FONT_BOLD | Sheet1!C19 | True
+INPUT | Sheet1!C21 | "Week 1"
+INPUT | Sheet1!E21 | "10/10 - 10/14"
+INPUT | Sheet1!C22 | "Week 2"
+INPUT | Sheet1!E22 | "10/17 - 10/21"
+INPUT | Sheet1!C23 | "Week 3"
+INPUT | Sheet1!E23 | "10/24 - 10/28"
+INPUT | Sheet1!C24 | "Week 4"
+INPUT | Sheet1!E24 | "10/31 - 11/4"
+INPUT | Sheet1!C25 | "Week 5"
+INPUT | Sheet1!E25 | "11/7 - 11/10"
+FONT_BOLD | Sheet1!C21:C25 | True
+FILL_COLOR | Sheet1!C21:E25 | #C7DAF1
+INPUT | Sheet1!G21 | "List # 5"
+INPUT | Sheet1!G22 | "List # 6"
+INPUT | Sheet1!G23 | "List # 7"
+INPUT | Sheet1!G24 | "List # 8"
+INPUT | Sheet1!G25 | "List # 9"
+FONT_BOLD | Sheet1!G21:G25 | True
+FONT_BOLD | Sheet1!A28 | True
+INPUT | Sheet1!A28 | "Veteran's Day"
+INPUT | Sheet1!C28 | "No School"
+INPUT | Sheet1!E28 | "Friday, November 11th"
+FILL_COLOR | Sheet1!A28:G28 | #B3A2C8
+FONT_BOLD | Sheet1!A31 | True
+INPUT | Sheet1!A31 | "LP Meeting Week"
+INPUT | Sheet1!C31 | "Week 6"
+INPUT | Sheet1!E31 | "11/14 - 11/18"
+FILL_COLOR | Sheet1!A31:E31 | #F3DCDC
+FONT_BOLD | Sheet1!C31 | True
+INPUT | Sheet1!G31 | "List # 10"
+FONT_BOLD | Sheet1!G31 | True
+INPUT | Sheet1!A34 | "Thanksgiving Break"
+FONT_BOLD | Sheet1!A34 | True
+FILL_COLOR | Sheet1!A34:G34 | #B3A2C8
+INPUT | Sheet1!C34 | "11/21 - 11/25"
+INPUT | Sheet1!E34 | "1 Week Off"
+BORDER_TOP | Sheet1!A36:G36 | Thin, Continuous
+INPUT | Sheet1!A37 | "Learning Period # 3"
+FONT_BOLD | Sheet1!A37 | True
+FILL_COLOR | Sheet1!A37:G37 | #D9D9D9
+INPUT | Sheet1!C37 | "11/30 - 1/22"
+FONT_BOLD | Sheet1!C37 | True
+INPUT | Sheet1!C39 | "Week 1"
+INPUT | Sheet1!E39 | "11/28 - 12/2"
+INPUT | Sheet1!C40 | "Week 2"
+INPUT | Sheet1!E40 | "12/5 - 12/9"
+INPUT | Sheet1!C41 | "Week 3"
+INPUT | Sheet1!E41 | "12/12 - 12/16"
+FONT_BOLD | Sheet1!C39:C41 | True
+FILL_COLOR | Sheet1!C39:E41 | #C7DAF1
+INPUT | Sheet1!G39 | "List # 11"
+INPUT | Sheet1!G40 | "List # 12"
+INPUT | Sheet1!G41 | "List # 13"
+FONT_BOLD | Sheet1!G39:G41 | True
+FONT_BOLD | Sheet1!A43 | True
+INPUT | Sheet1!A43 | "New Year Break"
+INPUT | Sheet1!C43 | "12/19 - 1/2"
+INPUT | Sheet1!E43 | "2 Weeks Off"
+FILL_COLOR | Sheet1!A43:G43 | #B3A2C8
+INPUT | Sheet1!C47 | "Week 4"
+INPUT | Sheet1!E47 | "1/3 - 1/6"
+INPUT | Sheet1!C48 | "Week 5"
+INPUT | Sheet1!E48 | "1/9  - 1/13"
+FONT_BOLD | Sheet1!C47:C48 | True
+FILL_COLOR | Sheet1!C47:E48 | #C7DAF1
+INPUT | Sheet1!G47 | "List # 14"
+INPUT | Sheet1!G48 | "List # 15"
+FONT_BOLD | Sheet1!G47:G48 | True
+FONT_BOLD | Sheet1!A50 | True
+INPUT | Sheet1!A50 | "ML King Day"
+INPUT | Sheet1!C50 | "No School"
+INPUT | Sheet1!E50 | "Monday, January 16th"
+FILL_COLOR | Sheet1!A50:G50 | #B3A2C8
+FONT_BOLD | Sheet1!A52 | True
+INPUT | Sheet1!A52 | "LP Meeting Week"
+INPUT | Sheet1!C52 | "Week 6"
+INPUT | Sheet1!E52 | "1/17 - 1/20"
+FILL_COLOR | Sheet1!A52:E52 | #F3DCDC
+FONT_BOLD | Sheet1!C52 | True
+INPUT | Sheet1!G52 | "List # 16"
+FONT_BOLD | Sheet1!G52 | True
+BORDER_BOTTOM | Sheet1!A54:G54 | Thin, Continuous
+BORDER_TOP | Sheet1!A54:G54 | Thin, Continuous
+INPUT | Sheet1!A55 | "Semester 2"
+FONT_UNDERLINE | Sheet1!A55 | single
+FONT_BOLD | Sheet1!A55 | True
+FILL_COLOR | Sheet1!A55:G55 | #93CEDD
+INPUT | Sheet1!A57 | "Learning Period # 4"
+FONT_BOLD | Sheet1!A57 | True
+FILL_COLOR | Sheet1!A57:G57 | #D9D9D9
+INPUT | Sheet1!C57 | "1/23 - 3/3"
+FONT_BOLD | Sheet1!C57 | True
+INPUT | Sheet1!C59 | "Week 1"
+INPUT | Sheet1!E59 | "1/23 - 1/27"
+INPUT | Sheet1!C60 | "Week 2"
+INPUT | Sheet1!E60 | "1/30 - 2/3"
+INPUT | Sheet1!C61 | "Week 3"
+INPUT | Sheet1!E61 | "2/6 - 2/10"
+INPUT | Sheet1!C62 | "Week 4"
+INPUT | Sheet1!E62 | "2/13 - 2/16"
+FONT_BOLD | Sheet1!C59:C62 | True
+FILL_COLOR | Sheet1!C59:E62 | #C7DAF1
+INPUT | Sheet1!G59 | "List # 17"
+INPUT | Sheet1!G60 | "List # 18"
+INPUT | Sheet1!G61 | "List # 19"
+INPUT | Sheet1!G62 | "List # 20"
+FONT_BOLD | Sheet1!G59:G62 | True
+INPUT | Sheet1!A64 | "Presidents' Day"
+INPUT | Sheet1!B64 | "Friday , February 17th"
+INPUT | Sheet1!A65 | "Presidents' Day"
+INPUT | Sheet1!B65 | "Monday , February 20th"
+FONT_BOLD | Sheet1!A64:A65 | True
+FILL_COLOR | Sheet1!A64:G65 | #B3A2C8
+FONT_BOLD | Sheet1!C67 | True
+INPUT | Sheet1!C67 | "Week 5"
+INPUT | Sheet1!E67 | "2/21 - 2/24"
+FILL_COLOR | Sheet1!C67:E67 | #C7DAF1
+INPUT | Sheet1!G67 | "List # 21"
+FONT_BOLD | Sheet1!G67 | True
+FONT_BOLD | Sheet1!A69 | True
+INPUT | Sheet1!A69 | "LP Meeting Week"
+INPUT | Sheet1!C69 | "Week 6"
+INPUT | Sheet1!E69 | "2/27 - 3/ 3"
+FILL_COLOR | Sheet1!A69:E69 | #F3DCDC
+FONT_BOLD | Sheet1!C69 | True
+INPUT | Sheet1!G69 | "List # 22"
+FONT_BOLD | Sheet1!G69 | True
+BORDER_TOP | Sheet1!A71:G71 | Thin, Continuous
+INPUT | Sheet1!A72 | "Learning Period # 5"
+INPUT | Sheet1!C72 | "3/6 - 4/28"
+FONT_BOLD | Sheet1!A72 | True
+FONT_BOLD | Sheet1!C72 | True
+FILL_COLOR | Sheet1!A72:G72 | #D9D9D9
+INPUT | Sheet1!C74 | "Week 1"
+INPUT | Sheet1!E74 | "3/6 - 3/10"
+INPUT | Sheet1!C75 | "Week 2"
+INPUT | Sheet1!E75 | "3/13 - 3/17"
+INPUT | Sheet1!C76 | "Week 3"
+INPUT | Sheet1!E76 | "3/20 -  3/24"
+INPUT | Sheet1!C77 | "Week 4"
+INPUT | Sheet1!E77 | "3/27 - 3/31"
+INPUT | Sheet1!C78 | "Week 5"
+INPUT | Sheet1!E78 | "4/3 - 4/7"
+FONT_BOLD | Sheet1!C74:C78 | True
+FILL_COLOR | Sheet1!C74:E78 | #C7DAF1
+INPUT | Sheet1!G74 | "List # 23"
+INPUT | Sheet1!G75 | "List # 24"
+INPUT | Sheet1!G76 | "List # 25"
+INPUT | Sheet1!G77 | "List # 26"
+INPUT | Sheet1!G78 | "List # 27"
+FONT_BOLD | Sheet1!G74:G78 | True
+FONT_BOLD | Sheet1!A80 | True
+INPUT | Sheet1!A80 | "Spring Break"
+INPUT | Sheet1!C80 | "4/10 - 4/21"
+INPUT | Sheet1!E80 | "2 Weeks Off"
+FILL_COLOR | Sheet1!A80:G80 | #B3A2C8
+FONT_BOLD | Sheet1!A83 | True
+INPUT | Sheet1!A83 | "LP Meeting Week"
+INPUT | Sheet1!C83 | "Week 6"
+INPUT | Sheet1!E83 | "4/24 - 4/28"
+FILL_COLOR | Sheet1!A83:E83 | #F3DCDC
+FONT_BOLD | Sheet1!C83 | True
+INPUT | Sheet1!G83 | "List # 28"
+FONT_BOLD | Sheet1!G83 | True
+BORDER_TOP | Sheet1!A86:G86 | Thin, Continuous
+INPUT | Sheet1!A87 | "Learning Period # 6"
+INPUT | Sheet1!C87 | "5/1 - 6/13"
+FONT_BOLD | Sheet1!A87 | True
+FONT_BOLD | Sheet1!C87 | True
+FILL_COLOR | Sheet1!A87:G87 | #D9D9D9
+INPUT | Sheet1!C89 | "Week 1"
+INPUT | Sheet1!E89 | "5/1 - 5/5"
+INPUT | Sheet1!C90 | "Week 2"
+INPUT | Sheet1!E90 | "5/8 - 5/12"
+INPUT | Sheet1!C91 | "Week 3"
+INPUT | Sheet1!E91 | "5/15 - 5/19"
+INPUT | Sheet1!C92 | "Week 4"
+INPUT | Sheet1!E92 | "5/22 - 5/26"
+FONT_BOLD | Sheet1!C89:C92 | True
+FILL_COLOR | Sheet1!C89:E92 | #C7DAF1
+INPUT | Sheet1!G89 | "List # 29"
+INPUT | Sheet1!G90 | "List # 30"
+INPUT | Sheet1!G91 | "Spelling Enrichment/Review"
+INPUT | Sheet1!G92 | "Spelling Enrichment/Review"
+FONT_BOLD | Sheet1!G89:G92 | True
+FONT_SIZE | Sheet1!G91:G92 | 9.0
+FONT_BOLD | Sheet1!A94 | True
+INPUT | Sheet1!A94 | "Memorial Day"
+INPUT | Sheet1!C94 | "05/29/2016"
+FILL_COLOR | Sheet1!A94:G94 | #B3A2C8
+NUMBER_FORMAT | Sheet1!C94 | d-mmm
+FONT_BOLD | Sheet1!C96 | True
+INPUT | Sheet1!C96 | "Week 5"
+INPUT | Sheet1!E96 | "5/30 - 6/2"
+FILL_COLOR | Sheet1!C96:E96 | #C7DAF1
+INPUT | Sheet1!G96 | "Spelling Enrichment/Review"
+FONT_BOLD | Sheet1!G96 | True
+FONT_SIZE | Sheet1!G96 | 9.0
+FONT_BOLD | Sheet1!A98 | True
+INPUT | Sheet1!A98 | "LP Meeting Week"
+INPUT | Sheet1!C98 | "Week 6"
+INPUT | Sheet1!E98 | "6/5 - 6/16"
+FILL_COLOR | Sheet1!A98:E98 | #F3DCDC
+FONT_BOLD | Sheet1!C98 | True
+INPUT | Sheet1!G98 | "Spelling Enrichment/Review"
+FONT_SIZE | Sheet1!G98 | 9.0
+FONT_BOLD | Sheet1!G98 | True
+FILL_COLOR | Sheet1!A102:D102 | #B3A2C8
+INPUT | Sheet1!E102 | "Monday 6/13"
+INPUT | Sheet1!F102 | "Last Day of Homeschool"
+FILL_COLOR | Sheet1!E102:G102 | #FFFF00
+FONT_BOLD | Sheet1!E102:G102 | True

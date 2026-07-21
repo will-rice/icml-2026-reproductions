@@ -1,0 +1,136 @@
+INPUT | Sheet1!A1 | "Consolidated balance sheet"
+FONT_SIZE | Sheet1!A1 | 15.0
+FONT_BOLD | Sheet1!A1 | True
+FONT_COLOR | Sheet1!A1 | #73706E
+INPUT | Sheet1!A2 | "for the year ended 31 December"
+WRAP_TEXT | Sheet1!A3:D48 | True
+ALIGN_VERTICAL | Sheet1!B3:D48 | center
+INPUT | Sheet1!C3 | "€ million"
+INPUT | Sheet1!D3 | "€ million"
+BORDER_BOTTOM | Sheet1!A4:D4 | Thin, Continuous, #000000
+INPUT | Sheet1!B4 | "Notes"
+INPUT | Sheet1!C4 | 2023
+INPUT | Sheet1!D4 | 2022
+INPUT | Sheet1!A5 | "Assets"
+FONT_COLOR | Sheet1!A5 | #1F36C7
+FONT_BOLD | Sheet1!A5:A6 | True
+FILL_COLOR | Sheet1!C5:C48 | #E6EFFD
+INPUT | Sheet1!A6 | "Non-current assets"
+INPUT | Sheet1!A7 | "Goodwill"
+INPUT | Sheet1!C7:C13 | [[21109], [18357], [10707], [3781], [1113], [1386], [911]]
+INPUT | Sheet1!D7:D13 | [[21609], [18880], [10770], [4260], [1049], [1154], [942]]
+INPUT | Sheet1!B7 | 9
+INPUT | Sheet1!B8 | 9
+INPUT | Sheet1!B9 | 10
+INPUT | Sheet1!B10 | "4B"
+INPUT | Sheet1!B11 | "6B"
+INPUT | Sheet1!B12 | "17A"
+INPUT | Sheet1!B13 | 11
+NUMBER_FORMAT | Sheet1!C7:D48 | ###,###;\(###,###\)
+INPUT | Sheet1!A8 | "Intangible assets"
+INPUT | Sheet1!A9 | "Property, plant and equipment"
+INPUT | Sheet1!A10 | "Pension asset for funded schemes in surplus"
+INPUT | Sheet1!A11 | "Deferred tax assets"
+INPUT | Sheet1!A12 | "Financial assets"
+INPUT | Sheet1!A13 | "Other non-current assets"
+BORDER_BOTTOM | Sheet1!C13:D14 | Thin, Continuous, #000000
+BORDER_TOP | Sheet1!C14:D14 | Thin, Continuous, #000000
+INPUT | Sheet1!C14 | 57364
+INPUT | Sheet1!D14 | 58664
+INPUT | Sheet1!A15 | "Current assets"
+FONT_BOLD | Sheet1!A15 | True
+INPUT | Sheet1!A16 | "Inventories"
+INPUT | Sheet1!A17 | "Trade and other current receivables"
+INPUT | Sheet1!C16:C21 | [[5119], [5775], [427], [4159], [1731], [691]]
+INPUT | Sheet1!D16:D21 | [[5931], [7056], [381], [4326], [1435], [28]]
+INPUT | Sheet1!B16 | 12
+INPUT | Sheet1!B17 | 13
+INPUT | Sheet1!B19 | "17A"
+INPUT | Sheet1!B20 | "17A"
+INPUT | Sheet1!B21 | 22
+INPUT | Sheet1!A18 | "Current tax assets"
+INPUT | Sheet1!A19 | "Cash and cash equivalents"
+INPUT | Sheet1!A20 | "Other financial assets"
+INPUT | Sheet1!A21 | "Assets held for sale"
+INPUT | Sheet1!C22 | 17902
+INPUT | Sheet1!D22 | 19157
+BORDER_TOP | Sheet1!C22:D22 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!C22:D22 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!C21:D23 | Thin, Continuous, #000000
+INPUT | Sheet1!A23 | "Total assets"
+INPUT | Sheet1!C23 | 75266
+INPUT | Sheet1!D23 | 77821
+BORDER_BOTTOM | Sheet1!A23:B23 | Thin, Continuous, #000000
+BORDER_TOP | Sheet1!C23:D23 | Thin, Continuous, #000000
+FONT_COLOR | Sheet1!A23:A24 | #1F36C7
+FONT_NAME | Sheet1!A1:B48 | Unilever Shilling
+FONT_NAME | Sheet1!A1:A2 | Unilever Shilling
+FONT_NAME | Sheet1!D3:D48 | Unilever Shilling
+FONT_SIZE | Sheet1!A2:D48 | 7.0
+FONT_SIZE | Sheet1!B4 | 6.0
+FONT_SIZE | Sheet1!C3:D4 | 6.0
+ALIGN_HORIZONTAL | Sheet1!B4:D48 | right
+ALIGN_VERTICAL | Sheet1!A1:A48 | center
+FONT_BOLD | Sheet1!A23:A25 | True
+INPUT | Sheet1!A24 | "Liabilities"
+INPUT | Sheet1!A25 | "Current liabilities"
+INPUT | Sheet1!A26 | "Financial liabilities"
+INPUT | Sheet1!A27 | "Trade payables and other current liabilities"
+INPUT | Sheet1!C26:C30 | [[5087], [16857], [851], [537], [175]]
+INPUT | Sheet1!D26:D30 | [[5775], [18023], [877], [748], [4]]
+INPUT | Sheet1!B26 | "15C"
+INPUT | Sheet1!B27 | 14
+INPUT | Sheet1!B29 | 19
+INPUT | Sheet1!B30 | 22
+INPUT | Sheet1!A28 | "Current tax liabilities"
+INPUT | Sheet1!A29 | "Provisions"
+INPUT | Sheet1!A30 | "Liabilities held for sale"
+INPUT | Sheet1!C31 | 23507
+INPUT | Sheet1!D31 | 25427
+BORDER_TOP | Sheet1!C31:D31 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!C30:D31 | Thin, Continuous, #000000
+INPUT | Sheet1!A32 | "Non-current liabilities"
+FONT_BOLD | Sheet1!A32 | True
+INPUT | Sheet1!A33 | "Financial liabilities"
+INPUT | Sheet1!A34 | "Non-current tax liabilities"
+INPUT | Sheet1!A35 | "Pensions and post-retirement healthcare liabilities:"
+INPUT | Sheet1!A36 | "Funded schemes in deficit"
+INPUT | Sheet1!A37 | "Unfunded schemes"
+INPUT | Sheet1!A38 | "Provisions"
+INPUT | Sheet1!A39 | "Deferred tax liabilities"
+INPUT | Sheet1!A40 | "Other non-current liabilities"
+INPUT | Sheet1!C33:C40 | [[24535], [384], [""], [351], [1029], [563], [3995], [138]]
+INPUT | Sheet1!D33:D40 | [[23713], [94], [""], [613], [1078], [550], [4375], [270]]
+INPUT | Sheet1!B33 | "15C"
+INPUT | Sheet1!B36 | "4B"
+INPUT | Sheet1!B37 | "4B"
+INPUT | Sheet1!B38 | 19
+INPUT | Sheet1!B39 | "6B"
+INPUT | Sheet1!B40 | 14
+INPUT | Sheet1!C41 | 30995
+INPUT | Sheet1!D41 | 30693
+BORDER_TOP | Sheet1!C41:D41 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!C40:D42 | Thin, Continuous, #000000
+BORDER_TOP | Sheet1!C42:D42 | Thin, Continuous, #000000
+INPUT | Sheet1!A42 | "Total liabilities"
+INPUT | Sheet1!C42 | 54502
+INPUT | Sheet1!D42 | 56120
+FONT_BOLD | Sheet1!A42 | True
+INPUT | Sheet1!A44 | "Equity"
+FONT_BOLD | Sheet1!A44 | True
+INPUT | Sheet1!A45 | "Shareholders' equity"
+INPUT | Sheet1!A46 | "Non-controlling interests"
+INPUT | Sheet1!C45:D46 | [[18102, 19021], [2662, 2680]]
+BORDER_BOTTOM | Sheet1!C46:D48 | Thin, Continuous, #000000
+INPUT | Sheet1!A47 | "Total equity"
+INPUT | Sheet1!C47 | 20764
+INPUT | Sheet1!D47 | 21701
+BORDER_TOP | Sheet1!C47:D47 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!C47:D47 | Thin, Continuous, #000000
+FONT_BOLD | Sheet1!A47:A48 | True
+INPUT | Sheet1!A48 | "Total liabilities and equity"
+FONT_COLOR | Sheet1!A48 | #1F36C7
+BORDER_BOTTOM | Sheet1!A48:B48 | Thin, Continuous, #000000
+BORDER_TOP | Sheet1!C48:D48 | Thin, Continuous, #000000
+INPUT | Sheet1!C48 | 75266
+INPUT | Sheet1!D48 | 77821

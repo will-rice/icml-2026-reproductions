@@ -1,0 +1,1173 @@
+{
+  "trajectory_name": "0ec4560b",
+  "predictable_count": 777,
+  "final_state_size": 1388,
+  "coverage_pct": 55.98,
+  "predictable_properties": {
+    "Sheet1": {
+      "B1": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "B10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "merged_cells"
+      ],
+      "B11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.font.bold",
+        "merged_cells"
+      ],
+      "B12": [
+        "Format.borders.left",
+        "Format.font.bold",
+        "merged_cells"
+      ],
+      "B13": [
+        "Format.borders.left",
+        "Format.font.bold",
+        "merged_cells"
+      ],
+      "B14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.font.bold",
+        "merged_cells"
+      ],
+      "B3": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText"
+      ],
+      "B4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.wrapText"
+      ],
+      "B5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "B6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "B7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "B8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "B9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "C10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "C11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "C12": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "C13": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "C14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "C3": [
+        "Format.borders.left",
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "C4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.wrapText",
+        "number_format",
+        "value"
+      ],
+      "C5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "C6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "C7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "C8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "C9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "D10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "D11": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "D12": [
+        "merged_cells"
+      ],
+      "D13": [
+        "merged_cells"
+      ],
+      "D14": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "D3": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "D4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.wrapText",
+        "number_format"
+      ],
+      "D5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "D6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "D7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "D8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "D9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "E10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "E11": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "E12": [
+        "merged_cells"
+      ],
+      "E13": [
+        "merged_cells"
+      ],
+      "E14": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "E3": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "E4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "number_format"
+      ],
+      "E5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "E6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "E7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "E8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "E9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "F10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "F11": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "F12": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "F13": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "F14": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "F3": [
+        "Format.borders.right",
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "F4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "number_format"
+      ],
+      "F5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "F6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "F7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "F8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "F9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "G10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "G11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "G12": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "G13": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "G14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "G3": [
+        "Format.borders.left",
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "G4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "number_format"
+      ],
+      "G5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "G6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "G7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "G8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "G9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "H10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "H11": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "H12": [
+        "merged_cells"
+      ],
+      "H13": [
+        "merged_cells"
+      ],
+      "H14": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "H3": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "H4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "number_format"
+      ],
+      "H5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "H6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "H7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "H8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "H9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "I10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "I11": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "I12": [
+        "merged_cells"
+      ],
+      "I13": [
+        "merged_cells"
+      ],
+      "I14": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "I3": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "I4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "number_format",
+        "value"
+      ],
+      "I5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "I6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "I7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.verticalAlignment"
+      ],
+      "I8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.verticalAlignment"
+      ],
+      "I9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.verticalAlignment"
+      ],
+      "J10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "J11": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "J12": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "J13": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "J14": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "J3": [
+        "Format.borders.right",
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "J4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "number_format"
+      ],
+      "J5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "J6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "J7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "J8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "J9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "K10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "K11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "K12": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "K13": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "K14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "K3": [
+        "Format.borders.left",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "K4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "number_format"
+      ],
+      "K5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "K6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "K7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "K8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "K9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "L10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "L11": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "L12": [
+        "merged_cells"
+      ],
+      "L13": [
+        "merged_cells"
+      ],
+      "L14": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "L3": [
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "L4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "number_format"
+      ],
+      "L5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "L6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "L7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "L8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "L9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "M10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "M11": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "M12": [
+        "merged_cells"
+      ],
+      "M13": [
+        "merged_cells"
+      ],
+      "M14": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "M3": [
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "M4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "number_format"
+      ],
+      "M5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "M6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "M7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "M8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "M9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "N10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "N11": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "N12": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "N13": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "N14": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "N3": [
+        "Format.borders.right",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "N4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.font.bold",
+        "number_format"
+      ],
+      "N5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "N6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "N7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "N8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "N9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "O10": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "O11": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "O12": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "O13": [
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "O14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "merged_cells"
+      ],
+      "O3": [
+        "Format.borders.left",
+        "Format.horizontalAlignment",
+        "Format.wrapText"
+      ],
+      "O4": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "number_format"
+      ],
+      "O5": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "O6": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "O7": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "O8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "O9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.verticalAlignment"
+      ],
+      "P10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "P11": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "P12": [
+        "merged_cells"
+      ],
+      "P13": [
+        "merged_cells"
+      ],
+      "P14": [
+        "Format.borders.bottom",
+        "merged_cells"
+      ],
+      "P3": [
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "P4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "number_format"
+      ],
+      "P5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "P6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "P7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment"
+      ],
+      "P8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment"
+      ],
+      "P9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment"
+      ],
+      "Q10": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "merged_cells"
+      ],
+      "Q11": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "Q12": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "Q13": [
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "Q14": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "merged_cells"
+      ],
+      "Q3": [
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "Q4": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "number_format"
+      ],
+      "Q5": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "Q6": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment",
+        "number_format"
+      ],
+      "Q7": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment"
+      ],
+      "Q8": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment"
+      ],
+      "Q9": [
+        "Format.borders.bottom",
+        "Format.borders.right",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.verticalAlignment"
+      ]
+    }
+  }
+}

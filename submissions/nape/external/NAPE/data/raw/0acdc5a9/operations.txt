@@ -1,0 +1,638 @@
+INPUT | Sheet1!A1 | "Bouygues Immobilier"
+NUMBER_FORMAT | Sheet1!A1:A2 | #,##0;\(#,##0\);"-"
+FONT_COLOR | Sheet1!A1:A2 | #4472C5
+FONT_BOLD | Sheet1!A1:A3 | True
+INPUT | Sheet1!A3 | "Key Figures"
+FONT_ITALIC | Sheet1!A3 | True
+FONT_COLOR | Sheet1!A3 | #A5A5A5
+FONT_UNDERLINE | Sheet1!A3 | single
+INPUT | Sheet1!C4 | 2019
+ALIGN_HORIZONTAL | Sheet1!C1:Y32 | center
+NUMBER_FORMAT | Sheet1!C4 | 0
+FILL_COLOR | Sheet1!C4 | #EA7D10
+FONT_COLOR | Sheet1!C4 | #FFFFFF
+MERGE | Sheet1!C4:G4 | true
+BORDER_ALL | Sheet1!C4:G4 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!C4:C6 | True
+INPUT | Sheet1!I4 | 2020
+NUMBER_FORMAT | Sheet1!I4 | 0
+FILL_COLOR | Sheet1!I4 | #EA7D10
+FONT_COLOR | Sheet1!I4 | #FFFFFF
+MERGE | Sheet1!I4:M4 | true
+BORDER_ALL | Sheet1!I4:M4 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!I4:I6 | True
+INPUT | Sheet1!O4 | 2021
+NUMBER_FORMAT | Sheet1!O4 | 0
+FILL_COLOR | Sheet1!O4 | #EA7D10
+FONT_COLOR | Sheet1!O4 | #FFFFFF
+MERGE | Sheet1!O4:S4 | true
+BORDER_ALL | Sheet1!O4:S4 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!O4:O6 | True
+INPUT | Sheet1!U4 | 2022
+NUMBER_FORMAT | Sheet1!U4 | 0
+FILL_COLOR | Sheet1!U4 | #EA7D10
+FONT_COLOR | Sheet1!U4 | #FFFFFF
+MERGE | Sheet1!U4:Y4 | true
+BORDER_ALL | Sheet1!U4:Y4 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!U4:U6 | True
+INPUT | Sheet1!A5 | "€m"
+FONT_BOLD | Sheet1!A5:A6 | True
+FONT_COLOR | Sheet1!A5:A11 | #5C5C5C
+INPUT | Sheet1!C5 | "Q1"
+NUMBER_FORMAT | Sheet1!C5:G5 | #,##0
+FONT_COLOR | Sheet1!C5:F11 | #5C5C5C
+INPUT | Sheet1!D5 | "Q2"
+FONT_BOLD | Sheet1!D5:G6 | True
+INPUT | Sheet1!E5 | "Q3"
+INPUT | Sheet1!F5 | "Q4"
+INPUT | Sheet1!G5 | "FY"
+FILL_COLOR | Sheet1!G5 | #EA7D10
+FONT_COLOR | Sheet1!G5:G11 | #FFFFFF
+INPUT | Sheet1!I5 | "Q1"
+NUMBER_FORMAT | Sheet1!I5:M5 | #,##0
+BORDER_OUTSIDE | Sheet1!I5:M5 | Thin, Continuous, #ED7D32
+FONT_COLOR | Sheet1!I5:L11 | #5C5C5C
+INPUT | Sheet1!J5 | "Q2"
+FONT_BOLD | Sheet1!J5:M6 | True
+INPUT | Sheet1!K5 | "Q3"
+INPUT | Sheet1!L5 | "Q4"
+INPUT | Sheet1!M5 | "FY"
+FILL_COLOR | Sheet1!M5 | #EA7D10
+FONT_COLOR | Sheet1!M5:M11 | #FFFFFF
+INPUT | Sheet1!O5 | "Q1"
+NUMBER_FORMAT | Sheet1!O5:S5 | #,##0
+BORDER_OUTSIDE | Sheet1!O5:S5 | Thin, Continuous, #ED7D32
+FONT_COLOR | Sheet1!O5:R11 | #5C5C5C
+INPUT | Sheet1!P5 | "Q2"
+FONT_BOLD | Sheet1!P5:S6 | True
+INPUT | Sheet1!Q5 | "Q3"
+INPUT | Sheet1!R5 | "Q4"
+INPUT | Sheet1!S5 | "FY"
+FILL_COLOR | Sheet1!S5 | #EA7D10
+FONT_COLOR | Sheet1!S5:S11 | #FFFFFF
+INPUT | Sheet1!U5 | "Q1"
+NUMBER_FORMAT | Sheet1!U5:Y5 | #,##0
+BORDER_OUTSIDE | Sheet1!U5:Y5 | Thin, Continuous, #ED7D32
+FONT_COLOR | Sheet1!U5:X11 | #5C5C5C
+INPUT | Sheet1!V5 | "Q2"
+FONT_BOLD | Sheet1!V5:Y6 | True
+INPUT | Sheet1!W5 | "Q3"
+INPUT | Sheet1!X5 | "Q4"
+INPUT | Sheet1!Y5 | "FY"
+FILL_COLOR | Sheet1!Y5 | #EA7D10
+FONT_COLOR | Sheet1!Y5:Y11 | #FFFFFF
+INPUT | Sheet1!A6 | "Sales"
+ALIGN_VERTICAL | Sheet1!A1:Y32 | center
+WRAP_TEXT | Sheet1!A1:Y32 | True
+NUMBER_FORMAT | Sheet1!B6 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!C6 | 527
+NUMBER_FORMAT | Sheet1!C6:E6 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!D6 | 559
+INPUT | Sheet1!E6 | 524
+INPUT | Sheet1!F6 | 1096
+NUMBER_FORMAT | Sheet1!F6:H6 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!G6 | "=SUM(C6:F6)"
+FILL_COLOR | Sheet1!G6:G11 | #0093D5
+INPUT | Sheet1!I6 | 373
+NUMBER_FORMAT | Sheet1!I6:L6 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!J6 | 328
+INPUT | Sheet1!K6 | 622
+INPUT | Sheet1!L6 | 709
+INPUT | Sheet1!M6 | "=SUM(I6:L6)"
+NUMBER_FORMAT | Sheet1!M6:M7 | #.##0,;\(#.##0,\);"-"
+FILL_COLOR | Sheet1!M6:M11 | #0093D5
+NUMBER_FORMAT | Sheet1!N6 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!O6 | 452
+NUMBER_FORMAT | Sheet1!O6:R6 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!P6 | 529
+INPUT | Sheet1!Q6 | 452
+INPUT | Sheet1!R6 | 683
+INPUT | Sheet1!S6 | "=SUM(O6:R6)"
+NUMBER_FORMAT | Sheet1!S6:S7 | #.##0,;\(#.##0,\);"-"
+FILL_COLOR | Sheet1!S6:S11 | #0093D5
+NUMBER_FORMAT | Sheet1!T6 | #,##0
+INPUT | Sheet1!U6 | 399
+NUMBER_FORMAT | Sheet1!U6:V6 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!V6 | 470
+INPUT | Sheet1!W6 | 497
+NUMBER_FORMAT | Sheet1!W6:W7 | #,##0
+NUMBER_FORMAT | Sheet1!X6:Y6 | #,##0
+FILL_COLOR | Sheet1!Y6:Y11 | #0093D5
+INPUT | Sheet1!A7 | "o/w Residential"
+FONT_ITALIC | Sheet1!A7:A8 | True
+NUMBER_FORMAT | Sheet1!B7:F7 | #,##0
+INPUT | Sheet1!C7 | 494
+INPUT | Sheet1!D7 | 529
+INPUT | Sheet1!E7 | 496
+INPUT | Sheet1!F7 | 717
+INPUT | Sheet1!G7 | "=SUM(C7:F7)"
+NUMBER_FORMAT | Sheet1!G7 | #.##0,;\(#.##0,\);"-"
+NUMBER_FORMAT | Sheet1!H7:L7 | #,##0
+INPUT | Sheet1!I7 | 336
+INPUT | Sheet1!J7 | 308
+INPUT | Sheet1!K7 | 495
+INPUT | Sheet1!L7 | 623
+INPUT | Sheet1!M7 | "=SUM(I7:L7)"
+NUMBER_FORMAT | Sheet1!N7:R7 | #,##0
+INPUT | Sheet1!O7 | 407
+INPUT | Sheet1!P7 | 486
+INPUT | Sheet1!Q7 | 418
+INPUT | Sheet1!R7 | 562
+INPUT | Sheet1!S7 | "=SUM(O7:R7)"
+INPUT | Sheet1!U7 | 386
+NUMBER_FORMAT | Sheet1!U7:V7 | #,##0
+INPUT | Sheet1!V7 | 456
+INPUT | Sheet1!W7 | 386
+NUMBER_FORMAT | Sheet1!X7 | #.000,
+INPUT | Sheet1!Y7 | "=SUM(U7:X7)"
+NUMBER_FORMAT | Sheet1!Y7 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!A8 | "o/w Commercial"
+FONT_ITALIC | Sheet1!B8 | True
+FONT_COLOR | Sheet1!B8:B9 | #5C5C5C
+INPUT | Sheet1!C8 | 33
+NUMBER_FORMAT | Sheet1!C8:F8 | #,##0
+INPUT | Sheet1!D8 | 30
+INPUT | Sheet1!E8 | 28
+INPUT | Sheet1!F8 | 379
+INPUT | Sheet1!G8 | "=SUM(C8:F8)"
+NUMBER_FORMAT | Sheet1!G8:G9 | #,##0;\(#,##0\);"-"
+FONT_ITALIC | Sheet1!H8 | True
+FONT_COLOR | Sheet1!H8:H9 | #5C5C5C
+INPUT | Sheet1!I8 | 37
+NUMBER_FORMAT | Sheet1!I8:L8 | #,##0
+INPUT | Sheet1!J8 | 20
+INPUT | Sheet1!K8 | 127
+INPUT | Sheet1!L8 | 86
+INPUT | Sheet1!M8 | "=SUM(I8:L8)"
+NUMBER_FORMAT | Sheet1!M8:M9 | #,##0;\(#,##0\);"-"
+FONT_ITALIC | Sheet1!N8 | True
+FONT_COLOR | Sheet1!N8:N9 | #5C5C5C
+INPUT | Sheet1!O8 | 45
+INPUT | Sheet1!P8 | 43
+INPUT | Sheet1!Q8 | 34
+INPUT | Sheet1!R8 | 121
+INPUT | Sheet1!S8 | "=SUM(O8:R8)"
+NUMBER_FORMAT | Sheet1!S8:S9 | #,##0;\(#,##0\);"-"
+FONT_ITALIC | Sheet1!T8 | True
+FONT_COLOR | Sheet1!T8:T9 | #5C5C5C
+INPUT | Sheet1!U8 | 13
+INPUT | Sheet1!V8 | 14
+INPUT | Sheet1!W8 | 111
+FONT_ITALIC | Sheet1!X8 | True
+INPUT | Sheet1!Y8 | "=SUM(U8:X8)"
+NUMBER_FORMAT | Sheet1!Y8 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!A9 | "Current operating profit"
+FONT_BOLD | Sheet1!A9:F9 | True
+NUMBER_FORMAT | Sheet1!B9 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!C9 | 14
+NUMBER_FORMAT | Sheet1!C9:F9 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!D9 | 15
+INPUT | Sheet1!E9 | 13
+INPUT | Sheet1!F9 | 57
+INPUT | Sheet1!G9 | "=SUM(C9:F9)"
+NUMBER_FORMAT | Sheet1!H9 | #.##0,;\(#.##0,\);"-"
+FONT_BOLD | Sheet1!H9:L9 | True
+INPUT | Sheet1!I9 | -16
+NUMBER_FORMAT | Sheet1!I9:L9 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!J9 | -22
+INPUT | Sheet1!K9 | 28
+INPUT | Sheet1!L9 | 22
+INPUT | Sheet1!M9 | "=SUM(I9:L9)"
+NUMBER_FORMAT | Sheet1!N9 | #.##0,;\(#.##0,\);"-"
+FONT_BOLD | Sheet1!N9:R9 | True
+INPUT | Sheet1!O9 | 4
+NUMBER_FORMAT | Sheet1!O9:R9 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!P9 | 13
+INPUT | Sheet1!Q9 | 10
+INPUT | Sheet1!R9 | 16
+INPUT | Sheet1!S9 | "=SUM(O9:R9)"
+NUMBER_FORMAT | Sheet1!T9 | #,##0
+FONT_BOLD | Sheet1!T9:X9 | True
+INPUT | Sheet1!U9 | 0
+INPUT | Sheet1!V9 | 16
+NUMBER_FORMAT | Sheet1!V9 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!W9 | 1
+NUMBER_FORMAT | Sheet1!W9:Y9 | #,##0
+INPUT | Sheet1!A10 | "Current operating margin"
+NUMBER_FORMAT | Sheet1!B10:Y10 | 0.0%
+INPUT | Sheet1!C10 | "2.7%"
+INPUT | Sheet1!D10 | "2.7%"
+INPUT | Sheet1!E10 | "2.5%"
+INPUT | Sheet1!F10 | "5.2%"
+INPUT | Sheet1!G10 | "3.7%"
+INPUT | Sheet1!I10 | "(4.3%)"
+INPUT | Sheet1!J10 | "(6.7%)"
+INPUT | Sheet1!K10 | "4.5%"
+INPUT | Sheet1!L10 | "3.1%"
+INPUT | Sheet1!M10 | "0.6%"
+INPUT | Sheet1!O10 | "0.9%"
+INPUT | Sheet1!P10 | "2.5%"
+INPUT | Sheet1!Q10 | "2.2%"
+INPUT | Sheet1!R10 | "2.3%"
+INPUT | Sheet1!S10 | "2.0%"
+INPUT | Sheet1!U10 | "0.0%"
+INPUT | Sheet1!V10 | "3.4%"
+INPUT | Sheet1!W10 | "0.2%"
+INPUT | Sheet1!A11 | "Operating profit"
+FONT_BOLD | Sheet1!A11:Y11 | True
+NUMBER_FORMAT | Sheet1!B11 | #,##0
+FONT_COLOR | Sheet1!B11 | #5C5C5C
+INPUT | Sheet1!C11 | 14
+NUMBER_FORMAT | Sheet1!C11:G11 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!D11 | 15
+INPUT | Sheet1!E11 | 13
+INPUT | Sheet1!F11 | 57
+INPUT | Sheet1!G11 | "=SUM(C11:F11)"
+NUMBER_FORMAT | Sheet1!H11 | #,##0
+FONT_COLOR | Sheet1!H11 | #5C5C5C
+INPUT | Sheet1!I11 | -16
+NUMBER_FORMAT | Sheet1!I11:M11 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!J11 | -22
+INPUT | Sheet1!K11 | 28
+INPUT | Sheet1!L11 | 5
+INPUT | Sheet1!M11 | "=SUM(I11:L11)"
+NUMBER_FORMAT | Sheet1!N11 | #,##0
+FONT_COLOR | Sheet1!N11 | #5C5C5C
+INPUT | Sheet1!O11 | 0
+INPUT | Sheet1!P11 | 11
+NUMBER_FORMAT | Sheet1!P11:S11 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!Q11 | 10
+INPUT | Sheet1!R11 | 14
+INPUT | Sheet1!S11 | "=SUM(O11:R11)"
+NUMBER_FORMAT | Sheet1!T11 | #,##0
+FONT_COLOR | Sheet1!T11 | #5C5C5C
+INPUT | Sheet1!U11 | 0
+INPUT | Sheet1!V11 | 16
+NUMBER_FORMAT | Sheet1!V11 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!W11 | 1
+NUMBER_FORMAT | Sheet1!W11:Y11 | #,##0
+INPUT | Sheet1!A13 | "Net capital expenditure"
+FONT_COLOR | Sheet1!A13:F13 | #5C5C5C
+FONT_BOLD | Sheet1!A13:Y13 | True
+INPUT | Sheet1!C13 | -2
+NUMBER_FORMAT | Sheet1!C13:G13 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!D13 | -4
+INPUT | Sheet1!E13 | -1
+INPUT | Sheet1!F13 | -4
+INPUT | Sheet1!G13 | "=SUM(C13:F13)"
+FILL_COLOR | Sheet1!G13 | #0093D5
+FONT_COLOR | Sheet1!G13 | #FFFFFF
+FONT_COLOR | Sheet1!H13:L13 | #5C5C5C
+INPUT | Sheet1!I13 | -2
+NUMBER_FORMAT | Sheet1!I13 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!J13 | 0
+NUMBER_FORMAT | Sheet1!J13 | #,##0
+INPUT | Sheet1!K13 | -1
+NUMBER_FORMAT | Sheet1!K13:M13 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!L13 | -2
+INPUT | Sheet1!M13 | "=SUM(I13:L13)"
+FILL_COLOR | Sheet1!M13 | #0093D5
+FONT_COLOR | Sheet1!M13 | #FFFFFF
+FONT_COLOR | Sheet1!N13:R13 | #5C5C5C
+INPUT | Sheet1!O13 | -1
+NUMBER_FORMAT | Sheet1!O13:S13 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!P13 | -1
+INPUT | Sheet1!Q13 | -2
+INPUT | Sheet1!R13 | -2
+INPUT | Sheet1!S13 | "=SUM(O13:R13)"
+FILL_COLOR | Sheet1!S13 | #0093D5
+FONT_COLOR | Sheet1!S13 | #FFFFFF
+FONT_COLOR | Sheet1!T13:X13 | #5C5C5C
+INPUT | Sheet1!U13 | 0
+INPUT | Sheet1!V13 | -1
+NUMBER_FORMAT | Sheet1!V13:W13 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!W13 | -1
+NUMBER_FORMAT | Sheet1!Y13 | \+#.##0,;\(#.##0,\);"-"
+FILL_COLOR | Sheet1!Y13 | #0093D5
+FONT_COLOR | Sheet1!Y13 | #FFFFFF
+NUMBER_FORMAT | Sheet1!J14 | 0\.0%
+INPUT | Sheet1!A15 | "Free Cash Flow"
+FONT_COLOR | Sheet1!A15:F15 | #5C5C5C
+FONT_BOLD | Sheet1!A15:Y15 | True
+INPUT | Sheet1!C15 | -5
+NUMBER_FORMAT | Sheet1!C15:D15 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!D15 | -15
+INPUT | Sheet1!E15 | 0
+INPUT | Sheet1!F15 | 120
+INPUT | Sheet1!G15 | "=SUM(C15:F15)"
+NUMBER_FORMAT | Sheet1!G15 | #,##0;\(#,##0\);"-"
+FILL_COLOR | Sheet1!G15 | #0093D5
+FONT_COLOR | Sheet1!G15 | #FFFFFF
+FONT_COLOR | Sheet1!H15:L15 | #5C5C5C
+INPUT | Sheet1!I15 | -28
+NUMBER_FORMAT | Sheet1!I15:J15 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!J15 | -22
+INPUT | Sheet1!K15 | 32
+INPUT | Sheet1!L15 | 0
+INPUT | Sheet1!M15 | "=SUM(I15:L15)"
+NUMBER_FORMAT | Sheet1!M15 | #,##0;\(#,##0\);"-"
+FILL_COLOR | Sheet1!M15 | #0093D5
+FONT_COLOR | Sheet1!M15 | #FFFFFF
+FONT_COLOR | Sheet1!N15:R15 | #5C5C5C
+INPUT | Sheet1!O15 | 4
+INPUT | Sheet1!P15 | 8
+INPUT | Sheet1!Q15 | 8
+INPUT | Sheet1!R15 | 16
+INPUT | Sheet1!S15 | "=SUM(O15:R15)"
+NUMBER_FORMAT | Sheet1!S15 | #,##0;\(#,##0\);"-"
+FILL_COLOR | Sheet1!S15 | #0093D5
+FONT_COLOR | Sheet1!S15 | #FFFFFF
+FONT_COLOR | Sheet1!T15:X15 | #5C5C5C
+INPUT | Sheet1!U15 | 0
+INPUT | Sheet1!V15 | 17
+INPUT | Sheet1!W15 | -4
+NUMBER_FORMAT | Sheet1!W15 | #,##0;\(#,##0\);"-"
+NUMBER_FORMAT | Sheet1!Y15 | \+#.##0,;\(#.##0,\);"-"
+FILL_COLOR | Sheet1!Y15 | #0093D5
+FONT_COLOR | Sheet1!Y15 | #FFFFFF
+INPUT | Sheet1!A17 | "Business Indicators"
+FONT_ITALIC | Sheet1!A17 | True
+FONT_BOLD | Sheet1!A17 | True
+FONT_COLOR | Sheet1!A17 | #A5A5A5
+FONT_UNDERLINE | Sheet1!A17 | single
+INPUT | Sheet1!C18 | 2019
+NUMBER_FORMAT | Sheet1!C18 | 0
+FILL_COLOR | Sheet1!C18 | #EA7D10
+FONT_COLOR | Sheet1!C18 | #FFFFFF
+MERGE | Sheet1!C18:G18 | true
+BORDER_ALL | Sheet1!C18:G18 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!C18:C20 | True
+INPUT | Sheet1!I18 | 2020
+NUMBER_FORMAT | Sheet1!I18 | 0
+FILL_COLOR | Sheet1!I18 | #EA7D10
+FONT_COLOR | Sheet1!I18 | #FFFFFF
+MERGE | Sheet1!I18:M18 | true
+BORDER_ALL | Sheet1!I18:M18 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!I18:I20 | True
+INPUT | Sheet1!O18 | 2021
+NUMBER_FORMAT | Sheet1!O18 | 0
+FILL_COLOR | Sheet1!O18 | #EA7D10
+FONT_COLOR | Sheet1!O18 | #FFFFFF
+MERGE | Sheet1!O18:S18 | true
+BORDER_ALL | Sheet1!O18:S18 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!O18:O20 | True
+INPUT | Sheet1!U18 | 2022
+NUMBER_FORMAT | Sheet1!U18 | 0
+FILL_COLOR | Sheet1!U18 | #EA7D10
+FONT_COLOR | Sheet1!U18 | #FFFFFF
+MERGE | Sheet1!U18:Y18 | true
+BORDER_ALL | Sheet1!U18:Y18 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!U18:U20 | True
+INPUT | Sheet1!A19 | "€m"
+FONT_BOLD | Sheet1!A19:A20 | True
+FONT_COLOR | Sheet1!A19:A22 | #5C5C5C
+INPUT | Sheet1!C19 | "Q1"
+NUMBER_FORMAT | Sheet1!C19:G19 | #,##0
+FONT_COLOR | Sheet1!C19:F22 | #5C5C5C
+INPUT | Sheet1!D19 | "Q2"
+FONT_BOLD | Sheet1!D19:G20 | True
+INPUT | Sheet1!E19 | "Q3"
+INPUT | Sheet1!F19 | "Q4"
+INPUT | Sheet1!G19 | "FY"
+FILL_COLOR | Sheet1!G19 | #EA7D10
+FONT_COLOR | Sheet1!G19:G22 | #FFFFFF
+INPUT | Sheet1!I19 | "Q1"
+NUMBER_FORMAT | Sheet1!I19:M19 | #,##0
+FONT_COLOR | Sheet1!I19:L22 | #5C5C5C
+BORDER_OUTSIDE | Sheet1!I19:M22 | Thin, Continuous, #ED7D32
+INPUT | Sheet1!J19 | "Q2"
+FONT_BOLD | Sheet1!J19:M20 | True
+INPUT | Sheet1!K19 | "Q3"
+INPUT | Sheet1!L19 | "Q4"
+INPUT | Sheet1!M19 | "FY"
+FILL_COLOR | Sheet1!M19 | #EA7D10
+FONT_COLOR | Sheet1!M19:M22 | #FFFFFF
+INPUT | Sheet1!O19 | "Q1"
+NUMBER_FORMAT | Sheet1!O19:S19 | #,##0
+FONT_COLOR | Sheet1!O19:R22 | #5C5C5C
+BORDER_OUTSIDE | Sheet1!O19:S22 | Thin, Continuous, #ED7D32
+INPUT | Sheet1!P19 | "Q2"
+FONT_BOLD | Sheet1!P19:S20 | True
+INPUT | Sheet1!Q19 | "Q3"
+INPUT | Sheet1!R19 | "Q4"
+INPUT | Sheet1!S19 | "FY"
+FILL_COLOR | Sheet1!S19 | #EA7D10
+FONT_COLOR | Sheet1!S19:S22 | #FFFFFF
+INPUT | Sheet1!U19 | "Q1"
+NUMBER_FORMAT | Sheet1!U19:Y19 | #,##0
+FONT_COLOR | Sheet1!U19:X22 | #5C5C5C
+BORDER_OUTSIDE | Sheet1!U19:Y22 | Thin, Continuous, #ED7D32
+INPUT | Sheet1!V19 | "Q2"
+FONT_BOLD | Sheet1!V19:Y20 | True
+INPUT | Sheet1!W19 | "Q3"
+INPUT | Sheet1!X19 | "Q4"
+INPUT | Sheet1!Y19 | "FY"
+FILL_COLOR | Sheet1!Y19 | #EA7D10
+FONT_COLOR | Sheet1!Y19:Y22 | #FFFFFF
+INPUT | Sheet1!A20 | "RESERVATIONS (€m)"
+NUMBER_FORMAT | Sheet1!B20:B22 | #,##0
+INPUT | Sheet1!C20 | 482
+NUMBER_FORMAT | Sheet1!C20:E22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!D20 | 507
+INPUT | Sheet1!E20 | 463
+INPUT | Sheet1!F20 | 1247
+NUMBER_FORMAT | Sheet1!F20:G20 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!G20 | "=SUM(C20:F20)"
+FILL_COLOR | Sheet1!G20:G22 | #0093D5
+NUMBER_FORMAT | Sheet1!H20:H22 | #,##0
+INPUT | Sheet1!I20 | 390
+NUMBER_FORMAT | Sheet1!I20:L22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!J20 | 502
+INPUT | Sheet1!K20 | 406
+INPUT | Sheet1!L20 | 539
+INPUT | Sheet1!M20 | "=SUM(I20:L20)"
+NUMBER_FORMAT | Sheet1!M20:M21 | #.##0,;\(#.##0,\);"-"
+FILL_COLOR | Sheet1!M20:M22 | #0093D5
+NUMBER_FORMAT | Sheet1!N20:N22 | #,##0
+INPUT | Sheet1!O20 | 452
+NUMBER_FORMAT | Sheet1!O20:R22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!P20 | 581
+INPUT | Sheet1!Q20 | 362
+INPUT | Sheet1!R20 | 690
+INPUT | Sheet1!S20 | "=SUM(O20:R20)"
+NUMBER_FORMAT | Sheet1!S20:S21 | #.##0,;\(#.##0,\);"-"
+FILL_COLOR | Sheet1!S20:S22 | #0093D5
+NUMBER_FORMAT | Sheet1!T20:T22 | #,##0
+INPUT | Sheet1!U20 | 400
+NUMBER_FORMAT | Sheet1!U20:U22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!V20 | 493
+NUMBER_FORMAT | Sheet1!V20:Y22 | #,##0
+INPUT | Sheet1!W20 | 424
+FILL_COLOR | Sheet1!W20:W22 | #FFFFFF
+FILL_COLOR | Sheet1!Y20:Y22 | #0093D5
+INPUT | Sheet1!A21 | "- of which residential property"
+INPUT | Sheet1!C21 | 462
+INPUT | Sheet1!D21 | 502
+INPUT | Sheet1!E21 | 444
+INPUT | Sheet1!F21 | 666
+NUMBER_FORMAT | Sheet1!F21:F22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!G21 | "=SUM(C21:F21)"
+NUMBER_FORMAT | Sheet1!G21 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!I21 | 388
+INPUT | Sheet1!J21 | 499
+INPUT | Sheet1!K21 | 290
+INPUT | Sheet1!L21 | 412
+INPUT | Sheet1!M21 | "=SUM(I21:L21)"
+INPUT | Sheet1!O21 | 443
+INPUT | Sheet1!P21 | 529
+INPUT | Sheet1!Q21 | 354
+INPUT | Sheet1!R21 | 523
+INPUT | Sheet1!S21 | "=SUM(O21:R21)"
+INPUT | Sheet1!U21 | 395
+INPUT | Sheet1!V21 | 473
+INPUT | Sheet1!W21 | 276
+INPUT | Sheet1!A22 | "- of which commercial property"
+INPUT | Sheet1!C22 | 20
+INPUT | Sheet1!D22 | 5
+INPUT | Sheet1!E22 | 19
+INPUT | Sheet1!F22 | 581
+INPUT | Sheet1!G22 | "=SUM(C22:F22)"
+NUMBER_FORMAT | Sheet1!G22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!I22 | 2
+INPUT | Sheet1!J22 | 3
+INPUT | Sheet1!K22 | 116
+INPUT | Sheet1!L22 | 127
+INPUT | Sheet1!M22 | "=SUM(I22:L22)"
+NUMBER_FORMAT | Sheet1!M22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!O22 | 9
+INPUT | Sheet1!P22 | 52
+INPUT | Sheet1!Q22 | 8
+INPUT | Sheet1!R22 | 167
+INPUT | Sheet1!S22 | "=SUM(O22:R22)"
+NUMBER_FORMAT | Sheet1!S22 | #,##0;\(#,##0\);"-"
+INPUT | Sheet1!U22 | 5
+INPUT | Sheet1!V22 | 20
+INPUT | Sheet1!W22 | 148
+INPUT | Sheet1!C24 | 2019
+FILL_COLOR | Sheet1!C24 | #ED7D32
+FONT_COLOR | Sheet1!C24 | #FFFFFF
+MERGE | Sheet1!C24:F24 | true
+BORDER_OUTSIDE | Sheet1!C24:F25 | Thin, Continuous, #ED7D32
+FONT_BOLD | Sheet1!C24:C26 | True
+INPUT | Sheet1!I24 | 2020
+FILL_COLOR | Sheet1!I24 | #ED7D32
+FONT_COLOR | Sheet1!I24 | #FFFFFF
+MERGE | Sheet1!I24:L24 | true
+FONT_BOLD | Sheet1!I24:I26 | True
+INPUT | Sheet1!O24 | 2021
+FILL_COLOR | Sheet1!O24 | #ED7D32
+FONT_COLOR | Sheet1!O24 | #FFFFFF
+MERGE | Sheet1!O24:R24 | true
+FONT_BOLD | Sheet1!O24:O26 | True
+BORDER_OUTSIDE | Sheet1!O24:R28 | Thin, Continuous, #ED7D32
+INPUT | Sheet1!U24 | 2022
+FILL_COLOR | Sheet1!U24 | #ED7D32
+FONT_COLOR | Sheet1!U24 | #FFFFFF
+MERGE | Sheet1!U24:X24 | true
+FONT_BOLD | Sheet1!U24:U26 | True
+BORDER_OUTSIDE | Sheet1!U24:X28 | Thin, Continuous, #ED7D32
+INPUT | Sheet1!C25 | "End Mar."
+NUMBER_FORMAT | Sheet1!C25:F25 | #,##0
+FONT_COLOR | Sheet1!C25:F28 | #5C5C5C
+INPUT | Sheet1!D25 | "End June"
+FONT_BOLD | Sheet1!D25:F26 | True
+INPUT | Sheet1!E25 | "End Sept."
+INPUT | Sheet1!F25 | "End Dec."
+INPUT | Sheet1!I25 | "End Mar."
+NUMBER_FORMAT | Sheet1!I25:L25 | #,##0
+FONT_COLOR | Sheet1!I25:L28 | #5C5C5C
+INPUT | Sheet1!J25 | "End June"
+FONT_BOLD | Sheet1!J25:L26 | True
+INPUT | Sheet1!K25 | "End Sept."
+INPUT | Sheet1!L25 | "End Dec."
+INPUT | Sheet1!O25 | "End Mar."
+NUMBER_FORMAT | Sheet1!O25:R25 | #,##0
+FONT_COLOR | Sheet1!O25:R28 | #5C5C5C
+INPUT | Sheet1!P25 | "End June"
+FONT_BOLD | Sheet1!P25:R26 | True
+INPUT | Sheet1!Q25 | "End Sept."
+INPUT | Sheet1!R25 | "End Dec."
+INPUT | Sheet1!U25 | "End Mar."
+NUMBER_FORMAT | Sheet1!U25:X25 | #,##0
+FONT_COLOR | Sheet1!U25:X28 | #5C5C5C
+INPUT | Sheet1!V25 | "End June"
+FONT_BOLD | Sheet1!V25:X26 | True
+INPUT | Sheet1!W25 | "End Sept."
+INPUT | Sheet1!X25 | "End Dec."
+INPUT | Sheet1!A26 | "ORDER BOOK (€m)"
+FONT_BOLD | Sheet1!A26 | True
+FONT_COLOR | Sheet1!A26:A28 | #5C5C5C
+NUMBER_FORMAT | Sheet1!B26:R27 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!C26 | 2409
+INPUT | Sheet1!D26 | 2304
+INPUT | Sheet1!E26 | 2245
+INPUT | Sheet1!F26 | 2213
+INPUT | Sheet1!I26 | 2222
+INPUT | Sheet1!J26 | 2386
+INPUT | Sheet1!K26 | 2192
+INPUT | Sheet1!L26 | 1981
+INPUT | Sheet1!O26 | 1970
+INPUT | Sheet1!P26 | 1954
+INPUT | Sheet1!Q26 | 1872
+INPUT | Sheet1!R26 | 1739
+NUMBER_FORMAT | Sheet1!S26:T28 | #,##0
+INPUT | Sheet1!U26 | 1717
+NUMBER_FORMAT | Sheet1!U26:W27 | #.##0,;\(#.##0,\);"-"
+INPUT | Sheet1!V26 | 1713
+INPUT | Sheet1!W26 | 1578
+INPUT | Sheet1!X26 | 0
+NUMBER_FORMAT | Sheet1!X26:X28 | #,##0
+INPUT | Sheet1!A27 | "- of which residential property"
+INPUT | Sheet1!C27 | 2163
+INPUT | Sheet1!D27 | 2095
+INPUT | Sheet1!E27 | 2057
+INPUT | Sheet1!F27 | 1964
+INPUT | Sheet1!I27 | 2016
+INPUT | Sheet1!J27 | 2201
+INPUT | Sheet1!K27 | 2006
+INPUT | Sheet1!L27 | 1789
+INPUT | Sheet1!O27 | 1855
+INPUT | Sheet1!P27 | 1878
+INPUT | Sheet1!Q27 | 1824
+INPUT | Sheet1!R27 | 1709
+INPUT | Sheet1!U27 | 1694
+INPUT | Sheet1!V27 | 1684
+INPUT | Sheet1!W27 | 1557
+INPUT | Sheet1!X27 | 0
+INPUT | Sheet1!A28 | "- of which commercial property"
+NUMBER_FORMAT | Sheet1!B28:R28 | #,##0
+INPUT | Sheet1!C28 | 246
+INPUT | Sheet1!D28 | 209
+INPUT | Sheet1!E28 | 187
+INPUT | Sheet1!F28 | 248
+INPUT | Sheet1!I28 | 206
+INPUT | Sheet1!J28 | 185
+INPUT | Sheet1!K28 | 186
+INPUT | Sheet1!L28 | 192
+INPUT | Sheet1!O28 | 115
+INPUT | Sheet1!P28 | 75
+INPUT | Sheet1!Q28 | 48
+INPUT | Sheet1!R28 | 30
+INPUT | Sheet1!U28 | 23
+NUMBER_FORMAT | Sheet1!U28:W28 | #,##0
+INPUT | Sheet1!V28 | 29
+INPUT | Sheet1!W28 | 21
+INPUT | Sheet1!X28 | 0
+BORDER_OUTSIDE | Sheet1!C5:G11 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!I5:M11 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!O5:S11 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!U5:Y11 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!C13:G13 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!I13:M13 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!O13:S13 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!U13:Y13 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!C15:G15 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!I15:M15 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!O15:S15 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!U15:Y15 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!C19:G22 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!I19:M22 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!O19:S22 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!U19:Y22 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!C25:F28 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!I25:L28 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!O25:R28 | Thin, Continuous, #ED7D32
+BORDER_OUTSIDE | Sheet1!U25:X28 | Thin, Continuous, #ED7D32
+INPUT | Sheet1!A31 | "Note :   - all figures are at business areas level."
+FILL_COLOR | Sheet1!A31:A32 | #FFFFFF
+INPUT | Sheet1!A32 | "            - all figures are as reported"

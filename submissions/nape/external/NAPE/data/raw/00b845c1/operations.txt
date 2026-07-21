@@ -1,0 +1,270 @@
+INPUT | Sheet1!A2 | "QUEENSLAND, 2020–21*"
+FONT_BOLD | Sheet1!A2 | True
+FONT_SIZE | Sheet1!A2 | 20.0
+FONT_COLOR | Sheet1!A2 | #59534F
+INPUT | Sheet1!C3 | "Consumption"
+INPUT | Sheet1!D3 | " Gross value added"
+INPUT | Sheet1!E3 | " Gross regional product"
+INPUT | Sheet1!F3 | " Employed persons"
+FILL_COLOR | Sheet1!A3:F3 | #ACA6A2
+FONT_COLOR | Sheet1!B3:F3 | #FFFFFF
+FONT_BOLD | Sheet1!B3:F3 | True
+WRAP_TEXT | Sheet1!B3:F3 | True
+FILL_COLOR | Sheet1!A4:F4 | #DFDCD5
+BORDER_OUTSIDE | Sheet1!A3:F4 | Thin, Continuous, #ACA6A2
+INPUT | Sheet1!C4 | " $ million - purchaser's prices"
+INPUT | Sheet1!D4 | " $ million - basic prices"
+MERGE | Sheet1!D4:E4 | true
+INPUT | Sheet1!F4 | "'000"
+INPUT | Sheet1!A5 | "DIRECT"
+ALIGN_HORIZONTAL | Sheet1!A5 | center
+ALIGN_VERTICAL | Sheet1!A5 | center
+TEXT_ORIENTATION | Sheet1!A5 | 90
+INPUT | Sheet1!B5 | "Gold Coast"
+INPUT | Sheet1!D5 | 1416.89
+INPUT | Sheet1!E5 | 1578.39
+INPUT | Sheet1!F5 | 21.88
+INPUT | Sheet1!B6 | "Brisbane"
+INPUT | Sheet1!D6 | 2191.66
+INPUT | Sheet1!E6 | 2428.58
+INPUT | Sheet1!F6 | 29.33
+INPUT | Sheet1!B7 | "Sunshine Coast"
+INPUT | Sheet1!D7 | 1123.11
+INPUT | Sheet1!E7 | 1250.55
+INPUT | Sheet1!F7 | 18.61
+INPUT | Sheet1!B8 | "Fraser Coast"
+INPUT | Sheet1!D8 | 199.82
+INPUT | Sheet1!E8 | 222.78
+INPUT | Sheet1!F8 | 3.83
+INPUT | Sheet1!B9 | "Southern Queensland Country"
+INPUT | Sheet1!D9 | 323.16
+INPUT | Sheet1!E9 | 357.19
+INPUT | Sheet1!F9 | 6.61
+INPUT | Sheet1!B10 | "Bundaberg"
+INPUT | Sheet1!D10 | 131.11
+INPUT | Sheet1!E10 | 145.56
+INPUT | Sheet1!F10 | 2.46
+INPUT | Sheet1!B11 | "Gladstone"
+INPUT | Sheet1!D11 | 137.69
+INPUT | Sheet1!E11 | 153.28
+INPUT | Sheet1!F11 | 2.67
+INPUT | Sheet1!B12 | "Mackay"
+INPUT | Sheet1!D12 | 150.52
+INPUT | Sheet1!E12 | 167.25
+INPUT | Sheet1!F12 | 2.57
+INPUT | Sheet1!B13 | "Whitsundays"
+INPUT | Sheet1!D13 | 310.38
+INPUT | Sheet1!E13 | 346.68
+INPUT | Sheet1!F13 | 5.4
+INPUT | Sheet1!B14 | "Townsville"
+INPUT | Sheet1!D14 | 269.3
+INPUT | Sheet1!E14 | 299.19
+INPUT | Sheet1!F14 | 4.87
+INPUT | Sheet1!B15 | "Tropical North Queensland"
+INPUT | Sheet1!D15 | 856.58
+INPUT | Sheet1!E15 | 955.93
+INPUT | Sheet1!F15 | 14.86
+INPUT | Sheet1!B16 | "Outback Queensland"
+INPUT | Sheet1!D16 | 154.36
+INPUT | Sheet1!E16 | 172.28
+INPUT | Sheet1!F16 | 3.05
+INPUT | Sheet1!B17 | "Capricorn"
+INPUT | Sheet1!D17 | 226.05
+INPUT | Sheet1!E17 | 250.34
+INPUT | Sheet1!F17 | 4.46
+INPUT | Sheet1!B18 | "Regional Qld"
+INPUT | Sheet1!D18 | 3882.08
+INPUT | Sheet1!E18 | 4321.04
+INPUT | Sheet1!F18 | 69.39
+INPUT | Sheet1!B19 | "Total Qld"
+INPUT | Sheet1!D19 | 7490.63
+INPUT | Sheet1!E19 | 8328
+INPUT | Sheet1!F19 | 120.6
+INPUT | Sheet1!B20 | "Gold Coast"
+INPUT | Sheet1!D20 | 982.36
+INPUT | Sheet1!E20 | 1153.1
+INPUT | Sheet1!F20 | 7.25
+INPUT | Sheet1!B21 | "Brisbane"
+INPUT | Sheet1!D21 | 1653.12
+INPUT | Sheet1!E21 | 1939.26
+INPUT | Sheet1!F21 | 11.97
+INPUT | Sheet1!B22 | "Sunshine Coast"
+INPUT | Sheet1!D22 | 890.83
+INPUT | Sheet1!E22 | 1045.41
+INPUT | Sheet1!F22 | 6.62
+INPUT | Sheet1!B23 | "Fraser Coast"
+INPUT | Sheet1!D23 | 140.38
+INPUT | Sheet1!E23 | 164.74
+INPUT | Sheet1!F23 | 1.04
+INPUT | Sheet1!B24 | "Southern Queensland Country"
+INPUT | Sheet1!D24 | 316.2
+INPUT | Sheet1!E24 | 370.99
+INPUT | Sheet1!F24 | 2.35
+INPUT | Sheet1!B25 | "Bundaberg"
+INPUT | Sheet1!D25 | 100.99
+INPUT | Sheet1!E25 | 118.52
+INPUT | Sheet1!F25 | 0.75
+INPUT | Sheet1!B26 | "Gladstone"
+INPUT | Sheet1!D26 | 99.04
+INPUT | Sheet1!E26 | 116.18
+INPUT | Sheet1!F26 | 0.75
+INPUT | Sheet1!B27 | "Mackay"
+INPUT | Sheet1!D27 | 120.01
+INPUT | Sheet1!E27 | 140.83
+INPUT | Sheet1!F27 | 0.89
+INPUT | Sheet1!B28 | "Whitsundays"
+INPUT | Sheet1!D28 | 202.57
+INPUT | Sheet1!E28 | 237.77
+INPUT | Sheet1!F28 | 1.53
+INPUT | Sheet1!B29 | "Townsville"
+INPUT | Sheet1!D29 | 194.57
+INPUT | Sheet1!E29 | 228.31
+INPUT | Sheet1!F29 | 1.46
+INPUT | Sheet1!B30 | "Tropical North Queensland"
+INPUT | Sheet1!D30 | 572.34
+INPUT | Sheet1!E30 | 671.77
+INPUT | Sheet1!F30 | 4.29
+INPUT | Sheet1!B31 | "Outback Queensland"
+INPUT | Sheet1!D31 | 123.63
+INPUT | Sheet1!E31 | 145.23
+INPUT | Sheet1!F31 | 0.95
+INPUT | Sheet1!B32 | "Capricorn"
+INPUT | Sheet1!D32 | 196.64
+INPUT | Sheet1!E32 | 230.73
+INPUT | Sheet1!F32 | 1.47
+INPUT | Sheet1!B33 | "Rest of Australia (Qld)"
+INPUT | Sheet1!D33 | 1637.9
+INPUT | Sheet1!E33 | 1924.76
+INPUT | Sheet1!F33 | 12.08
+INPUT | Sheet1!B34 | "Regional Qld"
+INPUT | Sheet1!D34 | 4595.12
+INPUT | Sheet1!E34 | 5395.24
+INPUT | Sheet1!F34 | 34.18
+INPUT | Sheet1!B35 | "Total Qld"
+INPUT | Sheet1!D35 | 7230.6
+INPUT | Sheet1!E35 | 8487.6
+INPUT | Sheet1!F35 | 53.4
+INPUT | Sheet1!B36 | "Gold Coast"
+INPUT | Sheet1!C36 | 3673.4
+INPUT | Sheet1!D36 | 2399.25
+INPUT | Sheet1!E36 | 2731.49
+INPUT | Sheet1!F36 | 29.14
+INPUT | Sheet1!B37 | "Brisbane"
+INPUT | Sheet1!C37 | 4999.02
+INPUT | Sheet1!D37 | 3844.78
+INPUT | Sheet1!E37 | 4367.84
+INPUT | Sheet1!F37 | 41.29
+INPUT | Sheet1!B38 | "Sunshine Coast"
+INPUT | Sheet1!C38 | 3646.18
+INPUT | Sheet1!D38 | 2013.94
+INPUT | Sheet1!E38 | 2295.96
+INPUT | Sheet1!F38 | 25.23
+INPUT | Sheet1!B39 | "Fraser Coast"
+INPUT | Sheet1!C39 | 627.25
+INPUT | Sheet1!D39 | 340.2
+INPUT | Sheet1!E39 | 387.53
+INPUT | Sheet1!F39 | 4.87
+INPUT | Sheet1!B40 | "Southern Queensland Country"
+INPUT | Sheet1!C40 | 1222.84
+INPUT | Sheet1!D40 | 639.36
+INPUT | Sheet1!E40 | 728.18
+INPUT | Sheet1!F40 | 8.96
+INPUT | Sheet1!B41 | "Bundaberg"
+INPUT | Sheet1!C41 | 440.93
+INPUT | Sheet1!D41 | 232.1
+INPUT | Sheet1!E41 | 264.08
+INPUT | Sheet1!F41 | 3.21
+INPUT | Sheet1!B42 | "Gladstone"
+INPUT | Sheet1!C42 | 475.04
+INPUT | Sheet1!D42 | 236.73
+INPUT | Sheet1!E42 | 269.45
+INPUT | Sheet1!F42 | 3.42
+INPUT | Sheet1!B43 | "Mackay"
+INPUT | Sheet1!C43 | 545.09
+INPUT | Sheet1!D43 | 270.54
+INPUT | Sheet1!E43 | 308.08
+INPUT | Sheet1!F43 | 3.46
+INPUT | Sheet1!B44 | "Whitsundays"
+INPUT | Sheet1!C44 | 990.19
+INPUT | Sheet1!D44 | 512.95
+INPUT | Sheet1!E44 | 584.45
+INPUT | Sheet1!F44 | 6.93
+INPUT | Sheet1!B45 | "Townsville"
+INPUT | Sheet1!C45 | 755.3
+INPUT | Sheet1!D45 | 463.87
+INPUT | Sheet1!E45 | 527.5
+INPUT | Sheet1!F45 | 6.33
+INPUT | Sheet1!B46 | "Tropical North Queensland"
+INPUT | Sheet1!C46 | 2479.74
+INPUT | Sheet1!D46 | 1428.93
+INPUT | Sheet1!E46 | 1627.7
+INPUT | Sheet1!F46 | 19.15
+INPUT | Sheet1!B47 | "Outback Queensland"
+INPUT | Sheet1!C47 | 678.13
+INPUT | Sheet1!D47 | 278
+INPUT | Sheet1!E47 | 317.52
+INPUT | Sheet1!F47 | 4
+INPUT | Sheet1!B48 | "Capricorn"
+INPUT | Sheet1!C48 | 834.57
+INPUT | Sheet1!D48 | 422.69
+INPUT | Sheet1!E48 | 481.07
+INPUT | Sheet1!F48 | 5.93
+INPUT | Sheet1!B49 | "Rest of Australia (Qld)"
+INPUT | Sheet1!C49 | 0
+INPUT | Sheet1!D49 | 1637.9
+INPUT | Sheet1!E49 | 1924.76
+INPUT | Sheet1!F49 | 12.08
+INPUT | Sheet1!B50 | "Regional Qld"
+INPUT | Sheet1!C50 | 12695.27
+INPUT | Sheet1!D50 | 8477.2
+INPUT | Sheet1!E50 | 9716.28
+INPUT | Sheet1!F50 | 103.57
+INPUT | Sheet1!B51 | "Total Qld"
+INPUT | Sheet1!C51 | 21367.69
+INPUT | Sheet1!D51 | 14721.23
+INPUT | Sheet1!E51 | 16815.6
+INPUT | Sheet1!F51 | 174
+MERGE | Sheet1!A5:A19 | true
+ALIGN_HORIZONTAL | Sheet1!A5:A51 | center
+BORDER_ALL | Sheet1!A5:A51 | Thin, Continuous, #ACA6A2
+ALIGN_VERTICAL | Sheet1!B3:F51 | center
+ALIGN_HORIZONTAL | Sheet1!C3:F51 | right
+NUMBER_FORMAT | Sheet1!C5:E51 | #,##0
+NUMBER_FORMAT | Sheet1!F5:F51 | #,##0.0
+FILL_COLOR | Sheet1!B14:F14 | #008BB6
+FONT_COLOR | Sheet1!B14:F14 | #FFFFFF
+FILL_COLOR | Sheet1!B18:F18 | #EFEEED
+BORDER_TOP | Sheet1!B18:F19 | Thin, Continuous, #ACA6A2
+BORDER_BOTTOM | Sheet1!B18:F19 | Thin, Continuous, #ACA6A2
+FONT_BOLD | Sheet1!B18:F19 | True
+FILL_COLOR | Sheet1!B19:F19 | #DFDCD5
+INPUT | Sheet1!A20 | "INDIRECT"
+ALIGN_HORIZONTAL | Sheet1!A20 | center
+TEXT_ORIENTATION | Sheet1!A20 | 90
+MERGE | Sheet1!A20:A35 | true
+FILL_COLOR | Sheet1!B29:F29 | #008BB6
+FONT_COLOR | Sheet1!B29:F29 | #FFFFFF
+NUMBER_FORMAT | Sheet1!B33 | _(\ #,##0.0_);_(\ \(#,##0.0\);_(* "-"??_);_(@_)
+WRAP_TEXT | Sheet1!B33:C33 | True
+FILL_COLOR | Sheet1!B34:F34 | #EFEEED
+BORDER_TOP | Sheet1!B34:F35 | Thin, Continuous, #ACA6A2
+BORDER_BOTTOM | Sheet1!B34:F35 | Thin, Continuous, #ACA6A2
+FONT_BOLD | Sheet1!B34:F35 | True
+FILL_COLOR | Sheet1!B35:F35 | #DFDCD5
+INPUT | Sheet1!A36 | "TOTAL"
+ALIGN_HORIZONTAL | Sheet1!A36 | center
+TEXT_ORIENTATION | Sheet1!A36 | 90
+MERGE | Sheet1!A36:A51 | true
+FILL_COLOR | Sheet1!B45:F45 | #008BB6
+FONT_COLOR | Sheet1!B45:F45 | #FFFFFF
+NUMBER_FORMAT | Sheet1!B49 | _(\ #,##0.0_);_(\ \(#,##0.0\);_(* "-"??_);_(@_)
+WRAP_TEXT | Sheet1!B49 | True
+FILL_COLOR | Sheet1!B50:F50 | #EFEEED
+BORDER_TOP | Sheet1!B50:F51 | Thin, Continuous, #ACA6A2
+BORDER_BOTTOM | Sheet1!B50:F51 | Thin, Continuous, #ACA6A2
+FONT_BOLD | Sheet1!B50:F51 | True
+FILL_COLOR | Sheet1!B51:F51 | #DFDCD5
+INPUT | Sheet1!A52 | "* Note: the sum of regions may not add to total due to rounding."
+BORDER_OUTSIDE | Sheet1!B5:F19 | Thin, Continuous, #ACA6A2
+BORDER_OUTSIDE | Sheet1!B20:F35 | Thin, Continuous, #ACA6A2
+BORDER_OUTSIDE | Sheet1!B36:F51 | Thin, Continuous, #ACA6A2

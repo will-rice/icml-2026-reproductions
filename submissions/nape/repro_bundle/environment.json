@@ -1,0 +1,31 @@
+{
+  "commands": [
+    "uv sync",
+    "uv run nape-repro",
+    "uv run pytest tests/test_cli.py -q",
+    "uv run pytest tests/test_benchmark_evidence.py tests/test_predictability_evidence.py tests/test_future_adaptation_evidence.py -q",
+    "uv run pytest -q",
+    "uv run pytest external/NAPE/tests -q",
+    "uv run pre-commit run -a",
+    "uv run ty check src tests",
+    "git diff --check"
+  ],
+  "pinned_revisions": {
+    "dataset": {
+      "repository": "Tej-a55/napeval",
+      "revision": "c7e28fe9b08ee2c0bfc429519cf100197b7e018c"
+    },
+    "github": {
+      "repository": "Tej-55/NAPE",
+      "revision": "ac0d10e4dc345f982a5665a2c4bdb6b752d663f2"
+    }
+  },
+  "platform": {
+    "machine": "arm64",
+    "release": "25.5.0",
+    "system": "Darwin"
+  },
+  "python": "3.13.0",
+  "python_implementation": "CPython",
+  "schema": "icml-2026-repro-bundle/v2"
+}

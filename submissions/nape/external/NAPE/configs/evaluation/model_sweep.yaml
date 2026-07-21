@@ -1,0 +1,57 @@
+# Model sweep — multi-action (paper Table 1).
+#
+# Compares N models under identical settings. Uses sweep_zip so each
+# entry is a paired (model, cache_path) variant — not a cross-product.
+# Each variant gets its own cache file so runs don't pollute each other.
+#
+# Usage: python scripts/run_sweep.py configs/evaluation/model_sweep.yaml
+
+name: model_sweep
+
+trajectory_paths:
+  - data/trajectories/*.json
+
+output_dir: results/model_sweep
+
+max_runs: null
+
+max_steps: 1200
+max_steps_pct: 1.20
+
+workers: 4
+max_context_ops: 32
+online_mode: true
+repredict_after_accept: false
+
+stride:
+  mode: fixed_interval
+  interval: 1
+
+heuristics:
+  - steps_saved              # paper: "greedy"
+
+context_shortening:
+  enabled: true
+  max_chars: 32
+  corner_cells_dim: 2
+
+solver:
+  type: llm
+  adapter: openai
+  model: <your-model-id>     # base value, overridden by sweep_zip below
+  temperature: 0.0
+  max_tokens: 4096
+  num_op_to_pred: null       # multi-action (m = infinity)
+  cache_enabled: true
+  cache_path: caches/model_sweep_cache.json   # overridden per variant
+  emit_intent: false
+  remove_sheet_name: true
+
+# sweep_zip pairs entries lockstep (all lists must be the same length):
+#   - first variant uses (<model-a>, caches/sweep_a.json)
+#   - second variant uses (<model-b>, caches/sweep_b.json)
+#   - ...
+sweep_zip:
+  solver.model:      [<model-a>,            <model-b>,            <model-c>,            <model-d>]
+  solver.cache_path: [caches/sweep_a.json,  caches/sweep_b.json,  caches/sweep_c.json,  caches/sweep_d.json]
+

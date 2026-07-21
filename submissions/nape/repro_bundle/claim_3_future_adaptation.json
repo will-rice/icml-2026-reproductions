@@ -1,0 +1,520 @@
+{
+  "case_counts": {
+    "eligible_cases": 52,
+    "executed_cases": 52,
+    "release_trajectories": 52,
+    "skipped_cases": 0
+  },
+  "claim": "NAPE's future-edit implementation removes satisfied future operations, prepends inverses for false positives, and patches residual differences to preserve the target state after accepted predictions.",
+  "counting_definitions": {
+    "deterministic_mutation": "After operation 0, predict the exact operation 1 followed by VALUE on the first operation's sheet at ZZ999 with value 987654321.",
+    "eligible_case": "One deterministic adaptation case from each structurally valid trajectory JSON file containing at least two symbolic operations.",
+    "executed_case": "An eligible case for which parsing and pre-evaluation application are supported and the evaluator, simulator, rebuild, and final comparison complete.",
+    "inverse_insertion_case": "An executed case with at least one operation in changes['inverse_ops_added'].",
+    "removal_case": "An executed case with at least one operation in changes['operations_removed'].",
+    "residual_patch_case": "An executed case with metadata['missing_ops_count'] greater than zero.",
+    "skipped_case": "An eligible case is skipped only when symbolic parsing or pre-evaluation state application explicitly raises NotImplementedError for an unsupported operation; skipped cases are excluded from every mechanism denominator.",
+    "target_preserved_case": "An executed case whose rebuilt-versus-target comparison has zero false positives, zero false negatives, and zero mismatches."
+  },
+  "denominators": {
+    "inverse_insertion_cases": 52,
+    "removal_cases": 52,
+    "residual_patch_cases": 52,
+    "target_preserved_cases": 52
+  },
+  "evidence_scope": "official_evaluator_one_case_per_release_trajectory_and_fixture",
+  "input_path": "external/NAPE/data/trajectories/*.json",
+  "orchestrator_trace": {
+    "decisions": [
+      {
+        "accepted": true,
+        "future_after_count": 2,
+        "future_before_count": 4,
+        "gt_len_after": 5,
+        "gt_len_before": 5,
+        "predicted_ops": [
+          "VALUE | Sheet1!A2 | 2",
+          "VALUE | Sheet1!A3 | 3"
+        ],
+        "prediction_index": 1,
+        "t": 3,
+        "user_step": 1,
+        "user_t": 1
+      },
+      {
+        "accepted": false,
+        "future_after_count": 1,
+        "future_before_count": 1,
+        "gt_len_after": null,
+        "gt_len_before": null,
+        "predicted_ops": [
+          "VALUE | Sheet1!A5 | 999"
+        ],
+        "prediction_index": 2,
+        "t": 4,
+        "user_step": 2,
+        "user_t": 4
+      }
+    ],
+    "fixture": [
+      "VALUE | Sheet1!A1 | 1",
+      "VALUE | Sheet1!A2 | 2",
+      "VALUE | Sheet1!A3 | 3",
+      "VALUE | Sheet1!A4 | 4",
+      "VALUE | Sheet1!A5 | 5"
+    ],
+    "source_revision": "ac0d10e4dc345f982a5665a2c4bdb6b752d663f2",
+    "summary": {
+      "accepted": 1,
+      "future_was_updated": true,
+      "predictions": 2,
+      "predictions_after_user_actions": true,
+      "rejected": 1
+    },
+    "verdict": "verified"
+  },
+  "release_case_scope": "One deterministic adaptation case per each of the 52 released trajectories; this is not a full per-action model rollout.",
+  "release_sweep": {
+    "case_counts": {
+      "eligible_cases": 52,
+      "executed_cases": 52,
+      "release_trajectories": 52,
+      "skipped_cases": 0
+    },
+    "counting_definitions": {
+      "deterministic_mutation": "After operation 0, predict the exact operation 1 followed by VALUE on the first operation's sheet at ZZ999 with value 987654321.",
+      "eligible_case": "One deterministic adaptation case from each structurally valid trajectory JSON file containing at least two symbolic operations.",
+      "executed_case": "An eligible case for which parsing and pre-evaluation application are supported and the evaluator, simulator, rebuild, and final comparison complete.",
+      "inverse_insertion_case": "An executed case with at least one operation in changes['inverse_ops_added'].",
+      "removal_case": "An executed case with at least one operation in changes['operations_removed'].",
+      "residual_patch_case": "An executed case with metadata['missing_ops_count'] greater than zero.",
+      "skipped_case": "An eligible case is skipped only when symbolic parsing or pre-evaluation state application explicitly raises NotImplementedError for an unsupported operation; skipped cases are excluded from every mechanism denominator.",
+      "target_preserved_case": "An executed case whose rebuilt-versus-target comparison has zero false positives, zero false negatives, and zero mismatches."
+    },
+    "denominators": {
+      "inverse_insertion_cases": 52,
+      "removal_cases": 52,
+      "residual_patch_cases": 52,
+      "target_preserved_cases": 52
+    },
+    "summary": {
+      "inverse_insertion_cases": 52,
+      "removal_cases": 50,
+      "residual_patch_cases": 0,
+      "skipped_cases": 0,
+      "target_preserved_cases": 52,
+      "trajectories": 52
+    },
+    "trajectories": [
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0000afae",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0000c48d",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "000b8df6",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "000bc705",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "000c4efd",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00a454dc",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00a50edd",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00a5aa2d",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00a6ec83",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00a7cd9d",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00a7e072",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00a83f8a",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00aa1723",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00acaece",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00adc46f",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00afbc43",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00b1f2c0",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00b62743",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00b845c1",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00bd495c",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00bd8a82",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00c58a3f",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00c991b0",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00cb661d",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "00e2f4fc",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0a1d7d02",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0a46e1aa",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0a8c8866",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0a8ebb28",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0abc91cc",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0acdc5a9",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0b01c6b4",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0ba5a977",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0bb659ad",
+        "operations_removed": 0,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0c193a33",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0c4e58ed",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0c711f91",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0cc558e8",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0d33c8cb",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0d893569",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0df7802c",
+        "operations_removed": 0,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0e4de3da",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0e610190",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0e6bee03",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0ec4560b",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0f0df05d",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "0f392711",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "1a8ec1d8",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "1aa12c8a",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "1b47d5d3",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "1c023280",
+        "operations_removed": 1,
+        "target_preserved": true
+      },
+      {
+        "inverse_ops_added": 1,
+        "missing_ops_count": 0,
+        "name": "1c275b37",
+        "operations_removed": 1,
+        "target_preserved": true
+      }
+    ]
+  },
+  "residual_patch_fixture": {
+    "case_counts": {
+      "eligible_cases": 1,
+      "executed_cases": 1,
+      "residual_patch_cases": 1,
+      "skipped_cases": 0,
+      "target_preserved_cases": 1
+    },
+    "counting_definitions": {
+      "eligible_case": "The exact ground-truth and prediction pair in this deterministic fixture is one eligible case.",
+      "executed_case": "The eligible fixture is executed when the official evaluator, simulator, rebuild, and final comparison complete.",
+      "residual_patch_case": "The executed fixture is a residual patch case when metadata['missing_ops_count'] is greater than zero.",
+      "skip_treatment": "The deterministic fixture does not permit skips; any failure aborts evidence generation.",
+      "target_preserved_case": "The executed fixture preserves the target when the rebuilt-versus-target comparison has zero false positives, zero false negatives, and zero mismatches."
+    },
+    "denominator_definitions": {
+      "executed_cases": "eligible_cases",
+      "residual_patch_cases": "executed_cases",
+      "target_preserved_cases": "executed_cases"
+    },
+    "denominators": {
+      "executed_cases": 1,
+      "residual_patch_cases": 1,
+      "target_preserved_cases": 1
+    },
+    "evidence_scope": "deterministic_fixture_mechanism_proof",
+    "ground_truth": [
+      "VALUE | Sheet1!A1 | 1",
+      "VALUE | Sheet1!A2 | 1",
+      "VALUE | Sheet1!A2 | 1",
+      "VALUE | Sheet1!A2 | 1"
+    ],
+    "inverse_ops_added": 0,
+    "mechanism": "residual_correction",
+    "missing_ops_count": 1,
+    "operations_removed": 0,
+    "prediction": [
+      "VALUE | Sheet1!A1 | 1",
+      "VALUE | Sheet1!A1 | 2"
+    ],
+    "target_preserved": true
+  },
+  "source_revision": "ac0d10e4dc345f982a5665a2c4bdb6b752d663f2",
+  "verdict": "reproduced",
+  "verified_input_root": "external/NAPE"
+}

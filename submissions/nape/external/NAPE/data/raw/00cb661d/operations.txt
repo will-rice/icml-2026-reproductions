@@ -1,0 +1,98 @@
+FONT_SIZE | Sheet1!B1 | 22.0
+WRAP_TEXT | Sheet1!B1 | True
+ALIGN_HORIZONTAL | Sheet1!B1 | center
+MERGE | Sheet1!B1:E1 | true
+FONT_COLOR | Sheet1!B1:B2 | #355E7F
+FONT_NAME | Sheet1!B1:E22 | Century Gothic
+FONT_BOLD | Sheet1!B1:B9 | True
+ALIGN_VERTICAL | Sheet1!B1:E22 | center
+FONT_SIZE | Sheet1!B2 | 20.0
+FONT_COLOR | Sheet1!C2:D2 | #355E7F
+FONT_BOLD | Sheet1!C2:D2 | True
+FONT_SIZE | Sheet1!C2:D2 | 22.0
+FILL_COLOR | Sheet1!B3 | #002060
+FONT_COLOR | Sheet1!B3 | #FFFFFF
+FONT_SIZE | Sheet1!B3 | 12.0
+ALIGN_HORIZONTAL | Sheet1!B3 | center
+MERGE | Sheet1!B3:E3 | true
+BORDER_OUTSIDE | Sheet1!B3:E3 | Thin, Continuous, #000000
+INPUT | Sheet1!B3 | "MEETING INFORMATION"
+INPUT | Sheet1!B4 | "EVENT"
+INPUT | Sheet1!B5 | "MEETING TITLE"
+INPUT | Sheet1!B6 | "LOCATION"
+INPUT | Sheet1!B7 | "DATE & TIME"
+INPUT | Sheet1!C4 | "MANDATORY PRE-BID MEETING"
+INPUT | Sheet1!C5 | "25B-2391 Landscape and Ground Maintenance AND Snow Plowing Services"
+INPUT | Sheet1!C6 | "500 Oak Avenue, Suite 200, Springfield, IL 62701"
+INPUT | Sheet1!C7 | "FEBRUARY 27, 2025 at 2:00 P.M."
+INPUT | Sheet1!B8 | "SIGN-IN SHEET"
+INPUT | Sheet1!B9 | "ATTENDEE NAME"
+INPUT | Sheet1!C9 | "COMPANY"
+INPUT | Sheet1!D9 | "PHONE NUMBER"
+INPUT | Sheet1!E9 | "E-MAIL ADDRESS"
+INPUT | Sheet1!B10 | "Helen Carter"
+INPUT | Sheet1!B11 | "Sandra Walsh"
+INPUT | Sheet1!B12 | "Scott Franklin"
+INPUT | Sheet1!B13 | "Leo Ortiz"
+INPUT | Sheet1!B14 | "Eric Daniels"
+MERGE | Sheet1!C5:E5 | true
+MERGE | Sheet1!C6:E6 | true
+WRAP_TEXT | Sheet1!B4:E8 | True
+FILL_COLOR | Sheet1!B4:B7 | #D5E2ED
+FONT_COLOR | Sheet1!B4:B7 | #355E7F
+FONT_SIZE | Sheet1!B4:C7 | 26.0
+NUMBER_FORMAT | Sheet1!C4 | [$-F800]dddd\,\ mmmm\ dd\,\ yyyy
+MERGE | Sheet1!C4:E4 | true
+FONT_BOLD | Sheet1!C4:C7 | True
+ALIGN_HORIZONTAL | Sheet1!C4:C7 | center
+FONT_COLOR | Sheet1!C5 | #C00000
+NUMBER_FORMAT | Sheet1!C7 | [$-F400]h:mm:ss\ AM/PM
+FONT_COLOR | Sheet1!C7 | #C00000
+MERGE | Sheet1!C7:E7 | true
+BORDER_ALL | Sheet1!B4:B7 | Thin, Continuous, #A6A6A6
+BORDER_OUTSIDE | Sheet1!C4:E7 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!B8 | 24.0
+MERGE | Sheet1!B8:E8 | true
+FILL_COLOR | Sheet1!B8:B9 | #002060
+FONT_COLOR | Sheet1!B8:B9 | #FFFFFF
+ALIGN_HORIZONTAL | Sheet1!B8:B9 | center
+FONT_SIZE | Sheet1!B9:E19 | 12.0
+FILL_COLOR | Sheet1!C9:E9 | #002060
+FONT_BOLD | Sheet1!C9:E9 | True
+FONT_COLOR | Sheet1!C9:E9 | #FFFFFF
+INPUT | Sheet1!C10 | "Winn Co"
+INPUT | Sheet1!D10 | "555-123-4567"
+INPUT | Sheet1!E10 | "hcarter@purchasing.sample.gov"
+INPUT | Sheet1!C11 | "Elites Lawncare"
+INPUT | Sheet1!D11 | "555-234-5678"
+INPUT | Sheet1!E11 | "premium.lawncare@example.com"
+INPUT | Sheet1!C12 | "Winn Co"
+INPUT | Sheet1!D12 | "555-345-6789"
+INPUT | Sheet1!E12 | "sfranklin@fm.sample.gov"
+INPUT | Sheet1!C13 | "DGO Premium Services"
+INPUT | Sheet1!D13 | "555-456-7890"
+INPUT | Sheet1!E13 | "lortiz@example.com"
+INPUT | Sheet1!C14 | "All Seasons Landscaping"
+INPUT | Sheet1!D14 | "555-567-8901"
+INPUT | Sheet1!E14 | "info@greenscapeslandscaping.com"
+ALIGN_HORIZONTAL | Sheet1!C9:E19 | center
+FILL_COLOR | Sheet1!B10:E19 | #EAF1F6
+FONT_UNDERLINE | Sheet1!E10:E17 | single
+FONT_COLOR | Sheet1!E10:E17 | #F8B615
+BORDER_ALL | Sheet1!B8:E19 | Thin, Continuous, #A6A6A6
+BORDER_BOTTOM | Sheet1!B10:E10 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!B12:E12 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!B14:E14 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!B16:E16 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!B18:E18 | Thin, Continuous, #000000
+INPUT | Sheet1!B20 | "Notes Section"
+FILL_COLOR | Sheet1!B20 | #002060
+FONT_SIZE | Sheet1!B20 | 12.0
+FONT_COLOR | Sheet1!B20 | #FFFFFF
+FONT_BOLD | Sheet1!B20 | True
+ALIGN_HORIZONTAL | Sheet1!B20 | center
+MERGE | Sheet1!B20:E20 | true
+FILL_COLOR | Sheet1!B21 | #EAF1F6
+FONT_COLOR | Sheet1!B21 | #7C3D17
+MERGE | Sheet1!B21:E21 | true
+BORDER_ALL | Sheet1!B21:E21 | Thin, Continuous, #000000

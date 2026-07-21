@@ -1,0 +1,73 @@
+# =============================================================================
+# Data Generation Pipeline Configuration
+# =============================================================================
+# Usage:
+#   python scripts/generate_training_data.py --config configs/generation/pipeline.yaml
+
+# ---------------------------------------------------------------------------
+# Targets: list of workbook/sheet pairs to process
+# ---------------------------------------------------------------------------
+targets:
+  - workbook_path: data/workbooks/example.xlsx
+    sheet_name: Sheet1
+
+# Or load from external JSON file:
+# targets_file: data/workbook_targets.json
+
+# ---------------------------------------------------------------------------
+# Output
+# ---------------------------------------------------------------------------
+output_dir: outputs/training_data
+
+# ---------------------------------------------------------------------------
+# Stages: toggle which pipeline stages to run
+# Set to false to skip a stage. Skipped stages assume outputs from prior runs.
+# ---------------------------------------------------------------------------
+stages:
+  screenshots: true       # Step 1: Capture sheet images (requires xlwings)
+  regions: true            # Step 2: LLM-based region analysis
+  sequencing: true         # Step 3: Heuristic sampling + sequencing engine
+  refinement: true         # Step 4: LLM-based judge/editor refinement loop
+  gif: true                # Step 5: GIF generation from final sequence
+
+# ---------------------------------------------------------------------------
+# LLM Configuration
+# ---------------------------------------------------------------------------
+llm:
+  provider: openai         # openai | azure
+  model: gpt-4o
+  cache_enabled: true
+  cache_dir: caches
+
+# ---------------------------------------------------------------------------
+# Region Analysis
+# ---------------------------------------------------------------------------
+region_analysis:
+  max_retries: 3
+  max_dimension: 200       # Max rows/cols for sheet analysis
+
+# ---------------------------------------------------------------------------
+# Sequencing
+# ---------------------------------------------------------------------------
+sequencing:
+  config_sampler_seed: null  # null = random, integer = deterministic
+
+# ---------------------------------------------------------------------------
+# Refinement
+# ---------------------------------------------------------------------------
+refinement:
+  max_iterations: 3
+  max_retries: 3
+  temperature: 0.15
+  reasoning_effort: low
+  max_completion_tokens: null
+  judge_reasoning_effort: high
+  judge_max_completion_tokens: 20000
+
+# ---------------------------------------------------------------------------
+# GIF Generation
+# ---------------------------------------------------------------------------
+gif:
+  duration_ms: 300
+  loop: 1
+  max_operations: 1000     # Max ops for GIF generation (0 = no limit)

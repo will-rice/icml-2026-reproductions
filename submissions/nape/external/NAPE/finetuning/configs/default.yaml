@@ -1,0 +1,93 @@
+# ==========================================================================
+# Finetuning Configuration — Causal LM on spreadsheet operation sequences
+# ==========================================================================
+# Usage:
+#   python finetuning/train.py --config finetuning/configs/default.yaml
+#
+# All paths are relative to the next_action_pred_eval project root.
+# CLI flags (e.g. --model, --output_dir) override values here.
+# ==========================================================================
+
+# --- Model -------------------------------------------------------------------
+# Accepts HuggingFace Hub IDs or local paths.
+# Recommended small models:
+#   - Qwen/Qwen2.5-0.5B
+#   - HuggingFaceTB/SmolLM2-360M
+#   - HuggingFaceTB/SmolLM2-135M
+#   - Qwen/Qwen2.5-1.5B
+model: Qwen/Qwen2.5-0.5B
+
+# --- Data --------------------------------------------------------------------
+data_dir: results/generation/train_data
+processed_data_path: finetuning/processed_data/sequences.jsonl
+max_percentile: 95.0                              # filter out sequences above this percentile by op count
+eval_split: 0.05                                  # fraction held out for val
+
+# --- Pre-processing (MUST match evaluation solver settings) ------------------
+# These are applied ON-THE-FLY in the dataloader, not at export time.
+# Changing these values takes effect immediately without re-exporting data.
+# Defaults mirror configs/evaluation/base_run.yaml.
+preprocessing:
+  remove_sheet_name: true        # strip "Sheet!" prefix from operations
+  context_shortening:
+    enabled: true
+    max_chars: 32                # truncate long cell values to this many chars
+    corner_cells_dim: 2          # rows/cols from each corner of large 2D arrays
+
+# --- Prompt template ---------------------------------------------------------
+# Must contain {actions} placeholder where the numbered action list goes.
+# Default matches CompletionSolver's DEFAULT_COMPLETION_TEMPLATE exactly.
+# To experiment with different prompts, modify this string.
+prompt_template: >-
+  Complete the sequence of actions to build the following
+  spreadsheet by identifying and extending key patterns.
+
+
+  {actions}
+
+# --- Example construction (operation-level) ----------------------------------
+# Controls how training examples are windowed from each sequence.
+max_context_ops: 128             # max operations per training example
+example_stride: 64               # step between windows (ops); 64 = 50% overlap
+                                 # Larger → fewer examples, faster epochs
+                                 # Smaller → more examples, more overlap
+max_seq_len: 2048                # hard token limit per example (tokenizer)
+include_sheet_name: false        # add "Active sheet: ..." to prompt (experimental)
+
+# --- Training ----------------------------------------------------------------
+epochs: 3
+batch_size: 4
+gradient_accumulation_steps: 8    # effective batch = 4 × 8 = 32
+lr: 5.0e-5
+warmup_ratio: 0.05
+weight_decay: 0.01
+fp16: true                        # set to false if on CPU or no fp16 support
+bf16: false                       # set to true for Ampere+ GPUs
+gradient_checkpointing: true      # trades compute for memory
+dataloader_num_workers: 4
+seed: 42
+
+# --- LoRA (optional — off by default for small models) -----------------------
+use_lora: false
+lora_rank: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_modules:              # null → auto-detect (all linear layers)
+
+# --- Output & logging --------------------------------------------------------
+output_dir: finetuning/results
+logging_steps: 50
+save_strategy: epoch              # "epoch" or "steps"
+save_total_limit: 3               # keep last N checkpoints
+eval_strategy: epoch              # validate every epoch
+load_best_model_at_end: true
+metric_for_best_model: eval_loss
+
+# Logging backend: "tensorboard" (default), "wandb", "all", or "none"
+# TensorBoard logs go to {output_dir}/tb_logs/
+# View with:  tensorboard --logdir finetuning/results/tb_logs
+report_to: tensorboard
+
+# --- Weights & Biases (optional, enable via report_to: wandb or all) ---------
+wandb_project:                    # e.g. "spreadsheet-ft"
+wandb_run_name:                   # auto-generated if empty

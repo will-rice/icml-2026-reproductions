@@ -1,0 +1,494 @@
+INPUT | Sheet1!B1 | "College of Southern Idaho (C.S.I.) Associates of Arts (AA)  @ Rigby High School *Updated Jan 15th,2025"
+MERGE | Sheet1!B1:L1 | true
+ALIGN_HORIZONTAL | Sheet1!B1:B2 | center
+FONT_BOLD | Sheet1!B1:B3 | True
+FONT_SIZE | Sheet1!B1:B3 | 24.0
+MERGE | Sheet1!B2:L2 | true
+INPUT | Sheet1!B3 | "Student Name:_________________________ Student ID:_________________ Email:______________________"
+MERGE | Sheet1!B3:L3 | true
+BORDER_BOTTOM | Sheet1!B3:L3 | Thin, Continuous, #000000
+FONT_BOLD | Sheet1!B4:L4 | True
+FONT_SIZE | Sheet1!B4:L4 | 24.0
+INPUT | Sheet1!B5 | "This sheet reflects Dual Credit Courses taught at RHS only. Students can complete their entire Associates Degree at RHS."
+FONT_BOLD | Sheet1!B5 | True
+FONT_SIZE | Sheet1!B5 | 18.0
+ALIGN_HORIZONTAL | Sheet1!B5 | center
+MERGE | Sheet1!B5:L5 | true
+INPUT | Sheet1!B6 | "CORE COURSES @ RIGBY HIGH SCHOOL"
+FONT_BOLD | Sheet1!B6 | True
+FONT_SIZE | Sheet1!B6 | 20.0
+ALIGN_HORIZONTAL | Sheet1!B6 | center
+MERGE | Sheet1!B6:F6 | true
+FONT_SIZE | Sheet1!G6:G7 | 20.0
+INPUT | Sheet1!H6 | "ELECTIVE DUAL CREDIT COURSES @ RIGBY HIGH SCHOOL"
+FONT_BOLD | Sheet1!H6 | True
+FONT_SIZE | Sheet1!H6 | 20.0
+ALIGN_HORIZONTAL | Sheet1!H6 | center
+MERGE | Sheet1!H6:L6 | true
+FONT_SIZE | Sheet1!C7:D7 | 18.0
+FONT_BOLD | Sheet1!C7:F7 | True
+INPUT | Sheet1!E7 | "College"
+INPUT | Sheet1!F7 | "Credits"
+FONT_SIZE | Sheet1!E7:F7 | 16.0
+ALIGN_HORIZONTAL | Sheet1!E7:F7 | center
+FONT_SIZE | Sheet1!H7 | 20.0
+FONT_SIZE | Sheet1!I7 | 22.0
+FONT_SIZE | Sheet1!J7 | 20.0
+INPUT | Sheet1!K7 | "College"
+INPUT | Sheet1!L7 | "Credits"
+ALIGN_HORIZONTAL | Sheet1!K7:L36 | center
+FONT_SIZE | Sheet1!K7:L37 | 16.0
+FONT_BOLD | Sheet1!K7:L37 | True
+INPUT | Sheet1!B8 | "ORAL COMMUNICATION"
+FONT_SIZE | Sheet1!B8 | 20.0
+FONT_BOLD | Sheet1!B8 | True
+ALIGN_HORIZONTAL | Sheet1!B8 | center
+MERGE | Sheet1!B8:E8 | true
+INPUT | Sheet1!F8 | "3 cr"
+FONT_BOLD | Sheet1!F8:F19 | True
+FONT_SIZE | Sheet1!F8:F19 | 16.0
+ALIGN_HORIZONTAL | Sheet1!F8:F19 | center
+FONT_SIZE | Sheet1!G8:G53 | 16.0
+FONT_SIZE | Sheet1!H8:H37 | 16.0
+FONT_SIZE | Sheet1!I8 | 20.0
+ALIGN_HORIZONTAL | Sheet1!I8 | center
+MERGE | Sheet1!I8:J8 | true
+INPUT | Sheet1!I8 | "ELECTIVES"
+INPUT | Sheet1!I9 | "AGED 258"
+INPUT | Sheet1!I10 | "ASE 114"
+INPUT | Sheet1!I11 | "ASE 133"
+INPUT | Sheet1!I12 | "ASE 164"
+INPUT | Sheet1!I13 | "ASE 165"
+INPUT | Sheet1!I14 | "ASE 173"
+INPUT | Sheet1!I15 | "BUSA 101"
+INPUT | Sheet1!I16 | "BUSA 215"
+INPUT | Sheet1!I17 | "COMM 2120"
+INPUT | Sheet1!I18 | "ED 201"
+INPUT | Sheet1!I19 | "ED 202"
+INPUT | Sheet1!I20 | "ED 204"
+INPUT | Sheet1!I21 | "ED 205"
+INPUT | Sheet1!I22 | "ED 215"
+INPUT | Sheet1!I23 | "EXHA 104"
+INPUT | Sheet1!I24 | "FIN 102"
+INPUT | Sheet1!I25 | "HCT 100"
+INPUT | Sheet1!I26 | "HCT 101"
+INPUT | Sheet1!I27 | "HCT 140"
+INPUT | Sheet1!I28 | "HIST 112"
+INPUT | Sheet1!I29 | "HPSS 2243"
+INPUT | Sheet1!I30 | "MUSI 121"
+INPUT | Sheet1!I31 | "PSYC 140"
+INPUT | Sheet1!I32 | "SPAN/CHIN"
+INPUT | Sheet1!I33 | "WELD 107"
+INPUT | Sheet1!I34 | "WELD 149"
+INPUT | Sheet1!I35 | "WELD 151"
+INPUT | Sheet1!I36 | "WELD 154"
+FONT_BOLD | Sheet1!I8:I36 | True
+BORDER_OUTSIDE | Sheet1!H8:L36 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!H9:H36 | Thin, Continuous, #000000
+INPUT | Sheet1!L8 | "24 Cr"
+BORDER_ALL | Sheet1!L8 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!B9:E9 | 16.0
+INPUT | Sheet1!C9 | "COMM 101"
+INPUT | Sheet1!D9 | "Fund of Oral Comm (1 Tri)"
+INPUT | Sheet1!E9 | "CWI"
+FONT_BOLD | Sheet1!C9:E9 | True
+ALIGN_HORIZONTAL | Sheet1!E9 | center
+BORDER_OUTSIDE | Sheet1!B8:F9 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B9 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F8 | Thin, Continuous, #000000
+INPUT | Sheet1!F9 | 3
+FONT_SIZE | Sheet1!I9:J37 | 16.0
+FONT_BOLD | Sheet1!J9:J36 | True
+INPUT | Sheet1!J9 | "Ag Exp Learning & SAE (1 Tri)"
+INPUT | Sheet1!K9 | "U of I"
+INPUT | Sheet1!J10 | "Engine Repair (Auto II)(1 Tri)"
+INPUT | Sheet1!K10 | "CEI"
+INPUT | Sheet1!J11 | "Manual Drive Train (Auto II)(1 Tri)"
+INPUT | Sheet1!K11 | "CEI"
+INPUT | Sheet1!J12 | "Intro Electrical (165 Combo(Auto I)"
+INPUT | Sheet1!K12 | "CEI"
+INPUT | Sheet1!J13 | "Electrical Systems (Combo A1)(1 Tri)"
+INPUT | Sheet1!K13 | "CEI"
+INPUT | Sheet1!J14 | "Basic HVAC (Auto III) (1 Tri)"
+INPUT | Sheet1!K14 | "CEI"
+INPUT | Sheet1!J15 | "Intro to Business (1 Tri)"
+INPUT | Sheet1!K15 | "CWI"
+INPUT | Sheet1!J16 | "Science & Data Manage (1 Tri)"
+INPUT | Sheet1!K16 | "CSI"
+INPUT | Sheet1!J17 | "Communication Activities* (1 - 4 Tri)"
+INPUT | Sheet1!K17 | "NNU"
+INPUT | Sheet1!J18 | "Foundations of ED (1 Tri)"
+INPUT | Sheet1!K18 | "CSI"
+INPUT | Sheet1!J19 | "Field Experience (1 Tri)"
+INPUT | Sheet1!K19 | "CSI"
+INPUT | Sheet1!J20 | "Families & Culture (1 Tri)"
+INPUT | Sheet1!K20 | "CSI"
+INPUT | Sheet1!J21 | "Develop & Indiv Diff (1 Tri)"
+INPUT | Sheet1!K21 | "CSI"
+INPUT | Sheet1!J22 | "Educational Technology (1 Tri)"
+INPUT | Sheet1!K22 | "CSI"
+INPUT | Sheet1!J23 | "Stay Active Live Well (1 Tri)"
+INPUT | Sheet1!K23 | "CWI"
+INPUT | Sheet1!J24 | "Personal Finance (1 Tri)"
+INPUT | Sheet1!K24 | "CWI"
+INPUT | Sheet1!J25 | "Fund of Health Professions (1 Tri)"
+INPUT | Sheet1!K25 | "CEI"
+INPUT | Sheet1!J26 | "Medical Terminology (1 Tri)"
+INPUT | Sheet1!K26 | "CEI"
+INPUT | Sheet1!J27 | "Certified Nursing Train (2Hr 1 Tri)"
+INPUT | Sheet1!K27 | "CEI"
+INPUT | Sheet1!J28 | "United State History (1 Tri 11B)"
+INPUT | Sheet1!K28 | "CWI"
+INPUT | Sheet1!J29 | "Anatomy & Physiology A&B (2 Tri)"
+INPUT | Sheet1!K29 | "ISU"
+INPUT | Sheet1!J30 | "Wind Ensemble*"
+INPUT | Sheet1!K30 | "U of I"
+INPUT | Sheet1!J31 | "Career & Personal Success (1 Tri)"
+INPUT | Sheet1!K31 | "CWI"
+INPUT | Sheet1!J32 | "Extra Immersion Classes (Varies)"
+INPUT | Sheet1!K32 | "BSU/U of I"
+INPUT | Sheet1!J33 | "Safety & Leaders(Ag Weld) (1 Tri)"
+INPUT | Sheet1!K33 | "CSI"
+INPUT | Sheet1!J34 | "Blueprint R &W (Ag Fab I) (1 Tri)"
+INPUT | Sheet1!K34 | "CSI"
+INPUT | Sheet1!J35 | "Weld Theory (Adv Ag Weld) (1 Tri)"
+INPUT | Sheet1!K35 | "CSI"
+INPUT | Sheet1!J36 | "SMAW Practical (Ag Fab II) (1 Tri)"
+INPUT | Sheet1!K36 | "CSI"
+INPUT | Sheet1!L9 | 3
+INPUT | Sheet1!L10 | 3
+INPUT | Sheet1!L11 | 2
+INPUT | Sheet1!L12 | 1
+INPUT | Sheet1!L13 | 3
+INPUT | Sheet1!L14 | 2
+INPUT | Sheet1!L15 | 3
+INPUT | Sheet1!L16 | 3
+INPUT | Sheet1!L17 | 1
+INPUT | Sheet1!L18 | 3
+INPUT | Sheet1!L19 | 1
+INPUT | Sheet1!L20 | 3
+INPUT | Sheet1!L21 | 3
+INPUT | Sheet1!L22 | 3
+INPUT | Sheet1!L23 | 1
+INPUT | Sheet1!L24 | 3
+INPUT | Sheet1!L25 | 2
+INPUT | Sheet1!L26 | 2
+INPUT | Sheet1!L27 | 6
+INPUT | Sheet1!L28 | 3
+INPUT | Sheet1!L29 | 3
+INPUT | Sheet1!L30 | 1
+INPUT | Sheet1!L31 | 3
+INPUT | Sheet1!K37 | "Electives Needed"
+INPUT | Sheet1!L37 | "24 cr"
+ALIGN_HORIZONTAL | Sheet1!K37 | right
+ALIGN_HORIZONTAL | Sheet1!L37 | center
+BORDER_ALL | Sheet1!L37 | Thin, Continuous, #000000
+INPUT | Sheet1!B10 | "WRITTEN COMMUNICATION"
+FONT_BOLD | Sheet1!B10 | True
+FONT_SIZE | Sheet1!B10 | 20.0
+ALIGN_HORIZONTAL | Sheet1!B10 | center
+MERGE | Sheet1!B10:E10 | true
+INPUT | Sheet1!F10 | "6 cr"
+FONT_SIZE | Sheet1!B11:E12 | 16.0
+INPUT | Sheet1!C11 | "ENGL 101"
+INPUT | Sheet1!D11 | "Writing & Rhetoric I (1 Tri)"
+INPUT | Sheet1!E11 | "CSI"
+INPUT | Sheet1!C12 | "ENGL 102"
+INPUT | Sheet1!D12 | "Writing & Rhetoric (1 Tri)"
+INPUT | Sheet1!E12 | "CSI"
+FONT_BOLD | Sheet1!C11:E12 | True
+ALIGN_HORIZONTAL | Sheet1!E11:E12 | center
+BORDER_OUTSIDE | Sheet1!B10:F12 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B11:B12 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F10 | Thin, Continuous, #000000
+INPUT | Sheet1!F11 | 3
+INPUT | Sheet1!F12 | 3
+INPUT | Sheet1!B13 | "MATHEMATICS"
+FONT_BOLD | Sheet1!B13 | True
+FONT_SIZE | Sheet1!B13 | 20.0
+ALIGN_HORIZONTAL | Sheet1!B13 | center
+MERGE | Sheet1!B13:E13 | true
+INPUT | Sheet1!F13 | "3 cr"
+FONT_SIZE | Sheet1!B14:E18 | 16.0
+INPUT | Sheet1!C14 | "MATH 123     Math in Modern Society (2 Tri)"
+INPUT | Sheet1!C15 | "MATH 143"
+INPUT | Sheet1!C16 | "MATH 144"
+INPUT | Sheet1!C17 | "MATH 153"
+INPUT | Sheet1!C18 | "MATH 170"
+FONT_BOLD | Sheet1!C14:C18 | True
+INPUT | Sheet1!E14 | "CSI"
+INPUT | Sheet1!E15 | "CSI"
+INPUT | Sheet1!E16 | "CSI"
+INPUT | Sheet1!E17 | "CSI/ISU"
+INPUT | Sheet1!E18 | "CSI/ISU"
+FONT_BOLD | Sheet1!E14:E18 | True
+ALIGN_HORIZONTAL | Sheet1!E14:E18 | center
+INPUT | Sheet1!F14 | 3
+INPUT | Sheet1!F15 | 3
+INPUT | Sheet1!F16 | 2
+INPUT | Sheet1!F17 | 3
+INPUT | Sheet1!D15 | "College Algebra A&B (2 Tri)"
+INPUT | Sheet1!D16 | "Trigonometry (1 Tri)"
+INPUT | Sheet1!D17 | "Statistical Methods A&B (2 Tri)"
+INPUT | Sheet1!D18 | "Calculus 1 A&B (2 Tri)"
+BORDER_OUTSIDE | Sheet1!B13:F18 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B14:B18 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F13 | Thin, Continuous, #000000
+FONT_BOLD | Sheet1!D15:D18 | True
+INPUT | Sheet1!F18 | "4 or 5"
+INPUT | Sheet1!F19 | "7-8 cr"
+FONT_SIZE | Sheet1!B19 | 20.0
+MERGE | Sheet1!B19:E19 | true
+INPUT | Sheet1!B19 | "SCIENCE"
+INPUT | Sheet1!B20 | "(Must have a course from two different disciplines)"
+INPUT | Sheet1!B21 | "LIFE SCIENCE"
+FONT_BOLD | Sheet1!B19:B21 | True
+ALIGN_HORIZONTAL | Sheet1!B19:B21 | center
+FONT_SIZE | Sheet1!B20 | 16.0
+MERGE | Sheet1!B20:F20 | true
+FILL_COLOR | Sheet1!B20 | #FFFF00
+FONT_SIZE | Sheet1!B21 | 20.0
+MERGE | Sheet1!B21:F21 | true
+FONT_SIZE | Sheet1!B22:F24 | 16.0
+INPUT | Sheet1!C22 | "BIOL 100"
+INPUT | Sheet1!D22 | "Concepts of Biology A&B (2Tri)"
+INPUT | Sheet1!E22 | "CSI"
+INPUT | Sheet1!C23 | "BIOL 201/L"
+INPUT | Sheet1!D23 | "Biology A&B (3 Tri) (Combined w/202)"
+INPUT | Sheet1!E23 | "CSI"
+INPUT | Sheet1!C24 | "BIOL 202/L"
+INPUT | Sheet1!D24 | "Biology C (3 Tri) (Combined w/201)"
+INPUT | Sheet1!E24 | "CSI"
+FONT_BOLD | Sheet1!C22:F24 | True
+ALIGN_HORIZONTAL | Sheet1!E22:F24 | center
+INPUT | Sheet1!F22 | 4
+INPUT | Sheet1!F23 | 4
+INPUT | Sheet1!F24 | 4
+BORDER_OUTSIDE | Sheet1!B19:F29 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F19 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B22:B24 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B26:B29 | Thin, Continuous, #000000
+WRAP_TEXT | Sheet1!D23:D24 | True
+INPUT | Sheet1!B25 | "PHYSICAL SCIENCE"
+FONT_SIZE | Sheet1!B25 | 20.0
+FONT_BOLD | Sheet1!B25 | True
+ALIGN_HORIZONTAL | Sheet1!B25 | center
+MERGE | Sheet1!B25:F25 | true
+FONT_SIZE | Sheet1!B26:B36 | 16.0
+INPUT | Sheet1!C26 | "CHEM 100"
+INPUT | Sheet1!D26 | "Concepts of Chemistry A&B (2 Tri)"
+INPUT | Sheet1!E26 | "CSI"
+INPUT | Sheet1!C27 | "GEOL 101"
+INPUT | Sheet1!D27 | "Physical Geology (1 Tri)"
+INPUT | Sheet1!E27 | "CSI"
+INPUT | Sheet1!C28 | "GEOL 104"
+INPUT | Sheet1!D28 | "Natural Disasters & Env Geo (1 Tri)"
+INPUT | Sheet1!E28 | "CSI"
+INPUT | Sheet1!C29 | "PHYS 100/L"
+INPUT | Sheet1!D29 | "Survey of Physics A&B (2 Tri)"
+INPUT | Sheet1!E29 | "CWI"
+FONT_BOLD | Sheet1!C26:F29 | True
+FONT_SIZE | Sheet1!C26:C30 | 16.0
+FONT_SIZE | Sheet1!D26:F29 | 16.0
+ALIGN_HORIZONTAL | Sheet1!E26:F30 | center
+INPUT | Sheet1!F26 | 4
+INPUT | Sheet1!F27 | 4
+INPUT | Sheet1!F28 | 4
+INPUT | Sheet1!F29 | 4
+INPUT | Sheet1!D30 | "SOCIAL SCIENCE"
+FONT_SIZE | Sheet1!D30 | 20.0
+ALIGN_HORIZONTAL | Sheet1!D30 | center
+FONT_BOLD | Sheet1!D30:F30 | True
+FONT_SIZE | Sheet1!E30:F30 | 16.0
+INPUT | Sheet1!F30 | "6 cr"
+INPUT | Sheet1!B31 | "(Must have a course from two different disciplines)"
+FONT_BOLD | Sheet1!B31 | True
+ALIGN_HORIZONTAL | Sheet1!B31 | center
+MERGE | Sheet1!B31:F31 | true
+FILL_COLOR | Sheet1!B31 | #FFFF00
+INPUT | Sheet1!C32 | "ECON 201"
+INPUT | Sheet1!D32 | "Principle MacroEconomics (1 Tri)"
+INPUT | Sheet1!E32 | "CSI"
+INPUT | Sheet1!C33 | "ECON 202"
+INPUT | Sheet1!D33 | "Principle MicroEconomics (1 Tri)"
+INPUT | Sheet1!E33 | "CSI"
+INPUT | Sheet1!C34 | "HIST 102"
+INPUT | Sheet1!D34 | "World History II (1 Tri)"
+INPUT | Sheet1!E34 | "CSI"
+INPUT | Sheet1!C35 | "HIST 111"
+INPUT | Sheet1!D35 | "United State History (1 Tri 11A)"
+INPUT | Sheet1!E35 | "CWI"
+INPUT | Sheet1!C36 | "POLS 101"
+INPUT | Sheet1!D36 | "American Nat Govt' A&B (2 Tri)"
+INPUT | Sheet1!E36 | "CWI"
+FONT_BOLD | Sheet1!C32:F36 | True
+FONT_SIZE | Sheet1!C32:F36 | 16.0
+BORDER_OUTSIDE | Sheet1!B30:F36 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B32:B36 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F30 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!E32:F36 | center
+INPUT | Sheet1!F32 | 3
+INPUT | Sheet1!F33 | 3
+INPUT | Sheet1!F34 | 3
+INPUT | Sheet1!F35 | 3
+INPUT | Sheet1!F36 | 3
+WRAP_TEXT | Sheet1!K32 | True
+INPUT | Sheet1!L32 | "TBD"
+INPUT | Sheet1!L33 | 2
+INPUT | Sheet1!L34 | 2
+INPUT | Sheet1!L35 | 2
+INPUT | Sheet1!L36 | 4
+FONT_SIZE | Sheet1!B37 | 20.0
+MERGE | Sheet1!B37:E37 | true
+INPUT | Sheet1!B37 | "HUMANITIES"
+INPUT | Sheet1!B38 | "(Must have a course from two different disciplines)"
+FONT_BOLD | Sheet1!B37:B38 | True
+ALIGN_HORIZONTAL | Sheet1!B37:B38 | center
+INPUT | Sheet1!F37 | "6 cr"
+FONT_SIZE | Sheet1!F37 | 16.0
+FONT_BOLD | Sheet1!F37 | True
+ALIGN_HORIZONTAL | Sheet1!F37 | center
+MERGE | Sheet1!B38:F38 | true
+FILL_COLOR | Sheet1!B38 | #FFFF00
+FONT_SIZE | Sheet1!B38:B45 | 16.0
+BORDER_OUTSIDE | Sheet1!B37:F45 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B39:B45 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F37 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!H38:L41 | 16.0
+INPUT | Sheet1!J38 | "*Course may be repeated for multiple credits"
+FONT_BOLD | Sheet1!J38 | True
+INPUT | Sheet1!C39 | "ENGL 175"
+INPUT | Sheet1!D39 | "Literature & Ideas (1 Tri)"
+INPUT | Sheet1!E39 | "CSI"
+INPUT | Sheet1!C40 | "THEA 101"
+INPUT | Sheet1!D40 | "Theatre Apprec. (1 Tri)"
+INPUT | Sheet1!E40 | "CSI/ISU"
+INPUT | Sheet1!C41 | "THEA 202"
+INPUT | Sheet1!D41 | "Modern Theatre & Musicals (1 Tri)"
+INPUT | Sheet1!E41 | "CSI"
+INPUT | Sheet1!C42 | "MUSI 108"
+INPUT | Sheet1!D42 | "Survey of Jazz & Pop Music (1 Tri)"
+INPUT | Sheet1!E42 | "CSI"
+INPUT | Sheet1!C43 | "CHIN/SPAN"
+INPUT | Sheet1!D43 | "Immersion College Courses (varies)"
+INPUT | Sheet1!E43 | "BSU/Uof I"
+INPUT | Sheet1!C44 | "SPAN 101"
+INPUT | Sheet1!D44 | "Elem Spanish 1 A&B (2 Tri)"
+INPUT | Sheet1!E44 | "CWI"
+INPUT | Sheet1!C45 | "SPAN 102"
+INPUT | Sheet1!D45 | "Elem Spanish 2 A&B (2 Tri)"
+INPUT | Sheet1!E45 | "CWI"
+FONT_SIZE | Sheet1!C39:F45 | 16.0
+FONT_BOLD | Sheet1!C39:F45 | True
+ALIGN_HORIZONTAL | Sheet1!E39:F45 | center
+INPUT | Sheet1!F39 | 3
+INPUT | Sheet1!F40 | 3
+INPUT | Sheet1!F41 | 3
+INPUT | Sheet1!F42 | 3
+INPUT | Sheet1!F43 | 4
+INPUT | Sheet1!F44 | 4
+INPUT | Sheet1!F45 | 4
+INPUT | Sheet1!I40 | "Any core credits taken above 36 credits count as an elective credit."
+INPUT | Sheet1!I41 | "You can register for other CSI ONLINE courses directly on your own:"
+FONT_BOLD | Sheet1!I40:L41 | True
+FONT_SIZE | Sheet1!M41 | 16.0
+FONT_SIZE | Sheet1!H42:H49 | 16.0
+FONT_UNDERLINE | Sheet1!I42:L42 | single
+FONT_BOLD | Sheet1!I42:L42 | True
+FONT_COLOR | Sheet1!I42:L42 | #0663C1
+FONT_SIZE | Sheet1!I42:L47 | 16.0
+WRAP_TEXT | Sheet1!J42:L42 | True
+INPUT | Sheet1!J42 | "CSI.DUALENROLL.COM"
+INPUT | Sheet1!J43 | "List any courses taken outside of RHS"
+ALIGN_HORIZONTAL | Sheet1!J42:J43 | center
+FONT_COLOR | Sheet1!M42 | #0663C1
+FONT_UNDERLINE | Sheet1!M42 | single
+WRAP_TEXT | Sheet1!M42 | True
+FONT_BOLD | Sheet1!J43 | True
+BORDER_ALL | Sheet1!H44:L47 | Thin, Continuous, #000000
+INPUT | Sheet1!B46 | "GENERAL EDUCATION"
+FONT_SIZE | Sheet1!B46 | 20.0
+FONT_BOLD | Sheet1!B46 | True
+ALIGN_HORIZONTAL | Sheet1!B46 | center
+MERGE | Sheet1!B46:E46 | true
+INPUT | Sheet1!F46 | "3 cr"
+FONT_BOLD | Sheet1!F46:F50 | True
+FONT_SIZE | Sheet1!F46:F50 | 16.0
+ALIGN_HORIZONTAL | Sheet1!F46:F50 | center
+FONT_SIZE | Sheet1!B47:E47 | 16.0
+BORDER_OUTSIDE | Sheet1!B46:F47 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B47 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F46 | Thin, Continuous, #000000
+INPUT | Sheet1!C47 | "GNED 101"
+INPUT | Sheet1!D47 | "Intro General Ed (1 Tri)"
+INPUT | Sheet1!E47 | "CSI"
+FONT_BOLD | Sheet1!C47:E47 | True
+ALIGN_HORIZONTAL | Sheet1!E47 | center
+INPUT | Sheet1!F47 | 3
+INPUT | Sheet1!B48 | "WELLNESS"
+FONT_SIZE | Sheet1!B48 | 20.0
+FONT_BOLD | Sheet1!B48 | True
+ALIGN_HORIZONTAL | Sheet1!B48 | center
+MERGE | Sheet1!B48:E48 | true
+BORDER_OUTSIDE | Sheet1!B48:F49 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!B49 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!F48 | Thin, Continuous, #000000
+INPUT | Sheet1!F48 | "2-3 cr"
+FONT_BOLD | Sheet1!H48 | True
+FONT_UNDERLINE | Sheet1!H48 | single
+FONT_COLOR | Sheet1!H48 | #0663C1
+ALIGN_HORIZONTAL | Sheet1!H48 | center
+WRAP_TEXT | Sheet1!H48 | True
+MERGE | Sheet1!H48:L48 | true
+BORDER_TOP | Sheet1!H48:L48 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!B49:E49 | 16.0
+INPUT | Sheet1!C49 | "WELL 255"
+INPUT | Sheet1!C50 | "Academic Certificate or "Gem Stamp" requirement (Core Courses)"
+FONT_BOLD | Sheet1!C49:D50 | True
+INPUT | Sheet1!D49 | "Well Healthy Living (1 Tri)"
+INPUT | Sheet1!E49 | "CSI"
+FONT_BOLD | Sheet1!E49 | True
+ALIGN_HORIZONTAL | Sheet1!E49 | center
+INPUT | Sheet1!F49 | 3
+FONT_SIZE | Sheet1!I49:L49 | 16.0
+WRAP_TEXT | Sheet1!J49 | True
+ALIGN_HORIZONTAL | Sheet1!J49:J50 | center
+INPUT | Sheet1!J49 | " My Core Credits =       ____"
+INPUT | Sheet1!J50 | "My Elective Credits =  ____"
+INPUT | Sheet1!J51 | "         My TOTAL Credits =     ____"
+FONT_BOLD | Sheet1!J49:J52 | True
+FONT_SIZE | Sheet1!C50:D51 | 16.0
+INPUT | Sheet1!F50 | "Core Req. 36 cr"
+FILL_COLOR | Sheet1!F50 | #BFBFBF
+WRAP_TEXT | Sheet1!F50 | True
+MERGE | Sheet1!F50:F51 | true
+BORDER_ALL | Sheet1!F50:F51 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!J50:K52 | 16.0
+INPUT | Sheet1!L50 | "Assoc Req."
+WRAP_TEXT | Sheet1!K50:L50 | True
+FONT_BOLD | Sheet1!K50:K52 | True
+ALIGN_HORIZONTAL | Sheet1!K50:K52 | center
+BORDER_OUTSIDE | Sheet1!L50:L51 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!L50:L51 | #BFBFBF
+FONT_SIZE | Sheet1!L50:L51 | 16.0
+FONT_BOLD | Sheet1!L50:L51 | True
+ALIGN_HORIZONTAL | Sheet1!L50:L51 | center
+FONT_SIZE | Sheet1!B51 | 16.0
+FONT_BOLD | Sheet1!D51 | True
+ALIGN_HORIZONTAL | Sheet1!D51 | center
+FONT_SIZE | Sheet1!E51 | 16.0
+FONT_BOLD | Sheet1!G51:G53 | True
+FONT_SIZE | Sheet1!H51:H52 | 16.0
+FONT_BOLD | Sheet1!I51 | True
+FONT_SIZE | Sheet1!I51 | 16.0
+ALIGN_HORIZONTAL | Sheet1!I51 | center
+WRAP_TEXT | Sheet1!J51 | True
+INPUT | Sheet1!L51 | "60 cr"
+FONT_BOLD | Sheet1!E52:E53 | True
+FONT_SIZE | Sheet1!E52:E53 | 16.0
+ALIGN_HORIZONTAL | Sheet1!J52 | center
+FONT_BOLD | Sheet1!B53:C53 | True
+FONT_SIZE | Sheet1!B53:C53 | 16.0
+FONT_SIZE | Sheet1!H53 | 16.0
+FONT_BOLD | Sheet1!H53 | True
+WRAP_TEXT | Sheet1!J55 | True

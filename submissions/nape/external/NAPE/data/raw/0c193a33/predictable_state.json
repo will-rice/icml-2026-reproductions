@@ -1,0 +1,1254 @@
+{
+  "trajectory_name": "0c193a33",
+  "predictable_count": 674,
+  "final_state_size": 811,
+  "coverage_pct": 83.11,
+  "predictable_properties": {
+    "Sheet1": {
+      "A1": [
+        "Format.font.bold"
+      ],
+      "A16": [
+        "Format.font.bold"
+      ],
+      "A19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A28": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "A3": [
+        "Format.font.bold"
+      ],
+      "A31": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A34": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A36": [
+        "Format.borders.top"
+      ],
+      "A37": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "A5": [
+        "Format.font.bold"
+      ],
+      "A50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "A52": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A54": [
+        "Format.borders.top"
+      ],
+      "A55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.font.underline",
+        "value"
+      ],
+      "A57": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A64": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A65": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A69": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A71": [
+        "Format.borders.top"
+      ],
+      "A72": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A80": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A83": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A86": [
+        "Format.borders.top"
+      ],
+      "A87": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A9": [
+        "Format.font.bold"
+      ],
+      "A94": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "A98": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "B19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B28": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B31": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B34": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B36": [
+        "Format.borders.top"
+      ],
+      "B37": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B52": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B54": [
+        "Format.borders.top"
+      ],
+      "B55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B57": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B64": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B65": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B69": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B71": [
+        "Format.borders.top"
+      ],
+      "B72": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B80": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B83": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B86": [
+        "Format.borders.top"
+      ],
+      "B87": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B94": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "B98": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C11": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C12": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "C13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C14": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C16": [
+        "Format.font.bold",
+        "value"
+      ],
+      "C19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C21": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C22": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C23": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C24": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C25": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C28": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "C31": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C34": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C36": [
+        "Format.borders.top"
+      ],
+      "C37": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "C39": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C40": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "C47": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "C48": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C5": [
+        "Format.font.bold"
+      ],
+      "C50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "C52": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C54": [
+        "Format.borders.top"
+      ],
+      "C55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C57": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C59": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C60": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C61": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C62": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C64": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C65": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C67": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C69": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C7": [
+        "Format.font.bold"
+      ],
+      "C71": [
+        "Format.borders.top"
+      ],
+      "C72": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "C74": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C75": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C76": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C77": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C78": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C80": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "C83": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C86": [
+        "Format.borders.top"
+      ],
+      "C87": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold"
+      ],
+      "C89": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C90": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C91": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C92": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C94": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C96": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "C98": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "value"
+      ],
+      "D11": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D12": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D14": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D21": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D22": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D23": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D24": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D25": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D28": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D31": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D34": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D36": [
+        "Format.borders.top"
+      ],
+      "D37": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D39": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D40": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D47": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D48": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D52": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D54": [
+        "Format.borders.top"
+      ],
+      "D55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D57": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D59": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D60": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D61": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D62": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D64": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D65": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D67": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D69": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D71": [
+        "Format.borders.top"
+      ],
+      "D72": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D74": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D75": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D76": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D77": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D78": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D80": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D83": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D86": [
+        "Format.borders.top"
+      ],
+      "D87": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D89": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D90": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D91": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D92": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D94": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D96": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D98": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E102": [
+        "Format.font.bold"
+      ],
+      "E11": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E12": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E14": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E16": [
+        "value"
+      ],
+      "E19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E21": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E22": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E23": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E24": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E25": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E28": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E31": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E34": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E36": [
+        "Format.borders.top"
+      ],
+      "E37": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E39": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E40": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E47": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E48": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E52": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E54": [
+        "Format.borders.top"
+      ],
+      "E55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E57": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E59": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E60": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E61": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E62": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E64": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E65": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E67": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E69": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E71": [
+        "Format.borders.top"
+      ],
+      "E72": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E74": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E75": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E76": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E77": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E78": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E80": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E83": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E86": [
+        "Format.borders.top"
+      ],
+      "E87": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E89": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E90": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E91": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E92": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E94": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "E96": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "E98": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F102": [
+        "Format.font.bold"
+      ],
+      "F19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F28": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F34": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F36": [
+        "Format.borders.top"
+      ],
+      "F37": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F54": [
+        "Format.borders.top"
+      ],
+      "F55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F57": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F64": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F65": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F71": [
+        "Format.borders.top"
+      ],
+      "F72": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F80": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F86": [
+        "Format.borders.top"
+      ],
+      "F87": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "F94": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G11": [
+        "Format.font.bold"
+      ],
+      "G12": [
+        "Format.font.bold"
+      ],
+      "G13": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G14": [
+        "Format.font.bold"
+      ],
+      "G16": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G21": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G22": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G23": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G24": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G25": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G28": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G31": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G34": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G36": [
+        "Format.borders.top"
+      ],
+      "G37": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G39": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G40": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G41": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G47": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G48": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G52": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G54": [
+        "Format.borders.top"
+      ],
+      "G55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G57": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G59": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G60": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G61": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G62": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G64": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G65": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G67": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G69": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G7": [
+        "Format.font.bold"
+      ],
+      "G71": [
+        "Format.borders.top"
+      ],
+      "G72": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G74": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G75": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G76": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G77": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G78": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G80": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G83": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G86": [
+        "Format.borders.top"
+      ],
+      "G87": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G89": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G90": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G91": [
+        "Format.font.bold"
+      ],
+      "G92": [
+        "Format.font.bold",
+        "value"
+      ],
+      "G94": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G96": [
+        "Format.font.bold",
+        "Format.font.size",
+        "value"
+      ],
+      "G98": [
+        "Format.font.bold",
+        "Format.font.size",
+        "value"
+      ]
+    }
+  }
+}

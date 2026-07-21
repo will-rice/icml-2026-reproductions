@@ -1,0 +1,22 @@
+{
+  "space_id": "wrice/repro-a-benchmark-and-framework-for-evaluating-next-action-predictions-in-spreadsheets",
+  "emoji": "🎯",
+  "created_at": "2026-07-20T20:59:52+00:00",
+  "last_page": "conclusion",
+  "tags": [
+    "icml2026-repro",
+    "paper-NvPgRwURDC"
+  ],
+  "paper": {
+    "arxiv_id": "2606.13802"
+  },
+  "local_artifacts": [
+    "repro-a-benchmark-and-framework-for-evaluating-next-action-predictions-in-spreadsheets/repro-bundle:v0",
+    "repro-a-benchmark-and-framework-for-evaluating-next-action-predictions-in-spreadsheets/repro-bundle-v2:v0",
+    "repro-a-benchmark-and-framework-for-evaluating-next-action-predictions-in-spreadsheets/repro-bundle-v2:v1"
+  ],
+  "autosync": false,
+  "private": false,
+  "local_dashboards": {},
+  "artifacts_bucket": "wrice/repro-a-benchmark-and-framework-for-evaluating-next-action-predictions-in-spreadsheets-artifacts"
+}

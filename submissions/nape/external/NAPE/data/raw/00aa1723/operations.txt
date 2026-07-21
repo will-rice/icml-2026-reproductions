@@ -1,0 +1,172 @@
+INPUT | Sheet1!A1 | "VSARA-05"
+MERGE | Sheet1!A1:E1 | true
+INPUT | Sheet1!A2 | "Rev. 03/2018"
+NUMBER_FORMAT | Sheet1!A2 | mmm-yy
+MERGE | Sheet1!A2:E2 | true
+FONT_SIZE | Sheet1!A1:A2 | 8.0
+FONT_NAME | Sheet1!A1:A2 | Times New Roman
+ALIGN_HORIZONTAL | Sheet1!A1:A2 | right
+BORDER_BOTTOM | Sheet1!A2:E3 | Thin, Continuous, #000000
+BORDER_LEFT | Sheet1!A3 | Thin, Continuous, #000000
+FONT_COLOR | Sheet1!A3 | #808080
+FONT_SIZE | Sheet1!A3 | 9.0
+FONT_ITALIC | Sheet1!A3 | True
+FILL_COLOR | Sheet1!A3:B3 | #FFFFFF
+BORDER_TOP | Sheet1!A3:E4 | Thin, Continuous, #000000
+INPUT | Sheet1!B3 | "Vermont State Archives and Records Administration\nOffice of the Secretary of State\n1078 US RTE 2, Middlesex * Montpelier, VT 05633-7701 * Tel: (802) 828-3700 * Fax: (802) 828-3710\n"
+FONT_BOLD | Sheet1!B3 | True
+FONT_SIZE | Sheet1!B3 | 14.0
+FONT_NAME | Sheet1!B3 | Times New Roman
+ALIGN_VERTICAL | Sheet1!B3 | distributed
+WRAP_TEXT | Sheet1!B3 | True
+MERGE | Sheet1!B3:E3 | true
+INPUT | Sheet1!A4 | "Box Transfer List"
+FONT_SIZE | Sheet1!A4 | 12.0
+FONT_BOLD | Sheet1!A4 | True
+FONT_COLOR | Sheet1!A4 | #333333
+ALIGN_VERTICAL | Sheet1!A4 | center
+MERGE | Sheet1!A4:E4 | true
+ALIGN_HORIZONTAL | Sheet1!A4:A6 | center
+INPUT | Sheet1!A5 | "This form must be submitted to the State Records Center and approved prior to transferring boxes.  \nCompleted Excel forms can be submitted by email to sos.recordscenter@vermont.gov"
+FILL_COLOR | Sheet1!A5 | #C0C0C0
+FONT_SIZE | Sheet1!A5 | 9.5
+WRAP_TEXT | Sheet1!A5 | True
+MERGE | Sheet1!A5:E5 | true
+FONT_ITALIC | Sheet1!A6 | True
+FONT_SIZE | Sheet1!A6 | 9.0
+FONT_COLOR | Sheet1!A6 | #808080
+MERGE | Sheet1!A6:E6 | true
+INPUT | Sheet1!A7 | "Sender \n(Records Officer or Liaison):"
+ALIGN_HORIZONTAL | Sheet1!A7 | right
+MERGE | Sheet1!A7:B7 | true
+BORDER_RIGHT | Sheet1!A7:B7 | Thin, Continuous, #000000
+FONT_BOLD | Sheet1!A7:A9 | True
+WRAP_TEXT | Sheet1!A7:A9 | True
+BORDER_ALL | Sheet1!C7 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!C7 | #FFFF99
+WRAP_TEXT | Sheet1!C7 | True
+ALIGN_VERTICAL | Sheet1!C7 | center
+FONT_BOLD | Sheet1!E7 | True
+ALIGN_HORIZONTAL | Sheet1!E7 | left
+ALIGN_HORIZONTAL | Sheet1!A8 | center
+MERGE | Sheet1!A8:E8 | true
+INPUT | Sheet1!A9 | "Agency/Department/\nDivision/Office:"
+ALIGN_HORIZONTAL | Sheet1!A9 | right
+MERGE | Sheet1!A9:B9 | true
+BORDER_RIGHT | Sheet1!A9:B9 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!C9 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!C9 | #FFFF99
+WRAP_TEXT | Sheet1!C9 | True
+ALIGN_VERTICAL | Sheet1!C9 | center
+INPUT | Sheet1!D9 | "Date:"
+BORDER_LEFT | Sheet1!D9 | Thin, Continuous, #000000
+FONT_BOLD | Sheet1!D9 | True
+ALIGN_HORIZONTAL | Sheet1!D9 | right
+BORDER_ALL | Sheet1!E9 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!E9 | #FFFF99
+ALIGN_VERTICAL | Sheet1!E9 | center
+MERGE | Sheet1!A10:E10 | true
+ALIGN_HORIZONTAL | Sheet1!A10:A11 | center
+INPUT | Sheet1!A11 | "I authorize transfer of the records below, which are in the required PAIGE MIRACLE boxes (W.B. Mason #PAIG15).*"
+FONT_NAME | Sheet1!A11 | Times New Roman
+MERGE | Sheet1!A11:E11 | true
+FONT_ITALIC | Sheet1!A11:A12 | True
+INPUT | Sheet1!A12 | "Hand signature and date not required if form is submitted by email directly from records officer or liaison"
+FONT_SIZE | Sheet1!A12 | 8.0
+FONT_COLOR | Sheet1!A12 | #808080
+MERGE | Sheet1!A12:D12 | true
+BORDER_BOTTOM | Sheet1!A12:E12 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!E12 | 9.0
+FONT_ITALIC | Sheet1!E12 | True
+ALIGN_HORIZONTAL | Sheet1!E12 | left
+INPUT | Sheet1!A13 | "Signature of Records Officer or Records Liaison"
+FONT_BOLD | Sheet1!A13 | True
+FONT_SIZE | Sheet1!A13 | 7.0
+MERGE | Sheet1!A13:C13 | true
+INPUT | Sheet1!E13 | "Date signed"
+FONT_SIZE | Sheet1!E13 | 7.0
+FONT_BOLD | Sheet1!E13 | True
+FONT_SIZE | Sheet1!I13 | 9.5
+FONT_ITALIC | Sheet1!A14 | True
+FONT_COLOR | Sheet1!A14 | #808080
+MERGE | Sheet1!A14:E14 | true
+FONT_SIZE | Sheet1!A14:A15 | 9.0
+ALIGN_HORIZONTAL | Sheet1!A14:A15 | center
+INPUT | Sheet1!A15 | "Dept. Box Number"
+FONT_BOLD | Sheet1!A15:D15 | True
+ALIGN_VERTICAL | Sheet1!A15:D15 | center
+WRAP_TEXT | Sheet1!A15:D15 | True
+MERGE | Sheet1!A15:A16 | true
+INPUT | Sheet1!B15 | "Record Series"
+FONT_SIZE | Sheet1!B15:D15 | 9.0
+ALIGN_HORIZONTAL | Sheet1!B15:D15 | center
+MERGE | Sheet1!B15:B16 | true
+INPUT | Sheet1!C15 | "Title and Description of Records"
+MERGE | Sheet1!C15:C16 | true
+INPUT | Sheet1!D15 | "Inclusive Dates of Records"
+MERGE | Sheet1!D15:E15 | true
+BORDER_ALL | Sheet1!A15:E16 | Thin, Continuous, #000000
+BORDER_TOP | Sheet1!A15:E15 | Thin, Double, #000000
+BORDER_BOTTOM | Sheet1!D15:E15 | Thin, Dot, #000000
+INPUT | Sheet1!D16 | "From"
+FONT_BOLD | Sheet1!D16:E16 | True
+FONT_SIZE | Sheet1!D16:E16 | 9.0
+ALIGN_HORIZONTAL | Sheet1!D16:E30 | center
+INPUT | Sheet1!E16 | "To"
+INPUT | Sheet1!A17 | "ED-06650"
+ALIGN_HORIZONTAL | Sheet1!A17:B17 | center
+FONT_ITALIC | Sheet1!A17:E18 | True
+FONT_COLOR | Sheet1!A17:E18 | #808080
+FONT_SIZE | Sheet1!A17:E30 | 8.5
+ALIGN_VERTICAL | Sheet1!A17:E30 | center
+INPUT | Sheet1!B17 | "1533.1108."
+NUMBER_FORMAT | Sheet1!B17:B30 | @
+INPUT | Sheet1!C17 | "SAMPLE -- Adams to Norris"
+WRAP_TEXT | Sheet1!C17:C30 | True
+INPUT | Sheet1!D17 | "January 1, 2000"
+NUMBER_FORMAT | Sheet1!D17:E18 | mm-dd-yy
+INPUT | Sheet1!E17 | "December 31, 2000"
+INPUT | Sheet1!A18 | "EP-STJ-00138"
+INPUT | Sheet1!B18 | "029."
+ALIGN_HORIZONTAL | Sheet1!B18:B30 | center
+INPUT | Sheet1!C18 | "SAMPLE -- Files 12345 to 23456"
+INPUT | Sheet1!D18 | "January 1, 2009"
+INPUT | Sheet1!E18 | "December 31, 2011"
+BORDER_ALL | Sheet1!A17:E29 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!A19:E19 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A20:E20 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A21:E21 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A22:E22 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A23:E23 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A24:E24 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A25:E25 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A26:E26 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A27:E27 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A28:E28 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A29:E29 | Thin, Dot, #000000
+BORDER_BOTTOM | Sheet1!A30:E30 | Thin, Double, #000000
+INPUT | Sheet1!A31 | "* Records transferred in any other box type will be returned to the agency or re-boxed at agency expense."
+MERGE | Sheet1!A31:E31 | true
+FONT_ITALIC | Sheet1!A31:A32 | True
+FONT_SIZE | Sheet1!A31:A32 | 8.0
+ALIGN_HORIZONTAL | Sheet1!A31:A32 | center
+FONT_SIZE | Sheet1!B32:E32 | 8.0
+FONT_ITALIC | Sheet1!B32:E32 | True
+ALIGN_HORIZONTAL | Sheet1!B32:E32 | center
+INPUT | Sheet1!A33 | "This Box for State Records Center Use Only"
+MERGE | Sheet1!A33:E33 | true
+FILL_COLOR | Sheet1!A33 | #808080
+FONT_BOLD | Sheet1!A33 | True
+FONT_COLOR | Sheet1!A33 | #008000
+FONT_SIZE | Sheet1!A33 | 8.0
+ALIGN_HORIZONTAL | Sheet1!A33 | center
+INPUT | Sheet1!A34 | "Form approved at State Records Center by:"
+WRAP_TEXT | Sheet1!A34 | True
+FONT_SIZE | Sheet1!A34:E35 | 8.0
+INPUT | Sheet1!D34 | "Date form approved:"
+WRAP_TEXT | Sheet1!D34:D35 | True
+INPUT | Sheet1!A35 | "Boxes delivered by:"
+INPUT | Sheet1!D35 | "Delivered:"
+BORDER_ALL | Sheet1!A33:E35 | Thin, Dot, #008000
+BORDER_OUTSIDE | Sheet1!A33:E35 | Thick, Continuous, #008000
+NUMBER_FORMAT | Sheet1!B36:B55 | @

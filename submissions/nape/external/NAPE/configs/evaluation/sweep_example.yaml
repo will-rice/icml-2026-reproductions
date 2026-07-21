@@ -1,0 +1,43 @@
+# Sweep Configuration Example
+# Usage: python scripts/run_sweep.py configs/evaluation/sweep_example.yaml
+#
+# The sweep section generates a cross-product of all parameter values.
+# Each combination creates a separate experiment variant with its own output dir.
+#
+# This example generates 4 x 2 = 8 variants:
+#   context_sweep_max_context_ops=10_model=<model-a>
+#   context_sweep_max_context_ops=10_model=<model-b>
+#   context_sweep_max_context_ops=25_model=<model-a>
+#   ...etc
+
+name: context_sweep
+
+trajectory_paths:
+  - data/trajectories/*.json
+
+output_dir: outputs
+
+max_runs: 16
+workers: 4
+max_context_ops: 50        # base value, overridden by sweep
+online_mode: false
+repredict_after_accept: false
+
+solver:
+  type: llm
+  adapter: openai
+  model: <your-model-id>    # base value, overridden by sweep
+  temperature: 0.0
+  cache_enabled: true
+
+stride:
+  mode: every_step
+
+heuristics:
+  - ideal_user
+  - precision_90
+
+# Sweep: cross-product of all lists below
+sweep:
+  max_context_ops: [10, 25, 50, 100]
+  solver.model: [<model-a>, <model-b>]

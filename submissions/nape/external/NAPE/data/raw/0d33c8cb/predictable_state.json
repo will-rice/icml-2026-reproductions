@@ -1,0 +1,1006 @@
+{
+  "trajectory_name": "0d33c8cb",
+  "predictable_count": 420,
+  "final_state_size": 722,
+  "coverage_pct": 58.17,
+  "predictable_properties": {
+    "Sheet1": {
+      "A1": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "A2": [
+        "Format.font.bold"
+      ],
+      "A20": [
+        "Format.font.bold",
+        "value"
+      ],
+      "A27": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "A28": [
+        "Format.font.bold",
+        "Format.horizontalAlignment"
+      ],
+      "A3": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "A38": [
+        "Format.font.bold",
+        "value"
+      ],
+      "A4": [
+        "Format.horizontalAlignment"
+      ],
+      "A48": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "A49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "A54": [
+        "value"
+      ],
+      "A55": [
+        "value"
+      ],
+      "A56": [
+        "Format.font.bold",
+        "value"
+      ],
+      "A61": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "A62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "A65": [
+        "value"
+      ],
+      "A72": [
+        "Format.font.bold",
+        "value"
+      ],
+      "B1": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "B10": [
+        "value"
+      ],
+      "B11": [
+        "value"
+      ],
+      "B12": [
+        "value"
+      ],
+      "B13": [
+        "value"
+      ],
+      "B14": [
+        "value"
+      ],
+      "B15": [
+        "value"
+      ],
+      "B18": [
+        "value"
+      ],
+      "B19": [
+        "value"
+      ],
+      "B2": [
+        "Format.font.bold"
+      ],
+      "B20": [
+        "Format.font.bold"
+      ],
+      "B27": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "B28": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B29": [
+        "value"
+      ],
+      "B3": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "B30": [
+        "value"
+      ],
+      "B31": [
+        "value"
+      ],
+      "B32": [
+        "value"
+      ],
+      "B34": [
+        "value"
+      ],
+      "B36": [
+        "value"
+      ],
+      "B38": [
+        "Format.font.bold"
+      ],
+      "B4": [
+        "Format.horizontalAlignment"
+      ],
+      "B48": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "B49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B50": [
+        "value"
+      ],
+      "B51": [
+        "value"
+      ],
+      "B52": [
+        "value"
+      ],
+      "B53": [
+        "value"
+      ],
+      "B54": [
+        "value"
+      ],
+      "B56": [
+        "Format.font.bold"
+      ],
+      "B61": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "B62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "B63": [
+        "value"
+      ],
+      "B65": [
+        "value"
+      ],
+      "B66": [
+        "value"
+      ],
+      "B67": [
+        "value"
+      ],
+      "B68": [
+        "value"
+      ],
+      "B69": [
+        "value"
+      ],
+      "B7": [
+        "value"
+      ],
+      "B71": [
+        "value"
+      ],
+      "B72": [
+        "Format.font.bold"
+      ],
+      "B8": [
+        "value"
+      ],
+      "B9": [
+        "value"
+      ],
+      "C20": [
+        "Format.font.bold",
+        "value"
+      ],
+      "C28": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "C38": [
+        "Format.font.bold",
+        "value"
+      ],
+      "C4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "C49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "C55": [
+        "value"
+      ],
+      "C56": [
+        "Format.font.bold",
+        "value"
+      ],
+      "C62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "C72": [
+        "Format.font.bold",
+        "value"
+      ],
+      "D20": [
+        "Format.font.bold",
+        "value"
+      ],
+      "D28": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "D37": [
+        "value"
+      ],
+      "D38": [
+        "Format.font.bold",
+        "value"
+      ],
+      "D4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment"
+      ],
+      "D49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "D56": [
+        "Format.font.bold",
+        "value"
+      ],
+      "D62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "D72": [
+        "Format.font.bold"
+      ],
+      "E10": [
+        "number_format"
+      ],
+      "E11": [
+        "number_format"
+      ],
+      "E12": [
+        "number_format"
+      ],
+      "E13": [
+        "number_format"
+      ],
+      "E14": [
+        "number_format"
+      ],
+      "E15": [
+        "number_format"
+      ],
+      "E16": [
+        "number_format"
+      ],
+      "E17": [
+        "number_format"
+      ],
+      "E18": [
+        "number_format"
+      ],
+      "E19": [
+        "number_format"
+      ],
+      "E2": [
+        "Format.font.bold"
+      ],
+      "E20": [
+        "Format.font.bold",
+        "number_format"
+      ],
+      "E28": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "E29": [
+        "value"
+      ],
+      "E30": [
+        "value"
+      ],
+      "E31": [
+        "value"
+      ],
+      "E32": [
+        "value"
+      ],
+      "E33": [
+        "value"
+      ],
+      "E34": [
+        "value"
+      ],
+      "E35": [
+        "value"
+      ],
+      "E36": [
+        "value"
+      ],
+      "E37": [
+        "value"
+      ],
+      "E38": [
+        "Format.font.bold",
+        "value"
+      ],
+      "E4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "E49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "E5": [
+        "number_format"
+      ],
+      "E50": [
+        "value"
+      ],
+      "E51": [
+        "value"
+      ],
+      "E52": [
+        "value"
+      ],
+      "E53": [
+        "value"
+      ],
+      "E54": [
+        "value"
+      ],
+      "E55": [
+        "value"
+      ],
+      "E56": [
+        "Format.font.bold",
+        "value"
+      ],
+      "E6": [
+        "number_format"
+      ],
+      "E62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "E63": [
+        "value"
+      ],
+      "E64": [
+        "value"
+      ],
+      "E65": [
+        "value"
+      ],
+      "E66": [
+        "value"
+      ],
+      "E67": [
+        "value"
+      ],
+      "E68": [
+        "value"
+      ],
+      "E69": [
+        "value"
+      ],
+      "E7": [
+        "number_format"
+      ],
+      "E70": [
+        "value"
+      ],
+      "E71": [
+        "value"
+      ],
+      "E72": [
+        "Format.font.bold",
+        "value"
+      ],
+      "E8": [
+        "number_format"
+      ],
+      "E9": [
+        "number_format"
+      ],
+      "H12": [
+        "value"
+      ],
+      "H16": [
+        "value"
+      ],
+      "H19": [
+        "value"
+      ],
+      "H22": [
+        "value"
+      ],
+      "H24": [
+        "Format.font.bold",
+        "value"
+      ],
+      "H28": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "H29": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "H3": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "H34": [
+        "value"
+      ],
+      "H36": [
+        "value"
+      ],
+      "H37": [
+        "value"
+      ],
+      "H38": [
+        "value"
+      ],
+      "H39": [
+        "Format.font.bold",
+        "value"
+      ],
+      "H4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "H48": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "H49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "H52": [
+        "value"
+      ],
+      "H55": [
+        "Format.font.bold",
+        "value"
+      ],
+      "H61": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "H62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment"
+      ],
+      "I10": [
+        "value"
+      ],
+      "I11": [
+        "value"
+      ],
+      "I12": [
+        "value"
+      ],
+      "I13": [
+        "value"
+      ],
+      "I14": [
+        "value"
+      ],
+      "I15": [
+        "value"
+      ],
+      "I16": [
+        "value"
+      ],
+      "I17": [
+        "value"
+      ],
+      "I18": [
+        "value"
+      ],
+      "I19": [
+        "value"
+      ],
+      "I21": [
+        "value"
+      ],
+      "I22": [
+        "value"
+      ],
+      "I24": [
+        "Format.font.bold"
+      ],
+      "I28": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "I29": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "I3": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "I30": [
+        "value"
+      ],
+      "I31": [
+        "value"
+      ],
+      "I32": [
+        "value"
+      ],
+      "I34": [
+        "value"
+      ],
+      "I35": [
+        "value"
+      ],
+      "I36": [
+        "value"
+      ],
+      "I37": [
+        "value"
+      ],
+      "I38": [
+        "value"
+      ],
+      "I39": [
+        "Format.font.bold"
+      ],
+      "I4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "I48": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "I49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "I5": [
+        "value"
+      ],
+      "I50": [
+        "value"
+      ],
+      "I51": [
+        "value"
+      ],
+      "I52": [
+        "value"
+      ],
+      "I54": [
+        "value"
+      ],
+      "I55": [
+        "Format.font.bold"
+      ],
+      "I6": [
+        "value"
+      ],
+      "I61": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "I62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "I66": [
+        "Format.font.bold"
+      ],
+      "I67": [
+        "Format.font.bold",
+        "value"
+      ],
+      "I7": [
+        "value"
+      ],
+      "I70": [
+        "value"
+      ],
+      "I71": [
+        "value"
+      ],
+      "I72": [
+        "value"
+      ],
+      "I73": [
+        "value"
+      ],
+      "I74": [
+        "value"
+      ],
+      "I76": [
+        "Format.font.bold",
+        "value"
+      ],
+      "I8": [
+        "value"
+      ],
+      "I9": [
+        "value"
+      ],
+      "J24": [
+        "Format.font.bold"
+      ],
+      "J29": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "J39": [
+        "Format.font.bold"
+      ],
+      "J4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "J49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "J55": [
+        "Format.font.bold",
+        "value"
+      ],
+      "J62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "J64": [
+        "value"
+      ],
+      "J67": [
+        "Format.font.bold",
+        "value"
+      ],
+      "J68": [
+        "value"
+      ],
+      "J69": [
+        "value"
+      ],
+      "J70": [
+        "value"
+      ],
+      "J71": [
+        "value"
+      ],
+      "J72": [
+        "value"
+      ],
+      "J73": [
+        "value"
+      ],
+      "J74": [
+        "value"
+      ],
+      "J75": [
+        "value"
+      ],
+      "J76": [
+        "Format.font.bold",
+        "value"
+      ],
+      "K16": [
+        "value"
+      ],
+      "K23": [
+        "value"
+      ],
+      "K24": [
+        "Format.font.bold",
+        "value"
+      ],
+      "K29": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "K37": [
+        "value"
+      ],
+      "K39": [
+        "Format.font.bold",
+        "value"
+      ],
+      "K4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "K49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "K54": [
+        "value"
+      ],
+      "K55": [
+        "Format.font.bold",
+        "value"
+      ],
+      "K62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "K64": [
+        "value"
+      ],
+      "K67": [
+        "Format.font.bold",
+        "value"
+      ],
+      "K68": [
+        "value"
+      ],
+      "K69": [
+        "value"
+      ],
+      "K70": [
+        "value"
+      ],
+      "K71": [
+        "value"
+      ],
+      "K72": [
+        "value"
+      ],
+      "K73": [
+        "value"
+      ],
+      "K74": [
+        "value"
+      ],
+      "K75": [
+        "value"
+      ],
+      "K76": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L10": [
+        "value"
+      ],
+      "L11": [
+        "value"
+      ],
+      "L12": [
+        "value"
+      ],
+      "L13": [
+        "value"
+      ],
+      "L14": [
+        "value"
+      ],
+      "L15": [
+        "value"
+      ],
+      "L16": [
+        "value"
+      ],
+      "L17": [
+        "value"
+      ],
+      "L18": [
+        "value"
+      ],
+      "L19": [
+        "value"
+      ],
+      "L20": [
+        "value"
+      ],
+      "L21": [
+        "value"
+      ],
+      "L22": [
+        "value"
+      ],
+      "L23": [
+        "value"
+      ],
+      "L24": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L29": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "L30": [
+        "value"
+      ],
+      "L31": [
+        "value"
+      ],
+      "L32": [
+        "value"
+      ],
+      "L33": [
+        "value"
+      ],
+      "L34": [
+        "value"
+      ],
+      "L35": [
+        "value"
+      ],
+      "L36": [
+        "value"
+      ],
+      "L37": [
+        "value"
+      ],
+      "L38": [
+        "value"
+      ],
+      "L39": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L4": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "L49": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "L5": [
+        "value"
+      ],
+      "L50": [
+        "value"
+      ],
+      "L51": [
+        "value"
+      ],
+      "L52": [
+        "value"
+      ],
+      "L53": [
+        "value"
+      ],
+      "L54": [
+        "value"
+      ],
+      "L55": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L6": [
+        "value"
+      ],
+      "L62": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "L63": [
+        "number_format",
+        "value"
+      ],
+      "L64": [
+        "number_format",
+        "value"
+      ],
+      "L65": [
+        "number_format"
+      ],
+      "L66": [
+        "Format.font.bold",
+        "number_format"
+      ],
+      "L67": [
+        "Format.font.bold",
+        "number_format",
+        "value"
+      ],
+      "L68": [
+        "Format.font.bold",
+        "number_format",
+        "value"
+      ],
+      "L69": [
+        "value"
+      ],
+      "L7": [
+        "value"
+      ],
+      "L70": [
+        "value"
+      ],
+      "L71": [
+        "value"
+      ],
+      "L72": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L73": [
+        "value"
+      ],
+      "L74": [
+        "value"
+      ],
+      "L75": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L76": [
+        "Format.font.bold",
+        "value"
+      ],
+      "L8": [
+        "value"
+      ],
+      "L9": [
+        "value"
+      ]
+    }
+  }
+}

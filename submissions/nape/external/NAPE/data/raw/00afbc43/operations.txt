@@ -1,0 +1,152 @@
+INPUT | Sheet1!B1 | "REGULATORY REPORTING STATEMENT"
+INPUT | Sheet1!B2 | "United Energy"
+INPUT | Sheet1!B3 | "Benchmarking RIN response 2020-21"
+INPUT | Sheet1!B4 | "3.1 REVENUE"
+FONT_BOLD | Sheet1!B1:B4 | True
+FILL_COLOR | Sheet1!B1:D3 | #000000
+FILL_COLOR | Sheet1!B4:D4 | #7F7F7F
+FONT_COLOR | Sheet1!B1:B4 | #FFFFFF
+FONT_SIZE | Sheet1!B1:B4 | 16.0
+FONT_SIZE | Sheet1!C3:D3 | 16.0
+FONT_BOLD | Sheet1!C3:D3 | True
+WRAP_TEXT | Sheet1!C3:D3 | True
+FONT_COLOR | Sheet1!C3:D4 | #FFFFFF
+FONT_SIZE | Sheet1!C4:D4 | 18.0
+INPUT | Sheet1!B6 | "There are THREE tables on this worksheet. Each table has been grouped for ease of navigation. See the Instructions sheet on how to group or ungroup tables."
+BORDER_ALL | Sheet1!B6 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B6 | #FDE9D9
+WRAP_TEXT | Sheet1!B6 | True
+INPUT | Sheet1!B8 | "3.1.1 - REVENUE GROUPING BY CHARGEABLE QUANTITY"
+FILL_COLOR | Sheet1!B8:D8 | #000000
+FONT_COLOR | Sheet1!B8:D8 | #FFFFFF
+FONT_SIZE | Sheet1!B8:D8 | 14.0
+FONT_BOLD | Sheet1!B8:D9 | True
+INPUT | Sheet1!C9 | "Standard control services"
+BORDER_OUTSIDE | Sheet1!C9:D11 | Medium, Continuous, #000000
+BORDER_OUTSIDE | Sheet1!C9:D9 | Medium, Continuous, #000000
+FONT_SIZE | Sheet1!C9:D9 | 12.0
+ALIGN_HORIZONTAL | Sheet1!C9:C11 | center
+INPUT | Sheet1!D9 | "Alternative control services"
+ALIGN_HORIZONTAL | Sheet1!D9 | center
+INPUT | Sheet1!C10 | "REVENUE\n($0's)"
+MERGE | Sheet1!C10:D10 | true
+WRAP_TEXT | Sheet1!C10 | True
+FILL_COLOR | Sheet1!C10:C11 | #95B3D7
+FONT_BOLD | Sheet1!C10:C11 | True
+BORDER_ALL | Sheet1!C10:D11 | Thin, Continuous, #000000
+INPUT | Sheet1!C11 | "2020-21"
+INPUT | Sheet1!D11 | "2020-21"
+FILL_COLOR | Sheet1!D11 | #95B3D7
+FONT_BOLD | Sheet1!D11 | True
+ALIGN_HORIZONTAL | Sheet1!D11 | center
+INPUT | Sheet1!A12 | "DREV0101"
+WRAP_TEXT | Sheet1!A12:A28 | True
+INPUT | Sheet1!B12 | "Revenue from Fixed Customer Charges"
+WRAP_TEXT | Sheet1!B12:B24 | True
+BORDER_OUTSIDE | Sheet1!B12:D25 | Medium, Continuous, #000000
+INPUT | Sheet1!C12 | 24624429.31
+NUMBER_FORMAT | Sheet1!C12:D24 | _-* #,##0_-;[Red]\(#,##0\)_-;_-* "-"??_-;_-@_-
+FILL_COLOR | Sheet1!C12:D24 | #FFFFCC
+BORDER_RIGHT | Sheet1!C12:C24 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!C12:D25 | right
+INPUT | Sheet1!A13 | "DREV0102"
+ALIGN_HORIZONTAL | Sheet1!A1:A28 | right
+INPUT | Sheet1!B13 | "Revenue from Energy Delivery charges where time of use is not a determinant"
+INPUT | Sheet1!C13:D24 | [[200227561.44, ""], [61359030.26, ""], [2024279.56, ""], [25524445.71, ""], [1568808.77, ""], [3359913.48, ""], [0, ""], [95286257.64, ""], ["", 38486369.86], ["", 6757965.7], ["", 5883489.55], ["", 6977495.82]]
+INPUT | Sheet1!A14:B25 | [["DREV0103", "Revenue from On\u2013Peak Energy Delivery charges"], ["DREV0104", "Revenue from Shoulder period Energy Delivery Charges"], ["DREV0105", "Revenue from Off\u2013Peak Energy Delivery charges"], ["DREV0106", "Revenue from controlled load customer charges"], ["DREV0107", "Revenue from unmetered supplies"], ["DREV0108", "Revenue from Contracted Maximum Demand charges"], ["DREV0109", "Revenue from Measured Maximum Demand charges"], ["DREV0110", "Revenue from metering charges"], ["DREV0111", "Revenue from connection charges"], ["DREV0112", "Revenue from public lighting charges"], ["DREV0113", "Revenue from other Sources"], ["DREV01", "Total revenue by chargeable quantity"]]
+ALIGN_HORIZONTAL | Sheet1!B25 | right
+NUMBER_FORMAT | Sheet1!B25:D25 | _-* #,##0_-;\-* #,##0_-;_-* "-"??_-;_-@_-
+FILL_COLOR | Sheet1!B25:D25 | #D8D8D8
+FONT_BOLD | Sheet1!B25:D25 | True
+BORDER_OUTSIDE | Sheet1!B25:D25 | Medium, Continuous, #000000
+INPUT | Sheet1!C25 | 413974726.17
+INPUT | Sheet1!D25 | 58105320.93
+FONT_ITALIC | Sheet1!B27 | True
+WRAP_TEXT | Sheet1!B27 | True
+ALIGN_HORIZONTAL | Sheet1!B27 | left
+FONT_BOLD | Sheet1!B27:B28 | True
+NUMBER_FORMAT | Sheet1!C27:D27 | _-* #,##0_-;\-* #,##0_-;_-* "-"??_-;_-@_-
+ALIGN_HORIZONTAL | Sheet1!C27:D27 | right
+INPUT | Sheet1!B28 | "3.1.2 - REVENUE GROUPING BY CUSTOMER TYPE OR CLASS"
+FILL_COLOR | Sheet1!B28:D28 | #000000
+FONT_COLOR | Sheet1!B28:D28 | #FFFFFF
+FONT_SIZE | Sheet1!B28:D28 | 14.0
+FONT_BOLD | Sheet1!C28:D28 | True
+INPUT | Sheet1!C29 | "Standard control services"
+BORDER_OUTSIDE | Sheet1!C29:D31 | Medium, Continuous, #000000
+BORDER_OUTSIDE | Sheet1!C29:D29 | Medium, Continuous, #000000
+FONT_SIZE | Sheet1!C29:D29 | 12.0
+FONT_BOLD | Sheet1!C29:D29 | True
+ALIGN_HORIZONTAL | Sheet1!C29:C31 | center
+INPUT | Sheet1!D29 | "Alternative control services"
+ALIGN_HORIZONTAL | Sheet1!D29 | center
+INPUT | Sheet1!C30 | "REVENUE\n($0's)"
+MERGE | Sheet1!C30:D30 | true
+WRAP_TEXT | Sheet1!C30 | True
+FILL_COLOR | Sheet1!C30:C31 | #95B3D7
+FONT_BOLD | Sheet1!C30:C31 | True
+BORDER_ALL | Sheet1!C30:D31 | Thin, Continuous, #000000
+INPUT | Sheet1!C31 | "2020-21"
+INPUT | Sheet1!D31 | "2020-21"
+FILL_COLOR | Sheet1!D31 | #95B3D7
+FONT_BOLD | Sheet1!D31 | True
+ALIGN_HORIZONTAL | Sheet1!D31 | center
+INPUT | Sheet1!A32 | "DREV0201"
+WRAP_TEXT | Sheet1!A32:A40 | True
+INPUT | Sheet1!B32 | "Revenue from residential Customers"
+WRAP_TEXT | Sheet1!B32:B37 | True
+BORDER_OUTSIDE | Sheet1!B32:D38 | Medium, Continuous, #000000
+INPUT | Sheet1!C32:D37 | [[209681115.25, ""], [49161058.98, ""], [131117332.23, ""], [20655306.23, ""], [3359913.48, ""], ["", 58105320.93]]
+NUMBER_FORMAT | Sheet1!C32:D37 | _-* #,##0_-;[Red]\(#,##0\)_-;_-* "-"??_-;_-@_-
+FILL_COLOR | Sheet1!C32:D37 | #FFFFCC
+BORDER_RIGHT | Sheet1!C32:C37 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!C32:D38 | right
+INPUT | Sheet1!A33:B38 | [["DREV0202", "Revenue from Non residential customers not on demand tariffs"], ["DREV0203", "Revenue from Non-residential low voltage demand tariff customers"], ["DREV0204", "Revenue from Non-residential high voltage demand tariff customers"], ["DREV0205", "Revenue from unmetered supplies"], ["DREV0206", "Revenue from Other Customers"], ["DREV02", "Total revenue by customer class"]]
+ALIGN_HORIZONTAL | Sheet1!B38 | right
+NUMBER_FORMAT | Sheet1!B38:D38 | _-* #,##0_-;\-* #,##0_-;_-* "-"??_-;_-@_-
+FILL_COLOR | Sheet1!B38:D38 | #D8D8D8
+FONT_BOLD | Sheet1!B38:D38 | True
+BORDER_OUTSIDE | Sheet1!B38:D38 | Medium, Continuous, #000000
+INPUT | Sheet1!C38 | 413974726.17
+INPUT | Sheet1!D38 | 58105320.93
+INPUT | Sheet1!B40 | "3.1.3 - REVENUE (penalties) ALLOWED (deducted) THROUGH INCENTIVE SCHEMES"
+FILL_COLOR | Sheet1!B40:D40 | #000000
+FONT_COLOR | Sheet1!B40:D40 | #FFFFFF
+FONT_SIZE | Sheet1!B40:D40 | 14.0
+FONT_BOLD | Sheet1!B40:D40 | True
+INPUT | Sheet1!C41 | "Standard control services"
+BORDER_OUTSIDE | Sheet1!C41:D43 | Medium, Continuous, #000000
+BORDER_OUTSIDE | Sheet1!C41:D41 | Medium, Continuous, #000000
+FONT_SIZE | Sheet1!C41:D41 | 12.0
+FONT_BOLD | Sheet1!C41:D41 | True
+ALIGN_HORIZONTAL | Sheet1!C41:C43 | center
+INPUT | Sheet1!D41 | "Alternative control services"
+ALIGN_HORIZONTAL | Sheet1!D41 | center
+INPUT | Sheet1!C42 | "REVENUE\n($0's)"
+MERGE | Sheet1!C42:D42 | true
+WRAP_TEXT | Sheet1!C42 | True
+FILL_COLOR | Sheet1!C42:C43 | #95B3D7
+FONT_BOLD | Sheet1!C42:C43 | True
+BORDER_ALL | Sheet1!C42:D43 | Thin, Continuous, #000000
+INPUT | Sheet1!C43 | "2020-21"
+INPUT | Sheet1!D43 | "2020-21"
+FILL_COLOR | Sheet1!D43 | #95B3D7
+FONT_BOLD | Sheet1!D43 | True
+ALIGN_HORIZONTAL | Sheet1!D43 | center
+INPUT | Sheet1!A44 | "DREV0301"
+WRAP_TEXT | Sheet1!A44:A49 | True
+INPUT | Sheet1!B44 | "EBSS"
+WRAP_TEXT | Sheet1!B44:B48 | True
+BORDER_OUTSIDE | Sheet1!B44:D49 | Medium, Continuous, #000000
+INPUT | Sheet1!C44:C48 | [[4022595], [9459958], [2550], [308464], [139799]]
+NUMBER_FORMAT | Sheet1!C44:D48 | _-* #,##0_-;[Red]\(#,##0\)_-;_-* "-"??_-;_-@_-
+FILL_COLOR | Sheet1!C44:D48 | #FFFFCC
+BORDER_RIGHT | Sheet1!C44:C48 | Thin, Continuous, #000000
+INPUT | Sheet1!A45:B49 | [["DREV0302", "STPIS"], ["DREV0303", "F-Factor"], ["DREV0304", "S-Factor True up"], ["DREV0305", "Other"], ["DREV03", "Total revenue of incentive schemes"]]
+ALIGN_HORIZONTAL | Sheet1!B49 | right
+NUMBER_FORMAT | Sheet1!B49:D49 | _-* #,##0_-;\-* #,##0_-;_-* "-"??_-;_-@_-
+FILL_COLOR | Sheet1!B49:D49 | #D8D8D8
+FONT_BOLD | Sheet1!B49:D49 | True
+BORDER_OUTSIDE | Sheet1!B49:D49 | Medium, Continuous, #000000
+INPUT | Sheet1!C49 | 13933366
+INPUT | Sheet1!D49 | 0

@@ -1,0 +1,575 @@
+{
+  "trajectory_name": "000bc705",
+  "predictable_count": 285,
+  "final_state_size": 420,
+  "coverage_pct": 67.86,
+  "predictable_properties": {
+    "Sheet1": {
+      "A12": [
+        "Format.font.bold",
+        "value"
+      ],
+      "A17": [
+        "Format.font.bold",
+        "value"
+      ],
+      "A20": [
+        "Format.font.bold"
+      ],
+      "A22": [
+        "Format.font.bold"
+      ],
+      "A29": [
+        "value"
+      ],
+      "A30": [
+        "value"
+      ],
+      "A31": [
+        "value"
+      ],
+      "A7": [
+        "Format.font.bold"
+      ],
+      "B10": [
+        "Format.font.italic",
+        "value"
+      ],
+      "B12": [
+        "Format.font.bold",
+        "value"
+      ],
+      "B13": [
+        "Format.font.italic",
+        "value"
+      ],
+      "B14": [
+        "Format.font.bold",
+        "value"
+      ],
+      "B15": [
+        "Format.font.italic",
+        "value"
+      ],
+      "B17": [
+        "Format.font.bold",
+        "value"
+      ],
+      "B18": [
+        "Format.font.bold"
+      ],
+      "B19": [
+        "Format.font.italic"
+      ],
+      "B20": [
+        "Format.font.bold",
+        "value"
+      ],
+      "B21": [
+        "Format.font.bold",
+        "value"
+      ],
+      "B22": [
+        "Format.font.bold"
+      ],
+      "B7": [
+        "value"
+      ],
+      "B9": [
+        "Format.font.bold",
+        "value"
+      ],
+      "C1": [
+        "Format.font.bold"
+      ],
+      "C10": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "C13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "C15": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "C16": [
+        "Format.font.size"
+      ],
+      "C2": [
+        "Format.font.bold"
+      ],
+      "C20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "C21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "C22": [
+        "Format.font.size"
+      ],
+      "C3": [
+        "Format.font.bold"
+      ],
+      "C5": [
+        "Format.font.bold",
+        "value"
+      ],
+      "C6": [
+        "Format.font.italic"
+      ],
+      "C9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D1": [
+        "Format.font.color",
+        "Format.font.underline"
+      ],
+      "D10": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D12": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D14": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D15": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "D2": [
+        "Format.font.color"
+      ],
+      "D20": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "D5": [
+        "Format.font.bold",
+        "value"
+      ],
+      "D9": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "E12": [
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "E13": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right"
+      ],
+      "E17": [
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "E18": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right"
+      ],
+      "E20": [
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "E21": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right"
+      ],
+      "E22": [
+        "Format.font.bold"
+      ],
+      "E26": [
+        "Format.font.bold"
+      ],
+      "E28": [
+        "value"
+      ],
+      "E29": [
+        "value"
+      ],
+      "E5": [
+        "Format.horizontalAlignment"
+      ],
+      "E6": [
+        "Format.horizontalAlignment"
+      ],
+      "E7": [
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "E8": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right"
+      ],
+      "F12": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "F13": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "F17": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "F18": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "F20": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "F21": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "F22": [
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "F23": [
+        "Format.borders.right"
+      ],
+      "F6": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "F7": [
+        "Format.borders.top"
+      ],
+      "F8": [
+        "Format.borders.bottom"
+      ],
+      "G12": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G13": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "G17": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G18": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "G20": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G21": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "G22": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G23": [
+        "Format.borders.right"
+      ],
+      "G26": [
+        "Format.borders.right",
+        "Format.font.bold",
+        "Format.horizontalAlignment"
+      ],
+      "G27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G5": [
+        "value"
+      ],
+      "G6": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "G7": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "G8": [
+        "Format.borders.right"
+      ],
+      "H12": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H13": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "H17": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H18": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "H20": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H21": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "H22": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H23": [
+        "Format.borders.right"
+      ],
+      "H26": [
+        "Format.font.bold",
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "H27": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H28": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H29": [
+        "Format.borders.bottom",
+        "Format.borders.left",
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H4": [
+        "Format.font.bold",
+        "Format.font.underline"
+      ],
+      "H5": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "H6": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "H7": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "H8": [
+        "Format.borders.right"
+      ],
+      "I12": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "I13": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "I17": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "I18": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "I20": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "I21": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "I22": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "I23": [
+        "Format.borders.right"
+      ],
+      "I4": [
+        "Format.font.bold"
+      ],
+      "I5": [
+        "value"
+      ],
+      "I6": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "I7": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "I8": [
+        "Format.borders.right"
+      ],
+      "J12": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "J13": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "J17": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "J18": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "J20": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "J21": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "J22": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "J23": [
+        "Format.borders.right"
+      ],
+      "J5": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "J6": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "J7": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "J8": [
+        "Format.borders.right"
+      ],
+      "K12": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "K13": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "K17": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "K18": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "K20": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "K21": [
+        "Format.borders.bottom",
+        "Format.borders.right"
+      ],
+      "K22": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ],
+      "K5": [
+        "value"
+      ],
+      "K6": [
+        "Format.horizontalAlignment",
+        "value"
+      ],
+      "K7": [
+        "Format.borders.right",
+        "Format.borders.top"
+      ]
+    }
+  }
+}

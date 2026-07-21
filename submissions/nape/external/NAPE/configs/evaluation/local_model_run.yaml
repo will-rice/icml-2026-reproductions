@@ -1,0 +1,52 @@
+# Local-model run — single-action repredict (paper Table 4 setting).
+#
+# Uses a locally hosted HuggingFace model via LocalModelAdapter.
+# Single-action repredict mode is used because most small models can't
+# decide when to stop on their own (paper §3 single-action repredict).
+#
+# The `model` field accepts:
+#   - A HuggingFace Hub ID:  Qwen/Qwen2.5-3B-Instruct, HuggingFaceTB/SmolLM2-360M
+#   - A short alias:         qwen-3b, smollm2-360m, smollm2-1.7b
+#   - A local path:          D:/models/my-finetuned-model
+#
+# Usage: python scripts/run_batch_evaluation.py --config configs/evaluation/local_model_run.yaml
+
+name: local_model_run
+
+trajectory_paths:
+  - data/trajectories/*.json
+
+output_dir: results/local_model_run
+
+max_runs: 5                # small for first sanity check; null for full dataset
+max_steps: 1200
+max_steps_pct: 1.20
+
+workers: 1                 # 1 for local models (GPU is the bottleneck)
+max_context_ops: 32
+online_mode: true
+repredict_after_accept: true
+max_predictions_per_step: 1
+
+stride:
+  mode: fixed_interval
+  interval: 1
+
+heuristics:
+  - steps_saved
+
+context_shortening:
+  enabled: true
+  max_chars: 32
+  corner_cells_dim: 2
+
+solver:
+  type: llm
+  adapter: local
+  model: HuggingFaceTB/SmolLM2-360M   # change to any HF model ID, alias, or local path
+  temperature: 0.0
+  max_tokens: 4096
+  num_op_to_pred: 1
+  cache_enabled: false       # local models are deterministic — caching gives little speedup
+  emit_intent: false
+  remove_sheet_name: true

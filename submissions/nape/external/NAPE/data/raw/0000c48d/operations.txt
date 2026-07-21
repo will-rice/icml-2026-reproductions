@@ -1,0 +1,48 @@
+INPUT | Sheet1!A1 | "Tables D-12. National estimates of working household youth (<20 years) on US farms by type of farm and sex"
+MERGE | Sheet1!A1:H1 | true
+WRAP_TEXT | Sheet1!A1 | True
+INPUT | Sheet1!A3 | "Type of Farm"
+INPUT | Sheet1!B3 | "Sex"
+INPUT | Sheet1!A4 | "Crop"
+INPUT | Sheet1!B4 | "Male"
+INPUT | Sheet1!B5 | "Female"
+INPUT | Sheet1!B6 | "Unknown"
+INPUT | Sheet1!A7 | "Livestock"
+INPUT | Sheet1!A10 | "Unknown"
+INPUT | Sheet1!A13 | "Total (1)"
+WRAP_TEXT | Sheet1!B3 | True
+INPUT | Sheet1!B7 | "Male"
+INPUT | Sheet1!B8 | "Female"
+INPUT | Sheet1!B9 | "Unknown"
+INPUT | Sheet1!B10 | "Male"
+INPUT | Sheet1!B11 | "Female"
+INPUT | Sheet1!B12 | "Unknown"
+INPUT | Sheet1!B13 | "Male"
+INPUT | Sheet1!B14 | "Female"
+INPUT | Sheet1!B15 | "Unknown"
+INPUT | Sheet1!C3 | 2001
+INPUT | Sheet1!D3 | 2004
+INPUT | Sheet1!E3 | 2006
+INPUT | Sheet1!F3 | 2009
+INPUT | Sheet1!H3 | 2012
+INPUT | Sheet1!I3 | 2014
+BORDER_OUTSIDE | Sheet1!A3:I15 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!A3:I3 | Double, Continuous, #000000
+BORDER_RIGHT | Sheet1!A3:A15 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!B3:B15 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!C3:C15 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!D3:D15 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!E3:E15 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!F3:F15 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!G3:G15 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!H3:H15 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!A12:I12 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!C3:F3 | center
+NUMBER_FORMAT | Sheet1!C4:F15 | #,##0
+INPUT | Sheet1!C4:I15 | [[144078, 176884, 139796, 119009, "", 117621, 105329], [101587, 119623, 97471, 85002.8, "", 85834, 77942], [244.74, 471.8, 454.6, 668.17, "", 1101, 613], [258482, 227190, 200291, 177430, "", 148785, 148336], [206265, 174325, 151310, 136262, "", 117434, 120499], [165.6, 278.67, 1174.4, 178.95, "", 1179, 1258], [9002.7, 0, 0, 0, "", 0, 0], [4951.49, 0, 0, 0, "", 0, 0], [230.7, 0, 0, 0, "", 0, 0], [411562.6, 404074.2, 340086.8, 296439.2, "", 266406, 253665], [312802.9, 293948.5, 248781.1, 221264.7, "", 203268, 198441], [641.06, 750.48, 1629.01, 847.13, "", 2280, 1871]]
+ALIGN_HORIZONTAL | Sheet1!H3:I3 | center
+NUMBER_FORMAT | Sheet1!H4:I15 | #,##0
+INPUT | Sheet1!A17 | "(1) Estimates may not sum due to rounding"
+MERGE | Sheet1!A17:F17 | true
+INPUT | Sheet1!A19 | "Source:  Childhood Agricultural Injury Survey, 2001, 2004, 2006, 2009, 2012 and 2014."
+MERGE | Sheet1!A19:F19 | true

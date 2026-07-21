@@ -1,0 +1,357 @@
+{
+  "trajectory_name": "0e4de3da",
+  "predictable_count": 177,
+  "final_state_size": 276,
+  "coverage_pct": 64.13,
+  "predictable_properties": {
+    "Sheet1": {
+      "B10": [
+        "value"
+      ],
+      "B11": [
+        "value"
+      ],
+      "B14": [
+        "Format.verticalAlignment"
+      ],
+      "B3": [
+        "Format.font.bold"
+      ],
+      "B5": [
+        "Format.font.bold"
+      ],
+      "B9": [
+        "Format.borders.top",
+        "value"
+      ],
+      "C10": [
+        "value"
+      ],
+      "C11": [
+        "value"
+      ],
+      "C14": [
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "merged_cells"
+      ],
+      "C15": [
+        "merged_cells"
+      ],
+      "C16": [
+        "merged_cells"
+      ],
+      "C17": [
+        "merged_cells"
+      ],
+      "C9": [
+        "Format.borders.top",
+        "Format.font.bold",
+        "value"
+      ],
+      "D10": [
+        "number_format"
+      ],
+      "D11": [
+        "number_format"
+      ],
+      "D12": [
+        "number_format"
+      ],
+      "D13": [
+        "number_format",
+        "value"
+      ],
+      "D14": [
+        "merged_cells"
+      ],
+      "D15": [
+        "merged_cells"
+      ],
+      "D16": [
+        "merged_cells"
+      ],
+      "D17": [
+        "merged_cells"
+      ],
+      "D6": [
+        "Format.font.bold",
+        "Format.font.color",
+        "Format.horizontalAlignment",
+        "Format.verticalAlignment",
+        "Format.wrapText"
+      ],
+      "D7": [
+        "number_format"
+      ],
+      "D9": [
+        "Format.borders.top",
+        "Format.font.bold",
+        "number_format"
+      ],
+      "E10": [
+        "value"
+      ],
+      "E11": [
+        "value"
+      ],
+      "E12": [
+        "value"
+      ],
+      "E13": [
+        "value"
+      ],
+      "E14": [
+        "merged_cells"
+      ],
+      "E15": [
+        "merged_cells"
+      ],
+      "E16": [
+        "merged_cells"
+      ],
+      "E17": [
+        "merged_cells"
+      ],
+      "E6": [
+        "Format.font.bold",
+        "Format.font.color",
+        "Format.horizontalAlignment",
+        "Format.verticalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "E7": [
+        "number_format",
+        "value"
+      ],
+      "E9": [
+        "Format.borders.top",
+        "Format.font.bold"
+      ],
+      "G10": [
+        "value"
+      ],
+      "G11": [
+        "value"
+      ],
+      "G13": [
+        "Format.borders.bottom"
+      ],
+      "G16": [
+        "Format.borders.bottom",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G5": [
+        "Format.font.bold"
+      ],
+      "G7": [
+        "Format.borders.bottom",
+        "Format.borders.top"
+      ],
+      "G9": [
+        "Format.borders.top",
+        "value"
+      ],
+      "H10": [
+        "Format.font.bold",
+        "Format.font.color",
+        "value"
+      ],
+      "H12": [
+        "value"
+      ],
+      "H13": [
+        "Format.borders.bottom",
+        "value"
+      ],
+      "H16": [
+        "Format.borders.bottom",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.font.color"
+      ],
+      "H7": [
+        "Format.borders.bottom",
+        "Format.borders.top",
+        "value"
+      ],
+      "H9": [
+        "Format.borders.top",
+        "value"
+      ],
+      "I10": [
+        "Format.font.bold",
+        "Format.font.color",
+        "number_format"
+      ],
+      "I11": [
+        "number_format"
+      ],
+      "I12": [
+        "number_format"
+      ],
+      "I13": [
+        "Format.borders.bottom",
+        "number_format",
+        "value"
+      ],
+      "I16": [
+        "Format.borders.bottom",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.font.color",
+        "number_format"
+      ],
+      "I6": [
+        "Format.font.bold",
+        "Format.font.color",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "I7": [
+        "Format.borders.bottom",
+        "Format.borders.top",
+        "number_format"
+      ],
+      "I9": [
+        "Format.borders.top",
+        "number_format"
+      ],
+      "J10": [
+        "Format.font.bold",
+        "Format.font.color",
+        "value"
+      ],
+      "J11": [
+        "number_format",
+        "value"
+      ],
+      "J12": [
+        "value"
+      ],
+      "J13": [
+        "Format.borders.bottom",
+        "value"
+      ],
+      "J16": [
+        "Format.borders.bottom",
+        "Format.borders.top",
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "Format.font.color",
+        "value"
+      ],
+      "J6": [
+        "Format.font.bold",
+        "Format.font.color",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "J7": [
+        "Format.borders.bottom",
+        "Format.borders.top",
+        "number_format",
+        "value"
+      ],
+      "J9": [
+        "Format.borders.top",
+        "value"
+      ],
+      "L10": [
+        "value"
+      ],
+      "L11": [
+        "value"
+      ],
+      "L13": [
+        "Format.borders.bottom"
+      ],
+      "L5": [
+        "Format.font.bold"
+      ],
+      "L9": [
+        "Format.borders.top",
+        "Format.font.bold",
+        "value"
+      ],
+      "M10": [
+        "value"
+      ],
+      "M12": [
+        "value"
+      ],
+      "M13": [
+        "Format.borders.bottom",
+        "value"
+      ],
+      "M9": [
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.font.color",
+        "value"
+      ],
+      "N10": [
+        "number_format"
+      ],
+      "N11": [
+        "number_format"
+      ],
+      "N12": [
+        "number_format"
+      ],
+      "N13": [
+        "Format.borders.bottom",
+        "number_format"
+      ],
+      "N6": [
+        "Format.font.bold",
+        "Format.font.color",
+        "Format.horizontalAlignment",
+        "Format.wrapText"
+      ],
+      "N9": [
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.font.color",
+        "number_format"
+      ],
+      "O10": [
+        "value"
+      ],
+      "O11": [
+        "number_format",
+        "value"
+      ],
+      "O12": [
+        "value"
+      ],
+      "O13": [
+        "Format.borders.bottom",
+        "value"
+      ],
+      "O6": [
+        "Format.font.bold",
+        "Format.font.color",
+        "Format.horizontalAlignment",
+        "Format.wrapText",
+        "value"
+      ],
+      "O9": [
+        "Format.borders.top",
+        "Format.font.bold",
+        "Format.font.color",
+        "value"
+      ]
+    }
+  }
+}

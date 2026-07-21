@@ -1,0 +1,18 @@
+{
+  "claim": "Approximately 68% of final spreadsheet properties are empirically predictable by the released frontier-model oracle pipeline.",
+  "counting_definition": "Weighted coverage is 100 times the sum of predictable_count divided by the sum of final_state_size.",
+  "evidence_scope": "released_oracle_output_recomputation",
+  "input_path": "external/NAPE/data/raw/*/predictable_state.json",
+  "limitation": "The original paid frontier-model oracle calls were not rerun.",
+  "observed": {
+    "final_state_properties": 186574,
+    "mean_coverage_pct": 65.99230769230769,
+    "median_coverage_pct": 66.34,
+    "predictable_properties": 126940,
+    "trajectories": 52,
+    "trajectories_above_50_pct": 44,
+    "weighted_coverage_pct": 68.03734711160183
+  },
+  "source_revision": "ac0d10e4dc345f982a5665a2c4bdb6b752d663f2",
+  "verdict": "reproduced_from_released_outputs"
+}

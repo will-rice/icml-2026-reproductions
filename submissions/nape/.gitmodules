@@ -1,0 +1,3 @@
+[submodule "external/NAPE"]
+	path = external/NAPE
+	url = https://github.com/Tej-55/NAPE.git

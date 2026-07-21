@@ -1,0 +1,570 @@
+INPUT | Sheet1!A1 | "Table Tennis"
+FONT_BOLD | Sheet1!A1 | True
+INPUT | Sheet1!A3 | "Men's Singles Division A"
+INPUT | Sheet1!A4 | "Place"
+INPUT | Sheet1!B4 | "Company"
+INPUT | Sheet1!C4 | "Points"
+INPUT | Sheet1!A5 | 1
+INPUT | Sheet1!B5 | "Children's Mercy Kansas City"
+INPUT | Sheet1!C5 | 11
+INPUT | Sheet1!A6 | 2
+INPUT | Sheet1!B6 | "City of Kansas City, Missouri"
+INPUT | Sheet1!C6 | 9
+INPUT | Sheet1!A7 | 3
+INPUT | Sheet1!B7 | "Burns & McDonnell"
+INPUT | Sheet1!C7 | 7
+INPUT | Sheet1!A8 | 4
+INPUT | Sheet1!B8 | "Commerce Bank"
+INPUT | Sheet1!C8 | 6
+INPUT | Sheet1!A9 | 5
+INPUT | Sheet1!B9 | "Black & Veatch"
+INPUT | Sheet1!C9 | 3.5
+INPUT | Sheet1!A10 | 5
+INPUT | Sheet1!B10 | "Evergy"
+INPUT | Sheet1!C10 | 3.5
+INPUT | Sheet1!A11 | 5
+INPUT | Sheet1!B11 | "Garmin"
+INPUT | Sheet1!C11 | 3.5
+INPUT | Sheet1!A12 | 5
+INPUT | Sheet1!B12 | "T-Mobile"
+INPUT | Sheet1!C12 | 3.5
+INPUT | Sheet1!B13 | "Johnson County, KS"
+INPUT | Sheet1!C13 | 1
+INPUT | Sheet1!B14 | "UMB"
+INPUT | Sheet1!C14 | 1
+FONT_BOLD | Sheet1!A3:C4 | True
+FILL_COLOR | Sheet1!A3:C3 | #4472C4
+NUMBER_FORMAT | Sheet1!A5:A14 | 0._)
+NUMBER_FORMAT | Sheet1!C5:C14 | 0.0
+BORDER_BOTTOM | Sheet1!A14:C14 | Thin, Continuous, #000000
+INPUT | Sheet1!A16 | "Women's Singles Division A"
+INPUT | Sheet1!A17 | "Place"
+INPUT | Sheet1!B17 | "Company"
+INPUT | Sheet1!C17 | "Points"
+INPUT | Sheet1!A18 | 1
+INPUT | Sheet1!B18 | "Garmin"
+INPUT | Sheet1!C18 | 11
+INPUT | Sheet1!A19 | 2
+INPUT | Sheet1!B19 | "Burns & McDonnell"
+INPUT | Sheet1!C19 | 9
+INPUT | Sheet1!A20 | 3
+INPUT | Sheet1!B20 | "T-Mobile"
+INPUT | Sheet1!C20 | 7
+INPUT | Sheet1!A21 | 4
+INPUT | Sheet1!B21 | "Black & Veatch"
+INPUT | Sheet1!C21 | 6
+INPUT | Sheet1!A22 | 5
+INPUT | Sheet1!B22 | "City of Kansas City, Missouri"
+INPUT | Sheet1!C22 | 3.5
+INPUT | Sheet1!A23 | 5
+INPUT | Sheet1!B23 | "Commerce Bank"
+INPUT | Sheet1!C23 | 3.5
+INPUT | Sheet1!A24 | 5
+INPUT | Sheet1!B24 | "Kansas City VA Medical Center"
+INPUT | Sheet1!C24 | 3.5
+INPUT | Sheet1!B25 | "UMB"
+INPUT | Sheet1!C25 | 1
+INPUT | Sheet1!B26 | "Children's Mercy Kansas City"
+INPUT | Sheet1!C26 | -2
+INPUT | Sheet1!B27 | "Johnson County, KS"
+INPUT | Sheet1!C27 | -2
+FONT_BOLD | Sheet1!A16:C17 | True
+FILL_COLOR | Sheet1!A16:C16 | #4472C4
+NUMBER_FORMAT | Sheet1!A18:A27 | 0._)
+NUMBER_FORMAT | Sheet1!C18:C27 | 0.0
+BORDER_BOTTOM | Sheet1!A27:C27 | Thin, Continuous, #000000
+INPUT | Sheet1!A29 | "Mixed Doubles Division A"
+INPUT | Sheet1!A30 | "Place"
+INPUT | Sheet1!B30 | "Company"
+INPUT | Sheet1!C30 | "Points"
+INPUT | Sheet1!A31 | 1
+INPUT | Sheet1!B31 | "Garmin"
+INPUT | Sheet1!C31 | 12
+INPUT | Sheet1!A32 | 2
+INPUT | Sheet1!B32 | "Burns & McDonnell"
+INPUT | Sheet1!C32 | 10
+INPUT | Sheet1!A33 | 3
+INPUT | Sheet1!B33 | "Commerce Bank"
+INPUT | Sheet1!C33 | 8
+INPUT | Sheet1!A34 | 4
+INPUT | Sheet1!B34 | "Evergy"
+INPUT | Sheet1!C34 | 7
+INPUT | Sheet1!A35 | 5
+INPUT | Sheet1!B35 | "Black & Veatch"
+INPUT | Sheet1!C35 | 4.5
+INPUT | Sheet1!A36 | 5
+INPUT | Sheet1!B36 | "City of Kansas City, Missouri"
+INPUT | Sheet1!C36 | 4.5
+INPUT | Sheet1!A37 | 5
+INPUT | Sheet1!B37 | "Johnson County, KS"
+INPUT | Sheet1!C37 | 4.5
+INPUT | Sheet1!A38 | 5
+INPUT | Sheet1!B38 | "UMB"
+INPUT | Sheet1!C38 | 4.5
+INPUT | Sheet1!B39 | "Children's Mercy Kansas City"
+INPUT | Sheet1!C39 | -4
+INPUT | Sheet1!B40 | "Kansas City VA Medical Center"
+INPUT | Sheet1!C40 | -4
+INPUT | Sheet1!B41 | "T-Mobile"
+INPUT | Sheet1!C41 | -4
+FONT_BOLD | Sheet1!A29:C30 | True
+FILL_COLOR | Sheet1!A29:C29 | #4472C4
+NUMBER_FORMAT | Sheet1!A31:A41 | 0._)
+NUMBER_FORMAT | Sheet1!C31:C41 | 0.0
+BORDER_BOTTOM | Sheet1!A41:C41 | Thin, Continuous, #000000
+INPUT | Sheet1!A43 | "Men's Singles Division B"
+INPUT | Sheet1!A44 | "Place"
+INPUT | Sheet1!B44 | "Company"
+INPUT | Sheet1!C44 | "Points"
+INPUT | Sheet1!A45 | 1
+INPUT | Sheet1!B45 | "Federal Reserve Bank of Kansas City"
+INPUT | Sheet1!C45 | 11
+INPUT | Sheet1!A46 | 2
+INPUT | Sheet1!B46 | "American Century Investments"
+INPUT | Sheet1!C46 | 9
+INPUT | Sheet1!A47 | 3
+INPUT | Sheet1!B47 | "CPKC"
+INPUT | Sheet1!C47 | 7
+INPUT | Sheet1!A48 | 4
+INPUT | Sheet1!B48 | "Spectrum/Charter Communications"
+INPUT | Sheet1!C48 | 6
+INPUT | Sheet1!A49 | 5
+INPUT | Sheet1!B49 | "CommunityAmerica Credit Union"
+INPUT | Sheet1!C49 | 3.5
+INPUT | Sheet1!A50 | 5
+INPUT | Sheet1!B50 | "GEHA"
+INPUT | Sheet1!C50 | 3.5
+INPUT | Sheet1!A51 | 5
+INPUT | Sheet1!B51 | "Kiewit"
+INPUT | Sheet1!C51 | 3.5
+INPUT | Sheet1!A52 | 5
+INPUT | Sheet1!B52 | "SelectQuote Insurance Services"
+INPUT | Sheet1!C52 | 3.5
+INPUT | Sheet1!B53 | "Blue Cross and Blue Shield of Kansas City"
+INPUT | Sheet1!C53 | 1
+INPUT | Sheet1!B54 | "City of Overland Park"
+INPUT | Sheet1!C54 | 1
+INPUT | Sheet1!B55 | "Custom Truck One Source"
+INPUT | Sheet1!C55 | 1
+INPUT | Sheet1!B56 | "JE Dunn Construction"
+INPUT | Sheet1!C56 | 1
+INPUT | Sheet1!B57 | "Netsmart"
+INPUT | Sheet1!C57 | 1
+INPUT | Sheet1!B58 | "H&R Block"
+INPUT | Sheet1!C58 | -2
+FONT_BOLD | Sheet1!A43:C44 | True
+FILL_COLOR | Sheet1!A43:C43 | #4472C4
+NUMBER_FORMAT | Sheet1!A45:A58 | 0._)
+NUMBER_FORMAT | Sheet1!C45:C58 | 0.0
+BORDER_BOTTOM | Sheet1!A58:C58 | Thin, Continuous, #000000
+INPUT | Sheet1!A60 | "Women's Singles Division B"
+INPUT | Sheet1!A61 | "Place"
+INPUT | Sheet1!B61 | "Company"
+INPUT | Sheet1!C61 | "Points"
+INPUT | Sheet1!A62 | 1
+INPUT | Sheet1!B62 | "Blue Cross and Blue Shield of Kansas City"
+INPUT | Sheet1!C62 | 11
+INPUT | Sheet1!A63 | 2
+INPUT | Sheet1!B63 | "Spectrum/Charter Communications"
+INPUT | Sheet1!C63 | 9
+INPUT | Sheet1!A64 | 3
+INPUT | Sheet1!B64 | "Custom Truck One Source"
+INPUT | Sheet1!C64 | 7
+INPUT | Sheet1!A65 | 4
+INPUT | Sheet1!B65 | "GEHA"
+INPUT | Sheet1!C65 | 6
+INPUT | Sheet1!A66 | 5
+INPUT | Sheet1!B66 | "CommunityAmerica Credit Union"
+INPUT | Sheet1!C66 | 3.5
+INPUT | Sheet1!A67 | 5
+INPUT | Sheet1!B67 | "Federal Reserve Bank of Kansas City"
+INPUT | Sheet1!C67 | 3.5
+INPUT | Sheet1!A68 | 5
+INPUT | Sheet1!B68 | "SelectQuote Insurance Services"
+INPUT | Sheet1!C68 | 3.5
+INPUT | Sheet1!B69 | "American Century Investments"
+INPUT | Sheet1!C69 | -2
+INPUT | Sheet1!B70 | "City of Overland Park"
+INPUT | Sheet1!C70 | -2
+INPUT | Sheet1!B71 | "H&R Block"
+INPUT | Sheet1!C71 | -2
+INPUT | Sheet1!B72 | "JE Dunn Construction"
+INPUT | Sheet1!C72 | -2
+INPUT | Sheet1!B73 | "Kiewit"
+INPUT | Sheet1!C73 | -2
+FONT_BOLD | Sheet1!A60:C61 | True
+FILL_COLOR | Sheet1!A60:C60 | #4472C4
+NUMBER_FORMAT | Sheet1!A62:A73 | 0._)
+NUMBER_FORMAT | Sheet1!C62:C73 | 0.0
+BORDER_BOTTOM | Sheet1!A73:C73 | Thin, Continuous, #000000
+INPUT | Sheet1!A75 | "Mixed Doubles Division B"
+INPUT | Sheet1!A76 | "Place"
+INPUT | Sheet1!B76 | "Company"
+INPUT | Sheet1!C76 | "Points"
+INPUT | Sheet1!A77 | 1
+INPUT | Sheet1!B77 | "American Century Investments"
+INPUT | Sheet1!C77 | 12
+INPUT | Sheet1!A78 | 2
+INPUT | Sheet1!B78 | "Spectrum/Charter Communications"
+INPUT | Sheet1!C78 | 10
+INPUT | Sheet1!A79 | 3
+INPUT | Sheet1!B79 | "Custom Truck One Source"
+INPUT | Sheet1!C79 | 8
+INPUT | Sheet1!A80 | 4
+INPUT | Sheet1!B80 | "GEHA"
+INPUT | Sheet1!C80 | 7
+INPUT | Sheet1!B81 | "CPKC"
+INPUT | Sheet1!C81 | 2
+INPUT | Sheet1!B82 | "Blue Cross and Blue Shield of Kansas City"
+INPUT | Sheet1!C82 | -4
+INPUT | Sheet1!B83 | "City of Overland Park"
+INPUT | Sheet1!C83 | -4
+INPUT | Sheet1!B84 | "CommunityAmerica Credit Union"
+INPUT | Sheet1!C84 | -4
+INPUT | Sheet1!B85 | "Federal Reserve Bank of Kansas City"
+INPUT | Sheet1!C85 | -4
+INPUT | Sheet1!B86 | "H&R Block"
+INPUT | Sheet1!C86 | -4
+INPUT | Sheet1!B87 | "JE Dunn Construction"
+INPUT | Sheet1!C87 | -4
+INPUT | Sheet1!B88 | "Kiewit"
+INPUT | Sheet1!C88 | -4
+INPUT | Sheet1!B89 | "Netsmart"
+INPUT | Sheet1!C89 | -4
+INPUT | Sheet1!B90 | "SelectQuote Insurance Services"
+INPUT | Sheet1!C90 | -4
+FONT_BOLD | Sheet1!A75:C76 | True
+FILL_COLOR | Sheet1!A75:C75 | #4472C4
+NUMBER_FORMAT | Sheet1!A77:A90 | 0._)
+NUMBER_FORMAT | Sheet1!C77:C90 | 0.0
+BORDER_BOTTOM | Sheet1!A90:C90 | Thin, Continuous, #000000
+INPUT | Sheet1!A92 | "Men's Singles Division C"
+INPUT | Sheet1!A93 | "Place"
+INPUT | Sheet1!B93 | "Company"
+INPUT | Sheet1!C93 | "Points"
+INPUT | Sheet1!A94 | 1
+INPUT | Sheet1!B94 | "PNC Bank"
+INPUT | Sheet1!C94 | 11
+INPUT | Sheet1!A95 | 2
+INPUT | Sheet1!B95 | "AMC Theatres"
+INPUT | Sheet1!C95 | 9
+INPUT | Sheet1!A96 | 3
+INPUT | Sheet1!B96 | "Freightquote & C.H. Robinson"
+INPUT | Sheet1!C96 | 7
+INPUT | Sheet1!A97 | 4
+INPUT | Sheet1!B97 | "Edward Jones"
+INPUT | Sheet1!C97 | 6
+INPUT | Sheet1!A98 | 5
+INPUT | Sheet1!B98 | "Bayer"
+INPUT | Sheet1!C98 | 3.5
+INPUT | Sheet1!A99 | 5
+INPUT | Sheet1!B99 | "Environmental Protection Warriors"
+INPUT | Sheet1!C99 | 3.5
+INPUT | Sheet1!A100 | 5
+INPUT | Sheet1!B100 | "WellSky"
+INPUT | Sheet1!C100 | 3.5
+INPUT | Sheet1!B101 | "Cornerstones of Care"
+INPUT | Sheet1!C101 | 1
+INPUT | Sheet1!B102 | "Creative Planning"
+INPUT | Sheet1!C102 | 1
+INPUT | Sheet1!B103 | "DH Pace"
+INPUT | Sheet1!C103 | 1
+INPUT | Sheet1!B104 | "Empower"
+INPUT | Sheet1!C104 | 1
+INPUT | Sheet1!B105 | "HNTB Corporation"
+INPUT | Sheet1!C105 | 1
+INPUT | Sheet1!B106 | "ReDiscover"
+INPUT | Sheet1!C106 | 1
+INPUT | Sheet1!B107 | "Associated Wholesale Grocers, Inc."
+INPUT | Sheet1!C107 | -2
+INPUT | Sheet1!B108 | "Kellanova - Kansas City Bakery"
+INPUT | Sheet1!C108 | -2
+INPUT | Sheet1!B109 | "MHC (Murphy-Hoffman Company)"
+INPUT | Sheet1!C109 | -2
+INPUT | Sheet1!B110 | "TVH Parts"
+INPUT | Sheet1!C110 | -2
+FONT_BOLD | Sheet1!A92:C93 | True
+FILL_COLOR | Sheet1!A92:C92 | #4472C4
+NUMBER_FORMAT | Sheet1!A94:A110 | 0._)
+NUMBER_FORMAT | Sheet1!C94:C110 | 0.0
+BORDER_BOTTOM | Sheet1!A110:C110 | Thin, Continuous, #000000
+INPUT | Sheet1!A112 | "Women's Singles Division C"
+INPUT | Sheet1!A113 | "Place"
+INPUT | Sheet1!B113 | "Company"
+INPUT | Sheet1!C113 | "Points"
+INPUT | Sheet1!A114 | 1
+INPUT | Sheet1!B114 | "AMC Theatres"
+INPUT | Sheet1!C114 | 11
+INPUT | Sheet1!A115 | 2
+INPUT | Sheet1!B115 | "HNTB Corporation"
+INPUT | Sheet1!C115 | 9
+INPUT | Sheet1!A116 | 3
+INPUT | Sheet1!B116 | "DH Pace"
+INPUT | Sheet1!C116 | 7
+INPUT | Sheet1!A117 | 4
+INPUT | Sheet1!B117 | "PNC Bank"
+INPUT | Sheet1!C117 | 6
+INPUT | Sheet1!A118 | 5
+INPUT | Sheet1!B118 | "CBIZ"
+INPUT | Sheet1!C118 | 3.5
+INPUT | Sheet1!A119 | 5
+INPUT | Sheet1!B119 | "Freightquote & C.H. Robinson"
+INPUT | Sheet1!C119 | 3.5
+INPUT | Sheet1!A120 | 5
+INPUT | Sheet1!B120 | "TVH Parts"
+INPUT | Sheet1!C120 | 3.5
+INPUT | Sheet1!B121 | "Creative Planning"
+INPUT | Sheet1!C121 | -2
+INPUT | Sheet1!B122 | "Edward Jones"
+INPUT | Sheet1!C122 | -2
+INPUT | Sheet1!B123 | "Empower"
+INPUT | Sheet1!C123 | -2
+INPUT | Sheet1!B124 | "Environmental Protection Warriors"
+INPUT | Sheet1!C124 | -2
+INPUT | Sheet1!B125 | "Kellanova - Kansas City Bakery"
+INPUT | Sheet1!C125 | -2
+INPUT | Sheet1!B126 | "MHC (Murphy-Hoffman Company)"
+INPUT | Sheet1!C126 | -2
+FONT_BOLD | Sheet1!A112:C113 | True
+FILL_COLOR | Sheet1!A112:C112 | #4472C4
+NUMBER_FORMAT | Sheet1!A114:A126 | 0._)
+NUMBER_FORMAT | Sheet1!C114:C126 | 0.0
+BORDER_BOTTOM | Sheet1!A126:C126 | Thin, Continuous, #000000
+INPUT | Sheet1!A128 | "Mixed Doubles Division C"
+INPUT | Sheet1!A129 | "Place"
+INPUT | Sheet1!B129 | "Company"
+INPUT | Sheet1!C129 | "Points"
+INPUT | Sheet1!A130 | 1
+INPUT | Sheet1!B130 | "DH Pace"
+INPUT | Sheet1!C130 | 12
+INPUT | Sheet1!A131 | 2
+INPUT | Sheet1!B131 | "AMC Theatres"
+INPUT | Sheet1!C131 | 10
+INPUT | Sheet1!A132 | 3
+INPUT | Sheet1!B132 | "Bayer"
+INPUT | Sheet1!C132 | 8
+INPUT | Sheet1!A133 | 4
+INPUT | Sheet1!B133 | "Edward Jones"
+INPUT | Sheet1!C133 | 7
+INPUT | Sheet1!A134 | 5
+INPUT | Sheet1!B134 | "CBIZ"
+INPUT | Sheet1!C134 | 4.5
+INPUT | Sheet1!A135 | 5
+INPUT | Sheet1!B135 | "Freightquote & C.H. Robinson"
+INPUT | Sheet1!C135 | 4.5
+INPUT | Sheet1!A136 | 5
+INPUT | Sheet1!B136 | "PNC Bank"
+INPUT | Sheet1!C136 | 4.5
+INPUT | Sheet1!B137 | "Creative Planning"
+INPUT | Sheet1!C137 | 2
+INPUT | Sheet1!B138 | "TVH Parts"
+INPUT | Sheet1!C138 | 2
+INPUT | Sheet1!B139 | "Empower"
+INPUT | Sheet1!C139 | -4
+INPUT | Sheet1!B140 | "Environmental Protection Warriors"
+INPUT | Sheet1!C140 | -4
+INPUT | Sheet1!B141 | "HNTB Corporation"
+INPUT | Sheet1!C141 | -4
+INPUT | Sheet1!B142 | "Kellanova - Kansas City Bakery"
+INPUT | Sheet1!C142 | -4
+INPUT | Sheet1!B143 | "MHC (Murphy-Hoffman Company)"
+INPUT | Sheet1!C143 | -4
+FONT_BOLD | Sheet1!A128:C129 | True
+FILL_COLOR | Sheet1!A128:C128 | #4472C4
+NUMBER_FORMAT | Sheet1!A130:A143 | 0._)
+NUMBER_FORMAT | Sheet1!C130:C143 | 0.0
+BORDER_BOTTOM | Sheet1!A143:C143 | Thin, Continuous, #000000
+INPUT | Sheet1!A145 | "Men's Singles Division D"
+INPUT | Sheet1!A146 | "Place"
+INPUT | Sheet1!B146 | "Company"
+INPUT | Sheet1!C146 | "Points"
+INPUT | Sheet1!A147 | 1
+INPUT | Sheet1!B147 | "Americo Life"
+INPUT | Sheet1!C147 | 11
+INPUT | Sheet1!A148 | 2
+INPUT | Sheet1!B148 | "NorthPoint Development"
+INPUT | Sheet1!C148 | 9
+INPUT | Sheet1!A149 | 3
+INPUT | Sheet1!B149 | "Accenture"
+INPUT | Sheet1!C149 | 7
+INPUT | Sheet1!A150 | 4
+INPUT | Sheet1!B150 | "Security Benefit"
+INPUT | Sheet1!C150 | 6
+INPUT | Sheet1!A151 | 5
+INPUT | Sheet1!B151 | "Collins Aerospace"
+INPUT | Sheet1!C151 | 3.5
+INPUT | Sheet1!A152 | 5
+INPUT | Sheet1!B152 | "McCownGordon Construction"
+INPUT | Sheet1!C152 | 3.5
+INPUT | Sheet1!A153 | 5
+INPUT | Sheet1!B153 | "NAIC & NIPR"
+INPUT | Sheet1!C153 | 3.5
+INPUT | Sheet1!A154 | 5
+INPUT | Sheet1!B154 | "Stowers Institute for Medical Research"
+INPUT | Sheet1!C154 | 3.5
+INPUT | Sheet1!B155 | "BlueScope Buildings"
+INPUT | Sheet1!C155 | 1
+INPUT | Sheet1!B156 | "Engineered Air"
+INPUT | Sheet1!C156 | 1
+INPUT | Sheet1!B157 | "Eurofins Viracor"
+INPUT | Sheet1!C157 | 1
+INPUT | Sheet1!B158 | "Henderson Engineers"
+INPUT | Sheet1!C158 | 1
+INPUT | Sheet1!B159 | "Huhtamaki, Inc."
+INPUT | Sheet1!C159 | 1
+INPUT | Sheet1!B160 | "Sioux Chief Manufacturing Inc."
+INPUT | Sheet1!C160 | 1
+INPUT | Sheet1!B161 | "Travelers Insurance"
+INPUT | Sheet1!C161 | 1
+INPUT | Sheet1!B162 | "US Army Corps of Engineers"
+INPUT | Sheet1!C162 | 1
+INPUT | Sheet1!B163 | "Fike Corporation"
+INPUT | Sheet1!C163 | -2
+INPUT | Sheet1!B164 | "Missouri Department of Transportation"
+INPUT | Sheet1!C164 | -2
+INPUT | Sheet1!B165 | "nbkc bank"
+INPUT | Sheet1!C165 | -2
+INPUT | Sheet1!B166 | "Swiss Re"
+INPUT | Sheet1!C166 | -2
+INPUT | Sheet1!B167 | "TreviPay"
+INPUT | Sheet1!C167 | -2
+FONT_BOLD | Sheet1!A145:C146 | True
+FILL_COLOR | Sheet1!A145:C145 | #4472C4
+NUMBER_FORMAT | Sheet1!A147:A167 | 0._)
+NUMBER_FORMAT | Sheet1!C147:C167 | 0.0
+BORDER_BOTTOM | Sheet1!A167:C167 | Thin, Continuous, #000000
+INPUT | Sheet1!A169 | "Women's Singles Division D"
+INPUT | Sheet1!A170 | "Place"
+INPUT | Sheet1!B170 | "Company"
+INPUT | Sheet1!C170 | "Points"
+INPUT | Sheet1!A171 | 1
+INPUT | Sheet1!B171 | "NorthPoint Development"
+INPUT | Sheet1!C171 | 11
+INPUT | Sheet1!A172 | 2
+INPUT | Sheet1!B172 | "Henderson Engineers"
+INPUT | Sheet1!C172 | 9
+INPUT | Sheet1!A173 | 3
+INPUT | Sheet1!B173 | "McCownGordon Construction"
+INPUT | Sheet1!C173 | 7
+INPUT | Sheet1!A174 | 4
+INPUT | Sheet1!B174 | "Stowers Institute for Medical Research"
+INPUT | Sheet1!C174 | 6
+INPUT | Sheet1!A175 | 5
+INPUT | Sheet1!B175 | "Accenture"
+INPUT | Sheet1!C175 | 3.5
+INPUT | Sheet1!A176 | 5
+INPUT | Sheet1!B176 | "NAIC & NIPR"
+INPUT | Sheet1!C176 | 3.5
+INPUT | Sheet1!A177 | 5
+INPUT | Sheet1!B177 | "TreviPay"
+INPUT | Sheet1!C177 | 3.5
+INPUT | Sheet1!A178 | 5
+INPUT | Sheet1!B178 | "US Army Corps of Engineers"
+INPUT | Sheet1!C178 | 3.5
+INPUT | Sheet1!B179 | "Huhtamaki, Inc."
+INPUT | Sheet1!C179 | 1
+INPUT | Sheet1!B180 | "nbkc bank"
+INPUT | Sheet1!C180 | 1
+INPUT | Sheet1!B181 | "Swiss Re"
+INPUT | Sheet1!C181 | 1
+INPUT | Sheet1!B182 | "Travelers Insurance"
+INPUT | Sheet1!C182 | 1
+INPUT | Sheet1!B183 | "BlueScope Buildings"
+INPUT | Sheet1!C183 | -2
+INPUT | Sheet1!B184 | "Fike Corporation"
+INPUT | Sheet1!C184 | -2
+INPUT | Sheet1!B185 | "Missouri Department of Transportation"
+INPUT | Sheet1!C185 | -2
+INPUT | Sheet1!B186 | "Sioux Chief Manufacturing Inc."
+INPUT | Sheet1!C186 | -2
+FONT_BOLD | Sheet1!A169:C170 | True
+FILL_COLOR | Sheet1!A169:C169 | #4472C4
+NUMBER_FORMAT | Sheet1!A171:A186 | 0._)
+NUMBER_FORMAT | Sheet1!C171:C186 | 0.0
+BORDER_BOTTOM | Sheet1!A186:C186 | Thin, Continuous, #000000
+INPUT | Sheet1!A188 | "Mixed Doubles Division D"
+INPUT | Sheet1!A189 | "Place"
+INPUT | Sheet1!B189 | "Company"
+INPUT | Sheet1!C189 | "Points"
+INPUT | Sheet1!A190 | 1
+INPUT | Sheet1!B190 | "Stowers Institute for Medical Research"
+INPUT | Sheet1!C190 | 12
+INPUT | Sheet1!A191 | 2
+INPUT | Sheet1!B191 | "NorthPoint Development"
+INPUT | Sheet1!C191 | 10
+INPUT | Sheet1!A192 | 3
+INPUT | Sheet1!B192 | "NAIC & NIPR"
+INPUT | Sheet1!C192 | 8
+INPUT | Sheet1!A193 | 4
+INPUT | Sheet1!B193 | "BlueScope Buildings"
+INPUT | Sheet1!C193 | 7
+INPUT | Sheet1!A194 | 5
+INPUT | Sheet1!B194 | "Huhtamaki, Inc."
+INPUT | Sheet1!C194 | 4.5
+INPUT | Sheet1!A195 | 5
+INPUT | Sheet1!B195 | "McCownGordon Construction"
+INPUT | Sheet1!C195 | 4.5
+INPUT | Sheet1!A196 | 5
+INPUT | Sheet1!B196 | "US Army Corps of Engineers"
+INPUT | Sheet1!C196 | 4.5
+INPUT | Sheet1!B197 | "Accenture"
+INPUT | Sheet1!C197 | 2
+INPUT | Sheet1!B198 | "nbkc bank"
+INPUT | Sheet1!C198 | 2
+INPUT | Sheet1!B199 | "Swiss Re"
+INPUT | Sheet1!C199 | 2
+INPUT | Sheet1!B200 | "Travelers Insurance"
+INPUT | Sheet1!C200 | 2
+INPUT | Sheet1!B201 | "TreviPay"
+INPUT | Sheet1!C201 | 2
+INPUT | Sheet1!B202 | "Collins Aerospace"
+INPUT | Sheet1!C202 | -4
+INPUT | Sheet1!B203 | "Eurofins Viracor"
+INPUT | Sheet1!C203 | -4
+INPUT | Sheet1!B204 | "Fike Corporation"
+INPUT | Sheet1!C204 | -4
+INPUT | Sheet1!B205 | "Henderson Engineers"
+INPUT | Sheet1!C205 | -4
+INPUT | Sheet1!B206 | "Missouri Department of Transportation"
+INPUT | Sheet1!C206 | -4
+FONT_BOLD | Sheet1!A188:C189 | True
+FILL_COLOR | Sheet1!A188:C188 | #4472C4
+NUMBER_FORMAT | Sheet1!A190:A206 | 0._)
+NUMBER_FORMAT | Sheet1!C190:C206 | 0.0
+BORDER_BOTTOM | Sheet1!A206:C206 | Thin, Continuous, #000000
+FONT_COLOR | Sheet1!A5:C5 | #DAA520
+FONT_COLOR | Sheet1!A6:C6 | #808080
+FONT_COLOR | Sheet1!A7:C7 | #CD7F32
+FONT_COLOR | Sheet1!A18:C18 | #DAA520
+FONT_COLOR | Sheet1!A19:C19 | #808080
+FONT_COLOR | Sheet1!A20:C20 | #CD7F32
+FONT_COLOR | Sheet1!A31:C31 | #DAA520
+FONT_COLOR | Sheet1!A32:C32 | #808080
+FONT_COLOR | Sheet1!A33:C33 | #CD7F32
+FONT_COLOR | Sheet1!A45:C45 | #DAA520
+FONT_COLOR | Sheet1!A46:C46 | #808080
+FONT_COLOR | Sheet1!A47:C47 | #CD7F32
+FONT_COLOR | Sheet1!A62:C62 | #DAA520
+FONT_COLOR | Sheet1!A63:C63 | #808080
+FONT_COLOR | Sheet1!A64:C64 | #CD7F32
+FONT_COLOR | Sheet1!A77:C77 | #DAA520
+FONT_COLOR | Sheet1!A78:C78 | #808080
+FONT_COLOR | Sheet1!A79:C79 | #CD7F32
+FONT_COLOR | Sheet1!A94:C94 | #DAA520
+FONT_COLOR | Sheet1!A95:C95 | #808080
+FONT_COLOR | Sheet1!A96:C96 | #CD7F32
+FONT_COLOR | Sheet1!A114:C114 | #DAA520
+FONT_COLOR | Sheet1!A115:C115 | #808080
+FONT_COLOR | Sheet1!A116:C116 | #CD7F32
+FONT_COLOR | Sheet1!A130:C130 | #DAA520
+FONT_COLOR | Sheet1!A131:C131 | #808080
+FONT_COLOR | Sheet1!A132:C132 | #CD7F32
+FONT_COLOR | Sheet1!A147:C147 | #DAA520
+FONT_COLOR | Sheet1!A148:C148 | #808080
+FONT_COLOR | Sheet1!A149:C149 | #CD7F32
+FONT_COLOR | Sheet1!A171:C171 | #DAA520
+FONT_COLOR | Sheet1!A172:C172 | #808080
+FONT_COLOR | Sheet1!A173:C173 | #CD7F32
+FONT_COLOR | Sheet1!A190:C190 | #DAA520
+FONT_COLOR | Sheet1!A191:C191 | #808080
+FONT_COLOR | Sheet1!A192:C192 | #CD7F32

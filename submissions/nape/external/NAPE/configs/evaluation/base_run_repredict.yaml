@@ -1,0 +1,56 @@
+# Base Run — single-action repredict (paper Table 4 setting).
+#
+# Solver predicts at most one operation per call; on acceptance the
+# solver is immediately re-invoked. This is the protocol used to
+# compare small models, finetuned SLMs, and classical sequence models
+# on a per-action basis.
+#
+# Settings:
+#   stride = 1, context = 32 ops
+#   m = 1 (single-action), repredict on
+#   heuristic = greedy (paper) / steps_saved (code)
+#
+# Usage: python scripts/run_batch_evaluation.py --config configs/evaluation/base_run_repredict.yaml
+
+name: base_run_repredict
+
+trajectory_paths:
+  - data/trajectories/*.json
+
+output_dir: results/base_run_repredict
+
+max_runs: null
+
+max_steps: 1200
+max_steps_pct: 1.20
+
+workers: 4
+max_context_ops: 32
+online_mode: true
+repredict_after_accept: true
+max_predictions_per_step: 1
+
+stride:
+  mode: fixed_interval
+  interval: 1
+
+heuristics:
+  - steps_saved              # paper: "greedy"
+
+context_shortening:
+  enabled: true
+  max_chars: 32
+  corner_cells_dim: 2
+
+solver:
+  type: llm
+  adapter: openai
+  model: <your-model-id>     # e.g. gpt-4o, gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 4096
+  num_op_to_pred: 1          # single-action repredict
+  cache_enabled: true
+  cache_path: caches/llm_cache.json
+  emit_intent: false
+  remove_sheet_name: true
+  transforms: null

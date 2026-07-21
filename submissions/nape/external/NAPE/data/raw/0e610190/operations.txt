@@ -1,0 +1,279 @@
+MERGE | Sheet1!B3:W3 | true
+BORDER_ALL | Sheet1!B3:W5 | Thin, Continuous, #000000
+INPUT | Sheet1!B3 | "ECE Final Year Project Marks Statement"
+FONT_SIZE | Sheet1!B3 | 12.0
+INPUT | Sheet1!B4 | "Project"
+INPUT | Sheet1!B5 | "Advisor Name"
+INPUT | Sheet1!B6 | "Remark"
+FILL_COLOR | Sheet1!B4 | #AEBACB
+MERGE | Sheet1!C4:T4 | true
+INPUT | Sheet1!C4 | "Patch Antenna Design"
+INPUT | Sheet1!C5 | "Anil Agarwal"
+INPUT | Sheet1!U4 | "Group-1"
+MERGE | Sheet1!U4:W5 | true
+MERGE | Sheet1!D5:T5 | true
+BORDER_OUTSIDE | Sheet1!B6:C6 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B6:C6 | #548236
+MERGE | Sheet1!C6:W6 | true
+INPUT | Sheet1!B7 | "Roll no"
+INPUT | Sheet1!C7 | "Name"
+INPUT | Sheet1!D7 | "Guide"
+INPUT | Sheet1!J7 | "G. Performance"
+INPUT | Sheet1!P7 | "Individual Person"
+INPUT | Sheet1!V7 | "Report"
+INPUT | Sheet1!W7 | "Total"
+MERGE | Sheet1!D7:I7 | true
+MERGE | Sheet1!J7:O7 | true
+MERGE | Sheet1!P7:U7 | true
+INPUT | Sheet1!B8:V11 | [[1137331037, "RAJ VERMA", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4.5, 4.5, 4.5, 4.5, 5, 10, 2, 2.25, 2.25, 2, 2.5, 5, 24], [1137331038, "ROHAN SINGH", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4.5, 4.5, 4.5, 4.5, 5, 10, 2, 2, 2, 2, 2.5, 5, 24], [1137331008, "CHIRAG KUMAR", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4.5, 4.5, 4.5, 4.5, 5, 10, 2.5, 2, 2.4, 2, 2.5, 5, 24], [1137331030, "NAVEEN KUMAR", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4.5, 4.5, 4.5, 4.5, 5, 10, 0, 2, 2, 2.5, 2.5, 5, 24]]
+WRAP_TEXT | Sheet1!B8:C11 | True
+WRAP_TEXT | Sheet1!E8:H11 | True
+INPUT | Sheet1!W8 | "=D8+E8+F8+G8+H8+I8+J8+K8+L8+M8+N8+O8+P8+Q8+R8+S8+T8+U8+V8"
+AUTOFILL | Sheet1!W8:W11 | Sheet1!W8
+BORDER_ALL | Sheet1!B6:W11 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B12 | #AEBACB
+INPUT | Sheet1!B12 | "Project"
+INPUT | Sheet1!C12 | "Speech Recognition using Matlab"
+INPUT | Sheet1!B13 | "Advisor Name"
+INPUT | Sheet1!C13 | "Naren Kumar"
+INPUT | Sheet1!U12 | "Group-2"
+INPUT | Sheet1!B14 | "Lack of literature review"
+PASTE_FROM | Sheet1!B15:W15 | Sheet1!B7:W7 | values
+MERGE | Sheet1!C12:T12 | true
+MERGE | Sheet1!U12:W13 | true
+MERGE | Sheet1!D13:T13 | true
+FILL_COLOR | Sheet1!B14 | #548236
+MERGE | Sheet1!B14:W14 | true
+MERGE | Sheet1!D15:I15 | true
+MERGE | Sheet1!J15:O15 | true
+MERGE | Sheet1!P15:U15 | true
+INPUT | Sheet1!B16:V19 | [[1137331039, "ROHIT AHLAWAT", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4, 4, 4.5, 4.5, 9, 1.8, 2, 1.8, 2, 2, 4.5, 23], [1137331041, "SANDEEP KUMAR", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 4.5, 4.5, 9, 2, 2.25, 2, 2, 2, 4.5, 23], [1137331048, "SUDHIR AGARWAL", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 4.5, 4.5, 9, 2, 2.25, 2, 2, 2, 4.5, 23], [1137331057, "VIKASH PATHAK", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 4.5, 4.5, 9, 2, 2.25, 2, 2, 2, 4.5, 23]]
+WRAP_TEXT | Sheet1!B16:H19 | True
+INPUT | Sheet1!W16 | "=D16+E16+F16+G16+H16+I16+J16+K16+L16+M16+N16+O16+P16+Q16+R16+S16+T16+U16+V16"
+AUTOFILL | Sheet1!W16:W19 | Sheet1!W16
+BORDER_ALL | Sheet1!B12:W19 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B20 | #AEBACB
+INPUT | Sheet1!B20 | "Project"
+INPUT | Sheet1!C20 | "Scrolling Display"
+INPUT | Sheet1!B21 | "Advisor Name"
+INPUT | Sheet1!C21 | "Dev Choudhury"
+INPUT | Sheet1!U20 | "Group-3"
+INPUT | Sheet1!B22 | "There is no Progress from last scheduled presentation in September."
+PASTE_FROM | Sheet1!B23:W23 | Sheet1!B7:W7 | values
+MERGE | Sheet1!C20:T20 | true
+MERGE | Sheet1!U20:W21 | true
+MERGE | Sheet1!D21:T21 | true
+FILL_COLOR | Sheet1!B22 | #548236
+MERGE | Sheet1!B22:W22 | true
+MERGE | Sheet1!D23:I23 | true
+MERGE | Sheet1!J23:O23 | true
+MERGE | Sheet1!P23:U23 | true
+INPUT | Sheet1!B24:V26 | [[1137331004, "AMIT SINGH", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4, 4.5, 5, 5, 5, 9, 2.25, 2.15, 2.15, 2.5, 2.5, 5, 23], [1137331013, "HARI KHAN", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4, 4.5, 5, 5, 5, 9, 2.5, 2.5, 2.5, 2, 2.5, 5, 23], [1137331026, "MAHESH ALAM", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4, 4.5, 5, 5, 5, 9, 1.25, 2.15, 2.15, 2, 2.5, 5, 23]]
+WRAP_TEXT | Sheet1!B24:H26 | True
+INPUT | Sheet1!W24 | "=D24+E24+F24+G24+H24+I24+J24+K24+L24+M24+N24+O24+P24+Q24+R24+S24+T24+U24+V24"
+AUTOFILL | Sheet1!W24:W26 | Sheet1!W24
+BORDER_ALL | Sheet1!B20:W26 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B27 | #AEBACB
+INPUT | Sheet1!B27 | "Project"
+INPUT | Sheet1!C27 | "Low Power High Speed Comparator Design"
+INPUT | Sheet1!B28 | "Advisor Name"
+INPUT | Sheet1!C28 | "Rajan Pandey"
+INPUT | Sheet1!U27 | "Group-4"
+MERGE | Sheet1!C27:T27 | true
+MERGE | Sheet1!U27:W28 | true
+MERGE | Sheet1!D28:T28 | true
+FILL_COLOR | Sheet1!B29 | #548236
+MERGE | Sheet1!B29:W29 | true
+PASTE_FROM | Sheet1!B30:W30 | Sheet1!B7:W7 | values
+MERGE | Sheet1!D30:I30 | true
+MERGE | Sheet1!J30:O30 | true
+MERGE | Sheet1!P30:U30 | true
+INPUT | Sheet1!B31:V34 | [[1137331020, "MOHAN KUMAR", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 5, 5, 5, 5, 10, 2.25, 2.5, 2.5, 2.25, 2.5, 4, 24.5], [1137331011, "DINESH KUMAR", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4, 4, 5, 5, 10, 2.25, 0, 2, 0, 0, 0, 0], [1237331902, "SANJAY KR.PANDEY", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 5, 5, 5, 5, 10, 2.25, 2.5, 2.5, 2.5, 2.45, 5, 24.5], [1237331901, "AAKASH PRATAP", 2.5, 2.5, 2, 2.5, 2.5, 10, 5, 5, 5, 5, 5, 10, 2.25, 2.35, 2.5, 2.25, 2.5, 4.5, 24.5]]
+WRAP_TEXT | Sheet1!B31:H34 | True
+INPUT | Sheet1!W31 | "=D31+E31+F31+G31+H31+I31+J31+K31+L31+M31+N31+O31+P31+Q31+R31+S31+T31+U31+V31"
+AUTOFILL | Sheet1!W31:W34 | Sheet1!W31
+BORDER_ALL | Sheet1!B27:W34 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B35 | #AEBACB
+INPUT | Sheet1!B35 | "Project"
+INPUT | Sheet1!C35 | "Metal sensing using PLC Sacda"
+INPUT | Sheet1!B36 | "Advisor Name"
+INPUT | Sheet1!C36 | "Harsh Arora"
+INPUT | Sheet1!U35 | "Group-5"
+MERGE | Sheet1!C35:T35 | true
+MERGE | Sheet1!U35:W36 | true
+MERGE | Sheet1!D36:T36 | true
+FILL_COLOR | Sheet1!B37 | #548236
+MERGE | Sheet1!B37:W37 | true
+PASTE_FROM | Sheet1!B38:W38 | Sheet1!B7:W7 | values
+MERGE | Sheet1!D38:I38 | true
+MERGE | Sheet1!J38:O38 | true
+MERGE | Sheet1!P38:U38 | true
+INPUT | Sheet1!B39:V43 | [[1137331047, "SWATI CHAUDHARY", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 5, 5, 10, 2.05, 1.9, 1.9, 2.5, 2.5, 5, 24], [1037331004, "BHASKAR KUMAR", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 5, 5, 10, 0, 1.9, 1.9, 2.5, 2.5, 5, 24], [1137331903, "SOURAV SINGH", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 5, 5, 10, 2.05, 1.9, 1.9, 2.5, 2.5, 5, 24], [1137331034, "PRATIK Kr. DIXIT", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 5, 5, 10, 2.05, 1.9, 1.9, 2.5, 2.5, 5, 24], [1137331043, "SAMIR VERMA", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 5, 4.5, 4.5, 5, 5, 10, 2.05, 1.9, 1.9, 2.5, 2.5, 5, 24]]
+WRAP_TEXT | Sheet1!B39:H43 | True
+INPUT | Sheet1!W39 | "=D39+E39+F39+G39+H39+I39+J39+K39+L39+M39+N39+O39+P39+Q39+R39+S39+T39+U39+V39"
+AUTOFILL | Sheet1!W39:W43 | Sheet1!W39
+BORDER_ALL | Sheet1!B35:W43 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B44 | #AEBACB
+INPUT | Sheet1!B44 | "Project"
+INPUT | Sheet1!C44 | "Robot"
+INPUT | Sheet1!B45 | "Advisor Name"
+INPUT | Sheet1!C45 | "Arun Gupta"
+INPUT | Sheet1!U44 | "Group-6"
+MERGE | Sheet1!C44:T44 | true
+MERGE | Sheet1!U44:W45 | true
+MERGE | Sheet1!D45:T45 | true
+FILL_COLOR | Sheet1!B46 | #548236
+MERGE | Sheet1!B46:W46 | true
+PASTE_FROM | Sheet1!B47:W47 | Sheet1!B7:W7 | values
+MERGE | Sheet1!D47:I47 | true
+MERGE | Sheet1!J47:O47 | true
+MERGE | Sheet1!P47:U47 | true
+INPUT | Sheet1!B48:V49 | [[1137331033, "PRAKASH Kr. SINGH", 2, 2, 2, 2.5, 2.5, 10, 3.7, 3.7, 3.7, 5, 5, 10, 2, 2, 2, 2.45, 2.5, 5, 24], [1137331014, "ISHWAR GOEL", 2, 2, 2, 2.5, 2.5, 10, 3.7, 3.7, 3.7, 5, 5, 10, 2, 2, 2, 2.5, 2.5, 5, 24]]
+WRAP_TEXT | Sheet1!B48:H49 | True
+INPUT | Sheet1!W48 | "=D48+E48+F48+G48+H48+I48+J48+K48+L48+M48+N48+O48+P48+Q48+R48+S48+T48+U48+V48"
+AUTOFILL | Sheet1!W48:W49 | Sheet1!W48
+BORDER_ALL | Sheet1!B44:W49 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B50 | #AEBACB
+INPUT | Sheet1!B50 | "Project"
+INPUT | Sheet1!C50 | "Mobile Jammer"
+INPUT | Sheet1!B51 | "Advisor Name"
+INPUT | Sheet1!C51 | "Arun Gupta"
+INPUT | Sheet1!U50 | "Group-7"
+MERGE | Sheet1!C50:T50 | true
+MERGE | Sheet1!U50:W51 | true
+MERGE | Sheet1!D51:T51 | true
+FILL_COLOR | Sheet1!B52 | #548236
+MERGE | Sheet1!B52:W52 | true
+PASTE_FROM | Sheet1!B53:W53 | Sheet1!B7:W7 | values
+MERGE | Sheet1!D53:I53 | true
+MERGE | Sheet1!J53:O53 | true
+MERGE | Sheet1!P53:U53 | true
+INPUT | Sheet1!B54:V57 | [[1137331005, "ANKUR KUMAR", 2, 2, 2, 2.5, 2.5, 10, 4, 4, 4, 4, 5, 10, 2, 2, 2, 2.3, 2.5, 5, 23.5], [1137331018, "KARAN KUMAR", 2, 2, 2, 2.5, 2.5, 10, 4, 4, 4, 4, 5, 10, 2, 2, 2, 2.3, 2.5, 5, 23.5], [1137331009, "DHRUV KUMAR", 2, 2, 2, 2, 2.5, 10, 4, 4, 4, 4, 5, 5, 0, 2, 2, 2.3, 0, 0, 0], [1137331031, "NAKUL KUMAR", 2, 2, 2, 2.5, 2.5, 10, 4, 4, 4, 4, 5, 10, 2, 2, 2, 2.3, 2.5, 5, 23.5]]
+WRAP_TEXT | Sheet1!B54:H57 | True
+INPUT | Sheet1!W54 | "=D54+E54+F54+G54+H54+I54+J54+K54+L54+M54+N54+O54+P54+Q54+R54+S54+T54+U54+V54"
+AUTOFILL | Sheet1!W54:W57 | Sheet1!W54
+BORDER_ALL | Sheet1!B50:W57 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B58 | #AEBACB
+INPUT | Sheet1!B58 | "Project"
+INPUT | Sheet1!C58 | "Accident prevention using Gps"
+INPUT | Sheet1!B59 | "Advisor Name"
+INPUT | Sheet1!C59 | "Harsh Arora"
+INPUT | Sheet1!U58 | "Group-8"
+INPUT | Sheet1!B60 | "No response remark by your guide. Presentation scheduled on Monday. 10 has been deducted."
+PASTE_FROM | Sheet1!B61:W61 | Sheet1!B7:W7 | values
+MERGE | Sheet1!C58:T58 | true
+MERGE | Sheet1!U58:W59 | true
+MERGE | Sheet1!D59:T59 | true
+FILL_COLOR | Sheet1!B60 | #548236
+MERGE | Sheet1!B60:W60 | true
+MERGE | Sheet1!D61:I61 | true
+MERGE | Sheet1!J61:O61 | true
+MERGE | Sheet1!P61:U61 | true
+INPUT | Sheet1!B62:V65 | [[1137331045, "SANYA", 2, 2.5, 2.5, 2.5, 2.5, 10, 3.7, 0, 4, 5, 5, 10, 2, 0, 2, 2, 2.5, 5, ""], [1137331049, "SONAL DIXIT", 2, 0, 2.5, 0, 0, 0, 3.7, 0, 4, 0, "", "", 2, 0, 2, 0, "", "", ""], [1137331060, "VARUN KUMAR", 2, 0, 2.5, 0, 0, 0, 3.7, 0, 4, 0, "", "", 2, 0, 2, 0, "", "", ""], [1137331021, "MAYANK KUMAR", 2, 0, 2.5, 0, 0, 0, 3.7, 0, 4, 0, "", "", 2, 0, 2, 0, "", "", ""]]
+WRAP_TEXT | Sheet1!B62:H65 | True
+INPUT | Sheet1!W62 | "=D62+E62+F62+G62+H62+I62+J62+K62+L62+M62+N62+O62+P62+Q62+R62+S62+T62+U62+V62"
+AUTOFILL | Sheet1!W62:W65 | Sheet1!W62
+BORDER_ALL | Sheet1!B58:W65 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B66 | #AEBACB
+INPUT | Sheet1!B66 | "Project"
+INPUT | Sheet1!C66 | "On Chip oscillator Design"
+INPUT | Sheet1!B67 | "Advisor Name"
+INPUT | Sheet1!C67 | "Rajan Pandey"
+INPUT | Sheet1!U66 | "Group-9"
+MERGE | Sheet1!C66:T66 | true
+MERGE | Sheet1!U66:W67 | true
+MERGE | Sheet1!D67:T67 | true
+FILL_COLOR | Sheet1!B68 | #548236
+MERGE | Sheet1!B68:W68 | true
+PASTE_FROM | Sheet1!B69:W69 | Sheet1!B7:W7 | values
+MERGE | Sheet1!D69:I69 | true
+MERGE | Sheet1!J69:O69 | true
+MERGE | Sheet1!P69:U69 | true
+INPUT | Sheet1!B70:V71 | [[1137331022, "MANOJ KUMAR", 2.5, 2.5, 2.5, 2, 2, 10, 5, 4, 4, 4, 4, 10, 2, 2, 2, 2, 2, 4, 23.5], [1137331035, "RAVINDRA MEHTA", 2.5, 2.5, 2.5, 2, 2, 10, 5, 4, 4, 4, 4, 10, 2, 2, 2, 0, 2, 4, 23.5]]
+WRAP_TEXT | Sheet1!B70:H71 | True
+INPUT | Sheet1!W70 | "=D70+E70+F70+G70+H70+I70+J70+K70+L70+M70+N70+O70+P70+Q70+R70+S70+T70+U70+V70"
+AUTOFILL | Sheet1!W70:W71 | Sheet1!W70
+BORDER_ALL | Sheet1!B66:W71 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B72 | #AEBACB
+INPUT | Sheet1!B72 | "Project"
+INPUT | Sheet1!C72 | "Project based on Geasture technology"
+INPUT | Sheet1!B73 | "Advisor Name"
+INPUT | Sheet1!C73 | "Arun Gupta"
+INPUT | Sheet1!U72 | "Group 10"
+MERGE | Sheet1!C72:T72 | true
+MERGE | Sheet1!U72:W73 | true
+MERGE | Sheet1!D73:T73 | true
+FILL_COLOR | Sheet1!B74 | #548236
+MERGE | Sheet1!B74:W74 | true
+PASTE_FROM | Sheet1!B75:W75 | Sheet1!B7:W7 | values
+MERGE | Sheet1!D75:I75 | true
+MERGE | Sheet1!J75:O75 | true
+MERGE | Sheet1!P75:U75 | true
+INPUT | Sheet1!B76:V77 | [[1137331032, "PAVAN KUMAR", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4, 4, 4, 5, 5, 10, 2, 2, 2, 2.5, 2.5, 5, 24], [1137331024, "MOHD GAZALI", 2.5, 2.5, 2.5, 2.5, 2.5, 10, 4, 4, 4, 5, 5, 10, 2.5, 2.25, 2.25, 2.5, 2.5, 5, 24]]
+WRAP_TEXT | Sheet1!B76:H77 | True
+INPUT | Sheet1!W76 | "=D76+E76+F76+G76+H76+I76+J76+K76+L76+M76+N76+O76+P76+Q76+R76+S76+T76+U76+V76"
+AUTOFILL | Sheet1!W76:W77 | Sheet1!W76
+BORDER_ALL | Sheet1!B72:W77 | Thin, Continuous, #000000
+FILL_COLOR | Sheet1!B78 | #AEBACB
+INPUT | Sheet1!B78 | "Project"
+INPUT | Sheet1!C78 | "Project based on Geasture technology"
+INPUT | Sheet1!B79 | "Advisor Name"
+INPUT | Sheet1!C79 | "Anil Agarwal"
+INPUT | Sheet1!U78 | "Group 11"
+MERGE | Sheet1!C78:T78 | true
+MERGE | Sheet1!U78:W79 | true
+MERGE | Sheet1!D79:T79 | true
+FILL_COLOR | Sheet1!B80 | #548236
+MERGE | Sheet1!B80:W80 | true
+PASTE_FROM | Sheet1!B81:W81 | Sheet1!B7:W7 | values
+MERGE | Sheet1!D81:I81 | true
+MERGE | Sheet1!J81:O81 | true
+MERGE | Sheet1!P81:U81 | true
+INPUT | Sheet1!B82 | 1137331032
+INPUT | Sheet1!C82 | "ABHINAV"
+INPUT | Sheet1!B83 | 1137331024
+INPUT | Sheet1!C83 | "VISHAL SHARMA"
+WRAP_TEXT | Sheet1!B82:H83 | True
+BORDER_ALL | Sheet1!B78:W83 | Thin, Continuous, #000000
+FONT_BOLD | Sheet1!B3:W83 | True
+ALIGN_HORIZONTAL | Sheet1!B3:W83 | center
+FILL_COLOR | Sheet1!Q10:R10 | #FFFF00
+FILL_COLOR | Sheet1!G16:G19 | #FFFF00
+FILL_COLOR | Sheet1!M16:M19 | #FFFF00
+FILL_COLOR | Sheet1!S16:S19 | #FFFF00
+FILL_COLOR | Sheet1!G24 | #FFFF00
+FILL_COLOR | Sheet1!M24 | #FFFF00
+FILL_COLOR | Sheet1!S24 | #FFFF00
+FILL_COLOR | Sheet1!G25:G26 | #FF0000
+FILL_COLOR | Sheet1!M25:M26 | #FF0000
+FILL_COLOR | Sheet1!S25:S26 | #FF0000
+FILL_COLOR | Sheet1!G32:I32 | #FF0000
+FILL_COLOR | Sheet1!M32 | #FF0000
+FILL_COLOR | Sheet1!Q32 | #FF0000
+FILL_COLOR | Sheet1!S32:W32 | #FF0000
+FILL_COLOR | Sheet1!M39:M43 | #FFFF00
+FILL_COLOR | Sheet1!S39:S43 | #FFFF00
+FILL_COLOR | Sheet1!H56:I56 | #FF0000
+FILL_COLOR | Sheet1!N56:O56 | #FF0000
+FILL_COLOR | Sheet1!T56:V56 | #FF0000
+FILL_COLOR | Sheet1!G62:G65 | #FF0000
+FILL_COLOR | Sheet1!M62:M65 | #FF0000
+FILL_COLOR | Sheet1!S62:S65 | #FF0000
+FILL_COLOR | Sheet1!N63:O65 | #FF0000
+FILL_COLOR | Sheet1!T63:U65 | #FF0000
+FILL_COLOR | Sheet1!Q70:R70 | #FF0000
+FILL_COLOR | Sheet1!G76:G77 | #FFFF00
+FILL_COLOR | Sheet1!M76:M77 | #FFFF00
+FILL_COLOR | Sheet1!S76:S77 | #FFFF00
+FILL_COLOR | Sheet1!G82:G83 | #FFFF00
+FILL_COLOR | Sheet1!M82:M83 | #FFFF00
+FILL_COLOR | Sheet1!S82:S83 | #FFFF00
+FILL_COLOR | Sheet1!B84 | #FF0000
+INPUT | Sheet1!C84 | "Absent without information"
+FILL_COLOR | Sheet1!D84 | #FFFF00
+INPUT | Sheet1!I84 | "Absent with information"
+BORDER_OUTSIDE | Sheet1!B84:W84 | Thin, Continuous, #000000
+MERGE | Sheet1!D84:H84 | true
+MERGE | Sheet1!I84:M84 | true
+FONT_BOLD | Sheet1!C84 | True
+FONT_BOLD | Sheet1!I84 | True

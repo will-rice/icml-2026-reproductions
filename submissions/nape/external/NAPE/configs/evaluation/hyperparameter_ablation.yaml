@@ -1,0 +1,56 @@
+# Hyperparameter ablation — multi-action (paper Table 3).
+#
+# Varies one hyperparameter at a time (stride, context, m, shortening)
+# while keeping the others at their defaults. Uses sweep_independent so
+# each variation is its own run.
+#
+# Usage: python scripts/run_sweep.py configs/evaluation/hyperparameter_ablation.yaml
+
+name: hyperparameter_ablation
+
+trajectory_paths:
+  - data/trajectories/*.json
+
+output_dir: results/hyperparameter_ablation
+
+max_runs: null
+
+max_steps: 1200
+max_steps_pct: 1.20
+
+workers: 4
+max_context_ops: 32
+online_mode: true
+repredict_after_accept: false
+
+stride:
+  mode: fixed_interval
+  interval: 1
+
+heuristics:
+  - steps_saved
+
+context_shortening:
+  enabled: true
+  max_chars: 32
+  corner_cells_dim: 2
+
+solver:
+  type: llm
+  adapter: openai
+  model: <your-model-id>     # e.g. gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 4096
+  num_op_to_pred: null
+  cache_enabled: true
+  cache_path: caches/llm_cache.json
+  emit_intent: false
+  remove_sheet_name: true
+
+# sweep_independent: one variant per value of each key, holding all other
+# keys at their base value above.
+sweep_independent:
+  stride.interval: [1, 2, 4, 8]
+  max_context_ops: [8, 32, 128, 512, 2048]
+  solver.num_op_to_pred: [1, 4, 8, 16, null]   # null = no per-call limit
+  context_shortening.enabled: [true, false]

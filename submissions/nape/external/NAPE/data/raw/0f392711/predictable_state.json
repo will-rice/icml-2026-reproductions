@@ -1,0 +1,355 @@
+{
+  "trajectory_name": "0f392711",
+  "predictable_count": 157,
+  "final_state_size": 1311,
+  "coverage_pct": 11.98,
+  "predictable_properties": {
+    "Sheet1": {
+      "A1": [
+        "Format.font.bold",
+        "Format.font.size"
+      ],
+      "D4": [
+        "value"
+      ],
+      "F3": [
+        "Format.font.bold"
+      ],
+      "F4": [
+        "value"
+      ],
+      "G13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G16": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G17": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G30": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G4": [
+        "value"
+      ],
+      "G42": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G45": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G48": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G52": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G56": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "G60": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "H12": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "H17": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "H4": [
+        "value"
+      ],
+      "I3": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "Format.font.bold",
+        "merged_cells"
+      ],
+      "J17": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "J3": [
+        "merged_cells"
+      ],
+      "K17": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "K3": [
+        "merged_cells"
+      ],
+      "L3": [
+        "merged_cells"
+      ],
+      "M3": [
+        "Format.font.bold"
+      ],
+      "N4": [
+        "value"
+      ],
+      "O4": [
+        "value"
+      ],
+      "P4": [
+        "value"
+      ],
+      "Q12": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "Q26": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "Q4": [
+        "value"
+      ],
+      "Q41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "Q54": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "Q55": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "R10": [
+        "value"
+      ],
+      "R11": [
+        "value"
+      ],
+      "R12": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R13": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R14": [
+        "value"
+      ],
+      "R15": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R16": [
+        "value"
+      ],
+      "R17": [
+        "value"
+      ],
+      "R18": [
+        "value"
+      ],
+      "R19": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R20": [
+        "value"
+      ],
+      "R21": [
+        "value"
+      ],
+      "R22": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R23": [
+        "value"
+      ],
+      "R24": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R25": [
+        "value"
+      ],
+      "R26": [
+        "value"
+      ],
+      "R27": [
+        "value"
+      ],
+      "R28": [
+        "value"
+      ],
+      "R29": [
+        "value"
+      ],
+      "R3": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "R30": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R31": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R32": [
+        "value"
+      ],
+      "R33": [
+        "value"
+      ],
+      "R34": [
+        "value"
+      ],
+      "R35": [
+        "value"
+      ],
+      "R36": [
+        "value"
+      ],
+      "R37": [
+        "value"
+      ],
+      "R38": [
+        "value"
+      ],
+      "R39": [
+        "value"
+      ],
+      "R4": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType"
+      ],
+      "R40": [
+        "value"
+      ],
+      "R41": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R42": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R43": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R44": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R45": [
+        "value"
+      ],
+      "R46": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R47": [
+        "value"
+      ],
+      "R48": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R49": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R50": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R51": [
+        "value"
+      ],
+      "R52": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R53": [
+        "value"
+      ],
+      "R54": [
+        "value"
+      ],
+      "R55": [
+        "value"
+      ],
+      "R56": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R57": [
+        "value"
+      ],
+      "R58": [
+        "value"
+      ],
+      "R59": [
+        "value"
+      ],
+      "R6": [
+        "value"
+      ],
+      "R60": [
+        "Format.fill.fgColor",
+        "Format.fill.patternType",
+        "value"
+      ],
+      "R61": [
+        "value"
+      ],
+      "R62": [
+        "value"
+      ],
+      "R63": [
+        "value"
+      ],
+      "R64": [
+        "value"
+      ],
+      "R7": [
+        "value"
+      ],
+      "R9": [
+        "value"
+      ]
+    }
+  }
+}

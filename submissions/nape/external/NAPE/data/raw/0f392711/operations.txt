@@ -1,0 +1,97 @@
+INPUT | Sheet1!A1 | "JPMC Excel Skills Virtual Experience Hypothetical Account Dataset"
+FONT_BOLD | Sheet1!A1 | True
+FONT_SIZE | Sheet1!A1 | 14.0
+FONT_BOLD | Sheet1!A4:R4 | True
+FONT_BOLD | Sheet1!F3 | True
+INPUT | Sheet1!F3 | "Product Lines"
+FILL_COLOR | Sheet1!F3 | #FFC000
+MERGE | Sheet1!F3:H3 | true
+INPUT | Sheet1!I3 | "Marketing / Promotion Programs"
+FILL_COLOR | Sheet1!I3 | #00B0F0
+MERGE | Sheet1!I3:L3 | true
+FONT_BOLD | Sheet1!I3 | True
+INPUT | Sheet1!M3 | "Product 1 Sales Volume (units)"
+FILL_COLOR | Sheet1!M4 | #00B050
+MERGE | Sheet1!M3:Q3 | true
+FONT_BOLD | Sheet1!M3 | True
+INPUT | Sheet1!A4 | "Account Name"
+INPUT | Sheet1!B4 | "Account Address"
+INPUT | Sheet1!C4 | "Decision Maker"
+INPUT | Sheet1!D4 | "Phone Number"
+INPUT | Sheet1!E4 | "Account Type"
+INPUT | Sheet1!F4 | "Product 1"
+INPUT | Sheet1!G4 | "Product 2"
+INPUT | Sheet1!H4 | "Product 3"
+INPUT | Sheet1!I4 | "Social Media"
+INPUT | Sheet1!J4 | "Coupons"
+INPUT | Sheet1!K4 | "Catalog Inclusion"
+INPUT | Sheet1!L4 | "Posters"
+INPUT | Sheet1!M4 | 2017
+INPUT | Sheet1!N4 | 2018
+INPUT | Sheet1!O4 | 2019
+INPUT | Sheet1!P4 | 2020
+INPUT | Sheet1!Q4 | 2021
+INPUT | Sheet1!R4 | "5 YR CAGR"
+FILL_COLOR | Sheet1!R3:R4 | #00B050
+INPUT | Sheet1!A5:Q64 | [["SB 1", "100 Oak Street, Brooklyn NY 11201", "Dana Romano", "(555) 123-4001", "Small Business", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 1982, 5388, 7063, 7208, 9093], ["SB 2", "200 Maple Lane, New York NY 10013", "Lance Miller", "(555) 123-4002", "Small Business", "Yes", "Yes", "Yes", "No", "Yes", "Yes", "Yes", 2786, 3804, 4121, 6210, 6909], ["SB 3", "300 Cedar Drive, New York NY 10013", "Victor Hunt", "(555) 123-4003", "Small Business", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 1209, 1534, 1634, 4302, 9768], ["SB 4", "400 Pine Street, New York NY 10005", "Susan Holmes", "(555) 123-4004", "Small Business", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 906, 1251, 2897, 4499, 9428], ["SB 5", "500 Birch Lane, New York NY 10004", "Sarah Henderson", "(555) 123-4005", "Small Business", "Yes", "Yes", "No", "Yes", "Yes", "Yes", "Yes", 1421, 1893, 2722, 4410, 5873], ["SB 6", "600 Willow Road, Bronx NY 10467", "Robert McGregor", "(555) 123-4006", "Small Business", "Yes", "Yes", "Yes", "No", "Yes", "Yes", "No", 2341, 6105, 7777, 7891, 8758], ["SB 7", "700 Elm Avenue, New York NY 10024", "Laura Peterson", "(555) 123-4007", "Small Business", "Yes", "No", "No", "No", "No", "Yes", "No", 9252, 8499, 991, 448, 211], ["SB 8", "800 Spruce Drive, Brooklyn NY 11214", "Janet Wilson", "(555) 123-4008", "Small Business", "Yes", "", "", "Yes", "No", "Yes", "No", 1581, 4799, 6582, 9024, 9759], ["SB 9", "900 Walnut Road, New York NY 10034", "Veronica Reed", "(555) 123-4009", "Small Business", "Yes", "No", "No", "No", "No", "Yes", "No", 9766, 8049, 5556, 5202, 2373], ["SB 10", "1000 Chestnut Court, Bronx NY 10461", "Helen Gates", "(555) 123-4010", "Small Business", "Yes", "Yes", "No", "Yes", "No", "Yes", "No", 1530, 1620, 2027, 4881, 6002], ["SB 11", "1100 Hickory Street, Brooklyn NY 11233", "George Baker", "(555) 123-4011", "Small Business", "Yes", "No", "No", "No", "No", "No", "No", 7555, 6551, 5188, 3436, 2359], ["SB 12", "1200 Poplar Ave, Brooklyn NY 11237", "James Allen", "(555) 123-4012", "Small Business", "Yes", "No", "No", "No", "No", "No", "No", 1532, 2678, 4068, 4278, 5382], ["SB 13", "1300 Aspen Court, Brooklyn NY 11201", "Thomas York", "(555) 123-4013", "Small Business", "Yes", "", "", "Yes", "", "", "", 24, 1797, 3548, 3668, 8592], ["SB 14", "1400 Sycamore Street, New York, NY 10025", "Diana King", "(555) 123-4014", "Small Business", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 861, 1314, 1810, 6510, 9271], ["SB 15", "1500 Magnolia Dr, New York NY 10032", "Karen Blake", "(555) 123-4015", "Small Business", "Yes", "Yes", "No", "No", "No", "No", "No", 9058, 4839, 4776, 4024, 369], ["MB 1", "1600 Cypress St, New York NY 10011", "David Hall", "(555) 123-4016", "Medium Business", "Yes", "Yes", "No", "No", "No", "No", "No", 3501, 7079, 7438, 7443, 9225], ["MB 2", "1700 Juniper Court, Brooklyn NY 11225", "Jason Grant", "(555) 123-4017", "Medium Business", "Yes", "Yes", "No", "No", "No", "No", "No", 3916, 4218, 5072, 5201, 7588], ["MB 3", "1800 Redwood Rd, Bronx NY 10466", "Chris Edwards", "(555) 123-4018", "Medium Business", "Yes", "Yes", "No", "Yes", "No", "Yes", "No", 700, 5721, 6247, 8495, 9236], ["MB 4", "1900 Warren Drive, New York NY 10040", "Julia Reed", "(555) 123-4019", "Medium Business", "Yes", "Yes", "No", "No", "No", "No", "No", 9773, 9179, 8390, 8256, 3815], ["MB 5", "2000 Bridgeton Lane, Bronx NY 10468", "Brian Cole", "(555) 123-4020", "Medium Business", "Yes", "Yes", "No", "Yes", "No", "Yes", "No", 73, 3485, 4592, 5143, 8100], ["MB 6", "2100 Nichols Ave, New York NY 10027", "Andrew Blake", "(555) 123-4021", "Medium Business", "Yes", "Yes", "No", "Yes", "No", "Yes", "No", 238, 1235, 1822, 7074, 8207], ["MB 7", "2200 Edgewood St, Bronx NY 10457", "Charlotte Lewis", "(555) 123-4022", "Medium Business", "Yes", "Yes", "No", "No", "No", "No", "No", 1368, 3447, 4535, 5476, 9983], ["MB 8", "2300 Thorne St, New York NY 10128", "Nina Carter", "(555) 123-4023", "Medium Business", "Yes", "Yes", "No", "Yes", "No", "Yes", "No", 8331, 7667, 5952, 1998, 375], ["MB 9", "2400 Franklin Lane, Bronx NY 10472", "Maria Anders", "(555) 123-4024", "Medium Business", "Yes", "Yes", "No", "Yes", "No", "Yes", "No", 1779, 2124, 2844, 6877, 9570], ["MB 10", "2500 Randall Dr, New York NY 10033", "Kate Roberts", "(555) 123-4025", "Medium Business", "Yes", "Yes", "No", "Yes", "No", "Yes", "No", 570, 1322, 7279, 8443, 9571], ["MB 11", "2600 Creek St, Brooklyn NY 11211", "Rachel Vance", "(555) 123-4026", "Medium Business", "Yes", "No", "No", "No", "Yes", "No", "No", 6156, 6110, 5791, 1759, 969], ["MB 12", "2700 Manhattan St, Bronx NY 10462", "Michael Burke", "(555) 123-4027", "Medium Business", "Yes", "Yes", "No", "No", "Yes", "Yes", "No", 209, 621, 3098, 7118, 8433], ["MB 13", "2800 River Road, Staten Island, NY 10306", "Diana Monroe", "(555) 123-4028", "Medium Business", "Yes", "Yes", "No", "No", "Yes", "Yes", "No", 6309, 6227, 5123, 4968, 3857], ["MB 14", "2900 Brandywine St, New York NY 10002", "Derek Ford", "(555) 123-4029", "Medium Business", "Yes", "No", "No", "No", "Yes", "No", "No", 712, 4182, 6087, 7494, 8599], ["MB 15", "3000 Tallwood St, Brooklyn NY 11233", "Karen Lewis", "(555) 123-4030", "Medium Business", "Yes", "Yes", "No", "No", "Yes", "Yes", "No", 2390, 2415, 3461, 3850, 4657], ["OR 1", "3100 Stillwater St, Brooklyn NY 11213", "James Mackay", "(555) 123-4031", "Online Retailer", "Yes", "Yes", "No", "No", "No", "No", "No", 2519, 3938, 5190, 8203, 8780], ["OR 2", "3200 Bishop St, Yonkers NY 10701", "Ryan Howard", "(555) 123-4032", "Online Retailer", "Yes", "Yes", "No", "No", "No", "Yes", "No", 138, 286, 6750, 8254, 8656], ["OR 3", "3300 Cedarwood Ave, Brooklyn NY 11221", "Jane Roberts", "(555) 123-4033", "Online Retailer", "Yes", "Yes", "Yes", "No", "No", "Yes", "No", 8873, 8484, 7883, 7499, 6592], ["OR 4", "3400 Lafayette Ave, Bronx NY 10462", "Brenda Harvey", "(555) 123-4034", "Online Retailer", "Yes", "Yes", "Yes", "No", "No", "Yes", "Yes", 3297, 4866, 4928, 8451, 9585], ["OR 5", "3500 Elm St, Staten Island NY 10306", "Leonard Newman", "(555) 123-4035", "Online Retailer", "Yes", "Yes", "Yes", "Yes", "No", "Yes", "Yes", 1092, 3140, 4123, 4366, 9482], ["OR 6", "3600 Stonybrook Dr, Brooklyn NY 11203", "Steven Hardy", "(555) 123-4036", "Online Retailer", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 2541, 3794, 3984, 8803, 9338], ["OR 7", "3700 Beechwood Dr, Bronx NY 10461", "Julian Stone", "(555) 123-4037", "Online Retailer", "Yes", "Yes", "Yes", "No", "No", "Yes", "Yes", 742, 3751, 4423, 8733, 9909], ["OR 8", "3800 Wagon Lane, Brooklyn NY 11237", "Keith Ingram", "(555) 123-4038", "Online Retailer", "Yes", "No", "No", "No", "Yes", "Yes", "Yes", 7703, 6957, 3898, 1857, 1512], ["OR 9", "3900 San Carlos Road, Bronx NY 10463", "Dominic Jones", "(555) 123-4039", "Online Retailer", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 488, 5535, 5775, 7661, 9206], ["OR 10", "4000 Coffee St, Bronx NY 10472", "Lawrence Adams", "(555) 123-4040", "Online Retailer", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 376, 889, 4373, 6803, 7578], ["OR 11", "4100 Princess St, New York NY 10033", "Carl Moss", "(555) 123-4041", "Online Retailer", "Yes", "No", "No", "No", "No", "Yes", "Yes", 7840, 5804, 4259, 4243, 907], ["OR 12", "4200 River St, Brooklyn NY 11230", "Shane Salvador", "(555) 123-4042", "Online Retailer", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 1038, 3615, 3712, 5819, 9589], ["OR 13", "4300 Hall Ave, New York NY 10128", "Angela Foster", "(555) 123-4043", "Online Retailer", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 8891, 5952, 5914, 5405, 4031], ["OR 14", "4400 Crescent St, Brooklyn NY 11210", "Martha Sawyer", "(555) 123-4044", "Online Retailer", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", 1290, 4033, 6956, 7929, 8834], ["OR 15", "4500 Birch Hill Dr, New York NY 10009", "Daniel Strong", "(555) 123-4045", "Online Retailer", "Yes", "Yes", "No", "No", "No", "Yes", "No", 431, 6231, 7478, 8039, 8271], ["WD 1", "4600 Center Court, Brooklyn NY 11208", "Richard Brady", "(555) 123-4046", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "Yes", "No", 8156, 1245, 791, 338, 44], ["WD 2", "4700 2nd St, New York NY 10028", "Craig Cooper", "(555) 123-4047", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "Yes", "No", "No", 299, 657, 6238, 8922, 9081], ["WD 3", "4800 Franklin Rd, Brooklyn NY 11223", "Donna Lang", "(555) 123-4048", "Wholesale Distributor", "Yes", "No", "No", "No", "No", "Yes", "No", 1323, 4963, 6292, 6728, 8202], ["WD 4", "4900 Bank Ave, Brooklyn NY 11218", "Teresa Vincent", "(555) 123-4049", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "Yes", "No", 8466, 4079, 2797, 2245, 1696], ["WD 5", "5000 Yukon St, Bronx NY 10451", "Andrew Morley", "(555) 123-4050", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "Yes", "No", 870, 2428, 7386, 8835, 9766], ["WD 6", "5100 Woodland Ave, New York NY 10025", "Raymond Hunter", "(555) 123-4051", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "Yes", "No", 1497, 1768, 2804, 5718, 9822], ["WD 7", "5200 River Ave, Bronx NY 10465", "Thomas Stone", "(555) 123-4052", "Wholesale Distributor", "Yes", "No", "No", "No", "No", "Yes", "Yes", 1082, 3353, 6351, 8550, 9272], ["WD 8", "5300 Alderwood St, New York NY 10032", "Henry Lawrence", "(555) 123-4053", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "No", "No", 9791, 9610, 7534, 5080, 4936], ["WD 9", "5400 Franklin St, Brooklyn NY 11228", "Danielle Thompson", "(555) 123-4054", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "No", "No", 1357, 4189, 5407, 6233, 9681], ["WD 10", "5500 Taylor Dr, Brooklyn NY 11211", "Joseph Schmidt", "(555) 123-4055", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "No", "No", 576, 2628, 3612, 5066, 5156], ["WD 11", "5600 Henry Ave, New York NY 10031", "Carl Jensen", "(555) 123-4056", "Wholesale Distributor", "Yes", "No", "No", "No", "No", "No", "No", 128, 416, 747, 1028, 6357], ["WD 12", "5700 8th St, Brooklyn NY 11209", "Russell Walker", "(555) 123-4057", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "No", "No", 8034, 6541, 3311, 3254, 2687], ["WD 13", "5800 Maple Ave, New York NY 10029", "Sharon Wells", "(555) 123-4058", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "No", "No", 1263, 2517, 8042, 8222, 9686], ["WD 14", "5900 Nicolls Ave, Staten Island NY 10312", "Kevin Flynn", "(555) 123-4059", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "No", "No", 1032, 3919, 4466, 5568, 6476], ["WD 15", "6000 Del Monte St, Brooklyn NY 11224", "Anna Green", "(555) 123-4060", "Wholesale Distributor", "Yes", "Yes", "Yes", "No", "No", "No", "No", 1014, 2254, 4534, 6796, 7730]]
+INPUT | Sheet1!R5 | "=_xlfn.RRI($Q$4-$M$4,M5,Q5)"
+AUTOFILL | Sheet1!R5:R7 | Sheet1!R5
+INPUT | Sheet1!R8 | "=_xlfn.RRI($Q$3-$M$3,M8,Q8)"
+INPUT | Sheet1!R9 | "=_xlfn.RRI($Q$4-$M$4,M9,Q9)"
+AUTOFILL | Sheet1!R9:R11 | Sheet1!R9
+INPUT | Sheet1!R12 | "=_xlfn.RRI($Q$3-$M$3,M12,Q12)"
+INPUT | Sheet1!R13 | "=_xlfn.RRI($Q$4-$M$4,M13,Q13)"
+AUTOFILL | Sheet1!R13:R64 | Sheet1!R13
+NUMBER_FORMAT | Sheet1!R5:R64 | 0%
+FILL_COLOR | Sheet1!R17 | #00B050
+FILL_COLOR | Sheet1!R23 | #00B050
+FILL_COLOR | Sheet1!R24 | #00B050
+FILL_COLOR | Sheet1!R27 | #00B050
+FILL_COLOR | Sheet1!R30 | #00B050
+FILL_COLOR | Sheet1!R35 | #00B050
+FILL_COLOR | Sheet1!R42 | #00B050
+FILL_COLOR | Sheet1!R44 | #00B050
+FILL_COLOR | Sheet1!R49 | #00B050
+FILL_COLOR | Sheet1!R50 | #00B050
+FILL_COLOR | Sheet1!R59 | #00B050
+FILL_COLOR | Sheet1!R11 | #FF0000
+FILL_COLOR | Sheet1!R13 | #FF0000
+FILL_COLOR | Sheet1!R15 | #FF0000
+FILL_COLOR | Sheet1!R19 | #FF0000
+FILL_COLOR | Sheet1!R22 | #FF0000
+FILL_COLOR | Sheet1!R26 | #FF0000
+FILL_COLOR | Sheet1!R29 | #FF0000
+FILL_COLOR | Sheet1!R31 | #FF0000
+FILL_COLOR | Sheet1!R36 | #FF0000
+FILL_COLOR | Sheet1!R41 | #FF0000
+FILL_COLOR | Sheet1!R43 | #FF0000
+FILL_COLOR | Sheet1!R46 | #FF0000
+FILL_COLOR | Sheet1!R48 | #FF0000
+FILL_COLOR | Sheet1!R52 | #FF0000
+FILL_COLOR | Sheet1!R56 | #FF0000
+FILL_COLOR | Sheet1!R60 | #FF0000
+FILL_COLOR | Sheet1!G11 | #ED7D31
+FILL_COLOR | Sheet1!G13 | #ED7D31
+FILL_COLOR | Sheet1!G16 | #ED7D31
+FILL_COLOR | Sheet1!G30 | #ED7D31
+FILL_COLOR | Sheet1!G34 | #ED7D31
+FILL_COLOR | Sheet1!G42 | #ED7D31
+FILL_COLOR | Sheet1!G45 | #ED7D31
+FILL_COLOR | Sheet1!G48 | #ED7D31
+FILL_COLOR | Sheet1!G52 | #ED7D31
+FILL_COLOR | Sheet1!G56 | #ED7D31
+FILL_COLOR | Sheet1!G60 | #ED7D31
+FILL_COLOR | Sheet1!Q7 | #00B1F0
+FILL_COLOR | Sheet1!Q12 | #00B1F0
+FILL_COLOR | Sheet1!Q26 | #00B1F0
+FILL_COLOR | Sheet1!Q41 | #00B1F0
+FILL_COLOR | Sheet1!Q54 | #00B1F0
+FILL_COLOR | Sheet1!Q55 | #00B1F0
+FILL_COLOR | Sheet1!G12 | #FFFF00
+FILL_COLOR | Sheet1!H12 | #FFFF00
+FILL_COLOR | Sheet1!G17 | #FFFF00
+FILL_COLOR | Sheet1!H17 | #FFFF00
+FILL_COLOR | Sheet1!J17 | #FFFF00
+FILL_COLOR | Sheet1!K17 | #FFFF00
+FILL_COLOR | Sheet1!R8 | #7030A0
+FILL_COLOR | Sheet1!R12 | #7030A0

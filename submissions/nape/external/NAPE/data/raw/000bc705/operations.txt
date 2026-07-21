@@ -1,0 +1,149 @@
+INPUT | Sheet1!C1 | "HEAD H&W COUNTY LEAGUES"
+INPUT | Sheet1!C2 | "SCORE CARD"
+INPUT | Sheet1!D1 | "HOME Team Captain - Enter result ONLINE - within 48 hrs of match finishing"
+INPUT | Sheet1!D2 | "DO NOT SEND TO THE LEAGUE ORGANISER - Both Captains keep a copy"
+FONT_UNDERLINE | Sheet1!C1:C3 | single
+FONT_BOLD | Sheet1!C1:C3 | True
+FONT_COLOR | Sheet1!D1:D3 | #FF0000
+FONT_UNDERLINE | Sheet1!D1:K1 | single
+INPUT | Sheet1!A5 | "Mens/Ladies/Mixed"
+INPUT | Sheet1!A7 | "1 v 1"
+FONT_BOLD | Sheet1!A7:B7 | True
+INPUT | Sheet1!A12 | "2 v 2"
+FONT_BOLD | Sheet1!A12:B12 | True
+INPUT | Sheet1!A17 | "1 v 2"
+FONT_BOLD | Sheet1!A17:B17 | True
+INPUT | Sheet1!A20 | "2 v 1"
+FONT_BOLD | Sheet1!A20:A23 | True
+INPUT | Sheet1!B7 | "Player"
+ALIGN_VERTICAL | Sheet1!B7 | center
+INPUT | Sheet1!B8 | "BTM number"
+FONT_ITALIC | Sheet1!B8 | True
+INPUT | Sheet1!B9 | "Player"
+FONT_BOLD | Sheet1!B9 | True
+INPUT | Sheet1!B10 | "BTM number"
+FONT_ITALIC | Sheet1!B10 | True
+INPUT | Sheet1!B12 | "Player"
+INPUT | Sheet1!B13 | "BTM number"
+FONT_ITALIC | Sheet1!B13 | True
+INPUT | Sheet1!B14 | "Player"
+FONT_BOLD | Sheet1!B14 | True
+INPUT | Sheet1!B15 | "BTM number"
+FONT_ITALIC | Sheet1!B15 | True
+INPUT | Sheet1!B17 | "Player"
+INPUT | Sheet1!B18 | "Player"
+FONT_BOLD | Sheet1!B18 | True
+FONT_ITALIC | Sheet1!B19 | True
+INPUT | Sheet1!B20 | "Player"
+FONT_BOLD | Sheet1!B20:B22 | True
+INPUT | Sheet1!B21 | "Player"
+INPUT | Sheet1!C4 | "Venue:"
+BORDER_BOTTOM | Sheet1!C4:D5 | Thin, Continuous
+INPUT | Sheet1!C5 | "Home Team:"
+BORDER_TOP | Sheet1!C5 | Thin, Continuous
+INPUT | Sheet1!C6 | "Forename and Surname required for all players as registered with British Tennis Membership"
+BORDER_ALL | Sheet1!C7:D7 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!C9:D9 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!C11 | 8.0
+BORDER_ALL | Sheet1!C12:D12 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!C14:D14 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!C16 | 8.0
+BORDER_ALL | Sheet1!C17:D18 | Thin, Dot, #000000
+BORDER_ALL | Sheet1!C20:D21 | Thin, Dot, #000000
+FONT_SIZE | Sheet1!C22 | 8.0
+INPUT | Sheet1!D4 | "Date Played:                                             Div:"
+INPUT | Sheet1!D5 | "Away Team:"
+INPUT | Sheet1!E5 | "Winner"
+ALIGN_HORIZONTAL | Sheet1!E5:E6 | center
+INPUT | Sheet1!E6 | "H or A"
+BORDER_OUTSIDE | Sheet1!E7:K8 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!E7:E8 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!G7:G8 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!I7:I8 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!F7:F8 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!H7:H8 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!J7:J8 | Thin, Dot, #000000
+BORDER_OUTSIDE | Sheet1!E12:K13 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!E12:E13 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!G12:G13 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!I12:I13 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!F12:F13 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!H12:H13 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!J12:J13 | Thin, Dot, #000000
+BORDER_OUTSIDE | Sheet1!E17:K18 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!E17:E18 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!G17:G18 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!I17:I18 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!F17:F18 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!H17:H18 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!J17:J18 | Thin, Dot, #000000
+BORDER_OUTSIDE | Sheet1!E20:K21 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!E20:E21 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!G20:G21 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!I20:I21 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!F20:F21 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!H20:H21 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!J20:J21 | Thin, Dot, #000000
+INPUT | Sheet1!E22 | "Total"
+FONT_SIZE | Sheet1!E22 | 10.0
+FONT_BOLD | Sheet1!E22 | True
+INPUT | Sheet1!F5 | "Set"
+ALIGN_HORIZONTAL | Sheet1!F5 | right
+INPUT | Sheet1!F6 | "H"
+ALIGN_HORIZONTAL | Sheet1!F6:K6 | center
+FONT_SIZE | Sheet1!F22 | 14.0
+BORDER_OUTSIDE | Sheet1!F22:K23 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!G22:G23 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!I22:I23 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!F22:F23 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!H22:H23 | Thin, Dot, #000000
+BORDER_RIGHT | Sheet1!J22:J23 | Thin, Dot, #000000
+INPUT | Sheet1!G5 | 1
+INPUT | Sheet1!G6 | "A"
+INPUT | Sheet1!H4 | "Scores"
+FONT_UNDERLINE | Sheet1!H4:I4 | single
+FONT_BOLD | Sheet1!H4:I4 | True
+INPUT | Sheet1!H5 | "Set"
+ALIGN_HORIZONTAL | Sheet1!H5 | right
+INPUT | Sheet1!H6 | "H"
+INPUT | Sheet1!I5 | 2
+INPUT | Sheet1!I6 | "A"
+INPUT | Sheet1!J5 | "Set"
+ALIGN_HORIZONTAL | Sheet1!J5 | right
+INPUT | Sheet1!J6 | "H"
+INPUT | Sheet1!K5 | 3
+INPUT | Sheet1!K6 | "A"
+FONT_BOLD | Sheet1!C5:D5 | True
+FONT_COLOR | Sheet1!C6:D6 | #FF0000
+FONT_ITALIC | Sheet1!C6:D6 | True
+FILL_COLOR | Sheet1!C8:D8 | #E7E6E6
+FILL_COLOR | Sheet1!C10:D10 | #E7E6E6
+FILL_COLOR | Sheet1!C13:D13 | #E7E6E6
+FILL_COLOR | Sheet1!C15:D15 | #E7E6E6
+FILL_COLOR | Sheet1!D12 | #FFFFFF
+FONT_SIZE | Sheet1!E4:E5 | 9.0
+INPUT | Sheet1!A23 | "HOME TEAM:  WON/LOST/DREW"
+INPUT | Sheet1!A25 | "Home team captain"
+BORDER_OUTSIDE | Sheet1!A25:C28 | Thin, Dot, #000000
+INPUT | Sheet1!A26 | "SIGN & PRINT NAME"
+INPUT | Sheet1!A27 | "Email:"
+BORDER_OUTSIDE | Sheet1!A29:C32 | Thin, Dot, #000000
+INPUT | Sheet1!A29 | "Away team captain"
+INPUT | Sheet1!A30 | "SIGN & PRINT NAME"
+INPUT | Sheet1!A31 | "Email:"
+INPUT | Sheet1!D23 | "Comments/Notes"
+ALIGN_VERTICAL | Sheet1!D26 | top
+MERGE | Sheet1!D26:D28 | true
+INPUT | Sheet1!E26 | "Result"
+FONT_BOLD | Sheet1!E26 | True
+INPUT | Sheet1!E27 | "Rubbers"
+INPUT | Sheet1!E28 | "Sets"
+INPUT | Sheet1!E29 | "Games"
+FONT_SIZE | Sheet1!F26 | 10.0
+INPUT | Sheet1!G26 | "H"
+FONT_BOLD | Sheet1!G26:H26 | True
+ALIGN_HORIZONTAL | Sheet1!G26:H26 | center
+BORDER_RIGHT | Sheet1!G26:G28 | Thin, Dot, #000000
+BORDER_ALL | Sheet1!G27:H29 | Thin, Continuous, #000000
+INPUT | Sheet1!H26 | "A"
+ALIGN_HORIZONTAL | Sheet1!J28:K28 | center

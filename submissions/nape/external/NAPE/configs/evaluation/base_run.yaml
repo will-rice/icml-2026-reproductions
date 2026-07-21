@@ -1,0 +1,55 @@
+# Base Run — multi-action prediction (paper default).
+#
+# Settings match the paper's defaults for multi-action mode:
+#   stride = 1 (predict after every user action)
+#   context = 32 ops
+#   m = infinity (solver decides its own stop)
+#   heuristic = greedy (accept if at least 1 op saved; code name `steps_saved`)
+#   context shortening on
+#
+# Usage: python scripts/run_batch_evaluation.py --config configs/evaluation/base_run.yaml
+
+name: base_run
+
+trajectory_paths:
+  - data/trajectories/*.json
+
+output_dir: results/base_run
+
+# Run all 52 trajectories (set an integer to cap for a quick smoke test)
+max_runs: null
+
+# Step limits: effective max = min(max_steps, max_steps_pct * initial_len)
+max_steps: 1200
+max_steps_pct: 1.20
+
+workers: 4
+max_context_ops: 32
+online_mode: true
+repredict_after_accept: false
+
+stride:
+  mode: fixed_interval
+  interval: 1                # paper default: predict after every user action
+
+heuristics:
+  - steps_saved              # paper name: "greedy" — accept if ops saved >= 1
+
+context_shortening:
+  enabled: true
+  max_chars: 32
+  corner_cells_dim: 2
+
+solver:
+  type: llm
+  adapter: openai
+  model: <your-model-id>     # e.g. gpt-4o, gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 4096
+  num_op_to_pred: null       # null = solver-decided (multi-action, m = inf)
+  cache_enabled: true
+  cache_path: caches/llm_cache.json
+  emit_intent: false
+  remove_sheet_name: true
+  transforms: null
+

@@ -1,0 +1,48 @@
+INPUT | Sheet1!B2 | "# of red"
+INPUT | Sheet1!C2 | "# of orange"
+INPUT | Sheet1!D2 | "# of yellow"
+INPUT | Sheet1!E2 | "# of green"
+INPUT | Sheet1!F2 | "# of purple"
+INPUT | Sheet1!A3:F3 | [["Alex Morgan", 9, 9, 14, 12, 17]]
+INPUT | Sheet1!A4:F4 | [["Beth Cooper", 18, 12, 10, 12, 9]]
+INPUT | Sheet1!A5:F5 | [["Sam Wheeler", 11, 14, 8, 18, 10]]
+INPUT | Sheet1!A6:F6 | [["Kim Patterson", 11, 12, 11, 14, 13]]
+INPUT | Sheet1!A7:F7 | [["Jake Nelson", 18, 13, 10, 13, 7]]
+INPUT | Sheet1!A8:F8 | [["Ella Foster", 12, 12, 15, 13, 12]]
+INPUT | Sheet1!A9:F9 | [["Dan Rivera", 17, 10, 15, 14, 6]]
+INPUT | Sheet1!A10:F10 | [["Tony Maxwell", 12, 7, 15, 10, 14]]
+INPUT | Sheet1!A11:F11 | [["Marcus Webb", 18, 8, 8, 12, 13]]
+INPUT | Sheet1!A12:F12 | [["Chris Warren", 11, 13, 17, 12, 6]]
+INPUT | Sheet1!A13:F13 | [["Shannon Blake", 11, 15, 9, 14, 10]]
+INPUT | Sheet1!A14:F14 | [["Andre Mason", 16, 11, 10, 11, 16]]
+INPUT | Sheet1!A15:F15 | [["Adam Sterling", 10, 10, 13, 12, 15]]
+INPUT | Sheet1!A16:F16 | [["Rachel Turner", 17, 10, 14, 9, 13]]
+INPUT | Sheet1!A17:F17 | [["Sky Bennett", 9, 8, 18, 14, 11]]
+INPUT | Sheet1!A18:F18 | [["Brianna Cole", 11, 13, 14, 13, 7]]
+INPUT | Sheet1!A19:F19 | [["Sara Mitchell", 13, 11, 11, 12, 13]]
+INPUT | Sheet1!A20:F20 | [["Carla Hayes", 16, 16, 9, 12, 7]]
+INPUT | Sheet1!A21:F21 | [["Morgan Pierce", 9, 10, 6, 20, 16]]
+INPUT | Sheet1!A22:F22 | [["Eric Stone", 12, 15, 18, 9, 8]]
+INPUT | Sheet1!A23:F23 | [["Earl Watson", 13, 14, 5, 13, 21]]
+INPUT | Sheet1!A24:F24 | [["D. Gordon Wells", 14, 15, 12, 9, 8]]
+INPUT | Sheet1!A25:F25 | [["Taylor Grant", 18, 11, 12, 14, 6]]
+INPUT | Sheet1!A26:F26 | [["Ethan Wright", 14, 9, 15, 8, 16]]
+INPUT | Sheet1!G2 | "Total # of candies in each bag"
+FONT_BOLD | Sheet1!B2:G2 | True
+INPUT | Sheet1!G3 | "=SUM(B3:F3)"
+AUTOFILL | Sheet1!G3:G26 |  Sheet1!G3
+INPUT | Sheet1!G27 | "=SUM(G3:G26)"
+INPUT | Sheet1!G29 | 24
+INPUT | Sheet1!H27 | "Total # of candies"
+FONT_BOLD | Sheet1!H27 | True
+INPUT | Sheet1!H29 | "Total # of bags"
+FONT_BOLD | Sheet1!H29 | True
+FILL_COLOR | Sheet1!L7 | #92D050
+FILL_COLOR | Sheet1!L8 | #FFC000
+FILL_COLOR | Sheet1!L9 | #FFFF00
+INPUT | Sheet1!M7 | "total number of candies in each bag"
+INPUT | Sheet1!M8 | "total number of bags"
+INPUT | Sheet1!M9 | "total number of candies"
+FILL_COLOR | Sheet1!G3:G26 | #92D050
+FILL_COLOR | Sheet1!G27 | #FFFF00
+FILL_COLOR | Sheet1!G29 | #FFC000

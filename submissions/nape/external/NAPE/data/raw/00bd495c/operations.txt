@@ -1,0 +1,59 @@
+FONT_BOLD | Sheet1!A2:D2 | True
+ALIGN_HORIZONTAL | Sheet1!A2:C83 | center
+WRAP_TEXT | Sheet1!C2 | True
+FONT_BOLD | Sheet1!A3:B83 | True
+BORDER_ALL | Sheet1!A2:C83 | Thin, Continuous, #000000
+NUMBER_FORMAT | Sheet1!C3:C83 | 0.0
+NUMBER_FORMAT | Sheet1!C7:C10 | _(* #,##0_);_(* \(#,##0\);_(* "-"??_);_(@_)
+NUMBER_FORMAT | Sheet1!C34:C35 | _(* #,##0_);_(* \(#,##0\);_(* "-"??_);_(@_)
+MERGE | Sheet1!A84:C84 | true
+WRAP_TEXT | Sheet1!A84 | True
+FONT_BOLD | Sheet1!A84 | True
+INPUT | Sheet1!C2 | "Employment Rate"
+INPUT | Sheet1!D84 | "http://www.statistics.gov.lk/LabourForce/StaticalInformation/AnnualReports#gsc.tab=0"
+INPUT | Sheet1!B3 | "Q1"
+INPUT | Sheet1!B4 | "Q2"
+INPUT | Sheet1!B5 | "Q3"
+INPUT | Sheet1!B6 | "Q4"
+AUTOFILL | Sheet1!B3:B83 | Sheet1!B3:B6
+INPUT | Sheet1!A3 | 2004
+INPUT | Sheet1!A7 | 2005
+INPUT | Sheet1!A11 | 2006
+INPUT | Sheet1!A15 | 2007
+INPUT | Sheet1!A19 | 2008
+INPUT | Sheet1!A23 | 2009
+INPUT | Sheet1!A27 | 2010
+INPUT | Sheet1!A31 | 2011
+INPUT | Sheet1!A35 | 2012
+INPUT | Sheet1!A39 | 2013
+INPUT | Sheet1!A43 | 2014
+INPUT | Sheet1!A47 | 2015
+INPUT | Sheet1!A51 | 2016
+INPUT | Sheet1!A55 | 2017
+INPUT | Sheet1!A59 | 2018
+INPUT | Sheet1!A63 | 2019
+INPUT | Sheet1!A67 | 2020
+INPUT | Sheet1!A71 | 2021
+INPUT | Sheet1!A75 | 2022
+INPUT | Sheet1!A79 | 2023
+INPUT | Sheet1!A83 | 2024
+INPUT | Sheet1!A84 | "Source: Department of Census and Statistics, Sri Lanka"
+INPUT | Sheet1!C3:C83 | [[91.9], [91.0], [91.5], [91.9], [""], [""], [""], [""], [92.8], [93.7], [93.6], [93.7], [93.8], [93.5], [94.4], [94.5], [94.9], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [95.6], [95.8], [95.9], [96.3], [""], [""], [96.1], [95.9], [96.1], [95.8], [96.2], [96.1], [96.3], [95.9], [95.5], [95.8], [95.6], [95.3], [95.5], [95.0], [95.7], [95.8], [95.4], [95.5], [95.8], [95.9], [95.5], [95.8], [96.0], [95.5], [95.4], [95.9], [95.4], [95.3], [95.1], [94.9], [95.5], [94.3], [94.6], [94.2], [94.8], [94.3], [94.9], [94.8], [95.4], [95.7], [95.4], [95.0], [95.2], [95.3], [94.8], [95.3], [95.7], [95.5]]
+INPUT | Sheet1!C20 | 94.7
+INPUT | Sheet1!C21 | 94.8
+INPUT | Sheet1!C22 | 94.8
+INPUT | Sheet1!C23 | 94.6
+INPUT | Sheet1!C24 | 93.7
+INPUT | Sheet1!C25 | 94.2
+INPUT | Sheet1!C26 | 94.5
+INPUT | Sheet1!C27 | 94.9
+INPUT | Sheet1!C28 | 94.6
+INPUT | Sheet1!C29 | 95.3
+INPUT | Sheet1!C7 | "na"
+INPUT | Sheet1!C8 | "na"
+INPUT | Sheet1!C9 | "na"
+INPUT | Sheet1!C10 | "na"
+INPUT | Sheet1!C34 | "na"
+INPUT | Sheet1!C35 | "na"
+FONT_COLOR | Sheet1!C7:C10 | #FF0000
+FONT_COLOR | Sheet1!C34:C35 | #FF0000

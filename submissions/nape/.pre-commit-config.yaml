@@ -1,0 +1,40 @@
+default_language_version:
+  python: python3.13
+exclude: ^(?:\.trackio/|external/|repro_bundle/|\.superpowers/)
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-ast
+        files: ^(?:src/|tests/)
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: requirements-txt-fixer
+  - repo: https://github.com/will-rice/prettier-pre-commit
+    rev: v1.0.9
+    hooks:
+      - id: prettier-format
+        files: ^\.github/.*\.ya?ml$
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.7
+    hooks:
+      - id: ruff-format
+        files: ^(?:src/|tests/)
+      - id: ruff
+        args: [--fix]
+        files: ^(?:src/|tests/)
+  - repo: local
+    hooks:
+      - id: ty-check
+        name: ty
+        entry: uv run ty check src tests
+        language: system
+        pass_filenames: false
+        files: ^(?:src/|tests/)
+      - id: pytest
+        name: pytest
+        entry: uv run pytest
+        language: system
+        pass_filenames: false
+        files: ^(?:src/|tests/)

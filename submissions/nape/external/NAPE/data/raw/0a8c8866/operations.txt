@@ -1,0 +1,115 @@
+INPUT | Sheet1!A1 | "University of Montevallo"
+FONT_SIZE | Sheet1!A1 | 14.0
+FONT_BOLD | Sheet1!A1:A2 | True
+ALIGN_HORIZONTAL | Sheet1!A1:A3 | center
+MERGE | Sheet1!A1:J1 | true
+INPUT | Sheet1!A2 | "REQUEST FOR TRAVEL AUTHORIZATION"
+MERGE | Sheet1!A2:J2 | true
+INPUT | Sheet1!A3 | "In-State Blanket"
+MERGE | Sheet1!A3:J3 | true
+INPUT | Sheet1!A5 | "Date:"
+BORDER_BOTTOM | Sheet1!B5:C5 | Thin, Continuous, #000000
+INPUT | Sheet1!G5 | "Budget No:"
+ALIGN_HORIZONTAL | Sheet1!G5:H5 | right
+BORDER_BOTTOM | Sheet1!H5:J5 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!C6:G6 | 8.0
+INPUT | Sheet1!H6 | "(or source of funding)"
+INPUT | Sheet1!A7 | "TRAVELER INFORMATION"
+FONT_BOLD | Sheet1!A7 | True
+INPUT | Sheet1!A9 | "Name:"
+BORDER_BOTTOM | Sheet1!B9:E9 | Thin, Continuous, #000000
+INPUT | Sheet1!G9 | "M No:"
+ALIGN_HORIZONTAL | Sheet1!G9 | right
+BORDER_BOTTOM | Sheet1!H9:J9 | Thin, Continuous, #000000
+INPUT | Sheet1!A11 | "Title:"
+BORDER_BOTTOM | Sheet1!B11:E11 | Thin, Continuous, #000000
+INPUT | Sheet1!G11 | "Station No:"
+ALIGN_HORIZONTAL | Sheet1!G11 | right
+BORDER_BOTTOM | Sheet1!H11:J11 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!E12 | 8.0
+ALIGN_HORIZONTAL | Sheet1!E12 | center
+INPUT | Sheet1!A13 | "PURPOSE OF TRAVEL"
+FONT_BOLD | Sheet1!A13 | True
+INPUT | Sheet1!A15 | "Purpose:"
+ALIGN_HORIZONTAL | Sheet1!B15 | center
+BORDER_BOTTOM | Sheet1!B15:J15 | Thin, Continuous, #000000
+FONT_SIZE | Sheet1!B15:J15 | 8.0
+ALIGN_HORIZONTAL | Sheet1!D15 | center
+ALIGN_HORIZONTAL | Sheet1!F15 | center
+ALIGN_HORIZONTAL | Sheet1!H15 | center
+INPUT | Sheet1!A17 | "Destination:"
+BORDER_BOTTOM | Sheet1!B17:J17 | Thin, Continuous, #000000
+INPUT | Sheet1!A19 | "Departure Date:"
+BORDER_BOTTOM | Sheet1!C19:E19 | Thin, Continuous, #000000
+INPUT | Sheet1!G19 | "Return Date:"
+ALIGN_HORIZONTAL | Sheet1!G19 | right
+BORDER_BOTTOM | Sheet1!H19:J19 | Thin, Continuous, #000000
+INPUT | Sheet1!A21 | "ESTIMATED TRAVEL EXPENSES"
+FONT_BOLD | Sheet1!A21 | True
+BORDER_ALL | Sheet1!G21 | Thin, Continuous, #000000
+INPUT | Sheet1!H21 | "Will not be claiming reimbursement."
+INPUT | Sheet1!A23 | "*In-State Per Diem:"
+INPUT | Sheet1!C23 | "Less than 6 hours: $0.00"
+INPUT | Sheet1!G23 | "Description"
+BORDER_ALL | Sheet1!G23:J28 | Thin, Continuous, #000000
+INPUT | Sheet1!I23 | "Estimated Expenses"
+INPUT | Sheet1!C24 | "6-12 hours: Lunch rate"
+INPUT | Sheet1!G24 | "In-State Per Diem*"
+INPUT | Sheet1!C25 | "Over 12 hours, return same day:"
+FONT_SIZE | Sheet1!D25 | 8.0
+FONT_BOLD | Sheet1!D25 | True
+ALIGN_HORIZONTAL | Sheet1!D25 | center
+INPUT | Sheet1!G25 | "Mileage Expense"
+INPUT | Sheet1!C26 | "\"First Day\" rate, 75% of Full Day"
+FONT_BOLD | Sheet1!C26 | True
+INPUT | Sheet1!G26 | "Public Transportation"
+INPUT | Sheet1!C27 | "Overnight:"
+INPUT | Sheet1!D27 | "Regular M&IE Per Diem"
+FONT_BOLD | Sheet1!D27 | True
+INPUT | Sheet1!G27 | "Misc."
+INPUT | Sheet1!A28 | "https://www.gsa.gov/travel/plan-book/per-diem-rates"
+FONT_UNDERLINE | Sheet1!A28 | single
+FONT_COLOR | Sheet1!A28 | #0000FF
+INPUT | Sheet1!G28 | "TOTAL"
+FONT_BOLD | Sheet1!H28 | True
+FONT_SIZE | Sheet1!H28 | 8.0
+ALIGN_HORIZONTAL | Sheet1!H28 | center
+INPUT | Sheet1!J28 | "=SUM(J24:J27)"
+INPUT | Sheet1!A29 | "Mileage Expense:"
+INPUT | Sheet1!C29 | "Personal car mileage @ .70/mile"
+INPUT | Sheet1!A30 | "Public Transportation:"
+INPUT | Sheet1!C30 | "Rental Car, Taxi, Uber, etc."
+INPUT | Sheet1!A31 | "Miscellaneous:"
+INPUT | Sheet1!C31 | "Parking, Tolls, Fuel, etc."
+INPUT | Sheet1!A33 | "AUTHORIZATION"
+FONT_BOLD | Sheet1!A33:A34 | True
+INPUT | Sheet1!A35 | "I understand that, to be reimbursed, I must comply with State travel law and UM policy."
+INPUT | Sheet1!A38 | "Traveler"
+BORDER_TOP | Sheet1!A38:D38 | Thin, Continuous, #000000
+INPUT | Sheet1!D38 | "Date"
+ALIGN_HORIZONTAL | Sheet1!D38 | right
+INPUT | Sheet1!G38 | "Dean or Director"
+BORDER_TOP | Sheet1!G38:J38 | Thin, Continuous, #000000
+INPUT | Sheet1!J38 | "Date"
+ALIGN_HORIZONTAL | Sheet1!J38 | right
+INPUT | Sheet1!A41 | "Department Head or Supervisor"
+BORDER_TOP | Sheet1!A41:D41 | Thin, Continuous, #000000
+INPUT | Sheet1!D41 | "Date"
+ALIGN_HORIZONTAL | Sheet1!D41 | right
+INPUT | Sheet1!G41 | "VPBA"
+BORDER_TOP | Sheet1!G41:J41 | Thin, Continuous, #000000
+ALIGN_HORIZONTAL | Sheet1!H41 | right
+INPUT | Sheet1!J41 | "Date"
+ALIGN_HORIZONTAL | Sheet1!J41 | right
+INPUT | Sheet1!A43 | "Received & Reviewed by Travel Office"
+BORDER_ALL | Sheet1!D43 | Thin, Continuous, #000000
+INPUT | Sheet1!A45 | "In accordance with University policy (03:040), please be sure to turn your completed travel reimbursement form,"
+INPUT | Sheet1!A46 | "along with necessary documentation and signatures, into the Business Office within 60 days after the trip;"
+INPUT | Sheet1!A47 | "otherwise, reimbursement is treated as income and processed through Payroll."
+INPUT | Sheet1!A49 | "**For Field Trips or other team travel, please attach a list of the names of students attending."
+FONT_ITALIC | Sheet1!A49 | True
+FONT_UNDERLINE | Sheet1!A49 | single
+FONT_BOLD | Sheet1!A49 | True
+INPUT | Sheet1!A51 | "*In-State Conferences are considered outside of regular job requirements and not covered by Blanket"
+FONT_BOLD | Sheet1!A51:A52 | True
+INPUT | Sheet1!A52 | "Authorizations. A separate Authorization must be completed for each In-State Conference."

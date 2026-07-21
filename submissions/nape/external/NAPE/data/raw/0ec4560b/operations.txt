@@ -1,0 +1,65 @@
+INPUT | Sheet1!B1 | "2021 Q4 Economic and Housing Market Outlook"
+FONT_BOLD | Sheet1!B1 | True
+FONT_SIZE | Sheet1!B1 | 16.0
+MERGE | Sheet1!B1:N1 | true
+INPUT | Sheet1!B2 | "Draft Revised 9/28/2021"
+FONT_BOLD | Sheet1!B3:Q3 | True
+ALIGN_HORIZONTAL | Sheet1!B3:Q3 | center
+ALIGN_VERTICAL | Sheet1!B3:Q4 | center
+INPUT | Sheet1!B3 | "Summary"
+INPUT | Sheet1!C3 | "2020 Q1"
+INPUT | Sheet1!D3 | "2020 Q2"
+INPUT | Sheet1!E3 | "2020 Q3"
+INPUT | Sheet1!F3 | "2020 Q4"
+INPUT | Sheet1!G3 | "2021 Q1"
+INPUT | Sheet1!H3 | "2021 Q2"
+INPUT | Sheet1!I3 | "2021 Q3"
+INPUT | Sheet1!J3 | "2021 Q4"
+INPUT | Sheet1!K3 | "2022 Q1"
+INPUT | Sheet1!L3 | "2022 Q2"
+INPUT | Sheet1!M3 | "2022 Q3"
+INPUT | Sheet1!N3 | "2022 Q4"
+INPUT | Sheet1!O3 | 2020
+INPUT | Sheet1!P3 | 2021
+AUTOFILL | Sheet1!O3:Q3 | Sheet1!O3:P3
+BORDER_OUTSIDE | Sheet1!B3:Q3 | Thin, Continuous, #4472C5
+FONT_SIZE | Sheet1!B3:Q3 | 14.0
+WRAP_TEXT | Sheet1!B3:Q3 | True
+FONT_BOLD | Sheet1!B4 | True
+INPUT | Sheet1!B4 | "30-year PMMS (%)"
+WRAP_TEXT | Sheet1!B4:D4 | True
+INPUT | Sheet1!C4:Q9 | [[3.5, 3.24, 2.95, 2.79, 2.88, 3.01, 2.9, 3.24, 3.37, 3.48, 3.58, 3.66, 3.12, 3.01, 3.52], [6.2, 5.1, 7.1, 7.6, 7.2, 6.58, 6.69, 6.69, 6.76, 6.76, 6.84, 6.89, 6.5, 6.79, 6.81], [1.88, 0.92, 4.3, 3.82, 4.19, 5.6, 4.07, 2.1, 2.06, 2.02, 1.98, 0.75, 11.33, 16.91, 6.97], [751.26, 1089.82, 1278.9, 1320.6, 1305, 1230, 1068.13, 858.07, 712.97, 855.57, 824.8, 715.71, 4440.58, 4461.19, 3109.05], [297.15, 349.27, 487.61, 453.06, 375, 525, 545.63, 470.82, 403.47, 591.32, 602.55, 516.96, 1587.1, 1916.44, 2114.3], [454.11, 740.55, 791.29, 867.54, 930, 705, 522.5, 387.25, 309.5, 264.25, 222.25, 198.75, 2853.49, 2544.75, 994.75]]
+BORDER_OUTSIDE | Sheet1!C3:F9 | Thin, Continuous, #4472C5
+BORDER_OUTSIDE | Sheet1!G3:J9 | Thin, Continuous, #4472C5
+BORDER_OUTSIDE | Sheet1!K3:N9 | Thin, Continuous, #4472C5
+BORDER_OUTSIDE | Sheet1!O3:Q9 | Thin, Continuous, #4472C5
+NUMBER_FORMAT | Sheet1!C4:Q6 | 0.0
+FONT_BOLD | Sheet1!I4:N9 | True
+FONT_BOLD | Sheet1!Q4:Q9 | True
+INPUT | Sheet1!B5 | "Total home sales (M)"
+WRAP_TEXT | Sheet1!B5:B9 | True
+ALIGN_VERTICAL | Sheet1!B5:Q9 | center
+FONT_BOLD | Sheet1!B5:B14 | True
+INPUT | Sheet1!B6 | "House price growth (%)"
+INPUT | Sheet1!B7 | "Total originations ($B)"
+NUMBER_FORMAT | Sheet1!C7:Q9 | "$"#,##0
+FONT_BOLD | Sheet1!P7:P9 | True
+INPUT | Sheet1!B8 | "Purchase originations ($B)"
+INPUT | Sheet1!B9 | "Refinance originations ($B)"
+FILL_COLOR | Sheet1!J4:N9 | #DFEBF7
+FILL_COLOR | Sheet1!P4:Q9 | #DFEBF7
+FILL_COLOR | Sheet1!I5:I9 | #DFEBF7
+INPUT | Sheet1!B10 | "Note: Quarterly and annual forecasts (or estimates) are shown in shaded areas; totals may not add due to rounding; annual forecast data are averages of quarterly values"
+MERGE | Sheet1!B10:Q10 | true
+FONT_SIZE | Sheet1!B10:B14 | 8.0
+BORDER_OUTSIDE | Sheet1!C10:Q14 | Thin, Continuous, #4472C5
+INPUT | Sheet1!B11 | "a.  Quarterly average of monthly interest rates (not seasonally-adjusted); reported as an annual rate."
+MERGE | Sheet1!B11:Q11 | true
+INPUT | Sheet1!B12 | "b.  Millions of housing units; total sales are the sum of new and existing single-family, condo/co-op home sales; quarterly averages of monthly, seasonally-adjusted levels (reported at an annual rate)."
+MERGE | Sheet1!B12:Q12 | true
+INPUT | Sheet1!B13 | "c.  Quarterly growth rate of Freddie Mac's House Price Index;  seasonally-adjusted; annual rates for yearly data."
+MERGE | Sheet1!B13:Q13 | true
+INPUT | Sheet1!B14 | "d.  Billions of dollars (not seasonally-adjusted). Includes only 1st lien mortgage originations."
+MERGE | Sheet1!B14:Q14 | true
+BORDER_ALL | Sheet1!B4:Q9 | Thin, Continuous, #4472C5
+BORDER_ALL | Sheet1!B10:Q14 | Thin, Continuous, #4472C5

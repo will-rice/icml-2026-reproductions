@@ -1,0 +1,47 @@
+{
+  "artifact_audit": {
+    "matched_trajectory_ids": 52,
+    "required_files_per_trajectory": [
+      "operations.txt",
+      "predictable_state.json",
+      "sheet_image.png",
+      "spreadsheet.xlsx"
+    ]
+  },
+  "claim": "NAPE contains 52 trajectories and 11,907 actions with sequence lengths 35-821 (mean 229, median 164), produced by symbolic sequencing, LLM refinement, and human annotation.",
+  "construction_pipeline": {
+    "human_annotation": {
+      "evidence_scope": "release_provenance_only",
+      "source_path": null
+    },
+    "llm_refinement": {
+      "evidence_scope": "executable_source",
+      "source_path": "src/next_action_pred_eval/generation/refinement/pipeline.py"
+    },
+    "region_annotation": {
+      "evidence_scope": "executable_source",
+      "source_path": "src/next_action_pred_eval/generation/regions/analyzer.py"
+    },
+    "symbolic_sequencing": {
+      "evidence_scope": "executable_source",
+      "source_path": "src/next_action_pred_eval/generation/sequencing/engine.py"
+    }
+  },
+  "counting_definition": "One trajectory is one JSON file; one action is one string in its operations array.",
+  "evidence_scope": "released_artifact_recomputation_and_source_audit",
+  "input_paths": [
+    "external/NAPE/data/trajectories",
+    "external/NAPE/data/raw"
+  ],
+  "observed": {
+    "maximum_sequence_length": 821,
+    "mean_sequence_length": 228.98076923076923,
+    "median_sequence_length": 164.0,
+    "minimum_sequence_length": 35,
+    "operations": 11907,
+    "paper_rounded_mean": 229,
+    "trajectories": 52
+  },
+  "source_revision": "ac0d10e4dc345f982a5665a2c4bdb6b752d663f2",
+  "verdict": "reproduced"
+}

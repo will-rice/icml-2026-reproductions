@@ -1,0 +1,159 @@
+INPUT | Sheet1!A1 | "Table 4.10.2"
+INPUT | Sheet1!A2 | "NUMBER OF AFFECTED PEOPLE DUE TO HUMAN-INDUCED DISASTERS1 BY TYPE FOR MAJOR DISASTERS"
+INPUT | Sheet1!A3 | "2014 to 2023"
+ALIGN_VERTICAL | Sheet1!A3 | top
+FONT_BOLD | Sheet1!A1:D3 | True
+WRAP_TEXT | Sheet1!A5 | True
+MERGE | Sheet1!A5:A6 | true
+INPUT | Sheet1!A5 | "Disaster \nSub-group"
+INPUT | Sheet1!B5 | "Disaster Type"
+INPUT | Sheet1!C5 | 2014
+ALIGN_HORIZONTAL | Sheet1!A5:C5 | center
+BORDER_TOP | Sheet1!A5:V5 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!A5:V5 | Thin, Continuous, #000000
+BORDER_BOTTOM | Sheet1!A6:V6 | Thin, Continuous, #000000
+BORDER_TOP | Sheet1!A6:B6 | Thin, Continuous, #000000
+WRAP_TEXT | Sheet1!A7 | True
+ALIGN_HORIZONTAL | Sheet1!A7:B7 | center
+INPUT | Sheet1!A8 | "Total"
+BORDER_OUTSIDE | Sheet1!A8:C8 | Thin, Continuous, #808080
+ALIGN_VERTICAL | Sheet1!A8:V60 | top
+BORDER_OUTSIDE | Sheet1!A9:U9 | Thin, Continuous, #808080
+INPUT | Sheet1!A10 | "Armed"
+INPUT | Sheet1!A19 | "Aviation"
+INPUT | Sheet1!A23 | "Chemical"
+ALIGN_HORIZONTAL | Sheet1!A25:A26 | center
+WRAP_TEXT | Sheet1!A25:A26 | True
+NUMBER_FORMAT | Sheet1!A29 | #,##0.0
+INPUT | Sheet1!A30 | "Fire"
+INPUT | Sheet1!A32 | "Land"
+INPUT | Sheet1!A35 | "Maritime"
+INPUT | Sheet1!A38 | "Others"
+INPUT | Sheet1!A59 | "Special events"
+MERGE | Sheet1!B5:B6 | true
+BORDER_RIGHT | Sheet1!B5:B6 | Thin, Continuous, #000000
+INPUT | Sheet1!B11:B18 | [["Ambush/Shooting Incident"], ["Armed Conflict/ Firefight Incident"], ["Bomb/Grenade Explosion"], ["Civil Disturbance"], ["Rido"], ["Hostage Taking"], ["Military Operations"], ["Territory Dispute"]]
+WRAP_TEXT | Sheet1!B12 | True
+INPUT | Sheet1!B20:B22 | [["Aviation Incident"], ["Flight Cancellation"], ["Rocket Launch"]]
+INPUT | Sheet1!B24:B29 | [["Chemical Explosion"], ["Chemical Leak"], ["Chemical Leak/ Poisoning"], ["Mercury Poisoning"], ["Oil Spill"], ["Oil/ Chemical Leak"]]
+WRAP_TEXT | Sheet1!B28:B30 | True
+INPUT | Sheet1!B31 | "Fire Incidents"
+INPUT | Sheet1!B33:B34 | [["Rail Accident"], ["Vehicular Accidents"]]
+INPUT | Sheet1!B36:B37 | [["Maritime Incidents"], ["Sea Mishaps"]]
+INPUT | Sheet1!B39:B58 | [["Bomb Threat"], ["Cave-in Incident"], ["Collapsed Steel Girder"], ["Collapsed Structure"], ["Electrocution Incidents"], ["Firecracker-related Incidents"], ["Fish Kill"], ["Harassment Incident"], ["Human-Induced Landslide"], ["Internally Displaced  Persons (IDP)"], ["LPG Explosion"], ["Mining Incident"], ["Missing Person"], ["Planned Event"], ["Political Boundary Conflict"], ["Poisoning A"], ["Social Disorganization"], ["Structural Damage"], ["Transport Strike"], ["Water Tank Explosion"]]
+WRAP_TEXT | Sheet1!B46:B48 | True
+WRAP_TEXT | Sheet1!B55:B57 | True
+INPUT | Sheet1!B60 | "Stampede"
+MERGE | Sheet1!C5:D5 | true
+BORDER_ALL | Sheet1!C5:V7 | Thin, Continuous, #808080
+INPUT | Sheet1!C6 | "Families"
+INPUT | Sheet1!D6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!C6:D7 | center
+NUMBER_FORMAT | Sheet1!C8:V25 | #,##0.0
+INPUT | Sheet1!C8 | 0
+AUTOFILL | Sheet1!C8:V8 |  Sheet1!C8
+AUTOFILL | Sheet1!C8:V62 |  Sheet1!C8:V8
+INPUT | Sheet1!U8 | 43699
+INPUT | Sheet1!V8 | 200244
+INPUT | Sheet1!U23 | 43699
+INPUT | Sheet1!V23 | 200244
+INPUT | Sheet1!U28 | 43699
+INPUT | Sheet1!V28 | 200244
+FONT_BOLD | Sheet1!C19:V19 | True
+FONT_BOLD | Sheet1!C23:V23 | True
+NUMBER_FORMAT | Sheet1!C26:J26 | 0.0
+NUMBER_FORMAT | Sheet1!C27:J28 | #,##0.0
+NUMBER_FORMAT | Sheet1!C29:J29 | 0.0
+NUMBER_FORMAT | Sheet1!C30:J60 | #,##0.0
+FONT_BOLD | Sheet1!C30:V30 | True
+FONT_BOLD | Sheet1!C32:V32 | True
+FONT_BOLD | Sheet1!C35:V35 | True
+FONT_BOLD | Sheet1!C38:V38 | True
+FONT_BOLD | Sheet1!C59:V59 | True
+BORDER_ALL | Sheet1!D8:U8 | Thin, Continuous, #808080
+INPUT | Sheet1!E5 | 2015
+INPUT | Sheet1!E6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!E5:E7 | center
+MERGE | Sheet1!E5:F5 | true
+INPUT | Sheet1!F6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!F6:F7 | center
+INPUT | Sheet1!G5 | 2016
+INPUT | Sheet1!G6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!G5:G7 | center
+MERGE | Sheet1!G5:H5 | true
+INPUT | Sheet1!H6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!H6:H7 | center
+INPUT | Sheet1!I5 | 2017
+INPUT | Sheet1!I6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!I5:I7 | center
+MERGE | Sheet1!I5:J5 | true
+INPUT | Sheet1!J6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!J6:J7 | center
+INPUT | Sheet1!K5 | 2018
+INPUT | Sheet1!K6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!K5:K7 | center
+MERGE | Sheet1!K5:L5 | true
+NUMBER_FORMAT | Sheet1!K26:V60 | #,##0.0
+INPUT | Sheet1!L6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!L6:L7 | center
+INPUT | Sheet1!M5 | 2019
+INPUT | Sheet1!M6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!M5:M7 | center
+MERGE | Sheet1!M5:N5 | true
+INPUT | Sheet1!N6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!N6:N7 | center
+INPUT | Sheet1!O5 | 2020
+INPUT | Sheet1!O6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!O5:O7 | center
+MERGE | Sheet1!O5:P5 | true
+INPUT | Sheet1!P6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!P6:P7 | center
+INPUT | Sheet1!Q5 | 2021
+INPUT | Sheet1!Q6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!Q5:Q7 | center
+MERGE | Sheet1!Q5:R5 | true
+INPUT | Sheet1!R6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!R6:R7 | center
+INPUT | Sheet1!S5 | 2022
+INPUT | Sheet1!S6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!S5:S6 | center
+MERGE | Sheet1!S5:T5 | true
+FONT_BOLD | Sheet1!S8:V10 | True
+INPUT | Sheet1!T6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!T6 | center
+INPUT | Sheet1!U5 | 2023
+INPUT | Sheet1!U6 | "Families"
+ALIGN_HORIZONTAL | Sheet1!U5:U6 | center
+MERGE | Sheet1!U5:V5 | true
+INPUT | Sheet1!V6 | "Persons"
+ALIGN_HORIZONTAL | Sheet1!V6 | center
+BORDER_OUTSIDE | Sheet1!V8:V9 | Thin, Continuous, #808080
+FONT_BOLD | Sheet1!A5:V6 | True
+FONT_BOLD | Sheet1!A8:A20 | True
+FONT_BOLD | Sheet1!A23:A24 | True
+FONT_ITALIC | Sheet1!A25:A26 | True
+FONT_SIZE | Sheet1!A25:A26 | 7.5
+FONT_BOLD | Sheet1!A27 | True
+FONT_BOLD | Sheet1!A30:A39 | True
+FONT_BOLD | Sheet1!A59:A60 | True
+FONT_BOLD | Sheet1!C6:V10 | True
+INPUT | Sheet1!A61 | "Water-Related Incidents"
+ALIGN_VERTICAL | Sheet1!A61:V62 | top
+BORDER_BOTTOM | Sheet1!A62:V62 | Thin, Continuous, #000000
+INPUT | Sheet1!A63 | "Notes:"
+ALIGN_VERTICAL | Sheet1!A63:A68 | top
+INPUT | Sheet1!A64 | "Technological Disasters has no core statistics based on Framework for the Development of Environment Statistics by United Nations Statistics Division"
+INPUT | Sheet1!A65 | "Figures may differ from previous compilations due to updated guidelines"
+INPUT | Sheet1!A66 | "1 Human Induced Disaster Classification by National Disaster Risk Reduction and Management Council (NDRRMC)"
+INPUT | Sheet1!A67 | "A Comprised of Food Poisoning, Gas Poisoning"
+INPUT | Sheet1!A68 | "Source: Office of Civil Defense (OCD)"
+INPUT | Sheet1!B62 | "Drowning Incidents"
+WRAP_TEXT | Sheet1!B63:B68 | True
+NUMBER_FORMAT | Sheet1!C61:V62 | #,##0.0
+ALIGN_HORIZONTAL | Sheet1!C63:K65 | right
+ALIGN_HORIZONTAL | Sheet1!C66:I68 | center
+ALIGN_HORIZONTAL | Sheet1!J66:J68 | right
+ALIGN_HORIZONTAL | Sheet1!K66:K68 | center
+FONT_BOLD | Sheet1!A61:A62 | True
+FONT_SIZE | Sheet1!A63:A68 | 10.0
+FONT_BOLD | Sheet1!C61:V61 | True

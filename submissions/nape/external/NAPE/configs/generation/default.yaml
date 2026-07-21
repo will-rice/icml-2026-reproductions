@@ -1,0 +1,43 @@
+# Default Generation Configuration
+# Configuration for the sequencing engine used in data generation.
+
+# Transformers to use in the pipeline
+transformers:
+  - name: RegionOrchestrator
+    config:
+      mode: sequential  # sequential, parallel, dependency
+      enabled: true
+
+  - name: OperationSequencer
+    config:
+      strategy: priority  # priority, spatial, hybrid
+      enabled: true
+
+  - name: InputSplitter
+    config:
+      enabled: true
+      split_threshold: 4
+      sparse_density: 0.5
+
+  - name: AutoFillDetector
+    config:
+      enabled: true
+      min_fill: 2
+      detect_formulas: true
+      detect_values: true
+
+  - name: ConstraintEnforcer
+    config:
+      enabled: true
+
+# Merge settings
+merge_options:
+  row_first: true
+  merge_borders: true
+  overlay_operation: false
+  merge_inputs: false
+
+# Output settings
+output:
+  format: symbolic  # symbolic, json
+  compress: false

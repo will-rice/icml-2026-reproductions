@@ -1,0 +1,185 @@
+INPUT | Sheet1!B1 | "Championship Eligible"
+WRAP_TEXT | Sheet1!B1 | True
+MERGE | Sheet1!B1:B2 | true
+ALIGN_HORIZONTAL | Sheet1!B1:C1 | center
+INPUT | Sheet1!C1 | "BRIDGES CHAMPIONSHIP WEEKEND 3/1 3/2 3/3"
+MERGE | Sheet1!C1:G1 | true
+INPUT | Sheet1!C3 | "AL MARTIN"
+INPUT | Sheet1!A3 | 1
+INPUT | Sheet1!A4 | 2
+AUTOFILL | Sheet1!A3:A38 |  Sheet1!A3:A4
+INPUT | Sheet1!C4 | "ANDREW BROOKS"
+INPUT | Sheet1!C5 | "AUSTIN GRAY"
+INPUT | Sheet1!C6 | "BRANDON COLE"
+INPUT | Sheet1!C7 | "CALVIN DRAKE"
+INPUT | Sheet1!C8 | "CARL PORTER"
+INPUT | Sheet1!C9 | "CHARLES REED"
+INPUT | Sheet1!C10 | "CHRIS PALMER"
+INPUT | Sheet1!C11 | "COREY BANKS"
+INPUT | Sheet1!C12 | "DANNY FOSTER"
+INPUT | Sheet1!C13 | "DAVID STONE"
+INPUT | Sheet1!C14 | "EDDIE WEST"
+INPUT | Sheet1!C15 | "FRED GRANT"
+INPUT | Sheet1!C16 | "FREDDIE HAYES"
+INPUT | Sheet1!C17 | "JAMES ST. CLAIRE"
+INPUT | Sheet1!C18 | "JEFF PRICE"
+INPUT | Sheet1!C19 | "JEREMY ROSS"
+INPUT | Sheet1!C20 | "JOEY STERN"
+INPUT | Sheet1!C21 | "JORDAN RICE"
+INPUT | Sheet1!C22 | "LAWRENCE LANE"
+INPUT | Sheet1!C23 | "MIKE HARPER"
+INPUT | Sheet1!C24 | "MIKE KELLER"
+INPUT | Sheet1!C25 | "MIKE MOORE"
+INPUT | Sheet1!C26 | "PAUL TAYLOR"
+INPUT | Sheet1!C27 | "PHIL WARREN"
+INPUT | Sheet1!C28 | "RICHARD POWELL"
+INPUT | Sheet1!C29 | "SHAWN MURPHY"
+INPUT | Sheet1!C30 | "STEVE CARTER"
+INPUT | Sheet1!C31 | "STEVE ST. JOHN"
+INPUT | Sheet1!C32 | "STEVE WAGNER"
+INPUT | Sheet1!C33 | "TERRENCE THOMAS"
+INPUT | Sheet1!C34 | "TOM FORD SR"
+INPUT | Sheet1!C35 | "WAYNE FORD"
+INPUT | Sheet1!B3 | "YES"
+ALIGN_HORIZONTAL | Sheet1!B3:B39 | center
+INPUT | Sheet1!B4 | "YES"
+INPUT | Sheet1!B5 | "YES"
+INPUT | Sheet1!B6 | "NO"
+INPUT | Sheet1!B7 | "YES"
+INPUT | Sheet1!B8 | "NO"
+INPUT | Sheet1!B9 | "YES"
+INPUT | Sheet1!B10 | "YES"
+INPUT | Sheet1!B11 | "YES"
+INPUT | Sheet1!B12 | "YES"
+INPUT | Sheet1!B13 | "NO"
+INPUT | Sheet1!B14 | "YES"
+INPUT | Sheet1!B15 | "YES"
+INPUT | Sheet1!B16 | "YES"
+INPUT | Sheet1!B17 | "YES"
+INPUT | Sheet1!B18 | "YES"
+INPUT | Sheet1!B19 | "YES"
+INPUT | Sheet1!B20 | "NO"
+INPUT | Sheet1!B21 | "NO"
+INPUT | Sheet1!B22 | "NO"
+INPUT | Sheet1!B23 | "YES"
+INPUT | Sheet1!B24 | "NO"
+INPUT | Sheet1!B25 | "NO"
+INPUT | Sheet1!B26 | "YES"
+INPUT | Sheet1!B27 | "YES"
+INPUT | Sheet1!B28 | "YES"
+INPUT | Sheet1!B29 | "YES"
+INPUT | Sheet1!B30 | "NO"
+INPUT | Sheet1!B31 | "YES"
+INPUT | Sheet1!B32 | "YES"
+INPUT | Sheet1!B33 | "NO"
+INPUT | Sheet1!B34 | "YES"
+INPUT | Sheet1!B35 | "NO"
+BORDER_ALL | Sheet1!B1:B41 | Thin, Continuous, #000000
+BORDER_ALL | Sheet1!C3:G40 | Thin, Continuous, #000000
+BORDER_RIGHT | Sheet1!C3:C40 | INVERSE
+INPUT | Sheet1!E2 | "FRI"
+INPUT | Sheet1!F2 | "SAT"
+INPUT | Sheet1!G2 | "SUN"
+ALIGN_HORIZONTAL | Sheet1!E2:G42 | center
+INPUT | Sheet1!E7 | "Y"
+INPUT | Sheet1!E8 | "Y"
+INPUT | Sheet1!E10 | "Y"
+INPUT | Sheet1!E13 | "Y"
+INPUT | Sheet1!E17 | "Y"
+INPUT | Sheet1!E20 | "Y"
+INPUT | Sheet1!E26 | "Y"
+INPUT | Sheet1!E27 | "Y"
+INPUT | Sheet1!E32 | "Y"
+INPUT | Sheet1!E35 | "Y"
+INPUT | Sheet1!F3 | "Y"
+INPUT | Sheet1!F4 | "Y"
+INPUT | Sheet1!F5 | "Y"
+INPUT | Sheet1!F6 | "Y"
+INPUT | Sheet1!F7 | "Y"
+INPUT | Sheet1!F9 | "Y"
+INPUT | Sheet1!F10 | "Y"
+INPUT | Sheet1!F11 | "Y"
+INPUT | Sheet1!F12 | "Y"
+INPUT | Sheet1!F13 | "Y"
+INPUT | Sheet1!F14 | "Y"
+INPUT | Sheet1!F15 | "Y"
+INPUT | Sheet1!F16 | "Y"
+INPUT | Sheet1!F17 | "Y"
+INPUT | Sheet1!F18 | "Y"
+INPUT | Sheet1!F19 | "Y"
+INPUT | Sheet1!F20 | "Y"
+INPUT | Sheet1!F21 | "Y"
+INPUT | Sheet1!F22 | "Y"
+INPUT | Sheet1!F23 | "Y"
+INPUT | Sheet1!F25 | "Y"
+INPUT | Sheet1!F26 | "Y"
+INPUT | Sheet1!F27 | "Y"
+INPUT | Sheet1!F28 | "Y"
+INPUT | Sheet1!F29 | "Y"
+INPUT | Sheet1!F30 | "Y"
+INPUT | Sheet1!F31 | "Y"
+INPUT | Sheet1!F32 | "Y"
+INPUT | Sheet1!F33 | "Y"
+INPUT | Sheet1!F34 | "Y"
+INPUT | Sheet1!F35 | "Y"
+INPUT | Sheet1!G3 | "Y"
+INPUT | Sheet1!G4 | "Y"
+INPUT | Sheet1!G5 | "Y"
+INPUT | Sheet1!G6 | "Y"
+INPUT | Sheet1!G7 | "Y"
+INPUT | Sheet1!G9 | "Y"
+INPUT | Sheet1!G10 | "Y"
+INPUT | Sheet1!G11 | "Y"
+INPUT | Sheet1!G12 | "Y"
+INPUT | Sheet1!G14 | "Y"
+INPUT | Sheet1!G15 | "Y"
+INPUT | Sheet1!G16 | "Y"
+INPUT | Sheet1!G17 | "Y"
+INPUT | Sheet1!G18 | "Y"
+INPUT | Sheet1!G19 | "Y"
+INPUT | Sheet1!G20 | "Y"
+INPUT | Sheet1!G22 | "Y"
+INPUT | Sheet1!G23 | "Y"
+INPUT | Sheet1!G24 | "Y"
+INPUT | Sheet1!G25 | "Y"
+INPUT | Sheet1!G26 | "Y"
+INPUT | Sheet1!G27 | "Y"
+INPUT | Sheet1!G28 | "Y"
+INPUT | Sheet1!G29 | "Y"
+INPUT | Sheet1!G31 | "Y"
+INPUT | Sheet1!G32 | "Y"
+INPUT | Sheet1!G34 | "Y"
+FONT_SIZE | Sheet1!B1 | 8.0
+ALIGN_HORIZONTAL | Sheet1!C40 | left
+MERGE | Sheet1!C40:D40 | true
+INPUT | Sheet1!C41 | "DAILY TOTALS"
+FILL_COLOR | Sheet1!C41 | #D9D9D9
+ALIGN_HORIZONTAL | Sheet1!C41 | center
+MERGE | Sheet1!C41:D41 | true
+INPUT | Sheet1!E41 | 10
+FILL_COLOR | Sheet1!E41:G41 | #D9D9D9
+INPUT | Sheet1!F41 | 31
+INPUT | Sheet1!G41 | 27
+FILL_COLOR | Sheet1!B3:B5 | #00FF00
+FILL_COLOR | Sheet1!B7 | #00FF00
+FILL_COLOR | Sheet1!B9:B12 | #00FF00
+FILL_COLOR | Sheet1!B14:B19 | #00FF00
+FILL_COLOR | Sheet1!B23 | #00FF00
+FILL_COLOR | Sheet1!B26:B29 | #00FF00
+FILL_COLOR | Sheet1!B31:B32 | #00FF00
+FILL_COLOR | Sheet1!B34 | #00FF00
+FILL_COLOR | Sheet1!E3:E6 | #FF0000
+FILL_COLOR | Sheet1!F8:G8 | #FF0000
+FILL_COLOR | Sheet1!E9 | #FF0000
+FILL_COLOR | Sheet1!E11:E12 | #FF0000
+FILL_COLOR | Sheet1!E14:E16 | #FF0000
+FILL_COLOR | Sheet1!E18:E19 | #FF0000
+FILL_COLOR | Sheet1!G13 | #FF0000
+FILL_COLOR | Sheet1!G21 | #FF0000
+FILL_COLOR | Sheet1!E21:E25 | #FF0000
+FILL_COLOR | Sheet1!F24 | #FF0000
+FILL_COLOR | Sheet1!E28:E31 | #FF0000
+FILL_COLOR | Sheet1!E33:E34 | #FF0000
+FILL_COLOR | Sheet1!G30 | #FF0000
+FILL_COLOR | Sheet1!G33 | #FF0000
+FILL_COLOR | Sheet1!G35 | #FF0000
