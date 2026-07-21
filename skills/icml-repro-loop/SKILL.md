@@ -5,11 +5,11 @@ description: Use when selecting, reproducing, submitting, improving, or continuo
 
 # ICML Reproduction Loop
 
-Process one paper at a time. Only code-computed outputs support claims. Persist every phase and continue until no eligible work remains or a gate requires the user.
+Process one paper at a time. Only code-computed outputs support claims. Persist state until no eligible work remains or a gate requires the user.
 
 ## Mandatory Response/Action Contract
 
-Every response must name its phase and applicable items. Omission makes the response incomplete and bars a success claim.
+Every response must name its phase and applicable items. Omission bars a success claim.
 
 - **Selection or design:** name live claim-state refresh, next `state/repro-loop.json` write (phase and fields), design presentation and explicit-approval wait before code, and exact continue/stop action.
 - **Implementing or later:** name live refresh when relevant, next state write, confirm design approval is already recorded (do not request it again), and exact continue/stop action.
@@ -18,7 +18,7 @@ Every response must name its phase and applicable items. Omission makes the resp
 ## Required Workflow
 
 1. Resume from `state/repro-loop.json` and `docs/HANDOFF.md`; refresh live catalog, claims, queues, and verdicts. Do not start another implementation with unresolved work or submission state.
-2. Read [selection-rubric.md](references/selection-rubric.md). Check live claim state and primary artifacts. Reject each ineligible candidate, record its reason, and evaluate the next; rejection never stops. Score, compare the top three eligible, select, and persist `selected` with revisions and API estimate. Stop only after selection or a persisted exhausted pool.
+2. Read [selection-rubric.md](references/selection-rubric.md). Check live claim state and primary artifacts. While idle, persist each ineligible candidate and reason with the `reject` command; do not transition phase. Continue ranking. Score, compare the top three eligible, select, and persist `selected` with revisions and API estimate. Stop only after selection or a persisted exhausted pool.
 3. **REQUIRED SUB-SKILL:** Use `superpowers:brainstorming`. Persist `design-pending`, present the paper design, and wait for explicit approval. Then persist `implementing` and use `superpowers:test-driven-development` under `submissions/<paper-slug>/`.
 4. Follow [submission-checklist.md](references/submission-checklist.md): distinguish inputs, computed outputs, and paper context; validate and persist `validated`.
 5. **REQUIRED SUB-SKILL:** Use `superpowers:verification-before-completion` before deployment or success claims. Deploy a separate Space, verify exact SHA, persist `deployed`, refresh live state before submitting, then persist `submitted` and `judging`.

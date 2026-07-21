@@ -2,6 +2,14 @@
   "current": null,
   "history": [],
   "phase": "idle",
+  "rejections": [
+    {
+      "checked_at": "2026-07-21",
+      "paper_id": "4M5Kj2UqaM",
+      "reason": "Already judged; challenge policy excludes judged papers from selection.",
+      "title": "AgentSelect"
+    }
+  ],
   "total_api_cost_usd": 0.0,
   "version": 1
 }

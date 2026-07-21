@@ -36,6 +36,7 @@ def test_new_state_starts_idle():
         "phase": "idle",
         "current": None,
         "history": [],
+        "rejections": [],
         "total_api_cost_usd": 0.0,
     }
 
@@ -61,6 +62,7 @@ def test_save_and_load_round_trip_without_temporary_file(tmp_path: Path):
                 "phase": "idle",
                 "current": None,
                 "history": [],
+                "rejections": [],
                 "total_api_cost_usd": 0.0,
             },
             "version",
@@ -71,6 +73,7 @@ def test_save_and_load_round_trip_without_temporary_file(tmp_path: Path):
                 "phase": "unknown",
                 "current": None,
                 "history": [],
+                "rejections": [],
                 "total_api_cost_usd": 0.0,
             },
             "phase",
@@ -81,6 +84,7 @@ def test_save_and_load_round_trip_without_temporary_file(tmp_path: Path):
                 "phase": "idle",
                 "current": None,
                 "history": [],
+                "rejections": [],
                 "total_api_cost_usd": -0.01,
             },
             "total_api_cost_usd",
@@ -91,6 +95,7 @@ def test_save_and_load_round_trip_without_temporary_file(tmp_path: Path):
                 "phase": "idle",
                 "current": None,
                 "history": {},
+                "rejections": [],
                 "total_api_cost_usd": 0.0,
             },
             "history",
@@ -101,6 +106,7 @@ def test_save_and_load_round_trip_without_temporary_file(tmp_path: Path):
                 "phase": "selected",
                 "current": None,
                 "history": [],
+                "rejections": [],
                 "total_api_cost_usd": 0.0,
             },
             "current",
@@ -191,6 +197,101 @@ def test_select_paper_rejects_completed_paper_id():
 
     with pytest.raises(ValueError, match="paper_id"):
         module.select_paper(state, paper)
+
+
+def test_reject_candidate_persists_immutable_record(tmp_path: Path):
+    module = state_module()
+    initial = module.new_state()
+    candidate = rejection()
+
+    rejected = module.reject_candidate(initial, candidate)
+    candidate["reason"] = "changed after rejection"
+    path = tmp_path / "repro-loop.json"
+    module.save_state(path, rejected)
+
+    assert initial == module.new_state()
+    assert rejected["phase"] == "idle"
+    assert rejected["rejections"] == [rejection()]
+    assert module.load_state(path) == rejected
+
+
+@pytest.mark.parametrize(
+    "candidate",
+    [
+        {},
+        {
+            "paper_id": "icml-2026-002",
+            "title": "Rejected Candidate",
+            "reason": "No released artifacts",
+            "checked_at": "",
+        },
+        {
+            "paper_id": "icml-2026-002",
+            "title": "Rejected Candidate",
+            "reason": "No released artifacts",
+            "checked_at": "2026-07-21T19:00:00Z",
+            "extra": "unexpected",
+        },
+    ],
+)
+@pytest.mark.parametrize("operation", ["save", "load"])
+def test_persisted_state_rejects_malformed_rejection_records(
+    candidate: dict, operation: str, tmp_path: Path
+):
+    module = state_module()
+    state = module.new_state()
+    state["rejections"] = [candidate]
+    path = tmp_path / "repro-loop.json"
+
+    if operation == "save":
+        with pytest.raises(ValueError):
+            module.save_state(path, state)
+    else:
+        path.write_text(json.dumps(state), encoding="utf-8")
+        with pytest.raises(ValueError):
+            module.load_state(path)
+
+
+@pytest.mark.parametrize("source", ["rejections", "history", "current"])
+def test_validate_state_rejects_duplicate_rejected_paper_ids(source: str):
+    module = state_module()
+    state = module.new_state()
+    if source == "rejections":
+        state["rejections"] = [rejection(), rejection()]
+    elif source == "history":
+        state["rejections"] = [rejection()]
+        state["history"] = [
+            {
+                **paper(),
+                "paper_id": rejection()["paper_id"],
+                "project_path": "submissions/reliable-reproductions",
+            }
+        ]
+    else:
+        state = module.select_paper(module.new_state(), paper())
+        state["rejections"] = [
+            {**rejection(), "paper_id": state["current"]["paper_id"]}
+        ]
+
+    with pytest.raises(ValueError, match="paper_id"):
+        module.validate_state(state)
+
+
+def test_reject_candidate_requires_idle_state():
+    module = state_module()
+    selected = module.select_paper(module.new_state(), paper())
+
+    with pytest.raises(ValueError, match="phase"):
+        module.reject_candidate(selected, rejection())
+
+
+def test_select_paper_rejects_previously_rejected_candidate():
+    module = state_module()
+    state = module.reject_candidate(module.new_state(), rejection())
+    candidate = {**paper(), "paper_id": rejection()["paper_id"]}
+
+    with pytest.raises(ValueError, match="paper_id"):
+        module.select_paper(state, candidate)
 
 
 def test_transition_requires_design_approval_to_start_implementation():
@@ -315,6 +416,17 @@ def test_cli_initializes_shows_selects_and_transitions_state(tmp_path: Path):
     run_cli("transition", str(path), "design-pending", "{}")
 
     assert json.loads(run_cli("show", str(path)).stdout)["phase"] == "design-pending"
+
+
+def test_cli_rejects_candidate_without_changing_idle_phase(tmp_path: Path):
+    path = tmp_path / "repro-loop.json"
+
+    run_cli("init", str(path))
+    rejected = json.loads(run_cli("reject", str(path), json.dumps(rejection())).stdout)
+
+    assert rejected["phase"] == "idle"
+    assert rejected["rejections"] == [rejection()]
+    assert json.loads(run_cli("show", str(path)).stdout) == rejected
 
 
 def test_cli_updates_current_without_changing_phase(tmp_path: Path):
@@ -951,6 +1063,15 @@ def paper() -> dict:
         "paper_id": "icml-2026-001",
         "title": "Reliable Reproductions",
         "slug": "reliable-reproductions",
+    }
+
+
+def rejection() -> dict:
+    return {
+        "paper_id": "icml-2026-002",
+        "title": "Rejected Candidate",
+        "reason": "No released artifacts",
+        "checked_at": "2026-07-21T19:00:00Z",
     }
 
 

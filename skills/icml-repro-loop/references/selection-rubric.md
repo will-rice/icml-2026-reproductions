@@ -98,4 +98,11 @@ Rank by final score. Before selection, compare the top three eligible candidates
 | B |  |  |  |  |  |  |  |
 | C |  |  |  |  |  |  |  |
 
-Select the highest-scoring candidate unless a documented tie-break favors stronger direct evidence, lower execution risk, or lower cost. Reject every ineligible candidate with its reason and continue ranking the remaining candidates; stop only after selecting an eligible candidate or documenting an exhausted eligible pool. Record rejected candidates and reasons so later sessions do not repeat the research.
+Select the highest-scoring candidate unless a documented tie-break favors stronger direct evidence, lower execution risk, or lower cost. While the state is idle, persist every ineligible candidate and reason before continuing with:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py reject state/repro-loop.json CANDIDATE_JSON
+```
+
+`reject` preserves the idle phase; do not use a phase transition. Stop only after
+selecting an eligible candidate or documenting an exhausted eligible pool.

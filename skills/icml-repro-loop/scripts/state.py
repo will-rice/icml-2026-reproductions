@@ -23,9 +23,17 @@ PHASES = {
     "complete",
     "blocked",
 }
-STATE_KEYS = {"version", "phase", "current", "history", "total_api_cost_usd"}
+STATE_KEYS = {
+    "version",
+    "phase",
+    "current",
+    "history",
+    "rejections",
+    "total_api_cost_usd",
+}
 IMMUTABLE_PAPER_FIELDS = {"paper_id", "title", "slug", "project_path"}
 PAPER_COST_FIELDS = {"estimated_api_cost_usd", "actual_api_cost_usd"}
+REJECTION_FIELDS = {"paper_id", "title", "reason", "checked_at"}
 CURRENT_UPDATE_FIELDS = {
     "actual_api_cost_usd",
     "last_poll_at",
@@ -59,6 +67,9 @@ def main() -> None:
     select_parser = commands.add_parser("select")
     select_parser.add_argument("path", type=Path)
     select_parser.add_argument("paper_json")
+    reject_parser = commands.add_parser("reject")
+    reject_parser.add_argument("path", type=Path)
+    reject_parser.add_argument("candidate_json")
     update_parser = commands.add_parser("update")
     update_parser.add_argument("path", type=Path)
     update_parser.add_argument("updates_json")
@@ -77,6 +88,11 @@ def main() -> None:
         state = load_state(arguments.path)
     elif arguments.command == "select":
         state = select_paper(load_state(arguments.path), json.loads(arguments.paper_json))
+        save_state(arguments.path, state)
+    elif arguments.command == "reject":
+        state = reject_candidate(
+            load_state(arguments.path), json.loads(arguments.candidate_json)
+        )
         save_state(arguments.path, state)
     elif arguments.command == "update":
         state = update_current(
@@ -100,6 +116,7 @@ def new_state() -> dict:
         "phase": "idle",
         "current": None,
         "history": [],
+        "rejections": [],
         "total_api_cost_usd": 0.0,
     }
 
@@ -151,6 +168,11 @@ def select_paper(state: dict, paper: dict) -> dict:
         for completed in state["history"]
     ):
         raise ValueError("paper_id")
+    if any(
+        rejected["paper_id"] == paper["paper_id"]
+        for rejected in state["rejections"]
+    ):
+        raise ValueError("paper_id")
 
     current = copy.deepcopy(paper)
     current.setdefault("estimated_api_cost_usd", 0.0)
@@ -168,6 +190,25 @@ def select_paper(state: dict, paper: dict) -> dict:
     selected["current"] = current
     validate_state(selected)
     return selected
+
+
+def reject_candidate(state: dict, candidate: dict) -> dict:
+    """Record an ineligible candidate without leaving the idle phase."""
+    validate_state(state)
+    if state["phase"] != "idle":
+        raise ValueError("phase")
+    paper_ids = {
+        record["paper_id"]
+        for record in state["rejections"] + state["history"]
+    }
+    if state["current"] is not None:
+        paper_ids.add(state["current"]["paper_id"])
+    validate_rejection_record(candidate, paper_ids)
+
+    rejected = copy.deepcopy(state)
+    rejected["rejections"].append(copy.deepcopy(candidate))
+    validate_state(rejected)
+    return rejected
 
 
 def transition(state: dict, phase: str, **updates: object) -> dict:
@@ -299,18 +340,23 @@ def validate_state(state: dict) -> None:
     validate_cost(state["total_api_cost_usd"], "total_api_cost_usd")
     if not isinstance(state["history"], list):
         raise ValueError("history")
+    if not isinstance(state["rejections"], list):
+        raise ValueError("rejections")
+    paper_ids = set()
+    for rejected in state["rejections"]:
+        validate_rejection_record(rejected, paper_ids)
     project_paths = set()
     space_ids = set()
     for completed in state["history"]:
         if not isinstance(completed, dict):
             raise ValueError("history")
-        validate_paper_record(completed, project_paths, space_ids)
+        validate_paper_record(completed, paper_ids, project_paths, space_ids)
     if state["phase"] == "idle" and state["current"] is not None:
         raise ValueError("current")
     if state["phase"] != "idle" and not isinstance(state["current"], dict):
         raise ValueError("current")
     if state["current"] is not None:
-        validate_paper_record(state["current"], project_paths, space_ids)
+        validate_paper_record(state["current"], paper_ids, project_paths, space_ids)
 
 
 def validate_cost(value: object, field: str) -> None:
@@ -334,10 +380,19 @@ def validate_paper_costs(paper: dict) -> None:
 
 
 def validate_paper_record(
-    paper: dict, project_paths: set[str], space_ids: set[str]
+    paper: dict,
+    paper_ids: set[str],
+    project_paths: set[str],
+    space_ids: set[str],
 ) -> None:
     """Validate persistent paper identity and cost invariants."""
     validate_paper_costs(paper)
+    for field in ("paper_id", "title"):
+        if type(paper.get(field)) is not str or not paper[field]:
+            raise ValueError(field)
+    if paper["paper_id"] in paper_ids:
+        raise ValueError("paper_id")
+    paper_ids.add(paper["paper_id"])
     if type(paper.get("slug")) is not str or not SLUG_PATTERN.fullmatch(paper["slug"]):
         raise ValueError("slug")
     if (
@@ -372,6 +427,18 @@ def validate_paper_record(
         raise ValueError("last_poll_status")
     if "external_ids" in paper:
         validate_external_ids(paper["external_ids"])
+
+
+def validate_rejection_record(candidate: object, paper_ids: set[str]) -> None:
+    """Validate a persisted candidate rejection and its unique paper ID."""
+    if type(candidate) is not dict or set(candidate) != REJECTION_FIELDS:
+        raise ValueError("rejections")
+    for field in REJECTION_FIELDS:
+        if type(candidate[field]) is not str or not candidate[field]:
+            raise ValueError(field)
+    if candidate["paper_id"] in paper_ids:
+        raise ValueError("paper_id")
+    paper_ids.add(candidate["paper_id"])
 
 
 def validate_polls(polls: object) -> None:
