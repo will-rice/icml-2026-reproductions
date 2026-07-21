@@ -12,7 +12,7 @@ Use this checklist for every paper. A checked item needs an artifact, command re
 
 ## Evidence Implementation
 
-- [ ] Obtain approval for the paper-specific design before writing implementation code.
+- [ ] Persist `design-pending`, present the paper-specific design to the user, and wait for explicit approval before writing implementation code.
 - [ ] Write each evidence test first and observe the expected failure before implementing it.
 - [ ] Keep inputs, code-computed outputs, and paper-reported context distinguishable. Never label paper-reported values as reproduced; only code-computed outputs can support reproduction.
 - [ ] Emit deterministic machine-readable claim results, such as JSON or CSV, with claim IDs, observations, tolerances, provenance, and status.
@@ -44,8 +44,8 @@ Use this checklist for every paper. A checked item needs an artifact, command re
 
 ## Verdict Handling
 
-- [ ] Before polling, define a finite deadline or maximum attempts and a bounded interval or backoff.
-- [ ] Persist every poll time, status, and external ID with same-phase state updates. On timeout or outage, keep judging pending, record the next check, and do not claim completion.
+- [ ] Before polling, define and persist a finite maximum attempt count, final deadline, and bounded interval or backoff.
+- [ ] Persist every poll time, status, and external ID with same-phase state updates. When either limit is reached without a verdict, transition to `blocked`, write the next check in `docs/HANDOFF.md`, and do not claim completion.
 - [ ] Store the received verdict and a result for every claim: `verified`, `partial`, `inconclusive`, `contradicted`, or `unavailable`.
 - [ ] Preserve judge details and distinguish challenge verdicts from the reproduction's own measurements.
 - [ ] Extract a concrete selection or evidence lesson for future candidates.
