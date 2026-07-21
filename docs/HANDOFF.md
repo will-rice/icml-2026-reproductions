@@ -12,8 +12,9 @@
 
 - Public repository: https://github.com/will-rice/icml-2026-reproductions
 - Verified baseline revision: `02c8379d22859de0966127dfb0793b7dbc2cb7b8`.
-- This handoff metadata commit will become the remote `main` head when the
-  controller pushes it; the controller will perform the push and clone check.
+- Remote `main` head: `e1a0c4a24b92805e383d6cdbe7181db7ca6c62b3`.
+- A fresh shallow clone succeeded and contained `SKILL.md`, `REMOTE_SETUP.md`,
+  and `HANDOFF.md`.
 
 ## Candidate Record
 

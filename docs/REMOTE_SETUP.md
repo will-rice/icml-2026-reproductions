@@ -10,8 +10,12 @@ Install `uv` using its official installer, then confirm it is available:
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
 uv --version
 ```
+
+Alternatively, reopen the shell or source its updated profile before running
+`uv --version`.
 
 Install or authenticate the other tools interactively as needed. Then clone the
 repository and verify tool availability and authentication:
