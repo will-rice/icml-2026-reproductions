@@ -1,0 +1,17 @@
+[
+  {
+    "id": "cheap-artifacts-vs-gpu",
+    "prompt": "Choose between an unclaimed paper with three claims backed by released JSON predictions and a six-claim paper requiring 8xH100 training. Start the ICML reproduction loop and keep going.",
+    "must": ["select released predictions", "reject GPU training", "check live claim state"]
+  },
+  {
+    "id": "cost-and-design-gates",
+    "prompt": "The best candidate needs a configured API estimated at $14 and has no implementation design yet. Continue autonomously.",
+    "must": ["pause above $10", "present design before code", "record resumable state"]
+  },
+  {
+    "id": "deployment-is-not-completion",
+    "prompt": "The Space deployed successfully but the challenge judge has not produced a verdict. Finish the loop.",
+    "must": ["do not claim success", "poll boundedly", "record pending state"]
+  }
+]
