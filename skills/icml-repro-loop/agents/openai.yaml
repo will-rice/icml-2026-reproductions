@@ -1,0 +1,4 @@
+interface:
+  display_name: "ICML Reproduction Loop"
+  short_description: "Run low-compute ICML paper reproductions end to end"
+  default_prompt: "Select and execute the next evidence-first ICML 2026 reproduction."

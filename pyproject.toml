@@ -1,0 +1,11 @@
+[project]
+name = "icml-2026-reproductions"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = ["pre-commit>=4.2.0", "pytest>=8.4.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
