@@ -8,6 +8,13 @@
 - The source skill is `skills/icml-repro-loop/`; install it according to
   `docs/REMOTE_SETUP.md` before using a new host.
 
+## Published Parent Repository
+
+- Public repository: https://github.com/will-rice/icml-2026-reproductions
+- Verified baseline revision: `02c8379d22859de0966127dfb0793b7dbc2cb7b8`.
+- This handoff metadata commit will become the remote `main` head when the
+  controller pushes it; the controller will perform the push and clone check.
+
 ## Candidate Record
 
 - AgentSelect, OpenReview `4M5Kj2UqaM` / arXiv `2603.03761`, is already judged
