@@ -12,9 +12,21 @@
 
 - Public repository: https://github.com/will-rice/icml-2026-reproductions
 - Verified baseline revision: `02c8379d22859de0966127dfb0793b7dbc2cb7b8`.
-- Remote `main` head: `e1a0c4a24b92805e383d6cdbe7181db7ca6c62b3`.
-- A fresh shallow clone succeeded and contained `SKILL.md`, `REMOTE_SETUP.md`,
-  and `HANDOFF.md`.
+- Clone-verified baseline at check time:
+  `e1a0c4a24b92805e383d6cdbe7181db7ca6c62b3`.
+- A fresh shallow clone of that baseline succeeded and contained `SKILL.md`,
+  `REMOTE_SETUP.md`, and `HANDOFF.md`. Subsequent documentation commits may
+  advance `main`.
+
+Verify the current remote and local heads with:
+
+```bash
+git ls-remote origin refs/heads/main
+git rev-parse HEAD
+```
+
+This document cannot contain its own commit SHA because its contents
+participate in that commit's hash.
 
 ## Candidate Record
 
