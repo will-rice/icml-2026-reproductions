@@ -10,6 +10,7 @@ A candidate is eligible only when all of these are true:
 - At least two distinct paper claims are independently testable. A claim is independently testable only when released artifacts or a feasible computation can verify it without treating the paper's reported value as evidence.
 - It does not require GPU training. Explicitly requested GPU projects are outside this skill.
 - The estimated cumulative paid-API cost for the paper is at most USD 10. More than USD 10 is ineligible, not merely a score penalty.
+- The selection record includes an explicit finite `estimated_api_cost_usd`, a nonempty immutable `upstream_revision`, and at least two unique nonempty immutable `target_claims`; omitted cost is not treated as zero.
 - Its execution path is not known to be unsafe. Unresolved safety ambiguity pauses selection; a workload proven safe inside an approved isolation boundary may remain eligible.
 - Its paper identity, candidate status, artifact availability, and expected execution path have been checked from live or primary sources.
 
@@ -106,3 +107,5 @@ uv run python skills/icml-repro-loop/scripts/state.py reject state/repro-loop.js
 
 `reject` preserves the idle phase; do not use a phase transition. Stop only after
 selecting an eligible candidate or documenting an exhausted eligible pool.
+The selected paper JSON must include `paper_id`, `title`, `slug`,
+`estimated_api_cost_usd`, `upstream_revision`, and `target_claims`.

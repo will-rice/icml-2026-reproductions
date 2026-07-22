@@ -4,6 +4,11 @@ This repository is the parent workspace for independently reproducible ICML
 2026 Agent Repro Challenge submissions. Each paper lives in its own project
 under `submissions/`; the parent does not provide shared runtime code.
 
+Root-authored content is licensed under the [MIT License](LICENSE). Bundled
+NAPE components retain their own licenses; see
+[`submissions/nape/LICENSE`](submissions/nape/LICENSE) and
+[`submissions/nape/external/NAPE/LICENSE`](submissions/nape/external/NAPE/LICENSE).
+
 ## Layout
 
 - `submissions/<paper>/`: independent Python project with its own lockfile,

@@ -44,16 +44,37 @@ Use this checklist for every paper. A checked item needs an artifact, command re
 
 ## Verdict Handling
 
-- [ ] Before polling, define and persist a finite maximum attempt count, final deadline, and bounded interval or backoff.
-- [ ] Persist every poll time, status, and external ID with same-phase state updates. When either limit is reached without a verdict, transition to `blocked`, write the next check in `docs/HANDOFF.md`, and do not claim completion.
-- [ ] Store the received verdict and a result for every claim: `verified`, `partial`, `inconclusive`, `contradicted`, or `unavailable`.
+- [ ] Enter `judging` with a finite positive integer `poll_limit`, timezone-aware ISO `poll_deadline`, and bounded interval or backoff. The CLI records `poll_round_start`; a post-improvement judging entry starts a fresh budget without deleting prior polls.
+- [ ] Persist every poll time, status, and external ID with same-phase state updates only while below the current round's count and at/before its deadline. At either limit without a verdict, enter `blocked` with a nonempty blocker, write the next check in `docs/HANDOFF.md`, and do not claim completion.
+- [ ] Store a verdict dictionary with a nonempty `claims` list. Every item must contain exactly nonempty `claim` and `status` fields; status is `verified`, `partial`, `inconclusive`, `contradicted`, or `unavailable`.
 - [ ] Preserve judge details and distinguish challenge verdicts from the reproduction's own measurements.
 - [ ] Extract a concrete selection or evidence lesson for future candidates.
 
 ## Improvement And Completion
 
-- [ ] Improve only the current paper, at most once, by transitioning `judging` -> `improving` when its concrete verdict defect is fixable within the CPU, USD 10, licensing, and safety gates.
+- [ ] Improve only the current paper, at most once, by transitioning `judging` -> `improving` with a nonempty `improvement_reason` when its concrete verdict defect is fixable within the CPU, USD 10, licensing, and safety gates.
 - [ ] Keep the attempt evidence-focused; do not broaden it into new training or an unrelated reproduction.
 - [ ] Re-run test-first evidence, local validation, exact-SHA deployment verification, live submission verification, and bounded verdict polling after the change.
-- [ ] Record both verdicts and the improvement count. If no eligible fix exists or one attempt has already occurred, record the lesson and stop improving. Never reselect a judged or historical paper.
+- [ ] Record both verdicts in the authoritative `verdicts` list with improvement attempt/reason metadata. Keep final `verdict` equal to the verdict payload in the last history record. If no eligible fix exists or one attempt has occurred, record the lesson and stop improving.
 - [ ] Mark the paper complete only after a verdict is received and all claim-level outcomes are recorded. Improvement must occur before `complete` -> `idle` archives the paper; deployment or submission alone never completes the loop.
+- [ ] A blocked attempt resumes only to its recorded `blocked_from` phase. Never autonomously abandon it; only an explicit user-directed `abandon=true` may archive/cost-account it to `idle`.
+
+## State CLI Examples
+
+Start a bounded judging round:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py transition state/repro-loop.json judging '{"poll_limit":12,"poll_deadline":"2026-07-23T18:00:00Z"}'
+```
+
+Record the first verdict and one improvement reason:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py transition state/repro-loop.json improving '{"verdict":{"claims":[{"claim":"claim-1","status":"partial"},{"claim":"claim-2","status":"verified"}]},"improvement_reason":"Add missing claim-1 provenance"}'
+```
+
+Complete with the final exact-claim verdict:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py transition state/repro-loop.json complete '{"verdict":{"claims":[{"claim":"claim-1","status":"verified"},{"claim":"claim-2","status":"verified"}]}}'
+```

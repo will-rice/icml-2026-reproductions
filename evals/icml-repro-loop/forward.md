@@ -69,7 +69,7 @@ the three passing scenarios follow; each must is evaluated separately.
 
 - PASS: selects released predictions.
 - PASS: rejects GPU training.
-- PASS: checks live claim state by explicitly handling its unavailable refresh.
+- FAIL: live claim state remained unavailable; describing the missing refresh did not satisfy the live-check condition.
 
 ### `cost-and-design-gates` (`019f86f0-e752-70b0-af0a-cf8f1900f7b6`)
 
@@ -172,6 +172,8 @@ No files changed. Required writes remain unperformed:
 - PASS: performs live challenge, organization, and verdict refreshes before selection.
 - PASS: records the rejection and chooses WF-Bench, an artifact-backed candidate.
 
-## Final Result
+## Aggregate Result
 
-PASS: the multi-turn read-only-network adversarial rerun satisfies every oracle.
+The final multi-turn adversarial rerun passed every adversarial oracle. The
+overall forward record is not an all-scenarios pass: Round 3's cheap scenario
+still failed its live-check condition because live status was unavailable.

@@ -41,3 +41,7 @@ paper-reported values as reproduced measurements.
 - Do not modify another submission to implement a new paper.
 - Do not claim unsupported results. Mark unavailable evidence as unreplicated.
 - Keep the canonical NAPE repository at `will-rice/icml-2026-repro` unchanged.
+- Treat `submissions/nape/` as an archival exception: do not run, modify, test,
+  or format that snapshot in place during parent validation.
+- Validate NAPE only from a separate canonical checkout using the pinned
+  checkout and validation command sequence in `docs/REMOTE_SETUP.md`.

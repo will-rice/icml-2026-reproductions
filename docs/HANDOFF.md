@@ -5,6 +5,10 @@
 - `state/repro-loop.json` is authoritative and currently records `idle` with
   no current paper, no history, one recorded rejection, and USD 0.00 total API
   cost.
+- The state file uses schema version 3. Selection requires explicit
+  `estimated_api_cost_usd`, immutable `upstream_revision`, and at least two
+  unique `target_claims`. Each judging entry starts a new poll round; verdict
+  history is authoritative and the final `verdict` mirrors its last record.
 - The source skill is `skills/icml-repro-loop/`; install it according to
   `docs/REMOTE_SETUP.md` before using a new host.
 
@@ -56,6 +60,21 @@ uv run python skills/icml-repro-loop/scripts/state.py reject state/repro-loop.js
 remains eligible and is selected, use
 `superpowers:brainstorming`, persist `design-pending`, present a paper-specific
 design, and wait for explicit user approval before writing evidence code.
+
+Selection JSON now includes the target claim names:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py select state/repro-loop.json '{"paper_id":"PAPER_ID","title":"TITLE","slug":"paper-slug","estimated_api_cost_usd":0.0,"upstream_revision":"REVISION","target_claims":["claim-1","claim-2"]}'
+```
+
+Use the judging, improvement, and completion JSON examples in
+`skills/icml-repro-loop/references/submission-checklist.md`; improvement and
+completion verdicts must cover exactly the selected target claims.
+
+Blocked transitions require a nonempty `blocker` and record `blocked_from`.
+Resume by transitioning back to that phase. Do not archive a blocked attempt
+unless the user explicitly directs `{"abandon": true}`; abandonment records the
+attempt in history and accounts its actual API cost.
 
 ## Validation Commands
 
