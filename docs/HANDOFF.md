@@ -39,33 +39,39 @@ participate in that commit's hash.
   or resumed. Its historical artifacts were the
   [official repository](https://github.com/Ancientshi/AgentSelect) and the
   [full dataset](https://drive.google.com/drive/folders/1wAzaUxOzPrwuF4s_iRT4NlRqV8gbLKe6?usp=sharing).
-- WF-Bench was the latest read-only candidate. It is not yet selected and has
-  not received a paper-specific implementation design approval.
+- A live challenge refresh on 2026-07-22 found 2,610 reproduction Spaces.
+  AdamW-style Shampoo (`gvWsViQBYB`) had two active reproductions and LoRA
+  Gradient Descent (`9GRlBVAXq8`) had three; both were persisted as rejected.
+- WF-Bench (`8Fhq7QpYfI`) was unclaimed but was persisted as rejected because
+  its substantive fidelity/scaling reproduction requires GPU training, which
+  is outside the autonomous reproduction-loop boundary.
+- Submission 2493, Dimension-Free Convergence of Diffusion Models for
+  Approximate Gaussian Mixtures (`HMu24dTKkJ`), was selected at immutable
+  revision `arxiv:2504.05300v1` with USD 0.00 estimated API cost.
 
 ## Next Action
 
-Use `icml-repro-loop` to refresh the live challenge status and re-evaluate
-WF-Bench. Do not select AgentSelect.
+`state/repro-loop.json` is `implementing`. The user approved the paper-specific
+design on 2026-07-22 and the state records `design_approved: true`. Execute
+`docs/superpowers/plans/2026-07-22-dimension-free-diffusion-gmm.md` with
+test-driven development under `submissions/dimension-free-diffusion-gmm/`.
 
-Before selecting WF-Bench, perform a fresh live status, primary-artifact,
-license, provenance, and CPU-feasibility check, compare the top eligible
-candidates as required by the selection rubric, and persist each ineligible
-candidate while idle with:
+The selected target claims are:
 
-```bash
-uv run python skills/icml-repro-loop/scripts/state.py reject state/repro-loop.json CANDIDATE_JSON
-```
+1. dimension-free DDPM discretization,
+2. robustness to score-estimation error, and
+3. a dimension-free score-Jacobian trace bound.
 
-`reject` records the candidate decision without a phase transition. If WF-Bench
-remains eligible and is selected, use
-`superpowers:brainstorming`, persist `design-pending`, present a paper-specific
-design, and wait for explicit user approval before writing evidence code.
+Selection comparison (all three were live and unclaimed):
 
-Selection JSON now includes the target claim names:
+| Candidate | Base | Penalties | Final | CPU estimate | Main risk |
+| --- | ---: | ---: | ---: | --- | --- |
+| Dimension-free diffusion/GMM | 18 | -2 | 16 | under 2 hours | no released code; independent numerical audit only |
+| Correlation-clustering cost | 17 | -2 | 15 | 2-8 hours | full empirical datasets are large |
+| Capacitated fair-range clustering | 15 | -2 | 13 | under 2 hours | hardness claims permit only finite-instance audits |
 
-```bash
-uv run python skills/icml-repro-loop/scripts/state.py select state/repro-loop.json '{"paper_id":"PAPER_ID","title":"TITLE","slug":"paper-slug","estimated_api_cost_usd":0.0,"upstream_revision":"REVISION","target_claims":["claim-1","claim-2"]}'
-```
+The design must clearly label numerical experiments as audits rather than proof
+replacements and must include controls that relax theorem assumptions.
 
 Use the judging, improvement, and completion JSON examples in
 `skills/icml-repro-loop/references/submission-checklist.md`; improvement and

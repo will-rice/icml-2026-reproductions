@@ -1,13 +1,47 @@
 {
-  "current": null,
+  "current": {
+    "design_approved": true,
+    "estimated_api_cost_usd": 0.0,
+    "improvement_attempts": 0,
+    "paper_id": "HMu24dTKkJ",
+    "polls": [],
+    "project_path": "submissions/dimension-free-diffusion-gmm",
+    "slug": "dimension-free-diffusion-gmm",
+    "target_claims": [
+      "dimension-free-ddpm-discretization",
+      "robustness-to-score-error",
+      "dimension-free-score-jacobian-trace"
+    ],
+    "title": "Dimension-Free Convergence of Diffusion Models for Approximate Gaussian Mixtures",
+    "upstream_revision": "arxiv:2504.05300v1",
+    "verdicts": []
+  },
   "history": [],
-  "phase": "idle",
+  "phase": "implementing",
   "rejections": [
     {
       "checked_at": "2026-07-21",
       "paper_id": "4M5Kj2UqaM",
       "reason": "Already judged; challenge policy excludes judged papers from selection.",
       "title": "AgentSelect"
+    },
+    {
+      "checked_at": "2026-07-22",
+      "paper_id": "gvWsViQBYB",
+      "reason": "Live challenge refresh found two existing reproduction Spaces (NaveenVenu/gvWsViQBYB and arvkevi/adamw-shampoo-convergence-repro); duplicate selection is ineligible under the workspace rubric.",
+      "title": "Convergence Rate Analysis of the AdamW-Style Shampoo: Unifying One-sided and Two-Sided Preconditioning"
+    },
+    {
+      "checked_at": "2026-07-22",
+      "paper_id": "9GRlBVAXq8",
+      "reason": "Live challenge refresh found three existing reproduction Spaces; duplicate selection is ineligible under the workspace rubric.",
+      "title": "On the Convergence Rate of LoRA Gradient Descent"
+    },
+    {
+      "checked_at": "2026-07-22",
+      "paper_id": "8Fhq7QpYfI",
+      "reason": "Substantive fidelity and scaling-law reproduction requires neural-wavefunction GPU training; autonomous GPU work is ineligible under the reproduction-loop constraint, and paper tables alone are not reproduced evidence.",
+      "title": "WF-Bench: A Benchmark for Neural-Network WaveFunction Expressivity and Scaling Laws"
     }
   ],
   "total_api_cost_usd": 0.0,
