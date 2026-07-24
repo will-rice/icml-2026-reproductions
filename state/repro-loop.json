@@ -1,5 +1,21 @@
 {
-  "current": null,
+  "current": {
+    "design_approved": true,
+    "estimated_api_cost_usd": 0.0,
+    "improvement_attempts": 0,
+    "paper_id": "vGeNaFHdET",
+    "polls": [],
+    "project_path": "submissions/eeg-fm-bench",
+    "slug": "eeg-fm-bench",
+    "target_claims": [
+      "fourteen-dataset-ten-paradigm-curation",
+      "standardized-preprocessing-reproducibility",
+      "three-strategy-evaluation-harness"
+    ],
+    "title": "EEG-FM-Bench: A Comprehensive Benchmark for the Systematic Evaluation and Diagnostic Analyses of EEG Foundation Models",
+    "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc",
+    "verdicts": []
+  },
   "history": [
     {
       "blocked_from": "implementing",
@@ -21,7 +37,7 @@
       "verdicts": []
     }
   ],
-  "phase": "idle",
+  "phase": "implementing",
   "rejections": [
     {
       "checked_at": "2026-07-21",
@@ -46,6 +62,36 @@
       "paper_id": "8Fhq7QpYfI",
       "reason": "Substantive fidelity and scaling-law reproduction requires neural-wavefunction GPU training; autonomous GPU work is ineligible under the reproduction-loop constraint, and paper tables alone are not reproduced evidence.",
       "title": "WF-Bench: A Benchmark for Neural-Network WaveFunction Expressivity and Scaling Laws"
+    },
+    {
+      "checked_at": "2026-07-24",
+      "paper_id": "mWxEAgz3xu",
+      "reason": "Survey-statistics claims require raw practitioner data; the paper releases only anonymized aggregate statistics, so claims are not independently testable (self-report only).",
+      "title": "Measuring Agents in Production"
+    },
+    {
+      "checked_at": "2026-07-24",
+      "paper_id": "MqzZ9X6m7f",
+      "reason": "Position paper; claims are argumentative proposals with no independently testable computation or released artifact.",
+      "title": "Position: Sustainable Open-Source AI Requires Tracking the Cumulative Footprint"
+    },
+    {
+      "checked_at": "2026-07-24",
+      "paper_id": "ycj3XWCh6E",
+      "reason": "Position paper; claims are argumentative, no independently testable evidence artifact.",
+      "title": "Position: LLM Serving Needs Mathematical Optimization and Algorithmic Foundations"
+    },
+    {
+      "checked_at": "2026-07-24",
+      "paper_id": "GnqHK8Ww98",
+      "reason": "All substantive claims require meta-RL teacher and student LLM training on GPU; outside the CPU-only reproduction boundary.",
+      "title": "Teaching Models to Teach Themselves: Reasoning at the Edge of Learnability"
+    },
+    {
+      "checked_at": "2026-07-24",
+      "paper_id": "71030",
+      "reason": "Claims require GPT-2 Large/XL and Qwen3-8B (continued) pretraining; GPU training is ineligible for the autonomous loop.",
+      "title": "OPUS: Towards Efficient and Principled Data Selection in Large Language Model Pretraining"
     }
   ],
   "total_api_cost_usd": 0.0,

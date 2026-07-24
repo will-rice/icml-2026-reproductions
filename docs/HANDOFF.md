@@ -2,10 +2,15 @@
 
 ## Loop State
 
-- `state/repro-loop.json` is authoritative and currently records `idle` with
-  no current paper, one archived abandoned attempt (`HMu24dTKkJ`, blocked from
-  `implementing` on 2026-07-24 because the paper was already officially
-  judged; see history), no verdicts, and USD 0.00 total API cost.
+- `state/repro-loop.json` is authoritative and currently records
+  `implementing` for `vGeNaFHdET` (EEG-FM-Bench, slug `eeg-fm-bench`) with
+  `design_approved: true` under the user's 2026-07-24 standing directive that
+  the loop run completely autonomously (design gates are approved on
+  presentation). History holds one archived abandoned attempt (`HMu24dTKkJ` —
+  see below); total API cost USD 0.00.
+- Autonomous mode: do not pause for design or deployment approval. Still
+  never autonomously abandon a blocked attempt; persist blocker + HANDOFF and
+  return control instead.
 - The state file uses schema version 3. Selection requires explicit
   `estimated_api_cost_usd`, immutable `upstream_revision`, and at least two
   unique `target_claims`. Each judging entry starts a new poll round; verdict
@@ -73,32 +78,39 @@ participate in that commit's hash.
 
 ## Next Action
 
-`state/repro-loop.json` is `idle`. The user archived the blocked `HMu24dTKkJ`
-attempt on 2026-07-24 with `{"abandon": true}`; it is now in history and must
-never be reselected. Before any new selection, refresh the live
-`ICML-2026-agent-repro/verdicts` dataset and exclude every paper with an
-existing verdict or tagged reproduction Space, including `HMu24dTKkJ` and
-`NvPgRwURDC` (both already scored; see the 2026-07-24 refresh above).
-The unmerged `impl/*` branches and `.worktrees/impl-*` worktrees hold the
-completed Tasks 1-3 implementation; they must never be deployed or submitted,
-and can be kept or discarded on user instruction.
+`state/repro-loop.json` is `implementing`. Execute
+`docs/superpowers/plans/2026-07-24-eeg-fm-bench.md` autonomously with
+test-driven development under `submissions/eeg-fm-bench/`: Tasks 1-2 in
+parallel via codex/agy CLI agents, then Task 3 (evidence CLI), Task 4
+(logbook/poster), and Task 5 (live refresh, dedicated Space, exact-SHA
+verification, submission, bounded judging).
 
-The selected target claims are:
-
-1. dimension-free DDPM discretization,
-2. robustness to score-estimation error, and
-3. a dimension-free score-Jacobian trace bound.
-
-Selection comparison (all three were live and unclaimed):
+Selection comparison on 2026-07-24 (all three live and unclaimed, no verdict,
+no tagged Space):
 
 | Candidate | Base | Penalties | Final | CPU estimate | Main risk |
 | --- | ---: | ---: | ---: | --- | --- |
-| Dimension-free diffusion/GMM | 18 | -2 | 16 | under 2 hours | no released code; independent numerical audit only |
-| Correlation-clustering cost | 17 | -2 | 15 | 2-8 hours | full empirical datasets are large |
-| Capacitated fair-range clustering | 15 | -2 | 13 | under 2 hours | hardness claims permit only finite-instance audits |
+| EEG-FM-Bench (`vGeNaFHdET`) | 18 | 0 | 18 | under 2 hours | registration-gated raw datasets; GPU performance claims out of scope |
+| Graph dataset pruning (`a3GdvuPItd`) | 14 | -2 | 12 | under 30 min | no released code; synthetic theorem audits risk `toy` verdicts |
+| NorMuon (`m1IRWFAMsa`) | 13 | -2 | 11 | under 2 hours | no released code; headline claims are 1.1B/5.4B GPU training |
 
-The design must clearly label numerical experiments as audits rather than proof
-replacements and must include controls that relax theorem assumptions.
+Rejected and persisted this round: `mWxEAgz3xu` (aggregate-only data),
+`MqzZ9X6m7f` and `ycj3XWCh6E` (position papers, no testable claims),
+`GnqHK8Ww98` and `71030` (GPU training required).
+
+The old `impl/*` branches/worktrees for the abandoned diffusion attempt
+remain unmerged and must never be deployed or submitted.
+
+The selected target claims are:
+
+1. `fourteen-dataset-ten-paradigm-curation`,
+2. `standardized-preprocessing-reproducibility`, and
+3. `three-strategy-evaluation-harness`.
+
+Paper-reported Figure 1 lists are context only. Computed evidence comes from
+the pinned repository census, deterministic preprocessing checks, and CPU
+smoke runs of the three harness strategies. GPU-only leaderboard and
+representation-analysis claims remain explicitly unavailable.
 
 Use the judging, improvement, and completion JSON examples in
 `skills/icml-repro-loop/references/submission-checklist.md`; improvement and
