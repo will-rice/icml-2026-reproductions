@@ -1,10 +1,11 @@
-# Reproduction Design: Numina-Lean-Agent (Revised)
+# Reproduction Design: Numina-Lean-Agent (Design Pending)
 
-**Paper**: Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics  
-**OpenReview ID**: `0bTEd4LpQr`  
-**arXiv**: `2601.14027`  
-**Design date**: 2026-07-24 (revised after independent review)  
-**Phase gate**: `design-pending` — approved by different-agent review (see §19)
+**Paper**: Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics
+**OpenReview ID**: `0bTEd4LpQr`
+**arXiv**: `2601.14027`
+**Design date**: 2026-07-24 (revised after two rejected reviews)
+**Phase gate**: `design-pending` — no user approval is recorded; this document
+does not authorize `implementing` (see §19)
 
 ---
 
@@ -28,20 +29,26 @@ key lookup.
 
 ---
 
-## 2. Top-Three Candidate Comparison
+## 2. Candidate-Pool Record and Non-Selection
 
-| Candidate | orid | Base | Penalties | Final | Testable claims | P(full/falsified) | P(toy) | Expected points | CPU estimate | API estimate | Main risk |
+| Candidate | orid | Base | Penalties | Final | Testable claims | P(full/falsified) | P(toy) | Expected points | CPU estimate | API estimate | Disposition |
 |---|---|---:|---:|---:|---:|---|---|---:|---|---:|---|
-| **Numina-Lean-Agent** | `0bTEd4LpQr` | 20 | -2 | **18** | 2 | 0.75 | 0.15 | **3.30** | 1–2 hr (Lean build × 2 toolchains) | $0.00 | BrascampLieb has no LICENSE file |
-| TerminalTraj | `PeFSCRulgy` | 13 | 0 | **13** | 2 | 0.20 | 0.30 | **1.10** | >24 hr GPU training | $0.00 CPU | requires GPU fine-tuning (Qwen backbone) |
+| Numina-Lean-Agent (this unapproved design) | `0bTEd4LpQr` | 16 | -2 | **14** | 2 | 0.75 | 0.15 | **3.15** | 50–80 min local CPU | $0.00 | design-pending; user gate still required |
+| TerminalTraj | `PeFSCRulgy` | — | — | — | — | — | — | — | >24 hr GPU training | $0.00 CPU | persisted `rejected`; no longer eligible |
 | OXE-AugE | `LcswwEzzX7` | — | — | — | — | — | — | **excl.** | — | — | 3 active reproduction Spaces; ineligible |
 
-**Excluded with reasons**:
-- **dXPP**: not present in the 200-paper challenge catalog; cannot be selected.
+**Candidate-pool closure**:
+- **dXPP**: persisted `rejected` (not present in the challenge catalog), so it is
+  not an eligible alternative.
 - **OXE-AugE** (`LcswwEzzX7`): 3 existing reproduction Spaces (algorise, abhishekkataria16, Edd16); ineligible under the duplicate-selection rubric rule.
-- **TerminalTraj** (`PeFSCRulgy`): 0 spaces, 5 unverified claims. However, its substantive claims require GPU training of a Qwen2.5-Coder backbone (32B parameters), which is outside the autonomous reproduction-loop boundary and requires >24 hr GPU time. CPU-only claims (Docker trajectory statistics) yield at most toy evidence. Expected points ≈ 1.10 vs Numina's ≈ 3.30.
+- **TerminalTraj** (`PeFSCRulgy`): persisted `rejected`; its substantive claims
+  require Qwen2.5-Coder GPU fine-tuning (>24 hours), while CPU-only trajectory
+  statistics would be toy evidence.
 
-**Selection**: Numina-Lean-Agent is selected as the highest expected-point eligible candidate. The -2 penalty reflects the BrascampLieb repo's absent license (see §10).
+This is an honest exhausted record of the alternative pool, not a selection action.
+Numina remains only a `design-pending` candidate until the user explicitly approves
+the design and the authoritative state is separately updated. Neither a prior review
+nor this author may substitute for that approval.
 
 ---
 
@@ -51,9 +58,16 @@ key lookup.
 |---|---|---|---|
 | `project-numina/numina-lean-agent` | `1c9af8a52e715f22fede766425ba3d3b95526132` | 2026-07-08 | Agent source, problem statements |
 | `project-numina/Numina-Putnam2025` | `60d33c8ba19af905bd731e938ebde1c5b8c76519` | 2026-01-20 | Completed Putnam 2025 proofs |
-| `project-numina/BrascampLieb` | `413f2bfd31100187eb6c2d632c9cbf12e3115494` | 2026-04-12 | Brascamp-Lieb formalization |
+| `project-numina/BrascampLieb` | `413f2bfd31100187eb6c2d632c9cbf12e3115494` | 2026-04-10T15:20:33Z | Brascamp-Lieb formalization |
 
-All confirmed live via GitHub API.
+All confirmed live via GitHub API. The immutable selection token, if user approval
+is later given, binds every released input rather than only the agent repository:
+
+```
+github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+
+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+
+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494
+```
 
 ---
 
@@ -125,9 +139,16 @@ All 21 `.lean` files: **0 tactic-level sorry** across the entire repository.
 
 Neither repository currently includes `#print axioms` commands in the committed
 source. The evidence pipeline will add a post-build Lean script that invokes
-`#print axioms` for each main theorem and captures the output. Expected axioms for
-sorry-free proofs: `propext`, `Classical.choice`, `Quotient.sound`, `funext` only.
-No `sorryAx` is expected for any file.
+`#print axioms` for each main theorem and parses only the resulting axiom names.
+The review observed Putnam output containing the Lean constant `Quot.sound` (not
+`Quotient.sound`). It did **not** establish a universal `funext` requirement, so the
+tests must not invent one. The sole cross-theorem assertion is that the normalized
+result contains no `sorryAx`; every observed axiom list is retained as an output for
+review rather than forced through an unproved allowlist.
+
+The script is an ordinary Lean input file run after the build, for example
+`lake env lean axiom_check.lean`. It must not use `--run`: `#print axioms` is an
+elaboration-time command, not a Lean program entry point.
 
 ---
 
@@ -189,37 +210,26 @@ from "we independently ran the agent and it produced these proofs."
 | Independently testable claim count | **2** | Two distinct claims with separate `lake build` + `#print axioms` observables |
 | CPU feasibility | **3** | Two separate Lean builds with Mathlib cache: ~1–2 CPU hours total |
 | Provenance | **5** | Exact SHAs, URLs, manifest hashes, acquisition commands recordable |
-| Licensing | **4** | Putnam repo: full MIT LICENSE file. Agent repo: README-only MIT, no LICENSE file (GitHub API returns `null`). BrascampLieb: **no LICENSE file, no license metadata, no README license mention** |
+| Licensing | **2** | Putnam has MIT terms, but both the agent repository (README-only MIT) and BrascampLieb (no terms) lack a LICENSE file. The latter two may be inspected locally but are not redistributable inputs. |
 
-**Base score**: 4 + 2 + 3 + 5 + 4 = **18**  
+**Base score**: 4 + 2 + 3 + 5 + 2 = **16**
 **Penalty**: -2 (BrascampLieb license is unclear — required artifact with no license)
 
-**Final rubric score**: **16**
+**Final rubric score**: **14**
 
 > Note: The -2 licensing penalty is applied because BrascampLieb has no LICENSE file,
 > no GitHub-detected license, and no README license section. Redistribution/deployment
-> of its contents in a Space requires at minimum implicit permission from the public
-> GitHub hosting, which is not an explicit license grant. The evidence pipeline can
-> reference the repo by URL and SHA without redistributing its source, but the Space
-> deployment may need to summarize its contents. The agent repo (`numina-lean-agent`)
-> similarly lacks a LICENSE file but has explicit "MIT License" text in its README.md;
-> GitHub returns `null` for its license metadata.
+> of its contents in a Space is not authorized by public GitHub hosting. The evidence
+> pipeline may link to its URL/SHA but must not reproduce its contents. The agent repo
+> (`numina-lean-agent`) similarly has no LICENSE file: its README text is provenance,
+> not a substitute for a file-level redistribution grant.
 
 ### Expected official points (conservative)
 
-- **Target Claim 1** (Putnam 12/12): P(full) = 0.75, P(toy) = 0.15
-  - Full requires the judge to accept released-proof verification (rather than
-    demanding agent re-execution). Toy if judge considers it "only checking proofs,
-    not running the agent." Conservative because some judges may require regeneration.
-  - Expected: 2×0.75 + 1×0.15 = **1.65**
-
-- **Target Claim 2** (Brascamp-Lieb): P(full) = 0.65, P(toy) = 0.20
-  - Lower P(full) because the official claim says "successful formalization" and
-    we verify the released artifact, not the interaction process. Also, BrascampLieb's
-    unclear license creates provenance risk.
-  - Expected: 2×0.65 + 1×0.20 = **1.50**
-
-- **Total expected official points ≈ 3.15** (conservative)
+The single conservative estimate is **≈3.15 expected official points**. It discounts
+both target claims for the risk that released-proof checking is judged as toy rather
+than agent re-execution and for BrascampLieb's licensing limitation. It is not an
+independent selection score or a promise of judge credit.
 
 ---
 
@@ -245,7 +255,15 @@ from "we independently ran the agent and it produced these proofs."
 
 ### Combined: ~50–80 minutes total CPU time
 
-### HF CPU Job cost (NOT free)
+### Local CPU default; HF CPU Job only with approval
+
+The default execution path is a local CPU machine with at least 16 GB RAM, `elan`,
+and network access for the pinned caches. Its paid cost is **$0.00**. No Job is
+needed for the design or for local evidence generation.
+
+An HF CPU Job is an optional paid alternative, not an autonomous fallback. Starting
+one requires a separate explicit user approval that names the hardware and maximum
+spend; without that approval, the loop remains on the local-CPU path or pauses.
 
 HF Jobs are billed per minute. Costs at listed hourly rates:
 
@@ -257,11 +275,9 @@ HF Jobs are billed per minute. Costs at listed hourly rates:
 B6's ~6.6 GB RAM requirement fits within `cpu-basic` (16 GB). However, 2 vCPU may
 be slow for Lean. `cpu-upgrade` (8 vCPU, 32 GB) provides headroom.
 
-**Estimated HF Job cost**: $0.04 (cpu-upgrade, 80 min) per run, $0.12 for 3 runs
-(build + evidence + validation). **Well under $10 cap.**
-
-**Alternative: local CPU path**: Both builds can run on any workstation with ≥16 GB
-RAM, `elan`/Lean installed, and network access for Mathlib cache. Zero paid cost.
+**Optional approved HF Job cost**: $0.04 (cpu-upgrade, 80 min) per run, up to $0.12
+for three separately approved runs (build, evidence, validation). The $10 ceiling
+does not grant approval to spend below it.
 
 ### Paid API cost
 
@@ -287,21 +303,22 @@ type-checking of released source. **Total paid-API cost: $0.00.**
 
 ## 10. License and Provenance (Corrected)
 
-| Artifact | LICENSE file | GitHub detection | README mention | Score |
+| Artifact | LICENSE file | GitHub detection | README mention | Treatment |
 |---|---|---|---|---|
-| `Numina-Putnam2025@60d33c8` | **Yes** (MIT, 1063 bytes) | `mit` | — | 5 |
-| `numina-lean-agent@1c9af8a` | **No** (no LICENSE file at root) | `null` | "MIT License" in README.md footer | 3 |
-| `BrascampLieb@413f2bf` | **No** (no LICENSE file) | `null` | **No mention** | **1** |
-| Mathlib4 | Yes (Apache 2.0) | `apache-2.0` | — | 5 |
-| Lean 4 | Yes (Apache 2.0) | `apache-2.0` | — | 5 |
+| `Numina-Putnam2025@60d33c8` | **Yes** (MIT, 1063 bytes) | `mit` | — | licensed input |
+| `numina-lean-agent@1c9af8a` | **No** (no LICENSE file at root) | `null` | "MIT License" in README.md footer | inspect/link only |
+| `BrascampLieb@413f2bf` | **No** (no LICENSE file) | `null` | **No mention** | inspect/link only; no redistribution |
+| Mathlib4 | Yes (Apache 2.0) | `apache-2.0` | — | licensed dependency |
+| Lean 4 | Yes (Apache 2.0) | `apache-2.0` | — | licensed dependency |
 
 **Licensing concerns**:
 1. **BrascampLieb** has no license at all. The repo is public on GitHub, but public
    availability is not a license grant. Our evidence pipeline references it by URL
    and SHA without redistributing source. The Space logbook can report build results
    and axiom lists without embedding the source code, mitigating redistribution risk.
-2. **numina-lean-agent** has no LICENSE file, but README.md explicitly states
-   "MIT License." This is legally ambiguous but likely sufficient for reference.
+2. **numina-lean-agent** has no LICENSE file. Its README says "MIT License," but
+   that ambiguity does not authorize copying its source into the evidence bundle or
+   Space.
 
 **Penalty applied**: -2 for BrascampLieb's unclear license (required artifact).
 
@@ -340,14 +357,12 @@ def test_all_12_proofs_no_sorry_ax():
         assert f in data, f"{f} missing from axiom audit"
         assert "sorryAx" not in data[f]["axioms"], f"{f} has sorryAx"
 
-def test_all_12_proofs_standard_axioms():
-    STANDARD = {"propext", "Classical.choice", "Quot.sound", "funext"}
+def test_axiom_audit_is_normalized_and_tracks_quot_sound():
     data = json.loads(pathlib.Path(
         "submissions/numina-lean-agent/evidence/putnam_axioms.json").read_text())
-    for f in FILES:
-        axioms = set(data[f]["axioms"])
-        unexpected = axioms - STANDARD
-        assert not unexpected, f"{f} has unexpected axioms: {unexpected}"
+    assert "observed_at" not in data
+    assert any("Quot.sound" in item["axioms"] for item in data.values())
+    # Do not require funext or an invented universal axiom allowlist.
 ```
 
 ### Task 2: Brascamp-Lieb build and axiom audit
@@ -368,13 +383,17 @@ def test_bl_main_theorem_no_sorry_ax():
         "submissions/numina-lean-agent/evidence/brascamp_lieb_axioms.json").read_text())
     assert "BrascampLieb.upperBound" in data
     assert "sorryAx" not in data["BrascampLieb.upperBound"]["axioms"]
+
+def test_bl_evidence_is_locally_authored_json_only():
+    paths = pathlib.Path("submissions/numina-lean-agent/evidence").glob("**/*")
+    assert all(p.suffix == ".json" for p in paths if p.is_file())
 ```
 
 ### Task 3: Evidence CLI, determinism, and logbook
 
 ```python
 def test_evidence_cli_deterministic():
-    # Two runs produce byte-identical JSON
+    # Two runs write byte-identical, sorted-key JSON and no timestamps.
     ...
 
 def test_claims_json_matches_official():
@@ -406,21 +425,24 @@ submissions/numina-lean-agent/
 │   ├── cli.py
 │   ├── putnam_audit.py
 │   └── brascamp_lieb_audit.py
-└── evidence/                        # generated, .gitignore'd
-    ├── putnam_build.json            # lake build result for Putnam
-    ├── putnam_axioms.json           # #print axioms per theorem
-    ├── brascamp_lieb_build.json     # lake build result for BL
-    ├── brascamp_lieb_axioms.json    # #print axioms for upperBound
+└── evidence/                        # tracked, normalized, locally authored JSON
+    ├── putnam_build.json            # exit status + pinned provenance only
+    ├── putnam_axioms.json           # sorted `#print axioms` names per theorem
+    ├── brascamp_lieb_build.json     # exit status + pinned provenance only
+    ├── brascamp_lieb_axioms.json    # sorted axiom names for `upperBound`
     └── claims.json                  # final claim results
 ```
 
-Evidence provenance fields:
-- `putnam_revision`: `github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519`
-- `brascamp_lieb_revision`: `github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494`
-- `agent_revision`: `github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132`
-- `lean_toolchain_putnam`: `leanprover/lean4:v4.26.0`
-- `lean_toolchain_brascamp_lieb`: `leanprover/lean4:v4.28.0`
-- `observed_at`: ISO-8601 UTC
+Every tracked evidence file is locally authored normalized JSON, rendered with
+sorted keys and stable arrays. It contains the composite `upstream_revision`, the
+relevant toolchain, command identity, exit status, and parsed axiom names. It omits
+wall-clock timestamps, elapsed time, host paths, raw stdout/stderr, and environment
+dumps so a clean rerun has byte-identical output. No ignored output is relied on.
+
+Because BrascampLieb has no license, neither the repository source, `.olean`/
+binaries, tarballs/cache contents, nor raw build or Lean logs may be committed or
+put in the Space. The Space contains only these locally-authored JSON summaries and
+links to the upstream URL/SHA; it does not copy any unlicensed upstream content.
 
 ---
 
@@ -433,9 +455,9 @@ cd putnam2025
 git checkout --detach 60d33c8ba19af905bd731e938ebde1c5b8c76519
 git rev-parse HEAD  # → 60d33c8ba19af905bd731e938ebde1c5b8c76519
 lake exe cache get  # ~62.5s, ~9.4 GB deps
-lake build 2>&1 | tee build_putnam.log  # type-check all 12 proofs
+lake build  # type-check all 12 proofs
 # Post-build axiom extraction:
-lake env lean --run axiom_check.lean 2>&1 | tee axioms_putnam.log
+lake env lean axiom_check.lean
 
 # === Brascamp-Lieb formalization ===
 cd ..
@@ -444,12 +466,25 @@ cd bl
 git checkout --detach 413f2bfd31100187eb6c2d632c9cbf12e3115494
 git rev-parse HEAD  # → 413f2bfd31100187eb6c2d632c9cbf12e3115494
 lake exe cache get  # ~60-90s, ~9-10 GB deps
-lake build 2>&1 | tee build_bl.log  # type-check formalization
-lake env lean --run axiom_check_bl.lean 2>&1 | tee axioms_bl.log
+lake build  # type-check formalization
+lake env lean axiom_check_bl.lean
 ```
 
 The `axiom_check.lean` and `axiom_check_bl.lean` scripts invoke `#print axioms` for
-each main theorem and are part of the evidence pipeline implementation.
+each main theorem and are part of the evidence pipeline implementation. Their stdout
+is parsed in the local work directory into the tracked normalized JSON; raw logs are
+not retained or distributed.
+
+### Reviewer-observed Brascamp-Lieb facts
+
+The reviewer checked the pinned checkout rather than inferring behavior from the
+paper: it declares `leanprover/lean4:v4.28.0`; `lakefile.toml` sets
+`defaultTargets = ["BrascampLieb"]` and pins Mathlib `v4.28.0`; and the main
+declaration is `upperBound` in `BrascampLieb/Code/MainTheorems.lean`. The review
+also observed that the cache retrieval and `lake build` complete for that checkout,
+and that an ordinary `lake env lean axiom_check_bl.lean` axiom query reports no
+`sorryAx` for `BrascampLieb.upperBound`. Those are rerunnable observations, not a
+license to retain its cache, build products, or output log.
 
 ---
 
@@ -461,7 +496,9 @@ each main theorem and are part of the evidence pipeline implementation.
 | Pinned SHAs | All three repos cloned at exact SHAs, verified with `git rev-parse HEAD` |
 | Two separate builds | Putnam (Lean v4.26.0) and BL (Lean v4.28.0) built independently |
 | Parser-backed sorry audit | Block-comment-aware parser, not grep; validated against all 33 files |
-| Axiom extraction | `#print axioms` is a Lean kernel command; output is deterministic |
+| Axiom extraction | `#print axioms` runs through `lake env lean <file>`; retain sorted parsed names, not logs |
+| Deterministic evidence | Track normalized locally-authored JSON with no timestamps, host paths, raw output, or ignored dependency |
+| No unlicensed redistribution | BL source, caches, binaries, and logs stay local; the Space receives only JSON summaries plus upstream URL/SHA |
 | Scope labeling | Evidence explicitly states "released-proof verification" not "agent re-execution" |
 | No paper values as evidence | Build success/failure and axiom lists are independently computed |
 
@@ -473,8 +510,10 @@ each main theorem and are part of the evidence pipeline implementation.
 - **Space tag**: `paper-0bTEd4LpQr`
 - **SDK**: `static`
 - Pre-deployment: full pytest suite, pre-commit, official logbook validator
-- BrascampLieb evidence: reported by URL/SHA reference, not source redistribution
-  (mitigates absent-license risk)
+- Commit the normalized JSON evidence before deployment; the exact committed JSON is
+  the only evidence copied to the Space.
+- BrascampLieb evidence: report locally-authored JSON and URL/SHA reference only.
+  Do not copy its source, binaries, cache, or raw build/axiom output.
 
 ---
 
@@ -483,7 +522,7 @@ each main theorem and are part of the evidence pipeline implementation.
 | Risk | Probability | Impact | Mitigation |
 |---|---|---|---|
 | Judge requires agent re-execution, not proof verification | Medium | Claim scored as toy/inconclusive | Scope label is explicit; proofs ARE the claim's evidence |
-| BrascampLieb license dispute | Low | Cannot redistribute source in Space | Reference by URL only; report build results |
+| BrascampLieb license dispute | Medium | Cannot redistribute source in Space | Local inspection only; Space gets normalized JSON and upstream URL/SHA, never source/binaries/logs |
 | Lean v4.28.0 Mathlib cache unavailable | Low | Cannot build BL | Build from source (~8 hr fallback) |
 | B6 OOM on cpu-basic (6.6 GB peak) | Low | Build failure | cpu-basic has 16 GB; headroom sufficient |
 | Paper becomes claimed during implementation | Medium | Wasted work | Re-check before each milestone |
@@ -498,7 +537,7 @@ each main theorem and are part of the evidence pipeline implementation.
   "title": "Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics",
   "slug": "numina-lean-agent",
   "estimated_api_cost_usd": 0.0,
-  "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132",
+  "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
   "target_claims": [
     "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
     "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
@@ -511,25 +550,27 @@ each main theorem and are part of the evidence pipeline implementation.
 ## 18. Checklist Pre-Entry to `implementing`
 
 - [x] Live challenge status refreshed: paper in catalog, 4 unverified claims, 0 spaces, 0 verdicts
-- [x] Top-three comparison completed; Numina selected as highest expected-point eligible candidate
+- [x] Alternative candidate pool closed: dXPP and TerminalTraj are persisted rejected; OXE is excluded
 - [x] Upstream revisions pinned (3 repos) and GitHub-API-confirmed
 - [x] Lean toolchains recorded: v4.26.0 (Putnam) and v4.28.0 (BrascampLieb)
 - [x] All 12 Putnam files source-sorry-free (parser-backed, not grep)
 - [x] All 21 BrascampLieb files source-sorry-free (parser-backed)
 - [x] Official paper claims identified (4); two selected as target claims
-- [x] CPU time estimate: 50–80 min; HF Job cost ≤$0.12; paid-API $0.00
-- [x] License audit: MIT (Putnam), README-MIT (agent), **no license** (BrascampLieb); -2 penalty applied
+- [x] Local CPU default: 50–80 min; paid-API $0.00; an HF Job is optional and requires explicit approval
+- [x] License audit: MIT (Putnam), README-MIT/no file (agent), **no license** (BrascampLieb); licensing score 2 and -2 penalty applied
 - [x] Safety: no GPU, no paid API, no unsafe code
 - [x] TDD plan with 3 tasks, 7 tests
 - [x] Evidence bundle and commands specified
 - [x] Space and submission plan specified
+- [ ] **Explicit user design approval required before `implementing` or any state transition**
 
 ---
 
 ## 19. Approval Record
 
-This design was reviewed and rejected by an independent agent review on
-2026-07-24T11:49Z. The review identified:
+The original design was reviewed and **REJECTED** by an independent agent review on
+2026-07-24T11:49Z. A subsequent review also left the design **REJECTED** and
+`design-pending`; neither review is an approval authority. The reviews identified:
 
 1. False sorry-count claims (all 12 files are source-sorry-free; grep hit comments)
 2. Missing BrascampLieb claim and repo inspection
@@ -539,15 +580,13 @@ This design was reviewed and rejected by an independent agent review on
 6. Missing top-three comparison
 7. Missing Lean/parser-backed sorry analysis
 
-All findings were independently verified and corrected in this revision.
-
-**Design approval**: This revised design is approved for `implementing` by
-different-agent review. The original design's `design-pending` phase gate is
-satisfied by this correction-and-approval cycle rather than explicit user approval.
+The present revision records the corrections, but it does not change the phase or
+write state. **Approval remains absent.** Wait for explicit user approval, then make
+the authorized state update separately; otherwise stop at `design-pending`.
 
 ---
 
-*Design originally authored: 2026-07-24T11:27–11:34Z*  
-*Revised: 2026-07-24T11:49–11:55Z*  
-*Challenge `challenge.json` accessed at dataset revision current as of 2026-07-24T11:53Z*  
+*Design originally authored: 2026-07-24T11:27–11:34Z*
+*Revised: 2026-07-24 after rejected-review corrections; design remains pending*
+*Challenge `challenge.json` accessed at dataset revision current as of 2026-07-24T11:53Z*
 *Validator revision at design time: `5bbcad2e9a7e8a7479f3563ac1fc6c768d4bb050`*
