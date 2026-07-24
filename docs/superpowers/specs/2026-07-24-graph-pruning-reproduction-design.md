@@ -10,11 +10,17 @@
   `arxiv:2606.12913v2`, dated 2026-07-03.
 - License shown by arXiv: CC BY-NC-SA 4.0.
 - Phase covered by this document: design. The live claim refresh and immutable
-  assessed snapshot that admitted this attempt remain coordinator provenance;
-  this task must not refresh live state or mutate coordinator files. After this
-  design is committed, a separate actor records it with the attempt's current
-  owner and fencing token, and a different reviewer records approval. Only then
-  may the attempt enter `implementing`.
+  assessed snapshot that admitted this attempt remain external coordinator
+  provenance in the sibling worktree
+  `/home/will/projects/icml-2026-reproductions/.worktrees/five-paper-scheduler`.
+  Its schema-v6 index names this attempt, and its authoritative attempt shard
+  pins snapshot
+  `d3e5dd78e25f92f23f17fe9db64617fb4774c9b74db3913e1065051dd1db5087`.
+  Those supplied index, attempt, lease, transaction, and snapshot shards must
+  not be copied into this paper branch. This task must not refresh live state or
+  mutate coordinator files. After this design is committed, a separate actor
+  records it with the attempt's current owner and fencing token, and a different
+  reviewer records approval. Only then may the attempt enter `implementing`.
 - Approval: the user's 2026-07-24 instruction gives standing autonomous
   approval for this design. It does not waive independent review, fencing, TDD,
   validation, deployment verification, or live-refresh requirements.
@@ -61,6 +67,19 @@ number, a normalized symbolic form, and the transcription checksum. The
 rendered report links to `https://arxiv.org/pdf/2606.12913v2`; it must not
 silently follow a newer arXiv revision.
 
+The exact PDF acquisition and verification command is:
+
+```bash
+curl --fail --location --proto '=https' --tlsv1.2 --output /tmp/2606.12913v2.pdf https://export.arxiv.org/pdf/2606.12913v2 && test "$(wc -c < /tmp/2606.12913v2.pdf)" -eq 683737 && printf '%s  %s\n' 26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090 /tmp/2606.12913v2.pdf | sha256sum --check --strict
+```
+
+The versioned URL plus mandatory digest check identifies immutable source
+bytes. Provenance and the canonical evidence must retain the command verbatim,
+the full byte count `683737`, and SHA-256
+`26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090`;
+recording only the arXiv identifier, URL, or revision is insufficient. The PDF
+itself is an acquisition input and need not be committed.
+
 The required transcription is:
 
 \[
@@ -102,6 +121,45 @@ I(x_i\mid S)=\Delta(x_i\mid S)=
 x^\star\in\arg\max_{x_i\in T\setminus S_t}I(x_i\mid S_t),
 \qquad S_{t+1}=S_t\cup\{x^\star\} \tag{8, PDF p. 3}
 \]
+
+Algorithm 1 is a separate primary-source object, not an implementation gloss on
+Eq. (7)--(8). Its literal line transcription (PDF p. 5; only PDF line wrapping
+is normalized) is:
+
+```text
+Algorithm 1 Overall pipeline with Greedy Selection and Structured Graph Sparsification
+Require: Training dataset T = {x_i}_{i=1}^N, pruning ratio p,
+Ensure: Pruned subset S.
+1: Build a fully connected graph G = (V, E) from T.
+2: Compute intrinsic importance I^in(x_i) for all x_i ∈ T.
+3: Perform Structured Graph Sparsification and get neighborhood clusters {N_k}_{k=1}^K.
+4: Compute {D(x_i, x_j) | ∀x_i, x_j ∈ N_k} for all N_k.
+5: Initialize S_0 ← ∅, I^ex(x_i | S_0) ← 0 for all x_i.
+6: for t = 1 to (1 - p)N do
+7:   for all x_i ∈ T \ S_{t-1} do
+8:     if x⋆ ∈ N(x_i) then
+9:       Fetch I^in(x_i) and D(x_i, x⋆).
+10:      I^ex(x_i | S_t) ← I^ex(x_i | S_{t-1}) + g(D(x_i, x⋆))
+11:      I(x_i | S_t) ← α I^in(x_i) + I^ex(x_i | S_t)
+12:    end if
+13:  end for
+14:  Select x⋆ ← arg max_{x_i ∈ T \ S} I(x_i | S_t).
+15:  Update S_t ← S_{t-1} ∪ {x⋆}.
+16: end for
+17: Return S ← S_{(1-p)N}.
+```
+
+The manifest retains a checksum of the source excerpt and this line-by-line
+transcription. The literal audit must report, rather than repair, the apparent
+operational ambiguities: line 5 initializes `S_0` and extrinsic values but no
+unified `I(x_i | S_0)` scores; line 8 reads `x*` before line 14 first selects it;
+lines 10--11 write values indexed by `S_t` before line 15 constructs `S_t`;
+line 14 uses unindexed `S`, although line 5 initialized only `S_0`; and
+candidates outside the line-8 neighborhood do not receive a score update before
+the argmax. Any executable resolution (score initialization,
+select-before-update, carry-forward scores, a chosen meaning of `S`, or a
+first-iteration special case) is a separately named interpretation and cannot
+be attributed to literal Algorithm 1.
 
 \[
 \Delta(x\mid A)=f(A\cup\{x\})-f(A),\qquad
@@ -317,8 +375,12 @@ marginal.
 
 ### Greedy-versus-optimum oracle
 
-There are two mandatory greedy paths:
+There are three mandatory, non-interchangeable audit paths:
 
+- `paper_algorithm1_literal` is a line-indexed state-machine audit of the exact
+  Algorithm 1 transcription above. Undefined reads and ambiguous state are
+  first-class results, so this path is expected to stop at the first unresolved
+  use rather than borrowing Eq. (8) initialization or silently reordering lines;
 - `paper_eq7_score_greedy` implements Eq. (8) using exactly Eq. (7),
   \(w_x+\sum_{j\in S}a_{xj}\), without calling an objective marginal; and
 - `true_marginal_greedy` computes
@@ -326,11 +388,14 @@ There are two mandatory greedy paths:
   For `paper_samplewise_literal`, this is
   \(w_x+2\sum_{j\in S}a_{xj}\).
 
-Neither path may call the other. The optimum implementation enumerates all
-size-\(b\) subsets directly. Deterministic tie handling evaluates all tied
-paths for each greedy implementation; the evidence reports best, worst, and
-canonical lexicographic values separately. This prevents an arbitrary tie
-break or the Eq. (7)/true-marginal mismatch from being hidden.
+No path may call another. The optimum implementation enumerates all size-\(b\)
+subsets directly. Each proposed executable resolution of Algorithm 1 receives
+its own identifier, records every departure from a literal line, and is never
+reported as `paper_algorithm1_literal`. Deterministic tie handling evaluates
+all tied paths for the two equation-defined executable greedy implementations;
+the evidence reports best, worst, and canonical lexicographic values
+separately. This prevents an arbitrary tie break, the Algorithm 1 ambiguities,
+or the Eq. (7)/true-marginal mismatch from being hidden.
 
 For each normalized, monotone, submodular instance it records
 
@@ -438,9 +503,11 @@ Implementation follows failing-test-first development:
 5. Monotonicity/shift boundary tests fail before Appendix E support exists.
 6. Greedy, exhaustive optimum, all-ties, and ratio tests fail before solvers
    exist.
-7. Proof-ledger and minimal-witness persistence tests fail before Appendix F
+7. Literal Algorithm 1 transcription, undefined-read, state-order, and
+   no-silent-repair tests fail before its independent audit path exists.
+8. Proof-ledger and minimal-witness persistence tests fail before Appendix F
    auditing exists.
-8. Evidence-bundle, report, poster, and Space rendering tests fail before their
+9. Evidence-bundle, report, poster, and Space rendering tests fail before their
    producers exist.
 
 For every red phase, the log records command, timestamp, test identifier, and
@@ -460,6 +527,9 @@ artifact. A proposed schema version `1` contains:
     "challenge_id": "a3GdvuPItd",
     "revision": "arxiv:2606.12913v2",
     "source_url": "https://arxiv.org/pdf/2606.12913v2",
+    "pdf_acquisition_command": "curl --fail --location --proto '=https' --tlsv1.2 --output /tmp/2606.12913v2.pdf https://export.arxiv.org/pdf/2606.12913v2 && test \"$(wc -c < /tmp/2606.12913v2.pdf)\" -eq 683737 && printf '%s  %s\\n' 26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090 /tmp/2606.12913v2.pdf | sha256sum --check --strict",
+    "pdf_byte_count": 683737,
+    "pdf_sha256": "26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
     "license": "CC BY-NC-SA 4.0"
   },
   "target_claims": [
@@ -576,8 +646,14 @@ The implementation plan must require:
 11. exercise of the live Space recomputation and machine-readable download;
 12. a fresh assessed live refresh immediately before submission, with
     cancellation if eligibility changed; and
-13. fenced writes for `validated`, `deployed`, `submitted`, and bounded
-    `judging`, followed by exact-claim verdict handling.
+13. a fenced `submitted` write, followed by a post-submission live refresh in
+    the external coordinator and inspection of its new immutable snapshot;
+14. verification in that refreshed live data that this exact paper-specific
+    Space and deployed commit are present in the expected queued/live submission
+    state, blocking instead of judging if the submission is absent, stale, or
+    terminal; and
+15. only after that verification, a fenced transition to bounded `judging`,
+    followed by exact-claim verdict handling.
 
 This design task stops after committing this document. It does not implement
 the submission, record or approve the design in coordinator state, update
@@ -587,6 +663,8 @@ the submission, record or approve the design in coordinator state, update
 
 - No placeholder, TODO, or unresolved design choice remains.
 - Literal, conventional, and repaired objectives have distinct identifiers.
+- Literal Algorithm 1, Eq. (7)--(8) score greedy, and true-marginal greedy have
+  distinct identifiers, with ambiguities preserved rather than repaired.
 - Each universal claim has an independent oracle and a falsification path.
 - Positive synthetic cases are labeled smoke tests, never universal evidence.
 - Minimal witnesses and complete search domains are preserved.
