@@ -4,8 +4,9 @@
 **OpenReview ID**: `0bTEd4LpQr`
 **arXiv**: `2601.14027`
 **Design date**: 2026-07-24 (revised after two rejected reviews)
-**Phase gate**: `design-pending` — no user approval is recorded; this document
-does not authorize `implementing` (see §19)
+**Phase gate**: `design-pending` — this author commit cannot approve itself.
+An independent different-agent review may `APPROVE` the corrected design and
+authorize the root agent to advance it (see §19).
 
 ---
 
@@ -31,24 +32,25 @@ key lookup.
 
 ## 2. Candidate-Pool Record and Non-Selection
 
-| Candidate | orid | Base | Penalties | Final | Testable claims | P(full/falsified) | P(toy) | Expected points | CPU estimate | API estimate | Disposition |
-|---|---|---:|---:|---:|---:|---|---|---:|---|---:|---|
-| Numina-Lean-Agent (this unapproved design) | `0bTEd4LpQr` | 16 | -2 | **14** | 2 | 0.75 | 0.15 | **3.15** | 50–80 min local CPU | $0.00 | design-pending; user gate still required |
-| TerminalTraj | `PeFSCRulgy` | — | — | — | — | — | — | — | >24 hr GPU training | $0.00 CPU | persisted `rejected`; no longer eligible |
-| OXE-AugE | `LcswwEzzX7` | — | — | — | — | — | — | **excl.** | — | — | 3 active reproduction Spaces; ineligible |
+| Candidate | orid | Base | Penalties | Final | Testable claims | Expected points | CPU estimate | API estimate | Disposition |
+|---|---|---:|---:|---:|---:|---:|---|---:|---|
+| Numina-Lean-Agent (this unapproved design) | `0bTEd4LpQr` | 16 | -2 | **14** | 2 | **3.15** | 50–80 min local CPU | $0.00 | design-pending; different-agent review gate |
+| TerminalTraj | `PeFSCRulgy` | — | — | — | — | — | >24 hr GPU training | $0.00 CPU | rejection required but not yet persisted |
+| OXE-AugE | `LcswwEzzX7` | — | — | — | — | — | — | — | exclusion observed; closure not yet persisted |
 
-**Candidate-pool closure**:
-- **dXPP**: persisted `rejected` (not present in the challenge catalog), so it is
-  not an eligible alternative.
+**Candidate-pool closure is pending authoritative persistence**:
+- **dXPP**: not present in the challenge catalog; the rejection decision has not
+  yet been persisted in the authoritative state.
 - **OXE-AugE** (`LcswwEzzX7`): 3 existing reproduction Spaces (algorise, abhishekkataria16, Edd16); ineligible under the duplicate-selection rubric rule.
-- **TerminalTraj** (`PeFSCRulgy`): persisted `rejected`; its substantive claims
-  require Qwen2.5-Coder GPU fine-tuning (>24 hours), while CPU-only trajectory
-  statistics would be toy evidence.
+- **TerminalTraj** (`PeFSCRulgy`): its substantive claims require Qwen2.5-Coder
+  GPU fine-tuning (>24 hours), while CPU-only trajectory statistics would be toy
+  evidence. The rejection decision has not yet been persisted.
 
-This is an honest exhausted record of the alternative pool, not a selection action.
-Numina remains only a `design-pending` candidate until the user explicitly approves
-the design and the authoritative state is separately updated. Neither a prior review
-nor this author may substitute for that approval.
+This document records the proposed closure; it does not claim that closure is
+already authoritative. Numina cannot transition beyond `design-pending` until the
+root agent serially persists the required rejection/closure records. This worktree
+must not edit authoritative state or HANDOFF. After that persistence, an independent
+different-agent review may approve the design; this author commit cannot.
 
 ---
 
@@ -60,8 +62,9 @@ nor this author may substitute for that approval.
 | `project-numina/Numina-Putnam2025` | `60d33c8ba19af905bd731e938ebde1c5b8c76519` | 2026-01-20 | Completed Putnam 2025 proofs |
 | `project-numina/BrascampLieb` | `413f2bfd31100187eb6c2d632c9cbf12e3115494` | 2026-04-10T15:20:33Z | Brascamp-Lieb formalization |
 
-All confirmed live via GitHub API. The immutable selection token, if user approval
-is later given, binds every released input rather than only the agent repository:
+All confirmed live via GitHub API. After root-serialized candidate closure and an
+independent different-agent `APPROVE`, the immutable selection token binds every
+released input rather than only the agent repository:
 
 ```
 github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+
@@ -137,18 +140,19 @@ All 21 `.lean` files: **0 tactic-level sorry** across the entire repository.
 
 ### `#print axioms` evidence plan
 
-Neither repository currently includes `#print axioms` commands in the committed
-source. The evidence pipeline will add a post-build Lean script that invokes
-`#print axioms` for each main theorem and parses only the resulting axiom names.
-The review observed Putnam output containing the Lean constant `Quot.sound` (not
-`Quotient.sound`). It did **not** establish a universal `funext` requirement, so the
-tests must not invent one. The sole cross-theorem assertion is that the normalized
-result contains no `sorryAx`; every observed axiom list is retained as an output for
-review rather than forced through an unproved allowlist.
+Every pinned Putnam proof file A1–A6 and B1–B6 already ends with its committed
+`#print axioms` command. The pipeline must execute each committed file with ordinary
+`lake env lean NuminaPutnam2025/putnam_2025_<id>.lean` and parse that command's
+output; it must not add or invent a Putnam query file. The review observed the Lean
+constant `Quot.sound` (not `Quotient.sound`) and did not establish a universal
+`funext` requirement. The sole cross-theorem assertion is absence of `sorryAx`;
+every observed axiom list is retained as normalized output rather than forced
+through an unproved allowlist.
 
-The script is an ordinary Lean input file run after the build, for example
-`lake env lean axiom_check.lean`. It must not use `--run`: `#print axioms` is an
-elaboration-time command, not a Lean program entry point.
+BrascampLieb does not contain the needed query, so the pipeline locally authors only
+`axiom_check_bl.lean` and runs it as `lake env lean axiom_check_bl.lean`. Neither
+path uses `--run`: `#print axioms` is an elaboration-time command, not a Lean
+program entry point.
 
 ---
 
@@ -226,10 +230,16 @@ from "we independently ran the agent and it produced these proofs."
 
 ### Expected official points (conservative)
 
-The single conservative estimate is **≈3.15 expected official points**. It discounts
-both target claims for the risk that released-proof checking is judged as toy rather
-than agent re-execution and for BrascampLieb's licensing limitation. It is not an
-independent selection score or a promise of judge credit.
+The conservative probabilities and arithmetic are:
+
+- Putnam: `P(full)=0.75`, `P(toy)=0.15`, so `2×0.75 + 1×0.15 = 1.65`.
+- BrascampLieb: `P(full)=0.65`, `P(toy)=0.20`, so
+  `2×0.65 + 1×0.20 = 1.50`.
+- Total: `1.65 + 1.50 = 3.15` expected official points.
+
+This discounts both claims for the risk that released-proof checking is judged as
+toy rather than agent re-execution and for BrascampLieb's licensing limitation. It
+is not a promise of judge credit.
 
 ---
 
@@ -456,8 +466,8 @@ git checkout --detach 60d33c8ba19af905bd731e938ebde1c5b8c76519
 git rev-parse HEAD  # → 60d33c8ba19af905bd731e938ebde1c5b8c76519
 lake exe cache get  # ~62.5s, ~9.4 GB deps
 lake build  # type-check all 12 proofs
-# Post-build axiom extraction:
-lake env lean axiom_check.lean
+# Execute and parse each proof file's committed `#print axioms`, for example:
+lake env lean NuminaPutnam2025/putnam_2025_a1.lean
 
 # === Brascamp-Lieb formalization ===
 cd ..
@@ -470,10 +480,9 @@ lake build  # type-check formalization
 lake env lean axiom_check_bl.lean
 ```
 
-The `axiom_check.lean` and `axiom_check_bl.lean` scripts invoke `#print axioms` for
-each main theorem and are part of the evidence pipeline implementation. Their stdout
-is parsed in the local work directory into the tracked normalized JSON; raw logs are
-not retained or distributed.
+The twelve committed Putnam commands and the one locally authored
+`axiom_check_bl.lean` command produce stdout that is parsed in the local work
+directory into tracked normalized JSON; raw logs are not retained or distributed.
 
 ### Reviewer-observed Brascamp-Lieb facts
 
@@ -496,7 +505,7 @@ license to retain its cache, build products, or output log.
 | Pinned SHAs | All three repos cloned at exact SHAs, verified with `git rev-parse HEAD` |
 | Two separate builds | Putnam (Lean v4.26.0) and BL (Lean v4.28.0) built independently |
 | Parser-backed sorry audit | Block-comment-aware parser, not grep; validated against all 33 files |
-| Axiom extraction | `#print axioms` runs through `lake env lean <file>`; retain sorted parsed names, not logs |
+| Axiom extraction | Execute the 12 committed Putnam commands plus one local BL query through `lake env lean <file>`; retain sorted parsed names, not logs |
 | Deterministic evidence | Track normalized locally-authored JSON with no timestamps, host paths, raw output, or ignored dependency |
 | No unlicensed redistribution | BL source, caches, binaries, and logs stay local; the Space receives only JSON summaries plus upstream URL/SHA |
 | Scope labeling | Evidence explicitly states "released-proof verification" not "agent re-execution" |
@@ -550,7 +559,7 @@ license to retain its cache, build products, or output log.
 ## 18. Checklist Pre-Entry to `implementing`
 
 - [x] Live challenge status refreshed: paper in catalog, 4 unverified claims, 0 spaces, 0 verdicts
-- [x] Alternative candidate pool closed: dXPP and TerminalTraj are persisted rejected; OXE is excluded
+- [ ] Root must serially persist dXPP and TerminalTraj rejections and the OXE exclusion; this worktree must not edit state/HANDOFF
 - [x] Upstream revisions pinned (3 repos) and GitHub-API-confirmed
 - [x] Lean toolchains recorded: v4.26.0 (Putnam) and v4.28.0 (BrascampLieb)
 - [x] All 12 Putnam files source-sorry-free (parser-backed, not grep)
@@ -559,10 +568,10 @@ license to retain its cache, build products, or output log.
 - [x] Local CPU default: 50–80 min; paid-API $0.00; an HF Job is optional and requires explicit approval
 - [x] License audit: MIT (Putnam), README-MIT/no file (agent), **no license** (BrascampLieb); licensing score 2 and -2 penalty applied
 - [x] Safety: no GPU, no paid API, no unsafe code
-- [x] TDD plan with 3 tasks, 7 tests
+- [x] TDD plan with 4 tasks, 9 tests
 - [x] Evidence bundle and commands specified
 - [x] Space and submission plan specified
-- [ ] **Explicit user design approval required before `implementing` or any state transition**
+- [ ] **Independent different-agent review must APPROVE before `implementing`; this author commit cannot self-approve**
 
 ---
 
@@ -570,7 +579,8 @@ license to retain its cache, build products, or output log.
 
 The original design was reviewed and **REJECTED** by an independent agent review on
 2026-07-24T11:49Z. A subsequent review also left the design **REJECTED** and
-`design-pending`; neither review is an approval authority. The reviews identified:
+`design-pending`. A future independent different-agent review is the approval
+authority for the corrected design; this author commit is not.
 
 1. False sorry-count claims (all 12 files are source-sorry-free; grep hit comments)
 2. Missing BrascampLieb claim and repo inspection
@@ -580,9 +590,10 @@ The original design was reviewed and **REJECTED** by an independent agent review
 6. Missing top-three comparison
 7. Missing Lean/parser-backed sorry analysis
 
-The present revision records the corrections, but it does not change the phase or
-write state. **Approval remains absent.** Wait for explicit user approval, then make
-the authorized state update separately; otherwise stop at `design-pending`.
+The present revision records corrections but does not change phase or write state.
+**Approval remains absent.** The root agent must first serialize the pending
+rejection/closure records, then obtain an independent different-agent `APPROVE`.
+Only that approval may authorize the root agent's later state transition.
 
 ---
 
