@@ -1,0 +1,20 @@
+[project]
+name = "eeg-fm-bench-repro"
+version = "0.1.0"
+description = "Deterministic CPU audit of the released EEG-FM-Bench artifact"
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eeg_fm_bench_repro"]
