@@ -2,7 +2,7 @@
 
 **Session**: 2026-07-24
 **Worktree**: `design/numina-lean`
-**Phase**: `design-pending` — no state or HANDOFF write was authorized
+**Phase**: `design-pending` — independently approved; no state or HANDOFF write
 
 ## Review Record
 
@@ -10,11 +10,12 @@
 |---|---|
 | Original design, commit `0b5c0a6` | rejected |
 | First revision, commit `01f3446` | rejected/design-pending |
-| This correction pass | design-pending; independent different-agent review required |
+| Author correction commit `3200c3e` | design-pending; independent review required |
+| Independent review of `3200c3e` | **APPROVED** against orchestration state `d7fc300` |
 
-An author cannot self-approve a design. This report records corrections only. A
-future independent different-agent review may `APPROVE`; this author commit does
-not select the paper, transition the loop, start a build, or authorize an HF Job.
+An author cannot self-approve a design. Commit `3200c3e` recorded corrections only;
+the independent decision below now approves them. Neither commit selects the paper,
+transitions the loop, starts a build, or authorizes an HF Job.
 
 ## Final Corrections
 
@@ -25,10 +26,9 @@ not select the paper, transition the loop, start a build, or authorize an HF Job
    only. It cannot contain BrascampLieb source, cache, binaries, raw build output,
    or raw Lean logs. Timestamps, host paths, elapsed time, and ignored evidence are
    excluded so tracked evidence is deterministic.
-3. The alternative pool is recorded honestly: dXPP/TerminalTraj rejections and the
-   OXE exclusion are **not yet persisted** in authoritative state. Selection cannot
-   transition until the root agent serially persists them; this worktree does not
-   edit state or HANDOFF.
+3. The alternative pool is closed in authoritative orchestration state `d7fc300`:
+   dXPP (`2jpMiRwsrL`), TerminalTraj (`PeFSCRulgy`), and OXE-AugE (`LcswwEzzX7`)
+   are persisted rejected. This worktree does not edit state or HANDOFF.
 4. All 12 pinned Putnam files already contain committed `#print axioms` commands.
    The pipeline executes and parses those files directly, using the observed spelling
    `Quot.sound`, with no invented `funext` assertion. It adds only the local
@@ -72,8 +72,21 @@ JSON summaries described in the design.
 - The proof checks validate released artifacts, not an agent rerun; judges may award
   toy or inconclusive credit.
 - Two no-file licenses make a source-free Space mandatory and lower selection value.
-- Root-serialized candidate closures and an independent different-agent `APPROVE`
-  remain blockers before any state transition or paid execution.
+- Paid HF execution still requires separate explicit approval; local CPU remains the
+  $0 default.
+
+## Independent Approval
+
+**APPROVED — 2026-07-24.** The independent reviewer checked corrected design commit
+`3200c3e7ddac06633ea05dedd502c7e54adc0742` against authoritative orchestration
+commit `d7fc300eff937a958eccf886ff088d2b279ddd7f`. All prior review blockers are
+resolved, including persisted candidate closure, exact composite pins, licensing
+score and JSON-only redistribution, Lean commands and axiom facts, deterministic
+tracked evidence, local-$0 execution, expected-points arithmetic, dates, task/test
+counts, and whitespace.
+
+This approval permits the root agent to update authoritative state separately. It
+does not modify state/HANDOFF, start implementation, or authorize paid execution.
 
 ## Verification
 

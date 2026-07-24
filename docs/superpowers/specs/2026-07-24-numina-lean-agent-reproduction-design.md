@@ -1,12 +1,11 @@
-# Reproduction Design: Numina-Lean-Agent (Design Pending)
+# Reproduction Design: Numina-Lean-Agent (Approved)
 
 **Paper**: Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics
 **OpenReview ID**: `0bTEd4LpQr`
 **arXiv**: `2601.14027`
 **Design date**: 2026-07-24 (revised after two rejected reviews)
-**Phase gate**: `design-pending` — this author commit cannot approve itself.
-An independent different-agent review may `APPROVE` the corrected design and
-authorize the root agent to advance it (see §19).
+**Phase gate**: `design-pending` — independently `APPROVED` for the root agent
+to advance; this document does not itself transition authoritative state (see §19).
 
 ---
 
@@ -34,23 +33,22 @@ key lookup.
 
 | Candidate | orid | Base | Penalties | Final | Testable claims | Expected points | CPU estimate | API estimate | Disposition |
 |---|---|---:|---:|---:|---:|---:|---|---:|---|
-| Numina-Lean-Agent (this unapproved design) | `0bTEd4LpQr` | 16 | -2 | **14** | 2 | **3.15** | 50–80 min local CPU | $0.00 | design-pending; different-agent review gate |
-| TerminalTraj | `PeFSCRulgy` | — | — | — | — | — | >24 hr GPU training | $0.00 CPU | rejection required but not yet persisted |
-| OXE-AugE | `LcswwEzzX7` | — | — | — | — | — | — | — | exclusion observed; closure not yet persisted |
+| Numina-Lean-Agent | `0bTEd4LpQr` | 16 | -2 | **14** | 2 | **3.15** | 50–80 min local CPU | $0.00 | design-pending; independently approved |
+| TerminalTraj | `PeFSCRulgy` | — | — | — | — | — | >24 hr GPU training | $0.00 CPU | persisted rejected |
+| OXE-AugE | `LcswwEzzX7` | — | — | — | — | — | — | — | persisted rejected; 3 existing Spaces |
 
-**Candidate-pool closure is pending authoritative persistence**:
-- **dXPP**: not present in the challenge catalog; the rejection decision has not
-  yet been persisted in the authoritative state.
+**Candidate-pool closure is authoritatively persisted**:
+- **dXPP** (`2jpMiRwsrL`): persisted rejected because it is absent from the current
+  challenge catalog and its proposed diagnostics do not reproduce its official claims.
 - **OXE-AugE** (`LcswwEzzX7`): 3 existing reproduction Spaces (algorise, abhishekkataria16, Edd16); ineligible under the duplicate-selection rubric rule.
-- **TerminalTraj** (`PeFSCRulgy`): its substantive claims require Qwen2.5-Coder
-  GPU fine-tuning (>24 hours), while CPU-only trajectory statistics would be toy
-  evidence. The rejection decision has not yet been persisted.
+- **TerminalTraj** (`PeFSCRulgy`): persisted rejected because released artifacts do
+  not provide two independently CPU-testable official claims; the performance claim
+  requires impractical GPU-dependent inference and dataset licensing is undeclared.
 
-This document records the proposed closure; it does not claim that closure is
-already authoritative. Numina cannot transition beyond `design-pending` until the
-root agent serially persists the required rejection/closure records. This worktree
-must not edit authoritative state or HANDOFF. After that persistence, an independent
-different-agent review may approve the design; this author commit cannot.
+The active orchestration worktree records all three rejections at
+`d7fc300eff937a958eccf886ff088d2b279ddd7f`. This design worktree does not edit
+authoritative state or HANDOFF. The independent approval in §19 authorizes the root
+agent to perform the later state transition separately.
 
 ---
 
@@ -559,7 +557,7 @@ license to retain its cache, build products, or output log.
 ## 18. Checklist Pre-Entry to `implementing`
 
 - [x] Live challenge status refreshed: paper in catalog, 4 unverified claims, 0 spaces, 0 verdicts
-- [ ] Root must serially persist dXPP and TerminalTraj rejections and the OXE exclusion; this worktree must not edit state/HANDOFF
+- [x] Authoritative state at `d7fc300eff937a958eccf886ff088d2b279ddd7f` persists dXPP, TerminalTraj, and OXE rejections
 - [x] Upstream revisions pinned (3 repos) and GitHub-API-confirmed
 - [x] Lean toolchains recorded: v4.26.0 (Putnam) and v4.28.0 (BrascampLieb)
 - [x] All 12 Putnam files source-sorry-free (parser-backed, not grep)
@@ -571,7 +569,7 @@ license to retain its cache, build products, or output log.
 - [x] TDD plan with 4 tasks, 9 tests
 - [x] Evidence bundle and commands specified
 - [x] Space and submission plan specified
-- [ ] **Independent different-agent review must APPROVE before `implementing`; this author commit cannot self-approve**
+- [x] **Independent different-agent review approved the corrected design**
 
 ---
 
@@ -590,14 +588,21 @@ authority for the corrected design; this author commit is not.
 6. Missing top-three comparison
 7. Missing Lean/parser-backed sorry analysis
 
-The present revision records corrections but does not change phase or write state.
-**Approval remains absent.** The root agent must first serialize the pending
-rejection/closure records, then obtain an independent different-agent `APPROVE`.
-Only that approval may authorize the root agent's later state transition.
+**APPROVED — 2026-07-24.** An independent different-agent reviewer verified corrected
+commit `3200c3e7ddac06633ea05dedd502c7e54adc0742` against authoritative orchestration
+state `d7fc300eff937a958eccf886ff088d2b279ddd7f`. The persisted state contains the
+dXPP (`2jpMiRwsrL`), TerminalTraj (`PeFSCRulgy`), and OXE-AugE (`LcswwEzzX7`)
+rejections. The reviewer also rechecked the composite pins, exact claims, licensing
+score and restrictions, Lean commands and axiom assertions, deterministic tracked
+JSON plan, local-$0 default, expected-points arithmetic, dates, and whitespace.
+
+This approval authorizes the root agent to transition the authoritative loop
+separately. It does not itself change state/HANDOFF, start implementation, launch
+paid compute, or mutate any external service.
 
 ---
 
 *Design originally authored: 2026-07-24T11:27–11:34Z*
-*Revised: 2026-07-24 after rejected-review corrections; design remains pending*
+*Revised and independently approved: 2026-07-24*
 *Challenge `challenge.json` accessed at dataset revision current as of 2026-07-24T11:53Z*
 *Validator revision at design time: `5bbcad2e9a7e8a7479f3563ac1fc6c768d4bb050`*
