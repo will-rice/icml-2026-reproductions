@@ -516,8 +516,8 @@ invariants; they do not assert that the paper must pass or fail.
 
 ## Evidence bundle and schema
 
-`submissions/graph-pruning/evidence/evidence.json` is the canonical computed
-artifact. A proposed schema version `1` contains:
+`submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration/evidence/evidence.json`
+is the canonical computed artifact. A proposed schema version `1` contains:
 
 ```json
 {
@@ -571,17 +571,18 @@ The parent convention is MIT for root-authored work (`LICENSE` and `README.md`)
 and separate licensing for bundled material. The submission follows that
 convention with explicit file boundaries:
 
-- `submissions/graph-pruning/LICENSE` contains the MIT License and covers
-  original software in `src/`, `tests/`, `app.py`, `pyproject.toml`, `uv.lock`,
-  and original JSON Schema files.
-- `submissions/graph-pruning/LICENSES/CC-BY-NC-SA-4.0.txt` contains the Creative
-  Commons Attribution-NonCommercial-ShareAlike 4.0 International legal code.
-  It covers adapted/transcribed material in `paper_transcriptions/`,
-  `evidence/`, `README.md`, `poster.html`, `poster_embed.html`, and explanatory
-  Space assets.
-- `submissions/graph-pruning/NOTICE.md` names all seven authors, paper title,
-  exact arXiv v2 URL, source license, adaptation status, both licenses, and the
-  file-boundary map. The Space exposes the same notice.
+- `submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration/LICENSE`
+  contains the MIT License and covers original software in `src/`, `tests/`,
+  `app.py`, `pyproject.toml`, `uv.lock`, and original JSON Schema files.
+- `submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration/LICENSES/CC-BY-NC-SA-4.0.txt`
+  contains the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  International legal code. It covers adapted/transcribed material in
+  `paper_transcriptions/`, `evidence/`, `README.md`, `poster.html`,
+  `poster_embed.html`, and explanatory Space assets.
+- `submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration/NOTICE.md`
+  names all seven authors, paper title, exact arXiv v2 URL, source license,
+  adaptation status, both licenses, and the file-boundary map. The Space
+  exposes the same notice.
 
 Transcribed equations are attributed at point of use with equation, PDF page,
 and revision. Generated evidence containing those transcriptions remains under
@@ -642,18 +643,35 @@ The implementation plan must require:
 7. credential, mutable-URL, cache, and unrelated-diff review;
 8. `superpowers:verification-before-completion`;
 9. commit of the exact validated source and evidence configuration;
-10. deployment to a paper-specific Space and exact deployed-SHA verification;
-11. exercise of the live Space recomputation and machine-readable download;
-12. a fresh assessed live refresh immediately before submission, with
-    cancellation if eligibility changed; and
-13. a fenced `submitted` write, followed by a post-submission live refresh in
-    the external coordinator and inspection of its new immutable snapshot;
-14. verification in that refreshed live data that this exact paper-specific
+10. only after gates 1--9 pass, a fenced transition and persistence of this
+    attempt to `validated` using its current owner and fencing token, followed
+    by a `docs/HANDOFF.md` milestone naming the attempt, phase, validation
+    evidence, and deployment as the next action;
+11. deployment to a paper-specific Space;
+12. exact deployed-SHA verification against the intended validated commit, plus
+    exercise of the live Space recomputation and machine-readable download;
+13. only after gate 12 passes, a fenced transition and persistence of this
+    attempt to `deployed` using its current owner and fencing token, followed by
+    a `docs/HANDOFF.md` milestone naming the attempt, phase, verified Space ID
+    and exact SHA, and refresh/submission as the next action;
+14. only after `deployed` is persisted, a fresh assessed live refresh
+    immediately before submission, with cancellation if eligibility changed;
+15. a fenced `submitted` transition and persistence using the current owner and
+    fencing token, followed by a `docs/HANDOFF.md` milestone naming the attempt,
+    submission ID, Space ID, deployed SHA, phase, and post-submission refresh as
+    the next action;
+16. a post-submission live refresh in the external coordinator and inspection
+    of its new immutable snapshot;
+17. verification in that refreshed live data that this exact paper-specific
     Space and deployed commit are present in the expected queued/live submission
     state, blocking instead of judging if the submission is absent, stale, or
     terminal; and
-15. only after that verification, a fenced transition to bounded `judging`,
-    followed by exact-claim verdict handling.
+18. only after that verification, a fenced transition and persistence to
+    bounded `judging` using the current owner and fencing token, followed by a
+    `docs/HANDOFF.md` milestone naming the attempt, phase, polling bounds, and
+    next action, then the existing exact-claim verdict, improvement, completion,
+    and archival flow with a HANDOFF milestone after every material phase
+    change or blocker.
 
 This design task stops after committing this document. It does not implement
 the submission, record or approve the design in coordinator state, update
