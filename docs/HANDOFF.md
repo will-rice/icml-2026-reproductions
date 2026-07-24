@@ -2,9 +2,10 @@
 
 ## Loop State
 
-- `state/repro-loop.json` is authoritative and currently records `blocked`
-  (`blocked_from: implementing`) for paper `HMu24dTKkJ`; see the blocker text
-  in the state file.
+- `state/repro-loop.json` is authoritative and currently records `idle` with
+  no current paper, one archived abandoned attempt (`HMu24dTKkJ`, blocked from
+  `implementing` on 2026-07-24 because the paper was already officially
+  judged; see history), no verdicts, and USD 0.00 total API cost.
 - The state file uses schema version 3. Selection requires explicit
   `estimated_api_cost_usd`, immutable `upstream_revision`, and at least two
   unique `target_claims`. Each judging entry starts a new poll round; verdict
@@ -72,12 +73,15 @@ participate in that commit's hash.
 
 ## Next Action
 
-`state/repro-loop.json` is `blocked`. Do not deploy or submit anything for
-`HMu24dTKkJ`: the paper already has an official verdict. Await the user's
-decision — either direct `{"abandon": true}` to archive the attempt to
-history and return the loop to `idle` for a fresh selection, or give other
-instructions. The unmerged `impl/*` branches and their worktrees
-(`.worktrees/impl-*`) can be kept or discarded per the same decision.
+`state/repro-loop.json` is `idle`. The user archived the blocked `HMu24dTKkJ`
+attempt on 2026-07-24 with `{"abandon": true}`; it is now in history and must
+never be reselected. Before any new selection, refresh the live
+`ICML-2026-agent-repro/verdicts` dataset and exclude every paper with an
+existing verdict or tagged reproduction Space, including `HMu24dTKkJ` and
+`NvPgRwURDC` (both already scored; see the 2026-07-24 refresh above).
+The unmerged `impl/*` branches and `.worktrees/impl-*` worktrees hold the
+completed Tasks 1-3 implementation; they must never be deployed or submitted,
+and can be kept or discarded on user instruction.
 
 The selected target claims are:
 
