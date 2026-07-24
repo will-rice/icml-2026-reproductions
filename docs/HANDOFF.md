@@ -2,15 +2,36 @@
 
 ## Loop State
 
-- `state/repro-loop.json` is authoritative and currently records `idle` with
-  no current paper, no history, one recorded rejection, and USD 0.00 total API
-  cost.
+- `state/repro-loop.json` is authoritative and currently records `blocked`
+  (`blocked_from: implementing`) for paper `HMu24dTKkJ`; see the blocker text
+  in the state file.
 - The state file uses schema version 3. Selection requires explicit
   `estimated_api_cost_usd`, immutable `upstream_revision`, and at least two
   unique `target_claims`. Each judging entry starts a new poll round; verdict
   history is authoritative and the final `verdict` mirrors its last record.
 - The source skill is `skills/icml-repro-loop/`; install it according to
   `docs/REMOTE_SETUP.md` before using a new host.
+
+## 2026-07-24 Live Refresh: Paper Already Scored
+
+- The official `ICML-2026-agent-repro/verdicts` dataset (revision
+  `3d3350a34469a6ee1b25a2d749f578578bf606d9`, fetched 2026-07-24) already
+  contains a verdict for `HMu24dTKkJ`, judged `2026-07-22T16:03:19+00:00`
+  against Space
+  `wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures`
+  at exact SHA `5af083f86c4ab0e98ee65a01e3995669f288849b`. Claim verdicts:
+  three `toy` (Theorem 1 TV bound, imperfect score estimation, trace lemma)
+  and two `inconclusive` (Assumption 1 closeness, prior-work contrast).
+- The same dataset holds the NAPE verdict (`NvPgRwURDC`, judged
+  2026-07-21T21:52:09+00:00) at Space SHA
+  `6ce52a53872fbbbc73da1efe313e224a9c9c853c`.
+- Both papers were therefore already scored by the official judge via the
+  parallel reproduction lineage; continuing the current attempt would create
+  an ineligible duplicate submission, so the loop is blocked awaiting a user
+  decision.
+- Before the discovery, two CLI agents completed plan Tasks 1-3 (GMM
+  primitives, deterministic DDPM audits, evidence CLI) on branch
+  `impl/diff-gmm-integration` (unmerged; Tasks 4-5 not started).
 
 ## Published Parent Repository
 
@@ -51,10 +72,12 @@ participate in that commit's hash.
 
 ## Next Action
 
-`state/repro-loop.json` is `implementing`. The user approved the paper-specific
-design on 2026-07-22 and the state records `design_approved: true`. Execute
-`docs/superpowers/plans/2026-07-22-dimension-free-diffusion-gmm.md` with
-test-driven development under `submissions/dimension-free-diffusion-gmm/`.
+`state/repro-loop.json` is `blocked`. Do not deploy or submit anything for
+`HMu24dTKkJ`: the paper already has an official verdict. Await the user's
+decision — either direct `{"abandon": true}` to archive the attempt to
+history and return the loop to `idle` for a fresh selection, or give other
+instructions. The unmerged `impl/*` branches and their worktrees
+(`.worktrees/impl-*`) can be kept or discarded per the same decision.
 
 The selected target claims are:
 
