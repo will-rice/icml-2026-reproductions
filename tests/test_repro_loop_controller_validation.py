@@ -52,6 +52,7 @@ class FakeRunner:
         branches: tuple[str, ...] | None = None,
         heads: tuple[str, ...] = (HEAD, HEAD),
         changed_paths: str | None = None,
+        project_status: tuple[str, ...] = ("", ""),
         failed_command: int | None = None,
         top_level: str | None = None,
     ) -> None:
@@ -61,6 +62,17 @@ class FakeRunner:
             top_level or manifest["worktree"]
         ]
         self.responses[("git", "status", "--porcelain")] = list(status)
+        self.responses[
+            (
+                "git",
+                "status",
+                "--porcelain",
+                "--ignored",
+                "--untracked-files=all",
+                "--",
+                manifest["project_path"],
+            )
+        ] = list(project_status)
         self.responses[("git", "branch", "--show-current")] = list(
             branches or (branch, branch)
         )
@@ -182,6 +194,22 @@ def test_validation_rejects_git_boundary_mismatch(
     runner = FakeRunner(manifest, **runner_updates)
 
     with pytest.raises(ValueError, match=error):
+        controller.attest_validation(
+            paths, "a1", lease, manifest, runner, NOW
+        )
+
+    assert attempts.read_attempt(paths, "a1")["phase"] == "implementing"
+    assert not paths.attestation("validation", "a1").exists()
+
+
+def test_validation_rejects_ignored_file_inside_project(validation_case):
+    paths, lease, manifest = validation_case
+    runner = FakeRunner(
+        manifest,
+        project_status=("!! submissions/paper-1/ignored.bin\n", ""),
+    )
+
+    with pytest.raises(ValueError, match="clean"):
         controller.attest_validation(
             paths, "a1", lease, manifest, runner, NOW
         )

@@ -438,6 +438,65 @@ def test_publication_rejects_source_directory_outside_validated_project(hub_case
     assert hub_case["client"].calls == []
 
 
+def replace_validation_source_hash(case: dict, source_tree_sha256: str) -> None:
+    slot = case["paths"].attestation("validation", "a1")
+    replacement = validation_record(
+        "a1",
+        case["worktree"],
+        case["source_commit"],
+        case["source_tree"],
+        source_tree_sha256,
+    )
+    replacement_id = attestations.persist(case["paths"], replacement)
+    replacement_record = attestations.read(case["paths"], replacement_id)
+    slot.unlink()
+    store.atomic_json_write(
+        slot,
+        replacement_record,
+        lambda record: attestations.validate_target(
+            case["paths"], slot, record
+        ),
+    )
+    attempt = attempts.read_attempt(case["paths"], "a1")
+    attempt["transitions"][-1]["attestation_id"] = replacement_id
+    store.atomic_json_write(
+        case["paths"].attempt("a1"), attempt, store.validate_attempt
+    )
+
+
+def test_publication_rejects_prevalidated_ignored_file_inside_project(hub_case):
+    exclude = hub_case["worktree"] / ".git" / "info" / "exclude"
+    exclude.write_text(
+        "submissions/paper-a/ignored.bin\n",
+        encoding="utf-8",
+    )
+    ignored = hub_case["source_dir"] / "ignored.bin"
+    ignored.write_bytes(b"must not upload")
+    replace_validation_source_hash(
+        hub_case,
+        controller._source_tree_sha256(hub_case["source_dir"]),
+    )
+
+    with pytest.raises(ValueError, match="source tree"):
+        deploy(hub_case)
+
+    assert hub_case["client"].calls == []
+
+
+def test_publication_allows_ignored_file_outside_project(hub_case):
+    exclude = hub_case["worktree"] / ".git" / "info" / "exclude"
+    exclude.write_text("root-ignored.bin\n", encoding="utf-8")
+    (hub_case["worktree"] / "root-ignored.bin").write_bytes(b"outside project")
+
+    transitioned = deploy(hub_case)
+
+    assert transitioned["phase"] == "deployed"
+    upload = [
+        call for call in hub_case["client"].calls if call[0] == "upload_folder"
+    ]
+    assert upload[0][1]["folder_path"] == hub_case["source_dir"]
+
+
 def test_publication_rejects_validated_project_root_symlink_to_outside(
     hub_case, tmp_path: Path
 ):

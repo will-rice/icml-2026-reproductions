@@ -152,6 +152,14 @@ def attest_validation(
             check_results,
         )
     )
+    _require_clean(
+        _checked(
+            runner,
+            _project_status_command(manifest["project_path"]),
+            worktree,
+            check_results,
+        )
+    )
     branch = _checked(
         runner, ("git", "branch", "--show-current"), worktree, check_results
     ).stdout.strip()
@@ -200,6 +208,14 @@ def attest_validation(
         _checked(
             runner,
             ("git", "status", "--porcelain"),
+            worktree,
+            check_results,
+        )
+    )
+    _require_clean(
+        _checked(
+            runner,
+            _project_status_command(manifest["project_path"]),
             worktree,
             check_results,
         )
@@ -766,6 +782,18 @@ def _require_clean(result: CommandResult) -> None:
         raise ValueError("clean worktree")
 
 
+def _project_status_command(project_path: str) -> tuple[str, ...]:
+    return (
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        project_path,
+    )
+
+
 def _assert_attempt_fence(
     paths: store.StatePaths,
     attempt_id: str,
@@ -902,6 +930,9 @@ def _require_current_validated_tree(
     worktree: Path, source_dir: Path, validation: dict
 ) -> None:
     if _git_output(worktree, "status", "--porcelain"):
+        raise ValueError("source tree")
+    project_status = _project_status_command(validation["project_path"])
+    if _git_output(worktree, *project_status[1:]):
         raise ValueError("source tree")
     if _git_output(worktree, "branch", "--show-current") != validation["branch"]:
         raise ValueError("source tree")
