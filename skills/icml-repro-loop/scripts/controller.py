@@ -43,9 +43,7 @@ ENVIRONMENT_ALLOWLIST = {
     "PATH",
     "SSL_CERT_DIR",
     "SSL_CERT_FILE",
-    "TMPDIR",
     "UV_CACHE_DIR",
-    "VIRTUAL_ENV",
 }
 ALLOWED_SPACE_OWNERS = frozenset({"wrice"})
 
@@ -70,11 +68,26 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
         for key in sorted(ENVIRONMENT_ALLOWLIST)
         if (value := os.environ.get(key)) is not None
     }
+    inherited_virtual_env = os.environ.get("VIRTUAL_ENV")
+    if inherited_virtual_env and "PATH" in environment:
+        virtual_environment = Path(inherited_virtual_env)
+        unsafe_entries = {
+            (virtual_environment / "bin").resolve(),
+            (virtual_environment / "Scripts").resolve(),
+        }
+        environment["PATH"] = os.pathsep.join(
+            entry
+            for entry in environment["PATH"].split(os.pathsep)
+            if Path(entry).resolve() not in unsafe_entries
+        )
     environment.update(
         {
             "HF_HOME": str(isolated_home.parent / "hf-home"),
             "HF_HUB_DISABLE_IMPLICIT_TOKEN": "1",
             "HOME": str(isolated_home),
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTEST_ADDOPTS": "-p no:cacheprovider",
+            "TMPDIR": str(isolated_home.parent / "tmp"),
             "UV_PROJECT_ENVIRONMENT": str(
                 isolated_home.parent / "uv-project-environment"
             ),
@@ -87,11 +100,15 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
 
 def run_command(argv: tuple[str, ...], worktree: Path) -> CommandResult:
     """Run one command at the registered worktree with a sanitized environment."""
-    with tempfile.TemporaryDirectory(prefix="icml-repro-validation-") as name:
+    with tempfile.TemporaryDirectory(
+        prefix="icml-repro-validation-",
+        dir="/tmp",
+    ) as name:
         isolated_root = Path(name)
         isolated_home = isolated_root / "home"
         isolated_home.mkdir()
         (isolated_root / "hf-home").mkdir()
+        (isolated_root / "tmp").mkdir()
         result = subprocess.run(
             argv,
             cwd=worktree,
@@ -277,14 +294,13 @@ def publish_and_attest_deployment(
         raise ValueError("owner")
 
     worktree = Path(validation["worktree"])
-    expected_source = (
-        worktree / validation["project_path"]
-    ).resolve(strict=True)
-    try:
-        actual_source = Path(source_dir).resolve(strict=True)
-    except OSError as error:
-        raise ValueError("source_dir") from error
-    if actual_source != expected_source or not actual_source.is_dir():
+    expected_source = _validated_project_source(
+        worktree,
+        validation["project_path"],
+        "source_dir",
+    )
+    actual_source = _resolved_directory(Path(source_dir), "source_dir")
+    if actual_source != expected_source:
         raise ValueError("source_dir")
     _require_current_validated_tree(worktree, actual_source, validation)
 
@@ -609,6 +625,7 @@ def _validate_manifest(
     design_path = _relative_path(manifest["design_path"], "design_path")
     if attempt.get("project_path") != project_path:
         raise ValueError("project_path")
+    _validated_project_source(worktree, project_path, "project_path")
     design = attempt.get("design")
     review = attempt.get("design_review")
     if type(design) is not dict or design.get("path") != design_path:
@@ -671,21 +688,20 @@ def _validation_commands(
 def _paper_pytest_arguments(
     command: tuple[str, ...], project_path: str
 ) -> tuple[str, ...] | None:
-    if command[:3] == ("uv", "run", "pytest"):
-        arguments = command[3:]
-    elif command[:5] == (
+    expected = (
         "uv",
         "run",
         "--project",
         project_path,
+        "python",
+        "-m",
         "pytest",
-    ):
-        arguments = command[5:]
-    else:
+        f"{project_path}/tests",
+        "-q",
+    )
+    if command != expected:
         return None
-    if arguments != (f"{project_path}/tests", "-q"):
-        return None
-    return arguments
+    return command[7:]
 
 
 def _references_project(argv: tuple[str, ...], project_path: str) -> bool:
@@ -817,8 +833,7 @@ def _sha256_json(value: object) -> str:
 
 def _source_tree_sha256(source_dir: Path) -> str:
     """Hash the relative paths and bytes in one validated upload tree."""
-    if not source_dir.is_dir():
-        raise ValueError("source_dir")
+    source_dir = _resolved_directory(source_dir, "source_dir")
     entries = []
     for path in sorted(source_dir.rglob("*")):
         if path.is_symlink():
@@ -831,6 +846,27 @@ def _source_tree_sha256(source_dir: Path) -> str:
                 }
             )
     return _sha256_json(entries)
+
+
+def _resolved_directory(path: Path, field: str) -> Path:
+    try:
+        resolved = path.resolve(strict=True)
+    except OSError as error:
+        raise ValueError(field) from error
+    if path != resolved or not resolved.is_dir():
+        raise ValueError(field)
+    return resolved
+
+
+def _validated_project_source(
+    worktree: Path,
+    project_path: str,
+    field: str,
+) -> Path:
+    source = _resolved_directory(worktree / project_path, field)
+    if not source.is_relative_to(worktree):
+        raise ValueError(field)
+    return source
 
 
 def _authoritative_attestation(

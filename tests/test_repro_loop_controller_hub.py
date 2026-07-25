@@ -438,6 +438,59 @@ def test_publication_rejects_source_directory_outside_validated_project(hub_case
     assert hub_case["client"].calls == []
 
 
+def test_publication_rejects_validated_project_root_symlink_to_outside(
+    hub_case, tmp_path: Path
+):
+    source_dir = hub_case["source_dir"]
+    outside = tmp_path / "outside-publish-source"
+    source_dir.rename(outside)
+    source_dir.symlink_to(outside, target_is_directory=True)
+    git(hub_case["worktree"], "add", "-A")
+    git(hub_case["worktree"], "commit", "-m", "replace project with symlink")
+    source_commit = git(hub_case["worktree"], "rev-parse", "HEAD")
+    source_tree = git(hub_case["worktree"], "rev-parse", "HEAD^{tree}")
+    source_tree_sha256 = canonical_sha256(
+        [
+            {
+                "path": path.relative_to(outside).as_posix(),
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            }
+            for path in sorted(outside.rglob("*"))
+            if path.is_file()
+        ]
+    )
+    slot = hub_case["paths"].attestation("validation", "a1")
+    replacement = validation_record(
+        "a1",
+        hub_case["worktree"],
+        source_commit,
+        source_tree,
+        source_tree_sha256,
+    )
+    replacement_id = attestations.persist(hub_case["paths"], replacement)
+    replacement_record = attestations.read(
+        hub_case["paths"], replacement_id
+    )
+    slot.unlink()
+    store.atomic_json_write(
+        slot,
+        replacement_record,
+        lambda record: attestations.validate_target(
+            hub_case["paths"], slot, record
+        ),
+    )
+    attempt = attempts.read_attempt(hub_case["paths"], "a1")
+    attempt["transitions"][-1]["attestation_id"] = replacement_id
+    store.atomic_json_write(
+        hub_case["paths"].attempt("a1"), attempt, store.validate_attempt
+    )
+
+    with pytest.raises(ValueError, match="source_dir"):
+        deploy(hub_case)
+
+    assert hub_case["client"].calls == []
+
+
 def test_publication_rejects_validation_tree_hash_mismatch(hub_case):
     slot = hub_case["paths"].attestation("validation", "a1")
     replacement = validation_record(

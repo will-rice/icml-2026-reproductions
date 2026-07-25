@@ -11,6 +11,10 @@
     [
       "uv",
       "run",
+      "--project",
+      "submissions/paper-1",
+      "python",
+      "-m",
       "pytest",
       "submissions/paper-1/tests",
       "-q"

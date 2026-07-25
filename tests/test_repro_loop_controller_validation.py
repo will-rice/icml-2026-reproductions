@@ -281,6 +281,8 @@ def test_validation_accepts_paper_local_uv_project_environment(validation_case):
         "run",
         "--project",
         "submissions/paper-1",
+        "python",
+        "-m",
         "pytest",
         "submissions/paper-1/tests",
         "-q",
@@ -299,8 +301,6 @@ def test_validation_accepts_paper_local_uv_project_environment(validation_case):
         [
             "uv",
             "run",
-            "--project",
-            "submissions/other-paper",
             "pytest",
             "submissions/paper-1/tests",
             "-q",
@@ -310,6 +310,15 @@ def test_validation_accepts_paper_local_uv_project_environment(validation_case):
             "run",
             "--project",
             "submissions/paper-1",
+            "pytest",
+            "submissions/paper-1/tests",
+            "-q",
+        ],
+        [
+            "uv",
+            "run",
+            "--project",
+            "submissions/other-paper",
             "python",
             "-m",
             "pytest",
@@ -335,6 +344,13 @@ def test_validation_accepts_paper_local_uv_project_environment(validation_case):
             "submissions/paper-1/tests/test_claim.py::test_one",
             "-q",
         ],
+    ],
+    ids=[
+        "path-pytest-shim-root",
+        "path-pytest-shim-project",
+        "other-project",
+        "rootdir-without-target",
+        "single-test-node",
     ],
 )
 def test_validation_rejects_noncanonical_paper_local_pytest(
@@ -395,6 +411,37 @@ def test_validation_requires_approved_implementing_attempt(
         controller.attest_validation(
             paths, "a1", lease, manifest, FakeRunner(manifest), NOW
         )
+
+
+def test_validation_rejects_project_root_symlink_outside_worktree(
+    validation_case, tmp_path: Path
+):
+    paths, lease, manifest = validation_case
+    project = Path(manifest["worktree"]) / manifest["project_path"]
+    outside = tmp_path / "outside-project"
+    project.rename(outside)
+    project.symlink_to(outside, target_is_directory=True)
+    runner = FakeRunner(manifest)
+
+    with pytest.raises(ValueError, match="project_path"):
+        controller.attest_validation(
+            paths, "a1", lease, manifest, runner, NOW
+        )
+
+    assert runner.calls == []
+    assert attempts.read_attempt(paths, "a1")["phase"] == "implementing"
+    assert not paths.attestation("validation", "a1").exists()
+
+
+def test_source_tree_hash_rejects_symlinked_root(tmp_path: Path):
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (outside / "payload.py").write_text("print('outside')\n", encoding="utf-8")
+    source_link = tmp_path / "source-link"
+    source_link.symlink_to(outside, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="source_dir"):
+        controller._source_tree_sha256(source_link)
 
 
 @pytest.mark.parametrize(
@@ -527,7 +574,23 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
         "UV_PROJECT_ENVIRONMENT",
         str(tmp_path / "submissions" / "paper-1" / ".venv"),
     )
-    monkeypatch.setenv("PATH", "/usr/local/bin:/usr/bin:/bin")
+    inherited_venv = tmp_path / "attacker-venv"
+    monkeypatch.setenv("VIRTUAL_ENV", str(inherited_venv))
+    monkeypatch.setenv(
+        "PATH",
+        os.pathsep.join(
+            (
+                str(inherited_venv / "bin"),
+                "/usr/local/bin",
+                "/usr/bin",
+                "/bin",
+            )
+        ),
+    )
+    attacker_tmp = tmp_path / "attacker-tmp"
+    attacker_tmp.mkdir()
+    monkeypatch.setenv("TMPDIR", str(attacker_tmp))
+    monkeypatch.setattr(controller.tempfile, "tempdir", None)
     monkeypatch.setattr(controller.subprocess, "run", fake_run)
 
     result = controller.run_command(("git", "status"), tmp_path)
@@ -541,19 +604,51 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
     assert "HF_TOKEN" not in captured["env"]
     assert "HUGGING_FACE_HUB_TOKEN" not in captured["env"]
     assert captured["env"]["HF_HUB_DISABLE_IMPLICIT_TOKEN"] == "1"
-    assert captured["env"]["PATH"] == "/usr/local/bin:/usr/bin:/bin"
+    assert captured["env"]["PATH"] == os.pathsep.join(
+        ("/usr/local/bin", "/usr/bin", "/bin")
+    )
+    assert "VIRTUAL_ENV" not in captured["env"]
     assert captured["env"]["HOME"] != os.environ.get("HOME")
+    isolated_root = Path(captured["env"]["HOME"]).parent
+    assert not isolated_root.is_relative_to(tmp_path)
+    assert captured["env"]["TMPDIR"] == str(isolated_root / "tmp")
     assert captured["env"].get("UV_PROJECT_ENVIRONMENT") == str(
-        Path(captured["env"]["HOME"]).parent / "uv-project-environment"
+        isolated_root / "uv-project-environment"
     )
     assert not Path(captured["env"]["UV_PROJECT_ENVIRONMENT"]).is_relative_to(
         tmp_path
     )
+    assert captured["env"]["PYTHONDONTWRITEBYTECODE"] == "1"
+    assert captured["env"]["PYTEST_ADDOPTS"] == "-p no:cacheprovider"
     assert Path(captured["env"]["HF_HOME"]).parent == Path(
         captured["env"]["HOME"]
     ).parent
     assert captured["home_entries"] == []
     assert captured["hf_entries"] == []
+
+
+def test_real_runner_keeps_generated_caches_outside_source_tree(tmp_path: Path):
+    module = tmp_path / "sample_module.py"
+    module.write_text("VALUE = 7\n", encoding="utf-8")
+    tests = tmp_path / "tests"
+    tests.mkdir()
+    (tests / "test_sample.py").write_text(
+        "from sample_module import VALUE\n\n"
+        "def test_value():\n"
+        "    assert VALUE == 7\n",
+        encoding="utf-8",
+    )
+    before = controller._source_tree_sha256(tmp_path)
+
+    result = controller.run_command(
+        (sys.executable, "-m", "pytest", str(tests), "-q"),
+        tmp_path,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert controller._source_tree_sha256(tmp_path) == before
+    assert not list(tmp_path.rglob("__pycache__"))
+    assert not list(tmp_path.rglob(".pytest_cache"))
 
 
 def test_state_cli_exposes_attest_validation_command():
