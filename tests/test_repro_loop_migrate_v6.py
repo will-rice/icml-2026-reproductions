@@ -409,6 +409,72 @@ def test_checked_migration_cas_does_not_overwrite_last_moment_source_swap(
     assert store.read_json(source_path)["version"] == 3
 
 
+def test_rejected_cas_manifest_cannot_replay_over_authorized_retry(
+    tmp_path,
+    monkeypatch,
+):
+    migrate_v6 = migration_module()
+    source_path = tmp_path / "repro-loop.json"
+    paths = store.StatePaths(source_path)
+    source = load_fixture("repro-loop-v3-eeg.json")
+    changed = json.loads(json.dumps(source))
+    changed["current"]["title"] = "authorized newer source"
+    store.atomic_json_write(
+        source_path,
+        source,
+        migrate_v6.legacy_state.validate_state,
+    )
+    rejected_plan = migrate_v6.plan_v6_migration(source)
+    real_matches = migrate_v6._matches
+    swapped = False
+
+    def swap_at_rejected_index_install(path, expected_sha256):
+        nonlocal swapped
+        matches = real_matches(path, expected_sha256)
+        if path == source_path and not swapped:
+            swapped = True
+            store._atomic_json_write(source_path, changed)
+        return matches
+
+    monkeypatch.setattr(
+        migrate_v6,
+        "_matches",
+        swap_at_rejected_index_install,
+    )
+    with pytest.raises(ValueError, match="source_state_sha256"):
+        migrate_v6.apply_checked_v6_migration(paths, rejected_plan)
+    monkeypatch.setattr(migrate_v6, "_matches", real_matches)
+    rejected_manifest_path = migrate_v6._manifest_path(
+        paths, rejected_plan.source_sha256
+    )
+    rejected_manifest = store.read_json(rejected_manifest_path)
+    assert rejected_manifest["status"] == "aborted"
+
+    retry_plan = migrate_v6.plan_v6_migration(changed)
+    migrate_v6.apply_checked_v6_migration(paths, retry_plan)
+    manifests = sorted((paths.root / "transactions").glob("*.json"))
+    assert len(manifests) == 2
+
+    # Also simulate a crash that lost the abort-status write. Recovery must use
+    # installed-source authority, not trust that every stale manifest is marked.
+    rejected_manifest["status"] = "staged"
+    store.atomic_json_write(
+        rejected_manifest_path,
+        rejected_manifest,
+        migrate_v6._validate_manifest,
+    )
+    migrate_v6.recover_transactions(paths)
+    migrate_v6.recover_transactions(paths)
+
+    selected = migrate_v6.plan_for_existing_migration(paths)
+    assert selected.source_sha256 == retry_plan.source_sha256
+    assert store.read_json(paths.index) == retry_plan.index
+    assert migrate_v6.verify_semantic_equivalence(changed, paths)[
+        "active_attempts"
+    ] == 1
+    assert only_active_attempt(paths)["title"] == "authorized newer source"
+
+
 def test_migrate_v6_cli_dry_run_reports_plan_without_writes(tmp_path):
     source_path = tmp_path / "repro-loop.json"
     source_path.write_text(

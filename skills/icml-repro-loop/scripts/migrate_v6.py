@@ -142,7 +142,12 @@ def _validate_manifest(manifest: dict) -> None:
     if (
         type(manifest["source_sha256"]) is not str
         or SHA256_PATTERN.fullmatch(manifest["source_sha256"]) is None
-        or manifest["status"] not in {"planned", "staged", "complete"}
+        or manifest["status"] not in {
+            "planned",
+            "staged",
+            "complete",
+            "aborted",
+        }
         or type(manifest["targets"]) is not list
     ):
         raise ValueError("manifest")
@@ -231,6 +236,8 @@ def _finish_transaction(
     manifest: dict,
     index_writer=None,
 ) -> None:
+    if manifest["status"] == "aborted":
+        raise ValueError("migration aborted")
     targets = plan.resolved_targets(paths)
     by_target = {
         str(path.relative_to(paths.index.parent)): (path, value)
@@ -293,8 +300,21 @@ def apply_v6_migration(
             if not _matches(target, _sha256(value)):
                 raise ValueError("completed target hash")
         return plan.index
+    if manifest["status"] == "aborted":
+        raise ValueError("migration aborted")
     _finish_transaction(paths, plan, manifest, index_writer)
     return plan.index
+
+
+def _abort_transaction(paths: store.StatePaths, plan: MigrationPlan) -> None:
+    """Durably prevent a rejected checked plan from being replayed."""
+    manifest_path = _manifest_path(paths, plan.source_sha256)
+    manifest = store.read_json(manifest_path)
+    _authenticate_manifest(paths, plan, manifest)
+    if manifest["status"] == "complete":
+        raise ValueError("completed migration cannot be aborted")
+    manifest["status"] = "aborted"
+    _write_json(manifest_path, manifest, _validate_manifest)
 
 
 def apply_checked_v6_migration(
@@ -321,24 +341,26 @@ def apply_checked_v6_migration(
             validator(value)
             store._atomic_json_write(path, value)
 
-        return apply_v6_migration(
-            paths,
-            plan,
-            index_writer=compare_and_swap_index,
-        )
+        try:
+            return apply_v6_migration(
+                paths,
+                plan,
+                index_writer=compare_and_swap_index,
+            )
+        except ValueError as error:
+            if str(error) != "source_state_sha256":
+                raise
+            _abort_transaction(paths, plan)
+            raise
 
 
-def recover_transactions(paths: store.StatePaths) -> None:
-    """Resume every incomplete transaction, including a pre-manifest crash."""
-    if paths.index.exists():
-        current = store.read_json(paths.index)
-        if current.get("version") == legacy_state.SCHEMA_V3_VERSION:
-            plan = plan_v6_migration(current)
-            apply_v6_migration(paths, plan)
-            return
+def _authenticated_manifest_plans(
+    paths: store.StatePaths,
+) -> list[tuple[dict, MigrationPlan]]:
     transaction_dir = paths.root / "transactions"
     if not transaction_dir.exists():
-        return
+        return []
+    authenticated = []
     for manifest_path in sorted(transaction_dir.glob("*.json")):
         manifest = store.read_json(manifest_path)
         _validate_manifest(manifest)
@@ -351,7 +373,44 @@ def recover_transactions(paths: store.StatePaths) -> None:
             raise ValueError("missing migration source")
         plan = plan_v6_migration(store.read_json(backup))
         _authenticate_manifest(paths, plan, manifest)
-        apply_v6_migration(paths, plan)
+        authenticated.append((manifest, plan))
+    return authenticated
+
+
+def _plan_for_installed_v6(
+    paths: store.StatePaths,
+    current: dict,
+) -> MigrationPlan:
+    matches = [
+        plan
+        for manifest, plan in _authenticated_manifest_plans(paths)
+        if manifest["status"] != "aborted" and plan.index == current
+    ]
+    if len(matches) != 1:
+        raise ValueError("migration manifest")
+    return matches[0]
+
+
+def recover_transactions(paths: store.StatePaths) -> None:
+    """Resume every incomplete transaction, including a pre-manifest crash."""
+    if paths.index.exists():
+        current = store.read_json(paths.index)
+        if current.get("version") == legacy_state.SCHEMA_V3_VERSION:
+            plan = plan_v6_migration(current)
+            apply_checked_v6_migration(paths, plan)
+            return
+        store.validate_index(current)
+        apply_v6_migration(paths, _plan_for_installed_v6(paths, current))
+        return
+    active = [
+        plan
+        for manifest, plan in _authenticated_manifest_plans(paths)
+        if manifest["status"] != "aborted"
+    ]
+    if len(active) > 1:
+        raise ValueError("migration manifest")
+    if active:
+        apply_v6_migration(paths, active[0])
 
 
 def plan_for_existing_migration(paths: store.StatePaths) -> MigrationPlan:
@@ -360,20 +419,7 @@ def plan_for_existing_migration(paths: store.StatePaths) -> MigrationPlan:
     if current.get("version") == legacy_state.SCHEMA_V3_VERSION:
         return plan_v6_migration(current)
     store.validate_index(current)
-    transaction_dir = paths.root / "transactions"
-    manifests = sorted(transaction_dir.glob("*.json"))
-    if len(manifests) != 1:
-        raise ValueError("migration manifest")
-    manifest = store.read_json(manifests[0])
-    _validate_manifest(manifest)
-    backup = (
-        paths.root / "v3-backups" / f"{manifest['source_sha256']}.json"
-    )
-    if not backup.exists():
-        raise ValueError("missing migration source")
-    plan = plan_v6_migration(store.read_json(backup))
-    _authenticate_manifest(paths, plan, manifest)
-    return plan
+    return _plan_for_installed_v6(paths, current)
 
 
 def _legacy_fields(shard: dict) -> dict:
