@@ -1,3 +1,21 @@
+---
+title: EEG-FM-Bench Released-Artifact Audit
+emoji: 🧠
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: "6.20.0"
+app_file: app.py
+pinned: false
+license: cc-by-4.0
+python_version: "3.12"
+short_description: CPU audit of the released EEG-FM-Bench artifact
+tags:
+  - icml2026-repro
+  - open-experiment
+  - paper-vGeNaFHdET
+---
+
 # EEG-FM-Bench released-artifact audit
 
 This project independently audits three structural claims against
