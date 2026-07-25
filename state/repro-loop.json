@@ -76,7 +76,9 @@
     "metered_api_reserved_usd": 10.0,
     "publication_per_provider": 20
   },
-  "snapshots": {},
+  "snapshots": {
+    "c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97": "repro-loop/snapshots/c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97.json"
+  },
   "total_api_cost_usd": 0.0,
   "version": 6
 }
