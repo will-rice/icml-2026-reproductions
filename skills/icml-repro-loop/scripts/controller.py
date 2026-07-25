@@ -643,13 +643,12 @@ def _validation_commands(
         or not _references_project(evidence, project_path)
     ):
         raise ValueError("commands")
-    if (
-        paper_pytest[:3] != ("uv", "run", "pytest")
-        or not _references_project(paper_pytest, project_path)
-        or any(
-            _pytest_bypass(argument)
-            for argument in paper_pytest[3:]
-        )
+    paper_pytest_arguments = _paper_pytest_arguments(
+        paper_pytest, project_path
+    )
+    if paper_pytest_arguments is None or any(
+        _pytest_bypass(argument)
+        for argument in paper_pytest_arguments
     ):
         raise ValueError("commands")
     if root_pytest != ("uv", "run", "pytest", "-q"):
@@ -664,6 +663,26 @@ def _validation_commands(
     if pre_commit != ("uv", "run", "pre-commit", "run", "-a"):
         raise ValueError("commands")
     return tuple(commands)
+
+
+def _paper_pytest_arguments(
+    command: tuple[str, ...], project_path: str
+) -> tuple[str, ...] | None:
+    if command[:3] == ("uv", "run", "pytest"):
+        arguments = command[3:]
+    elif command[:5] == (
+        "uv",
+        "run",
+        "--project",
+        project_path,
+        "pytest",
+    ):
+        arguments = command[5:]
+    else:
+        return None
+    if arguments != (f"{project_path}/tests", "-q"):
+        return None
+    return arguments
 
 
 def _references_project(argv: tuple[str, ...], project_path: str) -> bool:

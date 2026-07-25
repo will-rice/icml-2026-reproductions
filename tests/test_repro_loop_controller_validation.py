@@ -265,6 +265,90 @@ def test_validation_rejects_noncanonical_command_manifest(
         )
 
 
+def test_validation_accepts_paper_local_uv_project_environment(validation_case):
+    paths, lease, manifest = validation_case
+    manifest["commands"][0] = [
+        "uv",
+        "run",
+        "--project",
+        "submissions/paper-1",
+        "python",
+        "-m",
+        "paper_1.evidence",
+    ]
+    manifest["commands"][1] = [
+        "uv",
+        "run",
+        "--project",
+        "submissions/paper-1",
+        "pytest",
+        "submissions/paper-1/tests",
+        "-q",
+    ]
+
+    result = controller.attest_validation(
+        paths, "a1", lease, manifest, FakeRunner(manifest), NOW
+    )
+
+    assert result["phase"] == "validated"
+
+
+@pytest.mark.parametrize(
+    "paper_pytest",
+    [
+        [
+            "uv",
+            "run",
+            "--project",
+            "submissions/other-paper",
+            "pytest",
+            "submissions/paper-1/tests",
+            "-q",
+        ],
+        [
+            "uv",
+            "run",
+            "--project",
+            "submissions/paper-1",
+            "python",
+            "-m",
+            "pytest",
+            "submissions/paper-1/tests",
+            "-q",
+        ],
+        [
+            "uv",
+            "run",
+            "--project",
+            "submissions/paper-1",
+            "pytest",
+            "--rootdir",
+            "submissions/paper-1",
+            "-q",
+        ],
+        [
+            "uv",
+            "run",
+            "--project",
+            "submissions/paper-1",
+            "pytest",
+            "submissions/paper-1/tests/test_claim.py::test_one",
+            "-q",
+        ],
+    ],
+)
+def test_validation_rejects_noncanonical_paper_local_pytest(
+    validation_case, paper_pytest
+):
+    paths, lease, manifest = validation_case
+    manifest["commands"][1] = paper_pytest
+
+    with pytest.raises(ValueError, match="commands"):
+        controller.attest_validation(
+            paths, "a1", lease, manifest, FakeRunner(manifest), NOW
+        )
+
+
 @pytest.mark.parametrize(
     ("status", "branches", "error"),
     [
@@ -324,6 +408,8 @@ def test_validation_requires_approved_implementing_attempt(
         ["-m", "not slow"],
         ["--lf"],
         ["--ff"],
+        ["-o", "addopts=--collect-only"],
+        ["--override-ini", "addopts=--collect-only"],
     ],
 )
 def test_validation_rejects_paper_pytest_bypass_flags(
