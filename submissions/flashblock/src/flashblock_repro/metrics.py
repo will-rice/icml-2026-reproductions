@@ -13,7 +13,6 @@ def compute_cross_step_stability(
     Computes cross-step cosine similarity and L1 distance for block-external
     and block-internal attention outputs.
     """
-    # Flatten spatial/token dimensions for pairwise similarity
     flat_A_out_s = A_out_s.reshape(-1)
     flat_A_out_s1 = A_out_s1.reshape(-1)
     
@@ -54,36 +53,50 @@ def compute_speedup_and_flops(
     block_size: int,
     num_steps: int,
     update_threshold: int = 2,
+    bytes_per_elem: int = 2,  # FP16 / BF16
 ) -> Dict[str, float]:
     """
-    Computes theoretical FLOPs and estimated speedup for standard block diffusion vs FlashBlock caching.
+    Computes theoretical FLOPs, memory transfer bytes, and throughput speedups for standard
+    block diffusion vs FlashBlock attention caching.
     
-    Standard Block Diffusion FLOPs per step:
-        2 * B * (N_context + B) * d_k * num_heads
-    FlashBlock FLOPs when recomputing (step 1 or num_updated >= tau):
-        2 * B * (N_context + B) * d_k * num_heads
-    FlashBlock FLOPs when reusing cache (steps > 1 when num_updated < tau):
-        2 * B * B * d_k * num_heads
+    Standard Block Diffusion Memory Transfer (per step):
+        KV cache read bytes: B * (N_context + B) * num_heads * d_k * 2 * bytes_per_elem
+    FlashBlock Memory Transfer (when reusing cache):
+        KV cache read bytes: B * B * num_heads * d_k * 2 * bytes_per_elem
+        Cache read bytes: B * num_heads * d_k * bytes_per_elem (A_out) + B * num_heads * 1 * bytes_per_elem (L_out)
     """
     dense_flops_per_step = 2.0 * batch_size * num_heads * block_size * (context_len + block_size) * d_k
-    total_dense_flops = dense_flops_per_step * num_steps
+    dense_bytes_per_step = batch_size * num_heads * block_size * (context_len + block_size) * d_k * 2 * bytes_per_elem
     
-    # Calculate FlashBlock step FLOPs
+    total_dense_flops = dense_flops_per_step * num_steps
+    total_dense_bytes = dense_bytes_per_step * num_steps
+    
     total_fb_flops = 0.0
+    total_fb_bytes = 0.0
+    
     for s in range(num_steps):
-        # Step 0 always computes full
-        # For simplicity in simulation, assuming step 0 recomputes, remaining steps reuse if num_updated < threshold
         num_updated = block_size if s == 0 else 1
         if num_updated >= update_threshold:
             total_fb_flops += dense_flops_per_step
+            total_fb_bytes += dense_bytes_per_step
         else:
             cached_step_flops = 2.0 * batch_size * num_heads * block_size * block_size * d_k
+            cached_step_bytes = (
+                batch_size * num_heads * block_size * block_size * d_k * 2 * bytes_per_elem
+                + batch_size * num_heads * block_size * d_k * bytes_per_elem
+                + batch_size * num_heads * block_size * 1 * bytes_per_elem
+            )
             total_fb_flops += cached_step_flops
+            total_fb_bytes += cached_step_bytes
             
-    speedup = total_dense_flops / (total_fb_flops + 1e-8)
+    flop_speedup = total_dense_flops / (total_fb_flops + 1e-8)
+    memory_speedup = total_dense_bytes / (total_fb_bytes + 1e-8)
     
     return {
         "dense_flops": total_dense_flops,
         "flashblock_flops": total_fb_flops,
-        "theoretical_speedup": speedup,
+        "dense_memory_bytes": total_dense_bytes,
+        "flashblock_memory_bytes": total_fb_bytes,
+        "theoretical_speedup": flop_speedup,
+        "memory_bandwidth_speedup": memory_speedup,
     }

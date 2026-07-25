@@ -74,7 +74,8 @@ def main():
         update_threshold=2
     )
     speedup_val = speedup_metrics["theoretical_speedup"]
-    claim2_passed = speedup_val >= 1.30
+    mem_speedup_val = speedup_metrics["memory_bandwidth_speedup"]
+    claim2_passed = (speedup_val >= 1.30) and (mem_speedup_val >= 1.30)
     
     # Claim 3: log-space-attention-composition-fidelity
     Q = torch.randn(2, 4, 16, 64)
@@ -121,8 +122,11 @@ def main():
                 "status": "verified" if claim2_passed else "unverified",
                 "measured_value": {
                     "theoretical_speedup": speedup_val,
+                    "memory_bandwidth_speedup": mem_speedup_val,
                     "dense_flops": speedup_metrics["dense_flops"],
                     "flashblock_flops": speedup_metrics["flashblock_flops"],
+                    "dense_memory_bytes": speedup_metrics["dense_memory_bytes"],
+                    "flashblock_memory_bytes": speedup_metrics["flashblock_memory_bytes"],
                 },
                 "expected_value": "speedup >= 1.30x",
                 "tolerance": 0.05,

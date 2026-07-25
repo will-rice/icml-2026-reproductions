@@ -2,8 +2,8 @@
   "paper_id": "4jfuNNghPS",
   "paper_title": "FlashBlock: Attention Caching for Efficient Long-Context Block Diffusion",
   "upstream_revision": "arxiv:2602.05305v1",
-  "timestamp": "2026-07-25T15:37:54.704143+00:00",
-  "git_commit": "a34c1c4a643130a5b47fa1c5c79239192d77164b",
+  "timestamp": "2026-07-25T15:40:50.290609+00:00",
+  "git_commit": "8bde4f63305ed27d8abf07afa2a63140ffe72642",
   "claims": [
     {
       "claim_id": "cross-step-attention-stability-discrepancy",
@@ -21,8 +21,11 @@
       "status": "verified",
       "measured_value": {
         "theoretical_speedup": 9.661654135338344,
+        "memory_bandwidth_speedup": 9.640948239543683,
         "dense_flops": 336855040.0,
-        "flashblock_flops": 34865152.0
+        "flashblock_flops": 34865152.0,
+        "dense_memory_bytes": 673710080,
+        "flashblock_memory_bytes": 69880064.0
       },
       "expected_value": "speedup >= 1.30x",
       "tolerance": 0.05,
