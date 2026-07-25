@@ -2,6 +2,7 @@
 
 import importlib.util
 from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -1729,6 +1730,26 @@ def test_scheduler_assignment_drives_documented_cli_lifecycle(tmp_path: Path):
                 "slug": "paper-a",
                 "upstream_revision": "revision-a",
                 "target_claims": ["claim-1", "claim-2"],
+                "claim_bindings": [
+                    {
+                        "target_claim": "claim-1",
+                        "challenge_claim": "Challenge claim 1",
+                        "challenge_claim_sha256": hashlib.sha256(
+                            b"Challenge claim 1"
+                        ).hexdigest(),
+                    },
+                    {
+                        "target_claim": "claim-2",
+                        "challenge_claim": "Challenge claim 2",
+                        "challenge_claim_sha256": hashlib.sha256(
+                            b"Challenge claim 2"
+                        ).hexdigest(),
+                    },
+                ],
+                "live_claims": [
+                    {"text": "Challenge claim 1", "status": "extracted"},
+                    {"text": "Challenge claim 2", "status": "extracted"},
+                ],
                 "estimated_api_cost_usd": 0.0,
                 "score": 10,
                 "artifact_access": True,
