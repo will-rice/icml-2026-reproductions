@@ -1,1 +1,1 @@
-"""DeMix data mixing via model merging package."""
+"""Deterministic audit of released DeMix evidence artifacts."""
