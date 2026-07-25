@@ -1909,6 +1909,47 @@ def test_transition_attempt_rejects_owner_mismatch(tmp_path: Path):
     assert "owner" in result.stderr
 
 
+def test_cli_transition_attempt_rejects_attested_complete_phase(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path, submitted=True)
+    lease = attempt_leases["a1"]
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases", "attestations", "attempts"):
+        sys.modules.pop(name, None)
+    import attestations
+    import attempts
+
+    attestation_id = persist_test_attestation(
+        attestations, paths, "authority-audit", "a1"
+    )
+    attempts.transition_attested(
+        paths,
+        "a1",
+        "judging",
+        attestation_id,
+        {},
+        lease,
+        datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc),
+    )
+
+    result = run_cli_unchecked(
+        "transition-attempt",
+        str(paths.index),
+        "complete",
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+        "--now",
+        "2026-07-24T18:00:00+00:00",
+    )
+
+    assert result.returncode != 0
+    assert "attestation" in result.stderr
+
+
 def test_cli_judgment_commands_preserve_fenced_scheduler_signatures(tmp_path: Path):
     paths, attempt_leases = schema_v6_attempts(tmp_path, submitted=True)
     lease = attempt_leases["a1"]
@@ -2451,10 +2492,11 @@ def run_cli_unchecked(*arguments: str) -> subprocess.CompletedProcess[str]:
 def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
     scripts = str(STATE_MODULE_PATH.parent)
     sys.path.insert(0, scripts)
-    for name in ("store", "leases", "attempts"):
+    for name in ("store", "leases", "attestations", "attempts"):
         sys.modules.pop(name, None)
     import store
     import leases
+    import attestations
     import attempts
 
     paths = store.StatePaths(tmp_path / "repro-loop.json")
@@ -2504,8 +2546,17 @@ def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
         attempts.record_design_review(
             paths, "a1", lease, "reviewer", "approved", now
         )
-        for phase in ("validated", "deployed", "submitted"):
-            attempts.transition_attempt(paths, "a1", phase, lease, now)
+        for phase, kind in (
+            ("validated", "validation"),
+            ("deployed", "deployment"),
+            ("submitted", "submission"),
+        ):
+            attestation_id = persist_test_attestation(
+                attestations, paths, kind, "a1"
+            )
+            attempts.transition_attested(
+                paths, "a1", phase, attestation_id, {}, lease, now
+            )
         attempts.update_attempt(
             paths,
             "a1",
@@ -2516,3 +2567,19 @@ def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
             improvement_attempts=0,
         )
     return paths, attempt_leases
+
+
+def persist_test_attestation(
+    attestations, paths, kind: str, attempt_id: str, attempt_number: int = 1
+) -> str:
+    return attestations.persist(
+        paths,
+        {
+            "kind": kind,
+            "attempt_id": attempt_id,
+            "attempt_number": attempt_number,
+            "observed_at": "2026-07-24T18:00:00+00:00",
+            "source_commit": "abc123",
+            "payload_sha256": "1" * 64,
+        },
+    )

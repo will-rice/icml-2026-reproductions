@@ -14,6 +14,14 @@ SCRIPTS = (
     Path(__file__).resolve().parents[1] / "skills" / "icml-repro-loop" / "scripts"
 )
 TTL = timedelta(minutes=5)
+ATTESTED_PHASES = ("validated", "deployed", "submitted", "judging", "complete")
+PHASE_KINDS = {
+    "validated": "validation",
+    "deployed": "deployment",
+    "submitted": "submission",
+    "judging": "authority-audit",
+    "complete": "verdict",
+}
 
 
 def load_module(name: str):
@@ -39,6 +47,12 @@ def attempts():
     load_module("leases")
     load_module("state")
     return load_module("attempts")
+
+
+@pytest.fixture
+def attestations():
+    load_module("store")
+    return load_module("attestations")
 
 
 @pytest.fixture
@@ -72,6 +86,34 @@ def create(attempts, leases, paths, attempt_id, paper_id, owner, now):
         paths, attempt_id, paper(paper_id), lease, "snapshot-1", now
     )
     return lease
+
+
+def transition_attested_to(
+    attempts, attestations, paths, attempt_id, phase, lease, now
+):
+    for target in ATTESTED_PHASES:
+        if target == "complete" and phase != "complete":
+            break
+        attestation_id = attestations.persist(
+            paths, attestation_record(PHASE_KINDS[target], attempt_id)
+        )
+        attempts.transition_attested(
+            paths, attempt_id, target, attestation_id, {}, lease, now
+        )
+        if target == phase:
+            return
+    raise AssertionError(f"Unsupported attested phase: {phase}")
+
+
+def attestation_record(kind, attempt_id="a1", attempt_number=1):
+    return {
+        "kind": kind,
+        "attempt_id": attempt_id,
+        "attempt_number": attempt_number,
+        "observed_at": "2026-07-24T12:00:00+00:00",
+        "source_commit": "abc123",
+        "payload_sha256": "1" * 64,
+    }
 
 
 def interrupt_transaction(monkeypatch, attempts, fail_after):
@@ -216,6 +258,96 @@ def test_blocked_attempt_is_not_runnable_and_resumes_its_origin(
     assert "blocked_from" not in resumed
 
 
+@pytest.mark.parametrize("phase", ATTESTED_PHASES)
+def test_generic_transition_rejects_attested_phase(
+    paths, attempts_and_leases, attempts, attestations, now, phase
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    if phase != "validated":
+        previous = ATTESTED_PHASES[ATTESTED_PHASES.index(phase) - 1]
+        transition_attested_to(
+            attempts, attestations, paths, attempt_id, previous, lease, now
+        )
+
+    with pytest.raises(ValueError, match="attestation"):
+        attempts.transition_attempt(paths, attempt_id, phase, lease, now)
+
+
+@pytest.mark.parametrize("phase", ATTESTED_PHASES)
+def test_generic_transition_cannot_resume_blocked_attested_phase(
+    paths, attempts_and_leases, attempts, store, now, phase
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    attempts.transition_attempt(
+        paths, attempt_id, "blocked", lease, now, blocker="external outage"
+    )
+    with store.locked_json(paths.attempt(attempt_id), store.validate_attempt) as attempt:
+        attempt["blocked_from"] = phase
+
+    with pytest.raises(ValueError, match="attestation"):
+        attempts.transition_attempt(paths, attempt_id, phase, lease, now)
+
+
+def test_attested_transition_requires_matching_kind_attempt_and_number(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    mismatches = (
+        attestation_record("deployment"),
+        attestation_record("validation", attempt_id="a2"),
+        attestation_record("validation", attempt_number=2),
+    )
+
+    for record in mismatches:
+        attestation_id = attestations.persist(paths, record)
+        with pytest.raises(ValueError, match="attestation"):
+            attempts.transition_attested(
+                paths,
+                attempt_id,
+                "validated",
+                attestation_id,
+                {},
+                lease,
+                now,
+            )
+
+
+def test_attested_transition_advances_and_resumes_external_phase(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    attestation_id = attestations.persist(
+        paths, attestation_record("validation")
+    )
+
+    transitioned = attempts.transition_attested(
+        paths,
+        attempt_id,
+        "validated",
+        attestation_id,
+        {"validation_command": "uv run pytest"},
+        lease,
+        now,
+    )
+    attempts.transition_attempt(
+        paths, attempt_id, "blocked", lease, now, blocker="external outage"
+    )
+    resumed = attempts.transition_attested(
+        paths,
+        attempt_id,
+        "validated",
+        attestation_id,
+        {},
+        lease,
+        now,
+    )
+
+    assert transitioned["phase"] == "validated"
+    assert transitioned["validation_command"] == "uv run pytest"
+    assert resumed["phase"] == "validated"
+    assert "blocked_from" not in resumed
+
+
 def test_blocking_requires_nonempty_blocker(paths, attempts_and_leases, attempts, now):
     a1, lease, _, _ = attempts_and_leases
     with pytest.raises(ValueError, match="blocker"):
@@ -223,14 +355,12 @@ def test_blocking_requires_nonempty_blocker(paths, attempts_and_leases, attempts
 
 
 def test_completion_moves_attempt_reference_to_history(
-    paths, attempts_and_leases, attempts, store, now
+    paths, attempts_and_leases, attempts, attestations, store, now
 ):
     a1, lease, _, _ = attempts_and_leases
-    attempts.transition_attempt(paths, a1, "validated", lease, now)
-    attempts.transition_attempt(paths, a1, "deployed", lease, now)
-    attempts.transition_attempt(paths, a1, "submitted", lease, now)
-    attempts.transition_attempt(paths, a1, "judging", lease, now)
-    attempts.transition_attempt(paths, a1, "complete", lease, now)
+    transition_attested_to(
+        attempts, attestations, paths, a1, "complete", lease, now
+    )
 
     index = store.read_json(paths.index)
     assert a1 not in index["attempts"]
@@ -310,15 +440,28 @@ def test_interrupted_update_recovers_matching_shard_and_reference(
 
 @pytest.mark.parametrize("fail_after", range(1, 5))
 def test_interrupted_completion_never_recovers_complete_attempt_as_active(
-    paths, attempts_and_leases, attempts, store, now, monkeypatch, fail_after
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    store,
+    now,
+    monkeypatch,
+    fail_after,
 ):
     attempt_id, lease, _, _ = attempts_and_leases
-    for phase in ("validated", "deployed", "submitted", "judging"):
-        attempts.transition_attempt(paths, attempt_id, phase, lease, now)
+    transition_attested_to(
+        attempts, attestations, paths, attempt_id, "judging", lease, now
+    )
+    attestation_id = attestations.persist(
+        paths, attestation_record("verdict", attempt_id)
+    )
     interrupt_transaction(monkeypatch, attempts, fail_after)
 
     with pytest.raises(OSError, match="simulated interruption"):
-        attempts.transition_attempt(paths, attempt_id, "complete", lease, now)
+        attempts.transition_attested(
+            paths, attempt_id, "complete", attestation_id, {}, lease, now
+        )
 
     restore_transaction_writes(monkeypatch, attempts)
     attempts.recover_transactions(paths)

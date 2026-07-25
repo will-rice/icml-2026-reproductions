@@ -68,6 +68,21 @@ class StatePaths:
             / f"{validate_id(attempt_id)}--{attempt_number}.json"
         )
 
+    def attestation(
+        self, kind: str, attempt_id: str, attempt_number: int = 1
+    ) -> Path:
+        """Resolve one immutable external-lifecycle attestation slot."""
+        validate_id(kind)
+        validate_id(attempt_id)
+        if type(attempt_number) is not int or attempt_number < 1:
+            raise ValueError("attempt_number")
+        return (
+            self.root
+            / "attestations"
+            / kind
+            / f"{attempt_id}--{attempt_number}.json"
+        )
+
     def lease(self, lease_id: str) -> Path:
         return self.root / "leases" / f"{validate_id(lease_id)}.json"
 

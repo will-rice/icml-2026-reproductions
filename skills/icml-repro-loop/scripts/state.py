@@ -155,7 +155,8 @@ def main() -> None:
     _add_fence_arguments(renew_parser)
     renew_parser.add_argument("--now")
     transition_attempt_parser = commands.add_parser(
-        "transition-attempt", help="transition one fenced attempt"
+        "transition-attempt",
+        help="transition one fenced non-authoritative attempt edge",
     )
     transition_attempt_parser.add_argument("path", type=Path)
     transition_attempt_parser.add_argument("phase", choices=sorted(PHASES))

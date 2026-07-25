@@ -16,6 +16,13 @@ SCRIPTS = (
     Path(__file__).resolve().parents[1] / "skills" / "icml-repro-loop" / "scripts"
 )
 TTL = timedelta(minutes=5)
+PHASE_KINDS = {
+    "validated": "validation",
+    "deployed": "deployment",
+    "submitted": "submission",
+    "judging": "authority-audit",
+    "complete": "verdict",
+}
 
 
 def load_module(name: str):
@@ -151,7 +158,7 @@ def transition_to_submitted(attempts, paths, assignment, now):
         paths, attempt_id, lease, "reviewer", "approved", now
     )
     for phase in ("validated", "deployed", "submitted"):
-        attempts.transition_attempt(paths, attempt_id, phase, lease, now)
+        transition_attested(attempts, paths, attempt_id, phase, lease, now)
     attempts.update_attempt(
         paths,
         attempt_id,
@@ -160,6 +167,23 @@ def transition_to_submitted(attempts, paths, assignment, now):
         space_id=f"org/{attempt_id}",
         deployed_sha=f"sha-{attempt_id}",
         improvement_attempts=0,
+    )
+
+
+def transition_attested(attempts, paths, attempt_id, phase, lease, now):
+    attestation_id = attempts.attestations.persist(
+        paths,
+        {
+            "kind": PHASE_KINDS[phase],
+            "attempt_id": attempt_id,
+            "attempt_number": 1,
+            "observed_at": now.isoformat(),
+            "source_commit": "abc123",
+            "payload_sha256": "1" * 64,
+        },
+    )
+    return attempts.transition_attested(
+        paths, attempt_id, phase, attestation_id, {}, lease, now
     )
 
 
@@ -327,8 +351,8 @@ def test_scheduler_refills_completed_and_blocked_slots(
             paths, attempt_id, lease, "reviewer", "approved", now
         )
     for phase in ("validated", "deployed", "submitted", "judging", "complete"):
-        attempts.transition_attempt(
-            paths, complete.attempt_id, phase, complete.writer_lease, now
+        transition_attested(
+            attempts, paths, complete.attempt_id, phase, complete.writer_lease, now
         )
     attempts.transition_attempt(
         paths,

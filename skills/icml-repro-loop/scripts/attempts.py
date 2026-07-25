@@ -14,6 +14,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
+import attestations  # noqa: E402
 import leases  # noqa: E402
 import state  # noqa: E402
 import store  # noqa: E402
@@ -29,6 +30,14 @@ IMMUTABLE_FIELDS = {
 }
 DESIGN_FIELDS = {"design", "design_review"}
 REVIEW_DECISIONS = {"approved", "rejected"}
+ATTESTED_PHASE_KINDS = {
+    "validated": "validation",
+    "deployed": "deployment",
+    "submitted": "submission",
+    "judging": "authority-audit",
+    "complete": "verdict",
+}
+GENERIC_PHASES = {"design-pending", "implementing", "improving", "blocked"}
 Mutation = Callable[[dict, str], bool]
 
 
@@ -127,13 +136,58 @@ def transition_attempt(
     now: datetime,
     **updates: object,
 ) -> dict:
-    """Advance one attempt through the phase graph and append provenance."""
+    """Advance a non-authoritative attempt edge and append provenance."""
+    if phase in ATTESTED_PHASE_KINDS:
+        raise ValueError("attestation")
+    if phase not in GENERIC_PHASES and phase != "idle":
+        raise ValueError("phase")
     unsupported = set(updates) & (IMMUTABLE_FIELDS | DESIGN_FIELDS)
     if unsupported:
         raise ValueError(sorted(unsupported)[0])
     transition_updates = copy.deepcopy(updates)
 
     def transition(attempt: dict, timestamp: str) -> bool:
+        return _apply_transition(
+            attempt, phase, lease, timestamp, transition_updates
+        )
+
+    return _mutate_attempt(paths, attempt_id, lease, now, transition)
+
+
+def transition_attested(
+    paths: store.StatePaths,
+    attempt_id: str,
+    phase: str,
+    attestation_id: str,
+    updates: dict,
+    lease: leases.Lease,
+    now: datetime,
+) -> dict:
+    """Advance one authoritative phase using matching immutable evidence."""
+    expected_kind = ATTESTED_PHASE_KINDS.get(phase)
+    if expected_kind is None:
+        raise ValueError("attestation")
+    if type(updates) is not dict:
+        raise ValueError("updates")
+    unsupported = set(updates) & (IMMUTABLE_FIELDS | DESIGN_FIELDS)
+    if unsupported:
+        raise ValueError(sorted(unsupported)[0])
+    record = attestations.read(paths, attestation_id)
+    transition_updates = copy.deepcopy(updates)
+
+    def transition(attempt: dict, timestamp: str) -> bool:
+        improvement_attempts = attempt.get("improvement_attempts", 0)
+        if (
+            type(improvement_attempts) is not int
+            or improvement_attempts not in {0, 1}
+        ):
+            raise ValueError("attestation")
+        if (
+            record["kind"] != expected_kind
+            or record["attempt_id"] != attempt_id
+            or record["attempt_number"] != improvement_attempts + 1
+        ):
+            raise ValueError("attestation")
         return _apply_transition(
             attempt, phase, lease, timestamp, transition_updates
         )
