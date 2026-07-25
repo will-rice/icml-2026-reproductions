@@ -18,7 +18,13 @@ import torch
 from .census import run_census_audit
 from .harness_audit import run_harness_audit
 from .preproc_audit import run_preproc_audit
-from .upstream import PROVENANCE_PATH, ensure_paper_pdf, ensure_repo_snapshot
+from .upstream import (
+    DEFAULT_CACHE_DIR,
+    PROVENANCE_PATH,
+    ensure_paper_pdf,
+    ensure_repo_snapshot,
+    register_cache_dir,
+)
 
 
 def _evaluate_status(record: dict[str, Any], thresholds: dict[str, Any]) -> str:
@@ -194,6 +200,7 @@ def _atomic_write(path: Path, content: bytes) -> None:
 
 def write_bundle(cache_dir: Path, output_dir: Path) -> None:
     bundle = build_bundle(cache_dir)
+    register_cache_dir(cache_dir)
     _atomic_write(output_dir / "results.json", _json_bytes(bundle))
     _atomic_write(output_dir / "measurements.csv", _csv_bytes(bundle))
 
@@ -202,7 +209,7 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Generate deterministic EEG-FM-Bench artifact-audit evidence."
     )
-    parser.add_argument("--cache-dir", type=Path, default=Path(".cache/upstream"))
+    parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE_DIR)
     parser.add_argument("--output-dir", type=Path, default=Path("evidence"))
     return parser
 
