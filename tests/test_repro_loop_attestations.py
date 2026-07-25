@@ -46,8 +46,25 @@ def record(kind: str = "validation", **updates: object) -> dict:
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
     }
+    if kind == "validation":
+        value.update(validation_fields())
     value.update(updates)
     return value
+
+
+def validation_fields() -> dict:
+    return {
+        "worktree": "/tmp/test-worktree",
+        "branch": "test-branch",
+        "base_sha": "2" * 40,
+        "project_path": "submissions/paper-1",
+        "design_path": "docs/designs/paper-1.md",
+        "commands": [],
+        "checks": [],
+        "environment": [],
+        "source_tree": "3" * 40,
+        "environment_sha256": "4" * 64,
+    }
 
 
 def canonical_id(value: dict) -> str:

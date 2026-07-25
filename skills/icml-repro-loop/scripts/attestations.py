@@ -29,6 +29,20 @@ COMMON_KEYS = {
 }
 KINDS = {"validation", "deployment", "submission", "verdict", "authority-audit"}
 KIND_KEYS = {kind: frozenset() for kind in KINDS}
+KIND_KEYS["validation"] = frozenset(
+    {
+        "worktree",
+        "branch",
+        "base_sha",
+        "project_path",
+        "design_path",
+        "commands",
+        "checks",
+        "environment",
+        "source_tree",
+        "environment_sha256",
+    }
+)
 SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
 
 

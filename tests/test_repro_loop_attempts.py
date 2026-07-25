@@ -114,6 +114,21 @@ def attestation_record(kind, attempt_id="a1", attempt_number=1, **updates):
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
     }
+    if kind == "validation":
+        record.update(
+            {
+                "worktree": "/tmp/test-worktree",
+                "branch": "test-branch",
+                "base_sha": "2" * 40,
+                "project_path": "submissions/paper-1",
+                "design_path": "docs/designs/paper-1.md",
+                "commands": [],
+                "checks": [],
+                "environment": [],
+                "source_tree": "3" * 40,
+                "environment_sha256": "4" * 64,
+            }
+        )
     record.update(updates)
     return record
 

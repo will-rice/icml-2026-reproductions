@@ -171,16 +171,32 @@ def transition_to_submitted(attempts, paths, assignment, now):
 
 
 def transition_attested(attempts, paths, attempt_id, phase, lease, now):
+    record = {
+        "kind": PHASE_KINDS[phase],
+        "attempt_id": attempt_id,
+        "attempt_number": 1,
+        "observed_at": now.isoformat(),
+        "source_commit": "abc123",
+        "payload_sha256": "1" * 64,
+    }
+    if phase == "validated":
+        record.update(
+            {
+                "worktree": "/tmp/test-worktree",
+                "branch": "test-branch",
+                "base_sha": "2" * 40,
+                "project_path": "submissions/paper-1",
+                "design_path": "docs/designs/paper-1.md",
+                "commands": [],
+                "checks": [],
+                "environment": [],
+                "source_tree": "3" * 40,
+                "environment_sha256": "4" * 64,
+            }
+        )
     attestation_id = attempts.attestations.persist(
         paths,
-        {
-            "kind": PHASE_KINDS[phase],
-            "attempt_id": attempt_id,
-            "attempt_number": 1,
-            "observed_at": now.isoformat(),
-            "source_commit": "abc123",
-            "payload_sha256": "1" * 64,
-        },
+        record,
     )
     return attempts.transition_attested(
         paths, attempt_id, phase, attestation_id, {}, lease, now

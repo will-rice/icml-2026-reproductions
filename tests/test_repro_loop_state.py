@@ -2572,14 +2572,30 @@ def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
 def persist_test_attestation(
     attestations, paths, kind: str, attempt_id: str, attempt_number: int = 1
 ) -> str:
+    record = {
+        "kind": kind,
+        "attempt_id": attempt_id,
+        "attempt_number": attempt_number,
+        "observed_at": "2026-07-24T18:00:00+00:00",
+        "source_commit": "abc123",
+        "payload_sha256": "1" * 64,
+    }
+    if kind == "validation":
+        record.update(
+            {
+                "worktree": "/tmp/test-worktree",
+                "branch": "test-branch",
+                "base_sha": "2" * 40,
+                "project_path": "submissions/paper-1",
+                "design_path": "docs/designs/paper-1.md",
+                "commands": [],
+                "checks": [],
+                "environment": [],
+                "source_tree": "3" * 40,
+                "environment_sha256": "4" * 64,
+            }
+        )
     return attestations.persist(
         paths,
-        {
-            "kind": kind,
-            "attempt_id": attempt_id,
-            "attempt_number": attempt_number,
-            "observed_at": "2026-07-24T18:00:00+00:00",
-            "source_commit": "abc123",
-            "payload_sha256": "1" * 64,
-        },
+        record,
     )

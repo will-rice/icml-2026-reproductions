@@ -205,6 +205,14 @@ def main() -> None:
     verdict_parser.add_argument("--normalized-verdict", required=True)
     verdict_parser.add_argument("--source-revision", required=True)
     verdict_parser.add_argument("--now")
+    validation_parser = commands.add_parser(
+        "attest-validation",
+        help="run and attest one fenced paper validation",
+    )
+    validation_parser.add_argument("path", type=Path)
+    _add_fence_arguments(validation_parser)
+    validation_parser.add_argument("--manifest", type=Path, required=True)
+    validation_parser.add_argument("--now")
     arguments = parser.parse_args()
 
     if arguments.command in {
@@ -221,6 +229,7 @@ def main() -> None:
         "watch-attempt",
         "record-poll",
         "record-verdict",
+        "attest-validation",
     }:
         state = _run_v6_command(arguments)
     elif arguments.command == "migrate-v6":
@@ -365,6 +374,18 @@ def _run_v6_command(arguments: argparse.Namespace) -> object:
     if arguments.command == "record-poll":
         return scheduler.record_poll(
             paths, arguments.attempt_id, lease, arguments.status, now
+        )
+    if arguments.command == "attest-validation":
+        import controller
+
+        manifest = json.loads(arguments.manifest.read_text(encoding="utf-8"))
+        return controller.attest_validation(
+            paths,
+            arguments.attempt_id,
+            lease,
+            manifest,
+            controller.run_command,
+            now,
         )
     return scheduler.record_verdict(
         paths,
