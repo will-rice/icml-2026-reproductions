@@ -1,0 +1,22 @@
+{
+  "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+  "attempt_number": 2,
+  "attestation_id": "25e9043e28a592b467af434fe1e61ccec7e3599bb59cbc294139e61db80dd464",
+  "kind": "deployment",
+  "observed_at": "2026-07-25T23:58:07.100708+00:00",
+  "owner": "wrice",
+  "payload_sha256": "031682c7ab7a80dd669861aa8a8908adf07baa099cc78b5358d1b1fc3e2d2ebb",
+  "runtime_stage": "RUNNING",
+  "source_commit": "a8aa5e202f88da2970e1e9862ff8b8ef1558ee2e",
+  "source_tree_sha256": "ea89a26a6bf53c6ffce8e3e238c63b9d24ef52eebf121e61b3be24cf802d07af",
+  "space_id": "wrice/repro-eeg-fm-bench",
+  "space_sha": "26252685754f34eceaac6a9bf7ce85468573eb95",
+  "tags": [
+    "gradio",
+    "icml2026-repro",
+    "open-experiment",
+    "paper-vGeNaFHdET",
+    "region:us"
+  ],
+  "validation_attestation_id": "3ba19d42c7dd8b5a089586f1efda507a1cfd37bca2ac53619a7f2bd5f0f370bd"
+}

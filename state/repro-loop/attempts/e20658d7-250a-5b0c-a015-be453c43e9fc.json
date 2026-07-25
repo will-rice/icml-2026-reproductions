@@ -17,6 +17,7 @@
       "target_claim": "three-strategy-evaluation-harness"
     }
   ],
+  "deployed_sha": "26252685754f34eceaac6a9bf7ce85468573eb95",
   "design": {
     "approval_commit": "1d2c4c74700b66068d43443f7c8e742d4dc797a5",
     "author": "git-author:Will Rice <wrice20@gmail.com>",
@@ -66,11 +67,12 @@
     }
   ],
   "paper_id": "vGeNaFHdET",
-  "phase": "validated",
+  "phase": "deployed",
   "polls": [],
   "project_path": "submissions/eeg-fm-bench",
   "slug": "eeg-fm-bench",
   "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+  "space_id": "wrice/repro-eeg-fm-bench",
   "target_claims": [
     "fourteen-dataset-ten-paradigm-curation",
     "standardized-preprocessing-reproducibility",
@@ -103,9 +105,18 @@
       "owner": "controller-eeg-reconcile-20260725",
       "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
       "to": "validated"
+    },
+    {
+      "at": "2026-07-25T23:58:07.100708+00:00",
+      "attestation_id": "25e9043e28a592b467af434fe1e61ccec7e3599bb59cbc294139e61db80dd464",
+      "fencing_token": 1,
+      "from": "validated",
+      "owner": "controller-eeg-reconcile-20260725",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "deployed"
     }
   ],
-  "updated_at": "2026-07-25T23:52:25.798009+00:00",
+  "updated_at": "2026-07-25T23:58:07.100708+00:00",
   "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc",
   "verdicts": []
 }
