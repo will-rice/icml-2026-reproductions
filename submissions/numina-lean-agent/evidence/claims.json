@@ -1,0 +1,71 @@
+[
+  {
+    "claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+    "claim_id": "putnam-12-12",
+    "computed_observation": {
+      "build_exit_code": 0,
+      "kernel_checked_proof_count": 12,
+      "proof_names": [
+        "putnam_2025_a1",
+        "putnam_2025_a2",
+        "putnam_2025_a3",
+        "putnam_2025_a4",
+        "putnam_2025_a5",
+        "putnam_2025_a6",
+        "putnam_2025_b1",
+        "putnam_2025_b2",
+        "putnam_2025_b3",
+        "putnam_2025_b4",
+        "putnam_2025_b5",
+        "putnam_2025_b6"
+      ],
+      "sorry_ax_count": 0
+    },
+    "evidence_kind": "released-proof-verification",
+    "input_files": {
+      "putnam_axioms.json": {
+        "sha256": "716fde5b94ce45bdc77405ecb97eab243e7232f23a689547b4b68ce19e42d9b4"
+      },
+      "putnam_build.json": {
+        "sha256": "5623452edc73a3b34a35bdff6ad751da2f217203b947e61e4fafa51d23b58afd"
+      }
+    },
+    "limitations": [
+      "Does not rerun Numina-Lean-Agent or Claude Opus 4.5.",
+      "Verifies the released companion proofs, not the agent-attribution or comparison-table experiment."
+    ],
+    "status": "supports",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  {
+    "claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+    "claim_id": "brascamp-lieb-formalization",
+    "computed_observation": {
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "build_exit_code": 0,
+      "formalization_scope": "BrascampLieb.upperBound Gaussian supremum bound from the Numina paper Appendix A.1; not the full analytic function-space theorem",
+      "sorry_ax_present": false,
+      "theorem": "BrascampLieb.upperBound"
+    },
+    "evidence_kind": "released-proof-verification",
+    "input_files": {
+      "brascamp_lieb_axioms.json": {
+        "sha256": "80a2cde91ba3d0bad70b13a33ff6da4f79aa25794dd7665447ffbbdf97de2d92"
+      },
+      "brascamp_lieb_build.json": {
+        "sha256": "41ee75e7c45ba23113138cd636dfb5ef0ae145d527b514c73c038ee0491fcc52"
+      }
+    },
+    "limitations": [
+      "Checks the released Gaussian supremum bound, not the full analytic function-space Brascamp-Lieb theorem.",
+      "Does not verify interaction with mathematicians or rerun Numina-Lean-Agent.",
+      "The released formal statement assumes nonzero ambient dimension."
+    ],
+    "status": "supports",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  }
+]
