@@ -45,7 +45,8 @@ ATTESTED_PHASE_KINDS = {
     "complete": "verdict",
 }
 GENERIC_PHASES = {"design-pending", "implementing", "improving", "blocked"}
-ATTESTED_PROTECTED_UPDATE_FIELDS = {"improvement_attempts"}
+IMPROVEMENT_FIELDS = {"improvement_attempts", "improvement_reason"}
+ATTESTED_PROTECTED_UPDATE_FIELDS = IMPROVEMENT_FIELDS
 DEPLOYMENT_FIELDS = {"deployed_sha", "space_id"}
 Mutation = Callable[[dict, str], bool]
 
@@ -126,7 +127,9 @@ def update_attempt(
     **updates: object,
 ) -> dict:
     """Apply same-phase updates to one active attempt under its writer fence."""
-    unsupported = set(updates) & (IMMUTABLE_FIELDS | DESIGN_FIELDS)
+    unsupported = set(updates) & (
+        IMMUTABLE_FIELDS | DESIGN_FIELDS | IMPROVEMENT_FIELDS
+    )
     if unsupported:
         raise ValueError(sorted(unsupported)[0])
 
@@ -487,12 +490,19 @@ def _apply_transition(
     attestation_id: str | None = None,
 ) -> bool:
     source = attempt["phase"]
-    is_predeployment_correction = source == "validated" and phase == "improving"
-    if is_predeployment_correction:
-        _validate_predeployment_correction(attempt, updates)
-    abandon = updates.pop("abandon", None)
     is_resume = source == "blocked" and phase == attempt.get("blocked_from")
     is_abandon = source == "blocked" and phase == "idle"
+    is_predeployment_correction = source == "validated" and phase == "improving"
+    is_improving_entry = phase == "improving" and not is_resume
+    if is_predeployment_correction:
+        _validate_predeployment_correction(attempt, updates)
+    elif is_improving_entry:
+        _validate_improving_entry(attempt, updates)
+    else:
+        protected = set(updates) & IMPROVEMENT_FIELDS
+        if protected:
+            raise ValueError(sorted(protected)[0])
+    abandon = updates.pop("abandon", None)
     if (
         type(phase) is not str
         or phase not in state.PHASES
@@ -542,6 +552,13 @@ def _apply_transition(
 
 def _validate_predeployment_correction(attempt: dict, updates: dict) -> None:
     """Require the sole counted correction before an attempt is deployed."""
+    if set(updates) - IMPROVEMENT_FIELDS:
+        raise ValueError("updates")
+    _validate_improving_entry(attempt, updates)
+
+
+def _validate_improving_entry(attempt: dict, updates: dict) -> None:
+    """Enforce the shared one-improvement ceiling on every fresh entry."""
     current_attempts = attempt.get("improvement_attempts", 0)
     if type(current_attempts) is not int or current_attempts != 0:
         raise ValueError("improvement_attempts")
@@ -565,8 +582,11 @@ def _require_no_deployment(
     ):
         raise ValueError("deployment")
     deployment_root = paths.root / "attestations" / "deployment"
-    if any(deployment_root.glob(f"{attempt['attempt_id']}--*.json")):
-        raise ValueError("deployment")
+    for path in sorted(deployment_root.glob("*.json")):
+        record = store.read_json(path)
+        attestations.validate_target(paths, path, record)
+        if record["attempt_id"] == attempt["attempt_id"]:
+            raise ValueError("deployment")
 
 
 def _commit(

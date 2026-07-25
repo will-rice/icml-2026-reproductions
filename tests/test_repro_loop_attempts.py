@@ -121,6 +121,38 @@ def attestation_record(kind, attempt_id="a1", attempt_number=1, **updates):
     return record
 
 
+def transition_through_correction(
+    attempts, attestations, paths, attempt_id, lease, now
+):
+    first_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+    attempts.transition_attested(
+        paths, attempt_id, "validated", first_id, {}, lease, now
+    )
+    attempts.transition_attempt(
+        paths,
+        attempt_id,
+        "improving",
+        lease,
+        now,
+        improvement_attempts=1,
+        improvement_reason="Correct validation evidence",
+    )
+    second_id = attestations.persist(
+        paths,
+        attestation_record(
+            "validation",
+            attempt_id,
+            attempt_number=2,
+            source_commit="7" * 40,
+        ),
+    )
+    return attempts.transition_attested(
+        paths, attempt_id, "validated", second_id, {}, lease, now
+    )
+
+
 def interrupt_transaction(monkeypatch, attempts, fail_after):
     writes = 0
 
@@ -583,21 +615,273 @@ def test_predeployment_correction_rejects_authoritative_deployment_attestation(
         )
 
 
-def test_attested_transition_rejects_improvement_attempt_update(
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("improvement_attempts", 0),
+        ("improvement_reason", ""),
+        ("improvement_reason", "Rewrite correction history"),
+    ],
+)
+def test_update_cannot_reset_or_rewrite_consumed_correction(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    now,
+    field,
+    value,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    expected = transition_through_correction(
+        attempts, attestations, paths, attempt_id, lease, now
+    )
+
+    with pytest.raises(ValueError, match=field):
+        attempts.update_attempt(
+            paths, attempt_id, lease, now, **{field: value}
+        )
+
+    assert attempts.read_attempt(paths, attempt_id) == expected
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("improvement_attempts", 0),
+        ("improvement_reason", "Rewrite correction history"),
+    ],
+)
+def test_other_generic_transition_cannot_rewrite_consumed_correction(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    now,
+    field,
+    value,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    expected = transition_through_correction(
+        attempts, attestations, paths, attempt_id, lease, now
+    )
+
+    with pytest.raises(ValueError, match=field):
+        attempts.transition_attempt(
+            paths,
+            attempt_id,
+            "blocked",
+            lease,
+            now,
+            blocker="External outage",
+            **{field: value},
+        )
+
+    assert attempts.read_attempt(paths, attempt_id) == expected
+
+
+@pytest.mark.parametrize(
+    ("mutation", "error"),
+    [
+        ({"improvement_attempts": 0}, "improvement_reason"),
+        ({"improvement_attempts": 2}, "improvement_attempts"),
+        ({"improvement_reason": ""}, "improvement_reason"),
+        ({"improvement_reason": None}, "improvement_reason"),
+    ],
+)
+def test_persisted_attempt_validates_improvement_relationship(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    store,
+    now,
+    mutation,
+    error,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    malformed = transition_through_correction(
+        attempts, attestations, paths, attempt_id, lease, now
+    )
+    malformed.update(mutation)
+
+    with pytest.raises(ValueError, match=error):
+        store.validate_attempt(malformed)
+
+
+def test_persisted_attempt_rejects_missing_reason_for_consumed_correction(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    store,
+    now,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    malformed = transition_through_correction(
+        attempts, attestations, paths, attempt_id, lease, now
+    )
+    malformed.pop("improvement_reason")
+
+    with pytest.raises(ValueError, match="improvement_reason"):
+        store.validate_attempt(malformed)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("project_path", "submissions/other-paper"),
+        ("target_claims", ["forged-claim-1", "forged-claim-2"]),
+    ],
+)
+def test_predeployment_correction_rejects_surplus_updates(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    now,
+    field,
+    value,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    first_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+    validated = attempts.transition_attested(
+        paths, attempt_id, "validated", first_id, {}, lease, now
+    )
+
+    with pytest.raises(ValueError, match="updates"):
+        attempts.transition_attempt(
+            paths,
+            attempt_id,
+            "improving",
+            lease,
+            now,
+            improvement_attempts=1,
+            improvement_reason="Correct evidence",
+            **{field: value},
+        )
+
+    assert attempts.read_attempt(paths, attempt_id) == validated
+
+
+def test_consumed_correction_rejects_later_judgment_improvement(
     paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    transition_through_correction(
+        attempts, attestations, paths, attempt_id, lease, now
+    )
+    for phase in ("deployed", "submitted", "judging"):
+        attestation_id = attestations.persist(
+            paths,
+            attestation_record(
+                PHASE_KINDS[phase], attempt_id, attempt_number=2
+            ),
+        )
+        attempts.transition_attested(
+            paths, attempt_id, phase, attestation_id, {}, lease, now
+        )
+
+    with pytest.raises(ValueError, match="improvement_attempts"):
+        attempts.transition_attempt(
+            paths,
+            attempt_id,
+            "improving",
+            lease,
+            now,
+            improvement_attempts=1,
+            improvement_reason="Official verdict requested stronger evidence",
+        )
+
+    assert attempts.read_attempt(paths, attempt_id)["phase"] == "judging"
+
+
+def test_unconsumed_judgment_allows_one_improvement(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    transition_attested_to(
+        attempts, attestations, paths, attempt_id, "judging", lease, now
+    )
+
+    improving = attempts.transition_attempt(
+        paths,
+        attempt_id,
+        "improving",
+        lease,
+        now,
+        improvement_attempts=1,
+        improvement_reason="Official verdict requested stronger evidence",
+    )
+
+    assert improving["phase"] == "improving"
+    assert improving["improvement_attempts"] == 1
+
+
+def test_deployment_for_delimiter_prefixed_attempt_does_not_block_correction(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    store,
+    now,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    first_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+    attempts.transition_attested(
+        paths, attempt_id, "validated", first_id, {}, lease, now
+    )
+    other_id = f"{attempt_id}--other"
+    deployment_id = attestations.persist(
+        paths, attestation_record("deployment", other_id)
+    )
+    deployment = attestations.read(paths, deployment_id)
+    target = paths.attestation("deployment", other_id, 1)
+    store.atomic_json_write(
+        target,
+        deployment,
+        lambda record: attestations.validate_target(paths, target, record),
+    )
+
+    improving = attempts.transition_attempt(
+        paths,
+        attempt_id,
+        "improving",
+        lease,
+        now,
+        improvement_attempts=1,
+        improvement_reason="Correct evidence",
+    )
+
+    assert improving["phase"] == "improving"
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("improvement_attempts", 1),
+        ("improvement_reason", "Forged correction"),
+    ],
+)
+def test_attested_transition_rejects_improvement_metadata_update(
+    paths, attempts_and_leases, attempts, attestations, now, field, value
 ):
     attempt_id, lease, _, _ = attempts_and_leases
     attestation_id = attestations.persist(
         paths, attestation_record("validation", attempt_id)
     )
 
-    with pytest.raises(ValueError, match="improvement_attempts"):
+    with pytest.raises(ValueError, match=field):
         attempts.transition_attested(
             paths,
             attempt_id,
             "validated",
             attestation_id,
-            {"improvement_attempts": 1},
+            {field: value},
             lease,
             now,
         )

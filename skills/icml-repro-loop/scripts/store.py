@@ -225,6 +225,20 @@ def validate_attempt(attempt: dict) -> None:
     _validate_timestamped_shard(attempt, "attempt_id", "attempt")
     _require_nonempty_string(attempt.get("paper_id"), "paper_id")
     _require_nonempty_string(attempt.get("phase"), "phase")
+    improvement_attempts = attempt.get("improvement_attempts", 0)
+    if (
+        type(improvement_attempts) is not int
+        or improvement_attempts not in {0, 1}
+    ):
+        raise ValueError("improvement_attempts")
+    if improvement_attempts == 0:
+        if "improvement_reason" in attempt:
+            raise ValueError("improvement_reason")
+    elif (
+        type(attempt.get("improvement_reason")) is not str
+        or not attempt["improvement_reason"].strip()
+    ):
+        raise ValueError("improvement_reason")
 
 
 def validate_judgment(judgment: dict) -> None:

@@ -169,7 +169,6 @@ def transition_to_submitted(attempts, paths, assignment, now):
         now,
         space_id=f"org/{attempt_id}",
         deployed_sha=f"sha-{attempt_id}",
-        improvement_attempts=0,
     )
 
 

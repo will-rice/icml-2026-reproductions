@@ -2692,7 +2692,6 @@ def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
             now,
             space_id="org/paper-a",
             deployed_sha="submitted-sha",
-            improvement_attempts=0,
         )
     return paths, attempt_leases
 
