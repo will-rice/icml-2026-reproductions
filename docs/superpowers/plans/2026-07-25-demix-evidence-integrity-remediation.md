@@ -85,7 +85,7 @@ The hash output must be:
 
 Create `evidence/provenance.json` with the exact paper, code, and dataset
 revisions; paper and inspected upstream-file hashes; dataset acquisition command;
-the 1,469-path release inventory; 16 reference roots; seven component roots;
+the 1,469-file release inventory; 16 reference roots; seven component roots;
 zero CSV and OpenCompass-result paths; and all fourteen component shard LFS
 hashes and sizes totaling 48,176,346,736 bytes.
 

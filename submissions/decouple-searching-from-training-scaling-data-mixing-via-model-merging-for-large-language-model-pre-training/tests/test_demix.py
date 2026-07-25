@@ -44,7 +44,8 @@ def test_vendored_manifest_is_byte_identical_to_pinned_release():
         "sha256": PINNED_SHA256,
     }
     inventory = provenance["release_inventory"]
-    assert inventory["paths_below_demix_reproduce"] == 1469
+    assert inventory["files_below_demix_reproduce"] == 1469
+    assert "paths_below_demix_reproduce" not in inventory
     assert inventory["reference_model_roots"] == 16
     assert inventory["component_model_roots"] == 7
     assert inventory["csv_paths"] == 0
@@ -237,8 +238,93 @@ def test_build_bundle_rejects_self_reported_provenance(tmp_path):
     modified = tmp_path / "provenance.json"
     modified.write_text(json.dumps(provenance))
 
-    with pytest.raises(EvidenceContractError, match="primary input SHA-256"):
+    with pytest.raises(EvidenceContractError, match="provenance SHA-256"):
         build_bundle(MANIFEST, modified)
+
+
+def _set_nested(mapping, key_path, replacement):
+    current = mapping
+    for key in key_path[:-1]:
+        current = current[key]
+    current[key_path[-1]] = replacement
+
+
+@pytest.mark.parametrize(
+    ("key_path", "replacement"),
+    [
+        (
+            ("paper", "acquisition_command"),
+            "curl https://example.invalid/paper.pdf",
+        ),
+        (
+            ("upstream_repository", "acquisition_command"),
+            "git clone https://example.invalid/repository.git",
+        ),
+        (
+            ("dataset", "acquisition_command"),
+            "hf download example/altered",
+        ),
+        (("dataset", "license"), "unknown"),
+        (("release_inventory", "files_below_demix_reproduce"), 1470),
+        (("dataset", "card", "sha256"), "0" * 64),
+        (
+            (
+                "release_inventory",
+                "component_checkpoint",
+                "shards",
+                0,
+                "lfs_sha256",
+            ),
+            "1" * 64,
+        ),
+    ],
+    ids=[
+        "paper-acquisition-command",
+        "repository-acquisition-command",
+        "dataset-acquisition-command",
+        "dataset-license",
+        "release-file-count",
+        "dataset-card-hash",
+        "valid-looking-shard-hash",
+    ],
+)
+def test_any_provenance_mutation_is_rejected(
+    tmp_path,
+    key_path,
+    replacement,
+):
+    from demix.pipeline import EvidenceContractError, build_bundle
+
+    provenance = json.loads(PROVENANCE.read_text())
+    effective_path = key_path
+    if (
+        key_path == ("release_inventory", "files_below_demix_reproduce")
+        and "files_below_demix_reproduce"
+        not in provenance["release_inventory"]
+    ):
+        effective_path = (
+            "release_inventory",
+            "paths_below_demix_reproduce",
+        )
+    _set_nested(provenance, effective_path, replacement)
+    modified = tmp_path / "provenance.json"
+    modified.write_text(
+        json.dumps(provenance, indent=2, sort_keys=True) + "\n"
+    )
+
+    with pytest.raises(EvidenceContractError, match="provenance SHA-256"):
+        build_bundle(MANIFEST, modified)
+
+
+def test_checked_in_provenance_has_pinned_complete_file_hash():
+    from demix.pipeline import PINNED_PROVENANCE_SHA256
+
+    assert PINNED_PROVENANCE_SHA256 == (
+        "b8ee6fedbe9761c1004d9956af0e509de78b289902cbe9f2a1c041ff7b7a4ca2"
+    )
+    assert hashlib.sha256(PROVENANCE.read_bytes()).hexdigest() == (
+        PINNED_PROVENANCE_SHA256
+    )
 
 
 def test_cli_regeneration_is_byte_identical(tmp_path):

@@ -1,6 +1,7 @@
 """Build deterministic DeMix evidence from pinned released artifacts."""
 
 from argparse import ArgumentParser
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, Mapping
@@ -28,6 +29,9 @@ GENERATE_MERGE_YAML_SHA256 = (
 )
 PROXY_EVAL_SHA256 = (
     "ba0bbd871c5e2aefca4d42f474ad02bccd98e68618d6d9efa76ec526e0931cd5"
+)
+PINNED_PROVENANCE_SHA256 = (
+    "b8ee6fedbe9761c1004d9956af0e509de78b289902cbe9f2a1c041ff7b7a4ca2"
 )
 COMPONENT_CHECKPOINT_BYTES = 48_176_346_736
 REGENERATION_COMMAND = (
@@ -118,8 +122,21 @@ def write_bundle(
 
 def _load_and_validate_provenance(path: Path) -> dict[str, Any]:
     try:
-        provenance = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        payload = path.read_bytes()
+    except OSError as error:
+        raise EvidenceContractError(
+            "provenance must be readable UTF-8 JSON"
+        ) from error
+    actual_sha256 = hashlib.sha256(payload).hexdigest()
+    if actual_sha256 != PINNED_PROVENANCE_SHA256:
+        raise EvidenceContractError(
+            "provenance SHA-256 "
+            f"{actual_sha256} does not match pinned "
+            f"{PINNED_PROVENANCE_SHA256}"
+        )
+    try:
+        provenance = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise EvidenceContractError(
             "provenance must be readable UTF-8 JSON"
         ) from error
@@ -178,6 +195,11 @@ def _load_and_validate_provenance(path: Path) -> dict[str, Any]:
             ("release_inventory", "opencompass_result_paths"),
             0,
             "released OpenCompass-result path count",
+        ),
+        (
+            ("release_inventory", "files_below_demix_reproduce"),
+            1469,
+            "released file count",
         ),
     ]
     for key_path, expected, label in required_values:

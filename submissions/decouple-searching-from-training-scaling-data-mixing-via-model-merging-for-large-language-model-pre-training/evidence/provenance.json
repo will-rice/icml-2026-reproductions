@@ -139,7 +139,7 @@
     "component_model_roots": 7,
     "csv_paths": 0,
     "opencompass_result_paths": 0,
-    "paths_below_demix_reproduce": 1469,
+    "files_below_demix_reproduce": 1469,
     "reference_model_roots": 16
   }
 }

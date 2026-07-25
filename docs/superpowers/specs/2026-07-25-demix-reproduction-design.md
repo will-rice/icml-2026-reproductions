@@ -80,7 +80,7 @@ resources. Downloading those checkpoints is outside this CPU-only audit and is
 not necessary to establish that the released evaluation inputs are absent.
 
 The release inventory is captured from the Hugging Face tree API at the pinned
-revision. It records 1,469 paths below `DeMix_reproduce/`, 16 reference-model
+revision. It records 1,469 files below `DeMix_reproduce/`, 16 reference-model
 roots, seven component-model roots, no CSV files, and no released OpenCompass
 result path. It also records every component shard's immutable LFS SHA-256 and
 byte count without downloading the shards.
