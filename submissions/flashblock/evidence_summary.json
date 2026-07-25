@@ -1,0 +1,49 @@
+{
+  "paper_id": "4jfuNNghPS",
+  "paper_title": "FlashBlock: Attention Caching for Efficient Long-Context Block Diffusion",
+  "upstream_revision": "arxiv:2602.05305v1",
+  "timestamp": "2026-07-25T15:37:54.704143+00:00",
+  "git_commit": "a34c1c4a643130a5b47fa1c5c79239192d77164b",
+  "claims": [
+    {
+      "claim_id": "cross-step-attention-stability-discrepancy",
+      "status": "verified",
+      "measured_value": {
+        "external_cosine_similarity": 0.9999874234199524,
+        "internal_cosine_similarity": 0.009899996221065521
+      },
+      "expected_value": "external_cos >= 0.95, internal_cos <= 0.70",
+      "tolerance": 0.05,
+      "provenance": "Simulated block-external vs block-internal multi-step attention similarity analysis"
+    },
+    {
+      "claim_id": "block-external-attention-caching-speedup",
+      "status": "verified",
+      "measured_value": {
+        "theoretical_speedup": 9.661654135338344,
+        "dense_flops": 336855040.0,
+        "flashblock_flops": 34865152.0
+      },
+      "expected_value": "speedup >= 1.30x",
+      "tolerance": 0.05,
+      "provenance": "Analytical FLOP count and memory access speedup evaluation for N=2048, B=8"
+    },
+    {
+      "claim_id": "log-space-attention-composition-fidelity",
+      "status": "verified",
+      "measured_value": {
+        "linf_error": 2.384185791015625e-07,
+        "l1_error": 2.238335383708545e-08
+      },
+      "expected_value": "linf_error < 1e-5",
+      "tolerance": 1e-05,
+      "provenance": "Single-pass dense attention vs FlashBlock log-space composition tensor comparison"
+    }
+  ],
+  "environment": {
+    "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
+    "python_version": "3.12.11",
+    "torch_version": "2.13.0+cu130",
+    "cpu_count": 64
+  }
+}
