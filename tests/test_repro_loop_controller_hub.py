@@ -103,7 +103,8 @@ def validation_record(
 
 
 @pytest.fixture
-def hub_case(tmp_path: Path):
+def hub_case(tmp_path: Path, monkeypatch):
+    monkeypatch.setattr(controller, "validation_now", lambda: NOW)
     paths = store.StatePaths(tmp_path / "repro-loop.json")
     store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
     lease = leases.acquire_lease(
@@ -398,6 +399,25 @@ def test_publication_requires_authoritative_validation_attestation(hub_case):
         deploy(hub_case)
 
     assert hub_case["client"].calls == []
+
+
+def test_publication_rechecks_fence_after_hub_mutation(hub_case, monkeypatch):
+    monkeypatch.setattr(
+        controller,
+        "validation_now",
+        lambda: NOW + timedelta(hours=3),
+    )
+
+    with pytest.raises(leases.StaleFence):
+        deploy(hub_case)
+
+    assert attempts.read_attempt(hub_case["paths"], "a1")["phase"] == "validated"
+    assert not hub_case["paths"].attestation("deployment", "a1").exists()
+    assert [call[0] for call in hub_case["client"].calls] == [
+        "create_repo",
+        "upload_folder",
+        "space_info",
+    ]
 
 
 def test_publication_rejects_source_directory_outside_validated_project(hub_case):

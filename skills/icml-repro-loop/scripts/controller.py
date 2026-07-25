@@ -324,6 +324,8 @@ def publish_and_attest_deployment(
     stage = _hub_attribute(runtime, "stage")
     if stage != "RUNNING":
         raise ValueError("runtime")
+    completed_at = validation_now()
+    _assert_attempt_fence(paths, attempt_id, lease, completed_at)
 
     payload = {
         "space_id": live_space_id,
@@ -338,7 +340,7 @@ def publish_and_attest_deployment(
         "kind": "deployment",
         "attempt_id": attempt_id,
         "attempt_number": validation["attempt_number"],
-        "observed_at": _aware_timestamp(now),
+        "observed_at": _aware_timestamp(completed_at),
         "source_commit": validation["source_commit"],
         "payload_sha256": _sha256_json(payload),
         **payload,
@@ -351,7 +353,7 @@ def publish_and_attest_deployment(
         attestation_id,
         {"space_id": live_space_id, "deployed_sha": live_sha},
         lease,
-        now,
+        completed_at,
     )
 
 
