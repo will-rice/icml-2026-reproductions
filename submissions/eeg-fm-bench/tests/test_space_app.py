@@ -5,6 +5,7 @@ import inspect
 import json
 import socket
 import sys
+import tomllib
 from html.parser import HTMLParser
 from pathlib import Path
 from types import ModuleType
@@ -18,6 +19,7 @@ from huggingface_hub.repocard import metadata_load
 PROJECT_ROOT = Path(__file__).parents[1]
 APP_PATH = PROJECT_ROOT / "app.py"
 POSTER_PATH = PROJECT_ROOT / "poster_embed.html"
+PYPROJECT_PATH = PROJECT_ROOT / "pyproject.toml"
 README_PATH = PROJECT_ROOT / "README.md"
 
 EXPECTED_STATUSES = {
@@ -66,6 +68,13 @@ def test_space_card_selects_the_exact_platform_runtime() -> None:
     assert metadata["tags"] == EXPECTED_TAGS
     assert 0 < len(metadata["short_description"]) <= 60
     assert not (PROJECT_ROOT / "requirements.txt").exists()
+
+
+def test_project_declares_the_exact_gradio_runtime_dependency() -> None:
+    metadata = tomllib.loads(PYPROJECT_PATH.read_text(encoding="utf-8"))
+    dependencies = metadata["project"]["dependencies"]
+
+    assert dependencies.count("gradio==6.20.0") == 1
 
 
 def test_import_is_offline_and_does_not_launch(
