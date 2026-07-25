@@ -86,6 +86,33 @@ test -L "$CODEX_HOME/skills/icml-repro-loop"
 test "$(readlink "$CODEX_HOME/skills/icml-repro-loop")" = "$PWD/skills/icml-repro-loop"
 ```
 
+## Verify The Worker Boundary
+
+Paper implementation workers must be launched only from a controller-authored
+contract through
+`skills/icml-repro-loop/scripts/worker_guard.py`. Before the first
+implementation launch for each runtime/worktree pair, run its
+`preflight_runtime` probe. The probe must execute its inside-worktree control
+write while denying both the synthetic outside-worktree write and synthetic
+credential-file read. If it cannot prove both denials, issue only a read-only
+research contract.
+
+The constructed worker environment removes `HF_TOKEN`,
+`HUGGING_FACE_HUB_TOKEN`, `GH_TOKEN`, Git credential helpers, and inherited
+Hugging Face caches; it sets `HF_HUB_DISABLE_IMPLICIT_TOKEN=1` and redirects
+the Hub cache to an empty ignored directory inside the assigned worktree.
+Antigravity launches require `--sandbox`; Codex implementation launches
+require `-s workspace-write -C <assigned-worktree>`. Never launch a worker
+with `--dangerously-skip-permissions`,
+`--dangerously-bypass-approvals-and-sandbox`, danger-full-access, or
+`--add-dir`.
+
+Verify the deterministic boundary tests on every host:
+
+```bash
+uv run pytest tests/test_repro_loop_worker_guard.py -q
+```
+
 ## Verify The Workspace
 
 ```bash

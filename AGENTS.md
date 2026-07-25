@@ -19,6 +19,20 @@ paper-reported values as reproduced measurements.
 - `docs/REMOTE_SETUP.md`: host prerequisites, authentication checks, skill
   installation, and verification commands.
 
+## Trust Boundary
+
+Paper workers are untrusted proposal producers. They may write only the
+controller-assigned paper worktree/project after
+`skills/icml-repro-loop/scripts/worker_guard.py` has constructed the launch and
+its runtime preflight has passed. They never receive Hub credentials or write
+the coordinator state, skill source, another submission, or controller
+documents. They do not deploy, submit, poll, import verdicts, merge, or claim
+external phases.
+
+The controller alone validates proposals, mutates external services, records
+live observations, imports official verdicts, repairs authority, and integrates
+branches. Full host permissions do not transfer that authority to a worker.
+
 ## Workflow
 
 1. When processing challenge papers, require and follow `icml-repro-loop`.
@@ -58,6 +72,10 @@ paper-reported values as reproduced measurements.
    Antigravity subscription use records USD 0.00.
 16. Persist every material milestone, next action, and blocker in the affected
    attempt shard; snapshots and judgment shards retain live provenance.
+17. Treat every worker result as a proposal. Require immutable controller
+    attestations from `attest-validation`, `publish-deployment`,
+    `attest-submission`, `watch-attempt`, and `sync-verdict` for the
+    corresponding phases.
 
 ## Constraints
 

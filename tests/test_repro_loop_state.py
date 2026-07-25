@@ -20,6 +20,18 @@ STATE_MODULE_PATH = (
     / "scripts"
     / "state.py"
 )
+REPOSITORY_ROOT = STATE_MODULE_PATH.parents[3]
+REPRO_SKILL_PATH = REPOSITORY_ROOT / "skills" / "icml-repro-loop" / "SKILL.md"
+SUBMISSION_CHECKLIST_PATH = (
+    REPOSITORY_ROOT
+    / "skills"
+    / "icml-repro-loop"
+    / "references"
+    / "submission-checklist.md"
+)
+EVAL_SCENARIOS_PATH = (
+    REPOSITORY_ROOT / "evals" / "icml-repro-loop" / "scenarios.json"
+)
 
 
 def state_module():
@@ -2000,6 +2012,72 @@ def test_cli_judgment_commands_preserve_fenced_scheduler_signatures(tmp_path: Pa
         "phase"
     ] == "judging"
     assert rejected.returncode != 0
+
+
+def test_skill_preserves_worker_controller_authority_contract():
+    skill = REPRO_SKILL_PATH.read_text(encoding="utf-8")
+    checklist = SUBMISSION_CHECKLIST_PATH.read_text(encoding="utf-8")
+    combined = f"{skill}\n{checklist}"
+
+    for required in (
+        "Worker Or Controller?",
+        "proposal, never authority",
+        "write only the assigned worktree",
+        "attest-validation",
+        "publish-deployment",
+        "attest-submission",
+        "watch-attempt",
+        "sync-verdict",
+        "audit-authority",
+        "verified",
+        "falsified",
+        "toy",
+        "inconclusive",
+        "Evidence is not the official verdict.",
+        "Simulations cannot enter judgment state.",
+        "Require exact live snapshot observation.",
+        "Wait for and import the official record.",
+        "Permissions do not grant authority.",
+    ):
+        assert required in combined
+    for forbidden in (
+        "record-verdict",
+        "--raw-verdict",
+        "--normalized-verdict",
+        "transition-attempt state/repro-loop.json complete",
+    ):
+        assert forbidden not in combined
+
+
+def test_worker_boundary_is_required_by_workspace_and_remote_setup():
+    agents = (REPOSITORY_ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    remote = (REPOSITORY_ROOT / "docs" / "REMOTE_SETUP.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "Paper workers are untrusted" in agents
+    assert "worker_guard.py" in agents
+    assert "worker_guard.py" in remote
+    assert "--dangerously-skip-permissions" in remote
+    assert "HF_HUB_DISABLE_IMPLICIT_TOKEN" in remote
+
+
+def test_skill_evals_cover_authority_failure_modes():
+    scenarios = json.loads(EVAL_SCENARIOS_PATH.read_text(encoding="utf-8"))
+    by_id = {scenario["id"]: scenario for scenario in scenarios}
+
+    assert {
+        "no-official-verdict",
+        "wrong-space-sha",
+        "missing-paper-tag",
+        "space-config-error",
+        "duplicate-paper",
+        "cross-paper-edit",
+        "official-toy-verdict",
+    } <= set(by_id)
+    assert "do not complete" in by_id["no-official-verdict"]["must"]
+    assert "preserve toy exactly" in by_id["official-toy-verdict"]["must"]
+    assert "reject cross-paper write" in by_id["cross-paper-edit"]["must"]
 
 
 @pytest.mark.parametrize(
