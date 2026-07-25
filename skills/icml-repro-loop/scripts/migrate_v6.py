@@ -226,7 +226,10 @@ def _matches(path: Path, expected_sha256: str) -> bool:
 
 
 def _finish_transaction(
-    paths: store.StatePaths, plan: MigrationPlan, manifest: dict
+    paths: store.StatePaths,
+    plan: MigrationPlan,
+    manifest: dict,
+    index_writer=None,
 ) -> None:
     targets = plan.resolved_targets(paths)
     by_target = {
@@ -254,7 +257,12 @@ def _finish_transaction(
     for entry in install_order:
         target, value = by_target[entry["target"]]
         if not _matches(target, entry["sha256"]):
-            _write_json(target, value, _validator_for(target, paths, plan))
+            writer = (
+                index_writer
+                if target == paths.index and index_writer is not None
+                else _write_json
+            )
+            writer(target, value, _validator_for(target, paths, plan))
             if not _matches(target, entry["sha256"]):
                 raise ValueError("target hash")
     if manifest["status"] != "complete":
@@ -266,7 +274,12 @@ def _finish_transaction(
         )
 
 
-def apply_v6_migration(paths: store.StatePaths, plan: MigrationPlan) -> dict:
+def apply_v6_migration(
+    paths: store.StatePaths,
+    plan: MigrationPlan,
+    *,
+    index_writer=None,
+) -> dict:
     """Apply a write-ahead migration, installing the index only after shards."""
     manifest_path = _manifest_path(paths, plan.source_sha256)
     if manifest_path.exists():
@@ -280,8 +293,39 @@ def apply_v6_migration(paths: store.StatePaths, plan: MigrationPlan) -> dict:
             if not _matches(target, _sha256(value)):
                 raise ValueError("completed target hash")
         return plan.index
-    _finish_transaction(paths, plan, manifest)
+    _finish_transaction(paths, plan, manifest, index_writer)
     return plan.index
+
+
+def apply_checked_v6_migration(
+    paths: store.StatePaths,
+    plan: MigrationPlan,
+) -> dict:
+    """Apply only when the current source still matches the checked plan."""
+    with store._exclusive_lock(paths.index):
+        current = store.read_json(paths.index)
+        if current.get("version") == legacy_state.SCHEMA_V3_VERSION:
+            current_plan = plan_v6_migration(current)
+        else:
+            current_plan = plan_for_existing_migration(paths)
+        if (
+            current_plan.source_sha256 != plan.source_sha256
+            or current_plan.source != plan.source
+        ):
+            raise ValueError("source_state_sha256")
+
+        def compare_and_swap_index(path, value, validator):
+            current_source = store.read_json(path)
+            if current_source != plan.source:
+                raise ValueError("source_state_sha256")
+            validator(value)
+            store._atomic_json_write(path, value)
+
+        return apply_v6_migration(
+            paths,
+            plan,
+            index_writer=compare_and_swap_index,
+        )
 
 
 def recover_transactions(paths: store.StatePaths) -> None:

@@ -300,7 +300,7 @@ def main() -> None:
                 migrate_parser.error(
                     "--expected-source-sha256 does not match the migration source"
                 )
-            migrate_v6.recover_transactions(paths)
+            migrate_v6.apply_checked_v6_migration(paths, plan)
             state = migrate_v6.verify_semantic_equivalence(legacy, paths)
     print(json.dumps(state, indent=2, sort_keys=True))
 

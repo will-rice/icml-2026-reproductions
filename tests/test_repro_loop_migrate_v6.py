@@ -318,6 +318,97 @@ def test_migrate_v6_cli_apply_requires_matching_source_digest(tmp_path, argument
     assert not source_path.with_suffix("").exists()
 
 
+def test_migrate_v6_apply_rejects_source_swap_before_any_migration_write(
+    tmp_path,
+    monkeypatch,
+):
+    migrate_v6 = migration_module()
+    state_cli = importlib.import_module("state")
+    source_path = tmp_path / "repro-loop.json"
+    source = load_fixture("repro-loop-v3-eeg.json")
+    changed = json.loads(json.dumps(source))
+    changed["current"]["title"] = "adversarially swapped source"
+    store.atomic_json_write(
+        source_path,
+        source,
+        migrate_v6.legacy_state.validate_state,
+    )
+    real_plan = migrate_v6.plan_for_existing_migration
+
+    def swap_after_checked_plan(paths):
+        plan = real_plan(paths)
+        store.atomic_json_write(
+            source_path,
+            changed,
+            migrate_v6.legacy_state.validate_state,
+        )
+        return plan
+
+    monkeypatch.setattr(
+        migrate_v6,
+        "plan_for_existing_migration",
+        swap_after_checked_plan,
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(SCRIPTS / "state.py"),
+            "migrate-v6",
+            str(source_path),
+            "--apply",
+            "--expected-source-sha256",
+            (
+                "f9fb0c976243de61b8fe90441e100c6b"
+                "c88f341a50adb5326ffd12c8d7e99354"
+            ),
+        ],
+    )
+
+    with pytest.raises(ValueError, match="source_state_sha256"):
+        state_cli.main()
+
+    assert store.read_json(source_path) == changed
+    assert not source_path.with_suffix("").exists()
+
+
+def test_checked_migration_cas_does_not_overwrite_last_moment_source_swap(
+    tmp_path,
+    monkeypatch,
+):
+    migrate_v6 = migration_module()
+    source_path = tmp_path / "repro-loop.json"
+    paths = store.StatePaths(source_path)
+    source = load_fixture("repro-loop-v3-eeg.json")
+    changed = json.loads(json.dumps(source))
+    changed["current"]["title"] = "last-moment adversarial source"
+    store.atomic_json_write(
+        source_path,
+        source,
+        migrate_v6.legacy_state.validate_state,
+    )
+    plan = migrate_v6.plan_v6_migration(source)
+    real_matches = migrate_v6._matches
+    swapped = False
+
+    def swap_at_index_install(path, expected_sha256):
+        nonlocal swapped
+        matches = real_matches(path, expected_sha256)
+        if path == source_path and not swapped:
+            swapped = True
+            store._atomic_json_write(source_path, changed)
+        return matches
+
+    monkeypatch.setattr(migrate_v6, "_matches", swap_at_index_install)
+
+    with pytest.raises(ValueError, match="source_state_sha256"):
+        migrate_v6.apply_checked_v6_migration(paths, plan)
+
+    assert swapped is True
+    assert store.read_json(source_path) == changed
+    assert store.read_json(source_path)["version"] == 3
+
+
 def test_migrate_v6_cli_dry_run_reports_plan_without_writes(tmp_path):
     source_path = tmp_path / "repro-loop.json"
     source_path.write_text(
