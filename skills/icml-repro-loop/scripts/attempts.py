@@ -400,15 +400,18 @@ def _commit(
 ) -> None:
     targets = []
     if attestation is not None:
+        attestation_path = paths.attestation(
+            attestation["kind"],
+            attestation["attempt_id"],
+            attestation["attempt_number"],
+        )
         targets.append(
             (
-                paths.attestation(
-                    attestation["kind"],
-                    attestation["attempt_id"],
-                    attestation["attempt_number"],
-                ),
+                attestation_path,
                 attestation,
-                attestations.validate_record,
+                lambda record: attestations.validate_target(
+                    paths, attestation_path, record
+                ),
             )
         )
     targets.extend(
@@ -434,7 +437,7 @@ def _validator_for(paths: store.StatePaths, path: Path) -> store.Validator:
         path.parent.parent == paths.root / "attestations"
         and path.suffix == ".json"
     ):
-        return attestations.validate_record
+        return lambda record: attestations.validate_target(paths, path, record)
     raise ValueError("transaction")
 
 

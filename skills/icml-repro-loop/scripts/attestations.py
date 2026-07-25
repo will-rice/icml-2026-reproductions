@@ -42,11 +42,7 @@ def persist(paths: store.StatePaths, record: dict) -> str:
         raise ValueError("attestation_id")
     persisted = {"attestation_id": attestation_id, **payload}
     _validate_record(persisted, persisted=True)
-    path = paths.attestation(
-        persisted["kind"],
-        persisted["attempt_id"],
-        persisted["attempt_number"],
-    )
+    path = _object_path(paths, attestation_id)
     expected_bytes = _file_bytes(persisted)
     with store._exclusive_lock(path):
         if path.exists():
@@ -60,26 +56,13 @@ def persist(paths: store.StatePaths, record: dict) -> str:
 def read(paths: store.StatePaths, attestation_id: str) -> dict:
     """Read and content-verify one immutable attestation by its canonical ID."""
     _sha256(attestation_id, "attestation_id")
-    candidates = []
-    for path in sorted((paths.root / "attestations").glob("*/*.json")):
-        record = store.read_json(path)
-        payload = {
-            key: value for key, value in record.items() if key != "attestation_id"
-        }
-        calculated = _canonical_id(payload)
-        if record.get("attestation_id") == attestation_id or calculated == attestation_id:
-            candidates.append((path, record))
-    if len(candidates) != 1:
+    path = _object_path(paths, attestation_id)
+    if not path.exists():
         raise ValueError("attestation_id")
-    path, record = candidates[0]
+    record = store.read_json(path)
     validate_record(record)
     if record["attestation_id"] != attestation_id:
         raise ValueError("attestation_id")
-    expected = paths.attestation(
-        record["kind"], record["attempt_id"], record["attempt_number"]
-    )
-    if path != expected:
-        raise ValueError("attestation")
     return copy.deepcopy(record)
 
 
@@ -88,6 +71,18 @@ def validate_record(record: dict) -> None:
     _validate_record(record, persisted=True)
     if _canonical_id(record) != record["attestation_id"]:
         raise ValueError("attestation_id")
+
+
+def validate_target(paths: store.StatePaths, path: Path, record: dict) -> None:
+    """Validate one immutable record against its authoritative slot path."""
+    validate_record(record)
+    expected = paths.attestation(
+        record["kind"], record["attempt_id"], record["attempt_number"]
+    )
+    if path != expected:
+        raise ValueError("attestation")
+    if path.exists() and path.read_bytes() != _file_bytes(record):
+        raise ValueError("attestation")
 
 
 def _validate_record(record: object, *, persisted: bool) -> None:
@@ -123,6 +118,10 @@ def _canonical_json(value: dict) -> bytes:
     return json.dumps(
         value, allow_nan=False, separators=(",", ":"), sort_keys=True
     ).encode("utf-8")
+
+
+def _object_path(paths: store.StatePaths, attestation_id: str) -> Path:
+    return paths.root / "attestation-objects" / f"{attestation_id}.json"
 
 
 def _file_bytes(value: dict) -> bytes:

@@ -105,8 +105,8 @@ def transition_attested_to(
     raise AssertionError(f"Unsupported attested phase: {phase}")
 
 
-def attestation_record(kind, attempt_id="a1", attempt_number=1):
-    return {
+def attestation_record(kind, attempt_id="a1", attempt_number=1, **updates):
+    record = {
         "kind": kind,
         "attempt_id": attempt_id,
         "attempt_number": attempt_number,
@@ -114,6 +114,8 @@ def attestation_record(kind, attempt_id="a1", attempt_number=1):
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
     }
+    record.update(updates)
+    return record
 
 
 def interrupt_transaction(monkeypatch, attempts, fail_after):
@@ -385,6 +387,67 @@ def test_attested_transition_rejects_improvement_attempt_update(
     assert attempts.read_attempt(paths, attempt_id)["phase"] == "implementing"
 
 
+def test_rejected_attested_transition_leaves_slot_free_for_corrected_record(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    rejected_id = attestations.persist(
+        paths,
+        attestation_record(
+            "validation", attempt_id, source_commit="rejected-commit"
+        ),
+    )
+
+    with pytest.raises(ValueError, match="attestation"):
+        attempts.transition_attested(
+            paths, attempt_id, "deployed", rejected_id, {}, lease, now
+        )
+    assert not paths.attestation("validation", attempt_id).exists()
+
+    corrected_id = attestations.persist(
+        paths,
+        attestation_record(
+            "validation", attempt_id, source_commit="corrected-commit"
+        ),
+    )
+    transitioned = attempts.transition_attested(
+        paths, attempt_id, "validated", corrected_id, {}, lease, now
+    )
+
+    assert transitioned["phase"] == "validated"
+    assert transitioned["transitions"][-1]["attestation_id"] == corrected_id
+
+
+def test_authoritative_attestation_slot_rejects_different_record_reuse(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    first_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+    attempts.transition_attested(
+        paths, attempt_id, "validated", first_id, {}, lease, now
+    )
+    attempts.transition_attempt(
+        paths, attempt_id, "blocked", lease, now, blocker="retry requested"
+    )
+    original = paths.attestation("validation", attempt_id).read_bytes()
+    conflicting_id = attestations.persist(
+        paths,
+        attestation_record(
+            "validation", attempt_id, source_commit="conflicting-commit"
+        ),
+    )
+
+    with pytest.raises(ValueError, match="attestation"):
+        attempts.transition_attested(
+            paths, attempt_id, "validated", conflicting_id, {}, lease, now
+        )
+
+    assert paths.attestation("validation", attempt_id).read_bytes() == original
+    assert attempts.read_attempt(paths, attempt_id)["phase"] == "blocked"
+
+
 def test_blocking_requires_nonempty_blocker(paths, attempts_and_leases, attempts, now):
     a1, lease, _, _ = attempts_and_leases
     with pytest.raises(ValueError, match="blocker"):
@@ -524,6 +587,7 @@ def test_attested_transition_transaction_recovers_attestation_attempt_and_index(
     attestation_id = attestations.persist(
         paths, attestation_record("validation", attempt_id)
     )
+    assert not paths.attestation("validation", attempt_id).exists()
     interrupt_transaction(monkeypatch, attempts, fail_after=3)
 
     with pytest.raises(OSError, match="simulated interruption"):
@@ -553,6 +617,53 @@ def test_attested_transition_transaction_recovers_attestation_attempt_and_index(
     assert recovered["phase"] == "validated"
     assert recovered["transitions"][-1]["attestation_id"] == attestation_id
     assert attestations.read(paths, attestation_id)["attempt_id"] == attempt_id
+
+
+def test_recovery_rejects_attestation_target_path_mismatching_identity(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    store,
+    now,
+    monkeypatch,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    attestation_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+    interrupt_transaction(monkeypatch, attempts, fail_after=2)
+
+    with pytest.raises(OSError, match="simulated interruption"):
+        attempts.transition_attested(
+            paths, attempt_id, "validated", attestation_id, {}, lease, now
+        )
+
+    transaction_path = next(
+        path
+        for path in (paths.root / "transactions" / "attempts").glob("*.json")
+        if store.read_json(path)["status"] == "planned"
+    )
+    manifest = store.read_json(transaction_path)
+    attestation_target = next(
+        target
+        for target in manifest["targets"]
+        if "/attestations/" in target["path"]
+    )
+    attestation_target["path"] = (
+        "repro-loop/attestations/validation/different-attempt--1.json"
+    )
+    store._atomic_json_write(transaction_path, manifest)
+    restore_transaction_writes(monkeypatch, attempts)
+
+    with pytest.raises(ValueError, match="attestation"):
+        attempts.recover_transactions(paths)
+    assert not (
+        paths.root
+        / "attestations"
+        / "validation"
+        / "different-attempt--1.json"
+    ).exists()
 
 
 def test_successor_takeover_between_precheck_and_write_fences_stale_writer(

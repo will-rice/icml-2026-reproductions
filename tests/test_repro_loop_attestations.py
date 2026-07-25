@@ -58,6 +58,10 @@ def canonical_id(value: dict) -> str:
     return hashlib.sha256(content).hexdigest()
 
 
+def object_path(paths, attestation_id: str) -> Path:
+    return paths.root / "attestation-objects" / f"{attestation_id}.json"
+
+
 def test_attestation_path_is_scoped_by_kind_attempt_and_number(paths):
     assert paths.attestation("validation", "attempt-1") == (
         paths.root / "attestations" / "validation" / "attempt-1--1.json"
@@ -76,24 +80,32 @@ def test_persist_and_read_verify_content_addressed_attestation(
     attestation_id = attestations.persist(paths, payload)
 
     assert attestation_id == canonical_id(payload)
+    assert object_path(paths, attestation_id).exists()
+    assert not paths.attestation(kind, "attempt-1").exists()
     assert attestations.read(paths, attestation_id) == {
         "attestation_id": attestation_id,
         **payload,
     }
 
 
-def test_persist_is_byte_idempotent_and_rejects_different_slot_reuse(
+def test_persist_is_byte_idempotent_and_allows_corrected_inert_same_slot_object(
     paths, attestations
 ):
     payload = record()
     attestation_id = attestations.persist(paths, payload)
-    path = paths.attestation("validation", "attempt-1")
+    path = object_path(paths, attestation_id)
     original = path.read_bytes()
 
     assert attestations.persist(paths, payload) == attestation_id
     assert path.read_bytes() == original
-    with pytest.raises(ValueError, match="attestation"):
-        attestations.persist(paths, record(source_commit="different"))
+    corrected = record(source_commit="different")
+    corrected_id = attestations.persist(paths, corrected)
+    assert corrected_id != attestation_id
+    assert attestations.read(paths, corrected_id) == {
+        "attestation_id": corrected_id,
+        **corrected,
+    }
+    assert not paths.attestation("validation", "attempt-1").exists()
     assert path.read_bytes() == original
 
 
@@ -101,7 +113,7 @@ def test_read_rejects_content_that_no_longer_matches_attestation_id(
     paths, attestations, store
 ):
     attestation_id = attestations.persist(paths, record())
-    path = paths.attestation("validation", "attempt-1")
+    path = object_path(paths, attestation_id)
     corrupted = store.read_json(path)
     corrupted["source_commit"] = "tampered"
     store._atomic_json_write(path, corrupted)
