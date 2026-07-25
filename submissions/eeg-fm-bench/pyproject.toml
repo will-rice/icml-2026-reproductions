@@ -5,6 +5,7 @@ description = "Deterministic CPU audit of the released EEG-FM-Bench artifact"
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=2.0",
+  "trackio>=0.31.5",
   "torch>=2.4",
 ]
 
