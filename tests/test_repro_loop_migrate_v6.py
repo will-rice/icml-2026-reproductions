@@ -275,6 +275,49 @@ def run_migrate_cli(path: Path, *arguments: str) -> subprocess.CompletedProcess:
     )
 
 
+def source_sha256(path: Path) -> str:
+    return migration_module().plan_for_existing_migration(
+        store.StatePaths(path)
+    ).source_sha256
+
+
+def test_migrate_v6_cli_requires_an_explicit_mode_before_writing(tmp_path):
+    source_path = tmp_path / "repro-loop.json"
+    source_path.write_text(
+        (FIXTURES / "repro-loop-v3-eeg.json").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    before = source_path.read_bytes()
+
+    result = run_migrate_cli(source_path)
+
+    assert result.returncode != 0
+    assert source_path.read_bytes() == before
+    assert not source_path.with_suffix("").exists()
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        ("--apply",),
+        ("--apply", "--expected-source-sha256", "0" * 64),
+    ],
+)
+def test_migrate_v6_cli_apply_requires_matching_source_digest(tmp_path, arguments):
+    source_path = tmp_path / "repro-loop.json"
+    source_path.write_text(
+        (FIXTURES / "repro-loop-v3-eeg.json").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    before = source_path.read_bytes()
+
+    result = run_migrate_cli(source_path, *arguments)
+
+    assert result.returncode != 0
+    assert source_path.read_bytes() == before
+    assert not source_path.with_suffix("").exists()
+
+
 def test_migrate_v6_cli_dry_run_reports_plan_without_writes(tmp_path):
     source_path = tmp_path / "repro-loop.json"
     source_path.write_text(
@@ -291,6 +334,7 @@ def test_migrate_v6_cli_dry_run_reports_plan_without_writes(tmp_path):
         "archived_attempts": 1,
         "rejections": 9,
         "max_runnable_attempts": 20,
+        "source_state_sha256": source_sha256(source_path),
         "total_api_cost_usd": 0.0,
     }
     assert source_path.read_bytes() == before
@@ -303,13 +347,24 @@ def test_migrate_v6_cli_rerun_is_idempotent(tmp_path):
         (FIXTURES / "repro-loop-v3-eeg.json").read_text(encoding="utf-8"),
         encoding="utf-8",
     )
-    first = run_migrate_cli(source_path)
+    expected_source_sha256 = source_sha256(source_path)
+    first = run_migrate_cli(
+        source_path,
+        "--apply",
+        "--expected-source-sha256",
+        expected_source_sha256,
+    )
     bytes_before = {
         path: path.read_bytes()
         for path in tmp_path.rglob("*.json")
     }
 
-    second = run_migrate_cli(source_path)
+    second = run_migrate_cli(
+        source_path,
+        "--apply",
+        "--expected-source-sha256",
+        expected_source_sha256,
+    )
 
     assert first.returncode == second.returncode == 0
     assert json.loads(second.stdout) == json.loads(first.stdout)
@@ -322,7 +377,12 @@ def test_migrate_v6_cli_rerun_is_idempotent(tmp_path):
 def test_migrate_v6_cli_recovers_after_index_install(tmp_path, fail_after):
     paths = interrupt_migration(tmp_path, fail_after)
 
-    result = run_migrate_cli(paths.index)
+    result = run_migrate_cli(
+        paths.index,
+        "--apply",
+        "--expected-source-sha256",
+        source_sha256(paths.index),
+    )
 
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["active_attempts"] == 1

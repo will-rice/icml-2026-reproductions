@@ -191,7 +191,8 @@ uv run python skills/icml-repro-loop/scripts/state.py migrate-v6 state/repro-loo
 ```
 
 Expected: PASS; dry-run reports one active EEG attempt, one archived diffusion
-attempt, all rejections, 20 runnable slots, and no writes.
+attempt, all rejections, 20 runnable slots, the exact schema-v3 source SHA-256,
+and no writes.
 
 - [ ] **Step 5: Commit**
 
@@ -535,11 +536,14 @@ Expected: one active `vGeNaFHdET` attempt in `implementing`, one archived
 Run:
 
 ```bash
-uv run python skills/icml-repro-loop/scripts/state.py migrate-v6 state/repro-loop.json
+expected_source_sha256="<source_state_sha256 from the reviewed dry-run>"
+uv run python skills/icml-repro-loop/scripts/state.py migrate-v6 \
+  state/repro-loop.json --apply \
+  --expected-source-sha256 "$expected_source_sha256"
 uv run python skills/icml-repro-loop/scripts/state.py list-attempts state/repro-loop.json
 ```
 
-Expected: schema version 6, one runnable attempt, four vacancies, and a valid
+Expected: schema version 6, one runnable attempt, nineteen vacancies, and a valid
 hash-addressed schema-v3 backup.
 
 - [ ] **Step 3: Discover, inspect, assess in parallel, and persist an assessed snapshot**

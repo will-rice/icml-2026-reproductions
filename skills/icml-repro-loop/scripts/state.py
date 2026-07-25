@@ -116,7 +116,10 @@ def main() -> None:
         "migrate-v6", help="migrate schema-v3 state to the sharded schema-v6 store"
     )
     migrate_parser.add_argument("path", type=Path)
-    migrate_parser.add_argument("--dry-run", action="store_true")
+    migrate_mode = migrate_parser.add_mutually_exclusive_group(required=True)
+    migrate_mode.add_argument("--dry-run", action="store_true")
+    migrate_mode.add_argument("--apply", action="store_true")
+    migrate_parser.add_argument("--expected-source-sha256")
     refresh_parser = commands.add_parser(
         "refresh-live", help="fetch and persist one immutable live Hub snapshot"
     )
@@ -285,9 +288,18 @@ def main() -> None:
                 "archived_attempts": len(plan.index["history"]),
                 "rejections": len(plan.index["rejections"]),
                 "max_runnable_attempts": plan.index["max_runnable_attempts"],
+                "source_state_sha256": plan.source_sha256,
                 "total_api_cost_usd": plan.index["total_api_cost_usd"],
             }
         else:
+            if arguments.expected_source_sha256 is None:
+                migrate_parser.error(
+                    "--apply requires --expected-source-sha256"
+                )
+            if arguments.expected_source_sha256 != plan.source_sha256:
+                migrate_parser.error(
+                    "--expected-source-sha256 does not match the migration source"
+                )
             migrate_v6.recover_transactions(paths)
             state = migrate_v6.verify_semantic_equivalence(legacy, paths)
     print(json.dumps(state, indent=2, sort_keys=True))
