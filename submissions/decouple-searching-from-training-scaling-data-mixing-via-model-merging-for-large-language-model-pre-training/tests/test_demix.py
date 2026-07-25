@@ -21,6 +21,11 @@ SUBMISSION_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = SUBMISSION_ROOT / "evidence" / "inputs" / "sampled_mixture.json"
 PROVENANCE = SUBMISSION_ROOT / "evidence" / "provenance.json"
 BUNDLE = SUBMISSION_ROOT / "evidence" / "bundle.json"
+APP = SUBMISSION_ROOT / "app.py"
+README = SUBMISSION_ROOT / "README.md"
+REQUIREMENTS = SUBMISSION_ROOT / "requirements.txt"
+REQUIREMENTS_TEST = SUBMISSION_ROOT / "requirements-test.txt"
+DOCKERFILE = SUBMISSION_ROOT / "Dockerfile"
 PINNED_SHA256 = (
     "2be00152f98c44a740bc2f8e2098be3740ea2f1cd31b7158ade9d54c8e852dc2"
 )
@@ -258,3 +263,70 @@ def test_cli_regeneration_is_byte_identical(tmp_path):
         env=environment,
     )
     assert output.read_bytes() == BUNDLE.read_bytes()
+
+
+def test_space_source_contains_no_synthetic_calculator():
+    source = APP.read_text()
+
+    for forbidden in (
+        "numpy",
+        "calculate_merge",
+        "merge_parameters",
+        "evaluate_merged_model",
+        "Predicted Benchmark Performance",
+        "Verified Reproduction",
+    ):
+        assert forbidden not in source
+    assert 'server_name="0.0.0.0", server_port=7860' in source
+
+
+def test_space_reads_only_committed_released_observations():
+    import app as space_app
+
+    assert space_app.get_evidence() == json.loads(BUNDLE.read_text())
+    observation = space_app.get_mixture_observation("mix_0")
+    assert observation == {
+        "mixture_id": "mix_0",
+        "raw_weight_sum": "2933",
+        "normalized_weights": {
+            "general_target": "0.399931810433",
+            "math_very_high": "0.193658370269",
+            "math_high": "0.023525400614",
+            "math_medium": "0.017047391749",
+            "code_very_high": "0.051824070917",
+            "code_high": "0.098192976475",
+            "code_medium": "0.215819979543",
+        },
+    }
+
+    with pytest.raises(KeyError, match="unknown released mixture"):
+        space_app.get_mixture_observation("user-authored")
+
+
+def test_runtime_dependencies_are_exactly_pinned():
+    assert REQUIREMENTS.read_text() == "gradio==6.20.0\n"
+    assert REQUIREMENTS_TEST.read_text() == (
+        "-r requirements.txt\n"
+        "pytest==8.4.2\n"
+    )
+    assert DOCKERFILE.read_text().startswith(
+        "FROM python:3.12.11-slim-bookworm@sha256:"
+        "519591d6871b7bc437060736b9f7456b8731f1499a57e22e6c285135ae657bf7\n"
+    )
+
+
+def test_readme_documents_evidence_boundary_and_regeneration():
+    readme = README.read_text()
+
+    assert "`partial`" in readme
+    assert readme.count("`unavailable`") >= 2
+    assert "2be00152f98c44a740bc2f8e2098be3740ea2f1cd31b7158ade9d54c8e852dc2" in (
+        readme
+    )
+    assert "17" in readme and "16" in readme
+    assert "48,176,346,736" in readme
+    assert "random.random()" in readme
+    assert "PYTHONPATH=src python -m demix.pipeline" in readme
+    assert "context only" in readme.lower()
+    assert "interactive simulator" not in readme.lower()
+    assert "verified reproduction" not in readme.lower()
