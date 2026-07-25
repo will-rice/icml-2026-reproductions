@@ -136,6 +136,14 @@ def main() -> None:
     )
     show_snapshot_parser.add_argument("path", type=Path)
     show_snapshot_parser.add_argument("--snapshot-id", required=True)
+    authority_parser = commands.add_parser(
+        "audit-authority",
+        help="audit and optionally quarantine unsupported local completions",
+    )
+    authority_parser.add_argument("path", type=Path)
+    authority_parser.add_argument("--snapshot-id", required=True)
+    authority_parser.add_argument("--repair", action="store_true")
+    authority_parser.add_argument("--now")
     scheduler_parser = commands.add_parser(
         "scheduler-pass", help="refill runnable lanes from one immutable snapshot"
     )
@@ -236,6 +244,7 @@ def main() -> None:
         "list-attempts",
         "show-attempt",
         "show-snapshot",
+        "audit-authority",
         "scheduler-pass",
         "claim-attempt",
         "renew-attempt",
@@ -320,6 +329,22 @@ def _run_v6_command(arguments: argparse.Namespace) -> object:
         import refresh
 
         return refresh.read_snapshot(paths, arguments.snapshot_id)
+    if arguments.command == "audit-authority":
+        import authority_audit
+
+        if arguments.repair:
+            authority_audit.recover_transactions(paths)
+        report = authority_audit.audit(paths, arguments.snapshot_id)
+        if not arguments.repair:
+            return report
+        return {
+            "report": report,
+            "repair": authority_audit.repair(
+                paths,
+                report,
+                _cli_datetime(arguments.now),
+            ),
+        }
     now = _cli_datetime(getattr(arguments, "now", None))
     if arguments.command == "scheduler-pass":
         report = scheduler.scheduler_pass(paths, arguments.snapshot_id, now)

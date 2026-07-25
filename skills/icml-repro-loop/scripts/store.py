@@ -83,6 +83,19 @@ class StatePaths:
             / f"{attempt_id}--{attempt_number}.json"
         )
 
+    def authority_audit(self, report_id: str) -> Path:
+        return (
+            self.root
+            / "authority-audits"
+            / f"{validate_id(report_id)}.json"
+        )
+
+    def quarantine(self, attempt_id: str) -> Path:
+        return self.root / "quarantine" / validate_id(attempt_id)
+
+    def quarantine_manifest(self, attempt_id: str) -> Path:
+        return self.quarantine(attempt_id) / "manifest.json"
+
     def lease(self, lease_id: str) -> Path:
         return self.root / "leases" / f"{validate_id(lease_id)}.json"
 

@@ -1,0 +1,38 @@
+{
+  "actual_api_cost_usd": 0.0,
+  "attempt_id": "a-official",
+  "deployed_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "estimated_api_cost_usd": 0.0,
+  "paper_id": "paper-official",
+  "phase": "complete",
+  "space_id": "wrice/repro-paper-official",
+  "target_claims": [
+    "claim-1",
+    "claim-2"
+  ],
+  "transitions": [
+    {
+      "at": "2026-07-25T12:00:00+00:00",
+      "fencing_token": 1,
+      "from": "judging",
+      "owner": "controller",
+      "snapshot_id": "old-snapshot",
+      "to": "complete"
+    }
+  ],
+  "updated_at": "2026-07-25T12:00:00+00:00",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "claim-1",
+        "status": "toy"
+      },
+      {
+        "claim": "claim-2",
+        "status": "inconclusive"
+      }
+    ]
+  },
+  "verdict_at": "2026-07-25T12:00:00+00:00",
+  "verdict_source_revision": "official-revision"
+}
