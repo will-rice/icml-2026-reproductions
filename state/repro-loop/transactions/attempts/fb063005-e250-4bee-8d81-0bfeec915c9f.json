@@ -1,0 +1,454 @@
+{
+  "status": "complete",
+  "targets": [
+    {
+      "path": "repro-loop/attestations/validation/e20658d7-250a-5b0c-a015-be453c43e9fc--2.json",
+      "value": {
+        "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+        "attempt_number": 2,
+        "attestation_id": "3ba19d42c7dd8b5a089586f1efda507a1cfd37bca2ac53619a7f2bd5f0f370bd",
+        "base_sha": "fc2de9dee7ddfb21a7e03463d27a274af5f904cf",
+        "branch": "validate/eeg-fm-bench",
+        "checks": [
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "--show-toplevel"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "cac7d309d02bb3feb692ca95210b4817c3a62555bc4da7174768ca871965146a"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain",
+              "--ignored",
+              "--untracked-files=all",
+              "--",
+              "submissions/eeg-fm-bench"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "branch",
+              "--show-current"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "a0969714cc70b1218ce81e63ac90a2a893793bc60d9fd17c28db9cdd13073600"
+          },
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "HEAD"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "343a80aa5456f72256bab700dc32c04d407c2d5ef4f2fea00cba1e64bec539a1"
+          },
+          {
+            "argv": [
+              "git",
+              "diff",
+              "--name-only",
+              "fc2de9dee7ddfb21a7e03463d27a274af5f904cf...HEAD"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "967117d62451cb4e4c0e1899537919034726c542442c703c863577a06ef3bf5b"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain",
+              "--ignored",
+              "--untracked-files=all",
+              "--",
+              "submissions/eeg-fm-bench"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "branch",
+              "--show-current"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "a0969714cc70b1218ce81e63ac90a2a893793bc60d9fd17c28db9cdd13073600"
+          },
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "HEAD"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "343a80aa5456f72256bab700dc32c04d407c2d5ef4f2fea00cba1e64bec539a1"
+          },
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "HEAD^{tree}"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "8df55deb43f95b84e1d91db3ad60c4f932fef6ab86369e654b6ac45ee599261b"
+          }
+        ],
+        "commands": [
+          {
+            "argv": [
+              "uv",
+              "run",
+              "--project",
+              "submissions/eeg-fm-bench",
+              "python",
+              "-m",
+              "eeg_fm_bench_repro.cli",
+              "--cache-dir",
+              "/tmp/icml-eeg-controller-validation-cache",
+              "--output-dir",
+              "submissions/eeg-fm-bench/evidence"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "fa054a452604a27a2beb9cce23464b41535509ba4b7ced2cbda331aced89e118",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "--project",
+              "submissions/eeg-fm-bench",
+              "python",
+              "-m",
+              "pytest",
+              "submissions/eeg-fm-bench/tests",
+              "-q"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "184d1c487844931bcfbe1cd5e6b41d81afc2737ad53db41bf5033fa714cf6065",
+            "stdout_sha256": "b41b9f4034705f263ec4acff009ecf3246a8d77e74fc59b7fe6626301299723e"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "pytest",
+              "-q"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "37d93d29fa2abdaf3453c9752d7ec8165e32a11c6370dccf332dfa61059bfda9",
+            "stdout_sha256": "2c8cc6a9bf7889ff4fa6c81d997a666fa7defc33f4134309893d647423ee4d09"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+              "skills/icml-repro-loop"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "546493364737fde2f59b388c1e3729c964da271a5a1b607e85138ff8f3310c8f",
+            "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "pre-commit",
+              "run",
+              "-a"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "a6c0ae3455d740d7b89153f095889c82c4cbf07defe7ed94bc0987681830c3e9",
+            "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+          }
+        ],
+        "design_path": "docs/superpowers/plans/2026-07-24-eeg-fm-bench.md",
+        "environment": [
+          {
+            "argv": [
+              "git",
+              "--version"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+          },
+          {
+            "argv": [
+              "uv",
+              "--version"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+          },
+          {
+            "argv": [
+              "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+              "--version"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+          }
+        ],
+        "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+        "kind": "validation",
+        "observed_at": "2026-07-25T23:52:25.798009+00:00",
+        "payload_sha256": "18310507bb8c387b0adcbf45ba395fe47f9c9b4a7475a09bfef9794972317871",
+        "project_path": "submissions/eeg-fm-bench",
+        "source_commit": "a8aa5e202f88da2970e1e9862ff8b8ef1558ee2e",
+        "source_tree": "6b288a41a5a3fb8a1593533b92f300a3c1aab860",
+        "source_tree_sha256": "ea89a26a6bf53c6ffce8e3e238c63b9d24ef52eebf121e61b3be24cf802d07af",
+        "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/eeg-controller-validation"
+      }
+    },
+    {
+      "path": "repro-loop/attempts/e20658d7-250a-5b0c-a015-be453c43e9fc.json",
+      "value": {
+        "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+        "claim_bindings": [
+          {
+            "challenge_claim": "EEG-FM-Bench curates 14 public datasets spanning 10 canonical EEG paradigms with standardized preprocessing and evaluation (Figure 1).",
+            "challenge_claim_sha256": "7aaa6179aeb9c0f747a5636bce809a9e2391521b3a36550ccedf57373f4b8338",
+            "target_claim": "fourteen-dataset-ten-paradigm-curation"
+          },
+          {
+            "challenge_claim": "EEG-FM-Bench curates 14 public datasets spanning 10 canonical EEG paradigms with standardized preprocessing and evaluation (Figure 1).",
+            "challenge_claim_sha256": "7aaa6179aeb9c0f747a5636bce809a9e2391521b3a36550ccedf57373f4b8338",
+            "target_claim": "standardized-preprocessing-reproducibility"
+          },
+          {
+            "challenge_claim": "The benchmark evaluates frozen-backbone single-task fine-tuning, full-parameter single-task fine-tuning, and full-parameter multi-task fine-tuning strategies (Figure 1).",
+            "challenge_claim_sha256": "b4b21e7b72456354cbc04c9b1b9650a7949b0fdf8cc0fd70d47d492c536e9d36",
+            "target_claim": "three-strategy-evaluation-harness"
+          }
+        ],
+        "design": {
+          "approval_commit": "1d2c4c74700b66068d43443f7c8e742d4dc797a5",
+          "author": "git-author:Will Rice <wrice20@gmail.com>",
+          "content_sha256": "ad05ddbdbfb68c9eb0be6038ce4646a1ad936b18b595215c19aae6377303b2a2",
+          "paper_id": "vGeNaFHdET",
+          "path": "docs/superpowers/plans/2026-07-24-eeg-fm-bench.md",
+          "recorded_at": "2026-07-25T22:10:44.293798+00:00"
+        },
+        "design_approved": true,
+        "design_review": {
+          "approval_ref": "git:1d2c4c74700b66068d43443f7c8e742d4dc797a5",
+          "decision": "approved",
+          "design_content_sha256": "ad05ddbdbfb68c9eb0be6038ce4646a1ad936b18b595215c19aae6377303b2a2",
+          "reviewed_at": "2026-07-25T22:10:44.293798+00:00",
+          "reviewer": "git-committer:Will Rice <wrice20@gmail.com>"
+        },
+        "estimated_api_cost_usd": 0.0,
+        "improvement_attempts": 1,
+        "improvement_reason": "Pre-deployment validation lacked a deployable Gradio app and isolated poster rendering",
+        "legacy_reconciliation": {
+          "approval_ref": "git:1d2c4c74700b66068d43443f7c8e742d4dc797a5",
+          "design_content_sha256": "ad05ddbdbfb68c9eb0be6038ce4646a1ad936b18b595215c19aae6377303b2a2",
+          "reconciled_at": "2026-07-25T22:10:44.293798+00:00",
+          "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+          "source_state_sha256": "f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354"
+        },
+        "live_claims": [
+          {
+            "status": "unverified",
+            "text": "EEG-FM-Bench curates 14 public datasets spanning 10 canonical EEG paradigms with standardized preprocessing and evaluation (Figure 1)."
+          },
+          {
+            "status": "unverified",
+            "text": "The benchmark evaluates frozen-backbone single-task fine-tuning, full-parameter single-task fine-tuning, and full-parameter multi-task fine-tuning strategies (Figure 1)."
+          },
+          {
+            "status": "unverified",
+            "text": "Frozen-backbone evaluation exposes a generalization gap, with many EEG foundation models performing only slightly above chance on several tasks (Table 1)."
+          },
+          {
+            "status": "unverified",
+            "text": "Separate full-parameter fine-tuning substantially improves performance over frozen-backbone probing across the seven main BCI tasks (Table 2)."
+          },
+          {
+            "status": "unverified",
+            "text": "Qualitative t-SNE and Integrated Gradients analyses show stronger models forming clearer task clusters and focusing on neurophysiologically relevant channels (Figure 2)."
+          }
+        ],
+        "paper_id": "vGeNaFHdET",
+        "phase": "validated",
+        "polls": [],
+        "project_path": "submissions/eeg-fm-bench",
+        "slug": "eeg-fm-bench",
+        "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+        "target_claims": [
+          "fourteen-dataset-ten-paradigm-curation",
+          "standardized-preprocessing-reproducibility",
+          "three-strategy-evaluation-harness"
+        ],
+        "title": "EEG-FM-Bench: A Comprehensive Benchmark for the Systematic Evaluation and Diagnostic Analyses of EEG Foundation Models",
+        "transitions": [
+          {
+            "at": "2026-07-25T23:05:00.757269+00:00",
+            "attestation_id": "786d14512c9eac116ba6992a90a05286418afd610ddba192f29fe07f9cb072f2",
+            "fencing_token": 1,
+            "from": "implementing",
+            "owner": "controller-eeg-reconcile-20260725",
+            "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+            "to": "validated"
+          },
+          {
+            "at": "2026-07-25T23:35:20+00:00",
+            "fencing_token": 1,
+            "from": "validated",
+            "owner": "controller-eeg-reconcile-20260725",
+            "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+            "to": "improving"
+          },
+          {
+            "at": "2026-07-25T23:52:25.798009+00:00",
+            "attestation_id": "3ba19d42c7dd8b5a089586f1efda507a1cfd37bca2ac53619a7f2bd5f0f370bd",
+            "fencing_token": 1,
+            "from": "improving",
+            "owner": "controller-eeg-reconcile-20260725",
+            "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+            "to": "validated"
+          }
+        ],
+        "updated_at": "2026-07-25T23:52:25.798009+00:00",
+        "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc",
+        "verdicts": []
+      }
+    },
+    {
+      "path": "repro-loop.json",
+      "value": {
+        "attempts": {
+          "64bfe193-333b-4b37-9683-9ac25ca5ac27": {
+            "paper_id": "a3GdvuPItd",
+            "path": "repro-loop/attempts/64bfe193-333b-4b37-9683-9ac25ca5ac27.json",
+            "phase": "implementing",
+            "updated_at": "2026-07-25T23:02:53.200638+00:00"
+          },
+          "e20658d7-250a-5b0c-a015-be453c43e9fc": {
+            "paper_id": "vGeNaFHdET",
+            "path": "repro-loop/attempts/e20658d7-250a-5b0c-a015-be453c43e9fc.json",
+            "phase": "validated",
+            "updated_at": "2026-07-25T23:52:25.798009+00:00"
+          }
+        },
+        "history": {
+          "c5819c75-8a2a-538d-850e-805bc2325a6d": {
+            "paper_id": "HMu24dTKkJ",
+            "path": "repro-loop/attempts/c5819c75-8a2a-538d-850e-805bc2325a6d.json",
+            "phase": "implementing",
+            "updated_at": "schema-v3-migration:f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354"
+          }
+        },
+        "max_runnable_attempts": 20,
+        "rejections": [
+          {
+            "checked_at": "2026-07-21",
+            "paper_id": "4M5Kj2UqaM",
+            "reason": "Already judged; challenge policy excludes judged papers from selection.",
+            "title": "AgentSelect"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "gvWsViQBYB",
+            "reason": "Live challenge refresh found two existing reproduction Spaces (NaveenVenu/gvWsViQBYB and arvkevi/adamw-shampoo-convergence-repro); duplicate selection is ineligible under the workspace rubric.",
+            "title": "Convergence Rate Analysis of the AdamW-Style Shampoo: Unifying One-sided and Two-Sided Preconditioning"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "9GRlBVAXq8",
+            "reason": "Live challenge refresh found three existing reproduction Spaces; duplicate selection is ineligible under the workspace rubric.",
+            "title": "On the Convergence Rate of LoRA Gradient Descent"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "8Fhq7QpYfI",
+            "reason": "Substantive fidelity and scaling-law reproduction requires neural-wavefunction GPU training; autonomous GPU work is ineligible under the reproduction-loop constraint, and paper tables alone are not reproduced evidence.",
+            "title": "WF-Bench: A Benchmark for Neural-Network WaveFunction Expressivity and Scaling Laws"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "mWxEAgz3xu",
+            "reason": "Survey-statistics claims require raw practitioner data; the paper releases only anonymized aggregate statistics, so claims are not independently testable (self-report only).",
+            "title": "Measuring Agents in Production"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "MqzZ9X6m7f",
+            "reason": "Position paper; claims are argumentative proposals with no independently testable computation or released artifact.",
+            "title": "Position: Sustainable Open-Source AI Requires Tracking the Cumulative Footprint"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "ycj3XWCh6E",
+            "reason": "Position paper; claims are argumentative, no independently testable evidence artifact.",
+            "title": "Position: LLM Serving Needs Mathematical Optimization and Algorithmic Foundations"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "GnqHK8Ww98",
+            "reason": "All substantive claims require meta-RL teacher and student LLM training on GPU; outside the CPU-only reproduction boundary.",
+            "title": "Teaching Models to Teach Themselves: Reasoning at the Edge of Learnability"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "71030",
+            "reason": "Claims require GPT-2 Large/XL and Qwen3-8B (continued) pretraining; GPU training is ineligible for the autonomous loop.",
+            "title": "OPUS: Towards Efficient and Principled Data Selection in Large Language Model Pretraining"
+          }
+        ],
+        "resource_limits": {
+          "metered_api_reserved_usd": 10.0,
+          "publication_per_provider": 20
+        },
+        "snapshots": {
+          "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d": "repro-loop/snapshots/35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d.json",
+          "37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd": "repro-loop/snapshots/37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd.json",
+          "c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97": "repro-loop/snapshots/c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97.json"
+        },
+        "total_api_cost_usd": 0.0,
+        "version": 6
+      }
+    }
+  ]
+}
