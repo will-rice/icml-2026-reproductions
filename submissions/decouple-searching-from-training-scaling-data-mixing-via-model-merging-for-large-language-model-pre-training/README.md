@@ -14,3 +14,13 @@ tags:
 
 Reproduction evidence and interactive simulator for:
 **Decouple Searching from Training: Scaling Data Mixing via Model Merging for Large Language Model Pre-training** (ICML 2026 Paper ID `uyRIOjFgOn`).
+
+## Test
+
+From this directory, run the complete suite in an isolated environment:
+
+```bash
+uv run --isolated --no-project \
+  --with-requirements requirements-test.txt \
+  python -m pytest -q
+```
