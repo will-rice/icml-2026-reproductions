@@ -523,6 +523,10 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
 
     monkeypatch.setenv("HF_TOKEN", "secret")
     monkeypatch.setenv("HUGGING_FACE_HUB_TOKEN", "second-secret")
+    monkeypatch.setenv(
+        "UV_PROJECT_ENVIRONMENT",
+        str(tmp_path / "submissions" / "paper-1" / ".venv"),
+    )
     monkeypatch.setenv("PATH", "/usr/local/bin:/usr/bin:/bin")
     monkeypatch.setattr(controller.subprocess, "run", fake_run)
 
@@ -539,6 +543,12 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
     assert captured["env"]["HF_HUB_DISABLE_IMPLICIT_TOKEN"] == "1"
     assert captured["env"]["PATH"] == "/usr/local/bin:/usr/bin:/bin"
     assert captured["env"]["HOME"] != os.environ.get("HOME")
+    assert captured["env"].get("UV_PROJECT_ENVIRONMENT") == str(
+        Path(captured["env"]["HOME"]).parent / "uv-project-environment"
+    )
+    assert not Path(captured["env"]["UV_PROJECT_ENVIRONMENT"]).is_relative_to(
+        tmp_path
+    )
     assert Path(captured["env"]["HF_HOME"]).parent == Path(
         captured["env"]["HOME"]
     ).parent

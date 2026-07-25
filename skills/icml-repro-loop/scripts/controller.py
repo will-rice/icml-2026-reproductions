@@ -75,6 +75,9 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
             "HF_HOME": str(isolated_home.parent / "hf-home"),
             "HF_HUB_DISABLE_IMPLICIT_TOKEN": "1",
             "HOME": str(isolated_home),
+            "UV_PROJECT_ENVIRONMENT": str(
+                isolated_home.parent / "uv-project-environment"
+            ),
             "XDG_CACHE_HOME": str(isolated_home / "cache"),
             "XDG_CONFIG_HOME": str(isolated_home / "config"),
         }
