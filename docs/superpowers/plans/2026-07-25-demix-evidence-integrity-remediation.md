@@ -606,3 +606,241 @@ git commit -m "chore(demix): finalize evidence verification"
 ```
 
 If no files changed, do not create an empty commit.
+
+---
+
+## Independent review remediation
+
+The following tasks supersede any earlier bundle/app details where they
+conflict. They respond to the independent review of commit
+`370cb8bf14358e44afb8ec1b7e93b2163d0d6a25`.
+
+### Task 5: Exact provenance identity and correct inventory semantics
+
+**Files:**
+
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/evidence/provenance.json`
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/src/demix/pipeline.py`
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/tests/test_demix.py`
+- Regenerate:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/evidence/bundle.json`
+- Modify:
+  `docs/superpowers/specs/2026-07-25-demix-reproduction-design.md`
+
+**Interfaces:**
+
+- Consumes: the exact checked-in provenance bytes.
+- Produces:
+  `PINNED_PROVENANCE_SHA256 =
+  "b8ee6fedbe9761c1004d9956af0e509de78b289902cbe9f2a1c041ff7b7a4ca2"`;
+  any byte change raises `EvidenceContractError`.
+
+- [ ] **Step 1: Add adversarial failing tests**
+
+Parameterize mutations to acquisition commands, dataset license, inventory
+file count, dataset-card hash, and a syntactically valid shard hash:
+
+```python
+@pytest.mark.parametrize(
+    ("key_path", "replacement"),
+    [
+        (("paper", "acquisition_command"), "curl https://example.invalid"),
+        (("dataset", "license"), "unknown"),
+        (("release_inventory", "files_below_demix_reproduce"), 1470),
+        (("dataset", "card", "sha256"), "0" * 64),
+        (
+            (
+                "release_inventory", "component_checkpoint",
+                "shards", 0, "lfs_sha256",
+            ),
+            "1" * 64,
+        ),
+    ],
+)
+def test_any_provenance_byte_mutation_is_rejected(
+    tmp_path, key_path, replacement
+):
+    provenance = json.loads(PROVENANCE.read_text())
+    set_nested(provenance, key_path, replacement)
+    changed = tmp_path / "provenance.json"
+    changed.write_text(json.dumps(provenance, indent=2, sort_keys=True) + "\n")
+    with pytest.raises(EvidenceContractError, match="provenance SHA-256"):
+        build_bundle(MANIFEST, changed)
+```
+
+Also assert the checked-in SHA-256 literal and that
+`files_below_demix_reproduce == 1469` while the old `paths_...` key is absent.
+
+- [ ] **Step 2: Run RED**
+
+Run `python -m pytest -q tests/test_demix.py`. Expected: the acquisition,
+license, card-hash, and valid-looking shard-hash mutations are accepted, and
+the new inventory field is missing.
+
+- [ ] **Step 3: Pin complete provenance bytes**
+
+Rename `paths_below_demix_reproduce` to
+`files_below_demix_reproduce`. In `_load_and_validate_provenance`, read bytes
+first and reject unless:
+
+```python
+hashlib.sha256(payload).hexdigest() == PINNED_PROVENANCE_SHA256
+```
+
+Only then decode and retain the existing structural checks as defense in
+depth. Update the design from “1,469 paths” to “1,469 files.”
+
+- [ ] **Step 4: Regenerate, run GREEN, and commit**
+
+Regenerate `evidence/bundle.json`, run all `tests/test_demix.py`, confirm a
+second regeneration is byte-identical, then commit:
+
+```bash
+git add docs/superpowers/specs/2026-07-25-demix-reproduction-design.md \
+  evidence/provenance.json evidence/bundle.json src/demix/pipeline.py \
+  tests/test_demix.py
+git commit -m "fix(demix): pin complete evidence provenance"
+```
+
+### Task 6: App-side pinned artifact recomputation
+
+**Files:**
+
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/app.py`
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/tests/test_demix.py`
+
+**Interfaces:**
+
+- Consumes: explicit `bundle_path: Path` and `manifest_path: Path`, defaulting
+  to the committed paths.
+- Produces:
+  `get_evidence(bundle_path=BUNDLE_PATH, manifest_path=MANIFEST_PATH)`;
+  `get_mixture_observation(mixture_id, bundle_path=BUNDLE_PATH,
+  manifest_path=MANIFEST_PATH)`; `EvidenceMismatchError`.
+
+- [ ] **Step 1: Add failing tamper tests**
+
+```python
+def test_space_rejects_modified_released_input(tmp_path):
+    changed = tmp_path / "sampled_mixture.json"
+    changed.write_bytes(MANIFEST.read_bytes() + b"\n")
+    with pytest.raises(ArtifactIntegrityError):
+        space_app.get_evidence(manifest_path=changed)
+
+
+def test_space_rejects_bundle_observation_mismatch(tmp_path):
+    bundle = json.loads(BUNDLE.read_text())
+    bundle["released_artifact_observations"]["raw_weight_sums"]["mix_0"] = "1"
+    changed = tmp_path / "bundle.json"
+    changed.write_text(json.dumps(bundle))
+    with pytest.raises(space_app.EvidenceMismatchError):
+        space_app.get_evidence(bundle_path=changed)
+```
+
+- [ ] **Step 2: Run RED**
+
+Run only both new tests. Expected: `get_evidence` rejects the injected keyword
+arguments because it still reads only the bundle.
+
+- [ ] **Step 3: Implement recomputation and cross-check**
+
+Import `load_pinned_manifest` and `analyze_manifest` from `src`. Every evidence
+read must recompute observations from the pinned manifest and compare them for
+exact equality with the bundle. The mixture view must return the recomputed
+raw sum and normalized weights, never the bundle values.
+
+- [ ] **Step 4: Run GREEN and commit**
+
+Run `tests/test_demix.py` and the real startup integration test, then commit:
+
+```bash
+git add app.py tests/test_demix.py
+git commit -m "fix(demix): recompute Space artifact observations"
+```
+
+### Task 7: Executable regeneration and licensed packaging
+
+**Files:**
+
+- Create:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/LICENSES/Apache-2.0.txt`
+- Create:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/THIRD_PARTY_NOTICES.md`
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/README.md`
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/src/demix/pipeline.py`
+- Modify:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/tests/test_demix.py`
+- Regenerate:
+  `submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/evidence/bundle.json`
+
+**Interfaces:**
+
+- Consumes: locally available `uv` and Python 3.12.11.
+- Produces: the documented executable command:
+
+```bash
+env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache \
+  uv run --isolated --no-project --python 3.12.11 \
+  python -m demix.pipeline \
+  --input evidence/inputs/sampled_mixture.json \
+  --provenance evidence/provenance.json \
+  --output evidence/bundle.json
+```
+
+- [ ] **Step 1: Add failing command and packaging tests**
+
+Assert the README and bundle expose the `uv run ... --python 3.12.11` command;
+run the same argv to a temporary output and compare bytes to the committed
+bundle. Assert:
+
+```python
+assert sha256(LICENSE).hexdigest() == (
+    "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+)
+assert "evidence/inputs/sampled_mixture.json" in NOTICE.read_text()
+assert "Apache-2.0" in NOTICE.read_text()
+assert "COPY --chown=user:user . ." in DOCKERFILE.read_text()
+```
+
+- [ ] **Step 2: Run RED**
+
+Run the new tests. Expected: README/bundle still contain the unavailable bare
+`python` command and the packaged license/notice files do not exist.
+
+- [ ] **Step 3: Add exact license and scoped notice**
+
+Add the canonical Apache License 2.0 text byte-identical to
+`/usr/share/common-licenses/Apache-2.0`. The notice must scope it only to the
+vendored dataset input at dataset revision
+`82a2effc58eb79bec691280a4e4fc50be0968b1e`, cite the dataset card's
+Apache-2.0 declaration, and state that no upstream GitHub source is vendored.
+Update README and `REGENERATION_COMMAND`; regenerate the bundle.
+
+- [ ] **Step 4: Run GREEN and commit**
+
+Run the full DeMix suite including the documented command test and real bind,
+then commit:
+
+```bash
+git add LICENSES/Apache-2.0.txt THIRD_PARTY_NOTICES.md README.md \
+  src/demix/pipeline.py evidence/bundle.json tests/test_demix.py
+git commit -m "docs(demix): package artifact license and runnable command"
+```
+
+### Task 8: Review-remediation verification
+
+- [ ] Run exact regeneration twice and compare bundle bytes.
+- [ ] Run the complete isolated DeMix suite outside the socket-denying sandbox.
+- [ ] Run scoped pre-commit on all editable DeMix files and both DeMix docs;
+  exclude only the immutable no-final-newline manifest from EOF fixing.
+- [ ] Confirm `git diff --check`, a clean worktree, and a branch diff containing
+  no NAPE, `state/repro-loop.json`, or `docs/HANDOFF.md` path.
+- [ ] Report the new commits, exact hashes, RED/GREEN outputs, remaining
+  scientific limitations, and preservation checks.
