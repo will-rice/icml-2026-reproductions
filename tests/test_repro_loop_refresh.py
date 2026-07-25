@@ -142,7 +142,23 @@ def assessment(**updates) -> dict:
     value = {
         "paper_id": "paper-a",
         "score": 10,
-        "target_claims": ["Claim A1", "Claim A2"],
+        "target_claims": ["claim-a-one", "claim-a-two"],
+        "claim_bindings": [
+            {
+                "target_claim": "claim-a-one",
+                "challenge_claim": "Claim A1",
+                "challenge_claim_sha256": hashlib.sha256(
+                    b"Claim A1"
+                ).hexdigest(),
+            },
+            {
+                "target_claim": "claim-a-two",
+                "challenge_claim": "Claim A2",
+                "challenge_claim_sha256": hashlib.sha256(
+                    b"Claim A2"
+                ).hexdigest(),
+            },
+        ],
         "upstream_revision": "arxiv:2601.00001v1",
         "artifact_access": True,
         "cpu_only": True,
@@ -216,7 +232,8 @@ def test_refresh_uses_current_challenge_and_explicit_matching_assessments(
         "paper-b",
     ]
     assessed, unassessed = snapshot["candidates"]
-    assert assessed["target_claims"] == ["Claim A1", "Claim A2"]
+    assert assessed["target_claims"] == ["claim-a-one", "claim-a-two"]
+    assert assessed["claim_bindings"] == assessment()["claim_bindings"]
     assert assessed["upstream_revision"] == "arxiv:2601.00001v1"
     assert assessed["live_claims"] == [
         {"text": "Claim A1", "status": "extracted"},
@@ -287,12 +304,51 @@ def test_fetch_rejects_assessment_mutated_after_hashing(
         )
 
 
-def test_assessment_with_non_live_claim_is_not_merged(
-    recorded_hub_client, assessments_path
+@pytest.mark.parametrize(
+    "updates",
+    [
+        {
+            "claim_bindings": [
+                {
+                    **assessment()["claim_bindings"][0],
+                    "challenge_claim_sha256": hashlib.sha256(b"wrong").hexdigest(),
+                },
+                assessment()["claim_bindings"][1],
+            ]
+        },
+        {
+            "claim_bindings": [
+                {
+                    **assessment()["claim_bindings"][0],
+                    "challenge_claim": "Claim not live",
+                    "challenge_claim_sha256": hashlib.sha256(
+                        b"Claim not live"
+                    ).hexdigest(),
+                },
+                assessment()["claim_bindings"][1],
+            ]
+        },
+        {
+            "claim_bindings": [
+                assessment()["claim_bindings"][0],
+                {
+                    **assessment()["claim_bindings"][1],
+                    "target_claim": "claim-a-one",
+                },
+            ]
+        },
+        {
+            "claim_bindings": [assessment()["claim_bindings"][0]],
+        },
+    ],
+    ids=["wrong-hash", "absent-live-claim", "duplicate-target", "different-set"],
+)
+def test_assessment_with_invalid_claim_binding_is_not_merged(
+    recorded_hub_client, assessments_path, updates
 ):
     refresh = load_module("refresh")
     assessments = json.loads(assessments_path.read_text(encoding="utf-8"))
-    assessments["assessments"][0]["target_claims"] = ["Claim A1", "not live"]
+    assessments["assessments"][0].update(updates)
     assessments_path.write_text(json.dumps(assessments), encoding="utf-8")
 
     snapshot = refresh.fetch_live_snapshot(
@@ -494,6 +550,22 @@ def test_photoagent_alias_is_canonicalized_and_verdict_excludes_candidate(
                 target_claims=[
                     "PhotoAgent uses long-horizon planning.",
                     "UGC-Edit contains 7,000 photos.",
+                ],
+                claim_bindings=[
+                    {
+                        "target_claim": "PhotoAgent uses long-horizon planning.",
+                        "challenge_claim": "PhotoAgent uses long-horizon planning.",
+                        "challenge_claim_sha256": hashlib.sha256(
+                            b"PhotoAgent uses long-horizon planning."
+                        ).hexdigest(),
+                    },
+                    {
+                        "target_claim": "UGC-Edit contains 7,000 photos.",
+                        "challenge_claim": "UGC-Edit contains 7,000 photos.",
+                        "challenge_claim_sha256": hashlib.sha256(
+                            b"UGC-Edit contains 7,000 photos."
+                        ).hexdigest(),
+                    },
                 ],
             )
         ],

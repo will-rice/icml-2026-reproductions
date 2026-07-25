@@ -149,6 +149,7 @@ def rank_eligible_candidates(
             paper_id in claimed
             or type(candidate.get("target_claims")) is not list
             or len(candidate["target_claims"]) < 2
+            or not _has_current_claim_bindings(candidate)
             or type(candidate.get("upstream_revision")) is not str
             or not candidate["upstream_revision"]
             or candidate.get("artifact_access") is not True
@@ -168,6 +169,20 @@ def rank_eligible_candidates(
     return sorted(
         eligible,
         key=lambda candidate: (-candidate["score"], candidate["paper_id"]),
+    )
+
+
+def _has_current_claim_bindings(candidate: dict) -> bool:
+    """Require admission inputs to preserve their live challenge claim identity."""
+    import refresh
+
+    target_claims = candidate.get("target_claims")
+    if type(target_claims) is not list or any(
+        type(claim) is not str or not claim for claim in target_claims
+    ):
+        return False
+    return refresh._valid_claim_bindings(
+        candidate.get("claim_bindings"), target_claims, candidate.get("live_claims")
     )
 
 

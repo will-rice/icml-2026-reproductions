@@ -25,6 +25,7 @@ ASSESSMENT_KEYS = {
     "paper_id",
     "score",
     "target_claims",
+    "claim_bindings",
     "upstream_revision",
     "artifact_access",
     "cpu_only",
@@ -54,6 +55,13 @@ def load_assessments(path: Path) -> dict:
         "content_sha256": hashlib.sha256(_canonical_json(document)).hexdigest(),
         "document": document,
     }
+
+
+def claim_text_sha256(text: str) -> str:
+    """Return the stable digest used to bind an extracted challenge claim."""
+    if type(text) is not str or not text:
+        raise ValueError("challenge_claim")
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def fetch_live_snapshot(
@@ -538,8 +546,43 @@ def _paper_id(record: object) -> str:
 def _assessment_matches(assessment: dict, live_claims: list[dict]) -> bool:
     if not _valid_assessment_record(assessment):
         return False
-    claim_texts = {claim["text"] for claim in live_claims}
-    return set(assessment["target_claims"]).issubset(claim_texts)
+    return _valid_claim_bindings(
+        assessment["claim_bindings"], assessment["target_claims"], live_claims
+    )
+
+
+def _valid_claim_bindings(
+    bindings: object, target_claims: list[str], live_claims: object
+) -> bool:
+    """Check one ordered, digest-pinned live claim binding per target claim."""
+    if type(bindings) is not list or type(live_claims) is not list:
+        return False
+    if len(bindings) != len(target_claims):
+        return False
+    live_texts = {claim.get("text") for claim in live_claims if type(claim) is dict}
+    binding_targets = []
+    for binding in bindings:
+        if type(binding) is not dict or set(binding) != {
+            "target_claim",
+            "challenge_claim",
+            "challenge_claim_sha256",
+        }:
+            return False
+        target_claim = binding["target_claim"]
+        challenge_claim = binding["challenge_claim"]
+        digest = binding["challenge_claim_sha256"]
+        if (
+            type(target_claim) is not str
+            or not target_claim
+            or type(challenge_claim) is not str
+            or not challenge_claim
+            or type(digest) is not str
+            or digest != claim_text_sha256(challenge_claim)
+            or challenge_claim not in live_texts
+        ):
+            return False
+        binding_targets.append(target_claim)
+    return binding_targets == target_claims
 
 
 def _valid_assessment_record(record: object) -> bool:
@@ -558,6 +601,7 @@ def _valid_assessment_record(record: object) -> bool:
         and len(record["target_claims"]) >= 2
         and len(set(record["target_claims"])) == len(record["target_claims"])
         and all(type(claim) is str and claim for claim in record["target_claims"])
+        and type(record["claim_bindings"]) is list
         and type(record["upstream_revision"]) is str
         and bool(record["upstream_revision"])
         and type(record["artifact_access"]) is bool

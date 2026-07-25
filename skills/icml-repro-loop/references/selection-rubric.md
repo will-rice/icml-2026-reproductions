@@ -18,11 +18,16 @@ A candidate is eligible only when all of these are true:
 
 The assessment file has top-level `challenge_revision`, `assessor`,
 `assessed_at`, and `assessments`. Each assessment contains exactly `paper_id`,
-`score`, `target_claims`, `upstream_revision`, `artifact_access`, `cpu_only`,
-`safety_blocker`, `licensing_blocker`, and `estimated_api_cost_usd`. Selected
-target strings must be present in the pinned live extracted claims. Unmatched
-and unassessed papers remain in snapshot provenance but are ineligible. A stale
-document revision aborts assessed refresh; rerun discovery and assessment.
+`score`, `target_claims`, `claim_bindings`, `upstream_revision`,
+`artifact_access`, `cpu_only`, `safety_blocker`, `licensing_blocker`, and
+`estimated_api_cost_usd`. `claim_bindings` has one object per target claim, in
+target order, with exactly `target_claim`, `challenge_claim`, and
+`challenge_claim_sha256`. The target must match its corresponding
+`target_claims` entry; `challenge_claim` must be text from the pinned current
+live extracted claims; and its SHA-256 must be the UTF-8 digest of that exact
+text. Unmatched and unassessed papers remain in snapshot provenance but are
+ineligible. A stale document revision aborts assessed refresh; rerun discovery
+and assessment.
 
 ## Base Score
 
@@ -124,5 +129,6 @@ uv run python skills/icml-repro-loop/scripts/state.py scheduler-pass state/repro
 ```
 
 Each admitted paper must include `paper_id`, `title`, `slug`,
-`estimated_api_cost_usd`, `upstream_revision`, and `target_claims`. A candidate
-rejection or exhausted pool affects admission only; existing attempts continue.
+`estimated_api_cost_usd`, `upstream_revision`, `target_claims`, and the exact
+`claim_bindings` recorded against its current live claims. A candidate rejection
+or exhausted pool affects admission only; existing attempts continue.

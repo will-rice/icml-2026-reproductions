@@ -71,6 +71,26 @@ def paper(paper_id: str, score: int = 0) -> dict:
         "slug": paper_id,
         "upstream_revision": f"revision-{paper_id}",
         "target_claims": ["claim-1", "claim-2"],
+        "claim_bindings": [
+            {
+                "target_claim": "claim-1",
+                "challenge_claim": "Challenge claim 1",
+                "challenge_claim_sha256": hashlib.sha256(
+                    b"Challenge claim 1"
+                ).hexdigest(),
+            },
+            {
+                "target_claim": "claim-2",
+                "challenge_claim": "Challenge claim 2",
+                "challenge_claim_sha256": hashlib.sha256(
+                    b"Challenge claim 2"
+                ).hexdigest(),
+            },
+        ],
+        "live_claims": [
+            {"text": "Challenge claim 1", "status": "extracted"},
+            {"text": "Challenge claim 2", "status": "extracted"},
+        ],
         "estimated_api_cost_usd": 0.0,
         "score": score,
         "artifact_access": True,
@@ -205,6 +225,34 @@ def test_scheduler_accepts_estimated_api_cost_boundaries(scheduler, now, cost):
     }
 
     assert scheduler.rank_eligible_candidates(snapshot) == [candidate]
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        lambda candidate: candidate.pop("claim_bindings"),
+        lambda candidate: candidate.update(
+            {"claim_bindings": [candidate["claim_bindings"][0]]}
+        ),
+    ],
+    ids=["missing-bindings", "target-list-differs"],
+)
+def test_scheduler_rejects_missing_or_mismatched_claim_bindings(
+    scheduler, now, mutation
+):
+    candidate = paper("paper-a", 10)
+    mutation(candidate)
+    snapshot = {
+        "snapshot_id": "snapshot-1",
+        "fetched_at": now.isoformat(),
+        "source_revision": "source-1",
+        "candidates": [candidate],
+        "queued_submissions": [],
+        "tagged_spaces": [],
+        "verdicts": [],
+    }
+
+    assert scheduler.rank_eligible_candidates(snapshot) == []
 
 
 def test_read_fresh_snapshot_rejects_payload_not_matching_snapshot_id(
