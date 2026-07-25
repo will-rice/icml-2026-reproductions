@@ -1,0 +1,93 @@
+{
+  "alphaxiv": "2606.12913",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2606.12913",
+  "attempt_id": "64bfe193-333b-4b37-9683-9ac25ca5ac27",
+  "authors": [
+    "Dongyue Wu",
+    "Zilin Guo",
+    "Xiaoyu Li",
+    "Jiajia Liu",
+    "Jingdong Chen",
+    "Nong Sang",
+    "Changxin Gao"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
+      "challenge_claim_sha256": "c452eab57d205adb756a93aa35ca0275e1d2054bfb1d3d77925a76ac070c1216",
+      "target_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3)."
+    },
+    {
+      "challenge_claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F).",
+      "challenge_claim_sha256": "0564a2d47c07bc76bfccbe33c25677fc72d3af29567cc780d55c9367857ebcfe",
+      "target_claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
+    }
+  ],
+  "cpu_only": true,
+  "estimated_api_cost_usd": 0.0,
+  "hf": "",
+  "i": 6487,
+  "insts": [
+    "Huazhong University of Science and Technology",
+    "Ant Group"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3)."
+    },
+    {
+      "status": "unverified",
+      "text": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
+    },
+    {
+      "status": "unverified",
+      "text": "UGIES outperforms state-of-the-art dataset pruning methods on CIFAR-10/100 with ResNet-18 (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "On ImageNet-1K, UGIES achieves lossless or better-than-lossless pruning with ResNet-50 and Swin-T at moderate pruning ratios (Table 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "With ResNet-50 on ImageNet-1K at a 50% pruning ratio, UGIES reaches the same accuracy while saving 43.2% total training cost (Table 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "Ablations show combining intrinsic and extrinsic importance terms outperforms using either component alone across pruning ratios (Table 4)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=a3GdvuPItd",
+  "orid": "a3GdvuPItd",
+  "paper_id": "a3GdvuPItd",
+  "phase": "design-pending",
+  "pid": "63109",
+  "safety_blocker": null,
+  "score": 18,
+  "slug": "selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
+  "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+  "spot": false,
+  "sub": "Algorithms",
+  "target_claims": [
+    "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
+    "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
+  ],
+  "title": "Selecting Samples on Graphs: A Unified Dataset Pruning Framework for Lossless Training Acceleration",
+  "transitions": [
+    {
+      "at": "2026-07-25T22:11:38.745511+00:00",
+      "fencing_token": 1,
+      "from": "selected",
+      "owner": "scheduler-2b4c6391-5e33-43d6-aad4-261a32840c1f",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "design-pending"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-25T22:11:38.745511+00:00",
+  "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
+  "vs": "https://icml.cc/virtual/2026/poster/63109"
+}
