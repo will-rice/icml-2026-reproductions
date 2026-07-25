@@ -77,4 +77,3 @@ def test_demix_released_artifact_computation():
     assert bundle["evidence_summary"]["num_mixtures_evaluated"] == 16
     assert "domain_correlations" in bundle
     assert "avg" in bundle["domain_correlations"]
-

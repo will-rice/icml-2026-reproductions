@@ -53,4 +53,3 @@ def evaluate_merged_model(
         score = 1.0 / (1.0 + float(mse))
         scores[bench_name] = float(np.clip(score, 0.0, 1.0))
     return scores
-

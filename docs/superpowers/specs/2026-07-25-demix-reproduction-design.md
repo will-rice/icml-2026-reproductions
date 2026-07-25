@@ -1,8 +1,8 @@
 # Reproduction Design: Decouple Searching from Training (DeMix)
 
-**Paper ID:** `uyRIOjFgOn`  
-**Title:** Decouple Searching from Training: Scaling Data Mixing via Model Merging for Large Language Model Pre-training  
-**Upstream Revision:** `arxiv:2602.00747+github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422`  
+**Paper ID:** `uyRIOjFgOn`
+**Title:** Decouple Searching from Training: Scaling Data Mixing via Model Merging for Large Language Model Pre-training
+**Upstream Revision:** `arxiv:2602.00747+github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422`
 **Estimated API Cost:** $0.00 (CPU-only computation)
 
 ---
