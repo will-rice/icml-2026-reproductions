@@ -5,6 +5,7 @@ import inspect
 import json
 import socket
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 from types import ModuleType
 from typing import get_type_hints
@@ -16,6 +17,7 @@ from huggingface_hub.repocard import metadata_load
 
 PROJECT_ROOT = Path(__file__).parents[1]
 APP_PATH = PROJECT_ROOT / "app.py"
+POSTER_PATH = PROJECT_ROOT / "poster_embed.html"
 README_PATH = PROJECT_ROOT / "README.md"
 
 EXPECTED_STATUSES = {
@@ -23,11 +25,25 @@ EXPECTED_STATUSES = {
     "standardized-preprocessing-reproducibility": "verified",
     "three-strategy-evaluation-harness": "partial",
 }
-EXPECTED_TAGS = {
+EXPECTED_TAGS = [
     "icml2026-repro",
     "open-experiment",
     "paper-vGeNaFHdET",
-}
+]
+
+
+class IframeParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.iframes: list[dict[str, str | None]] = []
+
+    def handle_starttag(
+        self,
+        tag: str,
+        attrs: list[tuple[str, str | None]],
+    ) -> None:
+        if tag == "iframe":
+            self.iframes.append(dict(attrs))
 
 
 def load_space_app() -> ModuleType:
@@ -47,7 +63,7 @@ def test_space_card_selects_the_exact_platform_runtime() -> None:
     assert metadata["sdk_version"] == "6.20.0"
     assert metadata["python_version"] == "3.12"
     assert metadata["app_file"] == "app.py"
-    assert set(metadata["tags"]) == EXPECTED_TAGS
+    assert metadata["tags"] == EXPECTED_TAGS
     assert 0 < len(metadata["short_description"]) <= 60
     assert not (PROJECT_ROOT / "requirements.txt").exists()
 
@@ -109,6 +125,27 @@ def test_demo_renders_committed_results_and_poster_and_registers_public_api() ->
     assert dependency["api_description"] == inspect.getdoc(
         module.evidence_summary
     )
+
+
+def test_poster_document_is_isolated_in_a_scriptless_sandbox() -> None:
+    module = load_space_app()
+    config = module.demo.get_config_file()
+    poster_component = next(
+        component
+        for component in config["components"]
+        if component["type"] == "html"
+    )
+    rendered_html = poster_component["props"]["value"]
+    parser = IframeParser()
+    parser.feed(rendered_html)
+
+    assert len(parser.iframes) == 1
+    iframe = parser.iframes[0]
+    assert "sandbox" in iframe
+    assert "allow-scripts" not in (iframe["sandbox"] or "").split()
+    assert iframe["srcdoc"] == POSTER_PATH.read_text(encoding="utf-8")
+    assert "<style>" not in rendered_html
+    assert "<main>" not in rendered_html
 
 
 def test_gradio_620_launch_exposes_stable_summary_endpoint(

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from html import escape
 from pathlib import Path
 
 import gradio as gr
@@ -13,6 +14,11 @@ TITLE = "EEG-FM-Bench released-artifact audit"
 
 RESULTS = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
 POSTER_HTML = POSTER_PATH.read_text(encoding="utf-8")
+POSTER_FRAME_HTML = (
+    '<iframe title="EEG-FM-Bench evidence poster" sandbox="" '
+    'style="width:100%;height:80vh;min-height:640px;border:0;" '
+    f'srcdoc="{escape(POSTER_HTML, quote=True)}"></iframe>'
+)
 
 
 def evidence_summary() -> dict[str, object]:
@@ -53,7 +59,7 @@ does not reproduce the GPU leaderboard or use gated raw EEG datasets.
                     open=True,
                 )
             with gr.Tab("Poster"):
-                gr.HTML(value=POSTER_HTML)
+                gr.HTML(value=POSTER_FRAME_HTML)
             with gr.Tab("Summary API"):
                 summary_output = gr.JSON(
                     value=evidence_summary(),
