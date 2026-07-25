@@ -56,12 +56,20 @@ def _tree_hash(root: Path) -> str:
     return digest.hexdigest()
 
 
+DEFAULT_CACHE_DIR = Path(__file__).resolve().parents[2] / ".cache" / "upstream"
+
+
 def ensure_paper_pdf(cache_dir: Path) -> Path:
     """Return a verified cached copy of the pinned paper PDF."""
 
     cache_dir.mkdir(parents=True, exist_ok=True)
     destination = cache_dir / "2508.17742v3.pdf"
     expected = _provenance_hash("paper")
+    if not destination.is_file():
+        default_file = DEFAULT_CACHE_DIR / "2508.17742v3.pdf"
+        if default_file.is_file() and cache_dir.resolve() != DEFAULT_CACHE_DIR.resolve():
+            shutil.copy2(default_file, destination)
+
     if destination.is_file():
         _verify(destination.read_bytes(), expected, "paper")
         return destination
@@ -82,6 +90,12 @@ def ensure_repo_snapshot(cache_dir: Path) -> Path:
     expected = _provenance_hash("repository")
     marker = destination / ".snapshot-sha256"
     tree_marker = destination / ".tree-sha256"
+
+    if not (destination.is_dir() and marker.is_file() and tree_marker.is_file()):
+        default_repo = DEFAULT_CACHE_DIR / REPO_SNAPSHOT_DIRECTORY
+        if default_repo.is_dir() and cache_dir.resolve() != DEFAULT_CACHE_DIR.resolve():
+            shutil.copytree(default_repo, destination, dirs_exist_ok=True)
+
     if destination.is_dir() and marker.is_file() and tree_marker.is_file():
         if marker.read_text(encoding="utf-8").strip() != expected:
             raise ValueError("repository snapshot sha256 mismatch in cache marker")
@@ -89,6 +103,7 @@ def ensure_repo_snapshot(cache_dir: Path) -> Path:
         if _tree_hash(destination) != recorded_tree_hash:
             raise ValueError("repository snapshot tree hash mismatch")
         return destination
+
 
     data = _fetch(REPO_URL)
     _verify(data, expected, "repository")

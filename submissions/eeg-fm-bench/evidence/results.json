@@ -283,9 +283,9 @@
     }
   ],
   "environment": {
-    "numpy": "2.5.1",
+    "numpy": "2.3.3",
     "python": "3.12.11",
-    "torch": "2.13.0+cpu"
+    "torch": "2.13.0+cu130"
   },
   "provenance": {
     "inputs": {
