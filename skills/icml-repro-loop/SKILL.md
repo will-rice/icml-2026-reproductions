@@ -69,10 +69,13 @@ success.
 
 ## Required Controller Workflow
 
-1. Resume the schema-v6 index and every named shard. Run raw `refresh-live`,
-   then inspect the immutable result through `show-snapshot`. Bare challenge
-   metadata never supplies feasibility, score, cost, targets, or an upstream
-   pin.
+1. Inspect the version in `state/repro-loop.json`. For schema-v3, run only
+   `migrate-v6 --dry-run` and stop until the controller explicitly authorizes
+   the real migration; no schema-v6 lifecycle command is valid before it.
+   After migration, resume the schema-v6 index and every named shard. Run raw
+   `refresh-live`, then inspect the immutable result through `show-snapshot`.
+   Bare challenge metadata never supplies feasibility, score, cost, targets,
+   or an upstream pin.
 2. Inspect primary artifacts and write assessment JSON following
    [selection-rubric.md](references/selection-rubric.md). Bind each target to
    exact live challenge text and SHA-256. Run

@@ -14,7 +14,8 @@ NAPE components retain their own licenses; see
 - `submissions/<paper>/`: independent Python project with its own lockfile,
   tests, evidence bundle, validation commands, and Hugging Face Space source.
 - `skills/icml-repro-loop/`: versioned source for the reproduction-loop skill.
-- `state/repro-loop.json`: schema-v6 coordinator for up to 20 paper attempts.
+- `state/repro-loop.json`: authoritative coordinator state; it remains
+  schema-v3 until the explicit controller migration installs schema-v6.
 - `state/repro-loop/`: authoritative attempt, snapshot, lease, transaction, and
   judgment shards.
 - `docs/REMOTE_SETUP.md`: host setup, authentication, skill installation, and
@@ -56,6 +57,7 @@ creates the `$CODEX_HOME/skills/icml-repro-loop` symlink and verifies it.
 
 ## Submission Status
 
-Operational status is read from `state/repro-loop.json` and its referenced
-shards. Use `state.py list-attempts`, `show-attempt`, and `show-snapshot`; there
-is no ambiguous current paper.
+Inspect the version in `state/repro-loop.json` first. Schema-v3 may be checked
+only with `migrate-v6 --dry-run` until its explicit controller migration.
+After migration, operational status is read from the index and its referenced
+shards through `list-attempts`, `show-attempt`, and `show-snapshot`.

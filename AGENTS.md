@@ -1,7 +1,8 @@
 # ICML 2026 Reproduction Workspace
 
-Read the schema-v6 coordinator index and its referenced attempt shards before
-starting work, and `docs/REMOTE_SETUP.md` before running commands on a new host.
+Read `docs/HANDOFF.md` and inspect the version in `state/repro-loop.json`
+before starting work. If it is schema-v3, stop at the migration gate described
+below. Read `docs/REMOTE_SETUP.md` before running commands on a new host.
 
 ## Objective
 
@@ -14,7 +15,8 @@ paper-reported values as reproduced measurements.
 - `submissions/<paper>/`: independent project, tests, evidence bundle, and
   Space source for one paper.
 - `skills/icml-repro-loop/`: versioned source for the reproduction-loop skill.
-- `state/repro-loop.json`: schema-v6 coordinator index for 20 paper attempts.
+- `state/repro-loop.json`: authoritative coordinator state; schema-v3 remains
+  in place until its explicit controller migration installs the schema-v6 index.
 - `state/repro-loop/`: fenced attempt, judgment, lease, and snapshot shards.
 - `docs/REMOTE_SETUP.md`: host prerequisites, authentication checks, skill
   installation, and verification commands.
@@ -36,7 +38,10 @@ branches. Full host permissions do not transfer that authority to a worker.
 ## Workflow
 
 1. When processing challenge papers, require and follow `icml-repro-loop`.
-   Resume every materially affected attempt from the schema-v6 index and shards.
+   Do not run schema-v6 lifecycle commands against schema-v3 state. Verify its
+   migration with `migrate-v6 --dry-run`, then wait for explicit controller
+   authority before the real migration. After migration, resume every
+   materially affected attempt from the schema-v6 index and shards.
    A migrated schema-v3 attempt must be bound once through
    `reconcile-legacy-attempt` to a fresh assessed snapshot and explicit design
    approval provenance before controller validation.
