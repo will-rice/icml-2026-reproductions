@@ -586,6 +586,45 @@ def test_valid_run_attests_hashed_outputs_commit_and_tree(
     assert all(Path(manifest["worktree"]) == cwd for _, cwd in runner.calls)
 
 
+def test_controller_revalidates_one_predeployment_correction(
+    validation_case,
+):
+    paths, lease, manifest = validation_case
+    first = controller.attest_validation(
+        paths, "a1", lease, manifest, FakeRunner(manifest), NOW
+    )
+    first_id = first["transitions"][-1]["attestation_id"]
+    first_slot = paths.attestation("validation", "a1", 1)
+    first_bytes = first_slot.read_bytes()
+    attempts.transition_attempt(
+        paths,
+        "a1",
+        "improving",
+        lease,
+        NOW,
+        improvement_attempts=1,
+        improvement_reason="Correct the evidence generation",
+    )
+
+    second = controller.attest_validation(
+        paths,
+        "a1",
+        lease,
+        manifest,
+        FakeRunner(manifest, heads=("4" * 40, "4" * 40)),
+        NOW,
+    )
+
+    second_id = second["transitions"][-1]["attestation_id"]
+    assert second["phase"] == "validated"
+    assert second["improvement_attempts"] == 1
+    assert first_slot.read_bytes() == first_bytes
+    assert attestations.read(paths, first_id)["attempt_number"] == 1
+    assert attestations.read(paths, second_id)["attempt_number"] == 2
+    assert paths.attestation("validation", "a1", 2).exists()
+    assert first_id != second_id
+
+
 def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
     captured = {}
 

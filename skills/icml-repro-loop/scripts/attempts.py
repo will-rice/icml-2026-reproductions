@@ -46,6 +46,7 @@ ATTESTED_PHASE_KINDS = {
 }
 GENERIC_PHASES = {"design-pending", "implementing", "improving", "blocked"}
 ATTESTED_PROTECTED_UPDATE_FIELDS = {"improvement_attempts"}
+DEPLOYMENT_FIELDS = {"deployed_sha", "space_id"}
 Mutation = Callable[[dict, str], bool]
 
 
@@ -155,6 +156,8 @@ def transition_attempt(
     transition_updates = copy.deepcopy(updates)
 
     def transition(attempt: dict, timestamp: str) -> bool:
+        if attempt["phase"] == "validated" and phase == "improving":
+            _require_no_deployment(paths, attempt, transition_updates)
         return _apply_transition(
             attempt, phase, lease, timestamp, transition_updates
         )
@@ -484,6 +487,9 @@ def _apply_transition(
     attestation_id: str | None = None,
 ) -> bool:
     source = attempt["phase"]
+    is_predeployment_correction = source == "validated" and phase == "improving"
+    if is_predeployment_correction:
+        _validate_predeployment_correction(attempt, updates)
     abandon = updates.pop("abandon", None)
     is_resume = source == "blocked" and phase == attempt.get("blocked_from")
     is_abandon = source == "blocked" and phase == "idle"
@@ -494,6 +500,7 @@ def _apply_transition(
             phase not in state.ALLOWED[source]
             and not is_resume
             and not is_abandon
+            and not is_predeployment_correction
         )
     ):
         raise ValueError("phase")
@@ -531,6 +538,35 @@ def _apply_transition(
         transition["attestation_id"] = attestation_id
     attempt.setdefault("transitions", []).append(transition)
     return phase == "complete" or is_abandon
+
+
+def _validate_predeployment_correction(attempt: dict, updates: dict) -> None:
+    """Require the sole counted correction before an attempt is deployed."""
+    current_attempts = attempt.get("improvement_attempts", 0)
+    if type(current_attempts) is not int or current_attempts != 0:
+        raise ValueError("improvement_attempts")
+    requested_attempts = updates.get("improvement_attempts")
+    if type(requested_attempts) is not int or requested_attempts != 1:
+        raise ValueError("improvement_attempts")
+    reason = updates.get("improvement_reason")
+    if type(reason) is not str or not reason.strip():
+        raise ValueError("improvement_reason")
+
+
+def _require_no_deployment(
+    paths: store.StatePaths, attempt: dict, updates: dict
+) -> None:
+    """Reject correction when any authoritative deployment state exists."""
+    if DEPLOYMENT_FIELDS & (set(attempt) | set(updates)):
+        raise ValueError("deployment")
+    if any(
+        transition.get("to") in {"deployed", "submitted", "judging", "complete"}
+        for transition in attempt.get("transitions", [])
+    ):
+        raise ValueError("deployment")
+    deployment_root = paths.root / "attestations" / "deployment"
+    if any(deployment_root.glob(f"{attempt['attempt_id']}--*.json")):
+        raise ValueError("deployment")
 
 
 def _commit(

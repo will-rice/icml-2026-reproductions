@@ -1905,6 +1905,61 @@ def test_transition_attempt_reconstructs_and_validates_persisted_lease(tmp_path:
     assert transitioned["phase"] == "design-pending"
 
 
+def test_cli_transitions_validated_attempt_to_one_predeployment_correction(
+    tmp_path: Path,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a2"]
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases", "attestations", "attempts"):
+        sys.modules.pop(name, None)
+    import attestations
+    import attempts
+
+    first_id = persist_test_attestation(
+        attestations, paths, "validation", "a2"
+    )
+    attempts.transition_attested(
+        paths,
+        "a2",
+        "validated",
+        first_id,
+        {},
+        lease,
+        datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc),
+    )
+    first_bytes = paths.attestation("validation", "a2", 1).read_bytes()
+
+    transitioned = json.loads(
+        run_cli(
+            "transition-attempt",
+            str(paths.index),
+            "improving",
+            "--attempt-id",
+            "a2",
+            "--owner",
+            lease.owner,
+            "--fencing-token",
+            str(lease.fencing_token),
+            "--updates-json",
+            json.dumps(
+                {
+                    "improvement_attempts": 1,
+                    "improvement_reason": "Correct validation provenance",
+                }
+            ),
+            "--now",
+            "2026-07-24T18:00:00+00:00",
+        ).stdout
+    )
+
+    assert transitioned["phase"] == "improving"
+    assert transitioned["improvement_attempts"] == 1
+    assert transitioned["improvement_reason"] == "Correct validation provenance"
+    assert paths.attestation("validation", "a2", 1).read_bytes() == first_bytes
+
+
 def test_transition_attempt_rejects_owner_mismatch(tmp_path: Path):
     paths, attempt_leases = schema_v6_attempts(tmp_path)
     result = run_cli_unchecked(
