@@ -2,10 +2,15 @@
 name = "icml-2026-reproductions"
 version = "0.1.0"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "numpy>=2.2.0",
+    "scipy>=1.15.0",
+    "torch>=2.6.0",
+]
 
 [dependency-groups]
 dev = ["pre-commit>=4.2.0", "pytest>=8.4.0"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
