@@ -87,4 +87,4 @@ with gr.Blocks(title="DeMix Reproduction Space") as demo:
         btn.click(calculate_merge, inputs=[w_gen, w_math, w_code], outputs=[out_norm, out_eval])
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(server_name="0.0.0.0", server_port=7860)
