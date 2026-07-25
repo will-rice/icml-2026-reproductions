@@ -1,6 +1,7 @@
 """Tests for persistent ICML reproduction loop state."""
 
 import importlib.util
+from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import subprocess
@@ -408,61 +409,6 @@ def test_transition_rejects_undeclared_transitions(source: str, target: str):
 
     with pytest.raises(ValueError, match="phase"):
         module.transition(state_in_phase(module, source), target, **updates_for(target))
-
-
-def test_cli_initializes_shows_selects_and_transitions_state(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-    paper_json = json.dumps(paper())
-
-    run_cli("init", str(path))
-    assert json.loads(run_cli("show", str(path)).stdout)["phase"] == "idle"
-    run_cli("select", str(path), paper_json)
-    run_cli("transition", str(path), "design-pending", "{}")
-
-    assert json.loads(run_cli("show", str(path)).stdout)["phase"] == "design-pending"
-
-
-def test_cli_rejects_candidate_without_changing_idle_phase(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-
-    run_cli("init", str(path))
-    rejected = json.loads(run_cli("reject", str(path), json.dumps(rejection())).stdout)
-
-    assert rejected["phase"] == "idle"
-    assert rejected["rejections"] == [rejection()]
-    assert json.loads(run_cli("show", str(path)).stdout) == rejected
-
-
-def test_cli_updates_current_without_changing_phase(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-    run_cli("init", str(path))
-    run_cli("select", str(path), json.dumps(paper()))
-
-    updated = json.loads(
-        run_cli(
-            "update",
-            str(path),
-            json.dumps(
-                {
-                    "external_ids": {"submission": "submission-123"},
-                }
-            ),
-        ).stdout
-    )
-
-    assert updated["phase"] == "selected"
-    assert updated["current"]["external_ids"] == {
-        "submission": "submission-123"
-    }
-    assert state_module().load_state(path) == updated
-
-
-def test_cli_init_creates_parent_directory(tmp_path: Path):
-    path = tmp_path / "state" / "repro-loop.json"
-
-    run_cli("init", str(path))
-
-    assert json.loads(run_cli("show", str(path)).stdout) == state_module().new_state()
 
 
 @pytest.mark.parametrize(
@@ -884,17 +830,6 @@ def test_abandoned_blocked_attempt_is_archived_and_cannot_be_reselected():
     assert idle["total_api_cost_usd"] == 2.5
     with pytest.raises(ValueError, match="paper_id"):
         module.select_paper(idle, paper())
-
-
-def test_cli_init_refuses_to_overwrite_existing_state(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-    run_cli("init", str(path))
-    persisted = path.read_text(encoding="utf-8")
-
-    with pytest.raises(subprocess.CalledProcessError):
-        run_cli("init", str(path))
-
-    assert path.read_text(encoding="utf-8") == persisted
 
 
 def test_select_derives_project_path_and_rejects_historical_project_path():
@@ -1516,16 +1451,498 @@ def test_persisted_state_validates_improvement_attempts(
             module.load_state(path)
 
 
-def test_cli_help_names_required_transition_metadata():
+def test_cli_help_names_schema_v6_operations():
     help_text = run_cli("--help").stdout
 
-    assert "upstream_revision" in help_text
-    assert "target_claims" in help_text
-    assert "poll_limit" in help_text
-    assert "blocker" in help_text
-    assert "abandon" in help_text
-    assert "improvement_reason" in help_text
-    assert "claim-level verdicts" in help_text
+    for command in (
+        "migrate-v6",
+        "refresh-live",
+        "list-attempts",
+        "show-snapshot",
+        "show-attempt",
+        "scheduler-pass",
+        "claim-attempt",
+        "renew-attempt",
+        "transition-attempt",
+        "record-design",
+        "review-design",
+        "watch-attempt",
+        "record-poll",
+        "record-verdict",
+    ):
+        assert command in help_text
+
+
+@pytest.mark.parametrize(
+    "command", ["init", "show", "select", "reject", "update", "transition"]
+)
+def test_cli_does_not_register_legacy_schema_v3_commands(command: str):
+    result = run_cli_unchecked(command)
+
+    assert result.returncode != 0
+    assert "invalid choice" in result.stderr
+
+
+def test_show_snapshot_requires_explicit_snapshot_id(tmp_path: Path):
+    result = run_cli_unchecked("show-snapshot", str(tmp_path / "repro-loop.json"))
+
+    assert result.returncode != 0
+    assert "snapshot-id" in result.stderr
+
+
+@pytest.mark.parametrize("command", ["claim-attempt", "renew-attempt"])
+@pytest.mark.parametrize("missing", ["attempt-id", "owner", "fencing-token"])
+def test_attempt_lease_commands_require_explicit_identity(
+    tmp_path: Path, command: str, missing: str
+):
+    arguments = [
+        command,
+        str(tmp_path / "repro-loop.json"),
+        "--attempt-id",
+        "a1",
+        "--owner",
+        "worker-1",
+        "--fencing-token",
+        "0",
+    ]
+    option = f"--{missing}"
+    index = arguments.index(option)
+    del arguments[index : index + 2]
+
+    result = run_cli_unchecked(*arguments)
+
+    assert result.returncode != 0
+    assert missing in result.stderr
+
+
+def test_cli_reclaims_and_renews_attempt_with_explicit_json_identity(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    predecessor = attempt_leases["a1"]
+
+    claimed = json.loads(
+        run_cli(
+            "claim-attempt",
+            str(paths.index),
+            "--attempt-id",
+            "a1",
+            "--owner",
+            "implementation-agent",
+            "--fencing-token",
+            str(predecessor.fencing_token),
+            "--now",
+            "2026-07-24T20:00:00+00:00",
+        ).stdout
+    )
+    renewed = json.loads(
+        run_cli(
+            "renew-attempt",
+            str(paths.index),
+            "--attempt-id",
+            "a1",
+            "--owner",
+            "implementation-agent",
+            "--fencing-token",
+            str(claimed["fencing_token"]),
+            "--now",
+            "2026-07-24T21:00:00+00:00",
+        ).stdout
+    )
+
+    assert claimed == {
+        "attempt_id": "a1",
+        "owner": "implementation-agent",
+        "fencing_token": 2,
+        "acquired_at": "2026-07-24T20:00:00+00:00",
+        "expires_at": "2026-07-24T22:00:00+00:00",
+    }
+    assert renewed == {
+        **claimed,
+        "expires_at": "2026-07-24T23:00:00+00:00",
+    }
+
+
+def test_cli_attempt_lease_chronology_boundaries(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    predecessor = attempt_leases["a1"]
+    identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        "successor",
+        "--fencing-token",
+        str(predecessor.fencing_token),
+    )
+
+    backdated_claim = run_cli_unchecked(
+        "claim-attempt",
+        str(paths.index),
+        *identity,
+        "--now",
+        "2026-07-24T17:59:59.999999+00:00",
+    )
+    assert backdated_claim.returncode != 0
+    assert "now" in backdated_claim.stderr
+
+    claimed = json.loads(
+        run_cli(
+            "claim-attempt",
+            str(paths.index),
+            *identity,
+            "--now",
+            "2026-07-24T19:00:00+00:00",
+        ).stdout
+    )
+    current_identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        claimed["owner"],
+        "--fencing-token",
+        str(claimed["fencing_token"]),
+    )
+    boundary = json.loads(
+        run_cli(
+            "renew-attempt",
+            str(paths.index),
+            *current_identity,
+            "--now",
+            claimed["acquired_at"],
+        ).stdout
+    )
+    assert boundary["expires_at"] == claimed["expires_at"]
+
+    extended = json.loads(
+        run_cli(
+            "renew-attempt",
+            str(paths.index),
+            *current_identity,
+            "--now",
+            "2026-07-24T20:00:00+00:00",
+        ).stdout
+    )
+    backdated_renewal = run_cli_unchecked(
+        "renew-attempt",
+        str(paths.index),
+        *current_identity,
+        "--now",
+        "2026-07-24T19:30:00+00:00",
+    )
+    assert extended["expires_at"] == "2026-07-24T22:00:00+00:00"
+    assert backdated_renewal.returncode != 0
+    assert "now" in backdated_renewal.stderr
+
+
+def test_cli_renew_attempt_rejects_archived_attempt(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a1"]
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    sys.modules.pop("store", None)
+    import store
+
+    with store.locked_json(paths.index, store.validate_index) as index:
+        index["history"]["a1"] = index["attempts"].pop("a1")
+
+    result = run_cli_unchecked(
+        "renew-attempt",
+        str(paths.index),
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+        "--now",
+        "2026-07-24T18:01:00+00:00",
+    )
+
+    assert result.returncode != 0
+    assert "attempt_id" in result.stderr
+
+
+def test_cli_records_design_then_independent_review(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a1"]
+    identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+        "--now",
+        "2026-07-24T18:00:00+00:00",
+    )
+    run_cli(
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        *identity,
+    )
+
+    designed = json.loads(
+        run_cli(
+            "record-design",
+            str(paths.index),
+            *identity,
+            "--author",
+            "author-agent",
+            "--design-path",
+            "docs/designs/paper-a.md",
+        ).stdout
+    )
+    reviewed = json.loads(
+        run_cli(
+            "review-design",
+            str(paths.index),
+            *identity,
+            "--reviewer",
+            "reviewer-agent",
+            "--decision",
+            "approved",
+        ).stdout
+    )
+
+    assert designed["design"]["author"] == "author-agent"
+    assert reviewed["phase"] == "implementing"
+    assert reviewed["design_review"]["reviewer"] == "reviewer-agent"
+
+
+def test_scheduler_assignment_drives_documented_cli_lifecycle(tmp_path: Path):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh"):
+        sys.modules.pop(name, None)
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    payload = {
+        "fetched_at": now.isoformat(),
+        "source_revision": "source-1",
+        "candidates": [
+            {
+                "paper_id": "paper-a",
+                "title": "Paper A",
+                "slug": "paper-a",
+                "upstream_revision": "revision-a",
+                "target_claims": ["claim-1", "claim-2"],
+                "estimated_api_cost_usd": 0.0,
+                "score": 10,
+                "artifact_access": True,
+                "cpu_only": True,
+                "safety_blocker": None,
+                "licensing_blocker": None,
+            }
+        ],
+        "queued_submissions": [],
+        "tagged_spaces": [],
+        "verdicts": [],
+    }
+    snapshot_id = refresh.canonical_snapshot_id(payload)
+    snapshot = {"snapshot_id": snapshot_id, **payload}
+    snapshot_path = paths.root / "snapshots" / f"{snapshot_id}.json"
+    store.atomic_json_write(snapshot_path, snapshot, store.validate_snapshot)
+    with store.locked_json(paths.index, store.validate_index) as index:
+        index["snapshots"][snapshot_id] = str(
+            snapshot_path.relative_to(paths.index.parent)
+        )
+
+    scheduler_output = json.loads(
+        run_cli(
+            "scheduler-pass",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+    assignment = scheduler_output["assignments"][0]
+    identity = (
+        "--attempt-id",
+        assignment["attempt_id"],
+        "--owner",
+        assignment["owner"],
+        "--fencing-token",
+        str(assignment["fencing_token"]),
+        "--now",
+        now.isoformat(),
+    )
+    run_cli(
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        *identity,
+    )
+    run_cli(
+        "record-design",
+        str(paths.index),
+        *identity,
+        "--author",
+        "author-agent",
+        "--design-path",
+        "docs/designs/paper-a.md",
+    )
+    reviewed = json.loads(
+        run_cli(
+            "review-design",
+            str(paths.index),
+            *identity,
+            "--reviewer",
+            "reviewer-agent",
+            "--decision",
+            "approved",
+        ).stdout
+    )
+
+    assert assignment["paper_id"] == "paper-a"
+    assert reviewed["phase"] == "implementing"
+
+
+def test_list_attempts_requires_no_ambiguous_current(tmp_path: Path):
+    paths, _leases = schema_v6_attempts(tmp_path)
+    result = run_cli_unchecked(
+        "list-attempts", str(paths.index), "--phase", "implementing"
+    )
+
+    assert result.returncode == 0
+    records = json.loads(result.stdout)
+    assert [record["attempt_id"] for record in records] == ["a2"]
+    assert all(record["phase"] == "implementing" for record in records)
+
+
+def test_show_attempt_requires_explicit_attempt_id(tmp_path: Path):
+    paths, _leases = schema_v6_attempts(tmp_path)
+    result = run_cli_unchecked("show-attempt", str(paths.index))
+
+    assert result.returncode != 0
+    assert "attempt-id" in result.stderr
+
+
+@pytest.mark.parametrize("missing", ["attempt-id", "owner", "fencing-token"])
+def test_attempt_mutation_requires_full_lease_identity(tmp_path: Path, missing: str):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    arguments = [
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        "--attempt-id",
+        "a1",
+        "--owner",
+        attempt_leases["a1"].owner,
+        "--fencing-token",
+        str(attempt_leases["a1"].fencing_token),
+    ]
+    option = f"--{missing}"
+    index = arguments.index(option)
+    del arguments[index : index + 2]
+
+    result = run_cli_unchecked(*arguments)
+
+    assert result.returncode != 0
+    assert missing in result.stderr
+
+
+def test_transition_attempt_reconstructs_and_validates_persisted_lease(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a1"]
+
+    transitioned = json.loads(
+        run_cli(
+            "transition-attempt",
+            str(paths.index),
+            "design-pending",
+            "--attempt-id",
+            "a1",
+            "--owner",
+            lease.owner,
+            "--fencing-token",
+            str(lease.fencing_token),
+            "--now",
+            "2026-07-24T18:00:00+00:00",
+        ).stdout
+    )
+
+    assert transitioned["attempt_id"] == "a1"
+    assert transitioned["phase"] == "design-pending"
+
+
+def test_transition_attempt_rejects_owner_mismatch(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    result = run_cli_unchecked(
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        "--attempt-id",
+        "a1",
+        "--owner",
+        "not-the-owner",
+        "--fencing-token",
+        str(attempt_leases["a1"].fencing_token),
+    )
+
+    assert result.returncode != 0
+    assert "owner" in result.stderr
+
+
+def test_cli_judgment_commands_preserve_fenced_scheduler_signatures(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path, submitted=True)
+    lease = attempt_leases["a1"]
+    identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+    )
+
+    watched = json.loads(
+        run_cli(
+            "watch-attempt",
+            str(paths.index),
+            *identity,
+            "--poll-limit",
+            "2",
+            "--poll-deadline",
+            "2026-07-24T19:00:00+00:00",
+            "--now",
+            "2026-07-24T18:00:00+00:00",
+        ).stdout
+    )
+    polled = json.loads(
+        run_cli(
+            "record-poll",
+            str(paths.index),
+            *identity,
+            "--status",
+            "pending",
+            "--now",
+            "2026-07-24T18:01:00+00:00",
+        ).stdout
+    )
+    recorded = json.loads(
+        run_cli(
+            "record-verdict",
+            str(paths.index),
+            *identity,
+            "--raw-verdict",
+            '{"result":"complete"}',
+            "--normalized-verdict",
+            json.dumps(verdict()),
+            "--source-revision",
+            "verdict-revision",
+            "--now",
+            "2026-07-24T18:02:00+00:00",
+        ).stdout
+    )
+
+    assert watched["attempt_id"] == "a1"
+    assert polled["polls"][-1]["status"] == "pending"
+    assert recorded["source_revision"] == "verdict-revision"
 
 
 @pytest.mark.parametrize(
@@ -1999,3 +2416,82 @@ def run_cli(*arguments: str) -> subprocess.CompletedProcess[str]:
         capture_output=True,
         text=True,
     )
+
+
+def run_cli_unchecked(*arguments: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(STATE_MODULE_PATH), *arguments],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+
+def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases", "attempts"):
+        sys.modules.pop(name, None)
+    import store
+    import leases
+    import attempts
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    attempt_leases = {}
+    for number, phase in ((1, "selected"), (2, "implementing")):
+        attempt_id = f"a{number}"
+        lease = leases.acquire_lease(
+            paths,
+            f"attempt:{attempt_id}",
+            f"owner-{number}",
+            attempt_id,
+            now,
+            timedelta(hours=1),
+        )
+        attempt_leases[attempt_id] = lease
+        attempts.create_attempt(
+            paths,
+            attempt_id,
+            {
+                "paper_id": f"paper-{number}",
+                "title": f"Paper {number}",
+                "slug": f"paper-{number}",
+                "upstream_revision": f"revision-{number}",
+                "target_claims": ["claim-1", "claim-2"],
+                "estimated_api_cost_usd": 0.0,
+            },
+            lease,
+            "snapshot-1",
+            now,
+        )
+        if phase == "implementing":
+            attempts.transition_attempt(
+                paths, attempt_id, "design-pending", lease, now
+            )
+            attempts.record_design(
+                paths, attempt_id, lease, "author", "design.md", now
+            )
+            attempts.record_design_review(
+                paths, attempt_id, lease, "reviewer", "approved", now
+            )
+    if submitted:
+        lease = attempt_leases["a1"]
+        attempts.transition_attempt(paths, "a1", "design-pending", lease, now)
+        attempts.record_design(paths, "a1", lease, "author", "design.md", now)
+        attempts.record_design_review(
+            paths, "a1", lease, "reviewer", "approved", now
+        )
+        for phase in ("validated", "deployed", "submitted"):
+            attempts.transition_attempt(paths, "a1", phase, lease, now)
+        attempts.update_attempt(
+            paths,
+            "a1",
+            lease,
+            now,
+            space_id="org/paper-a",
+            deployed_sha="submitted-sha",
+            improvement_attempts=0,
+        )
+    return paths, attempt_leases

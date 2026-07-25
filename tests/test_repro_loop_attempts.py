@@ -1,0 +1,489 @@
+"""Tests for independent fenced reproduction-attempt lifecycles."""
+
+from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
+import importlib
+from pathlib import Path
+import sys
+import threading
+
+import pytest
+
+
+SCRIPTS = (
+    Path(__file__).resolve().parents[1] / "skills" / "icml-repro-loop" / "scripts"
+)
+TTL = timedelta(minutes=5)
+
+
+def load_module(name: str):
+    sys.path.insert(0, str(SCRIPTS))
+    sys.modules.pop(name, None)
+    return importlib.import_module(name)
+
+
+@pytest.fixture
+def store():
+    return load_module("store")
+
+
+@pytest.fixture
+def leases():
+    load_module("store")
+    return load_module("leases")
+
+
+@pytest.fixture
+def attempts():
+    load_module("store")
+    load_module("leases")
+    load_module("state")
+    return load_module("attempts")
+
+
+@pytest.fixture
+def paths(tmp_path, store):
+    value = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(value.index, store.new_index(), store.validate_index)
+    return value
+
+
+@pytest.fixture
+def now():
+    return datetime(2026, 7, 24, 12, 0, tzinfo=timezone.utc)
+
+
+def paper(paper_id: str) -> dict:
+    return {
+        "paper_id": paper_id,
+        "title": f"Paper {paper_id}",
+        "slug": f"paper-{paper_id}",
+        "upstream_revision": "abc123",
+        "target_claims": ["claim-1", "claim-2"],
+        "estimated_api_cost_usd": 0.0,
+    }
+
+
+def create(attempts, leases, paths, attempt_id, paper_id, owner, now):
+    lease = leases.acquire_lease(
+        paths, f"attempt:{attempt_id}", owner, attempt_id, now, TTL
+    )
+    attempts.create_attempt(
+        paths, attempt_id, paper(paper_id), lease, "snapshot-1", now
+    )
+    return lease
+
+
+def interrupt_transaction(monkeypatch, attempts, fail_after):
+    writes = 0
+
+    def interrupted(path, value, validator):
+        nonlocal writes
+        writes += 1
+        if writes == fail_after:
+            raise OSError("simulated interruption")
+        validator(value)
+        attempts.store._atomic_json_write(path, value)
+
+    monkeypatch.setattr(
+        attempts.store, "_transaction_write", interrupted, raising=False
+    )
+
+
+def restore_transaction_writes(monkeypatch, attempts):
+    def write(path, value, validator):
+        validator(value)
+        attempts.store._atomic_json_write(path, value)
+
+    monkeypatch.setattr(attempts.store, "_transaction_write", write, raising=False)
+
+
+@pytest.fixture
+def attempts_and_leases(attempts, leases, paths, now):
+    first = create(attempts, leases, paths, "a1", "p1", "worker-1", now)
+    second = create(attempts, leases, paths, "a2", "p2", "worker-2", now)
+    for attempt_id, lease in (("a1", first), ("a2", second)):
+        attempts.transition_attempt(paths, attempt_id, "design-pending", lease, now)
+        attempts.record_design(
+            paths, attempt_id, lease, f"author-{attempt_id}", "design.md", now
+        )
+        attempts.record_design_review(
+            paths, attempt_id, lease, f"reviewer-{attempt_id}", "approved", now
+        )
+    return "a1", first, "a2", second
+
+
+@dataclass(frozen=True)
+class PendingAttempt:
+    id: str
+    lease: object
+
+
+@pytest.fixture
+def pending_attempt(attempts, leases, paths, now):
+    lease = create(attempts, leases, paths, "a1", "p1", "worker-1", now)
+    attempts.transition_attempt(paths, "a1", "design-pending", lease, now)
+    return PendingAttempt("a1", lease)
+
+
+def test_blocking_one_attempt_does_not_change_another(
+    paths, attempts_and_leases, attempts, now
+):
+    a1, l1, a2, _ = attempts_and_leases
+    attempts.transition_attempt(
+        paths, a1, "blocked", l1, now, blocker="missing dataset"
+    )
+    assert attempts.read_attempt(paths, a1)["phase"] == "blocked"
+    assert attempts.read_attempt(paths, a2)["phase"] == "implementing"
+
+
+def test_different_agent_may_approve_design(paths, pending_attempt, attempts, now):
+    attempts.record_design(
+        paths,
+        pending_attempt.id,
+        pending_attempt.lease,
+        "author-a",
+        "design.md",
+        now,
+    )
+    attempts.record_design_review(
+        paths,
+        pending_attempt.id,
+        pending_attempt.lease,
+        "reviewer-b",
+        "approved",
+        now,
+    )
+    assert attempts.read_attempt(paths, pending_attempt.id)["phase"] == "implementing"
+
+
+def test_design_author_cannot_self_approve(paths, pending_attempt, attempts, now):
+    attempts.record_design(
+        paths,
+        pending_attempt.id,
+        pending_attempt.lease,
+        "agent-a",
+        "design.md",
+        now,
+    )
+    with pytest.raises(ValueError, match="reviewer"):
+        attempts.record_design_review(
+            paths,
+            pending_attempt.id,
+            pending_attempt.lease,
+            "agent-a",
+            "approved",
+            now,
+        )
+
+
+def test_transition_appends_fenced_attempt_history(
+    paths, pending_attempt, attempts, now
+):
+    attempts.record_design(
+        paths, pending_attempt.id, pending_attempt.lease, "author-a", "design.md", now
+    )
+    attempts.record_design_review(
+        paths,
+        pending_attempt.id,
+        pending_attempt.lease,
+        "reviewer-b",
+        "approved",
+        now,
+    )
+
+    assert attempts.read_attempt(paths, pending_attempt.id)["transitions"][-1] == {
+        "from": "design-pending",
+        "to": "implementing",
+        "at": now.isoformat(),
+        "owner": "worker-1",
+        "fencing_token": pending_attempt.lease.fencing_token,
+        "snapshot_id": "snapshot-1",
+    }
+
+
+def test_blocked_attempt_is_not_runnable_and_resumes_its_origin(
+    paths, attempts_and_leases, attempts, now
+):
+    a1, lease, a2, _ = attempts_and_leases
+    attempts.transition_attempt(paths, a1, "blocked", lease, now, blocker="offline")
+    assert attempts.runnable_attempt_ids(paths) == [a2]
+
+    attempts.transition_attempt(paths, a1, "implementing", lease, now)
+    assert attempts.runnable_attempt_ids(paths) == [a1, a2]
+    resumed = attempts.read_attempt(paths, a1)
+    assert "blocker" not in resumed
+    assert "blocked_from" not in resumed
+
+
+def test_blocking_requires_nonempty_blocker(paths, attempts_and_leases, attempts, now):
+    a1, lease, _, _ = attempts_and_leases
+    with pytest.raises(ValueError, match="blocker"):
+        attempts.transition_attempt(paths, a1, "blocked", lease, now, blocker="")
+
+
+def test_completion_moves_attempt_reference_to_history(
+    paths, attempts_and_leases, attempts, store, now
+):
+    a1, lease, _, _ = attempts_and_leases
+    attempts.transition_attempt(paths, a1, "validated", lease, now)
+    attempts.transition_attempt(paths, a1, "deployed", lease, now)
+    attempts.transition_attempt(paths, a1, "submitted", lease, now)
+    attempts.transition_attempt(paths, a1, "judging", lease, now)
+    attempts.transition_attempt(paths, a1, "complete", lease, now)
+
+    index = store.read_json(paths.index)
+    assert a1 not in index["attempts"]
+    assert index["history"][a1]["phase"] == "complete"
+
+
+def test_blocked_abandonment_must_be_explicit(
+    paths, attempts_and_leases, attempts, store, now
+):
+    a1, lease, _, _ = attempts_and_leases
+    attempts.transition_attempt(paths, a1, "blocked", lease, now, blocker="offline")
+    with pytest.raises(ValueError, match="abandon"):
+        attempts.transition_attempt(paths, a1, "idle", lease, now)
+
+    attempts.transition_attempt(paths, a1, "idle", lease, now, abandon=True)
+    index = store.read_json(paths.index)
+    assert a1 not in index["attempts"]
+    assert a1 in index["history"]
+
+
+def test_stale_attempt_writer_cannot_update_successor(
+    paths, attempts, leases, now
+):
+    stale = create(attempts, leases, paths, "a1", "p1", "worker-1", now)
+    current = leases.claim_attempt(
+        paths, "a1", "worker-2", stale.fencing_token, now + TTL
+    )
+
+    with pytest.raises(attempts.leases.StaleFence):
+        attempts.update_attempt(
+            paths, "a1", stale, now + TTL, assigned_agents=["stale"]
+        )
+
+    attempts.update_attempt(
+        paths, "a1", current, now + TTL, assigned_agents=["current"]
+    )
+    assert attempts.read_attempt(paths, "a1")["assigned_agents"] == ["current"]
+
+
+@pytest.mark.parametrize("fail_after", range(1, 5))
+def test_interrupted_creation_recovers_without_orphan(
+    paths, attempts, leases, store, now, monkeypatch, fail_after
+):
+    lease = leases.acquire_lease(paths, "attempt:a1", "worker-1", "a1", now, TTL)
+    interrupt_transaction(monkeypatch, attempts, fail_after)
+
+    with pytest.raises(OSError, match="simulated interruption"):
+        attempts.create_attempt(paths, "a1", paper("p1"), lease, "snapshot-1", now)
+
+    restore_transaction_writes(monkeypatch, attempts)
+    attempts.recover_transactions(paths)
+    index = store.read_json(paths.index)
+    if paths.attempt("a1").exists():
+        assert index["attempts"]["a1"]["path"].endswith("attempts/a1.json")
+    else:
+        assert "a1" not in index["attempts"]
+
+
+@pytest.mark.parametrize("fail_after", range(1, 5))
+def test_interrupted_update_recovers_matching_shard_and_reference(
+    paths, attempts, leases, store, now, monkeypatch, fail_after
+):
+    lease = create(attempts, leases, paths, "a1", "p1", "worker-1", now)
+    later = now + timedelta(minutes=1)
+    interrupt_transaction(monkeypatch, attempts, fail_after)
+
+    with pytest.raises(OSError, match="simulated interruption"):
+        attempts.update_attempt(paths, "a1", lease, later, worktree="worktrees/a1")
+
+    restore_transaction_writes(monkeypatch, attempts)
+    attempts.recover_transactions(paths)
+    attempt = attempts.read_attempt(paths, "a1")
+    reference = store.read_json(paths.index)["attempts"]["a1"]
+    assert reference["phase"] == attempt["phase"]
+    assert reference["updated_at"] == attempt["updated_at"]
+
+
+@pytest.mark.parametrize("fail_after", range(1, 5))
+def test_interrupted_completion_never_recovers_complete_attempt_as_active(
+    paths, attempts_and_leases, attempts, store, now, monkeypatch, fail_after
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    for phase in ("validated", "deployed", "submitted", "judging"):
+        attempts.transition_attempt(paths, attempt_id, phase, lease, now)
+    interrupt_transaction(monkeypatch, attempts, fail_after)
+
+    with pytest.raises(OSError, match="simulated interruption"):
+        attempts.transition_attempt(paths, attempt_id, "complete", lease, now)
+
+    restore_transaction_writes(monkeypatch, attempts)
+    attempts.recover_transactions(paths)
+    attempt = attempts.read_attempt(paths, attempt_id)
+    index = store.read_json(paths.index)
+    assert not (
+        attempt["phase"] == "complete" and attempt_id in index["attempts"]
+    )
+    if attempt["phase"] == "complete":
+        assert attempt_id in index["history"]
+
+
+def test_successor_takeover_between_precheck_and_write_fences_stale_writer(
+    paths, attempts, leases, now, monkeypatch
+):
+    stale = create(attempts, leases, paths, "a1", "p1", "worker-1", now)
+    prechecked = threading.Event()
+    continue_write = threading.Event()
+    errors = []
+    real_assert = attempts._assert_attempt_fence
+
+    def pause_after_precheck(*args):
+        real_assert(*args)
+        prechecked.set()
+        assert continue_write.wait(timeout=5)
+
+    monkeypatch.setattr(attempts, "_assert_attempt_fence", pause_after_precheck)
+
+    def stale_update():
+        try:
+            attempts.update_attempt(
+                paths,
+                "a1",
+                stale,
+                now + timedelta(minutes=1),
+                assigned_agents=["stale"],
+            )
+        except BaseException as error:  # pragma: no cover - asserted below
+            errors.append(error)
+
+    thread = threading.Thread(target=stale_update)
+    thread.start()
+    assert prechecked.wait(timeout=5)
+    successor = leases.acquire_lease(
+        paths, "attempt:a1", "worker-2", "a1", now + TTL, TTL
+    )
+    continue_write.set()
+    thread.join(timeout=5)
+
+    assert not thread.is_alive()
+    assert len(errors) == 1
+    assert isinstance(errors[0], attempts.leases.StaleFence)
+    assert "assigned_agents" not in attempts.read_attempt(paths, "a1")
+    attempts.update_attempt(
+        paths, "a1", successor, now + TTL, assigned_agents=["current"]
+    )
+
+
+def test_update_cannot_inject_design_or_review(paths, pending_attempt, attempts, now):
+    for field, value in (
+        ("design", {"author": "forged", "path": "design.md"}),
+        ("design_review", {"reviewer": "forged", "decision": "approved"}),
+    ):
+        with pytest.raises(ValueError, match=field):
+            attempts.update_attempt(
+                paths,
+                pending_attempt.id,
+                pending_attempt.lease,
+                now,
+                **{field: value},
+            )
+
+
+def test_transition_cannot_inject_approval(paths, pending_attempt, attempts, now):
+    with pytest.raises(ValueError, match="design_review"):
+        attempts.transition_attempt(
+            paths,
+            pending_attempt.id,
+            "implementing",
+            pending_attempt.lease,
+            now,
+            design_review={
+                "reviewer": "forged-reviewer",
+                "decision": "approved",
+            },
+        )
+
+
+def test_twenty_first_runnable_attempt_is_rejected(paths, attempts, leases, now):
+    for number in range(20):
+        create(
+            attempts,
+            leases,
+            paths,
+            f"a{number}",
+            f"p{number}",
+            f"worker-{number}",
+            now,
+        )
+    lease = leases.acquire_lease(
+        paths, "attempt:a20", "worker-20", "a20", now, TTL
+    )
+
+    with pytest.raises(ValueError, match="max_runnable_attempts"):
+        attempts.create_attempt(
+            paths, "a20", paper("p20"), lease, "snapshot-1", now
+        )
+
+    assert len(attempts.runnable_attempt_ids(paths)) == 20
+
+
+def test_concurrent_admission_never_exceeds_twenty(paths, attempts, leases, now):
+    barrier = threading.Barrier(21)
+    created = []
+    errors = []
+
+    def admit(number):
+        attempt_id = f"a{number}"
+        lease = leases.acquire_lease(
+            paths,
+            f"attempt:{attempt_id}",
+            f"worker-{number}",
+            attempt_id,
+            now,
+            TTL,
+        )
+        barrier.wait()
+        try:
+            attempts.create_attempt(
+                paths,
+                attempt_id,
+                paper(f"p{number}"),
+                lease,
+                "snapshot-1",
+                now,
+            )
+            created.append(attempt_id)
+        except ValueError as error:
+            errors.append(error)
+
+    threads = [
+        threading.Thread(target=admit, args=(number,)) for number in range(21)
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=5)
+
+    assert all(not thread.is_alive() for thread in threads)
+    assert len(created) == 20
+    assert len(errors) == 1
+    assert str(errors[0]) == "max_runnable_attempts"
+    assert len(attempts.runnable_attempt_ids(paths)) == 20
+
+
+def test_repeated_payload_after_intervening_update_is_persisted(
+    paths, attempts, leases, now
+):
+    lease = create(attempts, leases, paths, "a1", "p1", "worker-1", now)
+    attempts.update_attempt(paths, "a1", lease, now, assigned_agents=["agent-a"])
+    attempts.update_attempt(paths, "a1", lease, now, assigned_agents=["agent-b"])
+
+    returned = attempts.update_attempt(
+        paths, "a1", lease, now, assigned_agents=["agent-a"]
+    )
+
+    assert returned["assigned_agents"] == ["agent-a"]
+    assert attempts.read_attempt(paths, "a1")["assigned_agents"] == ["agent-a"]

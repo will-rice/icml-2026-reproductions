@@ -33,9 +33,9 @@ orx --help
 ```
 
 `git submodule status` must produce no entries. Authenticate interactively if
-either authentication check fails. AgentSelect setup used to begin by reading
-`docs/HANDOFF.md`; it is now judged and must not be selected, so always use
-that file as the authoritative current-paper entry point.
+either authentication check fails. Resume work from `state/repro-loop.json`
+and its referenced attempt shards; list attempts explicitly because schema v6
+has no single current paper.
 
 ## Verify Required Superpowers Skills
 
@@ -94,6 +94,7 @@ uv sync --frozen
 uv run pytest -q
 uv run "$CODEX_HOME/skills/.system/skill-creator/scripts/quick_validate.py" skills/icml-repro-loop
 uv run pre-commit run -a
+uv run python skills/icml-repro-loop/scripts/state.py list-attempts state/repro-loop.json
 git status --short
 ```
 

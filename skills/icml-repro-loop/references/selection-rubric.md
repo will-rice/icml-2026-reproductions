@@ -1,18 +1,28 @@
 # Candidate Selection Rubric
 
-Use current challenge state and inspect source artifacts before scoring. Never label paper-reported values as reproduced; only code-computed outputs can support reproduction. Do not score promises, screenshots, README tables, or paper prose as independent evidence.
+Run raw `refresh-live` and inspect it with `show-snapshot`, then inspect source artifacts for its current papers and extracted claims. Write an explicit assessment file against that raw snapshot revision. The 6,341-record `index.json` catalog and current challenge records are metadata only. Never infer score, feasibility, cost, target claims, or upstream pins from them.
 
 ## Eligibility
 
 A candidate is eligible only when all of these are true:
 
-- It is not actively claimed, queued, judging, judged, or present in reproduction history. Judged and historical papers remain excluded from candidate selection.
+- It has no active/history attempt, candidate lease, queued submission, tagged Space, or verdict in the snapshot and durable store. Judged and historical papers remain excluded.
 - At least two distinct paper claims are independently testable. A claim is independently testable only when released artifacts or a feasible computation can verify it without treating the paper's reported value as evidence.
 - It does not require GPU training. Explicitly requested GPU projects are outside this skill.
 - The estimated cumulative paid-API cost for the paper is at most USD 10. More than USD 10 is ineligible, not merely a score penalty.
 - The selection record includes an explicit finite `estimated_api_cost_usd`, a nonempty immutable `upstream_revision`, and at least two unique nonempty immutable `target_claims`; omitted cost is not treated as zero.
 - Its execution path is not known to be unsafe. Unresolved safety ambiguity pauses selection; a workload proven safe inside an approved isolation boundary may remain eligible.
 - Its paper identity, candidate status, artifact availability, and expected execution path have been checked from live or primary sources.
+
+## Assessment Input
+
+The assessment file has top-level `challenge_revision`, `assessor`,
+`assessed_at`, and `assessments`. Each assessment contains exactly `paper_id`,
+`score`, `target_claims`, `upstream_revision`, `artifact_access`, `cpu_only`,
+`safety_blocker`, `licensing_blocker`, and `estimated_api_cost_usd`. Selected
+target strings must be present in the pinned live extracted claims. Unmatched
+and unassessed papers remain in snapshot provenance but are ineligible. A stale
+document revision aborts assessed refresh; rerun discovery and assessment.
 
 ## Base Score
 
@@ -99,13 +109,20 @@ Rank by final score. Before selection, compare the top three eligible candidates
 | B |  |  |  |  |  |  |  |
 | C |  |  |  |  |  |  |  |
 
-Select the highest-scoring candidate unless a documented tie-break favors stronger direct evidence, lower execution risk, or lower cost. While the state is idle, persist every ineligible candidate and reason before continuing with:
+The scheduler selects highest scores unless a documented tie-break favors
+stronger direct evidence, lower execution risk, or lower cost. Persist every
+ineligible candidate and reason in the coordinator before continuing. One
+bounded pass admits only enough candidates to restore 20 runnable paper
+attempts; blocked and complete attempts create capacity without stopping other
+work.
 
 ```bash
-uv run python skills/icml-repro-loop/scripts/state.py reject state/repro-loop.json CANDIDATE_JSON
+raw_id=$(uv run python skills/icml-repro-loop/scripts/state.py refresh-live state/repro-loop.json | uv run python -c 'import json,sys; print(json.load(sys.stdin)["snapshot_id"])')
+uv run python skills/icml-repro-loop/scripts/state.py show-snapshot state/repro-loop.json --snapshot-id "$raw_id"
+uv run python skills/icml-repro-loop/scripts/state.py refresh-live state/repro-loop.json --assessments-json state/candidate-assessments.json
+uv run python skills/icml-repro-loop/scripts/state.py scheduler-pass state/repro-loop.json --snapshot-id SNAPSHOT_ID
 ```
 
-`reject` preserves the idle phase; do not use a phase transition. Stop only after
-selecting an eligible candidate or documenting an exhausted eligible pool.
-The selected paper JSON must include `paper_id`, `title`, `slug`,
-`estimated_api_cost_usd`, `upstream_revision`, and `target_claims`.
+Each admitted paper must include `paper_id`, `title`, `slug`,
+`estimated_api_cost_usd`, `upstream_revision`, and `target_claims`. A candidate
+rejection or exhausted pool affects admission only; existing attempts continue.

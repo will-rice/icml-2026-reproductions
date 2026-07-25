@@ -10,3 +10,4 @@ repos:
       - id: trailing-whitespace
       - id: check-added-large-files
         args: [--maxkb=10240]
+        exclude: ^state/repro-loop/snapshots/

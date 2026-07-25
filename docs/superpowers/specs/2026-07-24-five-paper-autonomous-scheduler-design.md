@@ -1,12 +1,12 @@
-# Five-Paper Autonomous Scheduler Design
+# Twenty-Paper Autonomous Scheduler Design
 
 ## Goal
 
-Maintain five independently executable ICML reproduction attempts at all
+Maintain up to 20 independently executable ICML reproduction attempts at all
 times. Each paper advances through selection, design, implementation,
 validation, publication, submission, and judging without blocking unrelated
 papers. When a runnable attempt completes or becomes blocked, the scheduler
-admits a replacement until five runnable lanes are active again.
+admits replacements until 20 runnable paper attempts are active again.
 
 ## Scope
 
@@ -21,20 +21,20 @@ cost. Four newly refreshed and eligible papers fill lanes 2 through 5.
 
 ## Alternatives Considered
 
-### Sharded coordinator with five runnable lanes
+### Sharded coordinator with 20 runnable paper attempts
 
 Use one small global index and one atomic state shard per attempt, judgment,
 lease, and live snapshot. This is the selected design because attempts can be
 written independently while candidate claims and external resources remain
 fenced against duplicates.
 
-### Five schema-v3 lane files
+### Twenty schema-v3 lane files
 
 Reuse the current state machine independently five times. This is smaller but
 does not safely deduplicate candidate selection, Spaces, verdicts, or aggregate
 cost across concurrent writers.
 
-### Five unrelated repository clones
+### Twenty unrelated repository clones
 
 Run five autonomous loops without a coordinator. This starts quickly but has
 the highest risk of duplicate papers, conflicting publications, incomplete
@@ -44,7 +44,7 @@ recovery, and contradictory handoff state.
 
 `state/repro-loop.json` becomes a schema-v6 coordinator index containing:
 
-- `max_runnable_attempts: 5`;
+- `max_runnable_attempts: 20`;
 - immutable references to active and archived attempt shards;
 - recorded rejections and globally claimed paper identities;
 - immutable live-refresh snapshot references;
@@ -70,7 +70,7 @@ The index never duplicates mutable attempt content.
 
 A runnable attempt is in `selected`, `design-pending`, `implementing`,
 `validated`, `deployed`, `submitted`, `judging`, or `improving`. The scheduler
-admits candidates until five runnable attempts exist.
+admits candidates until 20 runnable attempts exist.
 
 `complete` attempts move to history and immediately free a lane. `blocked`
 attempts remain durable and visible but do not consume a runnable lane, so an
@@ -153,7 +153,7 @@ One bounded scheduler pass:
 2. expires stale leases;
 3. reconciles durable attempts with worktree commits and external IDs;
 4. assigns dependency-ready work;
-5. admits candidates until five runnable lanes exist;
+5. admits candidates until 20 runnable paper attempts exist;
 6. advances bounded judgment monitoring independently.
 
 The scheduler does not hold global locks during network, agent, test, or
@@ -168,7 +168,7 @@ Test-driven implementation must cover:
 - simultaneous claims for the same and different papers;
 - concurrent writes to independent attempts;
 - same-attempt fencing and stale-writer rejection;
-- exactly five runnable admissions and automatic refill;
+- exactly 20 runnable admissions and automatic refill;
 - blocked attempts not consuming runnable capacity;
 - duplicate paper, Space, submitted SHA, and verdict rejection;
 - independent design approval and rejection;
@@ -184,7 +184,7 @@ live identity checks.
 
 ## Operational Outcome
 
-After migration, EEG-FM-Bench continues in lane 1. A fresh live refresh selects
-and starts four additional papers. The coordinator keeps five runnable paper
+After migration, EEG-FM-Bench continues as an active attempt. Fresh live
+refreshes select and start up to 19 additional papers. The coordinator keeps 20 runnable paper
 pipelines active, while every paper retains independent evidence, deployment,
 judging, failure recovery, and truthful claim status.

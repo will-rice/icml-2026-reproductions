@@ -14,8 +14,9 @@ NAPE components retain their own licenses; see
 - `submissions/<paper>/`: independent Python project with its own lockfile,
   tests, evidence bundle, validation commands, and Hugging Face Space source.
 - `skills/icml-repro-loop/`: versioned source for the reproduction-loop skill.
-- `state/repro-loop.json`: resumable reproduction-loop state.
-- `docs/HANDOFF.md`: current research state and next action.
+- `state/repro-loop.json`: schema-v6 coordinator for up to 20 paper attempts.
+- `state/repro-loop/`: authoritative attempt, snapshot, lease, transaction, and
+  judgment shards.
 - `docs/REMOTE_SETUP.md`: host setup, authentication, skill installation, and
   verification instructions.
 
@@ -55,6 +56,6 @@ creates the `$CODEX_HOME/skills/icml-repro-loop` symlink and verifies it.
 
 ## Submission Status
 
-AgentSelect was screened as a candidate but is not implemented here because it
-became judged. `docs/HANDOFF.md` is the authoritative record for the current
-candidate and future work.
+Operational status is read from `state/repro-loop.json` and its referenced
+shards. Use `state.py list-attempts`, `show-attempt`, and `show-snapshot`; there
+is no ambiguous current paper.

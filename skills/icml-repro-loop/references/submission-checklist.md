@@ -12,7 +12,7 @@ Use this checklist for every paper. A checked item needs an artifact, command re
 
 ## Evidence Implementation
 
-- [ ] Persist `design-pending`, present the paper-specific design to the user, and wait for explicit approval before writing implementation code.
+- [ ] Persist a paper-specific design and author through fenced `record-design`. Record approval by a different reviewer through `review-design`; rejection revises only that attempt.
 - [ ] Write each evidence test first and observe the expected failure before implementing it.
 - [ ] Keep inputs, code-computed outputs, and paper-reported context distinguishable. Never label paper-reported values as reproduced; only code-computed outputs can support reproduction.
 - [ ] Emit deterministic machine-readable claim results, such as JSON or CSV, with claim IDs, observations, tolerances, provenance, and status.
@@ -37,15 +37,17 @@ Use this checklist for every paper. A checked item needs an artifact, command re
 
 ## Challenge Submission
 
-- [ ] Immediately before submitting, refresh the live paper, claim, queue, judging, and prior-verdict state.
+- [ ] Immediately before submitting, run `refresh-live --assessments-json PATH` and record the assessment hash and immutable snapshot ID. If challenge revision drift aborts refresh, regenerate assessments from a new raw refresh. No other state command may access the network.
 - [ ] Stop if the paper became claimed, queued, judging, or otherwise ineligible.
 - [ ] Submit the verified Space revision and record the submission ID, Space ID, deployed SHA, and timestamp.
 - [ ] Refresh live challenge state after submission and verify the submission appears in the expected state. Do not infer acceptance from the submit request alone.
 
 ## Verdict Handling
 
-- [ ] Enter `judging` with a finite positive integer `poll_limit`, timezone-aware ISO `poll_deadline`, and bounded interval or backoff. The CLI records `poll_round_start`; a post-improvement judging entry starts a fresh budget without deleting prior polls.
-- [ ] Persist every poll time, status, and external ID with same-phase state updates only while below the current round's count and at/before its deadline. At either limit without a verdict, enter `blocked` with a nonempty blocker, write the next check in `docs/HANDOFF.md`, and do not claim completion.
+- [ ] Call `watch-attempt` with an explicit attempt, owner, fence, finite positive `poll_limit`, and aware `poll_deadline`.
+- [ ] Persist each observation with fenced `record-poll`. At either limit
+  without a verdict, persist the blocker and next action in that attempt shard,
+  and let the scheduler refill its capacity.
 - [ ] Store a verdict dictionary with a nonempty `claims` list. Every item must contain exactly nonempty `claim` and `status` fields; status is `verified`, `partial`, `inconclusive`, `contradicted`, or `unavailable`.
 - [ ] Preserve judge details and distinguish challenge verdicts from the reproduction's own measurements.
 - [ ] Extract a concrete selection or evidence lesson for future candidates.
@@ -61,20 +63,29 @@ Use this checklist for every paper. A checked item needs an artifact, command re
 
 ## State CLI Examples
 
-Start a bounded judging round:
+Every attempt mutation below also takes `--owner OWNER --fencing-token TOKEN`.
+Record a design before independent review:
 
 ```bash
-uv run python skills/icml-repro-loop/scripts/state.py transition state/repro-loop.json judging '{"poll_limit":12,"poll_deadline":"2026-07-23T18:00:00Z"}'
+uv run python skills/icml-repro-loop/scripts/state.py record-design state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --author AUTHOR --design-path PATH
+uv run python skills/icml-repro-loop/scripts/state.py review-design state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --reviewer REVIEWER --decision approved
 ```
 
-Record the first verdict and one improvement reason:
+Start a bounded judgment:
 
 ```bash
-uv run python skills/icml-repro-loop/scripts/state.py transition state/repro-loop.json improving '{"verdict":{"claims":[{"claim":"claim-1","status":"partial"},{"claim":"claim-2","status":"verified"}]},"improvement_reason":"Add missing claim-1 provenance"}'
+uv run python skills/icml-repro-loop/scripts/state.py watch-attempt state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --poll-limit 12 --poll-deadline 2026-07-25T18:00:00+00:00
+```
+
+Record an exact-source verdict, then transition one fixable attempt:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py record-verdict state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --raw-verdict RAW_JSON --normalized-verdict VERDICT_JSON --source-revision EXACT_SHA
+uv run python skills/icml-repro-loop/scripts/state.py transition-attempt state/repro-loop.json improving --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --updates-json '{"improvement_reason":"Add missing claim-1 provenance"}'
 ```
 
 Complete with the final exact-claim verdict:
 
 ```bash
-uv run python skills/icml-repro-loop/scripts/state.py transition state/repro-loop.json complete '{"verdict":{"claims":[{"claim":"claim-1","status":"verified"},{"claim":"claim-2","status":"verified"}]}}'
+uv run python skills/icml-repro-loop/scripts/state.py transition-attempt state/repro-loop.json complete --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN
 ```

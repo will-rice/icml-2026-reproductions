@@ -1,16 +1,16 @@
-# Five-Paper Autonomous Scheduler Implementation Plan
+# Twenty-Paper Autonomous Scheduler Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the single-current-paper state machine with a crash-safe coordinator that continuously maintains exactly five runnable, independently advancing reproduction attempts.
+**Goal:** Replace the single-current-paper state machine with a crash-safe coordinator that continuously maintains exactly 20 runnable, independently advancing reproduction attempts.
 
-**Architecture:** `state/repro-loop.json` becomes a schema-v6 index whose mutable attempts, judgments, leases, snapshots, and transactions are stored in atomic JSON shards below `state/repro-loop/`. A bounded scheduler uses fenced leases to admit work until five runnable attempts exist, while each paper keeps a separate worktree, writer, evidence bundle, Space, and judgment record.
+**Architecture:** `state/repro-loop.json` becomes a schema-v6 index whose mutable attempts, judgments, leases, snapshots, and transactions are stored in atomic JSON shards below `state/repro-loop/`. A bounded scheduler uses fenced leases to admit work until 20 runnable attempts exist, while each paper keeps a separate worktree, writer, evidence bundle, Space, and judgment record.
 
 **Tech Stack:** Python 3.11+ standard library, JSON, `fcntl`, `pathlib`, `pytest`, subprocess concurrency tests, existing `uv`, Trackio, Hugging Face Hub.
 
 ## Global Constraints
 
-- `max_runnable_attempts` is exactly `5`; completed and blocked attempts do not consume runnable capacity.
+- `max_runnable_attempts` is exactly `20`; completed and blocked attempts do not consume runnable capacity.
 - Preserve the active EEG-FM-Bench attempt byte-for-byte at the field level during schema-v3 migration.
 - Preserve the archived diffusion attempt, every rejection, and aggregate cost.
 - One authoritative writer per attempt; different attempts and different Spaces may progress concurrently.
@@ -45,7 +45,7 @@ def test_state_paths_create_independent_shards(tmp_path):
 
 
 def test_new_index_has_five_runnable_slots():
-    assert store.new_index()["max_runnable_attempts"] == 5
+    assert store.new_index()["max_runnable_attempts"] == 20
 
 
 def test_independent_attempt_writes_do_not_lose_updates(tmp_path):
@@ -85,7 +85,7 @@ class StatePaths:
 def new_index() -> dict:
     return {
         "version": 6,
-        "max_runnable_attempts": 5,
+        "max_runnable_attempts": 20,
         "attempts": {},
         "history": {},
         "rejections": [],
@@ -173,7 +173,7 @@ def attempt_id(paper_id: str, work_kind: str, attempt_number: int) -> str:
 
 def plan_v6_migration(v3: dict) -> MigrationPlan:
     legacy_state.validate_state(v3)
-    return MigrationPlan.from_v3(v3, max_runnable_attempts=5)
+    return MigrationPlan.from_v3(v3, max_runnable_attempts=20)
 ```
 
 The transaction manifest records source SHA-256, every target path and hash,
@@ -191,13 +191,13 @@ uv run python skills/icml-repro-loop/scripts/state.py migrate-v6 state/repro-loo
 ```
 
 Expected: PASS; dry-run reports one active EEG attempt, one archived diffusion
-attempt, all rejections, five runnable slots, and no writes.
+attempt, all rejections, 20 runnable slots, and no writes.
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add skills/icml-repro-loop/scripts/migrate_v6.py skills/icml-repro-loop/scripts/state.py tests/fixtures/repro-loop-v3-eeg.json tests/test_repro_loop_migrate_v6.py
-git commit -m "feat: migrate single-paper state to five lanes"
+git commit -m "feat: migrate single-paper state to twenty attempts"
 ```
 
 ### Task 3: Fenced Resource Leases
@@ -345,7 +345,7 @@ git add skills/icml-repro-loop/scripts/attempts.py skills/icml-repro-loop/script
 git commit -m "feat: isolate reproduction attempt lifecycles"
 ```
 
-### Task 5: Five-Lane Scheduler and Independent Judgments
+### Task 5: Twenty-Paper Scheduler and Independent Judgments
 
 **Files:**
 - Create: `skills/icml-repro-loop/scripts/scheduler.py`
@@ -356,7 +356,7 @@ git commit -m "feat: isolate reproduction attempt lifecycles"
 - Produces: `SchedulerAssignment`, `SchedulerReport`, `scheduler_pass`, `watch_attempt`, `record_poll`, `record_verdict`.
 - Consumes: one immutable snapshot, attempt lifecycle, and fenced leases.
 
-- [ ] **Step 1: Write failing five-lane admission/refill tests**
+- [ ] **Step 1: Write failing 20-paper admission/refill tests**
 
 ```python
 def test_scheduler_admits_exactly_five_runnable_attempts(paths, snapshot_id, now):
@@ -417,7 +417,7 @@ Expected: PASS without timing-only sleeps.
 
 ```bash
 git add skills/icml-repro-loop/scripts/scheduler.py skills/icml-repro-loop/scripts/state.py tests/test_repro_loop_scheduler.py
-git commit -m "feat: maintain five concurrent reproduction lanes"
+git commit -m "feat: maintain 20 concurrent reproduction attempts"
 ```
 
 ### Task 6: CLI, Skill Contract, and Operational Documentation
@@ -430,12 +430,12 @@ git commit -m "feat: maintain five concurrent reproduction lanes"
 - Modify: `skills/icml-repro-loop/references/selection-rubric.md`
 - Modify: `skills/icml-repro-loop/references/submission-checklist.md`
 - Modify: `AGENTS.md`
-- Modify: `docs/HANDOFF.md`
+- Modify: `README.md`, `docs/REMOTE_SETUP.md`
 - Test: `tests/test_repro_loop_state.py`, `tests/test_repro_loop_scheduler.py`
 
 **Interfaces:**
-- Produces: `refresh.fetch_live_snapshot(client, observed_at) -> dict` and `refresh.persist_snapshot(paths, snapshot) -> str` where the returned ID is the canonical JSON SHA-256.
-- CLI commands: `migrate-v6`, `refresh-live`, `list-attempts`, `show-attempt`, `scheduler-pass`, `transition-attempt`, `review-design`, `watch-attempt`, `record-poll`, `record-verdict`.
+- Produces: `refresh.fetch_live_snapshot(client, observed_at, assessment_input=None) -> dict`, `refresh.persist_snapshot(paths, snapshot) -> str`, and `refresh.read_snapshot(paths, snapshot_id) -> dict`, with IDs verified as canonical JSON SHA-256 hashes.
+- CLI commands: `migrate-v6`, `refresh-live`, `show-snapshot`, `list-attempts`, `show-attempt`, `scheduler-pass`, `transition-attempt`, `record-design`, `review-design`, `watch-attempt`, `record-poll`, `record-verdict`.
 
 - [ ] **Step 1: Write failing CLI tests**
 
@@ -469,17 +469,22 @@ Expected: FAIL because multi-attempt CLI commands are not registered.
 
 - [ ] **Step 3: Implement explicit CLI commands and update contracts**
 
-Commands must never infer a current attempt. Every mutating command takes
+Commands must never infer a current attempt. Every attempt mutation takes
 `--attempt-id`, `--owner`, and `--fencing-token`. Documentation names all
-materially affected attempts and describes five-lane refill, per-attempt
+materially affected attempts and describes 20-paper refill, per-attempt
 blockers, independent design review, and subscription-cost accounting.
 
-`refresh-live` is the only network-aware state command. It fetches the exact
+`refresh-live` is the only network-aware state command. Without assessments it
+persists raw discovery for network-free `show-snapshot` inspection. With
+`--assessments-json PATH`, it fetches the exact
 `ICML-2026-agent-repro/challenge` and `ICML-2026-agent-repro/verdicts`
-revisions plus current `paper-*` Space identities, queues, and verdicts. It
-constructs canonical JSON, writes `snapshots/<sha256>.json` once, and publishes
-only the immutable ID into the index. Recorded test clients replace every
-network call in unit tests.
+revisions, current `challenge.json` papers/claims, and current `paper-*` Space
+identities, queues, and verdicts. Raw metadata remains unassessed. Assessed
+refresh merges only explicit assessments matching the newly fetched revision,
+pinned paper, and extracted claims; revision drift is an explicit failure. It
+verifies the canonical assessment-document hash, constructs canonical JSON,
+writes `snapshots/<sha256>.json` once, and publishes only the immutable ID into
+the index. Recorded test clients replace every network call in unit tests.
 
 - [ ] **Step 4: Run all local validation**
 
@@ -497,22 +502,22 @@ Expected: all tests and hooks pass; NAPE is not executed or formatted.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add AGENTS.md docs/HANDOFF.md skills/icml-repro-loop tests/test_repro_loop_state.py tests/test_repro_loop_scheduler.py tests/test_repro_loop_refresh.py
-git commit -m "docs: operate five autonomous paper lanes"
+git add AGENTS.md README.md docs/REMOTE_SETUP.md skills/icml-repro-loop tests/test_repro_loop_state.py tests/test_repro_loop_scheduler.py tests/test_repro_loop_refresh.py
+git commit -m "docs: operate twenty autonomous paper attempts"
 ```
 
-### Task 7: Migrate EEG-FM-Bench and Fill Lanes 2-5
+### Task 7: Migrate EEG-FM-Bench and Fill the Twenty-Paper Pool
 
 **Files:**
 - Modify: `state/repro-loop.json`
 - Create: `state/repro-loop/attempts/*.json`
 - Create: `state/repro-loop/snapshots/*.json`
 - Create: `state/repro-loop/v3-backups/*.json`
-- Modify: `docs/HANDOFF.md`
 
 **Interfaces:**
 - Consumes: validated migration and scheduler CLIs.
-- Produces: one migrated EEG-FM-Bench lane plus four live-selected attempts with isolated worktrees and writer leases.
+- Produces: one migrated EEG-FM-Bench attempt plus up to 19 live-selected
+  attempts with isolated worktrees and writer leases.
 
 - [ ] **Step 1: Dry-run and verify migration**
 
@@ -531,30 +536,48 @@ Run:
 
 ```bash
 uv run python skills/icml-repro-loop/scripts/state.py migrate-v6 state/repro-loop.json
-uv run python skills/icml-repro-loop/scripts/state.py list-attempts
+uv run python skills/icml-repro-loop/scripts/state.py list-attempts state/repro-loop.json
 ```
 
 Expected: schema version 6, one runnable attempt, four vacancies, and a valid
 hash-addressed schema-v3 backup.
 
-- [ ] **Step 3: Refresh live challenge state and persist a snapshot**
+- [ ] **Step 3: Discover, inspect, assess in parallel, and persist an assessed snapshot**
 
 Run:
 
 ```bash
-snapshot_id="$(
+raw_snapshot_id="$(
   uv run python skills/icml-repro-loop/scripts/state.py refresh-live \
     state/repro-loop.json \
+  | uv run python -c 'import json, sys; print(json.load(sys.stdin)["snapshot_id"])'
+)"
+uv run python skills/icml-repro-loop/scripts/state.py show-snapshot \
+  state/repro-loop.json --snapshot-id "$raw_snapshot_id" \
+  > state/current-challenge-snapshot.json
+
+assessment_path=state/candidate-assessments.json
+# Dispatch independent agents in parallel over disjoint candidates from the raw
+# snapshot. Merge their explicit records into one assessment document carrying
+# the raw snapshot's exact challenge revision.
+snapshot_id="$(
+  uv run python skills/icml-repro-loop/scripts/state.py refresh-live \
+    state/repro-loop.json --assessments-json "$assessment_path" \
   | uv run python -c 'import json, sys; print(json.load(sys.stdin)["snapshot_id"])'
 )"
 test -n "$snapshot_id"
 ```
 
-Expected: the command fetches exact revisions for
-`ICML-2026-agent-repro/challenge`, `ICML-2026-agent-repro/verdicts`, all
-`paper-*` Space tags, queues, and current-attempt external IDs. The resulting
-snapshot shard records source URLs, revisions, observation time, and content
-hashes; stdout returns its SHA-256 ID.
+Expected: the raw snapshot exposes the exact current candidates and claims
+without eligibility fields. Assessment agents independently inspect primary
+artifacts; the merged file records assessor/time and explicit score, selected
+live claims, upstream revision, artifact/CPU/safety/license decisions, and
+finite estimated API cost for each assessed candidate. Assessed refresh fetches
+the live sources again. If it fails with `challenge_revision`, discard the
+assessment document and restart Step 3 from a new raw refresh; never rewrite its
+revision or retry stale assessments. The resulting assessed snapshot records
+source URLs, revisions, observation time, canonical assessment hash, and
+content hashes; stdout returns its SHA-256 ID.
 
 - [ ] **Step 4: Run one scheduler pass**
 
@@ -562,37 +585,67 @@ Run:
 
 ```bash
 uv run python skills/icml-repro-loop/scripts/state.py scheduler-pass \
-  state/repro-loop.json --snapshot-id "$snapshot_id"
+  state/repro-loop.json --snapshot-id "$snapshot_id" \
+  > state/current-scheduler-pass.json
+
+uv run python -c \
+  'import json,sys; data=json.load(open(sys.argv[1])); [print(a["attempt_id"], a["paper_id"], a["owner"], a["fencing_token"], sep="\t") for a in data["assignments"]]' \
+  state/current-scheduler-pass.json \
+| while IFS="$(printf '\t')" read -r attempt_id paper_id owner fencing_token; do
+    uv run python skills/icml-repro-loop/scripts/state.py transition-attempt \
+      state/repro-loop.json design-pending \
+      --attempt-id "$attempt_id" --owner "$owner" \
+      --fencing-token "$fencing_token"
+  done
 ```
 
-Expected: exactly four newly admitted attempts and five runnable attempts
-total. Each new attempt has a distinct paper, worktree path, writer lease, and
-`design-pending` phase.
+Expected: exactly four newly admitted attempts and 20 runnable attempts
+total. Scheduler output supplies each distinct paper's attempt ID, paper ID,
+writer owner, and fencing token in `selected`; the explicit transitions put
+each new attempt in `design-pending`.
 
 - [ ] **Step 5: Dispatch paper-specific design authors and independent reviewers**
 
-For each new attempt, dispatch one design author and a different read-only
-reviewer. Persist the committed design path, author identity, review verdict,
-review evidence, and transition. Approved attempts advance independently to
-`implementing`; rejected designs revise without stopping other lanes.
+For each row captured in `state/current-scheduler-pass.json`, dispatch one
+design author. After that author commits the design, use the row's exact fenced
+identity (shown below), then dispatch a different read-only reviewer:
 
-- [ ] **Step 6: Verify all five lanes and update HANDOFF**
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py record-design \
+  state/repro-loop.json \
+  --attempt-id "$attempt_id" --owner "$owner" \
+  --fencing-token "$fencing_token" \
+  --author "$design_author" --design-path "$committed_design_path"
+
+test "$design_reviewer" != "$design_author"
+uv run python skills/icml-repro-loop/scripts/state.py review-design \
+  state/repro-loop.json \
+  --attempt-id "$attempt_id" --owner "$owner" \
+  --fencing-token "$fencing_token" \
+  --reviewer "$design_reviewer" --decision "$review_decision"
+```
+
+Persist the committed design path, author identity, review verdict, and
+transition. Approved attempts advance independently to `implementing`; rejected
+designs revise without stopping other lanes.
+
+- [ ] **Step 6: Verify the 20-paper pool**
 
 Run:
 
 ```bash
-uv run python skills/icml-repro-loop/scripts/state.py list-attempts --runnable
+uv run python skills/icml-repro-loop/scripts/state.py list-attempts state/repro-loop.json --runnable
 uv run pytest -q
 uv run pre-commit run -a
 ```
 
-Expected: five runnable attempts, no duplicate paper/Space identities, root
-tests and hooks pass. HANDOFF lists every attempt ID, paper, phase, worktree,
-owner, next action, and blocker.
+Expected: up to 20 runnable attempts, no duplicate paper/Space identities, and
+root tests and hooks pass. Every attempt shard records its paper, phase,
+worktree, owner, next action, and blocker.
 
 - [ ] **Step 7: Commit operational migration**
 
 ```bash
-git add state/repro-loop.json state/repro-loop docs/HANDOFF.md
-git commit -m "chore: activate five autonomous reproduction lanes"
+git add state/repro-loop.json state/repro-loop
+git commit -m "chore: activate twenty autonomous paper attempts"
 ```
