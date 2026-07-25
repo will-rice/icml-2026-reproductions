@@ -26,6 +26,16 @@
     }
   ],
   "cpu_only": true,
+  "design": {
+    "author": "codex-graph-pruning-design-author-v2",
+    "path": "docs/superpowers/specs/2026-07-24-graph-pruning-reproduction-design.md",
+    "recorded_at": "2026-07-25T23:02:47.224485+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-25T23:02:53.200638+00:00",
+    "reviewer": "codex-graph-pruning-design-reviewer-v2"
+  },
   "estimated_api_cost_usd": 0.0,
   "hf": "",
   "i": 6487,
@@ -63,7 +73,7 @@
   "or": "https://openreview.net/forum?id=a3GdvuPItd",
   "orid": "a3GdvuPItd",
   "paper_id": "a3GdvuPItd",
-  "phase": "design-pending",
+  "phase": "implementing",
   "pid": "63109",
   "safety_blocker": null,
   "score": 18,
@@ -84,10 +94,18 @@
       "owner": "scheduler-2b4c6391-5e33-43d6-aad4-261a32840c1f",
       "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
       "to": "design-pending"
+    },
+    {
+      "at": "2026-07-25T23:02:53.200638+00:00",
+      "fencing_token": 2,
+      "from": "design-pending",
+      "owner": "controller-graph-design-20260725",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "implementing"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-25T22:11:38.745511+00:00",
+  "updated_at": "2026-07-25T23:02:53.200638+00:00",
   "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
   "vs": "https://icml.cc/virtual/2026/poster/63109"
 }
