@@ -74,8 +74,10 @@ They may not:
 The controller is the sole authoritative state and external-mutation actor.
 Worker launch instructions must not use `--dangerously-skip-permissions`.
 Codex workers use a workspace-write sandbox rooted at their paper worktree;
-Antigravity workers use its sandbox with command allow-rules limited to that
-worktree. The controller strips Hub write tokens from worker environments.
+Antigravity workers use its sandbox with the process rooted at that worktree
+and no added directories. The controller strips Hub write tokens from worker
+environments and requires a runtime preflight to prove that coordinator writes
+and credential-file reads are denied.
 
 If a runtime cannot enforce the filesystem and credential boundary, it may
 only run read-only research. It cannot be an implementation worker.
@@ -105,7 +107,7 @@ No worker-provided “tests passed” string can satisfy this command.
 
 ### Deployment
 
-`attest-deployment` publishes controller-reviewed source, then independently
+`publish-deployment` publishes controller-reviewed source, then independently
 fetches the Space through the Hub API. It requires:
 
 - an allowlisted owner;
