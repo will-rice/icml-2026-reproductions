@@ -4,7 +4,7 @@
       "paper_id": "vGeNaFHdET",
       "path": "repro-loop/attempts/e20658d7-250a-5b0c-a015-be453c43e9fc.json",
       "phase": "implementing",
-      "updated_at": "schema-v3-migration:f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354"
+      "updated_at": "2026-07-25T22:10:44.293798+00:00"
     }
   },
   "history": {
@@ -77,6 +77,7 @@
     "publication_per_provider": 20
   },
   "snapshots": {
+    "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d": "repro-loop/snapshots/35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d.json",
     "c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97": "repro-loop/snapshots/c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97.json"
   },
   "total_api_cost_usd": 0.0,

@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-25T22:10:38.936454+00:00",
+  "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+  "expires_at": "2026-07-26T00:10:38.936454+00:00",
+  "fencing_token": 1,
+  "owner": "controller-eeg-reconcile-20260725",
+  "released_at": null,
+  "resource": "attempt:e20658d7-250a-5b0c-a015-be453c43e9fc"
+}
