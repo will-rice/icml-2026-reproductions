@@ -7,6 +7,21 @@ import pytest
 from eeg_fm_bench_repro import upstream
 
 
+def test_paper_license_matches_pinned_arxiv_v3_metadata() -> None:
+    provenance = json.loads(upstream.PROVENANCE_PATH.read_text(encoding="utf-8"))
+    license_record = provenance["inputs"]["paper"]["license"]
+
+    assert license_record == {
+        "spdx": "CC-BY-4.0",
+        "source": "https://arxiv.org/abs/2508.17742v3 license link",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "note": (
+            "arXiv v3 identifies the paper as Creative Commons "
+            "Attribution 4.0 International."
+        ),
+    }
+
+
 def _write_provenance(path: Path, repo_sha256: str, paper_sha256: str) -> None:
     path.write_text(
         json.dumps(

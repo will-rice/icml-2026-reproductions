@@ -283,9 +283,9 @@
     }
   ],
   "environment": {
-    "numpy": "2.3.3",
+    "numpy": "2.5.1",
     "python": "3.12.11",
-    "torch": "2.13.0+cu130"
+    "torch": "2.13.0+cpu"
   },
   "provenance": {
     "inputs": {
@@ -293,9 +293,10 @@
         "acquisition_command": "curl --fail --location --retry 3 --output 2508.17742v3.pdf https://arxiv.org/pdf/2508.17742v3",
         "artifact": "EEG-FM-Bench paper PDF",
         "license": {
-          "note": "Copyright 2026 by the authors; the PDF does not state a software or Creative Commons license.",
-          "source": "Copyright statement in arxiv:2508.17742v3",
-          "spdx": null
+          "note": "arXiv v3 identifies the paper as Creative Commons Attribution 4.0 International.",
+          "source": "https://arxiv.org/abs/2508.17742v3 license link",
+          "spdx": "CC-BY-4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
         },
         "revision": "arxiv:2508.17742v3",
         "sha256": "6698b90f5e56f8f55456ff716e69bab8ec3eb08bba7d0c9eeff98fba509b4501",
