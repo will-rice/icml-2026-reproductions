@@ -2,25 +2,22 @@
 
 ## Authority, attempt, and phase
 
-- Attempt: `e485c086-6fa5-4ff6-a3c3-1f31c79bbae6`
+- Attempt: `64bfe193-333b-4b37-9683-9ac25ca5ac27`
 - Challenge paper: `a3GdvuPItd`
-- Author and current writer: `codex-graph-pruning-writer`
+- Design author: `codex-graph-pruning-design-author-v2`
 - Pinned paper: Dongyue Wu et al., *Selecting Samples on Graphs: A Unified
   Dataset Pruning Framework for Lossless Training Acceleration*,
   `arxiv:2606.12913v2`, dated 2026-07-03.
 - License shown by arXiv: CC BY-NC-SA 4.0.
-- Phase covered by this document: design. The live claim refresh and immutable
-  assessed snapshot that admitted this attempt remain external coordinator
-  provenance in the sibling worktree
-  `/home/will/projects/icml-2026-reproductions/.worktrees/five-paper-scheduler`.
-  Its schema-v6 index names this attempt, and its authoritative attempt shard
-  pins snapshot
-  `d3e5dd78e25f92f23f17fe9db64617fb4774c9b74db3913e1065051dd1db5087`.
-  Those supplied index, attempt, lease, transaction, and snapshot shards must
-  not be copied into this paper branch. This task must not refresh live state or
-  mutate coordinator files. After this design is committed, a separate actor
-  records it with the attempt's current owner and fencing token, and a different
-  reviewer records approval. Only then may the attempt enter `implementing`.
+- Phase covered by this document: `design-pending`. The schema-v6 authoritative
+  attempt shard pins immutable assessed snapshot
+  `35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d`.
+  Coordinator index, attempt, lease, judgment, transaction, and snapshot shards
+  remain outside this design-author task. This task must not refresh live
+  state, mutate coordinator files, implement the submission, or commit. The
+  controller may record this proposal only after reviewing the focused
+  two-document diff; a different reviewer identity must independently approve
+  it before implementation.
 - Approval: the user's 2026-07-24 instruction gives standing autonomous
   approval for this design. It does not waive independent review, fencing, TDD,
   validation, deployment verification, or live-refresh requirements.
@@ -45,9 +42,11 @@ monotonicity, and the claimed \(1-1/e\) greedy/optimum bound.
 Each area receives claim-level observations, but no claim is declared verified
 merely because a corrected formulation works. Results for the literal paper
 formulation, a conventional single-counted objective, and any repaired
-premises are separate records. A universal counterexample to the literal
-statement is a contradiction witness. A generated positive instance is only a
-synthetic smoke test.
+premises are separate records. A greedy-guarantee violation is a theorem
+counterexample only when the same finite instance has been exhaustively
+certified to satisfy the theorem's global non-negativity, normalization,
+monotonicity, and submodularity premises. A failure outside that premise set is
+an `out_of_premise_diagnostic`, never a counterexample or guarantee violation.
 
 The following are explicitly unavailable:
 
@@ -62,9 +61,20 @@ They appear in limitations and context only, never in reproduced outputs.
 ## Primary-source transcription and provenance
 
 Implementation will include a hand-audited, immutable transcription manifest.
-Every expression stores paper revision, PDF page, section or appendix, equation
-number, a normalized symbolic form, and the transcription checksum. The
-rendered report links to `https://arxiv.org/pdf/2606.12913v2`; it must not
+Every record has exactly `record_id`, `equation`, `pdf_page`, `section`,
+`normalized_expression`, `source_excerpt_path`,
+`source_excerpt_byte_count`, `source_excerpt_sha256`, and `reviewed_by`.
+Equation excerpts are stored as literal UTF-8 bytes under
+`paper_transcriptions/excerpts/<record_id>.txt`; the Algorithm 1 record points
+to `paper_transcriptions/algorithm1.txt`. Paths are unique canonical POSIX
+paths, may not traverse or escape `paper_transcriptions/`, and each excerpt
+file is referenced exactly once. Hashes and byte counts are computed from
+`Path.read_bytes()` without newline, Unicode, or whitespace normalization.
+The manifest never embeds a second `source_excerpt` string. A pinned
+`TRANSCRIPTION_SET_SHA256` in `provenance.py` hashes the ordered tuples
+`(record_id, source_excerpt_path, source_excerpt_byte_count,
+source_excerpt_sha256)` and supplies a separately reviewed aggregate pin.
+The rendered report links to `https://arxiv.org/pdf/2606.12913v2`; it must not
 silently follow a newer arXiv revision.
 
 The exact PDF acquisition and verification command is:
@@ -222,7 +232,19 @@ Appendix F's proof chain, Eq. (28)--(38), is transcribed with special
 attention to its use of \((b-t)\), the product
 \(\prod_{k=1}^{b}(1-1/k)\), normalization, monotonicity, non-negativity,
 and the final \(1-1/e\) ratio. The transcription records what the PDF says
-without repairing notation in place.
+without repairing notation in place. Eq. (28) is stored as two independently
+statused conclusions within its one numbered ledger row:
+
+1. `eq28_union_submodular_bound`:
+   \(f(S^\star)\leq f(S_t)+
+   \sum_{x\in S^\star\setminus S_t}\Delta(x\mid S_t)\), which requires the
+   exact monotonicity/union and submodularity premises used to derive it; and
+2. `eq28_b_minus_t_bound`: replacing that sum by
+   \((b-t)\max_x\Delta(x\mid S_t)\), which additionally requires
+   \(|S^\star\setminus S_t|\leq b-t\) and nonnegative candidate marginals.
+
+Acceptance must not merge those conclusions or let the status of one stand in
+for the other.
 
 ## Considered approaches
 
@@ -259,8 +281,15 @@ The evidence engine exposes named, non-interchangeable objectives:
 - `appendix_eq26_score`: displayed Eq. (26), retained as a score rather than
   silently treated as the marginal of a defined set function.
 - `modular_shift_candidate`: a separately labeled repaired objective that
-  adds a fixed per-selected-element constant, with its coefficient stated for
-  the chosen single- or double-counted objective.
+  uses the literal double-counted base and adds the fixed modular term
+  \[
+  F_{\mathrm{mod}}(S)=f_{\mathrm{lit}}(S)+\eta_{\mathrm{mod}}|S|.
+  \]
+  Here `Instance.eta` is exactly \(\eta_{\mathrm{mod}}\) for this variant. In
+  the exhaustive greedy/proof domain it is fixed before evaluation to
+  \(\eta_{\mathrm{mod}}=2(n-1)M\), where
+  \(M=\max_{i\ne j}|a_{ij}|\). It never uses the single-counted base and never
+  substitutes the Appendix-inline quadratic term.
 
 No repaired variant can overwrite the verdict for a literal variant. Every
 result carries its `model_variant`.
@@ -308,28 +337,67 @@ constraint.
 
 The first oracle directly enumerates all triples
 \(A\subseteq B\subseteq T,\ x\notin B\) and calculates set-function
-differences. The second computes the claimed closed-form marginal polynomial.
-It checks:
+differences. The second computes a separately implemented closed-form
+marginal for each of the exact six set-function variants charged in the
+symmetric accounting:
 
-- literal Eq. (4)--(5);
-- the literal Appendix E objective
-  \(f_{\mathrm{lit}}(S)+\alpha\eta|S|^2\);
-- the single-counted objective;
+- `paper_mwcp`;
+- `paper_samplewise_literal`;
+- `single_counted_pairwise`;
+- `half_corrected_samplewise`;
+- `appendix_inline_shift_literal`; and
+- `modular_shift_candidate`.
+
+`appendix_eq26_score` is explicitly rejected because it is not a set function.
+The oracle also checks:
+
 - symmetric and deliberately asymmetric interaction tables;
 - \(g(D)\leq0\), zero, and one-premise-at-a-time violations; and
 - sparse zero-weight edges.
 
-For symmetric interactions the symbolic oracles independently derive
+For any stored directed interaction table define
+\[
+d_x(S)=\sum_{j\in S}(a_{xj}+a_{jx}),\qquad
+u_x(S)=\sum_{j\in S}a_{\min(x,j),\max(x,j)}.
+\]
+The latter uses the same canonical unordered-pair lookup as Eq. (3).
+The six exact closed forms are
+\[
+\begin{array}{c|l}
+\text{variant} & \Delta(x\mid S)\\ \hline
+\texttt{paper\_mwcp} & w_x+u_x(S)\\
+\texttt{paper\_samplewise\_literal} & w_x+d_x(S)\\
+\texttt{single\_counted\_pairwise} & w_x+u_x(S)\\
+\texttt{half\_corrected\_samplewise} & w_x+\tfrac12d_x(S)\\
+\texttt{appendix\_inline\_shift\_literal}
+  & w_x+d_x(S)+\alpha\eta(2|S|+1)\\
+\texttt{modular\_shift\_candidate}
+  & w_x+d_x(S)+\eta_{\mathrm{mod}}.
+\end{array}
+\]
+`direct_marginal` obtains each value only by two calls to the independent
+objective evaluator; `closed_form_marginal` may call neither that evaluator
+nor `direct_marginal`. Tests compare both implementations for all six
+variants on symmetric and asymmetric fixtures and assert the formula-specific
+values, so agreement cannot be obtained by dispatching only the two old
+literal/single formulas.
+
+For symmetric interactions \(d_x(S)=2\sum_{j\in S}a_{xj}\) and
+\(u_x(S)=\sum_{j\in S}a_{xj}\). The symbolic oracles therefore independently
+derive
 
 \[
 \Delta_{\mathrm{lit}}(x\mid S)=w_x+2\sum_{j\in S}a_{xj},\qquad
 \Delta_{\mathrm{single}}(x\mid S)=w_x+\sum_{j\in S}a_{xj}.
 \]
 
-Their diminishing-return differences are respectively
-\(-2\sum_{j\in B\setminus A}a_{xj}\) and
-\(-\sum_{j\in B\setminus A}a_{xj}\). This establishes the general sign result
-symbolically while also testing whether Eq. (12) is the actual marginal.
+The diminishing-return differences for `paper_mwcp`,
+`single_counted_pairwise`, and `half_corrected_samplewise` are
+\(-\sum_{j\in B\setminus A}a_{xj}\); those for
+`paper_samplewise_literal` and `modular_shift_candidate` are
+\(-2\sum_{j\in B\setminus A}a_{xj}\), because the fixed modular term cancels.
+This establishes the general sign result symbolically while also testing
+whether Eq. (12) is the actual marginal.
 
 For `appendix_inline_shift_literal`, the independently derived difference is
 
@@ -374,9 +442,19 @@ worst case to \(\alpha=1\). With \(|a_{ij}|\leq M\) and Eq. (27), displayed
 Eq. (26)'s \(\alpha|S|\eta\) term covers its \(|S|\) incident penalties. The
 actual Appendix-inline marginal's \(\alpha\eta(2|S|+1)\) term covers the
 literal objective's at most \(2|S|M\) penalty. By contrast, a repaired *fixed*
-modular shift needs a coefficient of at least \(|S|M\) for the single-counted
-objective or \(2|S|M\) for the literal objective; it cannot reuse Eq. (27)'s
-single-edge bound without the Appendix's cardinality multiplier.
+modular shift on the chosen literal base needs a coefficient at least
+\(2|S|M\) at a particular set size. The exact
+`modular_shift_candidate` fixes one coefficient for the whole \(n\)-vertex
+domain:
+\[
+F_{\mathrm{mod}}(S)=f_{\mathrm{lit}}(S)+2(n-1)M|S|,
+\quad
+\Delta_{\mathrm{mod}}(x\mid S)
+=w_x+2\sum_{j\in S}a_{xj}+2(n-1)M.
+\]
+Thus its `Instance.eta` is \(2(n-1)M\). It cannot reuse Eq. (27)'s
+single-edge bound without a cardinality/degree multiplier, and it is never
+implemented as `paper_mwcp + eta * |S|`.
 
 The labeled **exhaustive shift boundary search** covers \(1\leq n\leq4\),
 zero intrinsic weights, \(\alpha=1\), all symmetric edge assignments in
@@ -391,8 +469,10 @@ cases and cannot support a universal pass.
 It specifically verifies that the paper's single-edge bound suffices only in
 combination with its cardinality multiplier, and that both the displayed and
 actual set-size-dependent terms shift all candidates equally at a fixed greedy
-iteration. It separately falsifies any fixed-shift reinterpretation that is too
-small. Any failure stores the minimal
+iteration. The modular channel evaluates the exact literal-base objective
+above; separate below-threshold diagnostics vary a candidate coefficient but
+may not relabel those smaller coefficients as `modular_shift_candidate`. Any
+failure stores the minimal
 \((T,S,x,\alpha,I_{\mathrm{in}},a,\eta)\) witness and the exact negative
 marginal.
 
@@ -432,7 +512,66 @@ The greedy-guarantee audit therefore records the two-element `1`-then-`3`
 witness as a failed theorem premise and must not report the repaired standard
 greedy guarantee as a guarantee for this literal Appendix E variant.
 
-For each normalized, monotone, submodular instance it records
+The theorem-premise and ratio audit has six set-function variants:
+`paper_mwcp`, `paper_samplewise_literal`, `single_counted_pairwise`,
+`half_corrected_samplewise`, `appendix_inline_shift_literal`, and
+`modular_shift_candidate`. `appendix_eq26_score` is not a set function and
+receives one explicit `not_applicable` premise record with zero finite-domain
+work. Every canonical graph fixes
+\(M=\max_{\{i,j\}}|a_{ij}|\), with \(M=0\) when the graph has no edges, before
+any objective or outcome is evaluated. The one canonical parameter function
+for the symmetric diminishing-returns, premise, greedy, optimum, and finite
+proof-ledger domains is:
+
+| set-function variant | `alpha` | `eta` |
+| --- | ---: | ---: |
+| `paper_mwcp` | \(1\) | \(0\) |
+| `paper_samplewise_literal` | \(1\) | \(0\) |
+| `single_counted_pairwise` | \(1\) | \(0\) |
+| `half_corrected_samplewise` | \(1\) | \(0\) |
+| `appendix_inline_shift_literal` | \(1\) | \(M\) |
+| `modular_shift_candidate` | \(1\) | \(2(n-1)M\) |
+
+Thus the modular objective remains exactly
+\(f_{\mathrm{lit}}(S)+\eta_{\mathrm{mod}}|S|\), with
+\(\eta_{\mathrm{mod}}=2(n-1)M\), and never switches to a single-counted base.
+The parameter function creates no enumeration axis and therefore changes no
+case count or ceiling.
+
+The graph ID is exactly
+`n=<n>;vw=<w0>,...,<w(n-1)>;ew=<a01>,<a02>,...`, where vertices are canonical
+indices, every value is a normalized `p/q`, unordered edges are in
+lexicographic pair order, and an empty edge vector is `ew=-`. The symmetric
+diminishing-returns control records the all-zero vertex vector in that ID even
+though its symbolic proof cancels vertex terms. Every parameterized instance
+ID is then exactly
+`graph=<graph-id>::variant=<variant>::alpha=1/1::eta=<p>/<q>`, where the final
+`<p>/<q>` is the normalized nonnegative rational returned by the table.
+Budget, subset, marginal, greedy-path, or conclusion suffixes may extend that
+base ID, but may not replace it. Different parameter tuples may never share an
+ID. The separately required minimal Appendix falsification is a fixed
+symbolic diagnostic, outside the canonical per-graph finite enumeration: its
+ID includes `alpha=1/1::eta=1/1::diagnostic=appendix-minimal`, so its
+zero-edge, \(1\)-then-\(3\) result is preserved without selecting a parameter
+after observing an outcome.
+
+Premises are budget-independent, so for each of the
+\[
+G=\sum_{n=1}^{4}3^n2^{\binom n2}=5{,}421
+\]
+weighted graphs, each of the six set-function variants is checked once over
+the entire power set before any theorem ratio is classified:
+
+- global non-negativity: \(F(S)\geq0\) for every \(S\subseteq V\);
+- normalization: \(F(\varnothing)=0\);
+- global monotonicity: \(\Delta(x\mid S)\geq0\) for every
+  \(S\subseteq V\) and \(x\notin S\); and
+- global submodularity: \(\Delta(x\mid A)\geq\Delta(x\mid B)\) for every
+  \(A\subseteq B\subseteq V\) and \(x\notin B\).
+
+The result stores all four booleans and canonical failing witness IDs. Only an
+instance for which all four are true is `theorem_eligible`. For each eligible
+instance it records
 
 \[
 \rho =
@@ -442,33 +581,97 @@ F(S_{\mathrm{greedy}})/F(S^\star),&F(S^\star)>0,\\
 \end{cases}
 \]
 
-and flags negative or undefined objective regimes rather than presenting a
-misleading ratio. It searches smallest-first for:
+and compares the exact rational value to \(1-1/e\) through an exact certified
+inequality, never floating point. `guarantee_violations` may contain only
+eligible instances and must include their complete premise certificate.
+Negative, undefined, or poor ratios for ineligible instances are stored only
+under `out_of_premise_diagnostics`, with failed-premise witness IDs, and are
+never counted or described as theorem counterexamples. If the approved finite
+domain contains no eligible instance, the guarantee status is
+`not_evaluated`, not supported or contradicted. It searches smallest-first for:
 
 - a violation of the claimed \(1-1/e\) bound under the paper's exact premises;
-- a case showing the paper's \((b-t)\) proof step is invalid;
+- a symbolic cardinality witness showing the paper's \((b-t)\) step is
+  unavailable without an additional nesting premise;
 - a mismatch between Eq. (7)'s score and the literal Eq. (4) marginal; and
 - failure of the submodularity premise for the literal Appendix E shifted
-  objective, including the minimal two-element witness; and
-- smoke instances satisfying the standard repaired theorem premises.
+  objective, including the minimal two-element witness.
 
 The labeled **exhaustive greedy domain** uses \(1\leq n\leq4\),
 \(1\leq b\leq\min(3,n)\), vertex weights in \(\{0,1,2\}\), and symmetric edge
 weights in \(\{-1,0\}\). It contains exactly
 \(\sum_{n=1}^4\min(3,n)3^n2^{\binom n2}=16{,}239\) weighted-cardinality
 instances. Each optimum enumerates at most six selected sets, and each all-ties
-greedy traversal has at most \(P(4,3)=24\) terminal paths, so each greedy
-implementation evaluates at most 389,736 terminal paths and all optimum calls
-together evaluate at most 97,434 selected sets. Claims outside this domain rely
-on symbolic proof-ledger reasoning, not an exhaustive label.
-Additional seeded examples, if any, are explicitly **non-exhaustive smoke
-tests** with a ceiling of 100.
+greedy traversal has at most \(P(4,3)=24\) terminal paths. Exact
+domain-sensitive ceilings replace those loose maxima:
+
+- objective values needed for every optimum are
+  \[
+  O=\sum_n 3^n2^{\binom n2}
+  \sum_{b=1}^{\min(3,n)}\binom nb=74{,}145
+  \]
+  per set-function variant;
+- terminal paths per greedy selector are
+  \[
+  P=\sum_n 3^n2^{\binom n2}
+  \sum_{b=1}^{\min(3,n)}\frac{n!}{(n-b)!}=210{,}675;
+  \]
+- candidate score/look-up operations per selector are
+  \[
+  C=\sum_n3^n2^{\binom n2}
+  \sum_{b=1}^{\min(3,n)}
+  \sum_{k=1}^{b}\frac{n!}{(n-k)!}=316{,}983.
+  \]
+
+The optimum table is computed once per variant and reused for both greedy
+families' terminal objective values. The global premise marginal table is also
+reused by true-marginal greedy; a cache lookup/selection comparison is counted
+in \(C\), and no hidden marginal recomputation is permitted. Claims outside
+this domain rely on symbolic proof-ledger reasoning, not an exhaustive label.
+There is no undeclared 100-evaluation smoke allowance. Adding a future smoke
+domain requires a new named accounting component and independent design review
+before execution.
 
 ### Appendix-premise oracle
 
-This oracle is a proof ledger rather than a numerical shortcut. Each transition
-in Eq. (28)--(38) records its required premise and is checked by exact rational
-arithmetic on enumerated instances. At minimum it audits:
+This oracle is a proof ledger rather than a numerical shortcut. Eq. (28) keeps
+one numbered row for accounting but two separately statused conclusions as
+defined above. Every Eq. (28)--(38) conclusion stores its exact prerequisites,
+`blocked_by` links, and exact-rational check. A failed or unavailable
+prerequisite makes the downstream conclusion `not_applicable`; it is not
+automatically a contradiction. Finite rows for `modular_shift_candidate`
+consume only the literal-base
+\(f_{\mathrm{lit}}+\eta_{\mathrm{mod}}|S|\) objective and its
+\(w_x+d_x(S)+\eta_{\mathrm{mod}}\) marginal defined above; the proof ledger
+has no alternate single-counted modular interpretation. The dependency gates
+are:
+
+- Eq. (28a) requires its monotonicity/union and submodular telescoping steps.
+- Eq. (28b) additionally requires nonnegative marginals and
+  \(|S^\star\setminus S_t|\leq b-t\). A mandatory symbolic witness uses
+  \(V=\{a,b,c\}\), \(b=2\), \(t=1\), \(S_t=\{a\}\), and
+  \(S^\star=\{b,c\}\), so \(2=|S^\star\setminus S_t|>b-t=1\). It concerns
+  cardinality only and is never weight-dependent or reported as an Eq. (28a)
+  counterexample.
+- Eq. (29) requires that the selected element be a true-marginal maximizer and
+  that \(S_{t+1}\) be defined. Eq. (7) score selection does not satisfy this
+  prerequisite merely by sharing a greedy label.
+- Eq. (30) requires both Eq. (28) conclusions and Eq. (29); Eq. (31) requires
+  the defined algebraic quantities; Eq. (32) requires Eq. (30) and
+  \(b-t>0\); Eq. (33) requires Eq. (32) and its residual definition.
+- Eq. (34) requires the Eq. (33) recurrence for every \(t=0,\ldots,b-1\) and
+  exact product reindexing. Eq. (35) requires a well-defined product and
+  positive integer \(b\).
+- Eq. (36)'s conclusion is split from its logarithmic derivation. For \(b=1\),
+  \((1-1/b)^b=0\leq1/e\) is supported, but the `ln(1-1/b)` step is
+  `not_applicable` because \(\ln 0\) is outside its domain. For integer \(b>1\),
+  the log derivation uses the exact symbolic lemma
+  \(\ln(1-x)\leq-x\); \(b=0\) is `not_applicable`.
+- Eq. (37) requires the complete Eq. (34)--(36) chain and the theorem
+  premises; Eq. (38) requires Eq. (37), the exact objective relation, and a
+  nonnegative optimum.
+
+At minimum it also audits:
 
 - normalization \(f(\varnothing)=0\);
 - non-negativity and monotonicity, not submodularity alone;
@@ -482,8 +685,30 @@ arithmetic on enumerated instances. At minimum it audits:
 - the logical relationship between a repaired standard greedy theorem and the
   theorem actually stated.
 
-The output is a row per proof step and `model_variant` with `supported`,
-`contradicted`, or `not_applicable`, plus witness references. For
+The proof-ledger schema is uniform. Every numbered row, including rows with
+only one conclusion, has exactly:
+
+```json
+{
+  "row_id": "eq28",
+  "equation": "28",
+  "model_variant": "paper_samplewise_literal",
+  "instance_id": "symbolic-or-canonical-instance-id",
+  "conclusions": []
+}
+```
+
+Every member of `conclusions` has exactly `conclusion_id`, `statement`,
+`required_premise_ids`, `prerequisite_conclusion_refs`, `check_id`,
+`evidence_kind`, `status`, `blocked_by`, and `witness_ids`. Row objects never
+carry a shadow `status`, premise list, blocker list, or witness list. Eq. (28)
+has two conclusion members; Eq. (29)--(38) each have one, for 12 conclusions
+per variant/instance. A conclusion reference is the canonical string
+`<model_variant>/<instance_id>/<row_id>/<conclusion_id>`. Acceptance rebuilds
+the exact acyclic prerequisite adjacency map and rejects missing, duplicate,
+unknown, replaced, or cyclic references.
+
+Conclusion statuses are `supported`, `contradicted`, or `not_applicable`. For
 `appendix_inline_shift_literal`, the ledger must link the minimal two-element
 `1`-then-`3` witness wherever Appendix F requires submodularity, distinguish
 its supported normalization and any supported monotonicity facts, and reject
@@ -493,10 +718,13 @@ ratio transfer from a repaired objective. It must never substitute
 The arbitrary-set cardinality checks and algebraic transitions are labeled
 **symbolic**. A separate **exhaustive finite proof-ledger control** reuses the
 16,239 weighted-cardinality instances from the greedy domain rather than
-opening another Cartesian product. It emits at most one row for each of the 11
-numbered steps Eq. (28)--(38), for a ceiling of 178,629 rows. The ledger records
-`not_applicable` rather than manufacturing a numerical check when a symbolic
-step has no instance-level predicate.
+opening another Cartesian product. It evaluates 12 conclusions for each of
+the six set-function variants and each instance, for a ceiling of
+\(12\cdot6\cdot16{,}239=1{,}169{,}208\) conclusion-status operations.
+`appendix_eq26_score` receives 12 symbolic `not_applicable` conclusions but no
+finite-instance expansion. The ledger records `not_applicable` rather than
+manufacturing a numerical check when a symbolic step has no instance-level
+predicate.
 
 ## Search accounting and minimization
 
@@ -523,14 +751,68 @@ The minimized witness and the pre-minimization discovery are both retained.
 Regression fixtures are generated from canonical witness JSON, never copied
 from prose.
 
-Counting weighted greedy instances, optimum subsets, both greedy
-implementations, and the two exact marginal evaluations in the mandatory
-Appendix E witness separately, all declared finite controls have an aggregate
-ceiling of 1,177,835 case, path, subset, or ledger-row evaluations.
-They use exact arithmetic, at most four vertices, and no GPU, network call, or
-model training. This preserves the assessed CPU-only, under-30-minute scope;
-the evidence records wall time and fails the lifecycle gate rather than silently
-shrinking a domain if that bound is exceeded.
+The runner increments a named counter for every primitive subset evaluation,
+marginal/score evaluation, comparison, path record, summary classification,
+or proof conclusion. A component may finish below its ceiling because actual
+ties are fewer than the all-tie bound, but acceptance requires
+`0 <= actual <= declared_ceiling`; equality is never required or fabricated.
+The complete generation ceiling is:
+
+| Component | Formula | Ceiling |
+| --- | --- | ---: |
+| objective-equivalence objective values | \(26\cdot2\) | 52 |
+| symmetric diminishing-return primitives | \(79{,}480\cdot6\text{ exact set-function variants}\cdot(4\text{ subset}+2\text{ independently closed-form marginal})\) | 2,861,280 |
+| asymmetric literal diagnostic primitives | \(19{,}738\cdot(4+2)\) | 118,428 |
+| shift marginal/score values | \(6{,}459\cdot7\text{ channels}\) | 45,213 |
+| rational-\(\alpha\) values | \(256\cdot7\text{ channels}\) | 1,792 |
+| premise subset values | \(84{,}750\cdot6\) | 508,500 |
+| premise marginal values | \(168{,}555\cdot6\) | 1,011,330 |
+| premise submodularity comparisons | \(565{,}815\cdot6\) | 3,394,890 |
+| Eq. (7) candidate scores | \(C\) | 316,983 |
+| Eq. (7) terminal paths | \(P\) | 210,675 |
+| true-marginal candidate lookups/comparisons | \(C\cdot6\) | 1,901,898 |
+| true-marginal terminal paths | \(P\cdot6\) | 1,264,050 |
+| optimum subset objective values | \(O\cdot6\) | 444,870 |
+| best/worst/canonical classifications | \(16{,}239\cdot6\cdot2\cdot3\) | 584,604 |
+| finite Appendix F conclusions | \(16{,}239\cdot6\cdot12\) | 1,169,208 |
+| symbolic Appendix F conclusions | \(7\cdot12\) | 84 |
+| literal Algorithm 1 audit | fixed | 1 |
+| mandatory Appendix E witness marginals | fixed | 2 |
+| **Generation ceiling** | | **13,833,860** |
+
+The premise formulas are independently checked before execution:
+
+\[
+\sum_n3^n2^{\binom n2}2^n=84{,}750,\quad
+\sum_n3^n2^{\binom n2}n2^{n-1}=168{,}555,\quad
+\sum_n3^n2^{\binom n2}n3^{n-1}=565{,}815.
+\]
+
+The earlier `1_177_735` figure is withdrawn: it hid per-variant premise
+subsets/marginals and used loose path maxima as though they were exact runtime
+counts. It is neither an accepted total nor an equality target. Semantic
+validation performs one full deterministic replay with the same
+`13_833_860` ceiling, so controller generation plus replay has a declared
+ceiling of `27_667_720` work units. Each pass records its own component actuals,
+and both must remain at or below every component ceiling. All controls use
+exact arithmetic, at most four vertices, and no GPU, network call, or model
+training. Canonical `evidence.json`, canonical witness files, and canonical
+command records contain no measured wall time, start/end timestamp, duration,
+elapsed seconds, or host-clock value. They retain only deterministic domain
+formulas, declared ceilings, actual work counts, return/completion facts, and
+completion status. Every byte of every canonical evidence and witness file is
+included in the two-run byte comparison; there is no normalization or excluded
+runtime field.
+
+The controller measures generation and replay externally. It records the
+measurement only in its validation attestation or in a noncanonical log under
+`/tmp`; that measurement is never copied into the submission, committed,
+hashed into canonical evidence, rendered, uploaded, or used in canonical byte
+comparison. The 30-minute limit is an operational controller gate: if either
+generation or replay exceeds 1,800 measured seconds, the controller withholds
+validation rather than shrinking a domain. The deterministic work ceilings
+and completion facts remain in evidence regardless of that external timing
+decision.
 
 ## TDD sequence
 
@@ -552,13 +834,27 @@ Implementation follows failing-test-first development:
    marginals to be exactly `1` then `3` in the diminishing-returns,
    greedy-guarantee, and proof-ledger outputs.
 6. Greedy, exhaustive optimum, all-ties, and ratio tests fail before solvers
-   exist.
+   exist. Adversarial cases require a poor-ratio instance with one failed
+   global premise to remain only in `out_of_premise_diagnostics`, reject any
+   ineligible record in `guarantee_violations`, and produce `not_evaluated`
+   when no theorem-eligible instance exists.
 7. Literal Algorithm 1 transcription, undefined-read, state-order, and
    no-silent-repair tests fail before its independent audit path exists.
 8. Proof-ledger and minimal-witness persistence tests fail before Appendix F
-   auditing exists.
-9. Evidence-bundle, report, poster, and Space rendering tests fail before their
-   producers exist.
+   auditing exists. They require separately statused Eq. (28a)/(28b), the
+   uniform nested-conclusion schema on every row, the symbolic \(b-t\)
+   witness, exact acyclic prerequisite references, downstream blocking, and
+   Eq. (36) cases for \(b=0\), \(b=1\), and \(b>1\).
+9. Evidence-bundle acceptance tests fail before their producer exists. They
+   delete, duplicate, and replace full-domain records; alter stored statuses,
+   nested conclusions, and prerequisite edges; tamper excerpt paths, key sets,
+   byte counts, hashes, witness IDs, witness bytes, and links; and remove or add
+   witness files. All must be rejected by canonical full-domain replay even
+   when the mutated bundle is internally self-consistent.
+10. Renderer tests fail first on an invalid ID-as-array-index JSON pointer and
+    require every emitted RFC 6901 pointer to resolve to the displayed value.
+    Report, poster, and Space tests also require visible/downloadable
+    `NOTICE.md`, MIT `LICENSE`, and CC BY-NC-SA legal text.
 
 For every red phase, the log records command, timestamp, test identifier, and
 the expected missing behavior. Tests assert mathematical identities and schema
@@ -572,7 +868,8 @@ is the canonical computed artifact. A proposed schema version `1` contains:
 ```json
 {
   "schema_version": 1,
-  "attempt_id": "e485c086-6fa5-4ff6-a3c3-1f31c79bbae6",
+  "attempt_id": "64bfe193-333b-4b37-9683-9ac25ca5ac27",
+  "source_revision": "40-hex final source-integration commit",
   "paper": {
     "challenge_id": "a3GdvuPItd",
     "revision": "arxiv:2606.12913v2",
@@ -590,6 +887,9 @@ is the canonical computed artifact. A proposed schema version `1` contains:
   "transcriptions": [],
   "searches": [],
   "witnesses": [],
+  "guarantee_violations": [],
+  "out_of_premise_diagnostics": [],
+  "proof_ledger": [],
   "claim_results": [],
   "unavailable_claims": [],
   "commands": [],
@@ -597,14 +897,17 @@ is the canonical computed artifact. A proposed schema version `1` contains:
 }
 ```
 
-Each transcription includes `equation`, `pdf_page`, `section`,
-`normalized_expression`, `source_excerpt_sha256`, and `reviewed_by`.
+Each transcription has the exact manifest keys defined above and repeats the
+authenticated byte count/hash, not excerpt text.
 Each search includes `oracle`, `model_variant`, `greedy_path` when applicable,
 its exhaustive/symbolic label, exact domain, ceiling formula and value, actual
-case count, completion status, and code revision. Each witness includes
-`model_variant`, the audited property, exact rational inputs as
-numerator/denominator strings, all intermediate values,
-`universal_claim_falsified`, `minimality_checks`, and artifact SHA-256.
+case count, completion status, the canonical parameter rule and realized
+parameterized case-ID grammar, and `source_revision`. Each witness includes `id`,
+`artifact_path`, `artifact_sha256`, `model_variant`, the audited property,
+exact rational inputs as numerator/denominator strings, all intermediate
+values, `universal_claim_falsified`, and `minimality_checks`. `artifact_path`
+is a canonical relative path under `evidence/witnesses/`, cannot traverse
+outside the evidence root, and is never inferred from untrusted input.
 Each claim result includes a stable local claim ID, `target_claim` equal to one
 of the two exact strings above, expected observation, computed observations,
 witness links, status, and limitations. Every result belongs to exactly one
@@ -613,17 +916,89 @@ these two strings, preserve their order and spelling byte-for-byte, and reject
 missing, additional, or rewritten claim text before any coordinator mutation.
 
 The human report is generated from this JSON and cannot introduce new numeric
-claims. JSON Schema validation, stable sorting, deterministic serialization,
-and a second clean-run byte comparison are required.
+claims. Arrays remain arrays; canonical references to them use numeric,
+RFC 6901-escaped indices such as `/witnesses/0/id`, never pseudo-pointers such
+as `/witnesses/{id}`. Rendering builds a deterministic ID-to-index lookup and
+every `data-evidence-path` or report footnote must resolve with an RFC 6901
+evaluator to the exact displayed value. JSON Schema validation, stable sorting,
+deterministic serialization, and a second clean-run byte comparison are
+required.
 
-Schema acceptance additionally requires one canonical
+Schema acceptance is a full deterministic replay, not validation of predicates
+selected by the candidate bundle. Given the evidence JSON path, project root,
+and `source_revision`, it:
+
+1. opens `paper_transcriptions/manifest.json`, requires the exact key set,
+   exact expected record IDs, unique safe paths, and exact referenced-file set;
+   reads every excerpt/Algorithm file as bytes; verifies byte count, SHA-256,
+   UTF-8 decoding, the aggregate `TRANSCRIPTION_SET_SHA256`, and the reviewed
+   normalized expression;
+2. independently reconstructs the canonical graph, \(M\), six-row parameter
+   tuple, parameterized base ID, budget, subset, marginal, greedy, and
+   proof-conclusion domains from source constants rather than candidate
+   `searches`, record IDs, parameters, counts, or prerequisite links;
+3. reruns the entire `13_833_860`-ceiling generation into an isolated temporary
+   root, producing expected canonical `evidence.json` and witness files;
+4. compares canonical bytes and exact relative-file sets between expected and
+   candidate evidence roots, then separately validates every RFC 6901 render
+   pointer against the replayed evidence; and
+5. rejects path traversal, missing/extra/duplicate/replaced domain records,
+   missing/extra/tampered witness files, stale hashes, duplicate or
+   cross-variant witness IDs, a missing or altered `alpha`, any canonical
+   `eta` (zero unshifted, Appendix, or modular), parameterized case ID, and any
+   missing, unknown, replaced, or cyclic proof prerequisite edge.
+
+`guarantee_violations` and `out_of_premise_diagnostics` are required
+top-level arrays, and the displayed schema object has an exact top-level key
+set with no additional properties. Replay independently regenerates both from
+the canonical premise certificates and exact ratio classifications, then
+compares their complete canonical order and bytes. A missing, extra, reordered,
+or misclassified entry fails acceptance, including moving an ineligible result
+into `guarantee_violations` or removing its out-of-premise diagnostic.
+
+The replay must not call a `validate_*` method on candidate records or derive
+an expected domain from their contents. Tests delete one middle graph/subset
+record, duplicate another record in its place while preserving array length,
+replace a record under the original ID, alter Eq. (28)'s nested conclusion,
+remove and redirect prerequisite edges, alter `alpha`, any table-derived
+`eta`, or a parameterized ID, mutate or move an entry between the two top-level
+classification arrays, insert a measured runtime field, mutate excerpt bytes
+and manifest keys, and remove/replace witness files. Every mutation must fail
+even when stored counts, statuses, and hashes are edited to remain internally
+self-consistent.
+
+Acceptance additionally requires one canonical symbolic-diagnostic
 `appendix_inline_shift_literal` witness with two elements, zero vertex and edge
 weights, `alpha=1`, `eta=1`, and exact marginal values `1` and `3`. Its stable
-witness ID must be referenced by the diminishing-returns result, the
-greedy-guarantee premise result, and every applicable Appendix F proof-ledger
-row. Acceptance fails if any of those records is absent, if a repaired variant
-uses that literal variant's identifier, or if results for
+witness ID contains
+`alpha=1/1::eta=1/1::diagnostic=appendix-minimal` and must be referenced by
+the diminishing-returns result, the greedy-guarantee premise result, and every
+applicable Appendix F proof-ledger row. Acceptance fails if any of those
+records is absent, if a repaired variant uses that literal variant's
+identifier, or if results for
 `appendix_inline_shift_literal` and `modular_shift_candidate` are merged.
+
+Revision provenance has two non-self-referential authorities:
+
+- `source_revision` is embedded in canonical evidence and names the final
+  commit containing all executable source, schemas, transcriptions, tests,
+  application code, dependency files, and renderer templates.
+- `artifact_revision` is the controller-observed current Git `HEAD` containing
+  the generated evidence, witnesses, report, and poster. It is recorded in the
+  validation attestation, not embedded in those files, because embedding a
+  commit's own SHA would be self-referential.
+
+The controller requires `source_revision` to be an ancestor of
+`artifact_revision` and requires every path changed in
+`source_revision..artifact_revision` to match only:
+`evidence/evidence.json`, `evidence/witnesses/*.json`, `report.md`,
+`poster.html`, or `poster_embed.html` within this submission. The range may
+contain no source, schema, transcription, test, lockfile, application,
+configuration, README, notice, or license change. It reruns the full replay at
+`artifact_revision`; because executable paths are unchanged from
+`source_revision`, the replayed bytes must equal the committed generated
+artifacts. Any later executable or template change requires a new
+`source_revision`, regeneration, and a new artifact-only range.
 
 ## Attribution and licensing
 
@@ -643,6 +1018,12 @@ convention with explicit file boundaries:
   names all seven authors, paper title, exact arXiv v2 URL, source license,
   adaptation status, both licenses, and the file-boundary map. The Space
   exposes the same notice.
+
+`README.md`, `report.md`, the poster, and the Space each surface the attribution
+and license boundary without requiring repository browsing. The Space provides
+visible links and downloads for `NOTICE.md`, the MIT `LICENSE`, and
+`LICENSES/CC-BY-NC-SA-4.0.txt`; acceptance rejects a deployment bundle missing
+any of them.
 
 Transcribed equations are attributed at point of use with equation, PDF page,
 and revision. Generated evidence containing those transcriptions remains under
@@ -665,10 +1046,10 @@ not experimental marketing claims. They show:
 - a prominent unavailable panel for ImageNet, CIFAR, segmentation, and
   detection claims.
 
-The Space exposes downloadable canonical JSON and witness files and a
-deterministic “recompute formal audit” path suitable for CPU execution. It
-must not label repaired-theorem evidence as verification of the literal paper
-claim.
+The Space exposes downloadable canonical JSON and witness files, the three
+notice/license files above, and a deterministic “recompute formal audit” path
+suitable for CPU execution. It must not label repaired-theorem evidence as
+verification of the literal paper claim.
 
 ## Failure handling and limitations
 
@@ -682,7 +1063,8 @@ claim.
   prove it over arbitrary real weights; symbolic identities supply the general
   evidence where possible.
 - A repaired standard theorem can explain author intent but cannot erase a
-  literal counterexample.
+  literal formulation failure; an out-of-premise failure remains a diagnostic,
+  not a theorem counterexample.
 - No released implementation is available to resolve whether code used
   single- or double-counted edges or a different monotonicity shift.
 - Empirical accuracy and acceleration remain unavailable because the required
@@ -694,61 +1076,77 @@ The implementation plan must require:
 
 1. clean-environment installation from locked dependencies;
 2. the complete deterministic evidence command twice with byte-identical
-   canonical JSON;
-3. JSON Schema validation, report-to-JSON agreement, and acceptance of the
-   required Appendix E literal witness and its three audit linkages;
-4. the submission's full pytest suite;
-5. root `uv run pytest -q`, while excluding the archival NAPE tree according
+   canonical JSON and witness trees, component actuals no greater than the
+   `13_833_860` generation ceiling, and no equality assumption;
+3. JSON Schema validation plus full canonical-domain replay, byte comparison of
+   the complete evidence/witness tree, excerpt-byte authentication,
+   report-to-JSON pointer agreement, and acceptance of the required Appendix E
+   literal witness and its three audit linkages;
+4. the submission's full `python -m pytest` suite;
+5. root `uv run python -m pytest -q`, while excluding the archival NAPE tree according
    to repository policy;
 6. `uv run pre-commit run -a`;
 7. credential, mutable-URL, cache, and unrelated-diff review;
 8. `superpowers:verification-before-completion`;
-9. commit of the exact validated source and evidence configuration;
-10. only after gates 1--9 pass, a fenced transition and persistence of this
-    attempt to `validated` using its current owner and fencing token, followed
-    by a `docs/HANDOFF.md` milestone naming the attempt, phase, validation
-    evidence, and deployment as the next action;
-11. deployment to a paper-specific Space;
-12. exact deployed-SHA verification against the intended validated commit, plus
-    exercise of the live Space recomputation and machine-readable download;
-13. only after gate 12 passes, a fenced transition and persistence of this
-    attempt to `deployed` using its current owner and fencing token, followed by
-    a `docs/HANDOFF.md` milestone naming the attempt, phase, verified Space ID
-    and exact SHA, and refresh/submission as the next action;
-14. only after `deployed` is persisted, a fresh assessed live refresh
-    immediately before submission, with cancellation if eligibility changed;
-15. a fenced `submitted` transition and persistence using the current owner and
-    fencing token, followed by a `docs/HANDOFF.md` milestone naming the attempt,
-    submission ID, Space ID, deployed SHA, phase, and post-submission refresh as
-    the next action;
-16. a post-submission live refresh in the external coordinator and inspection
-    of its new immutable snapshot;
-17. verification in that refreshed live data that this exact paper-specific
-    Space and deployed commit are present in the expected queued/live submission
-    state, blocking instead of judging if the submission is absent, stale, or
-    terminal; and
-18. only after that verification, a fenced transition and persistence to
-    bounded `judging` using the current owner and fencing token, followed by a
-    `docs/HANDOFF.md` milestone naming the attempt, phase, polling bounds, and
-    next action, then the existing exact-claim verdict, improvement, completion,
-    and archival flow with a HANDOFF milestone after every material phase
-    change or blocker.
+9. integration of all source changes as `source_revision`, then regeneration
+   and an artifact-only descendant commit observed by the controller as
+   `artifact_revision`; every intervening path must match the generated
+   artifact allowlist, and any later executable/template change requires a new
+   source revision and regeneration;
+10. delivery of the worker branch and evidence as an untrusted proposal. The
+    worker does not mutate coordinator state or any external service;
+11. controller revalidation followed by immutable `attest-validation`;
+12. controller deployment to a paper-specific Space, exact deployed-SHA/live
+    verification, and `publish-deployment`;
+13. controller-only fresh assessed live refresh immediately before submission,
+    cancellation on drift, exact-claim submission, and `attest-submission`;
+14. controller-only post-submission refresh and queued/live presence proof,
+    followed by bounded `watch-attempt`; and
+15. controller-only official verdict import through `sync-verdict`. Each
+    controller phase uses the exact attempt ID, current owner, and fencing
+    token, and persists the corresponding HANDOFF milestone. Workers never
+    deploy, submit, poll, import verdicts, or claim those phases.
 
-This design task stops after committing this document. It does not implement
-the submission, record or approve the design in coordinator state, update
+This design-author task stops with an uncommitted two-document proposal for
+independent review. It does not implement the submission, record or approve the
+design in coordinator state, commit, update
 `docs/HANDOFF.md`, deploy a Space, submit to the challenge, or touch NAPE.
 
 ## Design self-review checklist
 
 - No placeholder, TODO, or unresolved design choice remains.
 - Literal, conventional, and repaired objectives have distinct identifiers.
+- `modular_shift_candidate` has one literal-base
+  \(f_{\mathrm{lit}}+\eta_{\mathrm{mod}}|S|\) definition across objective,
+  marginal, shift, greedy, optimum, premise, proof-ledger, and accounting
+  paths, with greedy/proof \(\eta_{\mathrm{mod}}=2(n-1)M\).
+- All six canonical graph variants derive `alpha=1` and their exact `eta`
+  (`0`, \(M\), or \(2(n-1)M\)) from one pre-outcome table, encode normalized
+  fractions in every case ID, and add no enumeration dimension.
+- All six charged set-function variants have independent closed-form marginal
+  formulas and direct-versus-closed formula-specific regression tests.
 - The Appendix E shifted literal objective has the exact minimal two-element
   `1`-then-`3` falsification linked across diminishing returns, greedy-guarantee,
   and proof-ledger audits without being conflated with a repaired shift.
 - Literal Algorithm 1, Eq. (7)--(8) score greedy, and true-marginal greedy have
   distinct identifiers, with ambiguities preserved rather than repaired.
 - Each universal claim has an independent oracle and a falsification path.
-- Positive synthetic cases are labeled smoke tests, never universal evidence.
+- Out-of-premise diagnostics are separate from guarantee violations and are
+  never universal counterexamples; both are required top-level arrays and are
+  regenerated by replay.
+- Measured time is controller-only and noncanonical; deterministic work and
+  completion facts remain in evidence, whose complete bytes are compared
+  without exclusions or normalization.
+- Six set-function variants have fixed parameters and fully counted subset,
+  marginal, path, classification, and proof-conclusion ceilings; actual work is
+  bounded above rather than required to equal a ceiling.
+- Semantic acceptance reconstructs canonical domains and byte-compares a full
+  replay, rather than trusting candidate membership or prerequisite graphs.
+- Every proof row uses the same nested-conclusion schema.
+- Excerpt bytes have unique authenticated paths and an aggregate transcription
+  pin.
+- `source_revision` and controller-observed `artifact_revision` are distinct,
+  with only generated artifacts allowed between them.
 - Minimal witnesses and complete search domains are preserved.
 - Paper context, computed outputs, and unavailable evidence are distinct.
 - Licensing, poster, Space, TDD, evidence schema, and validation are explicit.
