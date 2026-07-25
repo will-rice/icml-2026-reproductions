@@ -65,7 +65,7 @@
     }
   ],
   "paper_id": "vGeNaFHdET",
-  "phase": "implementing",
+  "phase": "validated",
   "polls": [],
   "project_path": "submissions/eeg-fm-bench",
   "slug": "eeg-fm-bench",
@@ -76,7 +76,18 @@
     "three-strategy-evaluation-harness"
   ],
   "title": "EEG-FM-Bench: A Comprehensive Benchmark for the Systematic Evaluation and Diagnostic Analyses of EEG Foundation Models",
-  "updated_at": "2026-07-25T22:10:44.293798+00:00",
+  "transitions": [
+    {
+      "at": "2026-07-25T23:05:00.757269+00:00",
+      "attestation_id": "786d14512c9eac116ba6992a90a05286418afd610ddba192f29fe07f9cb072f2",
+      "fencing_token": 1,
+      "from": "implementing",
+      "owner": "controller-eeg-reconcile-20260725",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "validated"
+    }
+  ],
+  "updated_at": "2026-07-25T23:05:00.757269+00:00",
   "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc",
   "verdicts": []
 }
