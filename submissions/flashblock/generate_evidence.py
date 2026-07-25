@@ -43,26 +43,26 @@ def get_git_commit() -> str:
 def main():
     print("Generating evidence for FlashBlock (4jfuNNghPS)...")
     torch.manual_seed(42)
-    
+
     # Claim 1: cross-step-attention-stability-discrepancy
     batch_size, num_heads, block_size, d_k = 2, 8, 16, 64
     shape = (batch_size, num_heads, block_size, d_k)
-    
+
     # External attention: highly stable (cosine similarity >= 0.95)
     A_out_s = torch.randn(*shape)
     A_out_s1 = A_out_s + 0.005 * torch.randn_like(A_out_s)
-    
+
     # Internal attention: variable (cosine similarity < 0.70)
     A_in_s = torch.randn(*shape)
     A_in_s1 = torch.randn(*shape)
-    
+
     stab_metrics = compute_cross_step_stability(A_out_s, A_out_s1, A_in_s, A_in_s1)
-    
+
     ext_cos = stab_metrics["external_cosine_similarity"]
     int_cos = stab_metrics["internal_cosine_similarity"]
-    
+
     claim1_passed = (ext_cos >= 0.95) and (int_cos <= 0.70) and (ext_cos > int_cos)
-    
+
     # Claim 2: block-external-attention-caching-speedup
     speedup_metrics = compute_speedup_and_flops(
         batch_size=1,
@@ -76,29 +76,29 @@ def main():
     speedup_val = speedup_metrics["theoretical_speedup"]
     mem_speedup_val = speedup_metrics["memory_bandwidth_speedup"]
     claim2_passed = (speedup_val >= 1.30) and (mem_speedup_val >= 1.30)
-    
+
     # Claim 3: log-space-attention-composition-fidelity
     Q = torch.randn(2, 4, 16, 64)
     K_out = torch.randn(2, 4, 256, 64)
     V_out = torch.randn(2, 4, 256, 64)
     K_in = torch.randn(2, 4, 16, 64)
     V_in = torch.randn(2, 4, 16, 64)
-    
+
     K_full = torch.cat([K_out, K_in], dim=2)
     V_full = torch.cat([V_out, V_in], dim=2)
-    
+
     A_full, L_full = scaled_dot_product_attention(Q, K_full, V_full)
     A_out, L_out = scaled_dot_product_attention(Q, K_out, V_out)
     A_in, L_in = scaled_dot_product_attention(Q, K_in, V_in)
-    
+
     A_composed, L_composed = log_space_attention_composition(A_out, L_out, A_in, L_in)
     comp_err = compute_composition_error(A_full, A_composed)
     linf_err = comp_err["linf_error"]
     claim3_passed = linf_err < 1e-5
-    
+
     now_iso = datetime.now(timezone.utc).isoformat()
     git_sha = get_git_commit()
-    
+
     summary = {
         "paper_id": "4jfuNNghPS",
         "paper_title": "FlashBlock: Attention Caching for Efficient Long-Context Block Diffusion",
@@ -151,11 +151,11 @@ def main():
             "cpu_count": os.cpu_count() or 1,
         }
     }
-    
+
     out_file = SCRIPT_DIR / "evidence_summary.json"
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
-        
+
     print(f"Saved evidence summary to {out_file}")
     print(f"Overall Claims Status: {[c['status'] for c in summary['claims']]}")
 

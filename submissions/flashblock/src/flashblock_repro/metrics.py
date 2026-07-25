@@ -15,16 +15,16 @@ def compute_cross_step_stability(
     """
     flat_A_out_s = A_out_s.reshape(-1)
     flat_A_out_s1 = A_out_s1.reshape(-1)
-    
+
     flat_A_in_s = A_in_s.reshape(-1)
     flat_A_in_s1 = A_in_s1.reshape(-1)
-    
+
     ext_cos = torch.cosine_similarity(flat_A_out_s.unsqueeze(0), flat_A_out_s1.unsqueeze(0)).item()
     ext_l1 = torch.mean(torch.abs(flat_A_out_s - flat_A_out_s1)).item()
-    
+
     int_cos = torch.cosine_similarity(flat_A_in_s.unsqueeze(0), flat_A_in_s1.unsqueeze(0)).item()
     int_l1 = torch.mean(torch.abs(flat_A_in_s - flat_A_in_s1)).item()
-    
+
     return {
         "external_cosine_similarity": ext_cos,
         "external_l1_distance": ext_l1,
@@ -58,7 +58,7 @@ def compute_speedup_and_flops(
     """
     Computes theoretical FLOPs, memory transfer bytes, and throughput speedups for standard
     block diffusion vs FlashBlock attention caching.
-    
+
     Standard Block Diffusion Memory Transfer (per step):
         KV cache read bytes: B * (N_context + B) * num_heads * d_k * 2 * bytes_per_elem
     FlashBlock Memory Transfer (when reusing cache):
@@ -67,13 +67,13 @@ def compute_speedup_and_flops(
     """
     dense_flops_per_step = 2.0 * batch_size * num_heads * block_size * (context_len + block_size) * d_k
     dense_bytes_per_step = batch_size * num_heads * block_size * (context_len + block_size) * d_k * 2 * bytes_per_elem
-    
+
     total_dense_flops = dense_flops_per_step * num_steps
     total_dense_bytes = dense_bytes_per_step * num_steps
-    
+
     total_fb_flops = 0.0
     total_fb_bytes = 0.0
-    
+
     for s in range(num_steps):
         num_updated = block_size if s == 0 else 1
         if num_updated >= update_threshold:
@@ -88,10 +88,10 @@ def compute_speedup_and_flops(
             )
             total_fb_flops += cached_step_flops
             total_fb_bytes += cached_step_bytes
-            
+
     flop_speedup = total_dense_flops / (total_fb_flops + 1e-8)
     memory_speedup = total_dense_bytes / (total_fb_bytes + 1e-8)
-    
+
     return {
         "dense_flops": total_dense_flops,
         "flashblock_flops": total_fb_flops,

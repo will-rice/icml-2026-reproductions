@@ -12,7 +12,7 @@ def classify_sample_pattern(sample: torch.Tensor) -> str:
 def analyze_pattern_attribution(samples: List[torch.Tensor], scores: List[float]) -> Dict[str, float]:
     rep_scores = []
     rand_scores = []
-    
+
     for sample, score in zip(samples, scores):
         category = classify_sample_pattern(sample)
         if category == "repetitive_structural":

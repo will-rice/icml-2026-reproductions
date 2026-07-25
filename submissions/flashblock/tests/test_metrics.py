@@ -11,7 +11,7 @@ def test_compute_speedup_and_flops():
     block_size = 8
     num_steps = 4
     update_threshold = 2
-    
+
     metrics = compute_speedup_and_flops(
         batch_size=batch_size,
         num_heads=num_heads,
@@ -21,7 +21,7 @@ def test_compute_speedup_and_flops():
         num_steps=num_steps,
         update_threshold=update_threshold,
     )
-    
+
     assert "dense_flops" in metrics
     assert "flashblock_flops" in metrics
     assert "theoretical_speedup" in metrics
@@ -34,7 +34,7 @@ def test_compute_composition_error():
     shape = (2, 4, 8, 32)
     A_full = torch.randn(*shape)
     A_composed = A_full + 1e-6 * torch.randn(*shape)
-    
+
     err = compute_composition_error(A_full, A_composed)
     assert "l1_error" in err
     assert "linf_error" in err

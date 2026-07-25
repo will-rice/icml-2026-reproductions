@@ -5,7 +5,7 @@ from mechanistic_data_attribution_repro.patterns import classify_sample_pattern,
 def test_classify_sample_pattern():
     repetitive_seq = torch.tensor([1, 2, 3, 1, 2, 3])
     random_seq = torch.tensor([10, 42, 99, 3, 8, 17])
-    
+
     assert classify_sample_pattern(repetitive_seq) == "repetitive_structural"
     assert classify_sample_pattern(random_seq) == "unstructured_random"
 

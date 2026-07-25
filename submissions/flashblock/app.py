@@ -35,14 +35,14 @@ def run_simulation(context_length, block_size, update_threshold):
         num_steps=10,
         update_threshold=int(update_threshold),
     )
-    
+
     # Run test block diffusion generator
     model = BlockDiffusionModel(vocab_size=100, embed_dim=64, num_heads=4, num_layers=2)
     generator = BlockDiffusionGenerator(model=model, block_size=int(block_size), update_threshold=int(update_threshold))
     gen_result = generator.generate(num_blocks=3, num_steps_per_block=4, use_flashblock=True)
-    
+
     stab = gen_result["stability_metrics"]
-    
+
     report = f"""
 ### Simulation Results
 - **Context Length**: {context_length} tokens
@@ -70,18 +70,18 @@ def load_evidence_json():
 with gr.Blocks(title="FlashBlock ICML 2026 Reproduction") as demo:
     gr.Markdown("# FlashBlock: Attention Caching for Efficient Long-Context Block Diffusion")
     gr.Markdown("**ICML 2026 Paper Reproduction** (`4jfuNNghPS` | arXiv:2602.05305)")
-    
+
     with gr.Tab("Interactive Simulation"):
         gr.Markdown("### Test FlashBlock Attention Caching Speedups & Stability")
         with gr.Row():
             ctx_slider = gr.Slider(minimum=256, maximum=8192, value=2048, step=256, label="Context Length (tokens)")
             block_slider = gr.Slider(minimum=4, maximum=32, value=8, step=4, label="Block Size (B)")
             thresh_slider = gr.Slider(minimum=1, maximum=8, value=2, step=1, label="Update Threshold (τ)")
-        
+
         sim_btn = gr.Button("Run FlashBlock Simulation", variant="primary")
         sim_output = gr.Markdown()
         sim_btn.click(run_simulation, inputs=[ctx_slider, block_slider, thresh_slider], outputs=[sim_output])
-        
+
     with gr.Tab("Evidence Summary Artifact"):
         gr.Markdown("### Machine-Readable Verified Claims Artifact")
         evidence_box = gr.Code(value=load_evidence_json(), language="json", label="evidence_summary.json")

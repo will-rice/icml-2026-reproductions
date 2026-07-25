@@ -10,7 +10,7 @@ def test_evaluate_causal_interventions():
         torch.tensor([7, 8, 9, 7, 8, 9]),
     ]
     scores = [0.80, 0.10, 0.90, 0.85]
-    
+
     results = evaluate_causal_interventions(samples, scores, prune_ratio=0.5, seed=42)
     assert "targeted_prune_probe_drop" in results
     assert "random_prune_probe_drop" in results

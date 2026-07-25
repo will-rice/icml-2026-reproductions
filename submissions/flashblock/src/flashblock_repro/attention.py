@@ -14,31 +14,31 @@ def scaled_dot_product_attention(
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
     Computes scaled dot-product attention and returns output and log-normalizer.
-    
+
     Q: (B, H, N_q, d_k)
     K: (B, H, N_k, d_k)
     V: (B, H, N_k, d_k)
-    
+
     Returns:
         A: Attention output (B, H, N_q, d_k)
         L: Log-normalizer (B, H, N_q, 1)
     """
     d_k = Q.size(-1)
     scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
-    
+
     if mask is not None:
         scores = scores.masked_fill(mask == 0, float('-inf'))
-        
+
     m = torch.max(scores, dim=-1, keepdim=True).values  # (B, H, N_q, 1)
     # Handle all-masked cases gracefully
     m = torch.nan_to_num(m, nan=0.0, posinf=0.0, neginf=0.0)
-    
+
     exp_scores = torch.exp(scores - m)
     sum_exp = torch.sum(exp_scores, dim=-1, keepdim=True)  # (B, H, N_q, 1)
-    
+
     L = m + torch.log(sum_exp + 1e-8)  # (B, H, N_q, 1)
     probs = exp_scores / (sum_exp + 1e-8)
-    
+
     A = torch.matmul(probs, V)  # (B, H, N_q, d_k)
     return A, L
 
@@ -51,33 +51,33 @@ def log_space_attention_composition(
     """
     Composes block-external (A_out, L_out) and block-internal (A_in, L_in)
     attention in log space in a numerically stable manner.
-    
+
     A_out: (B, H, N_q, d_k)
     L_out: (B, H, N_q, 1)
     A_in: (B, H, N_q, d_k)
     L_in: (B, H, N_q, 1)
-    
+
     Returns:
         A_full: Combined attention output (B, H, N_q, d_k)
         L_full: Combined log-normalizer (B, H, N_q, 1)
     """
     m = torch.maximum(L_out, L_in)
-    
+
     exp_out = torch.exp(L_out - m)
     exp_in = torch.exp(L_in - m)
-    
+
     sum_exp = exp_out + exp_in
     L_full = m + torch.log(sum_exp + 1e-8)
-    
+
     w_out = exp_out / (sum_exp + 1e-8)
     w_in = exp_in / (sum_exp + 1e-8)
-    
+
     A_full = w_out * A_out + w_in * A_in
     return A_full, L_full
 
 class BlockCausalAttentionCache:
     """Cache for block-external attention outputs (A_out, L_out) per layer."""
-    
+
     def __init__(self, update_threshold: int = 2):
         self.update_threshold = update_threshold
         self.cache: Dict[int, Tuple[torch.Tensor, torch.Tensor]] = {}
@@ -110,7 +110,7 @@ class FlashBlockAttention(nn.Module):
         self.num_heads = num_heads
         self.d_k = embed_dim // num_heads
         self.update_threshold = update_threshold
-        
+
         self.q_proj = nn.Linear(embed_dim, embed_dim)
         self.k_proj = nn.Linear(embed_dim, embed_dim)
         self.v_proj = nn.Linear(embed_dim, embed_dim)
@@ -129,23 +129,23 @@ class FlashBlockAttention(nn.Module):
         x_out: (B, N_out, C) optional block-external context representation
         """
         B, N_in, C = x_in.shape
-        
+
         # Project queries and internal K, V
         Q = self.q_proj(x_in).view(B, N_in, self.num_heads, self.d_k).transpose(1, 2)
         K_in = self.k_proj(x_in).view(B, N_in, self.num_heads, self.d_k).transpose(1, 2)
         V_in = self.v_proj(x_in).view(B, N_in, self.num_heads, self.d_k).transpose(1, 2)
-        
+
         # Block-internal attention
         A_in, L_in = scaled_dot_product_attention(Q, K_in, V_in)
-        
+
         if x_out is None or x_out.size(1) == 0:
             # No external context
             A_full = A_in
         else:
             N_out = x_out.size(1)
-            
+
             should_reuse = cache is not None and cache.should_reuse_cache(layer_idx, num_updated_tokens)
-            
+
             if should_reuse:
                 A_out, L_out = cache.get_cache(layer_idx)
             else:
@@ -153,11 +153,11 @@ class FlashBlockAttention(nn.Module):
                 K_out = self.k_proj(x_out).view(B, N_out, self.num_heads, self.d_k).transpose(1, 2)
                 V_out = self.v_proj(x_out).view(B, N_out, self.num_heads, self.d_k).transpose(1, 2)
                 A_out, L_out = scaled_dot_product_attention(Q, K_out, V_out)
-                
+
                 if cache is not None:
                     cache.update_cache(layer_idx, A_out, L_out)
-                    
+
             A_full, _ = log_space_attention_composition(A_out, L_out, A_in, L_in)
-            
+
         A_full = A_full.transpose(1, 2).contiguous().view(B, N_in, C)
         return self.out_proj(A_full)

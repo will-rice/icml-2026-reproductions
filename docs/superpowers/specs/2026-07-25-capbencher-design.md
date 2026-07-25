@@ -1,10 +1,10 @@
 # CapBencher Reproduction Design Specification
 
-**Paper ID:** `oCNT5PcMSQ`  
-**Title:** How Can I Publish My LLM Benchmark Without Giving the True Answers Away? (CapBencher)  
-**Authors:** Takashi Ishida, Thanawat Lodkaew, Ikko Yamane  
-**Upstream Pin:** `ishida-lab/capbencher@9f933d0757549e8e44b72fe2433f568767dab5b6`  
-**Dedicated Space:** `wrice/repro-capbencher-ocnt5pcmsq`  
+**Paper ID:** `oCNT5PcMSQ`
+**Title:** How Can I Publish My LLM Benchmark Without Giving the True Answers Away? (CapBencher)
+**Authors:** Takashi Ishida, Thanawat Lodkaew, Ikko Yamane
+**Upstream Pin:** `ishida-lab/capbencher@9f933d0757549e8e44b72fe2433f568767dab5b6`
+**Dedicated Space:** `wrice/repro-capbencher-ocnt5pcmsq`
 
 ---
 
