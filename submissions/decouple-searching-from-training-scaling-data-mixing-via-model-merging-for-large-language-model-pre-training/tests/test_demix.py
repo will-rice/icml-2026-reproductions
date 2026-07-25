@@ -1,79 +1,140 @@
+import hashlib
+import json
+from decimal import Decimal
+from pathlib import Path
+
 import pytest
-import numpy as np
 
-def test_demix_weight_normalization():
-    from demix.merging import normalize_weights
+from demix.artifacts import (
+    ArtifactIntegrityError,
+    ArtifactValidationError,
+    analyze_manifest,
+    load_pinned_manifest,
+    normalize_weights,
+)
 
-    ratios = {"general": 0.4, "code": 0.3, "math": 0.3}
-    weights = normalize_weights(ratios)
-    assert pytest.approx(sum(weights.values())) == 1.0
-    assert pytest.approx(weights["general"]) == 0.4
-    assert pytest.approx(weights["code"]) == 0.3
-    assert pytest.approx(weights["math"]) == 0.3
 
-def test_demix_linear_merge():
-    from demix.merging import merge_parameters
+SUBMISSION_ROOT = Path(__file__).resolve().parents[1]
+MANIFEST = SUBMISSION_ROOT / "evidence" / "inputs" / "sampled_mixture.json"
+PROVENANCE = SUBMISSION_ROOT / "evidence" / "provenance.json"
+PINNED_SHA256 = (
+    "2be00152f98c44a740bc2f8e2098be3740ea2f1cd31b7158ade9d54c8e852dc2"
+)
 
-    comp_a = {"weight1": np.array([1.0, 2.0]), "weight2": np.array([3.0, 4.0])}
-    comp_b = {"weight1": np.array([3.0, 6.0]), "weight2": np.array([5.0, 8.0])}
 
-    merged = merge_parameters({"a": comp_a, "b": comp_b}, {"a": 0.5, "b": 0.5})
-    np.testing.assert_allclose(merged["weight1"], np.array([2.0, 4.0]))
-    np.testing.assert_allclose(merged["weight2"], np.array([4.0, 6.0]))
+def test_vendored_manifest_is_byte_identical_to_pinned_release():
+    assert hashlib.sha256(MANIFEST.read_bytes()).hexdigest() == PINNED_SHA256
 
-def test_demix_spearman_evaluation():
-    from demix.eval import eval_correlations
-
-    pred_data = {
-        "mix_0": {"general_avg": 0.65, "code_avg": 0.40, "math_avg": 0.30},
-        "mix_1": {"general_avg": 0.70, "code_avg": 0.50, "math_avg": 0.45},
-        "mix_2": {"general_avg": 0.75, "code_avg": 0.60, "math_avg": 0.55},
-        "mix_3": {"general_avg": 0.80, "code_avg": 0.70, "math_avg": 0.65},
+    provenance = json.loads(PROVENANCE.read_text())
+    assert provenance["dataset"]["revision"] == (
+        "82a2effc58eb79bec691280a4e4fc50be0968b1e"
+    )
+    assert provenance["dataset"]["primary_input"] == {
+        "bytes": 4017,
+        "path": "DeMix_reproduce/reference_models/sampled_mixture.json",
+        "sha256": PINNED_SHA256,
     }
-    gt_data = {
-        "mix_0": {"general_avg": 0.60, "code_avg": 0.38, "math_avg": 0.28},
-        "mix_1": {"general_avg": 0.68, "code_avg": 0.48, "math_avg": 0.42},
-        "mix_2": {"general_avg": 0.74, "code_avg": 0.58, "math_avg": 0.52},
-        "mix_3": {"general_avg": 0.79, "code_avg": 0.68, "math_avg": 0.62},
-    }
+    inventory = provenance["release_inventory"]
+    assert inventory["paths_below_demix_reproduce"] == 1469
+    assert inventory["reference_model_roots"] == 16
+    assert inventory["component_model_roots"] == 7
+    assert inventory["csv_paths"] == 0
+    assert inventory["opencompass_result_paths"] == 0
+    shards = inventory["component_checkpoint"]["shards"]
+    assert len(shards) == 14
+    assert sum(shard["bytes"] for shard in shards) == 48_176_346_736
+    assert inventory["component_checkpoint"]["total_bytes"] == 48_176_346_736
 
-    rho_domain, top25_domain, maintain_domain = eval_correlations(pred_data, gt_data)
-    assert rho_domain["avg"] > 0.80
-    assert "general_avg" in rho_domain
-    assert "code_avg" in rho_domain
-    assert "math_avg" in rho_domain
 
-def test_demix_pipeline_run():
-    from demix.pipeline import run_demix_reproduction
+def test_pinned_manifest_observations_are_recomputed():
+    manifest = load_pinned_manifest(MANIFEST)
+    observations = analyze_manifest(manifest)
 
-    bundle = run_demix_reproduction()
-    assert bundle["paper_id"] == "uyRIOjFgOn"
-    assert bundle["reproduction_status"] == "verified"
-    assert bundle["macro_spearman"] >= 0.80
-    assert len(bundle["target_claims"]) == 3
+    assert observations["mixture_count"] == 17
+    assert observations["mixture_ids"] == [f"mix_{index}" for index in range(17)]
+    assert observations["domain_names"] == [
+        "general_target",
+        "math_very_high",
+        "math_high",
+        "math_medium",
+        "code_very_high",
+        "code_high",
+        "code_medium",
+    ]
+    assert observations["raw_weight_sums"]["mix_0"] == "2933"
+    assert observations["raw_weight_sums"]["mix_1"] == "1038.5"
+    assert observations["raw_weight_sums"]["mix_2"] == "0.9998"
+    assert observations["raw_weight_sums"]["mix_6"] == "1.0002"
+    assert (
+        observations["normalized_weights"]["mix_0"]["general_target"]
+        == "0.399931810433"
+    )
+    assert (
+        observations["normalized_weights"]["mix_2"]["general_target"]
+        == "0.390678135627"
+    )
+    assert observations["normalization_required"] == [
+        "mix_0",
+        "mix_1",
+        "mix_2",
+        "mix_6",
+        "mix_11",
+        "mix_12",
+        "mix_13",
+        "mix_14",
+    ]
+    assert observations["already_unit_sum"] == [
+        "mix_3",
+        "mix_4",
+        "mix_5",
+        "mix_7",
+        "mix_8",
+        "mix_9",
+        "mix_10",
+        "mix_15",
+        "mix_16",
+    ]
+    assert observations["all_weights_nonnegative"] is True
+    assert observations["all_sums_positive"] is True
+    assert observations["reference_model_count"] == 16
+    assert observations["manifest_reference_count_match"] is False
 
-def test_demix_evaluate_merged_model():
-    from demix.merging import evaluate_merged_model
 
-    merged_params = {
-        "w_proj": np.ones((4, 4), dtype=np.float64),
-        "head": np.ones((4, 1), dtype=np.float64)
-    }
-    benchmarks = {
-        "general_avg": {
-            "inputs": np.ones((2, 4), dtype=np.float64),
-            "targets": np.ones((2, 1), dtype=np.float64)
-        }
-    }
-    scores = evaluate_merged_model(merged_params, benchmarks)
-    assert "general_avg" in scores
-    assert 0.0 <= scores["general_avg"] <= 1.0
+def test_every_serialized_normalized_vector_sums_to_one():
+    observations = analyze_manifest(load_pinned_manifest(MANIFEST))
 
-def test_demix_released_artifact_computation():
-    from demix.pipeline import run_demix_reproduction
+    for normalized in observations["normalized_weights"].values():
+        assert sum(map(Decimal, normalized.values())) == Decimal("1")
 
-    bundle = run_demix_reproduction()
-    assert "evidence_summary" in bundle
-    assert bundle["evidence_summary"]["num_mixtures_evaluated"] == 16
-    assert "domain_correlations" in bundle
-    assert "avg" in bundle["domain_correlations"]
+
+def test_modified_manifest_is_rejected(tmp_path):
+    modified = tmp_path / "sampled_mixture.json"
+    modified.write_bytes(MANIFEST.read_bytes() + b"\n")
+
+    with pytest.raises(ArtifactIntegrityError, match="SHA-256"):
+        load_pinned_manifest(modified)
+
+
+@pytest.mark.parametrize(
+    "weights",
+    [
+        {},
+        {"x": Decimal("0")},
+        {"x": Decimal("-1")},
+        {"x": Decimal("NaN")},
+        {"x": Decimal("Infinity")},
+        {"x": True},
+        {"x": "1"},
+    ],
+)
+def test_normalization_rejects_invalid_weights(weights):
+    with pytest.raises(ArtifactValidationError):
+        normalize_weights(weights)
+
+
+def test_manifest_requires_matching_ordered_domains():
+    manifest = load_pinned_manifest(MANIFEST)
+    manifest["mix_16"] = dict(reversed(manifest["mix_16"].items()))
+
+    with pytest.raises(ArtifactValidationError, match="ordered domains"):
+        analyze_manifest(manifest)

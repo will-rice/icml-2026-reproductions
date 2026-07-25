@@ -1,0 +1,145 @@
+{
+  "paper": {
+    "acquisition_command": "curl --fail --location --output 2602.00747v3.pdf https://arxiv.org/pdf/2602.00747v3",
+    "arxiv_revision": "2602.00747v3",
+    "pdf_bytes": 1360866,
+    "pdf_sha256": "85ea10da0925ee5bd284eeb3143c345129c74c320829dabd9d0ba4413acf55a3",
+    "url": "https://arxiv.org/pdf/2602.00747v3"
+  },
+  "upstream_repository": {
+    "acquisition_command": "git clone https://github.com/Lucius-lsr/DeMix.git && git -C DeMix checkout d0c945ca84d5632c6ed1bfe469337cf880757422",
+    "commit": "d0c945ca84d5632c6ed1bfe469337cf880757422",
+    "files": {
+      "README.md": "ce59604a7b643665ca737e9f183f883eb052917cf21c8e2a3ccec5e077818881",
+      "eval_merged/proxy_eval.py": "ba0bbd871c5e2aefca4d42f474ad02bccd98e68618d6d9efa76ec526e0931cd5",
+      "iterative_sample/sample.py": "9df3dfbe76bdce6f815ef7a553b9c96036273d9dd5f49babe933b39d89bde5d6",
+      "iterative_sample/train_predictor.py": "45d78f7fe2aedbefa329b01dfa7c25fc1345924cd8d1543313c17175496c41a3",
+      "model_merge/generate_merge_yaml.py": "c98210d9a9702bb648012d90f83f033514e456ad34aa209ee57a8b4efbd6ee34",
+      "model_merge/merge_models.sh": "2a5a817b5f3021bf65c4240317a17a8c87f8b29f81ed439af2bd76f780082860"
+    },
+    "license": {
+      "detected": false,
+      "note": "No license file was present at the inspected commit; upstream code is cited but not vendored."
+    },
+    "url": "https://github.com/Lucius-lsr/DeMix"
+  },
+  "dataset": {
+    "acquisition_command": "hf download lucius1022/DeMix_Corpora DeMix_reproduce/reference_models/sampled_mixture.json --repo-type dataset --revision 82a2effc58eb79bec691280a4e4fc50be0968b1e",
+    "card": {
+      "bytes": 6343,
+      "path": "README.md",
+      "sha256": "b55cd21cb295d891176d6ef55ffb38b2d85d30f6896b59f142d36941a0fded52"
+    },
+    "license": "apache-2.0",
+    "primary_input": {
+      "bytes": 4017,
+      "path": "DeMix_reproduce/reference_models/sampled_mixture.json",
+      "sha256": "2be00152f98c44a740bc2f8e2098be3740ea2f1cd31b7158ade9d54c8e852dc2"
+    },
+    "repository": "lucius1022/DeMix_Corpora",
+    "revision": "82a2effc58eb79bec691280a4e4fc50be0968b1e",
+    "url": "https://huggingface.co/datasets/lucius1022/DeMix_Corpora"
+  },
+  "release_inventory": {
+    "acquisition": {
+      "method": "Paginated Hugging Face Hub dataset tree API with recursive=true and expand=true",
+      "url": "https://huggingface.co/api/datasets/lucius1022/DeMix_Corpora/tree/82a2effc58eb79bec691280a4e4fc50be0968b1e/DeMix_reproduce"
+    },
+    "component_checkpoint": {
+      "checkpoint": "checkpoint-7500",
+      "domains": 7,
+      "shards": [
+        {
+          "bytes": 4969539560,
+          "domain": "general_target",
+          "filename": "model-00001-of-00002.safetensors",
+          "lfs_sha256": "cb4fccd9f51d3229117c6e27c94faba5683a5d41970860e3a62b5c5f06ae5b29"
+        },
+        {
+          "bytes": 1912795688,
+          "domain": "general_target",
+          "filename": "model-00002-of-00002.safetensors",
+          "lfs_sha256": "6cf88097358dde8ce13f12a49a3ab4958fc2f96c8281dc9573ddee7a7b63f7fc"
+        },
+        {
+          "bytes": 4969539560,
+          "domain": "math_very_high",
+          "filename": "model-00001-of-00002.safetensors",
+          "lfs_sha256": "11bba6b5d46bd5bebdb838c463eaaa6cdaacc4769569404ec7c31365cacdcb51"
+        },
+        {
+          "bytes": 1912795688,
+          "domain": "math_very_high",
+          "filename": "model-00002-of-00002.safetensors",
+          "lfs_sha256": "115ea8b0b968c104549210d6e2f6754c6bb64bd1c86d81ca5b7cf71d357b8780"
+        },
+        {
+          "bytes": 4969539560,
+          "domain": "math_high",
+          "filename": "model-00001-of-00002.safetensors",
+          "lfs_sha256": "27747f7d54e5481d55fc2186f8b6705dbebb547c5bd8f88cff433b69463a9c10"
+        },
+        {
+          "bytes": 1912795688,
+          "domain": "math_high",
+          "filename": "model-00002-of-00002.safetensors",
+          "lfs_sha256": "849dcc1764f5fbec3d72a959b148e68d908009bedd8df3db4091477bf6b08d37"
+        },
+        {
+          "bytes": 4969539560,
+          "domain": "math_medium",
+          "filename": "model-00001-of-00002.safetensors",
+          "lfs_sha256": "8579ab850b0db01670ce0136e3dcd10105fb80e08830d57fc727652dc13220ff"
+        },
+        {
+          "bytes": 1912795688,
+          "domain": "math_medium",
+          "filename": "model-00002-of-00002.safetensors",
+          "lfs_sha256": "aa3918ffa2da8e7df122a99ef5b06ae0b5a8217768a46d916bed06bf922a52ef"
+        },
+        {
+          "bytes": 4969539560,
+          "domain": "code_very_high",
+          "filename": "model-00001-of-00002.safetensors",
+          "lfs_sha256": "4c6efffc11bbb9ece3e4da63818958467824e8cba7882fe989fe4fd3e79a1b6d"
+        },
+        {
+          "bytes": 1912795688,
+          "domain": "code_very_high",
+          "filename": "model-00002-of-00002.safetensors",
+          "lfs_sha256": "a3b0d2c6ae4168d1e965b4e3fc3389adb9742ed010940499224c29e42b3cb10f"
+        },
+        {
+          "bytes": 4969539560,
+          "domain": "code_high",
+          "filename": "model-00001-of-00002.safetensors",
+          "lfs_sha256": "149f7fdbd02b48d7c4867f8c24ddda8b2a8098088d9c9288a2a8405a2dc257fe"
+        },
+        {
+          "bytes": 1912795688,
+          "domain": "code_high",
+          "filename": "model-00002-of-00002.safetensors",
+          "lfs_sha256": "21b28ba7bef72689a7aaaf9c494294df16ea8ef1e71b3853ee9728434e22312d"
+        },
+        {
+          "bytes": 4969539560,
+          "domain": "code_medium",
+          "filename": "model-00001-of-00002.safetensors",
+          "lfs_sha256": "8a5c70c2505216a93bef41317a8980a70b7a3d9385fad87dae1259eb37fd825b"
+        },
+        {
+          "bytes": 1912795688,
+          "domain": "code_medium",
+          "filename": "model-00002-of-00002.safetensors",
+          "lfs_sha256": "0e667db1bf24a4d8696f933df47806069035ac344e0b1c95bc677d2552dddb55"
+        }
+      ],
+      "total_bytes": 48176346736
+    },
+    "component_model_roots": 7,
+    "csv_paths": 0,
+    "opencompass_result_paths": 0,
+    "paths_below_demix_reproduce": 1469,
+    "reference_model_roots": 16
+  }
+}
