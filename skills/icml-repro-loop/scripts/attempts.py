@@ -6,8 +6,10 @@ from collections.abc import Callable
 import copy
 from datetime import datetime, timedelta, timezone
 import hashlib
+import json
 from pathlib import Path, PurePosixPath
 import re
+import subprocess
 import sys
 from uuid import uuid4
 
@@ -299,6 +301,7 @@ def reconcile_legacy_attempt(
 ) -> dict:
     """Bind one migrated active attempt to fresh claims and design provenance."""
     import migrate_v6
+    import refresh
     import scheduler
 
     design_author = _identity(design_author, "design_author")
@@ -308,9 +311,8 @@ def reconcile_legacy_attempt(
         raise ValueError("reviewer")
     design_path = _relative_path(design_path, "design_path")
     snapshot = scheduler.read_fresh_snapshot(paths, snapshot_id, now)
-    if snapshot.get("assessments") is None:
-        raise ValueError("assessments")
     paper_id = _paper_id_for_attempt(paths, attempt_id)
+    assessment = refresh.assessment_record_for_snapshot(snapshot, paper_id)
     candidates = [
         candidate
         for candidate in scheduler.rank_eligible_candidates(snapshot)
@@ -319,6 +321,9 @@ def reconcile_legacy_attempt(
     if len(candidates) != 1:
         raise ValueError("paper_id")
     candidate = candidates[0]
+    for field in refresh.ASSESSMENT_KEYS:
+        if candidate.get(field) != assessment[field]:
+            raise ValueError(field)
     if any(
         record.get("paper_id") == paper_id
         for field in ("queued_submissions", "tagged_spaces", "verdicts")
@@ -367,23 +372,35 @@ def reconcile_legacy_attempt(
                 raise ValueError(field)
         if attempt.get("design_approved") is not True:
             raise ValueError("design_approved")
+        design_approval = _resolve_design_approval(
+            paths,
+            design_path,
+            approval_ref,
+            attempt,
+        )
         attempt["snapshot_id"] = snapshot_id
         attempt["claim_bindings"] = copy.deepcopy(candidate["claim_bindings"])
         attempt["live_claims"] = copy.deepcopy(candidate["live_claims"])
         attempt["design"] = {
             "author": design_author,
+            "approval_commit": design_approval["commit_sha"],
+            "content_sha256": design_approval["content_sha256"],
+            "paper_id": paper_id,
             "path": design_path,
             "recorded_at": timestamp,
         }
         attempt["design_review"] = {
             "reviewer": reviewer,
             "decision": "approved",
+            "approval_ref": approval_ref,
+            "design_content_sha256": design_approval["content_sha256"],
             "reviewed_at": timestamp,
         }
         attempt["legacy_reconciliation"] = {
             "source_state_sha256": source_state_sha256,
             "snapshot_id": snapshot_id,
             "approval_ref": approval_ref,
+            "design_content_sha256": design_approval["content_sha256"],
             "reconciled_at": timestamp,
         }
         return False
@@ -624,6 +641,103 @@ def _relative_path(value: object, field: str) -> str:
 def _paper_id_for_attempt(paths: store.StatePaths, attempt_id: str) -> str:
     attempt = read_attempt(paths, attempt_id)
     return _identity(attempt.get("paper_id"), "paper_id")
+
+
+def _resolve_design_approval(
+    paths: store.StatePaths,
+    design_path: str,
+    approval_ref: str,
+    attempt: dict,
+) -> dict:
+    match = re.fullmatch(r"git:([0-9a-f]{40})", approval_ref)
+    if match is None:
+        raise ValueError("approval_ref")
+    commit_sha = match.group(1)
+    try:
+        repository_root = Path(
+            _git_output(
+                paths.index.parent,
+                "rev-parse",
+                "--show-toplevel",
+            ).decode("utf-8").strip()
+        ).resolve()
+        state_path = paths.index.resolve().relative_to(repository_root).as_posix()
+    except (UnicodeDecodeError, ValueError):
+        raise ValueError("approval_ref") from None
+    ancestor = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repository_root),
+            "merge-base",
+            "--is-ancestor",
+            commit_sha,
+            "HEAD",
+        ],
+        check=False,
+        capture_output=True,
+    )
+    if ancestor.returncode != 0:
+        raise ValueError("approval_ref")
+    approved_content = _git_output(
+        repository_root,
+        "show",
+        f"{commit_sha}:{design_path}",
+    )
+    tracked_content = _git_output(
+        repository_root,
+        "show",
+        f"HEAD:{design_path}",
+    )
+    design_file = repository_root / design_path
+    if (
+        not design_file.is_file()
+        or design_file.read_bytes() != tracked_content
+        or tracked_content != approved_content
+    ):
+        raise ValueError("design_path")
+    approval_state_bytes = _git_output(
+        repository_root,
+        "show",
+        f"{commit_sha}:{state_path}",
+    )
+    try:
+        approval_state = json.loads(approval_state_bytes)
+        state.validate_state(approval_state)
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError, TypeError):
+        raise ValueError("approval_ref") from None
+    approved_attempt = approval_state.get("current")
+    if (
+        type(approved_attempt) is not dict
+        or approval_state.get("phase") != "implementing"
+        or approved_attempt.get("design_approved") is not True
+    ):
+        raise ValueError("design_approved")
+    for field in (
+        "paper_id",
+        "title",
+        "upstream_revision",
+        "target_claims",
+        "estimated_api_cost_usd",
+    ):
+        if approved_attempt.get(field) != attempt.get(field):
+            raise ValueError(field)
+    return {
+        "commit_sha": commit_sha,
+        "content_sha256": hashlib.sha256(approved_content).hexdigest(),
+    }
+
+
+def _git_output(repository: Path, *arguments: str) -> bytes:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(repository), *arguments],
+            check=True,
+            capture_output=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        raise ValueError("approval_ref") from None
+    return result.stdout
 
 
 def _timestamp(value: object) -> str:

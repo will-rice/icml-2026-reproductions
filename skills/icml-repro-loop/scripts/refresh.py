@@ -44,6 +44,14 @@ SNAPSHOT_KEYS = {
     "verdicts",
     "spaces",
 }
+PERSISTED_ASSESSMENT_KEYS = {
+    "content_sha256",
+    "challenge_revision",
+    "assessor",
+    "assessed_at",
+    "records",
+    "matched_paper_ids",
+}
 
 
 def load_assessments(path: Path) -> dict:
@@ -646,6 +654,63 @@ def _validate_assessment_input(value: object) -> None:
     expected = hashlib.sha256(_canonical_json(value["document"])).hexdigest()
     if digest != expected:
         raise ValueError("content_sha256")
+
+
+def assessment_record_for_snapshot(snapshot: dict, paper_id: str) -> dict:
+    """Return the exact, source-bound production assessment for one paper."""
+    paper_id = _identity(paper_id, "paper_id")
+    value = snapshot.get("assessments")
+    if type(value) is not dict or set(value) != PERSISTED_ASSESSMENT_KEYS:
+        raise ValueError("assessments")
+    records = value["records"]
+    document = {
+        "challenge_revision": value["challenge_revision"],
+        "assessor": value["assessor"],
+        "assessed_at": value["assessed_at"],
+        "assessments": records,
+    }
+    _validate_assessment_document(document)
+    if any(not _valid_assessment_record(record) for record in records):
+        raise ValueError("assessments")
+    digest = value["content_sha256"]
+    expected_digest = hashlib.sha256(_canonical_json(document)).hexdigest()
+    if (
+        type(digest) is not str
+        or re.fullmatch(r"[0-9a-f]{64}", digest) is None
+        or digest != expected_digest
+    ):
+        raise ValueError("content_sha256")
+    matched_paper_ids = value["matched_paper_ids"]
+    if (
+        type(matched_paper_ids) is not list
+        or any(
+            type(matched_paper_id) is not str or not matched_paper_id
+            for matched_paper_id in matched_paper_ids
+        )
+        or matched_paper_ids != sorted(set(matched_paper_ids))
+    ):
+        raise ValueError("matched_paper_ids")
+    sources = snapshot.get("sources")
+    challenge_source = (
+        None if type(sources) is not dict else sources.get("challenge")
+    )
+    if (
+        type(challenge_source) is not dict
+        or challenge_source.get("repo_id") != CHALLENGE_REPO
+    ):
+        raise ValueError("sources")
+    if challenge_source.get("revision") != value["challenge_revision"]:
+        raise ValueError("challenge_revision")
+    if snapshot.get("source_revision") != hashlib.sha256(
+        _canonical_json(sources)
+    ).hexdigest():
+        raise ValueError("source_revision")
+    matches = [
+        record for record in records if record["paper_id"] == paper_id
+    ]
+    if len(matches) != 1 or paper_id not in matched_paper_ids:
+        raise ValueError("paper_id")
+    return copy.deepcopy(matches[0])
 
 
 def _validate_live_claims(value: object) -> None:

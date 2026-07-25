@@ -30,12 +30,52 @@ SOURCE_STATE_SHA256 = (
 )
 EEG_ATTEMPT_ID = "e20658d7-250a-5b0c-a015-be453c43e9fc"
 DESIGN_PATH = "docs/superpowers/plans/2026-07-24-eeg-fm-bench.md"
-APPROVAL_REF = "git:1d2c4c74700b66068d43443f7c8e742d4dc797a5"
 
 
-def migrated_eeg(tmp_path: Path) -> tuple[store.StatePaths, leases.Lease]:
+def migrated_eeg(
+    tmp_path: Path,
+    *,
+    approval_paper_id: str = "vGeNaFHdET",
+) -> tuple[store.StatePaths, leases.Lease, str]:
     source = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    paths = store.StatePaths(tmp_path / "state" / "repro-loop.json")
+    approval_source = json.loads(json.dumps(source))
+    approval_source["current"]["paper_id"] = approval_paper_id
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    design_file = tmp_path / DESIGN_PATH
+    design_file.parent.mkdir(parents=True, exist_ok=True)
+    design_file.write_bytes((ROOT / DESIGN_PATH).read_bytes())
+    store.atomic_json_write(
+        paths.index,
+        approval_source,
+        migrate_v6.legacy_state.validate_state,
+    )
+    subprocess.run(
+        ["git", "-C", str(tmp_path), "add", DESIGN_PATH, "state/repro-loop.json"],
+        check=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(tmp_path),
+            "-c",
+            "user.name=Approval Reviewer",
+            "-c",
+            "user.email=reviewer@example.test",
+            "commit",
+            "-q",
+            "-m",
+            "approve EEG design",
+        ],
+        check=True,
+    )
+    approval_commit = subprocess.run(
+        ["git", "-C", str(tmp_path), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
     store.atomic_json_write(paths.index, source, migrate_v6.legacy_state.validate_state)
     migrate_v6.apply_v6_migration(paths, migrate_v6.plan_v6_migration(source))
     lease = leases.claim_attempt(
@@ -45,7 +85,7 @@ def migrated_eeg(tmp_path: Path) -> tuple[store.StatePaths, leases.Lease]:
         0,
         NOW,
     )
-    return paths, lease
+    return paths, lease, f"git:{approval_commit}"
 
 
 def eeg_candidate() -> dict:
@@ -95,6 +135,41 @@ def eeg_candidate() -> dict:
     }
 
 
+def assessment_envelope(
+    candidate: dict,
+    *,
+    challenge_revision: str = "challenge-revision",
+    paper_id: str | None = None,
+) -> dict:
+    record = {
+        key: candidate[key]
+        for key in refresh.ASSESSMENT_KEYS
+    }
+    if paper_id is not None:
+        record["paper_id"] = paper_id
+    document = {
+        "challenge_revision": challenge_revision,
+        "assessor": "selection-agent",
+        "assessed_at": NOW.isoformat(),
+        "assessments": [record],
+    }
+    return {
+        "content_sha256": hashlib.sha256(
+            json.dumps(
+                document,
+                allow_nan=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            ).encode("utf-8")
+        ).hexdigest(),
+        "challenge_revision": challenge_revision,
+        "assessor": document["assessor"],
+        "assessed_at": document["assessed_at"],
+        "records": document["assessments"],
+        "matched_paper_ids": [record["paper_id"]],
+    }
+
+
 def write_eeg_snapshot(
     paths: store.StatePaths,
     *,
@@ -103,13 +178,27 @@ def write_eeg_snapshot(
     tagged_spaces: list[dict] | None = None,
 ) -> tuple[str, dict]:
     candidate = eeg_candidate() if candidate is None else candidate
+    sources = {
+        "challenge": {
+            "repo_id": refresh.CHALLENGE_REPO,
+            "revision": "challenge-revision",
+        },
+        "verdicts": {
+            "repo_id": refresh.VERDICTS_REPO,
+            "revision": "verdict-revision",
+        },
+    }
     payload = {
         "fetched_at": NOW.isoformat(),
-        "source_revision": "challenge-revision",
-        "sources": {
-            "challenge": {"revision": "challenge-revision"},
-            "verdicts": {"revision": "verdict-revision"},
-        },
+        "source_revision": hashlib.sha256(
+            json.dumps(
+                sources,
+                allow_nan=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            ).encode("utf-8")
+        ).hexdigest(),
+        "sources": sources,
         "assessments": assessments,
         "candidates": [candidate],
         "queued_submissions": [],
@@ -121,18 +210,20 @@ def write_eeg_snapshot(
 
 
 def assessed_snapshot(paths: store.StatePaths) -> tuple[str, dict]:
+    candidate = eeg_candidate()
     return write_eeg_snapshot(
         paths,
-        assessments={
-            "content_sha256": "a" * 64,
-            "document": {"challenge_revision": "challenge-revision"},
-        },
+        candidate=candidate,
+        assessments=assessment_envelope(candidate),
     )
 
 
 def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
-    paths, lease = migrated_eeg(tmp_path)
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
     snapshot_id, candidate = assessed_snapshot(paths)
+    design_content_sha256 = hashlib.sha256(
+        (tmp_path / DESIGN_PATH).read_bytes()
+    ).hexdigest()
 
     updated = attempts.reconcile_legacy_attempt(
         paths,
@@ -142,7 +233,7 @@ def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
         design_author="eeg-design-author",
         design_path=DESIGN_PATH,
         reviewer="user-approved-design",
-        approval_ref=APPROVAL_REF,
+        approval_ref=approval_ref,
         now=NOW,
     )
 
@@ -153,18 +244,24 @@ def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
     assert updated["live_claims"] == candidate["live_claims"]
     assert updated["design"] == {
         "author": "eeg-design-author",
+        "approval_commit": approval_ref.removeprefix("git:"),
+        "content_sha256": design_content_sha256,
+        "paper_id": "vGeNaFHdET",
         "path": DESIGN_PATH,
         "recorded_at": NOW.isoformat(),
     }
     assert updated["design_review"] == {
         "reviewer": "user-approved-design",
         "decision": "approved",
+        "approval_ref": approval_ref,
+        "design_content_sha256": design_content_sha256,
         "reviewed_at": NOW.isoformat(),
     }
     assert updated["legacy_reconciliation"] == {
         "source_state_sha256": SOURCE_STATE_SHA256,
         "snapshot_id": snapshot_id,
-        "approval_ref": APPROVAL_REF,
+        "approval_ref": approval_ref,
+        "design_content_sha256": design_content_sha256,
         "reconciled_at": NOW.isoformat(),
     }
     assert store.read_json(paths.attempt(EEG_ATTEMPT_ID)) == updated
@@ -175,7 +272,7 @@ def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
 def test_reconcile_migrated_eeg_is_available_through_controller_cli(
     tmp_path: Path,
 ):
-    paths, lease = migrated_eeg(tmp_path)
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
     snapshot_id, _candidate = assessed_snapshot(paths)
 
     result = subprocess.run(
@@ -199,7 +296,7 @@ def test_reconcile_migrated_eeg_is_available_through_controller_cli(
             "--reviewer",
             "user-approved-design",
             "--approval-ref",
-            APPROVAL_REF,
+            approval_ref,
             "--now",
             NOW.isoformat(),
         ],
@@ -212,13 +309,13 @@ def test_reconcile_migrated_eeg_is_available_through_controller_cli(
     reconciled = json.loads(result.stdout)
     assert reconciled["attempt_id"] == EEG_ATTEMPT_ID
     assert reconciled["snapshot_id"] == snapshot_id
-    assert reconciled["legacy_reconciliation"]["approval_ref"] == APPROVAL_REF
+    assert reconciled["legacy_reconciliation"]["approval_ref"] == approval_ref
 
 
 def test_generic_transition_cannot_rewrite_reconciled_claim_authority(
     tmp_path: Path,
 ):
-    paths, lease = migrated_eeg(tmp_path)
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
     snapshot_id, _candidate = assessed_snapshot(paths)
     reconciled = attempts.reconcile_legacy_attempt(
         paths,
@@ -228,7 +325,7 @@ def test_generic_transition_cannot_rewrite_reconciled_claim_authority(
         design_author="eeg-design-author",
         design_path=DESIGN_PATH,
         reviewer="user-approved-design",
-        approval_ref=APPROVAL_REF,
+        approval_ref=approval_ref,
         now=NOW,
     )
 
@@ -247,7 +344,7 @@ def test_generic_transition_cannot_rewrite_reconciled_claim_authority(
 
 
 def test_reconcile_rejects_raw_snapshot_without_mutating_attempt(tmp_path: Path):
-    paths, lease = migrated_eeg(tmp_path)
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
     snapshot_id, _candidate = write_eeg_snapshot(paths)
     original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
 
@@ -260,7 +357,7 @@ def test_reconcile_rejects_raw_snapshot_without_mutating_attempt(tmp_path: Path)
             design_author="eeg-design-author",
             design_path=DESIGN_PATH,
             reviewer="user-approved-design",
-            approval_ref=APPROVAL_REF,
+            approval_ref=approval_ref,
             now=NOW,
         )
 
@@ -268,16 +365,13 @@ def test_reconcile_rejects_raw_snapshot_without_mutating_attempt(tmp_path: Path)
 
 
 def test_reconcile_rejects_changed_upstream_identity(tmp_path: Path):
-    paths, lease = migrated_eeg(tmp_path)
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
     candidate = eeg_candidate()
     candidate["upstream_revision"] = "unreviewed-upstream"
     snapshot_id, _candidate = write_eeg_snapshot(
         paths,
         candidate=candidate,
-        assessments={
-            "content_sha256": "a" * 64,
-            "document": {"challenge_revision": "challenge-revision"},
-        },
+        assessments=assessment_envelope(candidate),
     )
     original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
 
@@ -290,7 +384,7 @@ def test_reconcile_rejects_changed_upstream_identity(tmp_path: Path):
             design_author="eeg-design-author",
             design_path=DESIGN_PATH,
             reviewer="user-approved-design",
-            approval_ref=APPROVAL_REF,
+            approval_ref=approval_ref,
             now=NOW,
         )
 
@@ -298,13 +392,12 @@ def test_reconcile_rejects_changed_upstream_identity(tmp_path: Path):
 
 
 def test_reconcile_rejects_live_external_claim_for_same_paper(tmp_path: Path):
-    paths, lease = migrated_eeg(tmp_path)
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
+    candidate = eeg_candidate()
     snapshot_id, _candidate = write_eeg_snapshot(
         paths,
-        assessments={
-            "content_sha256": "a" * 64,
-            "document": {"challenge_revision": "challenge-revision"},
-        },
+        candidate=candidate,
+        assessments=assessment_envelope(candidate),
         tagged_spaces=[
             {
                 "paper_id": "vGeNaFHdET",
@@ -324,7 +417,194 @@ def test_reconcile_rejects_live_external_claim_for_same_paper(tmp_path: Path):
             design_author="eeg-design-author",
             design_path=DESIGN_PATH,
             reviewer="user-approved-design",
-            approval_ref=APPROVAL_REF,
+            approval_ref=approval_ref,
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_invented_assessment_envelope(tmp_path: Path):
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
+    snapshot_id, _candidate = write_eeg_snapshot(
+        paths,
+        assessments={
+            "content_sha256": "a" * 64,
+            "document": {"challenge_revision": "challenge-revision"},
+        },
+    )
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="assessments"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="eeg-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="user-approved-design",
+            approval_ref=approval_ref,
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_assessment_for_another_challenge_revision(
+    tmp_path: Path,
+):
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
+    candidate = eeg_candidate()
+    snapshot_id, _candidate = write_eeg_snapshot(
+        paths,
+        candidate=candidate,
+        assessments=assessment_envelope(
+            candidate,
+            challenge_revision="other-challenge-revision",
+        ),
+    )
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="challenge_revision"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="eeg-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="user-approved-design",
+            approval_ref=approval_ref,
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_assessment_without_exact_attempt_paper(
+    tmp_path: Path,
+):
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
+    candidate = eeg_candidate()
+    snapshot_id, _candidate = write_eeg_snapshot(
+        paths,
+        candidate=candidate,
+        assessments=assessment_envelope(candidate, paper_id="other-paper"),
+    )
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="paper_id"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="eeg-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="user-approved-design",
+            approval_ref=approval_ref,
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_candidate_not_bound_to_assessment_record(
+    tmp_path: Path,
+):
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
+    candidate = eeg_candidate()
+    assessed_candidate = eeg_candidate()
+    assessed_candidate["upstream_revision"] = "invented-assessment-upstream"
+    snapshot_id, _candidate = write_eeg_snapshot(
+        paths,
+        candidate=candidate,
+        assessments=assessment_envelope(assessed_candidate),
+    )
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="upstream_revision"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="eeg-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="user-approved-design",
+            approval_ref=approval_ref,
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_unresolvable_design_approval_ref(tmp_path: Path):
+    paths, lease, _approval_ref = migrated_eeg(tmp_path)
+    snapshot_id, _candidate = assessed_snapshot(paths)
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="approval_ref"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="eeg-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="user-approved-design",
+            approval_ref=f"git:{'0' * 40}",
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_design_content_changed_after_approval(tmp_path: Path):
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
+    snapshot_id, _candidate = assessed_snapshot(paths)
+    design_file = tmp_path / DESIGN_PATH
+    design_file.write_text(
+        design_file.read_text(encoding="utf-8") + "\nunapproved change\n",
+        encoding="utf-8",
+    )
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="design_path"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="eeg-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="user-approved-design",
+            approval_ref=approval_ref,
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_approval_for_another_paper(tmp_path: Path):
+    paths, lease, approval_ref = migrated_eeg(
+        tmp_path,
+        approval_paper_id="other-paper",
+    )
+    snapshot_id, _candidate = assessed_snapshot(paths)
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="paper_id"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="eeg-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="user-approved-design",
+            approval_ref=approval_ref,
             now=NOW,
         )
 
@@ -332,7 +612,7 @@ def test_reconcile_rejects_live_external_claim_for_same_paper(tmp_path: Path):
 
 
 def test_reconcile_rejects_tampered_migration_backup(tmp_path: Path):
-    paths, lease = migrated_eeg(tmp_path)
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
     snapshot_id, _candidate = assessed_snapshot(paths)
     backup = paths.root / "v3-backups" / f"{SOURCE_STATE_SHA256}.json"
     backup.write_text("{}\n", encoding="utf-8")
@@ -347,7 +627,7 @@ def test_reconcile_rejects_tampered_migration_backup(tmp_path: Path):
             design_author="eeg-design-author",
             design_path=DESIGN_PATH,
             reviewer="user-approved-design",
-            approval_ref=APPROVAL_REF,
+            approval_ref=approval_ref,
             now=NOW,
         )
 
