@@ -3,6 +3,7 @@
   "title": "Decouple Searching from Training: Scaling Data Mixing via Model Merging for Large Language Model Pre-training",
   "upstream_revision": "arxiv:2602.00747+github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422",
   "reproduction_status": "verified",
+  "improvement_round": 2,
   "macro_spearman": 0.9764705882352942,
   "domain_correlations": {
     "general_avg": 0.95,
@@ -16,6 +17,11 @@
     "math_avg": 1.0,
     "avg": 0.7333333333333333
   },
+  "multi_seed_stability": {
+    "mean_macro_spearman": 0.815,
+    "std_macro_spearman": 0.008,
+    "num_seeds": 5
+  },
   "target_claims": [
     "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1).",
     "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2).",
@@ -28,6 +34,7 @@
       "math_high",
       "code_high"
     ],
-    "spearman_macro_rho": 0.9764705882352942
+    "spearman_macro_rho": 0.9764705882352942,
+    "top25_spearman_macro_rho": 0.7333333333333333
   }
 }

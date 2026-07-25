@@ -19,12 +19,12 @@ def merge_parameters(
     normalized_weights = normalize_weights(ratios)
     first_model = next(iter(component_models.values()))
     merged = {}
-    
+
     for param_key in first_model.keys():
         accumulated = np.zeros_like(first_model[param_key], dtype=np.float64)
         for model_name, weights in component_models.items():
             w = normalized_weights.get(model_name, 0.0)
             accumulated += w * weights[param_key].astype(np.float64)
         merged[param_key] = accumulated.astype(first_model[param_key].dtype)
-        
+
     return merged
