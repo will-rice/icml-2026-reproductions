@@ -38,6 +38,7 @@ ATTESTED_PHASE_KINDS = {
     "complete": "verdict",
 }
 GENERIC_PHASES = {"design-pending", "implementing", "improving", "blocked"}
+ATTESTED_PROTECTED_UPDATE_FIELDS = {"improvement_attempts"}
 Mutation = Callable[[dict, str], bool]
 
 
@@ -169,7 +170,9 @@ def transition_attested(
         raise ValueError("attestation")
     if type(updates) is not dict:
         raise ValueError("updates")
-    unsupported = set(updates) & (IMMUTABLE_FIELDS | DESIGN_FIELDS)
+    unsupported = set(updates) & (
+        IMMUTABLE_FIELDS | DESIGN_FIELDS | ATTESTED_PROTECTED_UPDATE_FIELDS
+    )
     if unsupported:
         raise ValueError(sorted(unsupported)[0])
     record = attestations.read(paths, attestation_id)
@@ -189,10 +192,22 @@ def transition_attested(
         ):
             raise ValueError("attestation")
         return _apply_transition(
-            attempt, phase, lease, timestamp, transition_updates
+            attempt,
+            phase,
+            lease,
+            timestamp,
+            transition_updates,
+            attestation_id=attestation_id,
         )
 
-    return _mutate_attempt(paths, attempt_id, lease, now, transition)
+    return _mutate_attempt(
+        paths,
+        attempt_id,
+        lease,
+        now,
+        transition,
+        attestation=record,
+    )
 
 
 def record_design(
@@ -291,6 +306,7 @@ def _mutate_attempt(
     lease: leases.Lease,
     now: datetime,
     mutation: Mutation,
+    attestation: dict | None = None,
 ) -> dict:
     recover_transactions(paths)
     timestamp = _timestamp(now)
@@ -313,7 +329,7 @@ def _mutate_attempt(
                 updated_index["history"][attempt_id] = reference
             else:
                 updated_index["attempts"][attempt_id] = reference
-            _commit(paths, attempt, updated_index)
+            _commit(paths, attempt, updated_index, attestation)
     return copy.deepcopy(attempt)
 
 
@@ -324,6 +340,7 @@ def _apply_transition(
     timestamp: str,
     updates: dict,
     design_review: dict | None = None,
+    attestation_id: str | None = None,
 ) -> bool:
     source = attempt["phase"]
     abandon = updates.pop("abandon", None)
@@ -361,24 +378,45 @@ def _apply_transition(
         attempt.pop("blocked_from")
         attempt.pop("blocker")
     attempt["phase"] = phase
-    attempt.setdefault("transitions", []).append(
-        {
-            "from": source,
-            "to": phase,
-            "at": timestamp,
-            "owner": lease.owner,
-            "fencing_token": lease.fencing_token,
-            "snapshot_id": attempt.get("snapshot_id"),
-        }
-    )
+    transition = {
+        "from": source,
+        "to": phase,
+        "at": timestamp,
+        "owner": lease.owner,
+        "fencing_token": lease.fencing_token,
+        "snapshot_id": attempt.get("snapshot_id"),
+    }
+    if attestation_id is not None:
+        transition["attestation_id"] = attestation_id
+    attempt.setdefault("transitions", []).append(transition)
     return phase == "complete" or is_abandon
 
 
-def _commit(paths: store.StatePaths, attempt: dict, index: dict) -> None:
-    targets = [
-        (paths.attempt(attempt["attempt_id"]), attempt, store.validate_attempt),
-        (paths.index, index, store.validate_index),
-    ]
+def _commit(
+    paths: store.StatePaths,
+    attempt: dict,
+    index: dict,
+    attestation: dict | None = None,
+) -> None:
+    targets = []
+    if attestation is not None:
+        targets.append(
+            (
+                paths.attestation(
+                    attestation["kind"],
+                    attestation["attempt_id"],
+                    attestation["attempt_number"],
+                ),
+                attestation,
+                attestations.validate_record,
+            )
+        )
+    targets.extend(
+        [
+            (paths.attempt(attempt["attempt_id"]), attempt, store.validate_attempt),
+            (paths.index, index, store.validate_index),
+        ]
+    )
     transaction_path = (
         paths.root / "transactions" / "attempts" / f"{uuid4()}.json"
     )
@@ -392,6 +430,11 @@ def _validator_for(paths: store.StatePaths, path: Path) -> store.Validator:
         return store.validate_index
     if path.parent == paths.root / "attempts" and path.suffix == ".json":
         return store.validate_attempt
+    if (
+        path.parent.parent == paths.root / "attestations"
+        and path.suffix == ".json"
+    ):
+        return attestations.validate_record
     raise ValueError("transaction")
 
 

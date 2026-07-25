@@ -348,6 +348,43 @@ def test_attested_transition_advances_and_resumes_external_phase(
     assert "blocked_from" not in resumed
 
 
+def test_attested_transition_records_attestation_id_in_provenance(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    attestation_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+
+    transitioned = attempts.transition_attested(
+        paths, attempt_id, "validated", attestation_id, {}, lease, now
+    )
+
+    assert transitioned["transitions"][-1]["attestation_id"] == attestation_id
+
+
+def test_attested_transition_rejects_improvement_attempt_update(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    attestation_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+
+    with pytest.raises(ValueError, match="improvement_attempts"):
+        attempts.transition_attested(
+            paths,
+            attempt_id,
+            "validated",
+            attestation_id,
+            {"improvement_attempts": 1},
+            lease,
+            now,
+        )
+
+    assert attempts.read_attempt(paths, attempt_id)["phase"] == "implementing"
+
+
 def test_blocking_requires_nonempty_blocker(paths, attempts_and_leases, attempts, now):
     a1, lease, _, _ = attempts_and_leases
     with pytest.raises(ValueError, match="blocker"):
@@ -472,6 +509,50 @@ def test_interrupted_completion_never_recovers_complete_attempt_as_active(
     )
     if attempt["phase"] == "complete":
         assert attempt_id in index["history"]
+
+
+def test_attested_transition_transaction_recovers_attestation_attempt_and_index(
+    paths,
+    attempts_and_leases,
+    attempts,
+    attestations,
+    store,
+    now,
+    monkeypatch,
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    attestation_id = attestations.persist(
+        paths, attestation_record("validation", attempt_id)
+    )
+    interrupt_transaction(monkeypatch, attempts, fail_after=3)
+
+    with pytest.raises(OSError, match="simulated interruption"):
+        attempts.transition_attested(
+            paths, attempt_id, "validated", attestation_id, {}, lease, now
+        )
+
+    planned = [
+        store.read_json(path)
+        for path in (paths.root / "transactions" / "attempts").glob("*.json")
+        if store.read_json(path)["status"] == "planned"
+    ]
+    assert len(planned) == 1
+    assert {target["path"] for target in planned[0]["targets"]} == {
+        str(
+            paths.attestation("validation", attempt_id).relative_to(
+                paths.index.parent
+            )
+        ),
+        str(paths.attempt(attempt_id).relative_to(paths.index.parent)),
+        paths.index.name,
+    }
+
+    restore_transaction_writes(monkeypatch, attempts)
+    attempts.recover_transactions(paths)
+    recovered = attempts.read_attempt(paths, attempt_id)
+    assert recovered["phase"] == "validated"
+    assert recovered["transitions"][-1]["attestation_id"] == attestation_id
+    assert attestations.read(paths, attestation_id)["attempt_id"] == attempt_id
 
 
 def test_successor_takeover_between_precheck_and_write_fences_stale_writer(

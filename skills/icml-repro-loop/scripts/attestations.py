@@ -72,10 +72,8 @@ def read(paths: store.StatePaths, attestation_id: str) -> dict:
     if len(candidates) != 1:
         raise ValueError("attestation_id")
     path, record = candidates[0]
-    _validate_record(record, persisted=True)
+    validate_record(record)
     if record["attestation_id"] != attestation_id:
-        raise ValueError("attestation_id")
-    if _canonical_id(record) != attestation_id:
         raise ValueError("attestation_id")
     expected = paths.attestation(
         record["kind"], record["attempt_id"], record["attempt_number"]
@@ -83,6 +81,13 @@ def read(paths: store.StatePaths, attestation_id: str) -> dict:
     if path != expected:
         raise ValueError("attestation")
     return copy.deepcopy(record)
+
+
+def validate_record(record: dict) -> None:
+    """Validate an exact persisted attestation and its content address."""
+    _validate_record(record, persisted=True)
+    if _canonical_id(record) != record["attestation_id"]:
+        raise ValueError("attestation_id")
 
 
 def _validate_record(record: object, *, persisted: bool) -> None:
