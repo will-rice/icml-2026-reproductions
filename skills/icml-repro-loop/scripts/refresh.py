@@ -131,6 +131,7 @@ def fetch_live_snapshot(
         {
             "paper_id": paper_id,
             "space_id": space["space_id"],
+            "revision": space["revision"],
             "status": "pending",
         }
         for space in spaces

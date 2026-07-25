@@ -213,6 +213,23 @@ def main() -> None:
     _add_fence_arguments(validation_parser)
     validation_parser.add_argument("--manifest", type=Path, required=True)
     validation_parser.add_argument("--now")
+    deployment_parser = commands.add_parser(
+        "publish-deployment",
+        help="publish and attest one fenced validated Space",
+    )
+    deployment_parser.add_argument("path", type=Path)
+    _add_fence_arguments(deployment_parser)
+    deployment_parser.add_argument("--space-id", required=True)
+    deployment_parser.add_argument("--source-dir", type=Path, required=True)
+    deployment_parser.add_argument("--now")
+    submission_parser = commands.add_parser(
+        "attest-submission",
+        help="attest one exact fenced live submission observation",
+    )
+    submission_parser.add_argument("path", type=Path)
+    _add_fence_arguments(submission_parser)
+    submission_parser.add_argument("--snapshot-id", required=True)
+    submission_parser.add_argument("--now")
     arguments = parser.parse_args()
 
     if arguments.command in {
@@ -230,6 +247,8 @@ def main() -> None:
         "record-poll",
         "record-verdict",
         "attest-validation",
+        "publish-deployment",
+        "attest-submission",
     }:
         state = _run_v6_command(arguments)
     elif arguments.command == "migrate-v6":
@@ -385,6 +404,29 @@ def _run_v6_command(arguments: argparse.Namespace) -> object:
             lease,
             manifest,
             controller.run_command,
+            now,
+        )
+    if arguments.command == "publish-deployment":
+        from huggingface_hub import HfApi
+        import controller
+
+        return controller.publish_and_attest_deployment(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.space_id,
+            arguments.source_dir,
+            HfApi(),
+            now,
+        )
+    if arguments.command == "attest-submission":
+        import controller
+
+        return controller.attest_submission(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.snapshot_id,
             now,
         )
     return scheduler.record_verdict(

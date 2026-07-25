@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from repro_loop_attestation_fixtures import add_validation_fields
+from repro_loop_attestation_fixtures import add_attestation_fields
 
 
 SCRIPTS = (
@@ -49,8 +49,7 @@ def record(kind: str = "validation", **updates: object) -> dict:
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
     }
-    if kind == "validation":
-        add_validation_fields(value)
+    add_attestation_fields(value)
     value.update(updates)
     return value
 

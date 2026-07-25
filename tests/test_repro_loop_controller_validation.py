@@ -31,6 +31,9 @@ import store
 NOW = datetime(2026, 7, 25, 18, 0, tzinfo=timezone.utc)
 HEAD = "2" * 40
 TREE = "3" * 40
+SOURCE_TREE_SHA256 = (
+    "f356bf8e6186efe51cf1ec9403ab1eeb71f744a4d3b81ff1cb1195c0e518035d"
+)
 
 
 @pytest.fixture(autouse=True)
@@ -137,6 +140,14 @@ def validation_case(tmp_path: Path):
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     worktree = tmp_path / "paper-worktree"
     worktree.mkdir()
+    project = worktree / "submissions" / "paper-1"
+    project.mkdir(parents=True)
+    (project / "README.md").write_text(
+        "---\ntitle: Paper One\n---\n", encoding="utf-8"
+    )
+    (project / "app.py").write_text(
+        "print('paper one')\n", encoding="utf-8"
+    )
     manifest["worktree"] = str(worktree)
     return paths, lease, manifest
 
@@ -389,6 +400,7 @@ def test_valid_run_attests_hashed_outputs_commit_and_tree(
     assert transitioned["phase"] == "validated"
     assert record["source_commit"] == HEAD
     assert record["source_tree"] == TREE
+    assert record["source_tree_sha256"] == SOURCE_TREE_SHA256
     assert [result["argv"] for result in record["environment"]] == [
         ["git", "--version"],
         ["uv", "--version"],

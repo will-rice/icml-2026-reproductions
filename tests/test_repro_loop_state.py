@@ -10,7 +10,7 @@ import sys
 
 import pytest
 
-from repro_loop_attestation_fixtures import add_validation_fields
+from repro_loop_attestation_fixtures import add_attestation_fields
 
 
 STATE_MODULE_PATH = (
@@ -2582,8 +2582,7 @@ def persist_test_attestation(
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
     }
-    if kind == "validation":
-        add_validation_fields(record)
+    add_attestation_fields(record)
     return attestations.persist(
         paths,
         record,

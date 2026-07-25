@@ -9,7 +9,7 @@ import threading
 
 import pytest
 
-from repro_loop_attestation_fixtures import add_validation_fields
+from repro_loop_attestation_fixtures import add_attestation_fields
 
 
 SCRIPTS = (
@@ -116,8 +116,7 @@ def attestation_record(kind, attempt_id="a1", attempt_number=1, **updates):
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
     }
-    if kind == "validation":
-        add_validation_fields(record)
+    add_attestation_fields(record)
     record.update(updates)
     return record
 

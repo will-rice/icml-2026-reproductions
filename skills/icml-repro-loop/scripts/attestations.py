@@ -40,7 +40,30 @@ KIND_KEYS["validation"] = frozenset(
         "checks",
         "environment",
         "source_tree",
+        "source_tree_sha256",
         "environment_sha256",
+    }
+)
+KIND_KEYS["deployment"] = frozenset(
+    {
+        "space_id",
+        "space_sha",
+        "owner",
+        "tags",
+        "runtime_stage",
+        "validation_attestation_id",
+        "source_tree_sha256",
+    }
+)
+KIND_KEYS["submission"] = frozenset(
+    {
+        "snapshot_id",
+        "verdict_revision",
+        "space_id",
+        "space_sha",
+        "paper_id",
+        "queue_status",
+        "deployment_attestation_id",
     }
 )
 SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
@@ -127,6 +150,10 @@ def _validate_record(record: object, *, persisted: bool) -> None:
     _sha256(record["payload_sha256"], "payload_sha256")
     if kind == "validation":
         _validate_validation(record)
+    elif kind == "deployment":
+        _validate_deployment(record)
+    elif kind == "submission":
+        _validate_submission(record)
 
 
 def _validate_validation(record: dict) -> None:
@@ -140,6 +167,7 @@ def _validate_validation(record: dict) -> None:
         _nonempty_string(record[field], field)
     _git_sha(record["base_sha"], "base_sha")
     _git_sha(record["source_tree"], "source_tree")
+    _sha256(record["source_tree_sha256"], "source_tree_sha256")
     _sha256(record["environment_sha256"], "environment_sha256")
     for field in ("commands", "checks", "environment"):
         results = record[field]
@@ -147,7 +175,52 @@ def _validate_validation(record: dict) -> None:
             raise ValueError(field)
         for result in results:
             _validate_result(result, field)
-    payload = {key: record[key] for key in KIND_KEYS["validation"]}
+    _validate_payload_digest(record)
+
+
+def _validate_deployment(record: dict) -> None:
+    _git_sha(record["source_commit"], "source_commit")
+    _nonempty_string(record["space_id"], "space_id")
+    _nonempty_string(record["space_sha"], "space_sha")
+    owner = _nonempty_string(record["owner"], "owner")
+    if record["space_id"].partition("/")[0] != owner:
+        raise ValueError("owner")
+    tags = record["tags"]
+    if (
+        type(tags) is not list
+        or any(type(tag) is not str or not tag for tag in tags)
+        or tags != sorted(set(tags))
+    ):
+        raise ValueError("tags")
+    if record["runtime_stage"] != "RUNNING":
+        raise ValueError("runtime_stage")
+    _sha256(
+        record["validation_attestation_id"], "validation_attestation_id"
+    )
+    _sha256(record["source_tree_sha256"], "source_tree_sha256")
+    _validate_payload_digest(record)
+
+
+def _validate_submission(record: dict) -> None:
+    _git_sha(record["source_commit"], "source_commit")
+    _sha256(record["snapshot_id"], "snapshot_id")
+    for field in (
+        "verdict_revision",
+        "space_id",
+        "paper_id",
+        "queue_status",
+    ):
+        _nonempty_string(record[field], field)
+    _nonempty_string(record["space_sha"], "space_sha")
+    _sha256(
+        record["deployment_attestation_id"],
+        "deployment_attestation_id",
+    )
+    _validate_payload_digest(record)
+
+
+def _validate_payload_digest(record: dict) -> None:
+    payload = {key: record[key] for key in KIND_KEYS[record["kind"]]}
     expected = hashlib.sha256(_canonical_json(payload)).hexdigest()
     if record["payload_sha256"] != expected:
         raise ValueError("payload_sha256")

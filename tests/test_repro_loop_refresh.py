@@ -382,6 +382,7 @@ def test_verdict_keys_are_authoritative_and_only_unjudged_spaces_are_queued(
         {
             "paper_id": "paper-b",
             "space_id": "org/repro-paper-b",
+            "revision": "space-sha-paper-b",
             "status": "pending",
         }
     ]
@@ -413,6 +414,7 @@ def test_space_pid_and_orid_tags_collapse_to_one_canonical_paper(
         {
             "paper_id": "paper-a",
             "space_id": "org/repro-paper-a",
+            "revision": "space-sha-a",
             "status": "pending",
         }
     ]
@@ -496,11 +498,13 @@ def test_ambiguous_space_excludes_every_canonical_paper(recorded_hub_client):
         {
             "paper_id": "paper-a",
             "space_id": "org/ambiguous-reproduction",
+            "revision": "ambiguous-space-sha",
             "status": "pending",
         },
         {
             "paper_id": "paper-b",
             "space_id": "org/ambiguous-reproduction",
+            "revision": "ambiguous-space-sha",
             "status": "pending",
         },
     ]

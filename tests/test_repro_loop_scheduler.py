@@ -11,7 +11,7 @@ import threading
 
 import pytest
 
-from repro_loop_attestation_fixtures import add_validation_fields
+from repro_loop_attestation_fixtures import add_attestation_fields
 
 
 SCRIPTS = (
@@ -181,8 +181,7 @@ def transition_attested(attempts, paths, attempt_id, phase, lease, now):
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
     }
-    if phase == "validated":
-        add_validation_fields(record)
+    add_attestation_fields(record)
     attestation_id = attempts.attestations.persist(
         paths,
         record,

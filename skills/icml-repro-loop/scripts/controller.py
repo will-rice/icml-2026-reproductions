@@ -22,6 +22,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import attestations  # noqa: E402
 import attempts  # noqa: E402
 import leases  # noqa: E402
+import refresh  # noqa: E402
 import store  # noqa: E402
 
 
@@ -44,6 +45,7 @@ ENVIRONMENT_ALLOWLIST = {
     "UV_CACHE_DIR",
     "VIRTUAL_ENV",
 }
+ALLOWED_SPACE_OWNERS = frozenset({"wrice"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -217,6 +219,9 @@ def attest_validation(
             _result_record(result) for result in environment_results
         ],
         "source_tree": source_tree,
+        "source_tree_sha256": _source_tree_sha256(
+            worktree / manifest["project_path"]
+        ),
         "environment_sha256": _sha256_json(
             clean_validation_environment(
                 Path("/isolated-validation/home")
@@ -242,6 +247,217 @@ def attest_validation(
         {},
         lease,
         completed_at,
+    )
+
+
+def publish_and_attest_deployment(
+    paths: store.StatePaths,
+    attempt_id: str,
+    lease: leases.Lease,
+    space_id: str,
+    source_dir: Path,
+    client,
+    now: datetime,
+) -> dict:
+    """Publish one validated source tree and attest its exact live Space."""
+    attempt = attempts.read_attempt(paths, attempt_id)
+    _assert_attempt_fence(paths, attempt_id, lease, now)
+    if attempt.get("phase") != "validated":
+        raise ValueError("phase")
+    validation = _authoritative_attestation(
+        paths, attempt, "validation", "validated"
+    )
+    owner = _space_owner(space_id)
+    if owner not in ALLOWED_SPACE_OWNERS:
+        raise ValueError("owner")
+
+    worktree = Path(validation["worktree"])
+    expected_source = (
+        worktree / validation["project_path"]
+    ).resolve(strict=True)
+    try:
+        actual_source = Path(source_dir).resolve(strict=True)
+    except OSError as error:
+        raise ValueError("source_dir") from error
+    if actual_source != expected_source or not actual_source.is_dir():
+        raise ValueError("source_dir")
+    _require_current_validated_tree(worktree, actual_source, validation)
+
+    client.create_repo(
+        repo_id=space_id,
+        repo_type="space",
+        space_sdk="gradio",
+        exist_ok=True,
+    )
+    upload = client.upload_folder(
+        repo_id=space_id,
+        folder_path=actual_source,
+        repo_type="space",
+        commit_message=f"Publish validated {validation['source_commit']}",
+    )
+    upload_sha = _nonempty_string(
+        _hub_attribute(upload, "oid"), "upload revision"
+    )
+    info = client.space_info(repo_id=space_id, files_metadata=True)
+    live_space_id = _hub_attribute(info, "id")
+    if live_space_id != space_id:
+        raise ValueError("space")
+    live_sha = _nonempty_string(
+        _hub_attribute(info, "sha"), "space revision"
+    )
+    if live_sha != upload_sha:
+        raise ValueError("revision")
+    live_owner = _space_owner(live_space_id)
+    if live_owner not in ALLOWED_SPACE_OWNERS:
+        raise ValueError("owner")
+    tags = _hub_attribute(info, "tags")
+    if (
+        type(tags) not in {list, tuple}
+        or any(type(tag) is not str or not tag for tag in tags)
+    ):
+        raise ValueError("tag")
+    normalized_tags = sorted(set(tags))
+    required_tags = {"icml2026-repro", f"paper-{attempt['paper_id']}"}
+    if not required_tags.issubset(normalized_tags):
+        raise ValueError("tag")
+    runtime = _hub_attribute(info, "runtime")
+    stage = _hub_attribute(runtime, "stage")
+    if stage != "RUNNING":
+        raise ValueError("runtime")
+
+    payload = {
+        "space_id": live_space_id,
+        "space_sha": live_sha,
+        "owner": live_owner,
+        "tags": normalized_tags,
+        "runtime_stage": stage,
+        "validation_attestation_id": validation["attestation_id"],
+        "source_tree_sha256": validation["source_tree_sha256"],
+    }
+    record = {
+        "kind": "deployment",
+        "attempt_id": attempt_id,
+        "attempt_number": validation["attempt_number"],
+        "observed_at": _aware_timestamp(now),
+        "source_commit": validation["source_commit"],
+        "payload_sha256": _sha256_json(payload),
+        **payload,
+    }
+    attestation_id = attestations.persist(paths, record)
+    return attempts.transition_attested(
+        paths,
+        attempt_id,
+        "deployed",
+        attestation_id,
+        {"space_id": live_space_id, "deployed_sha": live_sha},
+        lease,
+        now,
+    )
+
+
+def attest_submission(
+    paths: store.StatePaths,
+    attempt_id: str,
+    lease: leases.Lease,
+    snapshot_id: str,
+    now: datetime,
+) -> dict:
+    """Attest one exact tagged-Space queue observation from a live snapshot."""
+    attempt = attempts.read_attempt(paths, attempt_id)
+    _assert_attempt_fence(paths, attempt_id, lease, now)
+    if attempt.get("phase") != "deployed":
+        raise ValueError("phase")
+    deployment = _authoritative_attestation(
+        paths, attempt, "deployment", "deployed"
+    )
+    snapshot = refresh.read_snapshot(paths, snapshot_id)
+    fetched_at = _parsed_timestamp(snapshot["fetched_at"], "snapshot")
+    deployed_at = _parsed_timestamp(deployment["observed_at"], "deployment")
+    if fetched_at <= deployed_at or fetched_at > now:
+        raise ValueError("snapshot")
+
+    paper_id = attempt["paper_id"]
+    space_id = deployment["space_id"]
+    space_sha = deployment["space_sha"]
+    for verdict in snapshot["verdicts"]:
+        if (
+            type(verdict) is dict
+            and verdict.get("paper_id") == paper_id
+            and verdict.get("space_id") != space_id
+        ):
+            raise ValueError("verdict")
+
+    exact_spaces = [
+        space for space in snapshot["spaces"] if space["space_id"] == space_id
+    ]
+    if len(exact_spaces) != 1:
+        raise ValueError("space")
+    exact_space = exact_spaces[0]
+    if exact_space["revision"] != space_sha:
+        raise ValueError("revision")
+    if exact_space["paper_ids"] != [paper_id]:
+        raise ValueError("paper")
+    owner = _space_owner(space_id)
+    canonical_spaces = [
+        space
+        for space in snapshot["spaces"]
+        if _space_owner(space["space_id"]) == owner
+        and paper_id in space["paper_ids"]
+    ]
+    if len(canonical_spaces) != 1:
+        raise ValueError("duplicate")
+
+    tagged = [
+        record
+        for record in snapshot["tagged_spaces"]
+        if record.get("paper_id") == paper_id
+        and record.get("space_id") == space_id
+        and record.get("revision") == space_sha
+    ]
+    if len(tagged) != 1:
+        raise ValueError("paper association")
+    queued = [
+        record
+        for record in snapshot["queued_submissions"]
+        if record.get("paper_id") == paper_id
+        and record.get("space_id") == space_id
+    ]
+    if len(queued) != 1:
+        raise ValueError("queue")
+    queue = queued[0]
+    if queue.get("revision") != space_sha:
+        raise ValueError("revision")
+    if queue.get("status") != "pending":
+        raise ValueError("queue")
+    verdict_revision = _snapshot_verdict_revision(snapshot)
+
+    payload = {
+        "snapshot_id": snapshot_id,
+        "verdict_revision": verdict_revision,
+        "space_id": space_id,
+        "space_sha": space_sha,
+        "paper_id": paper_id,
+        "queue_status": queue["status"],
+        "deployment_attestation_id": deployment["attestation_id"],
+    }
+    record = {
+        "kind": "submission",
+        "attempt_id": attempt_id,
+        "attempt_number": deployment["attempt_number"],
+        "observed_at": _aware_timestamp(now),
+        "source_commit": deployment["source_commit"],
+        "payload_sha256": _sha256_json(payload),
+        **payload,
+    }
+    attestation_id = attestations.persist(paths, record)
+    return attempts.transition_attested(
+        paths,
+        attempt_id,
+        "submitted",
+        attestation_id,
+        {},
+        lease,
+        now,
     )
 
 
@@ -459,3 +675,113 @@ def _sha256_json(value: object) -> str:
         value, allow_nan=False, separators=(",", ":"), sort_keys=True
     ).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
+
+
+def _source_tree_sha256(source_dir: Path) -> str:
+    """Hash the relative paths and bytes in one validated upload tree."""
+    if not source_dir.is_dir():
+        raise ValueError("source_dir")
+    entries = []
+    for path in sorted(source_dir.rglob("*")):
+        if path.is_symlink():
+            raise ValueError("source_dir")
+        if path.is_file():
+            entries.append(
+                {
+                    "path": path.relative_to(source_dir).as_posix(),
+                    "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                }
+            )
+    return _sha256_json(entries)
+
+
+def _authoritative_attestation(
+    paths: store.StatePaths,
+    attempt: dict,
+    kind: str,
+    phase: str,
+) -> dict:
+    attempt_number = attempt.get("improvement_attempts", 0) + 1
+    path = paths.attestation(kind, attempt["attempt_id"], attempt_number)
+    if not path.exists():
+        raise ValueError(kind)
+    record = store.read_json(path)
+    attestations.validate_target(paths, path, record)
+    transitions = [
+        transition
+        for transition in attempt.get("transitions", [])
+        if transition.get("to") == phase
+    ]
+    if (
+        record.get("kind") != kind
+        or record.get("attempt_id") != attempt["attempt_id"]
+        or record.get("attempt_number") != attempt_number
+        or not transitions
+        or transitions[-1].get("attestation_id")
+        != record.get("attestation_id")
+    ):
+        raise ValueError(kind)
+    return record
+
+
+def _require_current_validated_tree(
+    worktree: Path, source_dir: Path, validation: dict
+) -> None:
+    if _git_output(worktree, "status", "--porcelain"):
+        raise ValueError("source tree")
+    if _git_output(worktree, "branch", "--show-current") != validation["branch"]:
+        raise ValueError("source tree")
+    if _git_output(worktree, "rev-parse", "HEAD") != validation["source_commit"]:
+        raise ValueError("source commit")
+    if (
+        _git_output(worktree, "rev-parse", "HEAD^{tree}")
+        != validation["source_tree"]
+    ):
+        raise ValueError("source tree")
+    if _source_tree_sha256(source_dir) != validation["source_tree_sha256"]:
+        raise ValueError("source tree")
+
+
+def _git_output(worktree: Path, *arguments: str) -> str:
+    result = run_command(("git", *arguments), worktree)
+    if result.returncode != 0:
+        raise ValueError("source tree")
+    return result.stdout.strip()
+
+
+def _hub_attribute(value: object, field: str):
+    result = value.get(field) if isinstance(value, dict) else getattr(
+        value, field, None
+    )
+    if result is None:
+        raise ValueError(field)
+    return result
+
+
+def _space_owner(space_id: object) -> str:
+    space_id = _nonempty_string(space_id, "space")
+    owner, separator, name = space_id.partition("/")
+    if not separator or not owner or not name or "/" in name:
+        raise ValueError("space")
+    return owner
+
+
+def _parsed_timestamp(value: object, field: str) -> datetime:
+    value = _nonempty_string(value, field)
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise ValueError(field) from error
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError(field)
+    return parsed
+
+
+def _snapshot_verdict_revision(snapshot: dict) -> str:
+    sources = snapshot.get("sources")
+    if type(sources) is not dict:
+        raise ValueError("verdict revision")
+    verdicts = sources.get("verdicts")
+    if type(verdicts) is not dict:
+        raise ValueError("verdict revision")
+    return _nonempty_string(verdicts.get("revision"), "verdict revision")
