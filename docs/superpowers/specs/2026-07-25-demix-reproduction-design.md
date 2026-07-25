@@ -1,72 +1,186 @@
-# Reproduction Design: Decouple Searching from Training (DeMix)
+# DeMix Released-Artifact Audit Design
 
 **Paper ID:** `uyRIOjFgOn`
-**Title:** Decouple Searching from Training: Scaling Data Mixing via Model Merging for Large Language Model Pre-training
-**Upstream Revision:** `arxiv:2602.00747+github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422`
-**Estimated API Cost:** $0.00 (CPU-only computation)
+**Paper:** *Decouple Searching from Training: Scaling Data Mixing via Model
+Merging for Large Language Model Pre-training*
+**Submission path:**
+`submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/`
+**Approved approach:** conservative, CPU-only audit of released pinned artifacts
+**Estimated external cost:** USD 0.00
 
----
+## Objective and evidence boundary
 
-## 1. Executive Summary & Target Claims
+The submission will independently recompute only facts supported by small,
+released artifacts. It will not treat paper tables, handwritten tensors,
+invented targets, or scores computed from synthetic examples as reproduced
+measurements.
 
-This reproduction design specifies the independent implementation and evidence generation for DeMix. DeMix decouples data mixture searching from full model pre-training by training component models once on individual domain datasets and evaluating sampled mixture candidates via weighted linear model merging.
+The evidence boundary is:
 
-### Target Claims
-1. **Weighted Linear Model Merging (Figure 1, Section 3.1):** Candidate data mixtures are evaluated by computing normalized weighted combinations of component model parameters without re-training proxy models for every mixture candidate.
-2. **Spearman Proxy Accuracy (Table 2, Section 4):** Model merging evaluation metrics correlate with ground-truth evaluation performance, yielding macro Spearman rank correlation across benchmark domains (general, code, math).
-3. **Mixture Optimization & Benchmarking (Table 3, Section 4.2):** DeMix-selected optimal mixtures demonstrate higher benchmark average scores compared to baseline uniform and heuristic data mixing strategies.
+- paper: `arXiv:2602.00747v3`, PDF SHA-256
+  `85ea10da0925ee5bd284eeb3143c345129c74c320829dabd9d0ba4413acf55a3`;
+- code: `Lucius-lsr/DeMix` commit
+  `d0c945ca84d5632c6ed1bfe469337cf880757422`;
+- dataset: `lucius1022/DeMix_Corpora` revision
+  `82a2effc58eb79bec691280a4e4fc50be0968b1e`;
+- primary computation input:
+  `DeMix_reproduce/reference_models/sampled_mixture.json`, SHA-256
+  `2be00152f98c44a740bc2f8e2098be3740ea2f1cd31b7158ade9d54c8e852dc2`.
 
----
+The exact mixture manifest is vendored under `evidence/inputs/`. A compact
+provenance file records source URLs, immutable revisions, acquisition commands,
+file hashes, the upstream source-file hashes used in the audit, and the remote
+release inventory. The evidence generator rejects an input whose bytes do not
+match the pinned hash.
 
-## 2. System Architecture & Components
+## Claim dispositions
 
-The reproduction project is isolated in `submissions/demix-data-mixing-model-merging/` with the following structure:
+### 1. Weighted linear model merging — `partial`
 
+The released manifest permits independent computation of:
+
+- the exact mixture and domain counts;
+- each raw weight sum;
+- normalized domain weights;
+- which mixtures require normalization;
+- non-negativity and positive-sum checks;
+- the mismatch between 17 manifest entries and the 16 reference-model
+  directories described by the release.
+
+The pinned upstream merge configuration provides supporting source evidence
+that normalized ratios are mapped to a weighted linear merge. No component
+checkpoint is downloaded or merged, so the resulting observation is partial,
+not a verification of model behavior.
+
+### 2. Spearman proxy accuracy — `unavailable`
+
+The release contains no OpenCompass benchmark-result CSVs or equivalent
+per-mixture evaluation outputs from which Table 2 correlations can be
+recomputed. The pinned `eval_merged/proxy_eval.py` has path placeholders and
+uses `random.random()` in its sample data loader. Therefore it is not valid
+evidence for reported correlations.
+
+The bundle records no reproduced Spearman value. Paper-reported values may
+appear only under `paper_context`, explicitly labeled as non-reproduced.
+
+### 3. Mixture optimization and benchmarking — `unavailable`
+
+The release has neither the final benchmark output needed to recompute Table 3
+nor a CPU-feasible execution path for the released component models. The
+bundle records no reproduced benchmark comparison. Paper-reported values may
+appear only under `paper_context`.
+
+## Resource rationale
+
+The seven released 30B-token component checkpoints at `checkpoint-7500`
+contain fourteen Safetensors shards totaling 48,176,346,736 bytes before model
+merge outputs, evaluation datasets, or caches. Reproducing the model merge and
+OpenCompass evaluation would require material storage and accelerator
+resources. Downloading those checkpoints is outside this CPU-only audit and is
+not necessary to establish that the released evaluation inputs are absent.
+
+The release inventory is captured from the Hugging Face tree API at the pinned
+revision. It records 1,469 paths below `DeMix_reproduce/`, 16 reference-model
+roots, seven component-model roots, no CSV files, and no released OpenCompass
+result path. It also records every component shard's immutable LFS SHA-256 and
+byte count without downloading the shards.
+
+## Deterministic architecture
+
+The current synthetic modules and calculator are removed. The replacement has
+three parts:
+
+1. `src/demix/artifacts.py` validates the pinned input, parses finite numeric
+   weights, and deterministically derives released-manifest observations using
+   the Python standard library.
+2. `src/demix/pipeline.py` combines those observations with the checked-in
+   provenance document and per-claim dispositions, then serializes canonical
+   JSON with sorted keys, fixed indentation, UTF-8, and a final newline.
+3. `app.py` is a read-only evidence and released-mixture inspector. It displays
+   the committed bundle and computes normalization only from the pinned
+   released manifest. It does not accept user-authored targets or produce
+   scores.
+
+The canonical regeneration command, run from the submission directory, is:
+
+```bash
+PYTHONPATH=src python -m demix.pipeline \
+  --input evidence/inputs/sampled_mixture.json \
+  --provenance evidence/provenance.json \
+  --output evidence/bundle.json
 ```
-submissions/demix-data-mixing-model-merging/
-├── src/
-│   └── demix/
-│       ├── __init__.py
-│       ├── merging.py         # Linear weight normalization & model merging logic
-│       ├── eval.py            # Spearman rank correlation & benchmark evaluation metrics
-│       └── pipeline.py        # End-to-end evidence runner & data mixture simulator
-├── tests/
-│   └── test_demix.py          # Pytest suite verifying TDD contracts
-├── evidence/
-│   └── bundle.json            # Machine-readable evidence bundle
-├── app.py                     # HuggingFace Space Gradio interface
-├── Dockerfile                 # HuggingFace Space environment definition
-├── requirements.txt           # Minimal dependencies
-└── README.md                  # Reproduction documentation
+
+Two consecutive runs and a run to a temporary output must be byte-identical to
+the committed bundle.
+
+## Bundle contract
+
+`evidence/bundle.json` has:
+
+- an overall `reproduction_status` of `partial`;
+- immutable paper, code, dataset, and input provenance;
+- the exact regeneration command and pinned environment;
+- released-artifact observations derived from the vendored manifest;
+- one record per target claim with `id`, `status`, `observation`,
+  `input_artifacts`, and `limitations`;
+- a separate `paper_context` object for non-reproduced reported values.
+
+The schema forbids `verified` statuses and synthetic result keys such as
+`macro_spearman`, `ground_truth`, `proxy_scores`, or `multi_seed_stability`.
+An unavailable claim has no reproduced numeric result. A partial claim must
+cite the released input artifact that supports its observation.
+
+## Test-first acceptance criteria
+
+Tests are written before implementation changes and must initially fail for
+the current synthetic pipeline. They cover:
+
+- rejection of modified or alternate input bytes by SHA-256;
+- exact mixture count, domain order, raw sums, normalized values, and
+  normalization classifications from the pinned manifest;
+- rejection of non-finite, negative, empty, or zero-sum weights;
+- correct overall and per-claim statuses;
+- absence of synthetic scores, fabricated targets, and `verified`;
+- presence of immutable revisions, hashes, acquisition commands, environment
+  pins, and resource limitations;
+- byte-identical CLI regeneration;
+- a read-only app with the existing runtime contract
+  `server_name="0.0.0.0", server_port=7860`;
+- an integration startup check that observes the real Gradio listener on
+  wildcard port 7860.
+
+The required verification command is:
+
+```bash
+uv run --isolated --no-project \
+  --with-requirements requirements-test.txt \
+  python -m pytest -q
 ```
 
-### Core Algorithms
-- **Model Merging (`merging.py`):**
-  Given component models $M_1, \dots, M_K$ and raw domain ratios $r_1, \dots, r_K$:
-  $$\bar{r}_i = \frac{r_i}{\sum_{j=1}^K r_j}, \quad \theta_{\text{merged}} = \sum_{i=1}^K \bar{r}_i \theta_i$$
-- **Spearman Evaluation (`eval.py`):**
-  Calculates overall and top-25% Spearman rank correlations $\rho$ between proxy merged performance scores and ground-truth benchmark scores across General (ARC-e, HellaSwag, PIQA, SIQA, Winogrande), Code (MBPP, HumanEval), and Math (GSM8K, MATH) domains.
+Scoped pre-commit validation excludes the archival NAPE submission, as required
+by workspace policy.
 
----
+## Runtime and dependency pins
 
-## 3. Evidence Generation & Verification Strategy
+The Space base is
+`python:3.12.11-slim-bookworm@sha256:519591d6871b7bc437060736b9f7456b8731f1499a57e22e6c285135ae657bf7`.
+Direct Python dependencies are pinned to `gradio==6.20.0` and
+`pytest==8.4.2`. NumPy and SciPy are removed because evidence computation uses
+the standard library and no longer calculates synthetic tensor or correlation
+examples.
 
-1. **Unit Tests (TDD):**
-   - Test linear weight normalization for arbitrary non-zero ratio vectors.
-   - Test parameter tensor linear combination on synthetic model weights.
-   - Test Spearman correlation metric against reference `scipy.stats.spearmanr` values and edge cases (zero variance, missing data).
-   - Test end-to-end pipeline execution yielding expected macro Spearman accuracy (>0.80).
-2. **Evidence Bundle:**
-   - Saved at `evidence/bundle.json`.
-   - Records environment metadata, pinned commit SHAs, calculated Spearman correlations per domain, and benchmark comparisons.
-3. **Space Deployment:**
-   - Dedicated Space `wrice/repro-demix-data-mixing-model-merging`.
-   - Verified exact git commit SHA deployment before submission.
+The bundle records Python `3.12.11`, Gradio `6.20.0`, and pytest `8.4.2` as the
+validated regeneration/test environment. Dependency resolution itself is not
+treated as reproduced scientific evidence.
 
----
+## Safety, licensing, and publication
 
-## 4. Resource & Safety Constraints
+The Hugging Face dataset card declares Apache-2.0. The inspected GitHub
+revision has no detected license file, so its code is used only as cited,
+read-only provenance and is not vendored. The vendored primary input is from
+the licensed dataset revision.
 
-- **Hardware:** CPU-only computation, no GPU training required.
-- **API Cost:** $0.00 USD.
-- **Safety & Licensing:** No safety or licensing blockers present.
+This change does not deploy, publish, claim a challenge paper, or mutate
+coordinator state. A later deployment requires a separate authorization,
+live-status recheck, exact Space commit verification, and updates to
+`state/repro-loop.json` and `docs/HANDOFF.md`.
