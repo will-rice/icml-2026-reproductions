@@ -10,5 +10,11 @@
   "pinned_sha": "413f2bfd31100187eb6c2d632c9cbf12e3115494",
   "repository_url": "https://github.com/project-numina/BrascampLieb.git",
   "scope": "released-proof verification; not agent re-execution",
+  "source_audit": {
+    "file_count": 21,
+    "files_with_sorry": {},
+    "method": "nested-comment/string-aware sorry token scan",
+    "sorry_count": 0
+  },
   "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
 }

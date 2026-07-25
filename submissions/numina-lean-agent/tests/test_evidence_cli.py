@@ -7,6 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 
 PROJECT = Path(__file__).parents[1]
 SOURCE_EVIDENCE = PROJECT / "evidence"
@@ -87,7 +89,8 @@ def test_evidence_cli_writes_deterministic_claims_from_computed_inputs(
     claims = json.loads((first / "claims.json").read_text())
     assert [claim["claim_id"] for claim in claims] == list(OFFICIAL_CLAIMS)
     assert {claim["claim_id"]: claim["claim"] for claim in claims} == OFFICIAL_CLAIMS
-    assert all(claim["status"] == "supports" for claim in claims)
+    assert all(claim["status"] == "partial-support" for claim in claims)
+    assert all(claim["supported_component"] for claim in claims)
     assert all(
         claim["evidence_kind"] == "released-proof-verification" for claim in claims
     )
@@ -130,6 +133,7 @@ def test_evidence_cli_writes_deterministic_claims_from_computed_inputs(
             )
         ],
         "sorry_ax_count": 0,
+        "source_sorry_count": 0,
     }
     assert by_id["brascamp-lieb-formalization"]["computed_observation"] == {
         "axioms": ["Classical.choice", "Quot.sound", "propext"],
@@ -139,6 +143,7 @@ def test_evidence_cli_writes_deterministic_claims_from_computed_inputs(
             "Appendix A.1; not the full analytic function-space theorem"
         ),
         "sorry_ax_present": False,
+        "source_sorry_count": 0,
         "theorem": "BrascampLieb.upperBound",
     }
 
@@ -164,3 +169,59 @@ def test_evidence_cli_rejects_mixed_provenance_and_removes_stale_output(
     assert result.returncode != 0
     assert "upstream_revision" in result.stderr
     assert not claims_path.exists()
+
+
+def test_evidence_cli_rejects_missing_putnam_axiom_list(tmp_path: Path) -> None:
+    evidence_dir = tmp_path / "evidence"
+    copy_inputs(evidence_dir)
+    axiom_path = evidence_dir / "putnam_axioms.json"
+    axiom_data = json.loads(axiom_path.read_text())
+    del axiom_data["putnam_2025_a1"]["axioms"]
+    axiom_path.write_text(json.dumps(axiom_data, indent=2, sort_keys=True) + "\n")
+
+    result = run_cli(evidence_dir)
+
+    assert result.returncode != 0
+    assert "axioms" in result.stderr
+    assert not (evidence_dir / "claims.json").exists()
+
+
+@pytest.mark.parametrize(
+    ("filename", "record_name", "field", "bad_value"),
+    [
+        ("putnam_build.json", None, "lean_toolchain", "wrong"),
+        (
+            "putnam_axioms.json",
+            "putnam_2025_a1",
+            "mathlib_sha",
+            "wrong",
+        ),
+        ("brascamp_lieb_build.json", None, "command", ["wrong"]),
+        (
+            "brascamp_lieb_axioms.json",
+            "BrascampLieb.upperBound",
+            "repository_url",
+            "https://example.invalid/wrong",
+        ),
+    ],
+)
+def test_evidence_cli_rejects_mismatched_critical_metadata(
+    tmp_path: Path,
+    filename: str,
+    record_name: str | None,
+    field: str,
+    bad_value: object,
+) -> None:
+    evidence_dir = tmp_path / "evidence"
+    copy_inputs(evidence_dir)
+    path = evidence_dir / filename
+    data = json.loads(path.read_text())
+    record = data if record_name is None else data[record_name]
+    record[field] = bad_value
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
+
+    result = run_cli(evidence_dir)
+
+    assert result.returncode != 0
+    assert field in result.stderr
+    assert not (evidence_dir / "claims.json").exists()

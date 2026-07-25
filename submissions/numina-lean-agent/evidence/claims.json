@@ -19,7 +19,8 @@
         "putnam_2025_b5",
         "putnam_2025_b6"
       ],
-      "sorry_ax_count": 0
+      "sorry_ax_count": 0,
+      "source_sorry_count": 0
     },
     "evidence_kind": "released-proof-verification",
     "input_files": {
@@ -27,14 +28,15 @@
         "sha256": "716fde5b94ce45bdc77405ecb97eab243e7232f23a689547b4b68ce19e42d9b4"
       },
       "putnam_build.json": {
-        "sha256": "5623452edc73a3b34a35bdff6ad751da2f217203b947e61e4fafa51d23b58afd"
+        "sha256": "3cf2677f83dcf86db02cd2cfe093e27229dc1ec6ace679257a9ef5316459acc1"
       }
     },
     "limitations": [
       "Does not rerun Numina-Lean-Agent or Claude Opus 4.5.",
       "Verifies the released companion proofs, not the agent-attribution or comparison-table experiment."
     ],
-    "status": "supports",
+    "status": "partial-support",
+    "supported_component": "The 12 released companion proofs kernel-check without sorryAx.",
     "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
   },
   {
@@ -49,6 +51,7 @@
       "build_exit_code": 0,
       "formalization_scope": "BrascampLieb.upperBound Gaussian supremum bound from the Numina paper Appendix A.1; not the full analytic function-space theorem",
       "sorry_ax_present": false,
+      "source_sorry_count": 0,
       "theorem": "BrascampLieb.upperBound"
     },
     "evidence_kind": "released-proof-verification",
@@ -57,7 +60,7 @@
         "sha256": "80a2cde91ba3d0bad70b13a33ff6da4f79aa25794dd7665447ffbbdf97de2d92"
       },
       "brascamp_lieb_build.json": {
-        "sha256": "41ee75e7c45ba23113138cd636dfb5ef0ae145d527b514c73c038ee0491fcc52"
+        "sha256": "4cdb44e956e0b2f47f40b4b265fdc227020989ae270b663405206e1d680de125"
       }
     },
     "limitations": [
@@ -65,7 +68,8 @@
       "Does not verify interaction with mathematicians or rerun Numina-Lean-Agent.",
       "The released formal statement assumes nonzero ambient dimension."
     ],
-    "status": "supports",
+    "status": "partial-support",
+    "supported_component": "The released BrascampLieb.upperBound Gaussian supremum declaration kernel-checks without sorryAx.",
     "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
   }
 ]

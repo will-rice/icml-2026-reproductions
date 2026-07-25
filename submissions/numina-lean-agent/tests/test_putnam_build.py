@@ -51,6 +51,12 @@ def test_build_succeeded_at_pinned_revision() -> None:
     assert data["pinned_sha"] == COMPANION_SHA
     assert data["lean_toolchain"] == LEAN_TOOLCHAIN
     assert data["upstream_revision"] == UPSTREAM_REVISION
+    assert data["source_audit"] == {
+        "file_count": 12,
+        "files_with_sorry": {},
+        "method": "nested-comment/string-aware sorry token scan",
+        "sorry_count": 0,
+    }
 
 
 def test_all_12_proofs_have_no_sorry_ax() -> None:
@@ -79,6 +85,8 @@ def test_failed_axiom_query_invalidates_stale_putnam_evidence(
     evidence_dir.mkdir()
     stale_axioms = evidence_dir / "putnam_axioms.json"
     stale_axioms.write_text('{"stale": true}\n')
+    stale_claims = evidence_dir / "claims.json"
+    stale_claims.write_text('{"stale": true}\n')
 
     monkeypatch.setattr(putnam_audit, "ensure_checkout", lambda checkout: None)
     monkeypatch.setattr(putnam_audit, "verify_pins", lambda checkout: None)
@@ -110,3 +118,4 @@ def test_failed_axiom_query_invalidates_stale_putnam_evidence(
         putnam_audit.audit(tmp_path / "checkout", evidence_dir)
 
     assert not stale_axioms.exists()
+    assert not stale_claims.exists()

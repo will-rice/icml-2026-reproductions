@@ -12,6 +12,8 @@ from numina_lean import (
     RELEASED_PROOF_SCOPE,
     UPSTREAM_REVISION,
     invalidate_evidence,
+    scan_lean_sources,
+    tracked_lean_sources,
     verify_clean_checkout,
 )
 
@@ -101,9 +103,10 @@ def run_axiom_query(checkout: Path) -> subprocess.CompletedProcess[str]:
 def audit(checkout: Path, evidence_dir: Path) -> int:
     build_path = evidence_dir / "brascamp_lieb_build.json"
     axioms_path = evidence_dir / "brascamp_lieb_axioms.json"
-    invalidate_evidence(build_path, axioms_path)
+    invalidate_evidence(build_path, axioms_path, evidence_dir / "claims.json")
     ensure_checkout(checkout)
     verify_pins(checkout)
+    source_audit = scan_lean_sources(checkout, tracked_lean_sources(checkout))
     subprocess.run(["lake", "exe", "cache", "get"], cwd=checkout, check=True)
     build = run(["lake", "build"], cwd=checkout)
     write_json(
@@ -117,6 +120,7 @@ def audit(checkout: Path, evidence_dir: Path) -> int:
             "pinned_sha": PINNED_SHA,
             "repository_url": REPOSITORY_URL,
             "scope": RELEASED_PROOF_SCOPE,
+            "source_audit": source_audit,
             "upstream_revision": UPSTREAM_REVISION,
         },
     )

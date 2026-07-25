@@ -13,11 +13,20 @@ from typing import Any
 from numina_lean import UPSTREAM_REVISION, invalidate_evidence
 from numina_lean.brascamp_lieb_audit import (
     FORMALIZATION_SCOPE,
+    LEAN_TOOLCHAIN as BRASCAMP_LIEB_TOOLCHAIN,
     MAIN_THEOREM,
+    MATHLIB_REVISION as BRASCAMP_LIEB_MATHLIB_REVISION,
+    MATHLIB_SHA as BRASCAMP_LIEB_MATHLIB_SHA,
     PINNED_SHA as BRASCAMP_LIEB_SHA,
+    QUERY_FILENAME,
+    REPOSITORY_URL as BRASCAMP_LIEB_REPOSITORY_URL,
 )
+from numina_lean.putnam_audit import LEAN_TOOLCHAIN as PUTNAM_TOOLCHAIN
+from numina_lean.putnam_audit import MATHLIB_REVISION as PUTNAM_MATHLIB_REVISION
+from numina_lean.putnam_audit import MATHLIB_SHA as PUTNAM_MATHLIB_SHA
 from numina_lean.putnam_audit import PINNED_SHA as PUTNAM_SHA
 from numina_lean.putnam_audit import PROOF_NAMES
+from numina_lean.putnam_audit import REPOSITORY_URL as PUTNAM_REPOSITORY_URL
 
 
 PUTNAM_CLAIM = (
@@ -56,17 +65,65 @@ def require_mapping(value: Any, filename: str) -> dict[str, Any]:
 def require_provenance(
     records: list[tuple[str, dict[str, Any]]],
     *,
+    command_for_label: dict[str, list[str]],
+    lean_toolchain: str,
+    mathlib_revision: str,
+    mathlib_sha: str,
     pinned_sha: str,
+    repository_url: str,
 ) -> None:
     for label, record in records:
-        if record.get("upstream_revision") != UPSTREAM_REVISION:
-            raise EvidenceError(f"{label} has an unexpected upstream_revision")
-        if record.get("pinned_sha") != pinned_sha:
-            raise EvidenceError(f"{label} has an unexpected pinned_sha")
-        if record.get("scope") != (
-            "released-proof verification; not agent re-execution"
-        ):
-            raise EvidenceError(f"{label} has an unexpected evidence scope")
+        expected = {
+            "command": command_for_label[label],
+            "lean_toolchain": lean_toolchain,
+            "mathlib_revision": mathlib_revision,
+            "mathlib_sha": mathlib_sha,
+            "pinned_sha": pinned_sha,
+            "repository_url": repository_url,
+            "scope": "released-proof verification; not agent re-execution",
+            "upstream_revision": UPSTREAM_REVISION,
+        }
+        for field, value in expected.items():
+            if record.get(field) != value:
+                raise EvidenceError(f"{label} has an unexpected {field}")
+        if type(record.get("exit_code")) is not int:
+            raise EvidenceError(f"{label} has an invalid exit_code")
+
+
+def require_axiom_list(record: dict[str, Any], label: str) -> list[str]:
+    axioms = record.get("axioms")
+    if (
+        not isinstance(axioms, list)
+        or not all(isinstance(name, str) for name in axioms)
+        or axioms != sorted(set(axioms))
+    ):
+        raise EvidenceError(f"{label} has an invalid axioms list")
+    return axioms
+
+
+def require_source_audit(
+    record: dict[str, Any], label: str, *, file_count: int
+) -> dict[str, Any]:
+    source_audit = record.get("source_audit")
+    if not isinstance(source_audit, dict):
+        raise EvidenceError(f"{label} has an invalid source_audit")
+    files_with_sorry = source_audit.get("files_with_sorry")
+    sorry_count = source_audit.get("sorry_count")
+    valid_counts = isinstance(files_with_sorry, dict) and all(
+        isinstance(path, str) and type(count) is int and count > 0
+        for path, count in files_with_sorry.items()
+    )
+    if (
+        source_audit.get("file_count") != file_count
+        or source_audit.get("method")
+        != "nested-comment/string-aware sorry token scan"
+        or not valid_counts
+        or type(sorry_count) is not int
+        or sorry_count < 0
+        or sorry_count != sum(files_with_sorry.values())
+    ):
+        raise EvidenceError(f"{label} has an invalid source_audit")
+    return source_audit
 
 
 def putnam_claim(evidence_dir: Path) -> dict[str, Any]:
@@ -84,17 +141,46 @@ def putnam_claim(evidence_dir: Path) -> dict[str, Any]:
             raise EvidenceError(f"missing axiom record for {proof_name}")
         if record.get("exit_code") != 0:
             raise EvidenceError(f"axiom query did not succeed for {proof_name}")
-        axiom_records.append((f"putnam_axioms.json:{proof_name}", record))
+        label = f"putnam_axioms.json:{proof_name}"
+        require_axiom_list(record, label)
+        axiom_records.append((label, record))
+    command_for_label = {"putnam_build.json": ["lake", "build"]}
+    command_for_label.update(
+        {
+            label: [
+                "lake",
+                "env",
+                "lean",
+                f"NuminaPutnam2025/{proof_name}.lean",
+            ]
+            for (label, _), proof_name in zip(
+                axiom_records, PROOF_NAMES, strict=True
+            )
+        }
+    )
     require_provenance(
         [("putnam_build.json", build), *axiom_records],
+        command_for_label=command_for_label,
+        lean_toolchain=PUTNAM_TOOLCHAIN,
+        mathlib_revision=PUTNAM_MATHLIB_REVISION,
+        mathlib_sha=PUTNAM_MATHLIB_SHA,
         pinned_sha=PUTNAM_SHA,
+        repository_url=PUTNAM_REPOSITORY_URL,
     )
 
     sorry_ax_count = sum(
-        "sorryAx" in record.get("axioms", []) for _, record in axiom_records
+        "sorryAx" in require_axiom_list(record, label)
+        for label, record in axiom_records
     )
+    source_sorry_count = require_source_audit(
+        build, "putnam_build.json", file_count=12
+    )["sorry_count"]
     build_exit_code = build.get("exit_code")
-    supports = build_exit_code == 0 and sorry_ax_count == 0
+    supports = (
+        build_exit_code == 0
+        and sorry_ax_count == 0
+        and source_sorry_count == 0
+    )
     return {
         "claim": PUTNAM_CLAIM,
         "claim_id": "putnam-12-12",
@@ -103,6 +189,7 @@ def putnam_claim(evidence_dir: Path) -> dict[str, Any]:
             "kernel_checked_proof_count": len(axiom_records),
             "proof_names": PROOF_NAMES,
             "sorry_ax_count": sorry_ax_count,
+            "source_sorry_count": source_sorry_count,
         },
         "evidence_kind": "released-proof-verification",
         "input_files": {
@@ -116,7 +203,10 @@ def putnam_claim(evidence_dir: Path) -> dict[str, Any]:
                 "or comparison-table experiment."
             ),
         ],
-        "status": "supports" if supports else "does-not-support",
+        "status": "partial-support" if supports else "does-not-support",
+        "supported_component": (
+            "The 12 released companion proofs kernel-check without sorryAx."
+        ),
         "upstream_revision": UPSTREAM_REVISION,
     }
 
@@ -142,17 +232,35 @@ def brascamp_lieb_claim(evidence_dir: Path) -> dict[str, Any]:
             ("brascamp_lieb_build.json", build),
             (f"brascamp_lieb_axioms.json:{MAIN_THEOREM}", theorem),
         ],
+        command_for_label={
+            "brascamp_lieb_build.json": ["lake", "build"],
+            f"brascamp_lieb_axioms.json:{MAIN_THEOREM}": [
+                "lake",
+                "env",
+                "lean",
+                QUERY_FILENAME,
+            ],
+        },
+        lean_toolchain=BRASCAMP_LIEB_TOOLCHAIN,
+        mathlib_revision=BRASCAMP_LIEB_MATHLIB_REVISION,
+        mathlib_sha=BRASCAMP_LIEB_MATHLIB_SHA,
         pinned_sha=BRASCAMP_LIEB_SHA,
+        repository_url=BRASCAMP_LIEB_REPOSITORY_URL,
     )
 
-    axiom_names = theorem.get("axioms")
-    if not isinstance(axiom_names, list) or not all(
-        isinstance(name, str) for name in axiom_names
-    ):
-        raise EvidenceError(f"invalid axiom list for {MAIN_THEOREM}")
+    axiom_names = require_axiom_list(
+        theorem, f"brascamp_lieb_axioms.json:{MAIN_THEOREM}"
+    )
+    source_sorry_count = require_source_audit(
+        build, "brascamp_lieb_build.json", file_count=21
+    )["sorry_count"]
     sorry_ax_present = "sorryAx" in axiom_names
     build_exit_code = build.get("exit_code")
-    supports = build_exit_code == 0 and not sorry_ax_present
+    supports = (
+        build_exit_code == 0
+        and not sorry_ax_present
+        and source_sorry_count == 0
+    )
     return {
         "claim": BRASCAMP_LIEB_CLAIM,
         "claim_id": "brascamp-lieb-formalization",
@@ -161,6 +269,7 @@ def brascamp_lieb_claim(evidence_dir: Path) -> dict[str, Any]:
             "build_exit_code": build_exit_code,
             "formalization_scope": FORMALIZATION_SCOPE,
             "sorry_ax_present": sorry_ax_present,
+            "source_sorry_count": source_sorry_count,
             "theorem": MAIN_THEOREM,
         },
         "evidence_kind": "released-proof-verification",
@@ -179,7 +288,11 @@ def brascamp_lieb_claim(evidence_dir: Path) -> dict[str, Any]:
             ),
             "The released formal statement assumes nonzero ambient dimension.",
         ],
-        "status": "supports" if supports else "does-not-support",
+        "status": "partial-support" if supports else "does-not-support",
+        "supported_component": (
+            "The released BrascampLieb.upperBound Gaussian supremum declaration "
+            "kernel-checks without sorryAx."
+        ),
         "upstream_revision": UPSTREAM_REVISION,
     }
 

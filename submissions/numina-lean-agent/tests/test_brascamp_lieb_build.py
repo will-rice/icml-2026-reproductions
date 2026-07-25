@@ -37,6 +37,12 @@ def test_brascamp_lieb_build_succeeded_at_pinned_revision() -> None:
     assert data["command"] == ["lake", "build"]
     assert data["scope"] == "released-proof verification; not agent re-execution"
     assert data["upstream_revision"] == UPSTREAM_REVISION
+    assert data["source_audit"] == {
+        "file_count": 21,
+        "files_with_sorry": {},
+        "method": "nested-comment/string-aware sorry token scan",
+        "sorry_count": 0,
+    }
 
 
 def test_brascamp_lieb_main_theorem_has_no_sorry_ax() -> None:
@@ -87,9 +93,14 @@ def test_failed_axiom_query_invalidates_stale_brascamp_lieb_evidence(
     evidence_dir.mkdir()
     stale_axioms = evidence_dir / "brascamp_lieb_axioms.json"
     stale_axioms.write_text('{"stale": true}\n')
+    stale_claims = evidence_dir / "claims.json"
+    stale_claims.write_text('{"stale": true}\n')
 
     monkeypatch.setattr(brascamp_lieb_audit, "ensure_checkout", lambda checkout: None)
     monkeypatch.setattr(brascamp_lieb_audit, "verify_pins", lambda checkout: None)
+    monkeypatch.setattr(
+        brascamp_lieb_audit, "tracked_lean_sources", lambda checkout: []
+    )
     monkeypatch.setattr(
         brascamp_lieb_audit.subprocess,
         "run",
@@ -112,6 +123,7 @@ def test_failed_axiom_query_invalidates_stale_brascamp_lieb_evidence(
         brascamp_lieb_audit.audit(tmp_path / "checkout", evidence_dir)
 
     assert not stale_axioms.exists()
+    assert not stale_claims.exists()
 
 
 def test_brascamp_lieb_checkout_must_be_clean(

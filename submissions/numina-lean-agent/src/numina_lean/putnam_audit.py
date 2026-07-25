@@ -12,6 +12,7 @@ from numina_lean import (
     RELEASED_PROOF_SCOPE,
     UPSTREAM_REVISION,
     invalidate_evidence,
+    scan_lean_sources,
     verify_clean_checkout,
 )
 
@@ -97,9 +98,14 @@ def parse_axioms(stdout: str, proof_name: str) -> list[str]:
 def audit(checkout: Path, evidence_dir: Path) -> int:
     build_path = evidence_dir / "putnam_build.json"
     axioms_path = evidence_dir / "putnam_axioms.json"
-    invalidate_evidence(build_path, axioms_path)
+    invalidate_evidence(build_path, axioms_path, evidence_dir / "claims.json")
     ensure_checkout(checkout)
     verify_pins(checkout)
+    proof_paths = [
+        Path("NuminaPutnam2025") / f"{proof_name}.lean"
+        for proof_name in PROOF_NAMES
+    ]
+    source_audit = scan_lean_sources(checkout, proof_paths)
     subprocess.run(["lake", "exe", "cache", "get"], cwd=checkout, check=True)
     build = run(["lake", "build"], cwd=checkout)
     write_json(
@@ -113,6 +119,7 @@ def audit(checkout: Path, evidence_dir: Path) -> int:
             "pinned_sha": PINNED_SHA,
             "repository_url": REPOSITORY_URL,
             "scope": RELEASED_PROOF_SCOPE,
+            "source_audit": source_audit,
             "upstream_revision": UPSTREAM_REVISION,
         },
     )
@@ -120,8 +127,7 @@ def audit(checkout: Path, evidence_dir: Path) -> int:
         return build.returncode
 
     axioms: dict[str, dict[str, object]] = {}
-    for proof_name in PROOF_NAMES:
-        relative_file = Path("NuminaPutnam2025") / f"{proof_name}.lean"
+    for proof_name, relative_file in zip(PROOF_NAMES, proof_paths, strict=True):
         if f"#print axioms {proof_name}" not in (checkout / relative_file).read_text():
             raise RuntimeError(f"missing committed axiom command in {relative_file}")
         result = run(["lake", "env", "lean", str(relative_file)], cwd=checkout)
