@@ -389,6 +389,31 @@ def test_space_reads_only_committed_released_observations():
         space_app.get_mixture_observation("user-authored")
 
 
+def test_space_rejects_modified_released_input(tmp_path):
+    import app as space_app
+
+    modified = tmp_path / "sampled_mixture.json"
+    modified.write_bytes(MANIFEST.read_bytes() + b"\n")
+
+    with pytest.raises(ArtifactIntegrityError, match="SHA-256"):
+        space_app.get_evidence(manifest_path=modified)
+
+
+def test_space_rejects_bundle_observation_mismatch(tmp_path):
+    import app as space_app
+
+    bundle = json.loads(BUNDLE.read_text())
+    bundle["released_artifact_observations"]["raw_weight_sums"]["mix_0"] = "1"
+    modified = tmp_path / "bundle.json"
+    modified.write_text(json.dumps(bundle))
+
+    with pytest.raises(
+        space_app.EvidenceMismatchError,
+        match="released artifact observations",
+    ):
+        space_app.get_evidence(bundle_path=modified)
+
+
 def test_runtime_dependencies_are_exactly_pinned():
     assert REQUIREMENTS.read_text() == "gradio==6.20.0\n"
     assert REQUIREMENTS_TEST.read_text() == (

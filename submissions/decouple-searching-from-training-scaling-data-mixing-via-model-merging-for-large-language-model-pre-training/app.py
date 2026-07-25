@@ -2,22 +2,46 @@
 
 import json
 from pathlib import Path
+import sys
+from typing import Any
 
 import gradio as gr
 
 
 SUBMISSION_ROOT = Path(__file__).resolve().parent
+SRC_PATH = SUBMISSION_ROOT / "src"
+if str(SRC_PATH) not in sys.path:
+    sys.path.insert(0, str(SRC_PATH))
+
+from demix.artifacts import analyze_manifest, load_pinned_manifest
+
+
 BUNDLE_PATH = SUBMISSION_ROOT / "evidence" / "bundle.json"
+MANIFEST_PATH = (
+    SUBMISSION_ROOT / "evidence" / "inputs" / "sampled_mixture.json"
+)
 
 
-def get_evidence():
-    """Read the committed deterministic evidence bundle."""
-    return json.loads(BUNDLE_PATH.read_text(encoding="utf-8"))
+class EvidenceMismatchError(ValueError):
+    """Raised when committed observations differ from recomputation."""
 
 
-def get_mixture_observation(mixture_id):
-    """Return one already-computed observation from the pinned release."""
-    observations = get_evidence()["released_artifact_observations"]
+def get_evidence(
+    bundle_path: Path = BUNDLE_PATH,
+    manifest_path: Path = MANIFEST_PATH,
+) -> dict[str, Any]:
+    """Read evidence only after independently validating its observations."""
+    bundle, _ = _load_verified_state(bundle_path, manifest_path)
+    return bundle
+
+
+def get_mixture_observation(
+    mixture_id: str,
+    bundle_path: Path = BUNDLE_PATH,
+    manifest_path: Path = MANIFEST_PATH,
+) -> dict[str, Any]:
+    """Recompute and return one observation from the pinned release."""
+    _, observations = _load_verified_state(bundle_path, manifest_path)
     if mixture_id not in observations["mixture_ids"]:
         raise KeyError(f"unknown released mixture {mixture_id!r}")
     return {
@@ -25,6 +49,21 @@ def get_mixture_observation(mixture_id):
         "raw_weight_sum": observations["raw_weight_sums"][mixture_id],
         "normalized_weights": observations["normalized_weights"][mixture_id],
     }
+
+
+def _load_verified_state(
+    bundle_path: Path,
+    manifest_path: Path,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    manifest = load_pinned_manifest(manifest_path)
+    observations = analyze_manifest(manifest)
+    bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+    if bundle.get("released_artifact_observations") != observations:
+        raise EvidenceMismatchError(
+            "committed released artifact observations differ from "
+            "pinned-manifest recomputation"
+        )
+    return bundle, observations
 
 
 evidence = get_evidence()
