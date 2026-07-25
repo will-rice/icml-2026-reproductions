@@ -1,21 +1,43 @@
 {
-  "attempts": {
-    "e20658d7-250a-5b0c-a015-be453c43e9fc": {
-      "paper_id": "vGeNaFHdET",
-      "path": "repro-loop/attempts/e20658d7-250a-5b0c-a015-be453c43e9fc.json",
-      "phase": "implementing",
-      "updated_at": "schema-v3-migration:f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354"
-    }
+  "current": {
+    "design_approved": true,
+    "estimated_api_cost_usd": 0.0,
+    "improvement_attempts": 0,
+    "paper_id": "vGeNaFHdET",
+    "polls": [],
+    "project_path": "submissions/eeg-fm-bench",
+    "slug": "eeg-fm-bench",
+    "target_claims": [
+      "fourteen-dataset-ten-paradigm-curation",
+      "standardized-preprocessing-reproducibility",
+      "three-strategy-evaluation-harness"
+    ],
+    "title": "EEG-FM-Bench: A Comprehensive Benchmark for the Systematic Evaluation and Diagnostic Analyses of EEG Foundation Models",
+    "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc",
+    "verdicts": []
   },
-  "history": {
-    "c5819c75-8a2a-538d-850e-805bc2325a6d": {
+  "history": [
+    {
+      "blocked_from": "implementing",
+      "blocker": "Live refresh 2026-07-24: official ICML-2026-agent-repro/verdicts dataset (revision 3d3350a34469a6ee1b25a2d749f578578bf606d9) already records a verdict for paper HMu24dTKkJ, judged 2026-07-22T16:03:19+00:00 against Space wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures at SHA 5af083f86c4ab0e98ee65a01e3995669f288849b (5 claim verdicts: 3 toy, 2 inconclusive). The paper is already scored via the parallel reproduction lineage; challenge policy excludes judged papers, so deployment and submission of a duplicate must not proceed. Local re-implementation Tasks 1-3 completed on branch impl/diff-gmm-integration (unmerged).",
+      "design_approved": true,
+      "estimated_api_cost_usd": 0.0,
+      "improvement_attempts": 0,
       "paper_id": "HMu24dTKkJ",
-      "path": "repro-loop/attempts/c5819c75-8a2a-538d-850e-805bc2325a6d.json",
-      "phase": "implementing",
-      "updated_at": "schema-v3-migration:f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354"
+      "polls": [],
+      "project_path": "submissions/dimension-free-diffusion-gmm",
+      "slug": "dimension-free-diffusion-gmm",
+      "target_claims": [
+        "dimension-free-ddpm-discretization",
+        "robustness-to-score-error",
+        "dimension-free-score-jacobian-trace"
+      ],
+      "title": "Dimension-Free Convergence of Diffusion Models for Approximate Gaussian Mixtures",
+      "upstream_revision": "arxiv:2504.05300v1",
+      "verdicts": []
     }
-  },
-  "max_runnable_attempts": 20,
+  ],
+  "phase": "implementing",
   "rejections": [
     {
       "checked_at": "2026-07-21",
@@ -72,11 +94,6 @@
       "title": "OPUS: Towards Efficient and Principled Data Selection in Large Language Model Pretraining"
     }
   ],
-  "resource_limits": {
-    "metered_api_reserved_usd": 10.0,
-    "publication_per_provider": 20
-  },
-  "snapshots": {},
   "total_api_cost_usd": 0.0,
-  "version": 6
+  "version": 3
 }
