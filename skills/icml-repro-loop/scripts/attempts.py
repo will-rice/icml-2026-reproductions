@@ -163,6 +163,7 @@ def transition_attested(
     updates: dict,
     lease: leases.Lease,
     now: datetime,
+    transaction_targets: list[tuple[Path, dict, store.Validator]] | None = None,
 ) -> dict:
     """Advance one authoritative phase using matching immutable evidence."""
     expected_kind = ATTESTED_PHASE_KINDS.get(phase)
@@ -207,6 +208,7 @@ def transition_attested(
         now,
         transition,
         attestation=record,
+        transaction_targets=transaction_targets,
     )
 
 
@@ -307,6 +309,7 @@ def _mutate_attempt(
     now: datetime,
     mutation: Mutation,
     attestation: dict | None = None,
+    transaction_targets: list[tuple[Path, dict, store.Validator]] | None = None,
 ) -> dict:
     recover_transactions(paths)
     timestamp = _timestamp(now)
@@ -329,7 +332,13 @@ def _mutate_attempt(
                 updated_index["history"][attempt_id] = reference
             else:
                 updated_index["attempts"][attempt_id] = reference
-            _commit(paths, attempt, updated_index, attestation)
+            _commit(
+                paths,
+                attempt,
+                updated_index,
+                attestation,
+                transaction_targets,
+            )
     return copy.deepcopy(attempt)
 
 
@@ -397,6 +406,7 @@ def _commit(
     attempt: dict,
     index: dict,
     attestation: dict | None = None,
+    transaction_targets: list[tuple[Path, dict, store.Validator]] | None = None,
 ) -> None:
     targets = []
     if attestation is not None:
@@ -414,6 +424,7 @@ def _commit(
                 ),
             )
         )
+    targets.extend(transaction_targets or [])
     targets.extend(
         [
             (paths.attempt(attempt["attempt_id"]), attempt, store.validate_attempt),
@@ -438,6 +449,16 @@ def _validator_for(paths: store.StatePaths, path: Path) -> store.Validator:
         and path.suffix == ".json"
     ):
         return lambda record: attestations.validate_target(paths, path, record)
+    if (
+        path.parent == paths.root / "judgments"
+        and path.suffix == ".json"
+    ) or (
+        path.parent == paths.root / "judgments" / "archive"
+        and path.suffix == ".json"
+    ):
+        import scheduler
+
+        return scheduler.validate_judgment_record
     raise ValueError("transaction")
 
 

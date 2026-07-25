@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -23,6 +24,7 @@ import attestations  # noqa: E402
 import attempts  # noqa: E402
 import leases  # noqa: E402
 import refresh  # noqa: E402
+import scheduler  # noqa: E402
 import store  # noqa: E402
 
 
@@ -463,6 +465,118 @@ def attest_submission(
     )
 
 
+def sync_verdict(
+    paths: store.StatePaths,
+    attempt_id: str,
+    lease: leases.Lease,
+    snapshot_id: str,
+    now: datetime,
+) -> dict:
+    """Import one exact official snapshot verdict and complete atomically."""
+    attempt = attempts.read_attempt(paths, attempt_id)
+    _assert_attempt_fence(paths, attempt_id, lease, now)
+    if attempt.get("phase") != "judging":
+        raise ValueError("phase")
+    submission = _authoritative_attestation(
+        paths, attempt, "submission", "submitted"
+    )
+    authority = _authoritative_attestation(
+        paths, attempt, "authority-audit", "judging"
+    )
+    snapshot = scheduler.read_fresh_snapshot(paths, snapshot_id, now)
+    verdict_revision = _snapshot_verdict_revision(snapshot)
+    official = _exact_official_verdict(
+        snapshot,
+        attempt["paper_id"],
+        submission["space_id"],
+    )
+    if official.get("source_revision") != verdict_revision:
+        raise ValueError("source_revision")
+    if official.get("paper_id") != attempt["paper_id"]:
+        raise ValueError("paper")
+    if official.get("space_id") != submission["space_id"]:
+        raise ValueError("space")
+    if official.get("sha") != submission["space_sha"]:
+        raise ValueError("sha")
+    judged_at = _parsed_timestamp(official.get("judged_at"), "judged_at")
+    submitted_at = _parsed_timestamp(
+        submission["observed_at"], "submission"
+    )
+    fetched_at = _parsed_timestamp(snapshot["fetched_at"], "snapshot")
+    if judged_at <= submitted_at or judged_at > fetched_at or fetched_at > now:
+        raise ValueError("judged_at")
+    normalized = _normalize_official_claims(attempt, official)
+
+    judgment_path = paths.judgment(attempt_id)
+    judgment = store.read_json(judgment_path)
+    scheduler.validate_judgment_record(judgment)
+    if (
+        judgment["attempt_id"] != attempt_id
+        or judgment["paper_id"] != attempt["paper_id"]
+        or judgment["space_id"] != submission["space_id"]
+        or judgment["submitted_sha"] != submission["space_sha"]
+        or judgment["attempt_number"] != authority["attempt_number"]
+        or judgment["raw_verdict"] is not None
+    ):
+        raise ValueError("judgment")
+    latest_event = (
+        _parsed_timestamp(judgment["polls"][-1]["at"], "polls")
+        if judgment["polls"]
+        else _parsed_timestamp(judgment["created_at"], "created_at")
+    )
+    if now < latest_event:
+        raise ValueError("now")
+
+    payload = {
+        "snapshot_id": snapshot_id,
+        "verdict_revision": verdict_revision,
+        "submission_attestation_id": submission["attestation_id"],
+        "authority_attestation_id": authority["attestation_id"],
+        "space_id": submission["space_id"],
+        "space_sha": submission["space_sha"],
+        "paper_id": attempt["paper_id"],
+        "judged_at": official["judged_at"],
+        "claims": normalized["claims"],
+    }
+    record = {
+        "kind": "verdict",
+        "attempt_id": attempt_id,
+        "attempt_number": authority["attempt_number"],
+        "observed_at": _aware_timestamp(now),
+        "source_commit": submission["source_commit"],
+        "payload_sha256": _sha256_json(payload),
+        **payload,
+    }
+    attestation_id = attestations.persist(paths, record)
+    finalized = copy.deepcopy(judgment)
+    finalized["raw_verdict"] = copy.deepcopy(official)
+    finalized["normalized_verdict"] = copy.deepcopy(normalized)
+    finalized["source_revision"] = verdict_revision
+    finalized["verdict_at"] = _aware_timestamp(now)
+    finalized["updated_at"] = finalized["verdict_at"]
+    scheduler.validate_judgment_record(finalized)
+    return attempts.transition_attested(
+        paths,
+        attempt_id,
+        "complete",
+        attestation_id,
+        {
+            "verdict": normalized,
+            "verdict_source_revision": verdict_revision,
+            "verdict_at": finalized["verdict_at"],
+        },
+        lease,
+        now,
+        transaction_targets=[
+            (
+                judgment_path,
+                finalized,
+                scheduler.validate_judgment_record,
+            )
+        ],
+    )
+
+
 def _validate_manifest(
     attempt: dict, manifest: object
 ) -> tuple[Path, tuple[tuple[str, ...], ...]]:
@@ -787,3 +901,96 @@ def _snapshot_verdict_revision(snapshot: dict) -> str:
     if type(verdicts) is not dict:
         raise ValueError("verdict revision")
     return _nonempty_string(verdicts.get("revision"), "verdict revision")
+
+
+def _exact_official_verdict(
+    snapshot: dict, paper_id: str, space_id: str
+) -> dict:
+    same_space = [
+        verdict
+        for verdict in snapshot["verdicts"]
+        if verdict.get("space_id") == space_id
+    ]
+    if same_space and not any(
+        verdict.get("paper_id") == paper_id for verdict in same_space
+    ):
+        raise ValueError("paper")
+    same_paper = [
+        verdict
+        for verdict in snapshot["verdicts"]
+        if verdict.get("paper_id") == paper_id
+    ]
+    if same_paper and not any(
+        verdict.get("space_id") == space_id for verdict in same_paper
+    ):
+        raise ValueError("space")
+    exact = [
+        verdict
+        for verdict in same_space
+        if verdict.get("paper_id") == paper_id
+    ]
+    if len(exact) != 1:
+        raise ValueError("official_verdict")
+    return copy.deepcopy(exact[0])
+
+
+def _normalize_official_claims(attempt: dict, official: dict) -> dict:
+    target_claims = attempt.get("target_claims")
+    bindings = attempt.get("claim_bindings")
+    official_claims = official.get("claims")
+    if (
+        type(target_claims) is not list
+        or type(bindings) is not list
+        or len(bindings) != len(target_claims)
+        or type(official_claims) is not list
+    ):
+        raise ValueError("claim")
+    claims_by_text = {}
+    for claim in official_claims:
+        if (
+            type(claim) is not dict
+            or set(claim) != {"claim", "verdict", "evidence"}
+            or type(claim.get("claim")) is not str
+            or not claim["claim"]
+            or claim["claim"] in claims_by_text
+        ):
+            raise ValueError("claim")
+        claims_by_text[claim["claim"]] = claim
+    normalized = []
+    for target_claim, binding in zip(target_claims, bindings, strict=True):
+        if (
+            type(binding) is not dict
+            or set(binding)
+            != {
+                "target_claim",
+                "challenge_claim",
+                "challenge_claim_sha256",
+            }
+            or binding["target_claim"] != target_claim
+            or type(binding["challenge_claim"]) is not str
+            or not binding["challenge_claim"]
+            or binding["challenge_claim_sha256"]
+            != hashlib.sha256(
+                binding["challenge_claim"].encode("utf-8")
+            ).hexdigest()
+        ):
+            raise ValueError("claim")
+        claim = claims_by_text.get(binding["challenge_claim"])
+        if claim is None:
+            raise ValueError("claim")
+        status = claim["verdict"]
+        evidence = claim["evidence"]
+        if (
+            status not in scheduler.OFFICIAL_VERDICT_STATUSES
+            or type(evidence) is not str
+        ):
+            raise ValueError("verdict")
+        normalized.append(
+            {
+                "target_claim": target_claim,
+                "claim": binding["challenge_claim"],
+                "status": status,
+                "evidence": evidence,
+            }
+        )
+    return {"claims": normalized}

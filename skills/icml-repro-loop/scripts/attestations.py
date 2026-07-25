@@ -66,6 +66,34 @@ KIND_KEYS["submission"] = frozenset(
         "deployment_attestation_id",
     }
 )
+KIND_KEYS["authority-audit"] = frozenset(
+    {
+        "submission_attestation_id",
+        "poll_limit",
+        "poll_deadline",
+        "space_id",
+        "space_sha",
+    }
+)
+KIND_KEYS["verdict"] = frozenset(
+    {
+        "snapshot_id",
+        "verdict_revision",
+        "submission_attestation_id",
+        "authority_attestation_id",
+        "space_id",
+        "space_sha",
+        "paper_id",
+        "judged_at",
+        "claims",
+    }
+)
+OFFICIAL_VERDICT_STATUSES = {
+    "verified",
+    "falsified",
+    "toy",
+    "inconclusive",
+}
 SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
 GIT_SHA_PATTERN = re.compile(r"(?:[0-9a-f]{40}|[0-9a-f]{64})")
 RESULT_KEYS = {"argv", "returncode", "stdout_sha256", "stderr_sha256"}
@@ -154,6 +182,10 @@ def _validate_record(record: object, *, persisted: bool) -> None:
         _validate_deployment(record)
     elif kind == "submission":
         _validate_submission(record)
+    elif kind == "authority-audit":
+        _validate_authority_audit(record)
+    elif kind == "verdict":
+        _validate_verdict(record)
 
 
 def _validate_validation(record: dict) -> None:
@@ -216,6 +248,60 @@ def _validate_submission(record: dict) -> None:
         record["deployment_attestation_id"],
         "deployment_attestation_id",
     )
+    _validate_payload_digest(record)
+
+
+def _validate_authority_audit(record: dict) -> None:
+    _git_sha(record["source_commit"], "source_commit")
+    _sha256(
+        record["submission_attestation_id"],
+        "submission_attestation_id",
+    )
+    if type(record["poll_limit"]) is not int or record["poll_limit"] <= 0:
+        raise ValueError("poll_limit")
+    _timestamp(record["poll_deadline"])
+    _nonempty_string(record["space_id"], "space_id")
+    _nonempty_string(record["space_sha"], "space_sha")
+    _validate_payload_digest(record)
+
+
+def _validate_verdict(record: dict) -> None:
+    _git_sha(record["source_commit"], "source_commit")
+    _sha256(record["snapshot_id"], "snapshot_id")
+    _sha256(
+        record["submission_attestation_id"],
+        "submission_attestation_id",
+    )
+    _sha256(
+        record["authority_attestation_id"],
+        "authority_attestation_id",
+    )
+    for field in ("verdict_revision", "space_id", "space_sha", "paper_id"):
+        _nonempty_string(record[field], field)
+    _timestamp(record["judged_at"])
+    claims = record["claims"]
+    if type(claims) is not list or not claims:
+        raise ValueError("claims")
+    targets = []
+    challenge_claims = []
+    for claim in claims:
+        if type(claim) is not dict or set(claim) != {
+            "target_claim",
+            "claim",
+            "status",
+            "evidence",
+        }:
+            raise ValueError("claims")
+        targets.append(_nonempty_string(claim["target_claim"], "claims"))
+        challenge_claims.append(_nonempty_string(claim["claim"], "claims"))
+        if claim["status"] not in OFFICIAL_VERDICT_STATUSES:
+            raise ValueError("claims")
+        if type(claim["evidence"]) is not str:
+            raise ValueError("claims")
+    if len(targets) != len(set(targets)) or len(challenge_claims) != len(
+        set(challenge_claims)
+    ):
+        raise ValueError("claims")
     _validate_payload_digest(record)
 
 

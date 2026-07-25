@@ -7,7 +7,9 @@ from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+import hashlib
 from itertools import chain
+import json
 import math
 from pathlib import Path
 import sys
@@ -18,6 +20,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
+import attestations  # noqa: E402
 import attempts  # noqa: E402
 import leases  # noqa: E402
 import state  # noqa: E402
@@ -51,6 +54,12 @@ JUDGMENT_KEYS = {
     "verdict_at",
     "created_at",
     "updated_at",
+}
+OFFICIAL_VERDICT_STATUSES = {
+    "verified",
+    "falsified",
+    "toy",
+    "inconclusive",
 }
 
 
@@ -194,106 +203,132 @@ def watch_attempt(
     poll_deadline: datetime,
     now: datetime,
 ) -> dict:
-    """Create an independently locked bounded judgment record."""
+    """Atomically enter judging with a bounded authority attestation."""
     observed_at = _datetime(now)
     deadline = _datetime(poll_deadline)
     if type(poll_limit) is not int or poll_limit <= 0:
         raise ValueError("poll_limit")
     if deadline < observed_at:
         raise ValueError("poll_deadline")
-    with _hold_attempt_fence(paths, attempt_id, lease, observed_at):
-        attempt = attempts.read_attempt(paths, attempt_id)
-        if attempt["phase"] not in state.JUDGMENT_PHASES:
-            raise ValueError("phase")
-        target_claims = attempt.get("target_claims")
-        state.validate_target_claims(target_claims)
-        space_id = _identity(attempt.get("space_id"), "space_id")
-        submitted_sha = _identity(attempt.get("deployed_sha"), "deployed_sha")
-        improvement_attempts = attempt.get("improvement_attempts", 0)
+    attempt = attempts.read_attempt(paths, attempt_id)
+    if attempt["phase"] != "submitted":
+        raise ValueError("phase")
+    target_claims = attempt.get("target_claims")
+    state.validate_target_claims(target_claims)
+    space_id = _identity(attempt.get("space_id"), "space_id")
+    submitted_sha = _identity(attempt.get("deployed_sha"), "deployed_sha")
+    improvement_attempts = attempt.get("improvement_attempts", 0)
+    if (
+        type(improvement_attempts) is not int
+        or improvement_attempts not in {0, 1}
+    ):
+        raise ValueError("improvement_attempts")
+    attempt_number = improvement_attempts + 1
+    submission = _authoritative_attestation(
+        paths, attempt, "submission", "submitted"
+    )
+    timestamp = _timestamp(observed_at)
+    judgment = {
+        "attempt_id": attempt_id,
+        "paper_id": attempt["paper_id"],
+        "space_id": space_id,
+        "submitted_sha": submitted_sha,
+        "attempt_number": attempt_number,
+        "target_claims": copy.deepcopy(target_claims),
+        "poll_limit": poll_limit,
+        "poll_deadline": _timestamp(deadline),
+        "polls": [],
+        "raw_verdict": None,
+        "normalized_verdict": None,
+        "source_revision": None,
+        "verdict_at": None,
+        "created_at": timestamp,
+        "updated_at": timestamp,
+    }
+    authority_payload = {
+        "submission_attestation_id": submission["attestation_id"],
+        "poll_limit": poll_limit,
+        "poll_deadline": judgment["poll_deadline"],
+        "space_id": space_id,
+        "space_sha": submitted_sha,
+    }
+    authority_record = {
+        "kind": "authority-audit",
+        "attempt_id": attempt_id,
+        "attempt_number": attempt_number,
+        "observed_at": timestamp,
+        "source_commit": submission["source_commit"],
+        "payload_sha256": _sha256_json(authority_payload),
+        **authority_payload,
+    }
+    authority_id = attestations.persist(paths, authority_record)
+    path = paths.judgment(attempt_id)
+    transaction_targets = []
+    if path.exists():
+        previous = store.read_json(path)
+        validate_judgment_record(previous)
+        _require_judgment(previous, attempt_id)
         if (
-            type(improvement_attempts) is not int
-            or improvement_attempts not in {0, 1}
+            previous["raw_verdict"] is None
+            or previous["attempt_number"] != attempt_number - 1
         ):
-            raise ValueError("improvement_attempts")
-        timestamp = _timestamp(observed_at)
-        judgment = {
-            "attempt_id": attempt_id,
-            "paper_id": attempt["paper_id"],
-            "space_id": space_id,
-            "submitted_sha": submitted_sha,
-            "attempt_number": improvement_attempts + 1,
-            "target_claims": copy.deepcopy(target_claims),
-            "poll_limit": poll_limit,
-            "poll_deadline": _timestamp(deadline),
-            "polls": [],
-            "raw_verdict": None,
-            "normalized_verdict": None,
-            "source_revision": None,
-            "verdict_at": None,
-            "created_at": timestamp,
-            "updated_at": timestamp,
-        }
-        path = paths.judgment(attempt_id)
-        identity_leases = []
-        identity_resources = sorted(
-            (
-                ("space_id", f"judgment-space:{space_id}"),
-                ("submitted_sha", f"submitted-sha:{submitted_sha}"),
-            ),
-            key=lambda item: item[1],
+            raise ValueError("judgment")
+        archive_path = paths.judgment_archive(
+            attempt_id, previous["attempt_number"]
         )
-        try:
-            for field, resource in identity_resources:
-                try:
-                    identity_leases.append(
-                        leases.acquire_lease(
-                            paths,
-                            resource,
-                            f"judgment-{attempt_id}",
-                            attempt_id,
-                            observed_at,
-                            ADMISSION_LEASE_TTL,
-                        )
+        if archive_path.exists() and store.read_json(archive_path) != previous:
+            raise ValueError("judgment")
+        transaction_targets.append(
+            (archive_path, previous, validate_judgment_record)
+        )
+    transaction_targets.append((path, judgment, validate_judgment_record))
+    identity_leases = []
+    identity_resources = sorted(
+        (
+            ("space_id", f"judgment-space:{space_id}"),
+            ("submitted_sha", f"submitted-sha:{submitted_sha}"),
+        ),
+        key=lambda item: item[1],
+    )
+    try:
+        for field, resource in identity_resources:
+            try:
+                identity_leases.append(
+                    leases.acquire_lease(
+                        paths,
+                        resource,
+                        f"judgment-{attempt_id}",
+                        attempt_id,
+                        observed_at,
+                        ADMISSION_LEASE_TTL,
                     )
-                except leases.LeaseBusy as error:
-                    raise ValueError(field) from error
-            with ExitStack() as identity_fences:
-                for identity_lease in identity_leases:
-                    identity_fences.enter_context(
-                        leases.hold_fence(paths, identity_lease, observed_at)
-                    )
-                _assert_unique_submission(
-                    paths, attempt_id, space_id, submitted_sha
                 )
-                with store._exclusive_lock(path):
-                    if path.exists():
-                        previous = store.read_json(path)
-                        validate_judgment_record(previous)
-                        _require_judgment(previous, attempt_id)
-                        if (
-                            previous["raw_verdict"] is None
-                            or previous["attempt_number"]
-                            != judgment["attempt_number"] - 1
-                        ):
-                            raise ValueError("judgment")
-                        archive_path = paths.judgment_archive(
-                            attempt_id, previous["attempt_number"]
-                        )
-                        if archive_path.exists():
-                            if store.read_json(archive_path) != previous:
-                                raise ValueError("judgment")
-                        else:
-                            _write_judgment(archive_path, previous)
-                        store._fsync_directory(archive_path.parent.parent)
-                    _write_judgment(path, judgment)
-        finally:
-            for identity_lease in reversed(identity_leases):
-                try:
-                    leases.release_lease(paths, identity_lease, observed_at)
-                except leases.StaleFence:
-                    # A successor can acquire only after the held write completes.
-                    pass
-    return copy.deepcopy(judgment)
+            except leases.LeaseBusy as error:
+                raise ValueError(field) from error
+        with ExitStack() as identity_fences:
+            for identity_lease in identity_leases:
+                identity_fences.enter_context(
+                    leases.hold_fence(paths, identity_lease, observed_at)
+                )
+            _assert_unique_submission(paths, attempt_id, space_id, submitted_sha)
+            attempts.transition_attested(
+                paths,
+                attempt_id,
+                "judging",
+                authority_id,
+                {},
+                lease,
+                observed_at,
+                transaction_targets=transaction_targets,
+            )
+    finally:
+        for identity_lease in reversed(identity_leases):
+            try:
+                leases.release_lease(paths, identity_lease, observed_at)
+            except leases.StaleFence:
+                # A successor can acquire only after the held write completes.
+                pass
+    return store.read_json(path)
 
 
 def record_poll(
@@ -321,42 +356,6 @@ def record_poll(
             timestamp = _timestamp(observed_at)
             judgment["polls"].append({"at": timestamp, "status": status})
             judgment["updated_at"] = timestamp
-    return store.read_json(path)
-
-
-def record_verdict(
-    paths: store.StatePaths,
-    attempt_id: str,
-    lease: leases.Lease,
-    raw_verdict: dict,
-    normalized_verdict: dict,
-    source_revision: str,
-    now: datetime,
-) -> dict:
-    """Persist raw and normalized verdicts with their exact source revision."""
-    if type(raw_verdict) is not dict:
-        raise ValueError("raw_verdict")
-    source_revision = _identity(source_revision, "source_revision")
-    observed_at = _datetime(now)
-    path = paths.judgment(attempt_id)
-    with _hold_attempt_fence(paths, attempt_id, lease, observed_at):
-        with store.locked_json(path, validate_judgment_record) as judgment:
-            _require_judgment(judgment, attempt_id)
-            if judgment["raw_verdict"] is not None:
-                raise ValueError("verdict")
-            latest_event = (
-                _parse(judgment["polls"][-1]["at"], "polls")
-                if judgment["polls"]
-                else _parse(judgment["created_at"], "created_at")
-            )
-            if observed_at < latest_event:
-                raise ValueError("now")
-            state.validate_verdict(normalized_verdict, judgment["target_claims"])
-            judgment["raw_verdict"] = copy.deepcopy(raw_verdict)
-            judgment["normalized_verdict"] = copy.deepcopy(normalized_verdict)
-            judgment["source_revision"] = source_revision
-            judgment["verdict_at"] = _timestamp(observed_at)
-            judgment["updated_at"] = judgment["verdict_at"]
     return store.read_json(path)
 
 
@@ -405,7 +404,7 @@ def validate_judgment_record(judgment: dict) -> None:
         raise ValueError("verdict")
     if type(judgment["raw_verdict"]) is not dict:
         raise ValueError("raw_verdict")
-    state.validate_verdict(
+    validate_normalized_verdict(
         judgment["normalized_verdict"], judgment["target_claims"]
     )
     _identity(judgment["source_revision"], "source_revision")
@@ -414,6 +413,36 @@ def validate_judgment_record(judgment: dict) -> None:
         raise ValueError("verdict_at")
     if updated != verdict_at:
         raise ValueError("updated_at")
+
+
+def validate_normalized_verdict(verdict: object, target_claims: list[str]) -> None:
+    """Accept preserved legacy records or exact official-status records."""
+    try:
+        state.validate_verdict(verdict, target_claims)
+        return
+    except ValueError:
+        pass
+    if type(verdict) is not dict or set(verdict) != {"claims"}:
+        raise ValueError("verdict")
+    claims = verdict["claims"]
+    if type(claims) is not list or len(claims) != len(target_claims):
+        raise ValueError("verdict")
+    for target_claim, claim in zip(target_claims, claims, strict=True):
+        if type(claim) is not dict or set(claim) != {
+            "target_claim",
+            "claim",
+            "status",
+            "evidence",
+        }:
+            raise ValueError("verdict")
+        if (
+            claim["target_claim"] != target_claim
+            or type(claim["claim"]) is not str
+            or not claim["claim"]
+            or claim["status"] not in OFFICIAL_VERDICT_STATUSES
+            or type(claim["evidence"]) is not str
+        ):
+            raise ValueError("verdict")
 
 
 def _admit_up_to(
@@ -584,6 +613,35 @@ def _require_judgment(judgment: dict, attempt_id: str) -> None:
         raise ValueError("attempt_id")
 
 
+def _authoritative_attestation(
+    paths: store.StatePaths,
+    attempt: dict,
+    kind: str,
+    phase: str,
+) -> dict:
+    attempt_number = attempt.get("improvement_attempts", 0) + 1
+    path = paths.attestation(kind, attempt["attempt_id"], attempt_number)
+    if not path.exists():
+        raise ValueError(kind)
+    record = store.read_json(path)
+    attestations.validate_target(paths, path, record)
+    transitions = [
+        transition
+        for transition in attempt.get("transitions", [])
+        if transition.get("to") == phase
+    ]
+    if (
+        record.get("kind") != kind
+        or record.get("attempt_id") != attempt["attempt_id"]
+        or record.get("attempt_number") != attempt_number
+        or not transitions
+        or transitions[-1].get("attestation_id")
+        != record.get("attestation_id")
+    ):
+        raise ValueError(kind)
+    return record
+
+
 @contextmanager
 def _hold_attempt_fence(
     paths: store.StatePaths,
@@ -615,6 +673,13 @@ def _datetime(value: object) -> datetime:
 
 def _timestamp(value: object) -> str:
     return _datetime(value).isoformat()
+
+
+def _sha256_json(value: object) -> str:
+    encoded = json.dumps(
+        value, allow_nan=False, separators=(",", ":"), sort_keys=True
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _parse(value: object, field: str) -> datetime:

@@ -1471,7 +1471,7 @@ def test_cli_help_names_schema_v6_operations():
         "review-design",
         "watch-attempt",
         "record-poll",
-        "record-verdict",
+        "sync-verdict",
     ):
         assert command in help_text
 
@@ -1988,25 +1988,18 @@ def test_cli_judgment_commands_preserve_fenced_scheduler_signatures(tmp_path: Pa
             "2026-07-24T18:01:00+00:00",
         ).stdout
     )
-    recorded = json.loads(
-        run_cli(
-            "record-verdict",
-            str(paths.index),
-            *identity,
-            "--raw-verdict",
-            '{"result":"complete"}',
-            "--normalized-verdict",
-            json.dumps(verdict()),
-            "--source-revision",
-            "verdict-revision",
-            "--now",
-            "2026-07-24T18:02:00+00:00",
-        ).stdout
+    rejected = run_cli_unchecked(
+        "record-verdict",
+        str(paths.index),
+        *identity,
     )
 
     assert watched["attempt_id"] == "a1"
     assert polled["polls"][-1]["status"] == "pending"
-    assert recorded["source_revision"] == "verdict-revision"
+    assert json.loads(paths.attempt("a1").read_text(encoding="utf-8"))[
+        "phase"
+    ] == "judging"
+    assert rejected.returncode != 0
 
 
 @pytest.mark.parametrize(

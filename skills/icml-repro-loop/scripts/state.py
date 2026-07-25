@@ -197,13 +197,12 @@ def main() -> None:
     poll_parser.add_argument("--status", required=True)
     poll_parser.add_argument("--now")
     verdict_parser = commands.add_parser(
-        "record-verdict", help="persist one fenced judgment verdict"
+        "sync-verdict",
+        help="import one exact official snapshot verdict",
     )
     verdict_parser.add_argument("path", type=Path)
     _add_fence_arguments(verdict_parser)
-    verdict_parser.add_argument("--raw-verdict", required=True)
-    verdict_parser.add_argument("--normalized-verdict", required=True)
-    verdict_parser.add_argument("--source-revision", required=True)
+    verdict_parser.add_argument("--snapshot-id", required=True)
     verdict_parser.add_argument("--now")
     validation_parser = commands.add_parser(
         "attest-validation",
@@ -245,7 +244,7 @@ def main() -> None:
         "review-design",
         "watch-attempt",
         "record-poll",
-        "record-verdict",
+        "sync-verdict",
         "attest-validation",
         "publish-deployment",
         "attest-submission",
@@ -429,13 +428,13 @@ def _run_v6_command(arguments: argparse.Namespace) -> object:
             arguments.snapshot_id,
             now,
         )
-    return scheduler.record_verdict(
+    import controller
+
+    return controller.sync_verdict(
         paths,
         arguments.attempt_id,
         lease,
-        json.loads(arguments.raw_verdict),
-        json.loads(arguments.normalized_verdict),
-        arguments.source_revision,
+        arguments.snapshot_id,
         now,
     )
 

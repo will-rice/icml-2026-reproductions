@@ -1,5 +1,6 @@
 """Tests for bounded scheduler admission and independent judgments."""
 
+import copy
 from datetime import datetime, timedelta, timezone
 import fcntl
 import hashlib
@@ -172,11 +173,19 @@ def transition_to_submitted(attempts, paths, assignment, now):
     )
 
 
-def transition_attested(attempts, paths, attempt_id, phase, lease, now):
+def transition_attested(
+    attempts,
+    paths,
+    attempt_id,
+    phase,
+    lease,
+    now,
+    attempt_number=1,
+):
     record = {
         "kind": PHASE_KINDS[phase],
         "attempt_id": attempt_id,
-        "attempt_number": 1,
+        "attempt_number": attempt_number,
         "observed_at": now.isoformat(),
         "source_commit": "abc123",
         "payload_sha256": "1" * 64,
@@ -513,7 +522,7 @@ def test_pending_judgment_does_not_block_new_admission(
     assert report.paper_ids == ("new-paper",)
 
 
-def test_judgment_retains_submission_identity_and_bounded_verdict_provenance(
+def test_judgment_retains_submission_identity_and_bounded_poll_provenance(
     paths, store, now, scheduler
 ):
     snapshot_id = write_snapshot(store, paths, now, [paper("paper-a", 10)])
@@ -534,22 +543,7 @@ def test_judgment_retains_submission_identity_and_bounded_verdict_provenance(
         "ready",
         now + timedelta(minutes=2),
     )
-    raw = {"claims": [{"name": "claim-1", "verdict": "passed"}]}
-    normalized = {
-        "claims": [
-            {"claim": "claim-1", "status": "verified"},
-            {"claim": "claim-2", "status": "inconclusive"},
-        ]
-    }
-    recorded = scheduler.record_verdict(
-        paths,
-        assignment.attempt_id,
-        assignment.writer_lease,
-        raw,
-        normalized,
-        "verdict-dataset-revision",
-        now + timedelta(minutes=3),
-    )
+    recorded = store.read_json(paths.judgment(assignment.attempt_id))
 
     assert watched["space_id"] == f"org/{assignment.attempt_id}"
     assert watched["submitted_sha"] == f"sha-{assignment.attempt_id}"
@@ -558,15 +552,15 @@ def test_judgment_retains_submission_identity_and_bounded_verdict_provenance(
     assert watched["poll_limit"] == 2
     assert watched["poll_deadline"] == deadline.isoformat()
     assert len(recorded["polls"]) == 2
-    assert recorded["raw_verdict"] == raw
-    assert recorded["normalized_verdict"] == normalized
-    assert recorded["source_revision"] == "verdict-dataset-revision"
-    assert recorded["verdict_at"] == (now + timedelta(minutes=3)).isoformat()
+    assert recorded["raw_verdict"] is None
+    assert recorded["normalized_verdict"] is None
+    assert recorded["source_revision"] is None
+    assert recorded["verdict_at"] is None
     assert store.read_json(paths.judgment(assignment.attempt_id)) == recorded
 
 
 def test_second_judgment_archives_finalized_first_round(
-    paths, store, now, scheduler, monkeypatch
+    paths, store, now, scheduler
 ):
     snapshot_id = write_snapshot(store, paths, now, [paper("paper-a", 10)])
     assignment = scheduler.scheduler_pass(paths, snapshot_id, now).assignments[0]
@@ -574,42 +568,47 @@ def test_second_judgment_archives_finalized_first_round(
     first = scheduler.watch_attempt(
         paths, assignment.attempt_id, assignment.writer_lease, 2, now + TTL, now
     )
-    finalized = scheduler.record_verdict(
+    finalized = copy.deepcopy(first)
+    finalized.update(
+        {
+            "raw_verdict": {"result": "official"},
+            "normalized_verdict": normalized_verdict(),
+            "source_revision": "verdict-revision-1",
+            "verdict_at": (now + timedelta(minutes=1)).isoformat(),
+            "updated_at": (now + timedelta(minutes=1)).isoformat(),
+        }
+    )
+    store.atomic_json_write(
+        paths.judgment(assignment.attempt_id),
+        finalized,
+        scheduler.validate_judgment_record,
+    )
+    scheduler.attempts.transition_attempt(
         paths,
         assignment.attempt_id,
+        "improving",
         assignment.writer_lease,
-        {"result": "complete"},
-        normalized_verdict(),
-        "verdict-revision-1",
-        now + timedelta(minutes=1),
+        now + timedelta(minutes=2),
+        improvement_attempts=1,
+        improvement_reason="official verdict requested stronger evidence",
     )
     scheduler.attempts.update_attempt(
         paths,
         assignment.attempt_id,
         assignment.writer_lease,
         now + timedelta(minutes=2),
-        improvement_attempts=1,
         deployed_sha=f"improved-{assignment.attempt_id}",
     )
-    store.atomic_json_write(
-        paths.judgment_archive(assignment.attempt_id, 1),
-        finalized,
-        scheduler.validate_judgment_record,
-    )
-    events = []
-    real_fsync_directory = scheduler.store._fsync_directory
-    real_write_judgment = scheduler._write_judgment
-
-    def track_fsync(directory):
-        events.append(("fsync", directory))
-        real_fsync_directory(directory)
-
-    def track_write(path, judgment):
-        events.append(("write", path))
-        real_write_judgment(path, judgment)
-
-    monkeypatch.setattr(scheduler.store, "_fsync_directory", track_fsync)
-    monkeypatch.setattr(scheduler, "_write_judgment", track_write)
+    for phase in ("validated", "deployed", "submitted"):
+        transition_attested(
+            scheduler.attempts,
+            paths,
+            assignment.attempt_id,
+            phase,
+            assignment.writer_lease,
+            now + timedelta(minutes=2),
+            attempt_number=2,
+        )
 
     second = scheduler.watch_attempt(
         paths,
@@ -628,9 +627,6 @@ def test_second_judgment_archives_finalized_first_round(
         == finalized
     )
     assert store.read_json(paths.judgment(assignment.attempt_id)) == second
-    parent_fsync = ("fsync", paths.root / "judgments")
-    current_write = ("write", paths.judgment(assignment.attempt_id))
-    assert events.index(parent_fsync) < events.index(current_write)
 
 
 def test_judgment_poll_limit_and_deadline_are_enforced(
@@ -675,60 +671,6 @@ def test_judgment_poll_limit_and_deadline_are_enforced(
             other.writer_lease,
             "pending",
             deadline + timedelta(seconds=1),
-        )
-
-
-def test_verdict_cannot_precede_latest_poll(paths, store, now, scheduler):
-    snapshot_id = write_snapshot(store, paths, now, [paper("paper-a", 10)])
-    assignment = scheduler.scheduler_pass(paths, snapshot_id, now).assignments[0]
-    transition_to_submitted(scheduler.attempts, paths, assignment, now)
-    scheduler.watch_attempt(
-        paths, assignment.attempt_id, assignment.writer_lease, 2, now + TTL, now
-    )
-    scheduler.record_poll(
-        paths,
-        assignment.attempt_id,
-        assignment.writer_lease,
-        "pending",
-        now + timedelta(minutes=2),
-    )
-
-    with pytest.raises(ValueError, match="now"):
-        scheduler.record_verdict(
-            paths,
-            assignment.attempt_id,
-            assignment.writer_lease,
-            {"result": "complete"},
-            normalized_verdict(),
-            "verdict-revision",
-            now + timedelta(minutes=1),
-        )
-
-
-def test_poll_cannot_follow_verdict(paths, store, now, scheduler):
-    snapshot_id = write_snapshot(store, paths, now, [paper("paper-a", 10)])
-    assignment = scheduler.scheduler_pass(paths, snapshot_id, now).assignments[0]
-    transition_to_submitted(scheduler.attempts, paths, assignment, now)
-    scheduler.watch_attempt(
-        paths, assignment.attempt_id, assignment.writer_lease, 2, now + TTL, now
-    )
-    scheduler.record_verdict(
-        paths,
-        assignment.attempt_id,
-        assignment.writer_lease,
-        {"result": "complete"},
-        normalized_verdict(),
-        "verdict-revision",
-        now + timedelta(minutes=1),
-    )
-
-    with pytest.raises(ValueError, match="verdict"):
-        scheduler.record_poll(
-            paths,
-            assignment.attempt_id,
-            assignment.writer_lease,
-            "late",
-            now + timedelta(minutes=2),
         )
 
 
@@ -815,19 +757,20 @@ def test_identity_takeover_cannot_overtake_judgment_creation(
     events = []
     errors = []
     real_assert_unique = scheduler._assert_unique_submission
-    real_write = scheduler._write_judgment
+    real_write = scheduler.store._transaction_write
 
     def pause_before_scan(*args):
         reached_scan.set()
         assert continue_scan.wait(timeout=5)
         return real_assert_unique(*args)
 
-    def track_write(*args):
-        real_write(*args)
-        events.append("judgment-written")
+    def track_write(path, value, validator):
+        real_write(path, value, validator)
+        if path == paths.judgment(assignment.attempt_id):
+            events.append("judgment-written")
 
     monkeypatch.setattr(scheduler, "_assert_unique_submission", pause_before_scan)
-    monkeypatch.setattr(scheduler, "_write_judgment", track_write)
+    monkeypatch.setattr(scheduler.store, "_transaction_write", track_write)
 
     def watch():
         try:
@@ -908,18 +851,10 @@ def mutate_judgment(scheduler, paths, assignment, lease, operation, now):
         return scheduler.record_poll(
             paths, assignment.attempt_id, lease, "pending", now
         )
-    return scheduler.record_verdict(
-        paths,
-        assignment.attempt_id,
-        lease,
-        {"result": "complete"},
-        normalized_verdict(),
-        "verdict-revision",
-        now,
-    )
+    raise AssertionError(operation)
 
 
-@pytest.mark.parametrize("operation", ["watch", "poll", "verdict"])
+@pytest.mark.parametrize("operation", ["watch", "poll"])
 def test_judgment_mutations_reject_stale_writer_after_successor_takeover(
     paths, store, leases, now, scheduler, operation
 ):
@@ -956,7 +891,7 @@ def test_judgment_mutations_reject_stale_writer_after_successor_takeover(
         )
 
 
-@pytest.mark.parametrize("operation", ["watch", "poll", "verdict"])
+@pytest.mark.parametrize("operation", ["watch", "poll"])
 def test_judgment_mutations_reject_other_attempt_writer(
     paths, store, now, scheduler, operation
 ):
