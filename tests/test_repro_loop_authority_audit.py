@@ -578,3 +578,42 @@ def test_cli_exposes_dry_run_and_repair_authority_audit(authority_case):
     assert dry_result.returncode == 0
     assert json.loads(dry_result.stdout)["decisions"]
     assert store.read_json(paths.attempt("a-forged"))["phase"] == "complete"
+
+
+def test_cli_repair_reuses_the_persisted_report_on_an_idempotent_run(
+    authority_case,
+):
+    paths = authority_case["paths"]
+    command = [
+        sys.executable,
+        str(STATE),
+        "audit-authority",
+        str(paths.index),
+        "--snapshot-id",
+        authority_case["snapshot_id"],
+        "--repair",
+    ]
+    first = subprocess.run(
+        [*command, "--now", (NOW + timedelta(minutes=1)).isoformat()],
+        check=True,
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PYTHONPATH": str(SCRIPTS)},
+    )
+    second = subprocess.run(
+        [*command, "--now", (NOW + timedelta(minutes=2)).isoformat()],
+        check=True,
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PYTHONPATH": str(SCRIPTS)},
+    )
+    first_result = json.loads(first.stdout)
+    second_result = json.loads(second.stdout)
+
+    assert second_result["repair"]["mutations"] == 0
+    assert second_result["report"]["report_id"] == first_result["report"][
+        "report_id"
+    ]
+    assert second_result["report"]["decisions"] == first_result["report"][
+        "decisions"
+    ]

@@ -337,6 +337,7 @@ def _run_v6_command(arguments: argparse.Namespace) -> object:
         report = authority_audit.audit(paths, arguments.snapshot_id)
         if not arguments.repair:
             return report
+        report = authority_audit.reusable_repair_report(paths, report)
         return {
             "report": report,
             "repair": authority_audit.repair(

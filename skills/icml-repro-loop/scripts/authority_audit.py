@@ -269,6 +269,50 @@ def recover_transactions(paths: store.StatePaths) -> None:
     )
 
 
+def reusable_repair_report(paths: store.StatePaths, fresh: dict) -> dict:
+    """Reuse the exact persisted report when its repair is already installed."""
+    _validate_report(fresh)
+    fresh_decisions = {
+        decision["attempt_id"]: decision
+        for decision in fresh["decisions"]
+    }
+    matches = []
+    for path in sorted((paths.root / "authority-audits").glob("*.json")):
+        candidate = store.read_json(path)
+        _validate_report(candidate)
+        if (
+            candidate["snapshot_id"] != fresh["snapshot_id"]
+            or path != paths.authority_audit(candidate["report_id"])
+        ):
+            continue
+        unsupported = [
+            decision
+            for decision in candidate["decisions"]
+            if decision["classification"] == "unsupported-completion"
+        ]
+        valid = {
+            decision["attempt_id"]: decision
+            for decision in candidate["decisions"]
+            if decision["classification"] == "valid-official"
+        }
+        if (
+            unsupported
+            and fresh_decisions == valid
+            and all(
+                _is_repaired_attempt(
+                    paths,
+                    decision,
+                    candidate["report_id"],
+                )
+                for decision in unsupported
+            )
+        ):
+            matches.append(candidate)
+    if len(matches) > 1:
+        raise ValueError("report")
+    return fresh if not matches else matches[0]
+
+
 def _has_exact_official_verdict(snapshot: dict, attempt: dict) -> bool:
     paper_id = attempt.get("paper_id")
     space_id = attempt.get("space_id")
