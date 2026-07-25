@@ -37,6 +37,9 @@ branches. Full host permissions do not transfer that authority to a worker.
 
 1. When processing challenge papers, require and follow `icml-repro-loop`.
    Resume every materially affected attempt from the schema-v6 index and shards.
+   A migrated schema-v3 attempt must be bound once through
+   `reconcile-legacy-attempt` to a fresh assessed snapshot and explicit design
+   approval provenance before controller validation.
 2. Run `refresh-live` without assessments, then inspect the immutable raw result
    with `show-snapshot`. Assess its pinned `challenge.json` candidates in
    parallel from primary artifacts. Raw challenge metadata is never an

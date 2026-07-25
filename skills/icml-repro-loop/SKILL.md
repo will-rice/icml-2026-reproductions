@@ -41,6 +41,7 @@ The controller must use the dedicated command that owns each assertion:
 
 | Assertion | Required controller command |
 | --- | --- |
+| migrated schema-v3 attempt has fresh claim and design authority | `reconcile-legacy-attempt` |
 | local evidence passed | `attest-validation` |
 | exact Space was published and is healthy | `publish-deployment` |
 | exact tagged Space is visible live | `refresh-live`, then `attest-submission` |
@@ -77,6 +78,11 @@ success.
    exact live challenge text and SHA-256. Run
    `refresh-live --assessments-json PATH`; revision drift requires a new raw
    refresh and assessment.
+   A schema-v3 migrated attempt cannot advance on its legacy
+   `design_approved` boolean alone. Claim it with predecessor token `0`, then
+   use `reconcile-legacy-attempt` once with this fresh assessed snapshot,
+   distinct design author/reviewer identities, the tracked design path, and an
+   explicit approval reference.
 3. Run `scheduler-pass` with that assessed snapshot. Persist one paper-specific
    design with `record-design`, then require a different reviewer through
    `review-design`.

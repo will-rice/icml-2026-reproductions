@@ -5,7 +5,9 @@ from __future__ import annotations
 from collections.abc import Callable
 import copy
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
+import hashlib
+from pathlib import Path, PurePosixPath
+import re
 import sys
 from uuid import uuid4
 
@@ -22,6 +24,9 @@ import store  # noqa: E402
 
 IMMUTABLE_FIELDS = {
     "attempt_id",
+    "claim_bindings",
+    "legacy_reconciliation",
+    "live_claims",
     "paper_id",
     "phase",
     "snapshot_id",
@@ -280,6 +285,112 @@ def record_design_review(
     return _mutate_attempt(paths, attempt_id, lease, now, review)
 
 
+def reconcile_legacy_attempt(
+    paths: store.StatePaths,
+    attempt_id: str,
+    lease: leases.Lease,
+    snapshot_id: str,
+    *,
+    design_author: str,
+    design_path: str,
+    reviewer: str,
+    approval_ref: str,
+    now: datetime,
+) -> dict:
+    """Bind one migrated active attempt to fresh claims and design provenance."""
+    import migrate_v6
+    import scheduler
+
+    design_author = _identity(design_author, "design_author")
+    reviewer = _identity(reviewer, "reviewer")
+    approval_ref = _identity(approval_ref, "approval_ref")
+    if reviewer == design_author:
+        raise ValueError("reviewer")
+    design_path = _relative_path(design_path, "design_path")
+    snapshot = scheduler.read_fresh_snapshot(paths, snapshot_id, now)
+    if snapshot.get("assessments") is None:
+        raise ValueError("assessments")
+    paper_id = _paper_id_for_attempt(paths, attempt_id)
+    candidates = [
+        candidate
+        for candidate in scheduler.rank_eligible_candidates(snapshot)
+        if candidate["paper_id"] == paper_id
+    ]
+    if len(candidates) != 1:
+        raise ValueError("paper_id")
+    candidate = candidates[0]
+    if any(
+        record.get("paper_id") == paper_id
+        for field in ("queued_submissions", "tagged_spaces", "verdicts")
+        for record in snapshot[field]
+    ):
+        raise ValueError("paper_id")
+
+    def reconcile(attempt: dict, timestamp: str) -> bool:
+        if attempt["phase"] != "implementing":
+            raise ValueError("phase")
+        marker = re.fullmatch(
+            r"schema-v3-migration:([0-9a-f]{64})",
+            attempt.get("updated_at", ""),
+        )
+        if marker is None or "legacy_reconciliation" in attempt:
+            raise ValueError("legacy_reconciliation")
+        source_state_sha256 = marker.group(1)
+        backup = paths.root / "v3-backups" / f"{source_state_sha256}.json"
+        if (
+            not backup.is_file()
+            or hashlib.sha256(backup.read_bytes()).hexdigest()
+            != source_state_sha256
+        ):
+            raise ValueError("source_state_sha256")
+        source = store.read_json(backup)
+        migrate_v6.legacy_state.validate_state(source)
+        legacy = source.get("current")
+        if (
+            type(legacy) is not dict
+            or source["phase"] != attempt["phase"]
+            or migrate_v6.attempt_id(
+                attempt["paper_id"], "active", 1
+            )
+            != attempt_id
+            or any(attempt.get(field) != value for field, value in legacy.items())
+        ):
+            raise ValueError("legacy_reconciliation")
+        for field in (
+            "paper_id",
+            "title",
+            "upstream_revision",
+            "target_claims",
+            "estimated_api_cost_usd",
+        ):
+            if candidate.get(field) != attempt.get(field):
+                raise ValueError(field)
+        if attempt.get("design_approved") is not True:
+            raise ValueError("design_approved")
+        attempt["snapshot_id"] = snapshot_id
+        attempt["claim_bindings"] = copy.deepcopy(candidate["claim_bindings"])
+        attempt["live_claims"] = copy.deepcopy(candidate["live_claims"])
+        attempt["design"] = {
+            "author": design_author,
+            "path": design_path,
+            "recorded_at": timestamp,
+        }
+        attempt["design_review"] = {
+            "reviewer": reviewer,
+            "decision": "approved",
+            "reviewed_at": timestamp,
+        }
+        attempt["legacy_reconciliation"] = {
+            "source_state_sha256": source_state_sha256,
+            "snapshot_id": snapshot_id,
+            "approval_ref": approval_ref,
+            "reconciled_at": timestamp,
+        }
+        return False
+
+    return _mutate_attempt(paths, attempt_id, lease, now, reconcile)
+
+
 def runnable_attempt_ids(paths: store.StatePaths) -> list[str]:
     """Return active attempt IDs whose current phases consume scheduler lanes."""
     recover_transactions(paths)
@@ -496,6 +607,23 @@ def _identity(value: object, field: str) -> str:
     if type(value) is not str or not value or value != value.strip():
         raise ValueError(field)
     return value
+
+
+def _relative_path(value: object, field: str) -> str:
+    value = _identity(value, field)
+    path = PurePosixPath(value)
+    if (
+        path.is_absolute()
+        or path.as_posix() != value
+        or any(part in {".", ".."} for part in path.parts)
+    ):
+        raise ValueError(field)
+    return value
+
+
+def _paper_id_for_attempt(paths: store.StatePaths, attempt_id: str) -> str:
+    attempt = read_attempt(paths, attempt_id)
+    return _identity(attempt.get("paper_id"), "paper_id")
 
 
 def _timestamp(value: object) -> str:

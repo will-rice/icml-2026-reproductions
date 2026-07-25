@@ -189,6 +189,18 @@ def main() -> None:
         "--decision", choices=("approved", "rejected"), required=True
     )
     review_parser.add_argument("--now")
+    reconcile_parser = commands.add_parser(
+        "reconcile-legacy-attempt",
+        help="bind one migrated attempt to fresh claims and design provenance",
+    )
+    reconcile_parser.add_argument("path", type=Path)
+    _add_fence_arguments(reconcile_parser)
+    reconcile_parser.add_argument("--snapshot-id", required=True)
+    reconcile_parser.add_argument("--design-author", required=True)
+    reconcile_parser.add_argument("--design-path", required=True)
+    reconcile_parser.add_argument("--reviewer", required=True)
+    reconcile_parser.add_argument("--approval-ref", required=True)
+    reconcile_parser.add_argument("--now")
     watch_parser = commands.add_parser(
         "watch-attempt", help="create a bounded fenced judgment record"
     )
@@ -251,6 +263,7 @@ def main() -> None:
         "transition-attempt",
         "record-design",
         "review-design",
+        "reconcile-legacy-attempt",
         "watch-attempt",
         "record-poll",
         "sync-verdict",
@@ -405,6 +418,18 @@ def _run_v6_command(arguments: argparse.Namespace) -> object:
             arguments.reviewer,
             arguments.decision,
             now,
+        )
+    if arguments.command == "reconcile-legacy-attempt":
+        return attempts.reconcile_legacy_attempt(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.snapshot_id,
+            design_author=arguments.design_author,
+            design_path=arguments.design_path,
+            reviewer=arguments.reviewer,
+            approval_ref=arguments.approval_ref,
+            now=now,
         )
     if arguments.command == "watch-attempt":
         return scheduler.watch_attempt(
