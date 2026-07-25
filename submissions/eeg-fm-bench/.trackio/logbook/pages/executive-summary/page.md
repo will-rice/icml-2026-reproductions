@@ -3,11 +3,11 @@
 
 ---
 <!-- trackio-cell
-{"type": "markdown", "id": "cell_2ed1391a3011", "created_at": "2026-07-25T15:19:22+00:00", "title": "Executive summary", "pinned": true, "pinned_at": "2026-07-25T15:19:22+00:00"}
+{"type": "markdown", "id": "cell_9c0e1999b0bd", "created_at": "2026-07-25T15:25:18+00:00", "title": "Executive summary", "pinned": true, "pinned_at": "2026-07-25T15:25:19+00:00"}
 -->
 ## Outcome
 
-This CPU-only **released-artifact audit** separates paper-reported context from computed evidence. The released selector contains 14 target datasets, but released dataset classes expose 8 task types rather than the paper context of 10 canonical paradigms, so that claim is **partial**. Exact pinned preprocessing methods are repeat-identical on two synthetic EEG configurations, and all three released harness strategies have source-backed wiring plus finite CPU smoke steps.
+This CPU-only **released-artifact audit** separates paper-reported context from computed evidence. The released selector contains 14 target datasets, but released dataset classes expose 8 task types rather than the paper context of 10 canonical paradigms, so claim 1 is **partial**. Exact pinned preprocessing methods execute through MNE and are repeat-identical on two synthetic EEG configurations. Released source supports all three harness strategies, but its CPU steps use an audit-local model rather than a released baseline, so claim 3 is also **partial**.
 
 **Unavailable:** GPU leaderboard performance and representation analysis require gated raw datasets, checkpoints, and GPU runs.
 
@@ -16,7 +16,7 @@ Sources: [paper](https://arxiv.org/abs/2508.17742v3) · [pinned upstream](https:
 
 ---
 <!-- trackio-cell
-{"type": "figure", "id": "cell_826f7eb873e1", "created_at": "2026-07-25T15:19:22+00:00", "title": "Evidence poster", "pinned": true, "pinned_at": "2026-07-25T15:19:23+00:00"}
+{"type": "figure", "id": "cell_b27d27e26011", "created_at": "2026-07-25T15:25:20+00:00", "title": "Evidence poster", "pinned": true, "pinned_at": "2026-07-25T15:25:20+00:00"}
 -->
 ````html
 <!doctype html>
@@ -62,10 +62,10 @@ Sources: [paper](https://arxiv.org/abs/2508.17742v3) · [pinned upstream](https:
       channel standardization, 256 Hz resampling, and windowing.</p>
     </article>
     <article>
-      <span class="status">Verified locally</span>
+      <span class="status partial">Partial</span>
       <strong>Three harness strategies</strong>
-      <p>Frozen single-task, full single-task, and full multi-task paths audited
-      with finite deterministic CPU steps.</p>
+      <p>Released source supports all three paths; finite deterministic CPU steps
+      use an audit-local tiny model, not a released baseline.</p>
     </article>
   </section>
   <footer>

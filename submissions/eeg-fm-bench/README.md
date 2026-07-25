@@ -27,8 +27,10 @@ cache. The command atomically writes `evidence/results.json` and
 The bundle distinguishes paper-reported context from computed measurements:
 
 - the dataset/paradigm census is computed from released source and config;
-- preprocessing executes exact pinned method bodies on seeded synthetic EEG;
+- preprocessing executes exact pinned method bodies through MNE on seeded
+  synthetic EEG;
 - harness evidence combines released-source branch checks with three
-  deterministic CPU semantic smoke steps;
+  deterministic audit-local CPU semantic smoke steps and is marked `partial`
+  because no released baseline is executed;
 - GPU performance and representation-analysis claims are explicitly
   `unavailable`.

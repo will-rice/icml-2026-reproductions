@@ -42,6 +42,20 @@ def _verify(data: bytes, expected: str, input_name: str) -> None:
         )
 
 
+def _tree_hash(root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or path.name == ".tree-sha256":
+            continue
+        relative = path.relative_to(root).as_posix().encode()
+        digest.update(len(relative).to_bytes(8, "big"))
+        digest.update(relative)
+        content = path.read_bytes()
+        digest.update(len(content).to_bytes(8, "big"))
+        digest.update(content)
+    return digest.hexdigest()
+
+
 def ensure_paper_pdf(cache_dir: Path) -> Path:
     """Return a verified cached copy of the pinned paper PDF."""
 
@@ -67,10 +81,14 @@ def ensure_repo_snapshot(cache_dir: Path) -> Path:
     destination = cache_dir / REPO_SNAPSHOT_DIRECTORY
     expected = _provenance_hash("repository")
     marker = destination / ".snapshot-sha256"
-    if destination.is_dir() and marker.is_file():
-        if marker.read_text(encoding="utf-8").strip() == expected:
-            return destination
-        raise ValueError("repository snapshot sha256 mismatch in cache marker")
+    tree_marker = destination / ".tree-sha256"
+    if destination.is_dir() and marker.is_file() and tree_marker.is_file():
+        if marker.read_text(encoding="utf-8").strip() != expected:
+            raise ValueError("repository snapshot sha256 mismatch in cache marker")
+        recorded_tree_hash = tree_marker.read_text(encoding="utf-8").strip()
+        if _tree_hash(destination) != recorded_tree_hash:
+            raise ValueError("repository snapshot tree hash mismatch")
+        return destination
 
     data = _fetch(REPO_URL)
     _verify(data, expected, "repository")
@@ -87,6 +105,9 @@ def ensure_repo_snapshot(cache_dir: Path) -> Path:
         if len(roots) != 1:
             raise ValueError("repository archive must contain exactly one root directory")
         (roots[0] / ".snapshot-sha256").write_text(expected + "\n", encoding="utf-8")
+        (roots[0] / ".tree-sha256").write_text(
+            _tree_hash(roots[0]) + "\n", encoding="utf-8"
+        )
         if destination.exists():
             shutil.rmtree(destination)
         shutil.move(str(roots[0]), destination)

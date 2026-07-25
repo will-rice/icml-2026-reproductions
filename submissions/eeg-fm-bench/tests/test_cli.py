@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 from eeg_fm_bench_repro.upstream import ensure_paper_pdf, ensure_repo_snapshot
+from eeg_fm_bench_repro.cli import _claim
 
 CLAIMS = [
     "fourteen-dataset-ten-paradigm-curation",
@@ -80,3 +81,33 @@ def test_cli_rejects_unknown_arguments() -> None:
 
     assert result.returncode != 0
     assert "unrecognized arguments" in result.stderr
+
+
+def test_claim_status_checks_observations_not_self_reported_status() -> None:
+    """Catches a stale verified label surviving failed preprocessing thresholds."""
+    record = {
+        "claim_id": "standardized-preprocessing-reproducibility",
+        "kind": "numerical_audit",
+        "status": "verified",
+        "deterministic": False,
+        "primitive_backend": "audit-local",
+        "datasets": {
+            "one": {
+                "repeat_identical": False,
+                "resampled_sfreq": 128.0,
+                "all_values_finite": True,
+            }
+        },
+    }
+    claim = _claim(
+        record,
+        {
+            "datasets_minimum": 2,
+            "repeat_identical": True,
+            "target_sfreq": 256.0,
+            "all_values_finite": True,
+            "released_primitives": True,
+        },
+    )
+
+    assert claim["status"] == "inconclusive"

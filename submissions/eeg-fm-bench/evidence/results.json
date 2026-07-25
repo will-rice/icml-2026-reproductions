@@ -118,6 +118,7 @@
         "claim_id": "standardized-preprocessing-reproducibility",
         "datasets": {
           "adftd": {
+            "all_values_finite": true,
             "channel_count": 19,
             "channels": [
               "FP1",
@@ -140,16 +141,20 @@
               "O1",
               "O2"
             ],
-            "output_sha256": "e62bda51294dc67d083209169f106f20d71ea3be51554e2c2e99f68de10b2fcc",
+            "filter_high": 100.0,
+            "filter_low": 0.1,
+            "output_sha256": "e252b85598dd1c516bf645993df378705aff3b409d856c79d91bf13077aaf259",
             "repeat_identical": true,
             "resampled_sfreq": 256.0,
+            "window_seconds": 10,
             "window_shape": [
-              2,
+              4,
               19,
               2560
             ]
           },
           "workload": {
+            "all_values_finite": true,
             "channel_count": 19,
             "channels": [
               "FP1",
@@ -172,11 +177,14 @@
               "O1",
               "O2"
             ],
-            "output_sha256": "e62bda51294dc67d083209169f106f20d71ea3be51554e2c2e99f68de10b2fcc",
+            "filter_high": 100.0,
+            "filter_low": 0.1,
+            "output_sha256": "e252b85598dd1c516bf645993df378705aff3b409d856c79d91bf13077aaf259",
             "repeat_identical": true,
             "resampled_sfreq": 256.0,
+            "window_seconds": 10,
             "window_shape": [
-              2,
+              4,
               19,
               2560
             ]
@@ -184,6 +192,7 @@
         },
         "deterministic": true,
         "kind": "numerical_audit",
+        "primitive_backend": "mne.io.RawArray",
         "source_execution": {
           "methods": [
             "EEGDatasetBuilder._generate_window_sample",
@@ -203,24 +212,28 @@
       },
       "status": "verified",
       "thresholds": {
+        "all_values_finite": true,
         "datasets_minimum": 2,
+        "released_primitives": true,
         "repeat_identical": true,
         "target_sfreq": 256.0
       }
     },
     {
       "claim_id": "three-strategy-evaluation-harness",
-      "kind": "numerical_audit",
+      "kind": "hybrid_structural_smoke_audit",
       "observations": {
         "claim_id": "three-strategy-evaluation-harness",
-        "kind": "numerical_audit",
-        "scope": "Released harness wiring plus synthetic CPU semantic smoke; no leaderboard reproduction.",
+        "kind": "hybrid_structural_smoke_audit",
+        "released_execution": false,
+        "scope": "Released harness wiring plus audit-local synthetic CPU semantics; no released baseline execution and no leaderboard reproduction.",
+        "smoke_model": "audit_local_tiny_harness",
         "source_sha256": {
           "baseline/abstract/classifier.py": "a5a8e6f51f8d197b388ffc603e86ec8cc61d67c62874ebfd4aafb297daad8976",
           "baseline/abstract/config.py": "74012b1e1f292d2a2c7ca26d5f088f5fb5379795f5d0ccb3f8ab12890e40a780",
           "baseline/abstract/trainer.py": "6c93262067b0d55528dfc0c53034db70fd8a1b18514873039c90788e0500e13e"
         },
-        "status": "verified",
+        "status": "partial",
         "strategies": {
           "frozen-backbone-single-task": {
             "dataset_heads_exercised": [
@@ -256,10 +269,11 @@
           "multitask_training_branch": true
         }
       },
-      "status": "verified",
+      "status": "partial",
       "thresholds": {
         "all_upstream_contract_checks": true,
         "finite_cpu_steps": 3,
+        "released_execution": true,
         "strategies": 3
       }
     }

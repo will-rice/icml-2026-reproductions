@@ -16,8 +16,10 @@ def test_harness_proves_flags_paths_and_three_cpu_steps(tmp_path: Path) -> None:
 
     assert first == second
     assert first["claim_id"] == "three-strategy-evaluation-harness"
-    assert first["kind"] == "numerical_audit"
-    assert first["status"] == "verified"
+    assert first["kind"] == "hybrid_structural_smoke_audit"
+    assert first["status"] == "partial"
+    assert first["released_execution"] is False
+    assert first["smoke_model"] == "audit_local_tiny_harness"
     assert first["upstream_contract"] == {
         "freeze_encoder_declared": True,
         "freeze_encoder_honored": True,

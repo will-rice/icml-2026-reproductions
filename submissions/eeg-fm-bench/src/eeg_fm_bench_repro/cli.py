@@ -21,17 +21,51 @@ from .preproc_audit import run_preproc_audit
 from .upstream import PROVENANCE_PATH, ensure_paper_pdf, ensure_repo_snapshot
 
 
-def _claim(record: dict[str, Any], thresholds: dict[str, Any]) -> dict[str, Any]:
-    status = record.get("status")
-    if status is None:
+def _evaluate_status(record: dict[str, Any], thresholds: dict[str, Any]) -> str:
+    claim_id = record["claim_id"]
+    if claim_id == "fourteen-dataset-ten-paradigm-curation":
         computed = record["computed"]
         context = record["paper_context"]
-        status = (
+        return (
             "verified"
             if computed["dataset_count"] == context["dataset_count"]
             and computed["paradigm_count"] == context["paradigm_count"]
             else "partial"
         )
+    if claim_id == "standardized-preprocessing-reproducibility":
+        datasets = record["datasets"].values()
+        passed = (
+            record.get("deterministic") is thresholds["repeat_identical"]
+            and record.get("primitive_backend") == "mne.io.RawArray"
+            and len(record["datasets"]) >= thresholds["datasets_minimum"]
+            and all(
+                item["repeat_identical"] is thresholds["repeat_identical"]
+                and item["resampled_sfreq"] == thresholds["target_sfreq"]
+                and item["all_values_finite"] is thresholds["all_values_finite"]
+                for item in datasets
+            )
+        )
+        return "verified" if passed else "inconclusive"
+    if claim_id == "three-strategy-evaluation-harness":
+        contract = all(record["upstream_contract"].values())
+        strategies = record["strategies"]
+        semantic_smoke = (
+            len(strategies) == thresholds["strategies"]
+            and all(item["finite_loss"] for item in strategies.values())
+            and strategies["frozen-backbone-single-task"]["encoder_changed"] is False
+            and strategies["full-parameter-single-task"]["encoder_changed"] is True
+            and strategies["full-parameter-multi-task"]["encoder_changed"] is True
+            and strategies["full-parameter-multi-task"]["dataset_heads_exercised"]
+            == ["dataset_a", "dataset_b"]
+        )
+        if contract and semantic_smoke:
+            return "verified" if record.get("released_execution") else "partial"
+        return "inconclusive"
+    raise ValueError(f"unknown claim id: {claim_id}")
+
+
+def _claim(record: dict[str, Any], thresholds: dict[str, Any]) -> dict[str, Any]:
+    status = _evaluate_status(record, thresholds)
     return {
         "claim_id": record["claim_id"],
         "kind": record["kind"],
@@ -60,6 +94,8 @@ def build_bundle(cache_dir: Path) -> dict[str, Any]:
                     "datasets_minimum": 2,
                     "repeat_identical": True,
                     "target_sfreq": 256.0,
+                    "all_values_finite": True,
+                    "released_primitives": True,
                 },
             ),
             _claim(
@@ -68,6 +104,7 @@ def build_bundle(cache_dir: Path) -> dict[str, Any]:
                     "strategies": 3,
                     "finite_cpu_steps": 3,
                     "all_upstream_contract_checks": True,
+                    "released_execution": True,
                 },
             ),
         ],

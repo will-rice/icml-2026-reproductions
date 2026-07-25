@@ -10,6 +10,7 @@ import warnings
 from pathlib import Path
 from typing import Any
 
+import mne
 import numpy as np
 
 CLAIM_ID = "standardized-preprocessing-reproducibility"
@@ -95,30 +96,6 @@ def _field_literal(path: Path, class_name: str, field_name: str) -> Any:
     raise ValueError(f"{class_name}.{field_name} not found in {path}")
 
 
-class _SyntheticRaw:
-    def __init__(self, data: np.ndarray, sfreq: float):
-        self.data = data
-        self.info = {"sfreq": sfreq}
-        self.duration = data.shape[1] / sfreq
-
-    def filter(self, **_: Any) -> _SyntheticRaw:
-        return self
-
-    def notch_filter(self, **_: Any) -> _SyntheticRaw:
-        return self
-
-    def resample(self, sfreq: float, **_: Any) -> _SyntheticRaw:
-        target = round(self.data.shape[1] * sfreq / self.info["sfreq"])
-        old_axis = np.linspace(0.0, 1.0, self.data.shape[1])
-        new_axis = np.linspace(0.0, 1.0, target)
-        self.data = np.stack(
-            [np.interp(new_axis, old_axis, channel) for channel in self.data]
-        ).astype(np.float32)
-        self.info["sfreq"] = sfreq
-        self.duration = target / sfreq
-        return self
-
-
 def _one_dataset(
     snapshot: Path,
     dataset_name: str,
@@ -127,16 +104,24 @@ def _one_dataset(
     builder_name: str,
     methods: dict[str, tuple[Any, str]],
 ) -> dict[str, Any]:
+    builder_source = snapshot / _BUILDER
     montage = _field_literal(snapshot / dataset_path, config_name, "montage")
     montage_name = next(iter(montage))
+    target_fs = float(_field_literal(builder_source, "EEGConfig", "fs"))
+    window_seconds = int(
+        _field_literal(snapshot / dataset_path, config_name, "wnd_div_sec")
+    )
+    filter_low = float(_field_literal(builder_source, "EEGConfig", "filter_low"))
+    filter_high = float(_field_literal(builder_source, "EEGConfig", "filter_high"))
+    filter_notch = float(_field_literal(builder_source, "EEGConfig", "filter_notch"))
     config = types.SimpleNamespace(
         montage=montage,
-        fs=256.0,
-        filter_high=40.0,
-        filter_low=0.5,
-        filter_notch=50.0,
-        is_notched=True,
-        wnd_len=2560,
+        fs=target_fs,
+        filter_high=filter_high,
+        filter_low=filter_low,
+        filter_notch=filter_notch,
+        is_notched=False,
+        wnd_len=int(target_fs * window_seconds),
         is_finetune=False,
         category=[],
         category_query_dict={},
@@ -153,26 +138,37 @@ def _one_dataset(
     channels = standardize(builder, montage_name)
 
     rng = np.random.default_rng(20260724)
-    original = rng.standard_normal((len(channels), 11_000), dtype=np.float32)
+    # Long enough for the released 0.1 Hz FIR length guard to execute filtering.
+    original = rng.standard_normal((len(channels), 20_000), dtype=np.float32)
 
-    def execute() -> tuple[list[dict[str, Any]], float]:
-        raw = _SyntheticRaw(original.copy(), 500.0)
+    def execute() -> tuple[list[dict[str, Any]], float, float, float]:
+        info = mne.create_info(channels, sfreq=500.0, ch_types="eeg")
+        raw = mne.io.RawArray(original.copy(), info, verbose=False)
         processed = methods["EEGDatasetBuilder._resample_and_filter"][0](builder, raw)
         windows = methods["EEGDatasetBuilder._generate_window_sample"][0](
             builder,
-            processed.data,
+            processed.get_data(),
             montage_name,
             np.arange(len(channels), dtype=np.int64),
             [("default", 0, -1)],
             True,
         )
-        return windows, float(processed.info["sfreq"])
+        return (
+            windows,
+            float(processed.info["sfreq"]),
+            float(processed.info["highpass"]),
+            float(processed.info["lowpass"]),
+        )
 
-    first, first_sfreq = execute()
-    second, second_sfreq = execute()
+    first, first_sfreq, first_highpass, first_lowpass = execute()
+    second, second_sfreq, second_highpass, second_lowpass = execute()
     first_arrays = [item["data"] for item in first]
     second_arrays = [item["data"] for item in second]
-    identical = first_sfreq == second_sfreq and len(first_arrays) == len(second_arrays)
+    identical = (
+        (first_sfreq, first_highpass, first_lowpass)
+        == (second_sfreq, second_highpass, second_lowpass)
+        and len(first_arrays) == len(second_arrays)
+    )
     identical = identical and all(
         np.array_equal(left, right)
         for left, right in zip(first_arrays, second_arrays, strict=True)
@@ -182,8 +178,12 @@ def _one_dataset(
         "channel_count": len(channels),
         "channels": channels,
         "resampled_sfreq": first_sfreq,
+        "window_seconds": window_seconds,
         "window_shape": [len(first_arrays), len(channels), config.wnd_len],
         "repeat_identical": bool(identical),
+        "all_values_finite": bool(all(np.isfinite(item).all() for item in first_arrays)),
+        "filter_low": first_highpass,
+        "filter_high": first_lowpass,
         "output_sha256": digest,
     }
 
@@ -216,6 +216,7 @@ def run_preproc_audit(snapshot: Path) -> dict[str, Any]:
         "kind": "numerical_audit",
         "status": "verified" if deterministic else "contradicted",
         "deterministic": deterministic,
+        "primitive_backend": "mne.io.RawArray",
         "datasets": datasets,
         "source_execution": {
             "methods": [

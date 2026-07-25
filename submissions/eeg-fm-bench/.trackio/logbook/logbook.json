@@ -5,7 +5,7 @@
   "space_id": null,
   "paper": null,
   "tags": [],
-  "updated_at": "2026-07-25T15:19:46+00:00",
+  "updated_at": "2026-07-25T15:25:21+00:00",
   "root": {
     "slug": "index",
     "title": "EEG-FM-Bench released-artifact audit",
@@ -50,8 +50,8 @@
     "total_size": 0,
     "bucket_id": null
   },
-  "agent_view_tokens": 1180,
+  "agent_view_tokens": 1239,
   "trace_view_tokens": 10,
   "workspace_view_tokens": 8,
-  "revision": "2c0c4c981bd83fe63843"
+  "revision": "f2b54f9ff86ad3b83771"
 }

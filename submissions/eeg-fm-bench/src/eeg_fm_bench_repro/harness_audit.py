@@ -183,15 +183,20 @@ def run_harness_audit(snapshot: Path) -> dict[str, Any]:
             False, ("dataset_a", "dataset_b")
         ),
     }
-    verified = all(contract.values()) and all(
+    structural_support = all(contract.values()) and all(
         result["finite_loss"] for result in strategies.values()
     )
     return {
         "claim_id": CLAIM_ID,
-        "kind": "numerical_audit",
-        "status": "verified" if verified else "inconclusive",
+        "kind": "hybrid_structural_smoke_audit",
+        "status": "partial" if structural_support else "inconclusive",
+        "released_execution": False,
+        "smoke_model": "audit_local_tiny_harness",
         "upstream_contract": contract,
         "strategies": strategies,
         "source_sha256": source_hashes,
-        "scope": "Released harness wiring plus synthetic CPU semantic smoke; no leaderboard reproduction.",
+        "scope": (
+            "Released harness wiring plus audit-local synthetic CPU semantics; "
+            "no released baseline execution and no leaderboard reproduction."
+        ),
     }
