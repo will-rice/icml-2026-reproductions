@@ -28,3 +28,29 @@ def merge_parameters(
         merged[param_key] = accumulated.astype(first_model[param_key].dtype)
 
     return merged
+
+def evaluate_merged_model(
+    merged_params: Dict[str, np.ndarray],
+    domain_benchmarks: Dict[str, Dict[str, np.ndarray]]
+) -> Dict[str, float]:
+    """Evaluate merged model parameters directly on domain benchmark task representations."""
+    scores = {}
+    for bench_name, bench_data in domain_benchmarks.items():
+        inputs = bench_data["inputs"]
+        targets = bench_data["targets"]
+
+        # Forward evaluation through parameter matrices
+        if "w_proj" in merged_params and "head" in merged_params:
+            hidden = np.tanh(inputs @ merged_params["w_proj"])
+            logits = hidden @ merged_params["head"]
+        else:
+            first_param = next(iter(merged_params.values()))
+            in_dim = min(inputs.shape[1], first_param.shape[0])
+            out_dim = min(targets.shape[1], first_param.shape[1])
+            logits = inputs[:, :in_dim] @ first_param[:in_dim, :out_dim]
+
+        mse = np.mean((logits - targets) ** 2)
+        score = 1.0 / (1.0 + float(mse))
+        scores[bench_name] = float(np.clip(score, 0.0, 1.0))
+    return scores
+

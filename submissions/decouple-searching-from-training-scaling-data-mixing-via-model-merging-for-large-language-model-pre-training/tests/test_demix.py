@@ -51,3 +51,30 @@ def test_demix_pipeline_run():
     assert bundle["reproduction_status"] == "verified"
     assert bundle["macro_spearman"] >= 0.80
     assert len(bundle["target_claims"]) == 3
+
+def test_demix_evaluate_merged_model():
+    from demix.merging import evaluate_merged_model
+
+    merged_params = {
+        "w_proj": np.ones((4, 4), dtype=np.float64),
+        "head": np.ones((4, 1), dtype=np.float64)
+    }
+    benchmarks = {
+        "general_avg": {
+            "inputs": np.ones((2, 4), dtype=np.float64),
+            "targets": np.ones((2, 1), dtype=np.float64)
+        }
+    }
+    scores = evaluate_merged_model(merged_params, benchmarks)
+    assert "general_avg" in scores
+    assert 0.0 <= scores["general_avg"] <= 1.0
+
+def test_demix_released_artifact_computation():
+    from demix.pipeline import run_demix_reproduction
+
+    bundle = run_demix_reproduction()
+    assert "evidence_summary" in bundle
+    assert bundle["evidence_summary"]["num_mixtures_evaluated"] == 16
+    assert "domain_correlations" in bundle
+    assert "avg" in bundle["domain_correlations"]
+
