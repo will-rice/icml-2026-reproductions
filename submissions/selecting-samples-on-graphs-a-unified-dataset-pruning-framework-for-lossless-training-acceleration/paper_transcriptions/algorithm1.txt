@@ -1,0 +1,20 @@
+Algorithm 1 Overall pipeline with Greedy Selection and Structured Graph Sparsification
+Require: Training dataset T = {x_i}_{i=1}^N, pruning ratio p,
+Ensure: Pruned subset S.
+1: Build a fully connected graph G = (V, E) from T.
+2: Compute intrinsic importance I^in(x_i) for all x_i ∈ T.
+3: Perform Structured Graph Sparsification and get neighborhood clusters {N_k}_{k=1}^K.
+4: Compute {D(x_i, x_j) | ∀x_i, x_j ∈ N_k} for all N_k.
+5: Initialize S_0 ← ∅, I^ex(x_i | S_0) ← 0 for all x_i.
+6: for t = 1 to (1 - p)N do
+7:   for all x_i ∈ T \ S_{t-1} do
+8:     if x⋆ ∈ N(x_i) then
+9:       Fetch I^in(x_i) and D(x_i, x⋆).
+10:      I^ex(x_i | S_t) ← I^ex(x_i | S_{t-1}) + g(D(x_i, x⋆))
+11:      I(x_i | S_t) ← α I^in(x_i) + I^ex(x_i | S_t)
+12:    end if
+13:  end for
+14:  Select x⋆ ← arg max_{x_i ∈ T \ S} I(x_i | S_t).
+15:  Update S_t ← S_{t-1} ∪ {x⋆}.
+16: end for
+17: Return S ← S_{(1-p)N}.

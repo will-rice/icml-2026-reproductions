@@ -1,0 +1,3 @@
+Independent derivation from the Appendix E inline definition and literal Eqs. (4)–(5):
+f_appendix-inline(S ∪ {x}) − f_appendix-inline(S)
+= α I^in(x) + 2 Σ_{j ∈ S} a_xj + αη(2|S| + 1).

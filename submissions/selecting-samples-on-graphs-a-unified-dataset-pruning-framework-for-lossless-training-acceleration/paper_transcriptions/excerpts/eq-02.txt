@@ -1,0 +1,1 @@
+w_i = α I^in(x_i),  a_ij = g(D(x_i, x_j)).  (2)

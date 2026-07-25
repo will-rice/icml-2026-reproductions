@@ -1,0 +1,1 @@
+I^ex(x_i | S) = Σ_{x_j ∈ S \ {x_i}} a_ij = Σ_{x_j ∈ S \ {x_i}} g(D(x_i, x_j)).  (5)

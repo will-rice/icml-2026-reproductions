@@ -1,0 +1,1 @@
+max_{S ⊆ T} f(S) = Σ_{x_i ∈ S} [α I^in(x_i) + I^ex(x_i | S)],  s.t. |S| = b.  (4)
