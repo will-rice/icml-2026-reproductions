@@ -7,6 +7,14 @@ import pytest
 from eeg_fm_bench_repro import upstream
 
 
+def test_evidence_python_version_is_project_pinned() -> None:
+    project_root = upstream.PROVENANCE_PATH.parent.parent
+
+    assert (project_root / ".python-version").read_text(encoding="utf-8") == (
+        "3.12.11\n"
+    )
+
+
 def test_paper_license_matches_pinned_arxiv_v3_metadata() -> None:
     provenance = json.loads(upstream.PROVENANCE_PATH.read_text(encoding="utf-8"))
     license_record = provenance["inputs"]["paper"]["license"]
