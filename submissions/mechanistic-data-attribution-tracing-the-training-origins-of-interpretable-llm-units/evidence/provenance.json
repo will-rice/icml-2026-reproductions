@@ -1,0 +1,15 @@
+{
+  "paper_id": "PQaxfoEcRc",
+  "upstream_revision": "github:chenjianhuii/Mechanistic-Data-Attribution@faa0890bc2d7961a0f177a422849b4e0801943c0",
+  "environment": {
+    "torch_version": "2.13.0+cu130",
+    "python_version": "3.12",
+    "seed": 42
+  },
+  "artifacts_generated": [
+    "results.json",
+    "measurements.csv",
+    "provenance.json",
+    "repro-bundle.tar.gz"
+  ]
+}

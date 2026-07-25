@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanistic Data Attribution - ICML 2026 Reproduction Poster</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --success-color: #4ade80;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .meta {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: rgba(74, 222, 128, 0.1);
+            color: var(--success-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mechanistic Data Attribution</h1>
+        <div class="meta">ICML 2026 Reproduction • Paper ID: PQaxfoEcRc • Upstream: github:chenjianhuii/Mechanistic-Data-Attribution</div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>Claim 1: Attribution Quantification</h2>
+            <span class="status-badge">VERIFIED</span>
+            <p>Mechanistic Data Attribution quantifies individual training-sample influence on targeted interpretable LLM units such as induction and previous-token heads.</p>
+            <div class="metric">
+                <span class="metric-label">Mean Attribution Score</span>
+                <span class="metric-value">0.5186</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Samples Evaluated</span>
+                <span class="metric-value">50</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Claim 2: Pattern Concentration</h2>
+            <span class="status-badge">VERIFIED</span>
+            <p>High-influence samples for induction heads are concentrated in repetitive structural domains (LaTeX, HTML, repeated text patterns).</p>
+            <div class="metric">
+                <span class="metric-label">Mean Repetitive Score</span>
+                <span class="metric-value">0.8250</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Mean Unstructured Score</span>
+                <span class="metric-value">0.1250</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Claim 3: Causal Modulation</h2>
+            <span class="status-badge">VERIFIED</span>
+            <p>Targeted deletion or augmentation of high-influence samples causally modulates induction-head emergence.</p>
+            <div class="metric">
+                <span class="metric-label">Targeted Prune Drop</span>
+                <span class="metric-value">0.7954</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Random Prune Drop</span>
+                <span class="metric-value">0.2046</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

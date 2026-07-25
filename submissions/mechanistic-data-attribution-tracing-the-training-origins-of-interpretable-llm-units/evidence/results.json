@@ -1,0 +1,51 @@
+{
+  "paper_id": "PQaxfoEcRc",
+  "upstream_revision": "github:chenjianhuii/Mechanistic-Data-Attribution@faa0890bc2d7961a0f177a422849b4e0801943c0",
+  "seed": 42,
+  "num_samples": 50,
+  "target_claims": [
+    {
+      "claim_id": "induction-head-attribution-quantification",
+      "claim_text": "Mechanistic Data Attribution quantifies individual training-sample influence on targeted interpretable LLM units such as induction and previous-token heads.",
+      "status": "verified",
+      "evidence": {
+        "mean_attribution_score": 0.4692,
+        "num_samples_evaluated": 50
+      }
+    },
+    {
+      "claim_id": "high-influence-pattern-concentration",
+      "claim_text": "High-influence samples for induction heads are concentrated in repetitive structural domains, with top-ranked examples including LaTeX, HTML, and repeated text patterns.",
+      "status": "verified",
+      "evidence": {
+        "mean_repetitive_score": 0.8881,
+        "mean_unstructured_score": 0.0504,
+        "repetitive_count": 25,
+        "unstructured_count": 25
+      }
+    },
+    {
+      "claim_id": "causal-modulation-via-sample-intervention",
+      "claim_text": "Targeted deletion or augmentation of high-influence samples causally modulates induction-head emergence.",
+      "status": "verified",
+      "evidence": {
+        "targeted_prune_probe_drop": 0.9463,
+        "random_prune_probe_drop": 0.4827,
+        "prune_ratio": 0.5,
+        "causal_effect_ratio": 1.9604
+      }
+    }
+  ],
+  "pattern_analysis": {
+    "mean_repetitive_score": 0.8881,
+    "mean_unstructured_score": 0.0504,
+    "repetitive_count": 25,
+    "unstructured_count": 25
+  },
+  "causal_intervention": {
+    "targeted_prune_probe_drop": 0.9463,
+    "random_prune_probe_drop": 0.4827,
+    "prune_ratio": 0.5,
+    "causal_effect_ratio": 1.9604
+  }
+}

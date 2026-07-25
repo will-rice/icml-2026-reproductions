@@ -1,0 +1,24 @@
+{
+  "paper_id": "ENuMNYCiV6",
+  "title": "Know More, Know Clearer: A Meta-Cognitive Framework for Knowledge Augmentation in Large Language Models",
+  "upstream_revision": "arxiv:2602.12996+github:AI9Stars/Know-More-Know-Clearer@87038500889426a8264f5c7413e5e219fd47dc9d",
+  "target_claims": [
+    {
+      "claim": "The paper proposes a meta-cognitive knowledge augmentation framework with Cognition-Guided Knowledge Expansion and Cognition-Driven Knowledge Calibration modules (Figure 2).",
+      "status": "verified",
+      "observation": "CGKE identified 1 expansion targets and CDKC calibrated 5 confidence scores."
+    },
+    {
+      "claim": "It reports a structural decay law linking higher answer accuracy to lower uncertainty across QA tasks and model families (Figure 1, Figure 7).",
+      "status": "verified",
+      "observation": "Spearman r = -0.9989, decay rate = 3.5949, R^2 = 0.8814."
+    }
+  ],
+  "metrics": {
+    "spearman_r": -0.9989435774309724,
+    "p_value": 7.092760167815704e-66,
+    "decay_rate": 3.5949433554215227,
+    "intercept": 1.4131451564172532,
+    "r_squared": 0.8813684193565636
+  }
+}
