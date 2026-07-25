@@ -30,8 +30,9 @@ The evidence boundary is:
 The exact mixture manifest is vendored under `evidence/inputs/`. A compact
 provenance file records source URLs, immutable revisions, acquisition commands,
 file hashes, the upstream source-file hashes used in the audit, and the remote
-release inventory. The evidence generator rejects an input whose bytes do not
-match the pinned hash.
+release inventory. The generator pins the complete provenance file at SHA-256
+`b8ee6fedbe9761c1004d9956af0e509de78b289902cbe9f2a1c041ff7b7a4ca2`
+and rejects any input or provenance byte that does not match its pinned hash.
 
 ## Claim dispositions
 
@@ -96,15 +97,18 @@ three parts:
 2. `src/demix/pipeline.py` combines those observations with the checked-in
    provenance document and per-claim dispositions, then serializes canonical
    JSON with sorted keys, fixed indentation, UTF-8, and a final newline.
-3. `app.py` is a read-only evidence and released-mixture inspector. It displays
-   the committed bundle and computes normalization only from the pinned
-   released manifest. It does not accept user-authored targets or produce
-   scores.
+3. `app.py` is a read-only evidence and released-mixture inspector. Every read
+   hash-validates the released manifest, recomputes all observations, and
+   requires exact equality with the committed bundle before displaying
+   recomputed normalization. It does not accept user-authored targets or
+   produce scores.
 
 The canonical regeneration command, run from the submission directory, is:
 
 ```bash
-PYTHONPATH=src python -m demix.pipeline \
+env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache \
+  uv run --isolated --no-project --python 3.12.11 \
+  python -m demix.pipeline \
   --input evidence/inputs/sampled_mixture.json \
   --provenance evidence/provenance.json \
   --output evidence/bundle.json
@@ -136,6 +140,7 @@ Tests are written before implementation changes and must initially fail for
 the current synthetic pipeline. They cover:
 
 - rejection of modified or alternate input bytes by SHA-256;
+- rejection of any provenance-byte mutation, including valid-looking hashes;
 - exact mixture count, domain order, raw sums, normalized values, and
   normalization classifications from the pinned manifest;
 - rejection of non-finite, negative, empty, or zero-sum weights;
@@ -144,8 +149,12 @@ the current synthetic pipeline. They cover:
 - presence of immutable revisions, hashes, acquisition commands, environment
   pins, and resource limitations;
 - byte-identical CLI regeneration;
-- a read-only app with the existing runtime contract
+- an executable isolated `uv` regeneration command;
+- a read-only app that rejects input or bundle-observation tampering and keeps
+  the existing runtime contract
   `server_name="0.0.0.0", server_port=7860`;
+- the canonical Apache-2.0 text and a notice scoped to the vendored dataset
+  input are packaged by the Space image;
 - an integration startup check that observes the real Gradio listener on
   wildcard port 7860.
 
@@ -178,7 +187,9 @@ treated as reproduced scientific evidence.
 The Hugging Face dataset card declares Apache-2.0. The inspected GitHub
 revision has no detected license file, so its code is used only as cited,
 read-only provenance and is not vendored. The vendored primary input is from
-the licensed dataset revision.
+the licensed dataset revision. `THIRD_PARTY_NOTICES.md` scopes that license to
+the vendored manifest, and `LICENSES/Apache-2.0.txt` packages the canonical
+license text.
 
 This change does not deploy, publish, claim a challenge paper, or mutate
 coordinator state. A later deployment requires a separate authorization,

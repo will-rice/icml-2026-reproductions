@@ -343,7 +343,9 @@ defaults.
 From the submission directory, run:
 
 ```bash
-PYTHONPATH=src python -m demix.pipeline \
+env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache \
+  uv run --isolated --no-project --python 3.12.11 \
+  python -m demix.pipeline \
   --input evidence/inputs/sampled_mixture.json \
   --provenance evidence/provenance.json \
   --output evidence/bundle.json
@@ -528,7 +530,9 @@ From the submission directory:
 
 ```bash
 before="$(sha256sum evidence/bundle.json)"
-PYTHONPATH=src python -m demix.pipeline \
+env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache \
+  uv run --isolated --no-project --python 3.12.11 \
+  python -m demix.pipeline \
   --input evidence/inputs/sampled_mixture.json \
   --provenance evidence/provenance.json \
   --output evidence/bundle.json

@@ -242,7 +242,7 @@
     }
   },
   "regeneration": {
-    "command": "PYTHONPATH=src python -m demix.pipeline --input evidence/inputs/sampled_mixture.json --provenance evidence/provenance.json --output evidence/bundle.json",
+    "command": "env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache uv run --isolated --no-project --python 3.12.11 python -m demix.pipeline --input evidence/inputs/sampled_mixture.json --provenance evidence/provenance.json --output evidence/bundle.json",
     "serialization": "UTF-8 JSON, keys sorted, two-space indentation, final newline"
   },
   "released_artifact_observations": {

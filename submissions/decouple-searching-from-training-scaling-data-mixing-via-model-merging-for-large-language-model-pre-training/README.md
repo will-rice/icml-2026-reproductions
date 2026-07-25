@@ -58,14 +58,18 @@ and accelerator resources and are outside this CPU-only audit.
 
 The dataset card declares Apache-2.0. No license file was detected at the
 pinned GitHub commit, so upstream code is cited as read-only provenance and is
-not vendored here.
+not vendored here. The vendored dataset manifest is covered by the scoped
+notice in `THIRD_PARTY_NOTICES.md`; the complete license is packaged at
+`LICENSES/Apache-2.0.txt`.
 
 ## Regenerate evidence
 
 From this directory:
 
 ```bash
-PYTHONPATH=src python -m demix.pipeline \
+env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache \
+  uv run --isolated --no-project --python 3.12.11 \
+  python -m demix.pipeline \
   --input evidence/inputs/sampled_mixture.json \
   --provenance evidence/provenance.json \
   --output evidence/bundle.json

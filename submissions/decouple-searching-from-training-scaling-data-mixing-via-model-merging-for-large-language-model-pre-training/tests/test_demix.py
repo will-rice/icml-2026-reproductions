@@ -3,6 +3,7 @@ import json
 import os
 from decimal import Decimal
 from pathlib import Path
+import shlex
 import subprocess
 import sys
 
@@ -26,6 +27,8 @@ README = SUBMISSION_ROOT / "README.md"
 REQUIREMENTS = SUBMISSION_ROOT / "requirements.txt"
 REQUIREMENTS_TEST = SUBMISSION_ROOT / "requirements-test.txt"
 DOCKERFILE = SUBMISSION_ROOT / "Dockerfile"
+APACHE_LICENSE = SUBMISSION_ROOT / "LICENSES" / "Apache-2.0.txt"
+THIRD_PARTY_NOTICE = SUBMISSION_ROOT / "THIRD_PARTY_NOTICES.md"
 PINNED_SHA256 = (
     "2be00152f98c44a740bc2f8e2098be3740ea2f1cd31b7158ade9d54c8e852dc2"
 )
@@ -221,7 +224,9 @@ def test_generated_bundle_contains_exact_provenance_and_environment():
         "pytest": "8.4.2",
     }
     assert bundle["regeneration"]["command"] == (
-        "PYTHONPATH=src python -m demix.pipeline "
+        "env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache "
+        "uv run --isolated --no-project --python 3.12.11 "
+        "python -m demix.pipeline "
         "--input evidence/inputs/sampled_mixture.json "
         "--provenance evidence/provenance.json "
         "--output evidence/bundle.json"
@@ -437,7 +442,40 @@ def test_readme_documents_evidence_boundary_and_regeneration():
     assert "17" in readme and "16" in readme
     assert "48,176,346,736" in readme
     assert "random.random()" in readme
-    assert "PYTHONPATH=src python -m demix.pipeline" in readme
+    assert "python -m demix.pipeline" in readme
     assert "context only" in readme.lower()
     assert "interactive simulator" not in readme.lower()
     assert "verified reproduction" not in readme.lower()
+
+
+def test_declared_regeneration_command_executes_byte_identically(tmp_path):
+    bundle = json.loads(BUNDLE.read_text())
+    command = bundle["regeneration"]["command"]
+    assert command.startswith(
+        "env PYTHONPATH=src UV_CACHE_DIR=/tmp/demix-repro-uv-cache "
+        "uv run --isolated --no-project --python 3.12.11 "
+    )
+    assert (
+        "uv run --isolated --no-project --python 3.12.11"
+        in README.read_text().replace("\\\n", "")
+    )
+
+    arguments = shlex.split(command)
+    output = tmp_path / "bundle.json"
+    output_index = arguments.index("--output") + 1
+    arguments[output_index] = str(output)
+    subprocess.run(arguments, check=True, cwd=SUBMISSION_ROOT)
+    assert output.read_bytes() == BUNDLE.read_bytes()
+
+
+def test_vendored_dataset_input_includes_scoped_apache_license():
+    assert hashlib.sha256(APACHE_LICENSE.read_bytes()).hexdigest() == (
+        "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    )
+    notice = THIRD_PARTY_NOTICE.read_text()
+    assert "evidence/inputs/sampled_mixture.json" in notice
+    assert "lucius1022/DeMix_Corpora" in notice
+    assert "82a2effc58eb79bec691280a4e4fc50be0968b1e" in notice
+    assert "Apache-2.0" in notice
+    assert "No source code from Lucius-lsr/DeMix is vendored" in notice
+    assert "COPY --chown=user:user . ." in DOCKERFILE.read_text()
