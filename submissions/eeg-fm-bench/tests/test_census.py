@@ -63,3 +63,36 @@ def test_census_output_is_deterministic(tmp_path: Path) -> None:
     _write_fixture_snapshot(snapshot)
 
     assert run_census_audit(snapshot) == run_census_audit(snapshot)
+
+
+def test_release_task_type_not_paper_context_drives_computed_paradigm(
+    tmp_path: Path,
+) -> None:
+    """Catches copying the paper-context paradigm into computed evidence."""
+    snapshot = tmp_path / "snapshot"
+    wrapper = snapshot / "data" / "processor" / "wrapper.py"
+    wrapper.parent.mkdir(parents=True)
+    wrapper.write_text(
+        'DATASET_SELECTOR = {"adftd": AdftdBuilder}\n',
+        encoding="utf-8",
+    )
+    dataset_dir = snapshot / "data" / "dataset"
+    dataset_dir.mkdir()
+    (dataset_dir / "adftd.py").write_text(
+        """
+class AdftdConfig:
+    task_type: DatasetTaskType = DatasetTaskType.RELEASE_DEFINED_TASK
+
+class AdftdBuilder:
+    pass
+""",
+        encoding="utf-8",
+    )
+    (snapshot / "assets" / "conf").mkdir(parents=True)
+
+    record = run_census_audit(snapshot)
+
+    assert record["computed"]["dataset_paradigms"] == {
+        "ADFTD": ["release_defined_task"]
+    }
+    assert record["computed"]["mapping_source"] == "released_dataset_task_type"

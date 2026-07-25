@@ -81,6 +81,33 @@ def _builder_classes(dataset_dir: Path) -> set[str]:
     return classes
 
 
+def _builder_task_types(dataset_dir: Path) -> dict[str, str]:
+    """Associate builders with task types declared in their released module."""
+
+    mapping: dict[str, str] = {}
+    for path in sorted(dataset_dir.rglob("*.py")):
+        tree = _parse_python(path)
+        builders = [
+            node.name
+            for node in tree.body
+            if isinstance(node, ast.ClassDef) and node.name.endswith("Builder")
+        ]
+        task_types: list[str] = []
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.AnnAssign):
+                continue
+            if not isinstance(node.target, ast.Name) or node.target.id != "task_type":
+                continue
+            if isinstance(node.value, ast.Attribute):
+                task_types.append(node.value.attr.lower())
+            elif isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                task_types.append(node.value.value.lower())
+        if len(set(task_types)) == 1:
+            for builder in builders:
+                mapping[builder] = task_types[0]
+    return mapping
+
+
 def _fixture_mapping(config_dir: Path) -> dict[str, list[str]]:
     mapping: dict[str, set[str]] = {}
     for path in sorted(config_dir.rglob("*")):
@@ -102,6 +129,7 @@ def run_census_audit(snapshot: Path) -> dict:
     config_dir = snapshot / "assets" / "conf"
     selector = _dataset_selector(wrapper)
     builders = _builder_classes(dataset_dir)
+    builder_task_types = _builder_task_types(dataset_dir)
     fixture_mapping = _fixture_mapping(config_dir)
 
     if fixture_mapping:
@@ -110,12 +138,16 @@ def run_census_audit(snapshot: Path) -> dict:
             for dataset, paradigms in fixture_mapping.items()
             if dataset in selector and selector[dataset] in builders
         }
+        mapping_source = "released_configuration"
     else:
         mapping = {
-            paper_name: [paradigm]
-            for paper_name, (selector_key, builder, paradigm) in PAPER_DATASETS.items()
-            if selector.get(selector_key) == builder and builder in builders
+            paper_name: [builder_task_types[builder]]
+            for paper_name, (selector_key, builder, _) in PAPER_DATASETS.items()
+            if selector.get(selector_key) == builder
+            and builder in builders
+            and builder in builder_task_types
         }
+        mapping_source = "released_dataset_task_type"
 
     paradigms = sorted({item for values in mapping.values() for item in values})
     config_files = [
@@ -130,6 +162,7 @@ def run_census_audit(snapshot: Path) -> dict:
             "dataset_count": len(mapping),
             "paradigm_count": len(paradigms),
             "dataset_paradigms": mapping,
+            "mapping_source": mapping_source,
             "selector_entry_count": len(selector),
             "builder_class_count": len(builders),
             "config_files": config_files,
