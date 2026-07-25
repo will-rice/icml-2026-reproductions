@@ -378,11 +378,15 @@ def reconcile_legacy_attempt(
             approval_ref,
             attempt,
         )
+        if design_author != design_approval["design_author"]:
+            raise ValueError("design_author")
+        if reviewer != design_approval["reviewer"]:
+            raise ValueError("reviewer")
         attempt["snapshot_id"] = snapshot_id
         attempt["claim_bindings"] = copy.deepcopy(candidate["claim_bindings"])
         attempt["live_claims"] = copy.deepcopy(candidate["live_claims"])
         attempt["design"] = {
-            "author": design_author,
+            "author": design_approval["design_author"],
             "approval_commit": design_approval["commit_sha"],
             "content_sha256": design_approval["content_sha256"],
             "paper_id": paper_id,
@@ -390,7 +394,7 @@ def reconcile_legacy_attempt(
             "recorded_at": timestamp,
         }
         attempt["design_review"] = {
-            "reviewer": reviewer,
+            "reviewer": design_approval["reviewer"],
             "decision": "approved",
             "approval_ref": approval_ref,
             "design_content_sha256": design_approval["content_sha256"],
@@ -701,9 +705,27 @@ def _resolve_design_approval(
         "show",
         f"{commit_sha}:{state_path}",
     )
+    revision = _git_output(
+        repository_root,
+        "rev-list",
+        "--parents",
+        "-n",
+        "1",
+        commit_sha,
+    ).decode("utf-8").strip().split()
+    if len(revision) != 2 or revision[0] != commit_sha:
+        raise ValueError("approval_ref")
+    parent_sha = revision[1]
+    parent_state_bytes = _git_output(
+        repository_root,
+        "show",
+        f"{parent_sha}:{state_path}",
+    )
     try:
         approval_state = json.loads(approval_state_bytes)
+        parent_state = json.loads(parent_state_bytes)
         state.validate_state(approval_state)
+        state.validate_state(parent_state)
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError, TypeError):
         raise ValueError("approval_ref") from None
     approved_attempt = approval_state.get("current")
@@ -722,9 +744,38 @@ def _resolve_design_approval(
     ):
         if approved_attempt.get(field) != attempt.get(field):
             raise ValueError(field)
+    parent_attempt = parent_state.get("current")
+    if (
+        type(parent_attempt) is dict
+        and parent_attempt.get("paper_id") == attempt["paper_id"]
+        and parent_attempt.get("design_approved") is True
+    ):
+        raise ValueError("approval_ref")
+    identity_fields = (
+        _git_output(
+            repository_root,
+            "show",
+            "-s",
+            "--format=%an%x00%ae%x00%cn%x00%ce",
+            commit_sha,
+        )
+        .rstrip(b"\n")
+        .split(b"\x00")
+    )
+    if len(identity_fields) != 4:
+        raise ValueError("approval_ref")
+    try:
+        author_name, author_email, committer_name, committer_email = (
+            _identity(field.decode("utf-8"), "approval_ref")
+            for field in identity_fields
+        )
+    except UnicodeDecodeError:
+        raise ValueError("approval_ref") from None
     return {
         "commit_sha": commit_sha,
         "content_sha256": hashlib.sha256(approved_content).hexdigest(),
+        "design_author": f"git-author:{author_name} <{author_email}>",
+        "reviewer": f"git-committer:{committer_name} <{committer_email}>",
     }
 
 

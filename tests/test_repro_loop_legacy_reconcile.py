@@ -30,6 +30,8 @@ SOURCE_STATE_SHA256 = (
 )
 EEG_ATTEMPT_ID = "e20658d7-250a-5b0c-a015-be453c43e9fc"
 DESIGN_PATH = "docs/superpowers/plans/2026-07-24-eeg-fm-bench.md"
+DESIGN_AUTHOR = "git-author:Approval Reviewer <reviewer@example.test>"
+DESIGN_REVIEWER = "git-committer:Approval Reviewer <reviewer@example.test>"
 
 
 def migrated_eeg(
@@ -41,7 +43,35 @@ def migrated_eeg(
     paths = store.StatePaths(tmp_path / "state" / "repro-loop.json")
     approval_source = json.loads(json.dumps(source))
     approval_source["current"]["paper_id"] = approval_paper_id
+    before_approval = json.loads(json.dumps(source))
+    before_approval["current"] = None
+    before_approval["phase"] = "idle"
     subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    store.atomic_json_write(
+        paths.index,
+        before_approval,
+        migrate_v6.legacy_state.validate_state,
+    )
+    subprocess.run(
+        ["git", "-C", str(tmp_path), "add", "state/repro-loop.json"],
+        check=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(tmp_path),
+            "-c",
+            "user.name=Approval Reviewer",
+            "-c",
+            "user.email=reviewer@example.test",
+            "commit",
+            "-q",
+            "-m",
+            "state before design approval",
+        ],
+        check=True,
+    )
     design_file = tmp_path / DESIGN_PATH
     design_file.parent.mkdir(parents=True, exist_ok=True)
     design_file.write_bytes((ROOT / DESIGN_PATH).read_bytes())
@@ -230,9 +260,9 @@ def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
         EEG_ATTEMPT_ID,
         lease,
         snapshot_id,
-        design_author="eeg-design-author",
+        design_author=DESIGN_AUTHOR,
         design_path=DESIGN_PATH,
-        reviewer="user-approved-design",
+        reviewer=DESIGN_REVIEWER,
         approval_ref=approval_ref,
         now=NOW,
     )
@@ -243,7 +273,7 @@ def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
     assert updated["claim_bindings"] == candidate["claim_bindings"]
     assert updated["live_claims"] == candidate["live_claims"]
     assert updated["design"] == {
-        "author": "eeg-design-author",
+        "author": DESIGN_AUTHOR,
         "approval_commit": approval_ref.removeprefix("git:"),
         "content_sha256": design_content_sha256,
         "paper_id": "vGeNaFHdET",
@@ -251,7 +281,7 @@ def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
         "recorded_at": NOW.isoformat(),
     }
     assert updated["design_review"] == {
-        "reviewer": "user-approved-design",
+        "reviewer": DESIGN_REVIEWER,
         "decision": "approved",
         "approval_ref": approval_ref,
         "design_content_sha256": design_content_sha256,
@@ -290,11 +320,11 @@ def test_reconcile_migrated_eeg_is_available_through_controller_cli(
             "--snapshot-id",
             snapshot_id,
             "--design-author",
-            "eeg-design-author",
+            DESIGN_AUTHOR,
             "--design-path",
             DESIGN_PATH,
             "--reviewer",
-            "user-approved-design",
+            DESIGN_REVIEWER,
             "--approval-ref",
             approval_ref,
             "--now",
@@ -322,9 +352,9 @@ def test_generic_transition_cannot_rewrite_reconciled_claim_authority(
         EEG_ATTEMPT_ID,
         lease,
         snapshot_id,
-        design_author="eeg-design-author",
+        design_author=DESIGN_AUTHOR,
         design_path=DESIGN_PATH,
-        reviewer="user-approved-design",
+        reviewer=DESIGN_REVIEWER,
         approval_ref=approval_ref,
         now=NOW,
     )
@@ -354,9 +384,9 @@ def test_reconcile_rejects_raw_snapshot_without_mutating_attempt(tmp_path: Path)
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -381,9 +411,9 @@ def test_reconcile_rejects_changed_upstream_identity(tmp_path: Path):
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -414,9 +444,9 @@ def test_reconcile_rejects_live_external_claim_for_same_paper(tmp_path: Path):
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -441,9 +471,9 @@ def test_reconcile_rejects_invented_assessment_envelope(tmp_path: Path):
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -472,9 +502,9 @@ def test_reconcile_rejects_assessment_for_another_challenge_revision(
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -500,9 +530,9 @@ def test_reconcile_rejects_assessment_without_exact_attempt_paper(
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -530,9 +560,9 @@ def test_reconcile_rejects_candidate_not_bound_to_assessment_record(
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -551,9 +581,9 @@ def test_reconcile_rejects_unresolvable_design_approval_ref(tmp_path: Path):
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=f"git:{'0' * 40}",
             now=NOW,
         )
@@ -577,9 +607,9 @@ def test_reconcile_rejects_design_content_changed_after_approval(tmp_path: Path)
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -601,9 +631,78 @@ def test_reconcile_rejects_approval_for_another_paper(tmp_path: Path):
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
+            approval_ref=approval_ref,
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_unrelated_commit_after_design_approval(tmp_path: Path):
+    paths, lease, _approval_ref = migrated_eeg(tmp_path)
+    snapshot_id, _candidate = assessed_snapshot(paths)
+    (tmp_path / "unrelated.txt").write_text("unrelated\n", encoding="utf-8")
+    subprocess.run(
+        ["git", "-C", str(tmp_path), "add", "unrelated.txt"],
+        check=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(tmp_path),
+            "-c",
+            "user.name=Approval Reviewer",
+            "-c",
+            "user.email=reviewer@example.test",
+            "commit",
+            "-q",
+            "-m",
+            "unrelated later commit",
+        ],
+        check=True,
+    )
+    unrelated_commit = subprocess.run(
+        ["git", "-C", str(tmp_path), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="approval_ref"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author=DESIGN_AUTHOR,
+            design_path=DESIGN_PATH,
+            reviewer=DESIGN_REVIEWER,
+            approval_ref=f"git:{unrelated_commit}",
+            now=NOW,
+        )
+
+    assert attempts.read_attempt(paths, EEG_ATTEMPT_ID) == original
+
+
+def test_reconcile_rejects_invented_approval_identities(tmp_path: Path):
+    paths, lease, approval_ref = migrated_eeg(tmp_path)
+    snapshot_id, _candidate = assessed_snapshot(paths)
+    original = attempts.read_attempt(paths, EEG_ATTEMPT_ID)
+
+    with pytest.raises(ValueError, match="design_author"):
+        attempts.reconcile_legacy_attempt(
+            paths,
+            EEG_ATTEMPT_ID,
+            lease,
+            snapshot_id,
+            design_author="invented-design-author",
+            design_path=DESIGN_PATH,
+            reviewer="invented-reviewer",
             approval_ref=approval_ref,
             now=NOW,
         )
@@ -624,9 +723,9 @@ def test_reconcile_rejects_tampered_migration_backup(tmp_path: Path):
             EEG_ATTEMPT_ID,
             lease,
             snapshot_id,
-            design_author="eeg-design-author",
+            design_author=DESIGN_AUTHOR,
             design_path=DESIGN_PATH,
-            reviewer="user-approved-design",
+            reviewer=DESIGN_REVIEWER,
             approval_ref=approval_ref,
             now=NOW,
         )
