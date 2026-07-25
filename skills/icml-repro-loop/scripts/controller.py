@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
@@ -12,6 +12,7 @@ from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
+import tempfile
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -34,17 +35,14 @@ MANIFEST_KEYS = {
 }
 GIT_SHA_PATTERN = re.compile(r"(?:[0-9a-f]{40}|[0-9a-f]{64})")
 ENVIRONMENT_ALLOWLIST = {
-    "HOME",
     "LANG",
     "LC_ALL",
     "PATH",
     "SSL_CERT_DIR",
     "SSL_CERT_FILE",
     "TMPDIR",
-    "USER",
     "UV_CACHE_DIR",
     "VIRTUAL_ENV",
-    "XDG_CACHE_HOME",
 }
 
 
@@ -61,26 +59,46 @@ class CommandResult:
 Runner = Callable[[tuple[str, ...], Path], CommandResult]
 
 
-def clean_validation_environment() -> dict[str, str]:
-    """Return the small non-secret environment allowed during validation."""
-    return {
+def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
+    """Return a credential-free environment rooted in an empty home."""
+    environment = {
         key: value
         for key in sorted(ENVIRONMENT_ALLOWLIST)
         if (value := os.environ.get(key)) is not None
     }
+    environment.update(
+        {
+            "HF_HOME": str(isolated_home.parent / "hf-home"),
+            "HF_HUB_DISABLE_IMPLICIT_TOKEN": "1",
+            "HOME": str(isolated_home),
+            "XDG_CACHE_HOME": str(isolated_home / "cache"),
+            "XDG_CONFIG_HOME": str(isolated_home / "config"),
+        }
+    )
+    return environment
 
 
 def run_command(argv: tuple[str, ...], worktree: Path) -> CommandResult:
     """Run one command at the registered worktree with a sanitized environment."""
-    result = subprocess.run(
-        argv,
-        cwd=worktree,
-        text=True,
-        capture_output=True,
-        check=False,
-        env=clean_validation_environment(),
-    )
+    with tempfile.TemporaryDirectory(prefix="icml-repro-validation-") as name:
+        isolated_root = Path(name)
+        isolated_home = isolated_root / "home"
+        isolated_home.mkdir()
+        (isolated_root / "hf-home").mkdir()
+        result = subprocess.run(
+            argv,
+            cwd=worktree,
+            text=True,
+            capture_output=True,
+            check=False,
+            env=clean_validation_environment(isolated_home),
+        )
     return CommandResult(argv, result.returncode, result.stdout, result.stderr)
+
+
+def validation_now() -> datetime:
+    """Return a fresh controller time for the post-validation fence."""
+    return datetime.now(timezone.utc)
 
 
 def attest_validation(
@@ -93,7 +111,7 @@ def attest_validation(
 ) -> dict:
     """Run and attest one paper's complete validation under its exact boundary."""
     attempt = attempts.read_attempt(paths, attempt_id)
-    leases.assert_fence(paths, lease, now)
+    _assert_attempt_fence(paths, attempt_id, lease, now)
     worktree, commands = _validate_manifest(attempt, manifest)
     check_results: list[CommandResult] = []
 
@@ -184,6 +202,8 @@ def attest_validation(
         ).stdout.strip(),
         "tree hash",
     )
+    completed_at = validation_now()
+    _assert_attempt_fence(paths, attempt_id, lease, completed_at)
 
     payload = {
         "worktree": str(worktree),
@@ -197,14 +217,18 @@ def attest_validation(
             _result_record(result) for result in environment_results
         ],
         "source_tree": source_tree,
-        "environment_sha256": _sha256_json(clean_validation_environment()),
+        "environment_sha256": _sha256_json(
+            clean_validation_environment(
+                Path("/isolated-validation/home")
+            )
+        ),
     }
     attempt_number = attempt.get("improvement_attempts", 0) + 1
     record = {
         "kind": "validation",
         "attempt_id": attempt_id,
         "attempt_number": attempt_number,
-        "observed_at": _aware_timestamp(now),
+        "observed_at": _aware_timestamp(completed_at),
         "source_commit": source_commit,
         "payload_sha256": _sha256_json(payload),
         **payload,
@@ -217,7 +241,7 @@ def attest_validation(
         attestation_id,
         {},
         lease,
-        now,
+        completed_at,
     )
 
 
@@ -291,8 +315,7 @@ def _validation_commands(
         paper_pytest[:3] != ("uv", "run", "pytest")
         or not _references_project(paper_pytest, project_path)
         or any(
-            argument in {"-k", "--lf", "--ff", "--last-failed", "-x"}
-            or argument.startswith("--maxfail")
+            _pytest_bypass(argument)
             for argument in paper_pytest[3:]
         )
     ):
@@ -316,6 +339,29 @@ def _references_project(argv: tuple[str, ...], project_path: str) -> bool:
         argument == project_path or argument.startswith(f"{project_path}/")
         for argument in argv
     )
+
+
+def _pytest_bypass(argument: str) -> bool:
+    exact = {
+        "-k",
+        "-m",
+        "--collect-only",
+        "--ff",
+        "--lf",
+        "--last-failed",
+        "-x",
+    }
+    prefixes = (
+        "-k",
+        "-m",
+        "--collect-only",
+        "--deselect",
+        "--ff",
+        "--ignore",
+        "--lf",
+        "--maxfail",
+    )
+    return argument in exact or argument.startswith(prefixes)
 
 
 def _validate_changed_paths(
@@ -348,6 +394,20 @@ def _checked(
 def _require_clean(result: CommandResult) -> None:
     if result.stdout.strip():
         raise ValueError("clean worktree")
+
+
+def _assert_attempt_fence(
+    paths: store.StatePaths,
+    attempt_id: str,
+    lease: leases.Lease,
+    observed_at: datetime,
+) -> None:
+    if (
+        lease.resource != f"attempt:{attempt_id}"
+        or lease.attempt_id != attempt_id
+    ):
+        raise leases.StaleFence(f"attempt:{attempt_id}")
+    leases.assert_fence(paths, lease, observed_at)
 
 
 def _result_record(result: CommandResult) -> dict:

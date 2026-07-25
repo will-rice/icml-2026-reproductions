@@ -44,6 +44,8 @@ KIND_KEYS["validation"] = frozenset(
     }
 )
 SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
+GIT_SHA_PATTERN = re.compile(r"(?:[0-9a-f]{40}|[0-9a-f]{64})")
+RESULT_KEYS = {"argv", "returncode", "stdout_sha256", "stderr_sha256"}
 
 
 def persist(paths: store.StatePaths, record: dict) -> str:
@@ -82,9 +84,13 @@ def read(paths: store.StatePaths, attestation_id: str) -> dict:
 
 def validate_record(record: dict) -> None:
     """Validate an exact persisted attestation and its content address."""
-    _validate_record(record, persisted=True)
-    if _canonical_id(record) != record["attestation_id"]:
+    if (
+        type(record) is not dict
+        or type(record.get("attestation_id")) is not str
+        or _canonical_id(record) != record["attestation_id"]
+    ):
         raise ValueError("attestation_id")
+    _validate_record(record, persisted=True)
 
 
 def validate_target(paths: store.StatePaths, path: Path, record: dict) -> None:
@@ -119,6 +125,48 @@ def _validate_record(record: object, *, persisted: bool) -> None:
     _timestamp(record["observed_at"])
     _nonempty_string(record["source_commit"], "source_commit")
     _sha256(record["payload_sha256"], "payload_sha256")
+    if kind == "validation":
+        _validate_validation(record)
+
+
+def _validate_validation(record: dict) -> None:
+    _git_sha(record["source_commit"], "source_commit")
+    for field in (
+        "worktree",
+        "branch",
+        "project_path",
+        "design_path",
+    ):
+        _nonempty_string(record[field], field)
+    _git_sha(record["base_sha"], "base_sha")
+    _git_sha(record["source_tree"], "source_tree")
+    _sha256(record["environment_sha256"], "environment_sha256")
+    for field in ("commands", "checks", "environment"):
+        results = record[field]
+        if type(results) is not list:
+            raise ValueError(field)
+        for result in results:
+            _validate_result(result, field)
+    payload = {key: record[key] for key in KIND_KEYS["validation"]}
+    expected = hashlib.sha256(_canonical_json(payload)).hexdigest()
+    if record["payload_sha256"] != expected:
+        raise ValueError("payload_sha256")
+
+
+def _validate_result(result: object, field: str) -> None:
+    if type(result) is not dict or set(result) != RESULT_KEYS:
+        raise ValueError(field)
+    argv = result["argv"]
+    if (
+        type(argv) is not list
+        or not argv
+        or any(type(argument) is not str or not argument for argument in argv)
+        or type(result["returncode"]) is not int
+        or result["returncode"] != 0
+    ):
+        raise ValueError(field)
+    _sha256(result["stdout_sha256"], field)
+    _sha256(result["stderr_sha256"], field)
 
 
 def _canonical_id(record: dict) -> str:
@@ -152,6 +200,12 @@ def _nonempty_string(value: object, field: str) -> str:
 
 def _sha256(value: object, field: str) -> str:
     if type(value) is not str or SHA256_PATTERN.fullmatch(value) is None:
+        raise ValueError(field)
+    return value
+
+
+def _git_sha(value: object, field: str) -> str:
+    if type(value) is not str or GIT_SHA_PATTERN.fullmatch(value) is None:
         raise ValueError(field)
     return value
 

@@ -8,6 +8,27 @@
 
 **Tech Stack:** Python 3.12 standard library, `huggingface_hub`, schema-v6 atomic JSON store and fenced leases, pytest, Git CLI, Codex/Antigravity sandbox launchers.
 
+## Competition Scope Adjustment (2026-07-25)
+
+The controller process, its manifests, and its local CLI inputs are trusted.
+The boundary prevents paper workers from writing coordinator state, using Hub
+credentials, or turning self-authored claims into deployment/verdict authority.
+It does not defend against a malicious operator who already controls the
+controller process or filesystem.
+
+Keep the remaining work proportionate:
+
+- validation checks clean Git identity/path scope, runs the required commands,
+  strips deployment credentials, rechecks the writer fence, and hashes results;
+- deployment/submission/verdict authority comes only from exact live Hub data;
+- the worker launcher constructs a sandboxed command and sanitized environment,
+  without building a general runtime penetration-test framework;
+- final verification uses deterministic tests plus at most two representative
+  agent pressure samples, not an exhaustive adversarial matrix.
+
+Do not require exact command registration inside attempt state, controller
+binary allowlists, or exhaustive recursive schema/OS hardening.
+
 ## Global Constraints
 
 - Paper workers cannot write coordinator state, skill source, another submission, or deployment credentials.

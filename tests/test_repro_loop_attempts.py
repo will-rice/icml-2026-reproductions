@@ -9,6 +9,8 @@ import threading
 
 import pytest
 
+from repro_loop_attestation_fixtures import add_validation_fields
+
 
 SCRIPTS = (
     Path(__file__).resolve().parents[1] / "skills" / "icml-repro-loop" / "scripts"
@@ -115,20 +117,7 @@ def attestation_record(kind, attempt_id="a1", attempt_number=1, **updates):
         "payload_sha256": "1" * 64,
     }
     if kind == "validation":
-        record.update(
-            {
-                "worktree": "/tmp/test-worktree",
-                "branch": "test-branch",
-                "base_sha": "2" * 40,
-                "project_path": "submissions/paper-1",
-                "design_path": "docs/designs/paper-1.md",
-                "commands": [],
-                "checks": [],
-                "environment": [],
-                "source_tree": "3" * 40,
-                "environment_sha256": "4" * 64,
-            }
-        )
+        add_validation_fields(record)
     record.update(updates)
     return record
 
@@ -409,7 +398,7 @@ def test_rejected_attested_transition_leaves_slot_free_for_corrected_record(
     rejected_id = attestations.persist(
         paths,
         attestation_record(
-            "validation", attempt_id, source_commit="rejected-commit"
+            "validation", attempt_id, source_commit="6" * 40
         ),
     )
 
@@ -422,7 +411,7 @@ def test_rejected_attested_transition_leaves_slot_free_for_corrected_record(
     corrected_id = attestations.persist(
         paths,
         attestation_record(
-            "validation", attempt_id, source_commit="corrected-commit"
+            "validation", attempt_id, source_commit="7" * 40
         ),
     )
     transitioned = attempts.transition_attested(
@@ -450,7 +439,7 @@ def test_authoritative_attestation_slot_rejects_different_record_reuse(
     conflicting_id = attestations.persist(
         paths,
         attestation_record(
-            "validation", attempt_id, source_commit="conflicting-commit"
+            "validation", attempt_id, source_commit="8" * 40
         ),
     )
 

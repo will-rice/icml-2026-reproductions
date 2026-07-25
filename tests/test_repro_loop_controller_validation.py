@@ -33,6 +33,11 @@ HEAD = "2" * 40
 TREE = "3" * 40
 
 
+@pytest.fixture(autouse=True)
+def fixed_validation_clock(monkeypatch):
+    monkeypatch.setattr(controller, "validation_now", lambda: NOW, raising=False)
+
+
 class FakeRunner:
     """Return controlled real-command-shaped outputs without running pipelines."""
 
@@ -134,6 +139,14 @@ def validation_case(tmp_path: Path):
     worktree.mkdir()
     manifest["worktree"] = str(worktree)
     return paths, lease, manifest
+
+
+def rewrite_attempt(paths, field, value) -> None:
+    attempt = store.read_json(paths.attempt("a1"))
+    attempt[field] = value
+    store.atomic_json_write(
+        paths.attempt("a1"), attempt, store.validate_attempt
+    )
 
 
 @pytest.mark.parametrize(
@@ -241,6 +254,124 @@ def test_validation_rejects_noncanonical_command_manifest(
         )
 
 
+@pytest.mark.parametrize(
+    ("status", "branches", "error"),
+    [
+        (("", "?? generated-output\n"), None, "clean"),
+        (
+            ("", ""),
+            ("attempt-paper-1", "changed-after-validation"),
+            "branch",
+        ),
+    ],
+)
+def test_validation_rejects_post_command_git_drift(
+    validation_case, status, branches, error
+):
+    paths, lease, manifest = validation_case
+
+    with pytest.raises(ValueError, match=error):
+        controller.attest_validation(
+            paths,
+            "a1",
+            lease,
+            manifest,
+            FakeRunner(manifest, status=status, branches=branches),
+            NOW,
+        )
+
+    assert attempts.read_attempt(paths, "a1")["phase"] == "implementing"
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "error"),
+    [
+        ("phase", "design-pending", "phase"),
+        ("design_review", None, "design_review"),
+    ],
+)
+def test_validation_requires_approved_implementing_attempt(
+    validation_case, field, value, error
+):
+    paths, lease, manifest = validation_case
+    rewrite_attempt(paths, field, value)
+
+    with pytest.raises(ValueError, match=error):
+        controller.attest_validation(
+            paths, "a1", lease, manifest, FakeRunner(manifest), NOW
+        )
+
+
+@pytest.mark.parametrize(
+    "bypass",
+    [
+        ["--collect-only"],
+        ["--ignore", "submissions/paper-1/tests/test_claim.py"],
+        ["--ignore-glob", "submissions/paper-1/tests/test_*"],
+        ["--deselect", "submissions/paper-1/tests/test_claim.py::test_claim"],
+        ["-k", "not claim"],
+        ["-m", "not slow"],
+        ["--lf"],
+        ["--ff"],
+    ],
+)
+def test_validation_rejects_paper_pytest_bypass_flags(
+    validation_case, bypass
+):
+    paths, lease, manifest = validation_case
+    manifest["commands"][1].extend(bypass)
+
+    with pytest.raises(ValueError, match="commands"):
+        controller.attest_validation(
+            paths, "a1", lease, manifest, FakeRunner(manifest), NOW
+        )
+
+
+def test_validation_rechecks_fence_at_fresh_time_after_commands(
+    validation_case, monkeypatch
+):
+    paths, lease, manifest = validation_case
+    runner = FakeRunner(manifest)
+    monkeypatch.setattr(
+        controller,
+        "validation_now",
+        lambda: NOW + timedelta(hours=3),
+        raising=False,
+    )
+
+    with pytest.raises(leases.StaleFence):
+        controller.attest_validation(
+            paths, "a1", lease, manifest, runner, NOW
+        )
+
+    assert all(
+        tuple(command) in [argv for argv, _ in runner.calls]
+        for command in manifest["commands"]
+    )
+    assert attempts.read_attempt(paths, "a1")["phase"] == "implementing"
+    assert not paths.attestation("validation", "a1").exists()
+
+
+def test_validation_rejects_other_attempt_lease_before_commands(validation_case):
+    paths, _, manifest = validation_case
+    other = leases.acquire_lease(
+        paths,
+        "attempt:a2",
+        "controller-2",
+        "a2",
+        NOW,
+        timedelta(hours=2),
+    )
+    runner = FakeRunner(manifest)
+
+    with pytest.raises(leases.StaleFence):
+        controller.attest_validation(
+            paths, "a1", other, manifest, runner, NOW
+        )
+
+    assert runner.calls == []
+
+
 def test_valid_run_attests_hashed_outputs_commit_and_tree(
     validation_case, monkeypatch
 ):
@@ -288,9 +419,13 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
     def fake_run(argv, **kwargs):
         captured["argv"] = argv
         captured.update(kwargs)
+        captured["home_entries"] = list(Path(kwargs["env"]["HOME"]).iterdir())
+        captured["hf_entries"] = list(Path(kwargs["env"]["HF_HOME"]).iterdir())
         return subprocess.CompletedProcess(argv, 0, "out", "err")
 
     monkeypatch.setenv("HF_TOKEN", "secret")
+    monkeypatch.setenv("HUGGING_FACE_HUB_TOKEN", "second-secret")
+    monkeypatch.setenv("PATH", "/usr/local/bin:/usr/bin:/bin")
     monkeypatch.setattr(controller.subprocess, "run", fake_run)
 
     result = controller.run_command(("git", "status"), tmp_path)
@@ -301,8 +436,16 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
     assert captured["text"] is True
     assert captured["capture_output"] is True
     assert captured["check"] is False
-    assert captured["env"] == controller.clean_validation_environment()
     assert "HF_TOKEN" not in captured["env"]
+    assert "HUGGING_FACE_HUB_TOKEN" not in captured["env"]
+    assert captured["env"]["HF_HUB_DISABLE_IMPLICIT_TOKEN"] == "1"
+    assert captured["env"]["PATH"] == "/usr/local/bin:/usr/bin:/bin"
+    assert captured["env"]["HOME"] != os.environ.get("HOME")
+    assert Path(captured["env"]["HF_HOME"]).parent == Path(
+        captured["env"]["HOME"]
+    ).parent
+    assert captured["home_entries"] == []
+    assert captured["hf_entries"] == []
 
 
 def test_state_cli_exposes_attest_validation_command():
@@ -316,3 +459,38 @@ def test_state_cli_exposes_attest_validation_command():
 
     assert result.returncode == 0
     assert "attest-validation" in result.stdout
+
+
+def test_state_cli_rejects_invalid_validation_manifest(
+    validation_case, tmp_path
+):
+    paths, lease, manifest = validation_case
+    manifest["commands"][2] = ["uv", "run", "pytest", "--collect-only"]
+    manifest_path = tmp_path / "invalid-manifest.json"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(STATE),
+            "attest-validation",
+            str(paths.index),
+            "--attempt-id",
+            "a1",
+            "--owner",
+            lease.owner,
+            "--fencing-token",
+            str(lease.fencing_token),
+            "--manifest",
+            str(manifest_path),
+            "--now",
+            NOW.isoformat(),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode != 0
+    assert "commands" in result.stderr
+    assert attempts.read_attempt(paths, "a1")["phase"] == "implementing"

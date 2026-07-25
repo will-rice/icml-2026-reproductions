@@ -1,5 +1,6 @@
 """Tests for immutable external-lifecycle attestations."""
 
+import copy
 import hashlib
 import importlib
 import json
@@ -7,6 +8,8 @@ from pathlib import Path
 import sys
 
 import pytest
+
+from repro_loop_attestation_fixtures import add_validation_fields
 
 
 SCRIPTS = (
@@ -47,24 +50,9 @@ def record(kind: str = "validation", **updates: object) -> dict:
         "payload_sha256": "1" * 64,
     }
     if kind == "validation":
-        value.update(validation_fields())
+        add_validation_fields(value)
     value.update(updates)
     return value
-
-
-def validation_fields() -> dict:
-    return {
-        "worktree": "/tmp/test-worktree",
-        "branch": "test-branch",
-        "base_sha": "2" * 40,
-        "project_path": "submissions/paper-1",
-        "design_path": "docs/designs/paper-1.md",
-        "commands": [],
-        "checks": [],
-        "environment": [],
-        "source_tree": "3" * 40,
-        "environment_sha256": "4" * 64,
-    }
 
 
 def canonical_id(value: dict) -> str:
@@ -115,7 +103,7 @@ def test_persist_is_byte_idempotent_and_allows_corrected_inert_same_slot_object(
 
     assert attestations.persist(paths, payload) == attestation_id
     assert path.read_bytes() == original
-    corrected = record(source_commit="different")
+    corrected = record(source_commit="6" * 40)
     corrected_id = attestations.persist(paths, corrected)
     assert corrected_id != attestation_id
     assert attestations.read(paths, corrected_id) == {
@@ -167,3 +155,36 @@ def test_persist_rejects_conflicting_caller_supplied_attestation_id(
 def test_read_rejects_unknown_attestation_id(paths, attestations):
     with pytest.raises(ValueError, match="attestation_id"):
         attestations.read(paths, "0" * 64)
+
+
+@pytest.mark.parametrize(
+    ("path", "replacement"),
+    [
+        (("source_commit",), "not-a-git-sha"),
+        (("source_tree",), "not-a-git-sha"),
+        (("commands",), "not-a-list"),
+        (
+            ("commands",),
+            [
+                {
+                    "argv": ["uv", "run", "pytest", "-q"],
+                    "returncode": "zero",
+                    "stdout_sha256": "0" * 64,
+                    "stderr_sha256": "0" * 64,
+                }
+            ],
+        ),
+        (("payload_sha256",), "f" * 64),
+    ],
+)
+def test_validation_attestation_rejects_corrupt_typed_or_hashed_payload(
+    paths, attestations, path, replacement
+):
+    invalid = copy.deepcopy(record())
+    target = invalid
+    for part in path[:-1]:
+        target = target[part]
+    target[path[-1]] = replacement
+
+    with pytest.raises(ValueError):
+        attestations.persist(paths, invalid)

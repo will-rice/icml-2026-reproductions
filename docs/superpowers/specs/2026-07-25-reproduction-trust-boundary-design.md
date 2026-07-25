@@ -82,6 +82,11 @@ and credential-file reads are denied.
 If a runtime cannot enforce the filesystem and credential boundary, it may
 only run read-only research. It cannot be an implementation worker.
 
+The controller process and controller-authored manifests are trusted. The
+competition guardrail prevents paper workers from reaching coordinator state
+or Hub credentials; it does not attempt to resist a malicious local operator
+who already controls the controller process or filesystem.
+
 ## Attested Lifecycle
 
 Generic `transition-attempt` remains available only for internal phases that

@@ -11,6 +11,8 @@ import threading
 
 import pytest
 
+from repro_loop_attestation_fixtures import add_validation_fields
+
 
 SCRIPTS = (
     Path(__file__).resolve().parents[1] / "skills" / "icml-repro-loop" / "scripts"
@@ -180,20 +182,7 @@ def transition_attested(attempts, paths, attempt_id, phase, lease, now):
         "payload_sha256": "1" * 64,
     }
     if phase == "validated":
-        record.update(
-            {
-                "worktree": "/tmp/test-worktree",
-                "branch": "test-branch",
-                "base_sha": "2" * 40,
-                "project_path": "submissions/paper-1",
-                "design_path": "docs/designs/paper-1.md",
-                "commands": [],
-                "checks": [],
-                "environment": [],
-                "source_tree": "3" * 40,
-                "environment_sha256": "4" * 64,
-            }
-        )
+        add_validation_fields(record)
     attestation_id = attempts.attestations.persist(
         paths,
         record,
