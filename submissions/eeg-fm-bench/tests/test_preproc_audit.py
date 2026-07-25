@@ -34,5 +34,7 @@ def test_preprocessing_executes_pinned_primitives_deterministically(tmp_path: Pa
     assert all(item["all_values_finite"] for item in first["datasets"].values())
     assert all(item["filter_low"] == 0.1 for item in first["datasets"].values())
     assert all(item["filter_high"] == 100.0 for item in first["datasets"].values())
+    assert all(item["notch_applied"] is True for item in first["datasets"].values())
+    assert all(item["window_shape"] == [4, 19, 2560] for item in first["datasets"].values())
     assert all(item["window_shape"][0] >= 1 for item in first["datasets"].values())
     json.dumps(first)

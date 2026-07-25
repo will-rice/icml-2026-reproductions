@@ -96,6 +96,9 @@ def test_claim_status_checks_observations_not_self_reported_status() -> None:
                 "repeat_identical": False,
                 "resampled_sfreq": 128.0,
                 "all_values_finite": True,
+                "window_shape": [0, 19, 1280],
+                "channel_count": 19,
+                "window_seconds": 10,
             }
         },
     }
@@ -107,6 +110,8 @@ def test_claim_status_checks_observations_not_self_reported_status() -> None:
             "target_sfreq": 256.0,
             "all_values_finite": True,
             "released_primitives": True,
+            "minimum_windows": 1,
+            "consistent_window_structure": True,
         },
     )
 

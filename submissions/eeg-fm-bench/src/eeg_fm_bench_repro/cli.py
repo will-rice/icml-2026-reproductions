@@ -34,10 +34,26 @@ def _evaluate_status(record: dict[str, Any], thresholds: dict[str, Any]) -> str:
         )
     if claim_id == "standardized-preprocessing-reproducibility":
         datasets = record["datasets"].values()
+        structures = [item["window_shape"][1:] for item in datasets]
+        datasets = record["datasets"].values()
         passed = (
             record.get("deterministic") is thresholds["repeat_identical"]
-            and record.get("primitive_backend") == "mne.io.RawArray"
+            and (
+                not thresholds["released_primitives"]
+                or record.get("primitive_backend") == "mne.io.RawArray"
+            )
             and len(record["datasets"]) >= thresholds["datasets_minimum"]
+            and all(
+                item["window_shape"][0] >= thresholds["minimum_windows"]
+                and item["window_shape"][1] == item["channel_count"]
+                and item["window_shape"][2]
+                == item["resampled_sfreq"] * item["window_seconds"]
+                for item in datasets
+            )
+            and (
+                not thresholds["consistent_window_structure"]
+                or len(set(map(tuple, structures))) == 1
+            )
             and all(
                 item["repeat_identical"] is thresholds["repeat_identical"]
                 and item["resampled_sfreq"] == thresholds["target_sfreq"]
@@ -96,6 +112,8 @@ def build_bundle(cache_dir: Path) -> dict[str, Any]:
                     "target_sfreq": 256.0,
                     "all_values_finite": True,
                     "released_primitives": True,
+                    "minimum_windows": 1,
+                    "consistent_window_structure": True,
                 },
             ),
             _claim(

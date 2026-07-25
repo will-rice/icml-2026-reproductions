@@ -143,6 +143,7 @@
             ],
             "filter_high": 100.0,
             "filter_low": 0.1,
+            "notch_applied": true,
             "output_sha256": "e252b85598dd1c516bf645993df378705aff3b409d856c79d91bf13077aaf259",
             "repeat_identical": true,
             "resampled_sfreq": 256.0,
@@ -179,6 +180,7 @@
             ],
             "filter_high": 100.0,
             "filter_low": 0.1,
+            "notch_applied": true,
             "output_sha256": "e252b85598dd1c516bf645993df378705aff3b409d856c79d91bf13077aaf259",
             "repeat_identical": true,
             "resampled_sfreq": 256.0,
@@ -213,7 +215,9 @@
       "status": "verified",
       "thresholds": {
         "all_values_finite": true,
+        "consistent_window_structure": true,
         "datasets_minimum": 2,
+        "minimum_windows": 1,
         "released_primitives": true,
         "repeat_identical": true,
         "target_sfreq": 256.0

@@ -114,13 +114,14 @@ def _one_dataset(
     filter_low = float(_field_literal(builder_source, "EEGConfig", "filter_low"))
     filter_high = float(_field_literal(builder_source, "EEGConfig", "filter_high"))
     filter_notch = float(_field_literal(builder_source, "EEGConfig", "filter_notch"))
+    is_notched = bool(_field_literal(builder_source, "EEGConfig", "is_notched"))
     config = types.SimpleNamespace(
         montage=montage,
         fs=target_fs,
         filter_high=filter_high,
         filter_low=filter_low,
         filter_notch=filter_notch,
-        is_notched=False,
+        is_notched=is_notched,
         wnd_len=int(target_fs * window_seconds),
         is_finetune=False,
         category=[],
@@ -181,9 +182,11 @@ def _one_dataset(
         "window_seconds": window_seconds,
         "window_shape": [len(first_arrays), len(channels), config.wnd_len],
         "repeat_identical": bool(identical),
-        "all_values_finite": bool(all(np.isfinite(item).all() for item in first_arrays)),
+        "all_values_finite": bool(first_arrays)
+        and all(np.isfinite(item).all() for item in first_arrays),
         "filter_low": first_highpass,
         "filter_high": first_lowpass,
+        "notch_applied": not is_notched,
         "output_sha256": digest,
     }
 
