@@ -254,7 +254,8 @@ The evidence engine exposes named, non-interchangeable objectives:
   \(\tfrac12 I_{\mathrm{ex}}\), used only to explain a possible correction.
 - `appendix_inline_shift_literal`: the inline Appendix E replacement
   \(I_{\mathrm{in}}+|S|\eta\) applied to literal Eq. (4)--(5), yielding the
-  cardinality term \(\alpha\eta|S|^2\).
+  cardinality term \(\alpha\eta|S|^2\). This is the literal Appendix E set
+  function, not a repaired modular shift.
 - `appendix_eq26_score`: displayed Eq. (26), retained as a score rather than
   silently treated as the marginal of a defined set function.
 - `modular_shift_candidate`: a separately labeled repaired objective that
@@ -311,6 +312,8 @@ differences. The second computes the claimed closed-form marginal polynomial.
 It checks:
 
 - literal Eq. (4)--(5);
+- the literal Appendix E objective
+  \(f_{\mathrm{lit}}(S)+\alpha\eta|S|^2\);
 - the single-counted objective;
 - symmetric and deliberately asymmetric interaction tables;
 - \(g(D)\leq0\), zero, and one-premise-at-a-time violations; and
@@ -327,6 +330,26 @@ Their diminishing-return differences are respectively
 \(-2\sum_{j\in B\setminus A}a_{xj}\) and
 \(-\sum_{j\in B\setminus A}a_{xj}\). This establishes the general sign result
 symbolically while also testing whether Eq. (12) is the actual marginal.
+
+For `appendix_inline_shift_literal`, the independently derived difference is
+
+\[
+\Delta_{\mathrm{appendix}}(x\mid A)
+-\Delta_{\mathrm{appendix}}(x\mid B)
+=-2\sum_{j\in B\setminus A}a_{xj}
+-2\alpha\eta(|B|-|A|).
+\]
+
+The audit must persist the minimal two-element falsification: let
+\(T=\{x,y\}\), \(A=\varnothing\), \(B=\{y\}\), set both vertex weights and
+the sole edge weight to zero, and set \(\alpha=\eta=1\). Then the shifted
+literal objective is \(|S|^2\), so
+\(\Delta(x\mid\varnothing)=1\) and
+\(\Delta(x\mid\{y\})=3\), contradicting diminishing returns. Two elements are
+minimal because a strict chain \(A\subset B\) with \(x\notin B\) cannot exist
+on a one-element ground set. This witness applies only to
+`appendix_inline_shift_literal`; it is not attributed to
+`modular_shift_candidate` or any other repaired objective.
 
 The labeled **exhaustive symmetric control** covers \(1\leq n\leq4\), every
 triple \(A\subseteq B\), \(x\notin B\), and every symmetric edge assignment in
@@ -397,6 +420,18 @@ the evidence reports best, worst, and canonical lexicographic values
 separately. This prevents an arbitrary tie break, the Algorithm 1 ambiguities,
 or the Eq. (7)/true-marginal mismatch from being hidden.
 
+The true-marginal path must also run with
+`appendix_inline_shift_literal`, using
+\(w_x+2\sum_{j\in S}a_{xj}+\alpha\eta(2|S|+1)\). At each fixed iteration its
+cardinality term is equal for every candidate, and at fixed budget \(b\) its
+\(\alpha\eta b^2\) objective term is equal for every feasible set. Those facts
+may establish equality of selected sets and optima with the unshifted literal
+variant, but they do not establish submodularity or transfer a multiplicative
+approximation ratio: an additive cardinality term changes objective ratios.
+The greedy-guarantee audit therefore records the two-element `1`-then-`3`
+witness as a failed theorem premise and must not report the repaired standard
+greedy guarantee as a guarantee for this literal Appendix E variant.
+
 For each normalized, monotone, submodular instance it records
 
 \[
@@ -413,6 +448,8 @@ misleading ratio. It searches smallest-first for:
 - a violation of the claimed \(1-1/e\) bound under the paper's exact premises;
 - a case showing the paper's \((b-t)\) proof step is invalid;
 - a mismatch between Eq. (7)'s score and the literal Eq. (4) marginal; and
+- failure of the submodularity premise for the literal Appendix E shifted
+  objective, including the minimal two-element witness; and
 - smoke instances satisfying the standard repaired theorem premises.
 
 The labeled **exhaustive greedy domain** uses \(1\leq n\leq4\),
@@ -436,14 +473,22 @@ arithmetic on enumerated instances. At minimum it audits:
 - normalization \(f(\varnothing)=0\);
 - non-negativity and monotonicity, not submodularity alone;
 - whether adding an objective constant preserves normalization and ratios;
+- whether the Appendix E term \(\alpha\eta|S|^2\), which is not an objective
+  constant across cardinalities, preserves diminishing returns and permits the
+  standard greedy theorem;
 - the bound on \(|S^\star\setminus S_t|\), which is at most \(b\) but need not
   be at most \(b-t\);
 - the multiplication/product indices, including the \(k=1\) factor; and
 - the logical relationship between a repaired standard greedy theorem and the
   theorem actually stated.
 
-The output is a row per proof step with `supported`, `contradicted`, or
-`not_applicable`, plus witness references.
+The output is a row per proof step and `model_variant` with `supported`,
+`contradicted`, or `not_applicable`, plus witness references. For
+`appendix_inline_shift_literal`, the ledger must link the minimal two-element
+`1`-then-`3` witness wherever Appendix F requires submodularity, distinguish
+its supported normalization and any supported monotonicity facts, and reject
+ratio transfer from a repaired objective. It must never substitute
+`modular_shift_candidate` for this literal variant.
 
 The arbitrary-set cardinality checks and algebraic transitions are labeled
 **symbolic**. A separate **exhaustive finite proof-ledger control** reuses the
@@ -478,9 +523,10 @@ The minimized witness and the pre-minimization discovery are both retained.
 Regression fixtures are generated from canonical witness JSON, never copied
 from prose.
 
-Counting weighted greedy instances, optimum subsets, and both greedy
-implementations separately, all declared finite controls have an aggregate
-ceiling of 1,177,833 case, path, subset, or ledger-row evaluations.
+Counting weighted greedy instances, optimum subsets, both greedy
+implementations, and the two exact marginal evaluations in the mandatory
+Appendix E witness separately, all declared finite controls have an aggregate
+ceiling of 1,177,835 case, path, subset, or ledger-row evaluations.
 They use exact arithmetic, at most four vertices, and no GPU, network call, or
 model training. This preserves the assessed CPU-only, under-30-minute scope;
 the evidence records wall time and fails the lifecycle gate rather than silently
@@ -500,7 +546,11 @@ Implementation follows failing-test-first development:
    impossible neutral equality and not a preselected claim verdict.
 4. Diminishing-returns enumeration and closed-form agreement tests fail before
    those oracles are implemented.
-5. Monotonicity/shift boundary tests fail before Appendix E support exists.
+5. Appendix E tests fail before shift support exists: they require the literal
+   \(f_{\mathrm{lit}}(S)+\alpha\eta|S|^2\) variant to remain distinct from all
+   repaired shifts and require its zero-weight, \(\alpha=\eta=1\), two-element
+   marginals to be exactly `1` then `3` in the diminishing-returns,
+   greedy-guarantee, and proof-ledger outputs.
 6. Greedy, exhaustive optimum, all-ties, and ratio tests fail before solvers
    exist.
 7. Literal Algorithm 1 transcription, undefined-read, state-order, and
@@ -551,8 +601,9 @@ Each transcription includes `equation`, `pdf_page`, `section`,
 `normalized_expression`, `source_excerpt_sha256`, and `reviewed_by`.
 Each search includes `oracle`, `model_variant`, `greedy_path` when applicable,
 its exhaustive/symbolic label, exact domain, ceiling formula and value, actual
-case count, completion status, and code revision. Each witness includes exact
-rational inputs as numerator/denominator strings, all intermediate values,
+case count, completion status, and code revision. Each witness includes
+`model_variant`, the audited property, exact rational inputs as
+numerator/denominator strings, all intermediate values,
 `universal_claim_falsified`, `minimality_checks`, and artifact SHA-256.
 Each claim result includes a stable local claim ID, `target_claim` equal to one
 of the two exact strings above, expected observation, computed observations,
@@ -564,6 +615,15 @@ missing, additional, or rewritten claim text before any coordinator mutation.
 The human report is generated from this JSON and cannot introduce new numeric
 claims. JSON Schema validation, stable sorting, deterministic serialization,
 and a second clean-run byte comparison are required.
+
+Schema acceptance additionally requires one canonical
+`appendix_inline_shift_literal` witness with two elements, zero vertex and edge
+weights, `alpha=1`, `eta=1`, and exact marginal values `1` and `3`. Its stable
+witness ID must be referenced by the diminishing-returns result, the
+greedy-guarantee premise result, and every applicable Appendix F proof-ledger
+row. Acceptance fails if any of those records is absent, if a repaired variant
+uses that literal variant's identifier, or if results for
+`appendix_inline_shift_literal` and `modular_shift_candidate` are merged.
 
 ## Attribution and licensing
 
@@ -635,7 +695,8 @@ The implementation plan must require:
 1. clean-environment installation from locked dependencies;
 2. the complete deterministic evidence command twice with byte-identical
    canonical JSON;
-3. JSON Schema validation and report-to-JSON agreement;
+3. JSON Schema validation, report-to-JSON agreement, and acceptance of the
+   required Appendix E literal witness and its three audit linkages;
 4. the submission's full pytest suite;
 5. root `uv run pytest -q`, while excluding the archival NAPE tree according
    to repository policy;
@@ -681,6 +742,9 @@ the submission, record or approve the design in coordinator state, update
 
 - No placeholder, TODO, or unresolved design choice remains.
 - Literal, conventional, and repaired objectives have distinct identifiers.
+- The Appendix E shifted literal objective has the exact minimal two-element
+  `1`-then-`3` falsification linked across diminishing returns, greedy-guarantee,
+  and proof-ledger audits without being conflated with a repaired shift.
 - Literal Algorithm 1, Eq. (7)--(8) score greedy, and true-marginal greedy have
   distinct identifiers, with ambiguities preserved rather than repaired.
 - Each universal claim has an independent oracle and a falsification path.
