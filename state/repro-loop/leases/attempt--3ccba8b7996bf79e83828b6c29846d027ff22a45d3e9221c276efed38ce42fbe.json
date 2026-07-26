@@ -1,7 +1,7 @@
 {
   "acquired_at": "2026-07-26T09:11:41.700319+00:00",
   "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
-  "expires_at": "2026-07-26T11:11:41.700319+00:00",
+  "expires_at": "2026-07-26T12:23:36.243371+00:00",
   "fencing_token": 2,
   "owner": "controller-recurrent-design-20260726",
   "released_at": null,
