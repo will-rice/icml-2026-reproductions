@@ -712,6 +712,71 @@ def test_exact_domain_tuple_preflights_before_all_work(
     assert calls == {"traversal": 0, "objective": 0, "score": 0}
 
 
+@pytest.mark.parametrize(
+    ("live_name", "approved_name", "mutated_domain"),
+    (
+        (
+            "_VERTEX_DOMAIN",
+            "_APPROVED_VERTEX_DOMAIN",
+            (Fraction(1), Fraction(), Fraction(2)),
+        ),
+        (
+            "_VERTEX_DOMAIN",
+            "_APPROVED_VERTEX_DOMAIN",
+            (Fraction(), Fraction(1), Fraction(3)),
+        ),
+        (
+            "_EDGE_DOMAIN",
+            "_APPROVED_EDGE_DOMAIN",
+            (Fraction(), Fraction(-1)),
+        ),
+        (
+            "_EDGE_DOMAIN",
+            "_APPROVED_EDGE_DOMAIN",
+            (Fraction(-2), Fraction()),
+        ),
+    ),
+)
+def test_dual_patched_domain_aliases_cannot_bypass_preflight(
+    monkeypatch: pytest.MonkeyPatch,
+    live_name: str,
+    approved_name: str,
+    mutated_domain: tuple[Fraction, ...],
+) -> None:
+    calls = {"traversal": 0, "objective": 0, "score": 0}
+
+    def forbidden_product(*_args: object, **_kwargs: object) -> object:
+        calls["traversal"] += 1
+        raise AssertionError("domain traversal started")
+
+    def forbidden_objective(*_args: object, **_kwargs: object) -> Fraction:
+        calls["objective"] += 1
+        raise AssertionError("objective evaluation started")
+
+    def forbidden_score(*_args: object, **_kwargs: object) -> Fraction:
+        calls["score"] += 1
+        raise AssertionError("candidate scoring started")
+
+    monkeypatch.setattr(greedy_module, live_name, mutated_domain)
+    monkeypatch.setattr(
+        greedy_module,
+        approved_name,
+        mutated_domain,
+        raising=False,
+    )
+    monkeypatch.setattr(greedy_module, "product", forbidden_product)
+    monkeypatch.setattr(
+        greedy_module,
+        "evaluate_objective",
+        forbidden_objective,
+    )
+    monkeypatch.setattr(greedy_module, "eq7_score", forbidden_score)
+
+    with pytest.raises(ValueError, match="approved domain"):
+        run_greedy_audit("task-4-dual-domain-patch-regression")
+    assert calls == {"traversal": 0, "objective": 0, "score": 0}
+
+
 @pytest.mark.parametrize("source_revision", ("", 7))
 def test_audit_rejects_invalid_source_revision(
     source_revision: object,

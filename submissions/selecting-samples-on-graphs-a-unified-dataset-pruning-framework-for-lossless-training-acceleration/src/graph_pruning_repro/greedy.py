@@ -28,10 +28,8 @@ OPTIMUM_VALUE_CEILING = 444_870
 CLASSIFICATION_CEILING = 584_604
 
 _MAX_VERTICES = 4
-_APPROVED_VERTEX_DOMAIN = (Fraction(), Fraction(1), Fraction(2))
-_APPROVED_EDGE_DOMAIN = (Fraction(-1), Fraction())
-_VERTEX_DOMAIN = _APPROVED_VERTEX_DOMAIN
-_EDGE_DOMAIN = _APPROVED_EDGE_DOMAIN
+_VERTEX_DOMAIN = (Fraction(), Fraction(1), Fraction(2))
+_EDGE_DOMAIN = (Fraction(-1), Fraction())
 _SUBSET_MEMBERSHIP_STATES = 2
 _DIMINISHING_RELATION_STATES = 3
 _PREMISE_NAMES = (
@@ -430,15 +428,17 @@ def greedy_domain_formulas() -> dict[str, int]:
 
 
 def _validate_exact_domains() -> None:
+    expected_vertex_domain = (Fraction(), Fraction(1), Fraction(2))
+    expected_edge_domain = (Fraction(-1), Fraction())
     if (
         type(_VERTEX_DOMAIN) is not tuple
-        or _VERTEX_DOMAIN != _APPROVED_VERTEX_DOMAIN
+        or _VERTEX_DOMAIN != expected_vertex_domain
         or any(type(value) is not Fraction for value in _VERTEX_DOMAIN)
     ):
         raise ValueError("vertex weights do not match the approved domain")
     if (
         type(_EDGE_DOMAIN) is not tuple
-        or _EDGE_DOMAIN != _APPROVED_EDGE_DOMAIN
+        or _EDGE_DOMAIN != expected_edge_domain
         or any(type(value) is not Fraction for value in _EDGE_DOMAIN)
     ):
         raise ValueError("edge weights do not match the approved domain")

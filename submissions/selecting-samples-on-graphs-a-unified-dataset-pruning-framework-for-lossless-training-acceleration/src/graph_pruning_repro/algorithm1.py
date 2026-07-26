@@ -1,28 +1,19 @@
-"""Literal, non-repairing state audit for the paper's Algorithm 1."""
+"""Literal, non-repairing state audit for authenticated Algorithm 1 bytes."""
 
 from __future__ import annotations
 
 import hashlib
+import os
 import re
 from collections.abc import Sequence
+from pathlib import Path
+
+from .provenance import load_transcriptions
 
 _NUMBERED_LINE = re.compile(r"^(?P<number>[1-9][0-9]*):(?P<body>.*)$")
-_REVIEWED_TRANSCRIPTION_SHA256 = (
-    "d76e4ad27e1db3256341079e159115938"
-    "51962da2e04bd8b5913cb774ee79249"
-)
-_REVIEWED_TRANSCRIPTION_BYTE_COUNT = 926
 
 
 def _numbered_lines(transcription: Sequence[str]) -> dict[int, str]:
-    if isinstance(transcription, (str, bytes)) or not isinstance(
-        transcription,
-        Sequence,
-    ):
-        raise TypeError("transcription must be a sequence of lines")
-    if any(type(line) is not str for line in transcription):
-        raise TypeError("transcription lines must be strings")
-
     numbered: dict[int, str] = {}
     for line in transcription:
         match = _NUMBERED_LINE.match(line)
@@ -35,42 +26,96 @@ def _numbered_lines(transcription: Sequence[str]) -> dict[int, str]:
     return numbered
 
 
-def audit_literal_algorithm1(
-    transcription: Sequence[str],
-) -> dict[str, object]:
-    """Execute literal lines only until the first undefined symbol read.
+def _algorithm_record(project_root: Path) -> dict[str, object]:
+    records = load_transcriptions(project_root)
+    matches = [
+        record for record in records if record["record_id"] == "algorithm-1"
+    ]
+    if len(matches) != 1:
+        raise ValueError("Task 1 provenance lacks unique Algorithm 1 record")
+    return matches[0]
 
-    The routine intentionally does not initialize, reorder, or carry forward
-    any score that the transcription itself leaves unspecified.
+
+def _authenticated_bytes(
+    source: Path | bytes,
+    *,
+    project_root: Path,
+) -> tuple[bytes, dict[str, object]]:
+    if not isinstance(project_root, Path):
+        raise TypeError("project_root must be a Path")
+    project_root_absolute = Path(os.path.abspath(project_root))
+    try:
+        project_root_resolved = project_root.resolve(strict=True)
+    except OSError as exc:
+        raise ValueError("project root is not the canonical project root") from exc
+    if project_root_absolute != project_root_resolved:
+        raise ValueError("project root is not the canonical project root")
+
+    record = _algorithm_record(project_root_resolved)
+    expected_path = Path(
+        os.path.abspath(
+            project_root_resolved / str(record["source_excerpt_path"])
+        )
+    )
+
+    if isinstance(source, Path):
+        if source.is_symlink() or source != expected_path:
+            raise ValueError("source is not the canonical Algorithm 1 path")
+        raw = source.read_bytes()
+    elif type(source) is bytes:
+        raw = source
+    else:
+        raise TypeError("transcription source must be a Path or raw bytes")
+
+    expected_count = record["source_excerpt_byte_count"]
+    expected_digest = record["source_excerpt_sha256"]
+    if (
+        len(raw) != expected_count
+        or hashlib.sha256(raw).hexdigest() != expected_digest
+    ):
+        raise ValueError(
+            "authenticated Algorithm 1 bytes do not match Task 1 provenance"
+        )
+    return raw, record
+
+
+def audit_literal_algorithm1(
+    transcription: Path | bytes,
+    *,
+    project_root: Path,
+) -> dict[str, object]:
+    """Authenticate raw input, then stop at the first undefined read.
+
+    The original Sequence[str] interface cannot distinguish CRLF, a missing
+    final newline, or substituted paths. This security-hardened interface
+    authenticates exact bytes through Task 1 provenance before UTF-8 decoding
+    or literal state inspection.
     """
 
-    numbered = _numbered_lines(transcription)
+    raw, record = _authenticated_bytes(
+        transcription,
+        project_root=project_root,
+    )
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise ValueError("authenticated Algorithm 1 bytes are not UTF-8") from exc
+    numbered = _numbered_lines(text.splitlines())
     if 8 not in numbered:
         raise ValueError(
-            "reviewed transcription is missing numbered line 8"
+            "authenticated reviewed transcription is missing numbered line 8"
         )
     line_eight = numbered[8]
     if "x⋆" not in line_eight and "x*" not in line_eight:
         raise ValueError(
-            "reviewed transcription line 8 must contain the literal x* read"
+            "authenticated reviewed line 8 must contain the literal x* read"
         )
     required_prefix = set(range(1, 8))
     if not required_prefix.issubset(numbered):
         missing = sorted(required_prefix.difference(numbered))
         raise ValueError(
-            "reviewed transcription is missing numbered lines "
+            "authenticated reviewed transcription is missing numbered lines "
             f"{missing}"
-        )
-    transcription_bytes = (
-        "\n".join(transcription) + "\n"
-    ).encode("utf-8")
-    transcription_digest = hashlib.sha256(transcription_bytes).hexdigest()
-    if (
-        len(transcription_bytes) != _REVIEWED_TRANSCRIPTION_BYTE_COUNT
-        or transcription_digest != _REVIEWED_TRANSCRIPTION_SHA256
-    ):
-        raise ValueError(
-            "reviewed transcription byte count or SHA-256 mismatch"
         )
 
     return {
@@ -79,8 +124,18 @@ def audit_literal_algorithm1(
         "line": 8,
         "source_line": line_eight,
         "symbol": "x*",
-        "transcription_sha256": transcription_digest,
-        "transcription_byte_count": len(transcription_bytes),
+        "transcription_sha256": record["source_excerpt_sha256"],
+        "transcription_byte_count": len(raw),
+        "provenance_binding": {
+            field: record[field]
+            for field in (
+                "record_id",
+                "source_excerpt_path",
+                "source_excerpt_byte_count",
+                "source_excerpt_sha256",
+                "reviewed_by",
+            )
+        },
         "last_executed_line": 7,
         "selected": None,
         "executable_resolution": None,
