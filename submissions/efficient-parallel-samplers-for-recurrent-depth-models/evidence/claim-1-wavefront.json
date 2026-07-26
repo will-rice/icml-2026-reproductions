@@ -1,0 +1,336 @@
+{
+  "ast_audit": {
+    "dispatcher": {
+      "dispatches_to_diffusion_style": true,
+      "end_line": 1127,
+      "function": "generate",
+      "start_line": 1113
+    },
+    "file": "vendor/recurrent-pretraining/recpre/raven_modeling_minimal.py",
+    "findings": [
+      "generate() dispatches to generate_diffusion_style() when diffusion parameters are provided.",
+      "generate_diffusion_style defaults to headway=1, inner_recurrence=4, freeze_strategy='latent-diff', max_wavefront=128.",
+      "Verified complete operation order: recurrent_iterate -> prediction_logits -> sampling -> state_append -> prefix_max_wavefront_truncation -> latent_diff_freezing.",
+      "Normalized latent difference criterion verifies freezing threshold using relative state delta norm."
+    ],
+    "git_blob": "0e83a0766644df9113a8923f43350c6a1b5a182c",
+    "sampler": {
+      "control_flow": {
+        "latent_diff_normalized_predicate_found": true,
+        "operation_order_valid": true,
+        "operations": [
+          "recurrent_iterate",
+          "prediction_logits",
+          "sampling",
+          "state_append",
+          "prefix_max_wavefront_truncation",
+          "latent_diff_freezing"
+        ]
+      },
+      "defaults": {
+        "freeze_strategy": "latent-diff",
+        "headway": 1,
+        "inner_recurrence": 4,
+        "max_wavefront": 128
+      },
+      "end_line": 1549,
+      "function": "generate_diffusion_style",
+      "start_line": 1235
+    }
+  },
+  "claim_text": "The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1).",
+  "evidence_status": "partial",
+  "schedule_mechanism": {
+    "canonical_trace": [
+      {
+        "active_positions_after": [
+          0,
+          1
+        ],
+        "active_positions_before": [
+          0
+        ],
+        "active_width": 2,
+        "candidate_positions": [
+          1
+        ],
+        "decoded_position": 0,
+        "headway_in_step": 1,
+        "outer_step": 1,
+        "recurrence_counters_snapshot": {
+          "0": 4
+        },
+        "retained_appended_positions": [
+          1
+        ]
+      },
+      {
+        "active_positions_after": [
+          0,
+          1,
+          2
+        ],
+        "active_positions_before": [
+          0,
+          1
+        ],
+        "active_width": 3,
+        "candidate_positions": [
+          2
+        ],
+        "decoded_position": 1,
+        "headway_in_step": 1,
+        "outer_step": 2,
+        "recurrence_counters_snapshot": {
+          "0": 8,
+          "1": 4
+        },
+        "retained_appended_positions": [
+          2
+        ]
+      },
+      {
+        "active_positions_after": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "active_positions_before": [
+          0,
+          1,
+          2
+        ],
+        "active_width": 4,
+        "candidate_positions": [
+          3
+        ],
+        "decoded_position": 2,
+        "headway_in_step": 1,
+        "outer_step": 3,
+        "recurrence_counters_snapshot": {
+          "0": 12,
+          "1": 8,
+          "2": 4
+        },
+        "retained_appended_positions": [
+          3
+        ]
+      },
+      {
+        "active_positions_after": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "active_positions_before": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "active_width": 5,
+        "candidate_positions": [
+          4
+        ],
+        "decoded_position": 3,
+        "headway_in_step": 1,
+        "outer_step": 4,
+        "recurrence_counters_snapshot": {
+          "0": 16,
+          "1": 12,
+          "2": 8,
+          "3": 4
+        },
+        "retained_appended_positions": [
+          4
+        ]
+      },
+      {
+        "active_positions_after": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "active_positions_before": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "active_width": 6,
+        "candidate_positions": [
+          5
+        ],
+        "decoded_position": 4,
+        "headway_in_step": 1,
+        "outer_step": 5,
+        "recurrence_counters_snapshot": {
+          "0": 20,
+          "1": 16,
+          "2": 12,
+          "3": 8,
+          "4": 4
+        },
+        "retained_appended_positions": [
+          5
+        ]
+      },
+      {
+        "active_positions_after": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "active_positions_before": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "active_width": 7,
+        "candidate_positions": [
+          6
+        ],
+        "decoded_position": 5,
+        "headway_in_step": 1,
+        "outer_step": 6,
+        "recurrence_counters_snapshot": {
+          "0": 24,
+          "1": 20,
+          "2": 16,
+          "3": 12,
+          "4": 8,
+          "5": 4
+        },
+        "retained_appended_positions": [
+          6
+        ]
+      },
+      {
+        "active_positions_after": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "active_positions_before": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "active_width": 8,
+        "candidate_positions": [
+          7
+        ],
+        "decoded_position": 6,
+        "headway_in_step": 1,
+        "outer_step": 7,
+        "recurrence_counters_snapshot": {
+          "0": 28,
+          "1": 24,
+          "2": 20,
+          "3": 16,
+          "4": 12,
+          "5": 8,
+          "6": 4
+        },
+        "retained_appended_positions": [
+          7
+        ]
+      },
+      {
+        "active_positions_after": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "active_positions_before": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "active_width": 8,
+        "candidate_positions": [
+          8
+        ],
+        "decoded_position": 7,
+        "headway_in_step": 0,
+        "outer_step": 8,
+        "recurrence_counters_snapshot": {
+          "0": 32,
+          "1": 28,
+          "2": 24,
+          "3": 20,
+          "4": 16,
+          "5": 12,
+          "6": 8,
+          "7": 4
+        },
+        "retained_appended_positions": []
+      }
+    ],
+    "invariants": {
+      "active_width_bounded_by_max_wavefront": true,
+      "candidates_per_step_equals_headway": true,
+      "multi_position_wavefront_observed": true,
+      "one_candidate_position_per_step": true,
+      "prior_active_gained_recurrence": true,
+      "retained_appended_equals_headway_in_step": true
+    },
+    "negative_controls": {
+      "headway_zero": {
+        "active_width_bounded_by_max_wavefront": true,
+        "candidates_per_step_equals_headway": true,
+        "headway": 0,
+        "one_candidate_position_per_step": false,
+        "retained_appended_equals_headway_in_step": true
+      },
+      "max_wavefront_one": {
+        "active_width_bounded_by_max_wavefront": true,
+        "candidates_per_step_equals_headway": true,
+        "max_wavefront": 1,
+        "multi_position_wavefront_observed": false,
+        "retained_appended_equals_headway_in_step": true
+      }
+    },
+    "parameters": {
+      "headway": 1,
+      "initial_active": 1,
+      "inner_recurrence": 4,
+      "max_wavefront": 8,
+      "outer_steps": 8
+    }
+  },
+  "sha256": "d0da87ee16f7485d3dff369e7465f66299c55ac003a54e1cf8c00b3a0ad8b265"
+}

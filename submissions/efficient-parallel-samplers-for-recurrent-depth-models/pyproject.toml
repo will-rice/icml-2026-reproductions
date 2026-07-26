@@ -1,0 +1,20 @@
+[project]
+name = "recurrent-sampler-repro"
+version = "0.1.0"
+description = "Reproduction of Efficient Parallel Samplers for Recurrent-Depth Models"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.4",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
