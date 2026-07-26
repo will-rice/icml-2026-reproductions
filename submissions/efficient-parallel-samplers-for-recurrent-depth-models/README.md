@@ -1,3 +1,12 @@
+---
+title: Recurrent-Depth Parallel Sampler Reproduction
+sdk: static
+app_file: index.html
+tags:
+  - icml2026-repro
+  - paper-h7WBYYJF1Q
+---
+
 # Reproduction: Efficient Parallel Samplers for Recurrent-Depth Models
 
 This directory contains the reproduction project for:

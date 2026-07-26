@@ -1128,11 +1128,14 @@ def run_pipeline(project_root: Path) -> Dict[str, Any]:
     readme_bytes = space_readme_content.encode("utf-8")
 
     manifest_outputs = {
+        "REPORT.md": {"sha256": compute_sha256(rep_bytes)},
         "evidence/claim-1-wavefront.json": {"sha256": compute_sha256(c1_bytes)},
         "evidence/claim-2-theorem-audit.json": {"sha256": compute_sha256(c2_bytes)},
         "evidence/manifest.json": {"sha256": None, "unhashed_reason": "Self-referential manifest copy"},
         "evidence/results.json": {"sha256": compute_sha256(res_bytes)},
         "evidence/REPORT.md": {"sha256": compute_sha256(rep_bytes)},
+        "index.html": {"sha256": compute_sha256(html_bytes)},
+        "poster.html": {"sha256": compute_sha256(html_bytes)},
         "space/README.md": {"sha256": compute_sha256(readme_bytes)},
         "space/REPORT.md": {"sha256": compute_sha256(rep_bytes)},
         "space/evidence/claim-1-wavefront.json": {"sha256": compute_sha256(c1_bytes)},
@@ -1180,6 +1183,10 @@ def run_pipeline(project_root: Path) -> Dict[str, Any]:
     write_deterministic_file(evidence_dir / "claim-2-theorem-audit.json", claim2_json)
     write_deterministic_file(evidence_dir / "results.json", results_json)
     write_deterministic_file(evidence_dir / "REPORT.md", report_content)
+
+    write_deterministic_file(project_root / "index.html", space_html_content)
+    write_deterministic_file(project_root / "poster.html", space_html_content)
+    write_deterministic_file(project_root / "REPORT.md", report_content)
 
     write_deterministic_file(space_dir / "README.md", space_readme_content)
     write_deterministic_file(space_dir / "index.html", space_html_content)
