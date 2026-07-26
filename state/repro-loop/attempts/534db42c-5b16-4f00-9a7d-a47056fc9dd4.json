@@ -22,6 +22,12 @@
     }
   ],
   "cpu_only": true,
+  "design": {
+    "author": "codex-recurrent-design-author-20260726",
+    "path": "docs/superpowers/specs/2026-07-26-recurrent-sampler-reproduction-design.md",
+    "recorded_at": "2026-07-26T09:17:30.756767+00:00"
+  },
+  "design_review": null,
   "estimated_api_cost_usd": 0.0,
   "hf": "2510.14961",
   "i": 2013,
@@ -56,7 +62,7 @@
   "or": "https://openreview.net/forum?id=h7WBYYJF1Q",
   "orid": "h7WBYYJF1Q",
   "paper_id": "h7WBYYJF1Q",
-  "phase": "selected",
+  "phase": "design-pending",
   "pid": "62383",
   "safety_blocker": null,
   "score": 20,
@@ -69,9 +75,18 @@
     "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2)."
   ],
   "title": "Efficient Parallel Samplers for Recurrent-Depth Models",
-  "transitions": [],
+  "transitions": [
+    {
+      "at": "2026-07-26T09:17:26.742420+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-recurrent-design-20260726",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "design-pending"
+    }
+  ],
   "type": "Poster",
-  "updated_at": "2026-07-26T05:52:40.828422+00:00",
+  "updated_at": "2026-07-26T09:17:30.756767+00:00",
   "upstream_revision": "arxiv:2510.14961v1+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c",
   "vs": "https://icml.cc/virtual/2026/poster/62383"
 }

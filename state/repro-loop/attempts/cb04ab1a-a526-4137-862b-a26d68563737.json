@@ -26,6 +26,12 @@
     }
   ],
   "cpu_only": true,
+  "design": {
+    "author": "codex-posttrain-design-author-20260726",
+    "path": "docs/superpowers/specs/2026-07-26-posttrainbench-reproduction-design.md",
+    "recorded_at": "2026-07-26T09:17:30.617752+00:00"
+  },
+  "design_review": null,
   "estimated_api_cost_usd": 0.0,
   "hf": "2603.08640",
   "i": 4754,
@@ -60,7 +66,7 @@
   "or": "https://openreview.net/forum?id=UnjxMTe57e",
   "orid": "UnjxMTe57e",
   "paper_id": "UnjxMTe57e",
-  "phase": "selected",
+  "phase": "design-pending",
   "pid": "63667",
   "safety_blocker": null,
   "score": 22,
@@ -73,9 +79,18 @@
     "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
   ],
   "title": "PostTrainBench: Can LLM Agents Automate LLM Post-Training?",
-  "transitions": [],
+  "transitions": [
+    {
+      "at": "2026-07-26T09:17:26.603865+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "design-pending"
+    }
+  ],
   "type": "Poster",
-  "updated_at": "2026-07-26T05:51:07.284164+00:00",
+  "updated_at": "2026-07-26T09:17:30.617752+00:00",
   "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
   "vs": "https://icml.cc/virtual/2026/poster/63667"
 }
