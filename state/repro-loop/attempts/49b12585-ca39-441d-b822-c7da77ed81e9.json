@@ -31,6 +31,7 @@
     }
   ],
   "cpu_only": true,
+  "deployed_sha": "f79268b7718b50a1dfeb0a4bfd96299e59dfe2ab",
   "design": {
     "author": "codex-numina-design-author-20260724",
     "path": "docs/superpowers/specs/2026-07-24-numina-lean-agent-reproduction-design.md",
@@ -71,7 +72,7 @@
   "or": "https://openreview.net/forum?id=0bTEd4LpQr",
   "orid": "0bTEd4LpQr",
   "paper_id": "0bTEd4LpQr",
-  "phase": "validated",
+  "phase": "deployed",
   "pid": "66755",
   "project_path": "submissions/numina-lean-agent",
   "safety_blocker": null,
@@ -111,10 +112,19 @@
       "owner": "controller-numina-validation-20260726",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "validated"
+    },
+    {
+      "at": "2026-07-26T06:24:34.856331+00:00",
+      "attestation_id": "75637368d5bb567e33e8552e6c27baaedc9a161eda6f7f5f142c9b0ad4fda3f4",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-numina-validation-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "deployed"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T06:23:12.865446+00:00",
+  "updated_at": "2026-07-26T06:24:34.856331+00:00",
   "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
   "vs": "https://icml.cc/virtual/2026/poster/66755"
 }
