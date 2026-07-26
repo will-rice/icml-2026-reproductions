@@ -1,12 +1,18 @@
 # Reproduction Design: Efficient Parallel Samplers for Recurrent-Depth Models (Approved)
 
 **Paper**: Efficient Parallel Samplers for Recurrent-Depth Models and Their
-Connection to Diffusion Language Models  
-**OpenReview / paper ID**: `h7WBYYJF1Q`  
-**arXiv**: `2510.14961v1`  
-**Attempt ID**: `534db42c-5b16-4f00-9a7d-a47056fc9dd4`  
-**Design date**: 2026-07-26  
-**Approval**: The user explicitly approved the minimal proposal on 2026-07-26.  
+Connection to Diffusion Language Models
+
+**OpenReview / paper ID**: `h7WBYYJF1Q`
+
+**arXiv**: `2510.14961v1`
+
+**Attempt ID**: `534db42c-5b16-4f00-9a7d-a47056fc9dd4`
+
+**Design date**: 2026-07-26
+
+**Approval**: The user explicitly approved the minimal proposal on 2026-07-26.
+
 **Phase gate**: The attempt remains `selected`. This document records the
 approved design but does not mutate coordinator state or authorize a worker by
 itself.
