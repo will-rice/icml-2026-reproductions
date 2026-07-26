@@ -31,11 +31,11 @@
       },
       "remark_4_3": {
         "statement_found": true,
-        "title": "Probability that depth scaling is more efficient than width scaling"
+        "title": "Let $L$ be a random variable for prompt length with distribution $\\mathcal{D}$. Then the probability that depth scaling is more efficient than width scaling equals $\\Pr_{L \\sim \\mathcal{D}}[L \\geq L_\\star]$. Since $L_\\star$ on modern GPUs typically lies between a few hundred and a few thousand tokens while empirical input length distributions place substantial mass above this range, the probability is indeed close to $1$ in practice."
       },
       "remark_4_5": {
         "statement_found": true,
-        "title": "I/O cost of processing multiple tokens"
+        "title": "Since model parameters and KV states are shared, the I/O cost of processing multiple tokens is asymptotically equivalent to processing a single token, enabling increased token generation within identical runtime constraints. At each decoding step, an expanded wavefront enables greater width scaling, providing superior expressiveness compared to autoregressive decoding. Empirically, since maximum recurrence depth rarely exceeds $r \\approx 100$, the condition $W \\leq L_\\star$ typically holds."
       },
       "theorem_4_2": {
         "scope": "prefilling",
@@ -44,13 +44,13 @@
       },
       "theorem_4_4": {
         "assumptions": [
-          "r > 1 inner recurrences",
-          "diffusion forcing sampling and KV-cache sharing",
-          "wavefront size W \\le L_\\star"
+          "\\begin{theorem}[Depth vs. Width Scaling in Decoding",
+          "informal]\nFor recurrent-depth models with $r > 1$ inner recurrences",
+          "if diffusion forcing sampling and KV-cache sharing are employed with wavefront size $W \\leq L_\\star$"
         ],
         "has_proof_environment": false,
         "scope": "decoding",
-        "statement": "d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T)",
+        "statement": "d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T),",
         "statement_found": true,
         "title": "Depth vs. Width Scaling in Decoding"
       }

@@ -209,21 +209,36 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
                     op_positions["prefix_max_wavefront_truncation"] = lineno
 
     # Locate the exact freeze_strategy == "latent-diff" AST branch and structurally compare criterion assignment
+    expected_criterion_ast = ast.parse(
+        "(match_states - matching_prev_states).norm(dim=-1) / match_states.norm(dim=-1)",
+        mode="eval",
+    ).body
+    expected_criterion_dump = ast.dump(expected_criterion_ast, include_attributes=False)
+
     latent_diff_branch_found = False
     for node in ast.walk(diffusion_def):
         if isinstance(node, ast.If):
-            test_str = ast.unparse(node.test) if hasattr(ast, "unparse") else ""
-            if "latent-diff" in test_str or ("latent" in test_str and "freeze_strategy" in test_str):
-                for child in ast.walk(node):
-                    if isinstance(child, ast.Assign):
-                        target_names = [ast.unparse(t) for t in child.targets] if hasattr(ast, "unparse") else []
-                        if "criterion" in target_names:
-                            val_str = ast.unparse(child.value) if hasattr(ast, "unparse") else ""
-                            if "norm(dim=-1) / match_states.norm(dim=-1)" in val_str and "match_states" in val_str:
-                                latent_diff_branch_found = True
-                                lineno = getattr(child, "lineno", getattr(node, "lineno", 0))
-                                if "latent_diff_freezing" not in op_positions or lineno < op_positions["latent_diff_freezing"]:
-                                    op_positions["latent_diff_freezing"] = lineno
+            test = node.test
+            if (
+                isinstance(test, ast.Compare)
+                and isinstance(test.left, ast.Name)
+                and test.left.id == "freeze_strategy"
+                and len(test.ops) == 1
+                and isinstance(test.ops[0], ast.Eq)
+                and len(test.comparators) == 1
+                and isinstance(test.comparators[0], ast.Constant)
+                and test.comparators[0].value == "latent-diff"
+            ):
+                for stmt in node.body:
+                    if isinstance(stmt, ast.Assign):
+                        for target in stmt.targets:
+                            if isinstance(target, ast.Name) and target.id == "criterion":
+                                val_dump = ast.dump(stmt.value, include_attributes=False)
+                                if val_dump == expected_criterion_dump:
+                                    latent_diff_branch_found = True
+                                    lineno = getattr(stmt, "lineno", getattr(node, "lineno", 0))
+                                    if "latent_diff_freezing" not in op_positions or lineno < op_positions["latent_diff_freezing"]:
+                                        op_positions["latent_diff_freezing"] = lineno
 
     if not latent_diff_branch_found:
         raise ValueError("Normalized latent-difference freezing predicate not found")
@@ -453,13 +468,17 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
         env_name_cap = env_titles.get(env_type, env_type.capitalize())
         full_label = f"{env_name_cap} {label_num}"
 
-        title_clean = raw_title.split(",")[0].strip() if raw_title else env_name_cap
-
         block_start = m.start()
         block_end = sec4_text.find(f"\\end{{{env_type}}}", block_start)
         if block_end == -1:
             block_end = sec4_text.find("\\end{", block_start + 1)
         block_content = sec4_text[block_start:block_end] if block_end != -1 else sec4_text[block_start:]
+
+        # Extract environment body (content after \begin{env}[...])
+        header_end = block_content.find("]") if "[" in block_content and block_content.find("]") < block_content.find("\n") else block_content.find("\n")
+        body_text = block_content[header_end + 1:].strip() if header_end != -1 else block_content.strip()
+
+        title_clean = raw_title.split(",")[0].strip() if raw_title else body_text
 
         parsed_envs.append({
             "env_type": env_type,
@@ -468,6 +487,7 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
             "title": title_clean,
             "raw_title": raw_title,
             "block_content": block_content,
+            "body": body_text,
             "start": block_start,
             "end": block_end,
         })
@@ -494,15 +514,30 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
     thm44 = parsed_envs[3]
     thm44_block = thm44["block_content"]
 
-    if "d_{\\text{DF}}(T) = d_{\\text{AR}}(T)" not in thm44_block or "w_{\\text{DF}}(T) > w_{\\text{AR}}(T)" not in thm44_block:
+    eq_match = re.search(r"\$\$(.*?)\$\$", thm44_block, re.DOTALL)
+    if not eq_match:
+        raise ValueError("Theorem 4.4 equation or inequality missing/invalid")
+    extracted_eq = eq_match.group(1).strip()
+
+    if "d_{\\text{DF}}(T) = d_{\\text{AR}}(T)" not in extracted_eq or "w_{\\text{DF}}(T) > w_{\\text{AR}}(T)" not in extracted_eq:
         raise ValueError("Theorem 4.4 equation or inequality missing/invalid")
 
-    has_recurrence = "r > 1" in thm44_block
-    has_wavefront = ("W \\le L" in thm44_block) or ("W \\leq L" in thm44_block)
-    has_df = "diffusion forcing" in thm44_block
-
-    if not (has_recurrence and has_wavefront and has_df):
+    if ", then" in thm44_block:
+        pre_then = thm44_block.split(", then")[0]
+    elif " then" in thm44_block:
+        pre_then = thm44_block.split(" then")[0]
+    else:
         raise ValueError("Theorem 4.4 assumptions missing/invalid")
+
+    has_recurrence = "r > 1" in pre_then
+    has_wavefront = ("W \\le L" in pre_then) or ("W \\leq L" in pre_then)
+    has_df = "diffusion forcing" in pre_then
+    has_kv = ("KV-cache sharing" in pre_then) or ("KV-cache" in pre_then) or ("KV sharing" in pre_then)
+
+    if not (has_recurrence and has_wavefront and has_df and has_kv):
+        raise ValueError("Theorem 4.4 assumptions missing/invalid")
+
+    extracted_assumptions = [c.strip() for c in pre_then.split(",") if c.strip()]
 
     thm44_end = thm44["end"]
     rem45_start = parsed_envs[4]["start"]
@@ -517,42 +552,31 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
 
     citation_mismatch = (challenge_citation != thm44["full_label"])
 
+    theorems_dict = {}
+    for env in parsed_envs:
+        key = f"{env['env_type']}_{env['label_num'].replace('.', '_')}"
+        info: Dict[str, Any] = {
+            "statement_found": True,
+            "title": env["title"],
+        }
+        if env["label_num"] == "4.2":
+            info["scope"] = "prefilling"
+        elif env["label_num"] == "4.4":
+            info["scope"] = "decoding"
+            info["statement"] = extracted_eq
+            info["assumptions"] = extracted_assumptions
+            info["has_proof_environment"] = proof_in_thm44
+
+        theorems_dict[key] = info
+
+    proof_reproduced = bool(proof_in_thm44 and not citation_mismatch)
+
     return {
         "file": "vendor/arxiv/arxiv_submission.tex",
         "sha256": compute_sha256(tex_path.read_bytes()),
         "challenge_citation": challenge_citation,
         "document_order": [e["full_label"] for e in parsed_envs],
-        "theorems": {
-            "definition_4_1": {
-                "statement_found": True,
-                "title": parsed_envs[0]["title"],
-            },
-            "theorem_4_2": {
-                "statement_found": True,
-                "scope": "prefilling",
-                "title": parsed_envs[1]["title"],
-            },
-            "remark_4_3": {
-                "statement_found": True,
-                "title": "Probability that depth scaling is more efficient than width scaling",
-            },
-            "theorem_4_4": {
-                "statement_found": True,
-                "scope": "decoding",
-                "title": parsed_envs[3]["title"],
-                "statement": "d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T)",
-                "assumptions": [
-                    "r > 1 inner recurrences",
-                    "diffusion forcing sampling and KV-cache sharing",
-                    "wavefront size W \\le L_\\star",
-                ],
-                "has_proof_environment": proof_in_thm44,
-            },
-            "remark_4_5": {
-                "statement_found": True,
-                "title": "I/O cost of processing multiple tokens",
-            },
-        },
+        "theorems": theorems_dict,
         "citation_audit": {
             "citation_mismatch_detected": citation_mismatch,
             "mismatch_details": (
@@ -562,7 +586,7 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
             ),
         },
         "evidence_status": "unavailable",
-        "proof_reproduced": False,
+        "proof_reproduced": proof_reproduced,
         "reasons_unavailable": [
             f"The challenge string cites {challenge_citation}, which is the prefilling result, not the decoding result.",
             "Theorem 4.4 decoding expressiveness requires hardware-dependent I/O memory bandwidth assumptions.",
@@ -1111,8 +1135,8 @@ def run_pipeline(project_root: Path) -> Dict[str, Any]:
         "python_requirement": ">=3.10",
         "inputs": provenance["inputs"],
         "commands": {
-            "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models",
-            "test_suite": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests",
+            "evidence_generation": "uv run --locked --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models",
+            "test_suite": "uv run --locked --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests",
         },
         "claims": {
             "claim_1": {

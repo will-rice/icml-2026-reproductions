@@ -14,8 +14,8 @@
     }
   },
   "commands": {
-    "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models",
-    "test_suite": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests"
+    "evidence_generation": "uv run --locked --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models",
+    "test_suite": "uv run --locked --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests"
   },
   "inputs": {
     "ATTRIBUTION.md": {
@@ -48,7 +48,7 @@
       "sha256": "f698b4c709fad4f8ada0563559e7a924533a96819d10c1a4ced05c31389b891c"
     },
     "evidence/claim-2-theorem-audit.json": {
-      "sha256": "9fc29f76f7ee42d159f25d378244b357d0a6eea8745fbdf4004fa43c04da0f86"
+      "sha256": "9677bc7f4948e8a12621f80191ebe5c40487ae457035cd50cbebaee0b079bd17"
     },
     "evidence/manifest.json": {
       "sha256": null,
@@ -67,7 +67,7 @@
       "sha256": "f698b4c709fad4f8ada0563559e7a924533a96819d10c1a4ced05c31389b891c"
     },
     "space/evidence/claim-2-theorem-audit.json": {
-      "sha256": "9fc29f76f7ee42d159f25d378244b357d0a6eea8745fbdf4004fa43c04da0f86"
+      "sha256": "9677bc7f4948e8a12621f80191ebe5c40487ae457035cd50cbebaee0b079bd17"
     },
     "space/evidence/manifest.json": {
       "sha256": null,

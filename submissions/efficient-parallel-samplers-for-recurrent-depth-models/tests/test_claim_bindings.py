@@ -15,8 +15,8 @@ def test_claim_bindings_and_manifest():
     assert manifest["python_requirement"] == ">=3.10"
 
     cmds = manifest["commands"]
-    assert cmds["evidence_generation"] == "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models"
-    assert cmds["test_suite"] == "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests"
+    assert cmds["evidence_generation"] == "uv run --locked --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models"
+    assert cmds["test_suite"] == "uv run --locked --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests"
 
     inputs = manifest["inputs"]
     assert "arxiv_submission.tex" in inputs
