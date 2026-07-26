@@ -307,7 +307,7 @@ Seven-author paper attribution and adaptation details are in `NOTICE.md`. Origin
 - Displayed evidence: 683737 _(evidence: `/paper/pdf_byte_count`)_
 - Displayed evidence: 26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090 _(evidence: `/paper/pdf_sha256`)_
 - Displayed evidence: CC BY-NC-SA 4.0 _(evidence: `/paper/license`)_
-- Displayed evidence: 76f46fe5907eb4401c51effb2733a92763f93538 _(evidence: `/source_revision`)_
+- Displayed evidence: f84ea8cd366a28a4fba2b676dd3e033c1350d4d5 _(evidence: `/source_revision`)_
 - Displayed evidence: cpu _(evidence: `/environment/compute`)_
 - Displayed evidence: False _(evidence: `/environment/network_used`)_
 - Displayed evidence: 0/1 _(evidence: `/environment/paid_api_cost_usd`)_

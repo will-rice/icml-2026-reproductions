@@ -1,3 +1,13 @@
+---
+title: Graph Dataset Pruning Formal Evidence
+sdk: gradio
+sdk_version: 6.20.0
+app_file: app.py
+tags:
+  - icml2026-repro
+  - paper-a3GdvuPItd
+---
+
 # Formal evidence for graph-based dataset pruning
 
 This independent reproduction audits two target claims from “Selecting
@@ -23,8 +33,12 @@ From this directory, with `uv` installed:
 ```bash
 uv sync --frozen
 uv run --frozen python -m pytest -q
+EVIDENCE_SOURCE_REVISION="$(
+  uv run --frozen python -c \
+    'import json; from pathlib import Path; print(json.loads(Path("evidence/evidence.json").read_text())["source_revision"])'
+)"
 uv run --frozen python -m graph_pruning_repro.cli recompute \
-  evidence --source-revision 9ef7b07d8cb7349215aa5f780ec346a9024c9396
+  evidence --source-revision "$EVIDENCE_SOURCE_REVISION"
 uv run --frozen python -m graph_pruning_repro.cli validate \
   evidence/evidence.json
 uv run --frozen python -m graph_pruning_repro.cli render \
