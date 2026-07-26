@@ -13,6 +13,7 @@ import copy
 import hashlib
 import json
 import os
+import re
 import shutil
 from pathlib import Path
 from typing import Any
@@ -1847,3 +1848,339 @@ def test_claim_gate_rejects_every_mutated_authority(target, path, value):
             objects["protocol"],
             objects["reward"],
         )
+
+
+# ===================================================================
+# 22. Final reviewer blockers: isolation, auxiliary data, pointers
+# ===================================================================
+
+class TestExplicitOutputIsolation:
+    """Pipeline-writing tests must choose an isolated output directory."""
+
+    def test_run_pipeline_writes_only_to_explicit_output_root(self, tmp_path):
+        """An explicit output root receives every canonical output."""
+        isolated_root = tmp_path / "isolated"
+        outputs = run_pipeline(
+            _make_valid_acquired(),
+            output_root=isolated_root,
+        )
+        assert set(outputs) == set(C.CANONICAL_OUTPUTS)
+        assert all(path.is_relative_to(isolated_root) for path in outputs.values())
+        assert all(path.exists() for path in outputs.values())
+
+    def test_generate_evidence_forwards_explicit_output_root(self, tmp_path):
+        """The live entry point forwards its caller-selected output root."""
+        isolated_root = tmp_path / "isolated"
+        with patch(
+            "posttrainbench_repro.pipeline.acquire_all",
+            return_value=_make_valid_acquired(),
+        ):
+            outputs = generate_evidence(output_root=isolated_root)
+        assert all(path.is_relative_to(isolated_root) for path in outputs.values())
+
+
+def _inventory_with_viewer_data(file_count: int = 2397) -> dict[str, Any]:
+    inventory = _make_valid_hf_inventory()
+    inventory["dir_paths"].extend([
+        "viewer_data",
+        "viewer_data/cache",
+        "viewer_data/cache/nested",
+    ])
+    viewer_files = [
+        f"viewer_data/auxiliary-{index:04d}.json"
+        for index in range(file_count)
+    ]
+    inventory["file_paths"].extend(viewer_files)
+    inventory["all_paths"].extend(viewer_files)
+    inventory["total_entries"] = C.HF_TREE_TOTAL_ENTRIES
+    inventory["file_count"] = len(inventory["file_paths"])
+    inventory["dir_count"] = len(inventory["dir_paths"])
+    return inventory
+
+
+class TestViewerDataAccounting:
+    """The verified full inventory visibly accounts for auxiliary viewer data."""
+
+    def test_viewer_data_is_emitted_but_never_counted_as_task_root(self):
+        coverage = compute_coverage(_inventory_with_viewer_data())
+        assert coverage["excluded_auxiliary_data"] == {
+            "top_level_path": "viewer_data",
+            "present": True,
+            "file_count": 2397,
+            "directory_count": 3,
+            "counted_as_task_root": False,
+        }
+        assert coverage["recognized_root_count"] == C.EXPECTED_ROOT_COUNT
+        assert "viewer_data" not in {
+            row.get("root")
+            for row in coverage.get("matrix", [])
+        }
+
+    def test_verified_inventory_with_wrong_viewer_file_count_aborts(self):
+        with pytest.raises(ValueError, match="viewer_data.*2,397|2397"):
+            compute_coverage(_inventory_with_viewer_data(file_count=2396))
+
+
+class TestProtocolSourceReferences:
+    """Every source-derived protocol observation names verified source lines."""
+
+    def test_protocol_observations_have_pinned_blob_line_references(self):
+        acquired = _make_valid_acquired()
+        protocol = audit_protocol(
+            acquired["github"]["blob_contents"],
+            acquired["github"]["entries"],
+        )
+        references = protocol["source_references"]
+        expected = {
+            "num_gpus_default",
+            "cuda_device_requirement",
+            "request_gpus_binding",
+            "receives_num_hours",
+            "solve_timeout_formula",
+            "timeout_grace_minutes",
+            "commit_sh_analysis.current_models_in_arrays",
+            "commit_sh_analysis.current_benchmarks_in_arrays",
+            "commit_sh_analysis.htcondor_mpi_is_branch",
+            "commit_sh_analysis.htcondor_branch",
+        }
+        assert expected <= set(references)
+        for key in expected:
+            reference = references[key]
+            source = acquired["github"]["blob_contents"][reference["path"]]
+            source_lines = source.decode("utf-8").splitlines()
+            assert reference["lines"]
+            assert all(1 <= line <= len(source_lines) for line in reference["lines"])
+            assert all(
+                not source_lines[line - 1].lstrip().startswith("#")
+                for line in reference["lines"]
+            )
+
+    def test_evaluation_directory_references_are_verified_tree_entries(self):
+        acquired = _make_valid_acquired()
+        protocol = audit_protocol(
+            acquired["github"]["blob_contents"],
+            acquired["github"]["entries"],
+        )
+        reference = protocol["source_references"]["evaluation_dirs_present"]
+        assert reference == {
+            "kind": "git-tree-entries",
+            "paths": C.EXPECTED_EVAL_DIRS,
+        }
+
+
+def _resolve_evidence_pointer(
+    documents: dict[str, Any],
+    pointer: str,
+) -> Any:
+    document_name, separator, fragment = pointer.partition("#")
+    assert separator == "#"
+    current = documents[document_name]
+    if not fragment:
+        return current
+    assert fragment.startswith("/")
+    for token in fragment[1:].split("/"):
+        token = token.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, list):
+            current = current[int(token)]
+        else:
+            current = current[token]
+    return current
+
+
+def _rendered_evidence_documents() -> tuple[
+    dict[str, str],
+    dict[str, Any],
+]:
+    from posttrainbench_repro.audit import get_provenance
+    from posttrainbench_repro.render import (
+        render_index_html,
+        render_poster_html,
+        render_report_html,
+    )
+
+    acquired = _make_valid_acquired()
+    coverage = compute_coverage(acquired["hf_inventory"])
+    protocol = audit_protocol(
+        acquired["github"]["blob_contents"],
+        acquired["github"]["entries"],
+    )
+    coverage_output = {**coverage, "protocol": protocol}
+    reward = audit_reward_hacking(acquired)
+    claims = evaluate_claims(coverage, protocol, reward)
+    provenance = get_provenance(acquired)
+    documents = {
+        "evidence/provenance.json": provenance,
+        "evidence/coverage.json": coverage_output,
+        "evidence/reward_hacking.json": reward,
+        "evidence/claims.json": claims,
+    }
+    pages = {
+        "index": render_index_html(
+            provenance,
+            coverage_output,
+            reward,
+            claims,
+        ),
+        "report": render_report_html(
+            provenance,
+            coverage_output,
+            reward,
+            claims,
+        ),
+        "poster": render_poster_html(
+            provenance,
+            coverage_output,
+            reward,
+            claims,
+        ),
+    }
+    return pages, documents
+
+
+_CLAIM_POINTERS = {
+    f"evidence/claims.json#/{claim}/{field}"
+    for claim in ("claim_1", "claim_2")
+    for field in ("status", "text", "sha256", "summary")
+}
+_COUNT_POINTERS = {
+    f"evidence/coverage.json#/{field}"
+    for field in (
+        "accepted_benchmark_count",
+        "accepted_model_count",
+        "recognized_task_count",
+        "recognized_root_count",
+        "recognized_root_cell_pairs",
+        "duplicate_job_pairs",
+        "missing_root_cell_pairs",
+        "excluded_dirs_count",
+    )
+} | {
+    "evidence/coverage.json#/excluded_auxiliary_data/file_count",
+    "evidence/coverage.json#/excluded_auxiliary_data/directory_count",
+}
+_MATRIX_POINTERS = {
+    f"evidence/coverage.json#/cell_counts/{benchmark}/{model_index}"
+    for benchmark in sorted(C.EXPECTED_BENCHMARKS)
+    for model_index in range(4)
+}
+_PROTOCOL_POINTERS = {
+    f"evidence/coverage.json#/protocol/{field}"
+    for field in (
+        "num_gpus_default",
+        "cuda_device_requirement",
+        "request_gpus_binding",
+        "receives_num_hours",
+        "solve_timeout_formula",
+        "timeout_grace_minutes",
+        "evaluation_dir_count",
+    )
+} | {
+    "evidence/coverage.json#/protocol/commit_sh_analysis/current_models_in_arrays",
+    "evidence/coverage.json#/protocol/commit_sh_analysis/current_benchmarks_in_arrays",
+    "evidence/coverage.json#/protocol/commit_sh_analysis/htcondor_mpi_is_branch/hours",
+    "evidence/coverage.json#/protocol/commit_sh_analysis/htcondor_mpi_is_branch/gpus",
+    "evidence/coverage.json#/protocol/commit_sh_analysis/htcondor_branch/ten_hour_jobs",
+    "evidence/coverage.json#/protocol/commit_sh_analysis/htcondor_branch/one_hour_jobs",
+}
+_REWARD_STATUS_POINTERS = {
+    f"evidence/reward_hacking.json#/{mode}/status"
+    for mode in (
+        "training_on_test_sets",
+        "downloading_instruction_tuned_checkpoint",
+        "using_discovered_api_key",
+    )
+}
+_REWARD_DETAIL_POINTERS = {
+    "evidence/reward_hacking.json#/training_on_test_sets/witness_path",
+    "evidence/reward_hacking.json#/training_on_test_sets/witness_sha256",
+    "evidence/reward_hacking.json#/training_on_test_sets/witness_bytes",
+    "evidence/reward_hacking.json#/training_on_test_sets/observation_type",
+    "evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint/judgment_path",
+    "evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint/judgment_sha256",
+    "evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint/judgment_bytes",
+    "evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint/trace/size",
+    "evidence/reward_hacking.json#/using_discovered_api_key/unavailability_reason",
+} | {
+    (
+        "evidence/reward_hacking.json#/"
+        f"downloading_instruction_tuned_checkpoint/safe_excerpts/{index}/{field}"
+    )
+    for index in range(3)
+    for field in ("record", "json_pointer", "text", "sha256")
+}
+
+
+@pytest.mark.parametrize(
+    ("page_name", "expected"),
+    [
+        (
+            "index",
+            _CLAIM_POINTERS
+            | _COUNT_POINTERS
+            | _MATRIX_POINTERS
+            | _PROTOCOL_POINTERS
+            | _REWARD_STATUS_POINTERS
+            | _REWARD_DETAIL_POINTERS,
+        ),
+        (
+            "report",
+            _CLAIM_POINTERS
+            | _COUNT_POINTERS
+            | _MATRIX_POINTERS
+            | _PROTOCOL_POINTERS
+            | _REWARD_STATUS_POINTERS
+            | _REWARD_DETAIL_POINTERS,
+        ),
+        (
+            "poster",
+            _CLAIM_POINTERS
+            | _COUNT_POINTERS
+            | _MATRIX_POINTERS
+            | _REWARD_STATUS_POINTERS,
+        ),
+    ],
+)
+def test_every_visible_result_has_an_adjacent_resolvable_pointer(
+    page_name,
+    expected,
+):
+    pages, documents = _rendered_evidence_documents()
+    page = pages[page_name]
+    bindings = set(re.findall(r'data-evidence-pointer="([^"]+)"', page))
+    assert expected <= bindings
+    for pointer in bindings:
+        _resolve_evidence_pointer(documents, pointer)
+        assert pointer in page
+
+
+def test_viewer_data_is_visible_with_resolvable_counts_on_every_page():
+    pages, _ = _rendered_evidence_documents()
+    for page in pages.values():
+        assert "viewer_data" in page
+        assert (
+            'data-evidence-pointer="'
+            'evidence/coverage.json#/excluded_auxiliary_data/file_count"'
+        ) in page
+        assert (
+            'data-evidence-pointer="'
+            'evidence/coverage.json#/excluded_auxiliary_data/directory_count"'
+        ) in page
+
+
+def test_protocol_values_render_adjacent_source_references():
+    pages, _ = _rendered_evidence_documents()
+    for page_name in ("index", "report"):
+        page = pages[page_name]
+        for key in (
+            "num_gpus_default",
+            "cuda_device_requirement",
+            "request_gpus_binding",
+            "solve_timeout_formula",
+            "commit_sh_analysis.htcondor_mpi_is_branch",
+            "commit_sh_analysis.htcondor_branch",
+        ):
+            pointer = (
+                "evidence/coverage.json#/protocol/source_references/"
+                + key.replace("~", "~0").replace("/", "~1")
+            )
+            assert f'data-evidence-pointer="{pointer}"' in page
