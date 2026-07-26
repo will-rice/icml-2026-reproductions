@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Graph Dataset Pruning Formal Evidence</title>
+</head>
+<body>
+<header>
+<h1>Graph Dataset Pruning Formal-Evidence Reproduction</h1>
+<p>Evidence-only theorem audit; no training measurements.</p>
+</header>
+<main>
+<section>
+<h2>Target claims</h2>
+<ul>
+<li><strong>Claim:</strong> <span data-evidence-path="/target_claims/0">The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).</span></li>
+<li><strong>Claim:</strong> <span data-evidence-path="/target_claims/1">Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F).</span></li>
+</ul>
+</section>
+<section>
+<h2>Literal and repaired boundaries</h2>
+<p><code>paper_samplewise_literal</code> remains distinct from <code>paper_mwcp</code>, <code>single_counted_pairwise</code>, and <code>half_corrected_samplewise</code>.</p>
+<p><code>appendix_inline_shift_literal</code> is not <code>modular_shift_candidate</code>.</p>
+<p>The literal Appendix witness is <span data-evidence-path="/witnesses/1/intermediate_values/marginal_empty">1/1</span> then
+ <span data-evidence-path="/witnesses/1/intermediate_values/marginal_y">3/1</span>; exact rationals are listed in the pointer ledger.</p>
+</section>
+<section>
+<h2>Formal-evidence boundary</h2>
+<p>Exact ratio classifications and independently recomputed greedy/optimum accounting are displayed from evidence. Terminal greedy and optimum values are not retained as display records and are not invented here.</p>
+<ul>
+<li><strong>Ratio classification:</strong> <span data-evidence-path="/out_of_premise_diagnostics/84/ratio_classification/status">defined_positive_optimum</span></li>
+<li><strong>Exact out-of-premise ratio:</strong> <span data-evidence-path="/out_of_premise_diagnostics/84/ratio_classification/ratio">1/2</span></li>
+</ul>
+<p>Bounded enumeration can refute but cannot prove arbitrary-real universal claims. No released implementation resolves edge counting or the shift.</p>
+</section>
+<section>
+<h2>Unavailable empirical claims</h2>
+<ul>
+<li><strong>Status:</strong> <span data-evidence-path="/unavailable_claims/0/status">unavailable</span></li>
+<li><strong>Boundary:</strong> <span data-evidence-path="/unavailable_claims/0/reason">Paper-reported CIFAR-10/100 and ImageNet-1k accuracy, training-time, and acceleration values were not recomputed.</span></li>
+<li><strong>Status:</strong> <span data-evidence-path="/unavailable_claims/1/status">unavailable</span></li>
+<li><strong>Boundary:</strong> <span data-evidence-path="/unavailable_claims/1/reason">Paper-reported detection and segmentation experiments were not recomputed.</span></li>
+</ul>
+</section>
+<section>
+<h2>Provenance, attribution, and licenses</h2>
+<ul>
+<li><strong>Source:</strong> <span data-evidence-path="/paper/source_url">https://arxiv.org/pdf/2606.12913v2</span></li>
+<li><strong>Revision:</strong> <span data-evidence-path="/paper/revision">arxiv:2606.12913v2</span></li>
+<li><strong>Paper asset license:</strong> <span data-evidence-path="/paper/license">CC BY-NC-SA 4.0</span></li>
+</ul>
+<p>Seven-author attribution: <code>NOTICE.md</code>. Original code and schema: <code>LICENSE</code>. Transcriptions and evidence: <code>LICENSES/CC-BY-NC-SA-4.0.txt</code>.</p>
+</section>
+<details>
+<summary>Complete display-pointer ledger</summary>
+<ul>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/target_claims/0">The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/target_claims/1">Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F).</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/paper/revision">arxiv:2606.12913v2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/paper/source_url">https://arxiv.org/pdf/2606.12913v2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/paper/pdf_byte_count">683737</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/paper/pdf_sha256">26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/paper/license">CC BY-NC-SA 4.0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/source_revision">78afb1b1c3317a470ddaa325e0ecf1be2d0bd132</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/environment/compute">cpu</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/environment/network_used">False</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/environment/paid_api_cost_usd">0/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/commands/0/actual">11464573</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/commands/0/ceiling">13833860</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/0/equation">Algorithm 1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/0/section">Algorithm 1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/0/normalized_expression">literal source lines 1-17 with PDF line wrapping normalized and no operational repair</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/1/equation">26</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/1/section">Appendix E Maintain Monotonicity</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/1/normalized_expression">Delta(x_i|S_hat) = alpha I_in(x_i) + alpha sum_{j=1}^{|S_hat|} eta + sum_{x_j in S_hat} g(D(x_i,x_j))</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/2/equation">27</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/2/section">Appendix E Maintain Monotonicity</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/2/normalized_expression">eta &gt;= (1/alpha) max_{x_i,x_j} |g(D(x_i,x_j))|</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/3/equation">Appendix E inline</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/3/section">Appendix E Maintain Monotonicity</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/3/normalized_expression">I_in_revised(x_i) = I_in(x_i) + sum_{j=1}^{|S_hat|} eta</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/4/equation">28-38</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/4/section">Appendix F Proof of the Greedy Approximation Guarantee</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/4/normalized_expression">literal Eq. 28-38 chain ending f(S_greedy) &gt;= (1 - 1/e) f(S_star), without repairing its b-t or product steps</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/5/equation">Appendix E literal-derived marginal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/5/section">Approved design derivation from Appendix E and Eqs. 4-5</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/5/normalized_expression">Delta_appendix(x|S) = alpha I_in(x) + 2 sum_{j in S} a_xj + alpha eta (2|S|+1)</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/6/equation">Appendix E single-counted-derived marginal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/6/section">Approved design derivation for the repaired single-counted objective</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/6/normalized_expression">Delta_single(x|S) = alpha I_in(x) + sum_{j in S} a_xj + alpha eta (2|S|+1)</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/7/equation">2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/7/section">3.3 Rethinking Pruning from a Graph Perspective</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/7/normalized_expression">w_i = alpha I_in(x_i); a_ij = g(D(x_i,x_j))</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/8/equation">3</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/8/section">3.3 Maximum Weight Clique Formulation</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/8/normalized_expression">maximize sum_{i in C} w_i + sum_{{i,j} subseteq C} a_ij subject to |C|=b</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/9/equation">4</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/9/section">3.3 Sample-wise Reformulation</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/9/normalized_expression">f(S) = sum_{x_i in S} [alpha I_in(x_i) + I_ex(x_i|S)] subject to |S|=b</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/10/equation">5</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/10/section">3.3 Sample-wise Reformulation</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/10/normalized_expression">I_ex(x_i|S) = sum_{x_j in S minus {x_i}} a_ij = sum_{x_j in S minus {x_i}} g(D(x_i,x_j))</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/11/equation">6</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/11/section">3.4 Greedy Selection with Unified Importance</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/11/normalized_expression">Delta_minus(v_i|G) = w_i + sum_{v_j in C minus {v_i}} a_ij</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/12/equation">7</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/12/section">3.4 Unified Importance</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/12/normalized_expression">I(x_i|S) = Delta(x_i|S) = alpha I_in(x_i) + I_ex(x_i|S)</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/13/equation">8</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/13/section">3.4 Greedy Selection Strategy</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/13/normalized_expression">x_star in argmax_{x_i in T minus S_t} I(x_i|S_t); S_{t+1} = S_t union {x_star}</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/14/equation">10-11</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/14/section">3.6 Definition 3.3</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/14/normalized_expression">Delta(x|A) &gt;= Delta(x|B), where Delta(x|A) = f(A union {x}) - f(A)</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/15/equation">12-14</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/15/section">3.6 Lemma 3.4 proof</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/transcriptions/records/15/normalized_expression">Delta_A = alpha I_in + sum_A g; Delta_B = alpha I_in + sum_B g; Delta_A - Delta_B = -sum_{B minus A} g &gt;= 0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/0/id">algorithm1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/0/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/0/completed">True</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/0/components/0/id">literal_algorithm1_audit</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/0/components/0/actual">1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/0/components/0/declared_ceiling">1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/id">diminishing_returns</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/evidence_kind">exhaustive_finite</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/completed">True</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/0/id">appendix_e_witness_marginals</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/0/actual">2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/0/declared_ceiling">2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/1/id">asymmetric_literal_diagnostic_primitives</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/1/actual">118428</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/1/declared_ceiling">118428</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/2/id">symmetric_diminishing_return_primitives</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/2/actual">2861280</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/1/components/2/declared_ceiling">2861280</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/id">greedy</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/evidence_kind">exhaustive_finite</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/completed">True</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/0/id">eq7_candidate_scores</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/0/actual">149175</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/0/declared_ceiling">316983</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/1/id">eq7_terminal_paths</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/1/actual">42747</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/1/declared_ceiling">210675</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/2/id">greedy_summary_classifications</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/2/actual">584604</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/2/declared_ceiling">584604</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/3/id">optimum_subset_objective_values</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/3/actual">444870</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/3/declared_ceiling">444870</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/4/id">premise_marginal_values</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/4/actual">1011330</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/4/declared_ceiling">1011330</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/5/id">premise_submodularity_comparisons</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/5/actual">3394890</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/5/declared_ceiling">3394890</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/6/id">premise_subset_values</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/6/actual">508500</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/6/declared_ceiling">508500</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/7/id">true_marginal_candidate_lookups</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/7/actual">888066</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/7/declared_ceiling">1901898</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/8/id">true_marginal_terminal_paths</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/8/actual">244674</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/2/components/8/declared_ceiling">1264050</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/3/id">objective_equivalence</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/3/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/3/completed">True</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/3/components/0/id">objective_equivalence_objective_values</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/3/components/0/actual">52</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/3/components/0/declared_ceiling">52</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/id">proof_ledger</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/evidence_kind">exhaustive_finite</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/completed">True</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/components/0/id">finite_appendix_f_conclusions</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/components/0/actual">1169208</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/components/0/declared_ceiling">1169208</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/components/1/id">symbolic_appendix_f_conclusions</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/components/1/actual">84</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/4/components/1/declared_ceiling">84</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/id">shifts</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/evidence_kind">non_exhaustive</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/completed">True</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/components/0/id">rational_alpha_values</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/components/0/actual">1792</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/components/0/declared_ceiling">1792</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/components/1/id">shift_marginal_score_values</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/components/1/actual">44870</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/searches/5/components/1/declared_ceiling">45213</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/artifact_path">evidence/witnesses/8ab3857832c3bc9f.json</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/artifact_sha256">07cf661c91d70fc04700d91213d3c351bd3a3376785736ac34ce9ad750318aa7</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/classification/comparison">2 &gt; 1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/classification/eq28a_counterexample">False</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/classification/eq28b_cardinality_bound">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/classification/theorem_counterexample">False</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/id">cardinality-b-minus-t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/budget">2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/iteration">1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/s_star/0">b</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/s_star/1">c</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/s_t/0">a</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/vertices/0">a</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/vertices/1">b</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/vertices/2">c</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/inputs/weight_assumptions">none</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/intermediate_values/b_minus_t">1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/intermediate_values/remainder_cardinality">2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/intermediate_values/s_star_minus_s_t/0">b</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/intermediate_values/s_star_minus_s_t/1">c</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/0/property">optimum_remainder_cardinality_exceeds_b_minus_t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/artifact_path">evidence/witnesses/5068c5858180bb4c.json</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/artifact_sha256">5b06099fe7bce9f7bfd110755c0ea0f8b9532b0e18499d8689114d3ece5899d6</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/id">graph=n=2;vw=0/1,0/1;ew=0/1::variant=appendix_inline_shift_literal::alpha=1/1::eta=1/1::diagnostic=appendix-minimal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/alpha">1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/b/0">v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/candidate">v0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/edge_weights/0">0/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/eta">1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/vertex_weights/0">0/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/vertex_weights/1">0/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/vertices/0">v0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/inputs/vertices/1">v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/intermediate_values/difference">-2/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/intermediate_values/marginal_empty">1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/intermediate_values/marginal_y">3/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/minimality_checks/one_vertex_strict_chain_exists">False</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/minimality_checks/two_vertices_required">True</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/model_variant">appendix_inline_shift_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/1/property">appendix_inline_shift_diminishing_returns</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/artifact_path">evidence/witnesses/5a4759c10574d713.json</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/artifact_sha256">4dda75368f4b252582e0d7499fd0d69c61dbf0d35f0e966e2eb5ae2d18ded97b</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/case_id">n=2;selected=v0,v1;vw=0/1,0/1;ew=1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/comparison/mwcp_edge_coefficient">1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/comparison/paper_mwcp">1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/comparison/paper_samplewise_literal">2/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/comparison/samplewise_edge_coefficient">2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/comparison/samplewise_minus_mwcp">1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/id">objective-equivalence-n2-edge1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/interactions/0/0">v0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/interactions/0/1">v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/interactions/0/2">1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/interactions/1/0">v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/interactions/1/1">v0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/interactions/1/2">1/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/model_variant">paper_samplewise_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/property">paper_mwcp_vs_paper_samplewise_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/selected/0">v0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/selected/1">v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/vertex_weights/0/0">v0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/vertex_weights/0/1">0/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/vertex_weights/1/0">v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/vertex_weights/1/1">0/1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/vertices/0">v0</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/witnesses/2/vertices/1">v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/0/audit">appendix_f_proof_ledger</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/0/model_variant">paper_samplewise_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/0/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/0/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/1/audit">appendix_f_proof_ledger</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/1/model_variant">appendix_inline_shift_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/1/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/1/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/2/audit">diminishing_returns</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/2/model_variant">appendix_inline_shift_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/2/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/2/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/3/audit">greedy_guarantee_premise</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/3/model_variant">appendix_inline_shift_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/3/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/3/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/4/audit">shift_boundary</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/4/model_variant">modular_shift_candidate</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/4/evidence_kind">exhaustive_finite</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/4/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/5/audit">objective_equivalence</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/5/model_variant">paper_samplewise_literal</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/5/evidence_kind">symbolic</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/claim_results/5/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/unavailable_claims/0/id">cifar-imagenet-training-results</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/unavailable_claims/0/status">unavailable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/unavailable_claims/0/reason">Paper-reported CIFAR-10/100 and ImageNet-1k accuracy, training-time, and acceleration values were not recomputed.</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/unavailable_claims/1/id">detection-segmentation-results</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/unavailable_claims/1/status">unavailable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/unavailable_claims/1/reason">Paper-reported detection and segmentation experiments were not recomputed.</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/out_of_premise_diagnostics/84/id">graph=n=3;vw=0/1,0/1,0/1;ew=-1/1,-1/1,0/1::variant=appendix_inline_shift_literal::alpha=1/1::eta=1/1::budget=2::selector=paper_eq7_score_greedy::result=canonical::path=v0,v1</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/out_of_premise_diagnostics/84/ratio_classification/status">defined_positive_optimum</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/out_of_premise_diagnostics/84/ratio_classification/ratio">1/2</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/0/equation">28</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/0/conclusions/0/check_id">union_monotonicity_and_submodular_telescoping</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/0/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/0/conclusions/1/check_id">optimum_remainder_at_most_b_not_b_minus_t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/0/conclusions/1/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/1/equation">29</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/1/conclusions/0/check_id">true_marginal_argmax_and_defined_next_set</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/1/conclusions/0/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/2/equation">30</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/2/conclusions/0/check_id">combine_both_eq28_conclusions_and_eq29</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/2/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/3/equation">31</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/3/conclusions/0/check_id">defined_residual_algebra</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/3/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/4/equation">32</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/4/conclusions/0/check_id">divide_only_by_positive_b_minus_t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/4/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/5/equation">33</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/5/conclusions/0/check_id">residual_recurrence_definition</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/5/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/6/equation">34</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/6/conclusions/0/check_id">product_includes_k_equals_one_zero_factor</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/6/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/7/equation">35</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/7/conclusions/0/check_id">well_defined_positive_budget_product_bound</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/7/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/8/equation">36</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/8/conclusions/0/check_id">integer_budget_exponential_bound_and_log_domain</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/8/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/9/equation">37</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/9/conclusions/0/check_id">complete_chain_and_all_theorem_premises</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/9/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/10/equation">38</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/10/conclusions/0/check_id">ratio_transfer_from_repaired_objective</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/paper_samplewise_literal/10/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/0/equation">28</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/0/conclusions/0/check_id">union_monotonicity_and_submodular_telescoping</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/0/conclusions/0/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/0/conclusions/1/check_id">optimum_remainder_at_most_b_not_b_minus_t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/0/conclusions/1/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/1/equation">29</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/1/conclusions/0/check_id">true_marginal_argmax_and_defined_next_set</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/1/conclusions/0/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/2/equation">30</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/2/conclusions/0/check_id">combine_both_eq28_conclusions_and_eq29</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/2/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/3/equation">31</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/3/conclusions/0/check_id">defined_residual_algebra</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/3/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/4/equation">32</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/4/conclusions/0/check_id">divide_only_by_positive_b_minus_t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/4/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/5/equation">33</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/5/conclusions/0/check_id">residual_recurrence_definition</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/5/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/6/equation">34</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/6/conclusions/0/check_id">product_includes_k_equals_one_zero_factor</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/6/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/7/equation">35</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/7/conclusions/0/check_id">well_defined_positive_budget_product_bound</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/7/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/8/equation">36</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/8/conclusions/0/check_id">integer_budget_exponential_bound_and_log_domain</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/8/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/9/equation">37</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/9/conclusions/0/check_id">complete_chain_and_all_theorem_premises</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/9/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/10/equation">38</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/10/conclusions/0/check_id">ratio_transfer_from_repaired_objective</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/appendix_inline_shift_literal/10/conclusions/0/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/0/equation">28</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/0/conclusions/0/check_id">union_monotonicity_and_submodular_telescoping</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/0/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/0/conclusions/1/check_id">optimum_remainder_at_most_b_not_b_minus_t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/0/conclusions/1/status">contradicted</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/1/equation">29</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/1/conclusions/0/check_id">true_marginal_argmax_and_defined_next_set</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/1/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/2/equation">30</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/2/conclusions/0/check_id">combine_both_eq28_conclusions_and_eq29</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/2/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/3/equation">31</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/3/conclusions/0/check_id">defined_residual_algebra</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/3/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/4/equation">32</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/4/conclusions/0/check_id">divide_only_by_positive_b_minus_t</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/4/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/5/equation">33</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/5/conclusions/0/check_id">residual_recurrence_definition</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/5/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/6/equation">34</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/6/conclusions/0/check_id">product_includes_k_equals_one_zero_factor</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/6/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/7/equation">35</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/7/conclusions/0/check_id">well_defined_positive_budget_product_bound</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/7/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/8/equation">36</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/8/conclusions/0/check_id">integer_budget_exponential_bound_and_log_domain</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/8/conclusions/0/status">supported</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/9/equation">37</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/9/conclusions/0/check_id">complete_chain_and_all_theorem_premises</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/9/conclusions/0/status">not_applicable</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/10/equation">38</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/10/conclusions/0/check_id">ratio_transfer_from_repaired_objective</span></li>
+<li><strong>Displayed evidence:</strong> <span data-evidence-path="/proof_ledger/symbolic/ledgers/modular_shift_candidate/10/conclusions/0/status">not_applicable</span></li>
+</ul>
+</details>
+</main>
+</body>
+</html>

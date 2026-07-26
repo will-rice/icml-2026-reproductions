@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "graph-pruning-formal-evidence-reproduction"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["gradio>=5.0", "jsonschema>=4.25"]
+
+[project.scripts]
+graph-pruning-repro = "graph_pruning_repro.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8.4", "pre-commit>=4.2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/graph_pruning_repro"]

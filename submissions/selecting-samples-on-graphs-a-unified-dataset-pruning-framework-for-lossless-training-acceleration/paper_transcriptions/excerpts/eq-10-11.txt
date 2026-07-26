@@ -1,0 +1,3 @@
+Δ(x | A) ≥ Δ(x | B),  (10)
+where the marginal gain is defined as
+Δ(x | A) = f(A ∪ {x}) − f(A).  (11)
