@@ -51,7 +51,7 @@
           0
         ],
         "active_width": 2,
-        "appended_positions": [
+        "candidate_positions": [
           1
         ],
         "decoded_position": 0,
@@ -59,7 +59,10 @@
         "outer_step": 1,
         "recurrence_counters_snapshot": {
           "0": 4
-        }
+        },
+        "retained_appended_positions": [
+          1
+        ]
       },
       {
         "active_positions_after": [
@@ -72,7 +75,7 @@
           1
         ],
         "active_width": 3,
-        "appended_positions": [
+        "candidate_positions": [
           2
         ],
         "decoded_position": 1,
@@ -81,7 +84,10 @@
         "recurrence_counters_snapshot": {
           "0": 8,
           "1": 4
-        }
+        },
+        "retained_appended_positions": [
+          2
+        ]
       },
       {
         "active_positions_after": [
@@ -96,7 +102,7 @@
           2
         ],
         "active_width": 4,
-        "appended_positions": [
+        "candidate_positions": [
           3
         ],
         "decoded_position": 2,
@@ -106,7 +112,10 @@
           "0": 12,
           "1": 8,
           "2": 4
-        }
+        },
+        "retained_appended_positions": [
+          3
+        ]
       },
       {
         "active_positions_after": [
@@ -123,7 +132,7 @@
           3
         ],
         "active_width": 5,
-        "appended_positions": [
+        "candidate_positions": [
           4
         ],
         "decoded_position": 3,
@@ -134,7 +143,10 @@
           "1": 12,
           "2": 8,
           "3": 4
-        }
+        },
+        "retained_appended_positions": [
+          4
+        ]
       },
       {
         "active_positions_after": [
@@ -153,7 +165,7 @@
           4
         ],
         "active_width": 6,
-        "appended_positions": [
+        "candidate_positions": [
           5
         ],
         "decoded_position": 4,
@@ -165,7 +177,10 @@
           "2": 12,
           "3": 8,
           "4": 4
-        }
+        },
+        "retained_appended_positions": [
+          5
+        ]
       },
       {
         "active_positions_after": [
@@ -186,7 +201,7 @@
           5
         ],
         "active_width": 7,
-        "appended_positions": [
+        "candidate_positions": [
           6
         ],
         "decoded_position": 5,
@@ -199,7 +214,10 @@
           "3": 12,
           "4": 8,
           "5": 4
-        }
+        },
+        "retained_appended_positions": [
+          6
+        ]
       },
       {
         "active_positions_after": [
@@ -222,7 +240,7 @@
           6
         ],
         "active_width": 8,
-        "appended_positions": [
+        "candidate_positions": [
           7
         ],
         "decoded_position": 6,
@@ -236,7 +254,10 @@
           "4": 12,
           "5": 8,
           "6": 4
-        }
+        },
+        "retained_appended_positions": [
+          7
+        ]
       },
       {
         "active_positions_after": [
@@ -260,7 +281,9 @@
           7
         ],
         "active_width": 8,
-        "appended_positions": [],
+        "candidate_positions": [
+          8
+        ],
         "decoded_position": 7,
         "headway_in_step": 0,
         "outer_step": 8,
@@ -273,28 +296,32 @@
           "5": 12,
           "6": 8,
           "7": 4
-        }
+        },
+        "retained_appended_positions": []
       }
     ],
     "invariants": {
       "active_width_bounded_by_max_wavefront": true,
-      "appended_per_step_equals_headway": true,
+      "candidates_per_step_equals_headway": true,
       "multi_position_wavefront_observed": true,
-      "one_new_position_per_step": true,
-      "prior_active_gained_recurrence": true
+      "one_candidate_position_per_step": true,
+      "prior_active_gained_recurrence": true,
+      "retained_appended_equals_headway_in_step": true
     },
     "negative_controls": {
       "headway_zero": {
         "active_width_bounded_by_max_wavefront": true,
-        "appended_per_step_equals_headway": true,
+        "candidates_per_step_equals_headway": true,
         "headway": 0,
-        "one_new_position_per_step": false
+        "one_candidate_position_per_step": false,
+        "retained_appended_equals_headway_in_step": true
       },
       "max_wavefront_one": {
         "active_width_bounded_by_max_wavefront": true,
-        "appended_per_step_equals_headway": true,
+        "candidates_per_step_equals_headway": true,
         "max_wavefront": 1,
-        "multi_position_wavefront_observed": false
+        "multi_position_wavefront_observed": false,
+        "retained_appended_equals_headway_in_step": true
       }
     },
     "parameters": {

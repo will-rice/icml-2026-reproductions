@@ -336,13 +336,16 @@ def simulate_wavefront_schedule_core(
             "active_positions_before": pos_before,
             "recurrence_counters_snapshot": {str(k): recurrence_counters[k] for k in pos_before},
             "decoded_position": decoded_pos,
-            "appended_positions": appended_retained,
+            "candidate_positions": appended,
+            "retained_appended_positions": appended_retained,
             "headway_in_step": headway_in_step,
             "active_positions_after": list(active_positions),
             "active_width": len(active_positions),
         })
 
-    one_new_pos = headway >= 1 and all(len(t["appended_positions"]) >= 1 for t in trace if len(t["active_positions_before"]) < max_wavefront)
+    one_candidate_per_step = headway == 1 and all(
+        len(t["candidate_positions"]) == 1 for t in trace
+    )
     multi_pos_wavefront = any(t["active_width"] > 1 for t in trace)
 
     return {
@@ -355,13 +358,19 @@ def simulate_wavefront_schedule_core(
         },
         "canonical_trace": trace,
         "invariants": {
-            "appended_per_step_equals_headway": all(len(t["appended_positions"]) == t["headway_in_step"] for t in trace),
+            "candidates_per_step_equals_headway": all(
+                len(t["candidate_positions"]) == headway for t in trace
+            ),
+            "retained_appended_equals_headway_in_step": all(
+                len(t["retained_appended_positions"]) == t["headway_in_step"]
+                for t in trace
+            ),
             "prior_active_gained_recurrence": all(
                 all(t["recurrence_counters_snapshot"][str(p)] >= inner_recurrence for p in t["active_positions_before"])
                 for t in trace
             ),
             "active_width_bounded_by_max_wavefront": all(t["active_width"] <= max_wavefront for t in trace),
-            "one_new_position_per_step": one_new_pos,
+            "one_candidate_position_per_step": one_candidate_per_step,
             "multi_position_wavefront_observed": multi_pos_wavefront,
         },
     }
@@ -401,14 +410,16 @@ def simulate_wavefront_schedule(
     canonical["negative_controls"] = {
         "headway_zero": {
             "headway": 0,
-            "one_new_position_per_step": hz_sim["invariants"]["one_new_position_per_step"],
-            "appended_per_step_equals_headway": hz_sim["invariants"]["appended_per_step_equals_headway"],
+            "one_candidate_position_per_step": hz_sim["invariants"]["one_candidate_position_per_step"],
+            "candidates_per_step_equals_headway": hz_sim["invariants"]["candidates_per_step_equals_headway"],
+            "retained_appended_equals_headway_in_step": hz_sim["invariants"]["retained_appended_equals_headway_in_step"],
             "active_width_bounded_by_max_wavefront": hz_sim["invariants"]["active_width_bounded_by_max_wavefront"],
         },
         "max_wavefront_one": {
             "max_wavefront": 1,
             "multi_position_wavefront_observed": mw1_sim["invariants"]["multi_position_wavefront_observed"],
-            "appended_per_step_equals_headway": mw1_sim["invariants"]["appended_per_step_equals_headway"],
+            "candidates_per_step_equals_headway": mw1_sim["invariants"]["candidates_per_step_equals_headway"],
+            "retained_appended_equals_headway_in_step": mw1_sim["invariants"]["retained_appended_equals_headway_in_step"],
             "active_width_bounded_by_max_wavefront": mw1_sim["invariants"]["active_width_bounded_by_max_wavefront"],
         },
     }
@@ -626,8 +637,8 @@ def generate_report_markdown(provenance: Dict[str, Any], source_audit: Dict[str,
 
 ### Invariants Verified
 1. **Parallel Refinement**: Each outer iteration runs `inner_recurrence` steps across all active positions in the wavefront.
-2. **Token Append**: Exactly `headway` (default 1) new candidate position is appended per outer step.
-3. **Wavefront Limit**: Active state width is constrained by `max_wavefront`.
+2. **Candidate Sampling**: Exactly `headway` (default 1) candidate positions are sampled per outer step.
+3. **Wavefront Limit**: Prefix truncation retains only available candidate positions, and active state width is constrained by `max_wavefront`.
 
 ---
 
@@ -682,14 +693,18 @@ def generate_space_html(provenance: Dict[str, Any], source_audit: Dict[str, Any]
     schedule_rows_list = []
     for step in schedule["canonical_trace"]:
         active_str = ", ".join(str(p) for p in step["active_positions_before"])
-        appended_str = ", ".join(str(p) for p in step["appended_positions"])
+        candidate_str = ", ".join(str(p) for p in step["candidate_positions"])
+        retained_str = ", ".join(
+            str(p) for p in step["retained_appended_positions"]
+        )
         schedule_rows_list.append(
             f"        <tr>\n"
             f"          <td>Step {step['outer_step']}</td>\n"
             f"          <td><code>[{active_str}]</code></td>\n"
             f"          <td>+{schedule['parameters']['inner_recurrence']} updates</td>\n"
             f"          <td>Position {step['decoded_position']}</td>\n"
-            f"          <td><code>[{appended_str}]</code></td>\n"
+            f"          <td><code>[{candidate_str}]</code></td>\n"
+            f"          <td><code>[{retained_str}]</code></td>\n"
             f"          <td>{step['active_width']} / {schedule['parameters']['max_wavefront']}</td>\n"
             f"        </tr>"
         )
@@ -993,7 +1008,8 @@ def generate_space_html(provenance: Dict[str, Any], source_audit: Dict[str, Any]
             <th>Active Positions Before</th>
             <th>Recurrence Updates</th>
             <th>Decoded Position</th>
-            <th>Appended Positions</th>
+            <th>Candidate Positions</th>
+            <th>Retained Positions</th>
             <th>Active Width / Bound</th>
           </tr>
         </thead>

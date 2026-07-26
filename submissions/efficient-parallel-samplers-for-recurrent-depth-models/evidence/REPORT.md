@@ -27,8 +27,8 @@
 
 ### Invariants Verified
 1. **Parallel Refinement**: Each outer iteration runs `inner_recurrence` steps across all active positions in the wavefront.
-2. **Token Append**: Exactly `headway` (default 1) new candidate position is appended per outer step.
-3. **Wavefront Limit**: Active state width is constrained by `max_wavefront`.
+2. **Candidate Sampling**: Exactly `headway` (default 1) candidate positions are sampled per outer step.
+3. **Wavefront Limit**: Prefix truncation retains only available candidate positions, and active state width is constrained by `max_wavefront`.
 
 ---
 
