@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 numina-putnam-audit = "numina_lean.putnam_audit:main"
 numina-brascamp-lieb-audit = "numina_lean.brascamp_lieb_audit:main"
 numina-evidence = "numina_lean.cli:main"
+numina-space-assets = "numina_lean.space_assets:main"
 
 [build-system]
 requires = ["hatchling"]

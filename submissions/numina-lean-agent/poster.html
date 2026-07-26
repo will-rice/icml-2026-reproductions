@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Numina-Lean-Agent released-proof verification</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: #101827; color: #edf4ff; }
+    main { max-width: 960px; margin: auto; padding: 3rem 1.5rem; }
+    .scope { color: #b8c8df; max-width: 72ch; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1rem; }
+    article { border: 1px solid #385170; border-radius: 14px; padding: 1.25rem; background: #17243a; }
+    h2 { color: #ffd166; }
+    .claim-id, code { color: #8fd9c7; overflow-wrap: anywhere; }
+    a { color: #9fc5ff; }
+  </style>
+</head>
+<body><main>
+  <p class="claim-id">ICML 2026 reproduction evidence</p>
+  <h1>Numina-Lean-Agent released-proof verification</h1>
+  <p class="scope">Partial support from deterministic verification of released
+  Lean proofs. This is not an agent rerun and not an official verdict.</p>
+
+  <section class="grid"><article><p class="claim-id">putnam-12-12</p><h2>Partial support</h2><p>The 12 released companion proofs kernel-check without sorryAx.</p></article>
+<article><p class="claim-id">brascamp-lieb-formalization</p><h2>Partial support</h2><p>The released BrascampLieb.upperBound Gaussian supremum declaration kernel-checks without sorryAx.</p></article></section>
+  <h2>Limitations and provenance</h2>
+  <p>The BrascampLieb and agent repositories have no root LICENSE file. This
+  Space does not redistribute their source, caches, binaries, or raw logs.</p>
+  <p><code>github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494</code></p>
+</main></body>
+</html>
