@@ -13,6 +13,7 @@
     "Matthias Bethge",
     "Maksym Andriushchenko"
   ],
+  "branch": "validate/posttrainbench",
   "claim_bindings": [
     {
       "challenge_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
@@ -72,6 +73,7 @@
   "paper_id": "UnjxMTe57e",
   "phase": "implementing",
   "pid": "63667",
+  "project_path": "submissions/posttrainbench",
   "safety_blocker": null,
   "score": 22,
   "slug": "posttrainbench-can-llm-agents-automate-llm-post-training",
@@ -102,7 +104,8 @@
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T09:20:26.554344+00:00",
+  "updated_at": "2026-07-26T12:23:24.850896+00:00",
   "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
-  "vs": "https://icml.cc/virtual/2026/poster/63667"
+  "vs": "https://icml.cc/virtual/2026/poster/63667",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
 }
