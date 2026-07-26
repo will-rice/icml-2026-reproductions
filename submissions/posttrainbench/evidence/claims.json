@@ -1,0 +1,39 @@
+{
+  "claim_1": {
+    "evidence_pointers": [
+      "evidence/coverage.json#/recognized_task_count",
+      "evidence/coverage.json#/matrix",
+      "evidence/coverage.json#/cell_counts",
+      "evidence/provenance.json#/source",
+      "evidence/coverage.json#/protocol"
+    ],
+    "limitations": [
+      "No H100 run is reproduced; the resource and time findings are a released-configuration audit.",
+      "The runner allows a five-minute termination grace, and a released example records 10:05:01.",
+      "The pinned source's current launcher is scheduler-dependent: one branch has a 100-hour/eight-GPU METR command, another has 7 ten-hour and 1 one-hour default-GPU commands, and the arrays currently select only one model/benchmark pair.",
+      "Evidence is not an official challenge verdict."
+    ],
+    "sha256": "9c0c1fc52ad2a93a9dbe299532b952948c4ecb674f820fe19f78f6a3c33b0073",
+    "status": "partial-support",
+    "summary": "Released trajectory inventory confirms 4-by-7 coverage across all accepted benchmark/model cells. Runner configuration defaults to one H100 with a NUM_HOURS-based timeout. The current checkout's scheduler-dependent branches and five-minute termination grace are reported as limitations.",
+    "text": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+  },
+  "claim_2": {
+    "evidence_pointers": [
+      "evidence/reward_hacking.json#/training_on_test_sets",
+      "evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint",
+      "evidence/reward_hacking.json#/using_discovered_api_key"
+    ],
+    "limitations": [
+      "A released judge label is not independently established behavioral truth.",
+      "The instruction-model evidence is an upstream categorical label plus safe extracts from a released trace, not a fresh independent behavioral audit.",
+      "The selected trajectory revision does not expose the exact GPT-5.1 Codex-Max API-misuse task cluster 16804408.",
+      "No leaderboard score, BFCL score, weighted average, or reasoning-effort ablation is a selected target or reproduced measurement.",
+      "Evidence is not an official challenge verdict."
+    ],
+    "sha256": "d185d61e5d886672a739e321e048df2378b71f55cf388ec4097bd2df1a916aad",
+    "status": "partial-support",
+    "summary": "Released contamination and instruction-model judgments provide partial support for two of three reward-hacking submodes. The API-key submode artifact is absent from the pinned revision.",
+    "text": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+  }
+}

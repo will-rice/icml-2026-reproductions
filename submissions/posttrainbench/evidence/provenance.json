@@ -1,0 +1,125 @@
+{
+  "arxiv_id": "2603.08640v2",
+  "assessed_snapshot": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "challenge_assessment_digest": "c0a54e93b7686b34efd2859e98ef2d404e16800d241ff4c58b0dc3852392dbde",
+  "challenge_json_sha256": "65a632313094067874c7ab2b9f62b87dfb4cf913c7a7052c1c2a29a93ca29940",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "dataset": {
+    "canonical_digests": {
+      "all_entries": "045ae5c714aa605b4295e345970cdf9a330600f709ef18508e8bef5eb3eec13d",
+      "directories": "d480b9917811f32cfe7e055a029f475bfb2fa0c1cb02d0d08a7de0e200714132",
+      "files": "320253d2791e878f6539c58365ddc9ac93baffb53a5c78244910ef153f067ca4"
+    },
+    "consumed_files": [
+      {
+        "acquisition_command": "GET https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/claude_claude-opus-4-6_10h_run1/humaneval_Qwen_Qwen3-1.7B-Base_16855823/contamination_judgement.txt",
+        "oid": "f4e8be22ea10cb50d9e4b07e9b7ecd4d0183324b",
+        "path": "claude_claude-opus-4-6_10h_run1/humaneval_Qwen_Qwen3-1.7B-Base_16855823/contamination_judgement.txt",
+        "raw_url": "https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/claude_claude-opus-4-6_10h_run1/humaneval_Qwen_Qwen3-1.7B-Base_16855823/contamination_judgement.txt",
+        "sha256": "b9968212ca4ba2921be1a4c5d5dff209f47bb3acd6cf254a55e1b01ece5f6823",
+        "size": 23
+      },
+      {
+        "acquisition_command": "GET https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/claude_claude-opus-4-6_10h_run1/humaneval_Qwen_Qwen3-1.7B-Base_16855823/time_taken.txt",
+        "oid": "3856b2915c63f7dbf1d031ffc6246d9a41826cd5",
+        "path": "claude_claude-opus-4-6_10h_run1/humaneval_Qwen_Qwen3-1.7B-Base_16855823/time_taken.txt",
+        "raw_url": "https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/claude_claude-opus-4-6_10h_run1/humaneval_Qwen_Qwen3-1.7B-Base_16855823/time_taken.txt",
+        "sha256": "a416eb32ff4972cde64863ac484154b20b2830519fab499103427676f3911abf",
+        "size": 9
+      },
+      {
+        "acquisition_command": "GET https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/opencode_opencode_kimi-k2.5_10h_run1/arenahardwriting_Qwen_Qwen3-1.7B-Base_16853392/disallowed_model_judgement.txt",
+        "oid": "5f29d273935391ee6ae80a446380703bebe7d27d",
+        "path": "opencode_opencode_kimi-k2.5_10h_run1/arenahardwriting_Qwen_Qwen3-1.7B-Base_16853392/disallowed_model_judgement.txt",
+        "raw_url": "https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/opencode_opencode_kimi-k2.5_10h_run1/arenahardwriting_Qwen_Qwen3-1.7B-Base_16853392/disallowed_model_judgement.txt",
+        "sha256": "a59c16a4ee01e856e2a6444031ca4aacee2908816d023867f7f4b22bb3b86674",
+        "size": 23
+      },
+      {
+        "acquisition_command": "GET https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/opencode_opencode_kimi-k2.5_10h_run1/arenahardwriting_Qwen_Qwen3-1.7B-Base_16853392/trace.txt",
+        "oid": "441c8810be2c8a7c097f70426efe60d085b24758",
+        "path": "opencode_opencode_kimi-k2.5_10h_run1/arenahardwriting_Qwen_Qwen3-1.7B-Base_16853392/trace.txt",
+        "raw_url": "https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories/raw/46b3fec494f56fbd5f0600c7ad17646e4997aaa2/opencode_opencode_kimi-k2.5_10h_run1/arenahardwriting_Qwen_Qwen3-1.7B-Base_16853392/trace.txt",
+        "sha256": "79cace0a3564a25b4c3e7d9aca7f3ddb611d3cb6cdcfceefee31c997bfb194ce",
+        "size": 2362113
+      }
+    ],
+    "license": "Apache-2.0",
+    "pagination": {
+      "directory_count": 14117,
+      "endpoint": "tree",
+      "file_count": 97209,
+      "mechanism": "Link header cursor, rel=\"next\"",
+      "page_size": 1000,
+      "params": "recursive=true&expand=false&limit=1000",
+      "total_entries": 111326,
+      "total_pages": 112
+    },
+    "pinned_revision": "46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
+    "repository": "https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories",
+    "tree_acquisition": {
+      "acquisition_command": "GET https://huggingface.co/api/datasets/aisa-group/PostTrainBench-Trajectories/tree/46b3fec494f56fbd5f0600c7ad17646e4997aaa2?recursive=true&expand=false&limit=1000; follow Link rel=\"next\" until absent",
+      "initial_url": "https://huggingface.co/api/datasets/aisa-group/PostTrainBench-Trajectories/tree/46b3fec494f56fbd5f0600c7ad17646e4997aaa2?recursive=true&expand=false&limit=1000"
+    },
+    "truncated_siblings": {
+      "count": 85883,
+      "digest": "116dc22723f1cc13bf71461ff83dd03479c74a2740957787e6ca642a59628eea",
+      "note": "Truncated lexical prefix from Hub revision-metadata; rejected as coverage input."
+    }
+  },
+  "index_json_sha256": "fdc3074ee5105da8b061146ecf78d927a4266a9841db16ba2b5c747b48727ee0",
+  "paid_api_cost_usd": "0.00",
+  "paper_id": "UnjxMTe57e",
+  "paper_license": "CC BY 4.0",
+  "source": {
+    "canonical_tree_digest": "566361d3f86bdf1a22294e6a772117428a8fb23792de6e1ac327897237915aeb",
+    "consumed_blobs": {
+      "LICENSE": {
+        "acquisition_command": "GET https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/LICENSE",
+        "git_object": "075a303174a80b6d9cfef229bfd36b8ad2ee69e2",
+        "raw_sha256": "af874b1aba6df2929fe2bf23b46dee3e56d1c24d915220c0916d81e331371384",
+        "raw_url": "https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/LICENSE",
+        "size": 1123
+      },
+      "README.md": {
+        "acquisition_command": "GET https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/README.md",
+        "git_object": "3ffc21258c2c3a34c13d342cc2c6aa8fb87c66ea",
+        "raw_sha256": "f95474a651bfa6f0082b027b8b67b604678616e081c923889709e76d9501fd6e",
+        "raw_url": "https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/README.md",
+        "size": 12100
+      },
+      "src/commit_utils/commit.sh": {
+        "acquisition_command": "GET https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/src/commit_utils/commit.sh",
+        "git_object": "3c43144e1186a160f450e747b95861fea6d16747",
+        "raw_sha256": "663ecb37cc4e6a16dcfcf8135bdbadf325f0b067192fe7a71d2231ba37eaae8e",
+        "raw_url": "https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/src/commit_utils/commit.sh",
+        "size": 10952
+      },
+      "src/commit_utils/single_task.sub": {
+        "acquisition_command": "GET https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/src/commit_utils/single_task.sub",
+        "git_object": "ea7f8790b97301dcdb6f3c104c5555d7ddf4e06a",
+        "raw_sha256": "f8ee12da42fdebfc3b4293a22ea8b232c1f8f52cb2f52b103c9f138f0ddc013a",
+        "raw_url": "https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/src/commit_utils/single_task.sub",
+        "size": 1138
+      },
+      "src/run_task.sh": {
+        "acquisition_command": "GET https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/src/run_task.sh",
+        "git_object": "0642ec47ee7acd2528cdab7d343ddba11cbc84db",
+        "raw_sha256": "10b0238018f202209c06f12ff05d021a0ca03b98d42c86a65e80cacd4fbe7033",
+        "raw_url": "https://raw.githubusercontent.com/aisa-group/PostTrainBench/d3496fa7d5788a007d6cd143167471ccdfc688d0/src/run_task.sh",
+        "size": 12397
+      }
+    },
+    "entry_count": 228,
+    "license": "MIT",
+    "pinned_commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+    "repository": "https://github.com/aisa-group/PostTrainBench",
+    "tree_acquisition": {
+      "acquisition_command": "GET https://api.github.com/repos/aisa-group/PostTrainBench/git/trees/5e238e4a762aa0ec1f62d9e8ee63153a95514217?recursive=1",
+      "url": "https://api.github.com/repos/aisa-group/PostTrainBench/git/trees/5e238e4a762aa0ec1f62d9e8ee63153a95514217?recursive=1"
+    },
+    "tree_id": "5e238e4a762aa0ec1f62d9e8ee63153a95514217"
+  },
+  "upstream_token": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2"
+}
