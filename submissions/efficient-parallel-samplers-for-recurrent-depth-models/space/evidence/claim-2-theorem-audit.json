@@ -1,0 +1,26 @@
+{
+  "claim_text": "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2).",
+  "evidence_status": "unavailable",
+  "sha256": "2e15221c8b5516b0ab705e29a3d7c5d924ed5f0187c970a0caf60a1402757804",
+  "theorem_audit": {
+    "challenge_citation": "Theorem 4.2",
+    "citation_audit": {
+      "citation_mismatch_detected": true,
+      "mismatch_details": "The challenge text cites Theorem 4.2 for the decoding expressiveness claim, whereas arXiv v1 states the prefilling result in Theorem 4.2 and the same-runtime decoding result in Theorem 4.4.",
+      "remark_4_5_title": "Expressiveness and hardware I/O interpretation",
+      "theorem_4_2_scope": "Prefilling phase",
+      "theorem_4_2_title": "Prefilling depth scaling vs width scaling / token replication",
+      "theorem_4_4_scope": "Decoding phase (conditional on r > 1, KV sharing, W <= L_*)",
+      "theorem_4_4_title": "Equal depth and strictly greater width under same decoding runtime"
+    },
+    "evidence_status": "unavailable",
+    "file": "vendor/arxiv/arxiv_submission.tex",
+    "proof_reproduced": false,
+    "reasons_unavailable": [
+      "The challenge string cites Theorem 4.2, which is the prefilling result, not the decoding result.",
+      "Theorem 4.4 decoding expressiveness requires hardware-dependent I/O memory bandwidth assumptions.",
+      "The released arXiv v1 source does not contain an independently checkable proof of the decoding theorem."
+    ],
+    "sha256": "cdc058830d1e51f631e4fb8d1f2de0b79de91670fd4111646fe624f8c258d3b8"
+  }
+}

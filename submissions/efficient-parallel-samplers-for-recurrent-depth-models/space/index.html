@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recurrent-Depth Parallel Sampler Reproduction (h7WBYYJF1Q)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: #131b2e;
+      --bg-card-hover: #1c2744;
+      --border-color: #233152;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-purple: #c084fc;
+      --status-partial-bg: #451a03;
+      --status-partial-text: #fbbf24;
+      --status-partial-border: #92400e;
+      --status-unavail-bg: #311b92;
+      --status-unavail-text: #d8b4fe;
+      --status-unavail-border: #6b21a8;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .meta-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--accent-blue);
+    }
+
+    .claims-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .claims-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .claim-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .claim-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-blue);
+    }
+
+    .claim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .claim-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    .status-partial {
+      background: var(--status-partial-bg);
+      color: var(--status-partial-text);
+      border: 1px solid var(--status-partial-border);
+    }
+
+    .status-unavailable {
+      background: var(--status-unavail-bg);
+      color: var(--status-unavail-text);
+      border: 1px solid var(--status-unavail-border);
+    }
+
+    .claim-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-style: italic;
+      background: rgba(0,0,0,0.2);
+      padding: 0.75rem;
+      border-radius: 6px;
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem 0;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background: rgba(255,255,255,0.03);
+      font-weight: 600;
+      color: var(--accent-blue);
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-purple);
+    }
+
+    .provenance-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+      word-break: break-all;
+    }
+
+    .download-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .download-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .limitations-box {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .limitations-box h3 {
+      color: #f87171;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .limitations-box ul {
+      list-style-type: square;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Efficient Parallel Samplers for Recurrent-Depth Models</h1>
+      <p style="color: var(--text-muted);">ICML 2026 Reproduction Challenge • Independent Artifact Evidence Presentation</p>
+      <div class="meta-badges">
+        <span class="badge">Paper: h7WBYYJF1Q</span>
+        <span class="badge">arXiv: 2510.14961v1</span>
+        <span class="badge">Attempt: 534db42c-5b16-4f00-9a7d-a47056fc9dd4</span>
+        <span class="badge">Mode: Deterministic CPU Audit</span>
+      </div>
+    </header>
+
+    <section class="claims-grid">
+      <div class="claim-card">
+        <div class="claim-header">
+          <div class="claim-title">Claim 1: Wavefront Sampler</div>
+          <span class="status-badge status-partial">PARTIAL</span>
+        </div>
+        <div class="claim-text">"The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1)."</div>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          <strong>Findings:</strong> Released sampler AST (<code>recpre/raven_modeling_minimal.py</code>) confirms <code>generate_diffusion_style</code> applies <code>inner_recurrence</code> steps per outer iteration across active states, decodes logits, and appends new tokens. However, decoding occurs after the inner loop per outer step rather than after every individual inner step.
+        </p>
+      </div>
+
+      <div class="claim-card">
+        <div class="claim-header">
+          <div class="claim-title">Claim 2: Expressiveness Theorem</div>
+          <span class="status-badge status-unavailable">UNAVAILABLE</span>
+        </div>
+        <div class="claim-text">"The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2)."</div>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          <strong>Findings:</strong> Source TeX audit reveals a citation mismatch: Theorem 4.2 is the prefilling result, while same-runtime decoding expressiveness is Theorem 4.4. No complete independently checkable proof of the decoding theorem is included in the v1 source.
+        </p>
+      </div>
+    </section>
+
+    <h2 class="section-title">⚡ Wavefront Mechanism Schedule Simulation</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Outer Step</th>
+            <th>Active Positions Before</th>
+            <th>Recurrence Updates</th>
+            <th>Decoded Position</th>
+            <th>Appended Positions</th>
+            <th>Active Width / Bound</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td>Step 1</td>
+          <td><code>[0]</code></td>
+          <td>+4 updates</td>
+          <td>Position 0</td>
+          <td><code>[1]</code></td>
+          <td>2 / 8</td>
+        </tr>
+        
+        <tr>
+          <td>Step 2</td>
+          <td><code>[0, 1]</code></td>
+          <td>+4 updates</td>
+          <td>Position 1</td>
+          <td><code>[2]</code></td>
+          <td>3 / 8</td>
+        </tr>
+        
+        <tr>
+          <td>Step 3</td>
+          <td><code>[0, 1, 2]</code></td>
+          <td>+4 updates</td>
+          <td>Position 2</td>
+          <td><code>[3]</code></td>
+          <td>4 / 8</td>
+        </tr>
+        
+        <tr>
+          <td>Step 4</td>
+          <td><code>[0, 1, 2, 3]</code></td>
+          <td>+4 updates</td>
+          <td>Position 3</td>
+          <td><code>[4]</code></td>
+          <td>5 / 8</td>
+        </tr>
+        
+        <tr>
+          <td>Step 5</td>
+          <td><code>[0, 1, 2, 3, 4]</code></td>
+          <td>+4 updates</td>
+          <td>Position 4</td>
+          <td><code>[5]</code></td>
+          <td>6 / 8</td>
+        </tr>
+        
+        <tr>
+          <td>Step 6</td>
+          <td><code>[0, 1, 2, 3, 4, 5]</code></td>
+          <td>+4 updates</td>
+          <td>Position 5</td>
+          <td><code>[6]</code></td>
+          <td>7 / 8</td>
+        </tr>
+        
+        <tr>
+          <td>Step 7</td>
+          <td><code>[0, 1, 2, 3, 4, 5, 6]</code></td>
+          <td>+4 updates</td>
+          <td>Position 6</td>
+          <td><code>[7]</code></td>
+          <td>8 / 8</td>
+        </tr>
+        
+        <tr>
+          <td>Step 8</td>
+          <td><code>[0, 1, 2, 3, 4, 5, 6, 7]</code></td>
+          <td>+4 updates</td>
+          <td>Position 7</td>
+          <td><code>[8]</code></td>
+          <td>8 / 8</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">📜 Provenance & Pinned Input Hashes</h2>
+    <div class="provenance-card">
+      <p style="margin-bottom: 0.5rem; color: var(--accent-blue);"><strong>Provenance Token:</strong></p>
+      <p style="margin-bottom: 1rem;"><code>arxiv:2510.14961v1+pdf-sha256:74e7985abe41ee2a75914a65e3778a15353fb0c0964d6ea34e7bfeb1f18312c8+source-sha256:60a795d123a2d2d642971834b6e0cba6dda80b5dfcd539f78d01639582d9c41d+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c</code></p>
+
+      <p style="margin-bottom: 0.5rem; color: var(--accent-purple);"><strong>Input Hashes:</strong></p>
+      <p>• arxiv_submission.tex SHA-256: <code>cdc058830d1e51f631e4fb8d1f2de0b79de91670fd4111646fe624f8c258d3b8</code></p>
+      <p>• raven_modeling_minimal.py SHA-256: <code>18fcacd53fb5696a76c0d3bda44480f2f3900aa9659c137a08962c593a9a9e42</code></p>
+      <p>• raven_modeling_minimal.py Git Blob: <code>0e83a0766644df9113a8923f43350c6a1b5a182c</code></p>
+      <p>• LICENSE SHA-256: <code>bc6c264d8ba4450599cf95c4699c6b82142f32ca1ecd91011c17b50a5a36a2f5</code></p>
+    </div>
+
+    <h2 class="section-title">📥 Download Evidence Bundles</h2>
+    <div class="download-links">
+      <a class="download-btn" href="evidence/manifest.json" download>📄 manifest.json</a>
+      <a class="download-btn" href="evidence/claim-1-wavefront.json" download>📄 claim-1-wavefront.json</a>
+      <a class="download-btn" href="evidence/claim-2-theorem-audit.json" download>📄 claim-2-theorem-audit.json</a>
+      <a class="download-btn" href="evidence/results.json" download>📄 results.json</a>
+      <a class="download-btn" href="REPORT.md" download>📝 REPORT.md</a>
+    </div>
+
+    <div class="limitations-box">
+      <h3>⚠️ Scope & Limitations</h3>
+      <ul>
+        <li><strong>No Model Execution:</strong> 3.5B Huginn-0125 weights were not loaded or run.</li>
+        <li><strong>No GPU Benchmarking:</strong> Modern GPU hardware timing and reported ~5x speedups were not measured.</li>
+        <li><strong>Audit Only:</strong> Evidence statuses reflect static AST, schedule, and TeX audits.</li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>ICML 2026 Reproduction Challenge • Generated deterministically</p>
+    </footer>
+  </div>
+</body>
+</html>
