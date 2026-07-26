@@ -9,6 +9,7 @@ Categories 1-12 from worker-task.md.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import os
@@ -910,10 +911,8 @@ class TestProtocolMutated:
             b"# htcondor_mpi-is was considered but not used\n"
             b"echo default\n"
         )
-        proto = audit_protocol(blobs, self._base_entries())
-        analysis = proto["commit_sh_analysis"]
-        # Comment-only mention should not report has_metr_branch
-        assert analysis["has_metr_branch"] is False
+        with pytest.raises(ValueError, match="commit.sh|scheduler|branch"):
+            audit_protocol(blobs, self._base_entries())
 
 
 # ===================================================================
@@ -1388,13 +1387,13 @@ class TestCommitShAnalysis:
         assert mpi.get("active_jobs") == 1 or mpi.get("hours") == 100
 
     def test_wrong_model_detected(self):
-        """Mutated model must change results."""
+        """Mutated model must abort rather than produce evidence."""
         from posttrainbench_repro.audit import _analyze_commit_sh
         mutated = _REALISTIC_COMMIT_SH.replace(
             b'"Qwen/Qwen3-4B-Base"', b'"Qwen/Qwen3-1.7B-Base"'
         )
-        result = _analyze_commit_sh(mutated.decode())
-        assert "Qwen/Qwen3-4B-Base" not in result["current_models_in_arrays"]
+        with pytest.raises(ValueError, match="model"):
+            _analyze_commit_sh(mutated.decode())
 
 
 # ===================================================================
@@ -1477,5 +1476,326 @@ class TestProtocolWithRealisticFixture:
         assert analysis["htcondor_branch"]["one_hour_jobs"] == 1
         assert "Qwen/Qwen3-4B-Base" in analysis["current_models_in_arrays"]
 
+
+# ===================================================================
+# 21. Final acquisition and authority contract
+# ===================================================================
+
+class TestFinalAcquisitionContract:
+    """Acquisition must retain and validate the exact consumed authorities."""
+
+    def _entry_metadata(self) -> dict[str, dict[str, Any]]:
+        metadata = {
+            path: {
+                "type": "file",
+                "oid": hashlib.sha1(path.encode("utf-8")).hexdigest(),
+                "size": len(path.encode("utf-8")),
+            }
+            for path in C.HF_ALLOWLISTED_FILES
+        }
+        metadata[C.INSTRUCTION_MODEL_JUDGMENT_PATH].update({
+            "oid": C.INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
+            "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
+        })
+        metadata[C.INSTRUCTION_MODEL_TRACE_PATH].update({
+            "oid": C.INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
+            "size": C.INSTRUCTION_MODEL_TRACE_SIZE,
+        })
+        return metadata
+
+    def test_inventory_retains_allowlisted_entry_metadata(self, monkeypatch):
+        """A valid complete-tree response retains type, oid, and size."""
+        import posttrainbench_repro.acquisition as A
+
+        metadata = self._entry_metadata()
+        entries = [
+            {"path": path, **entry}
+            for path, entry in sorted(metadata.items())
+        ]
+        paths = [entry["path"] for entry in entries]
+        digest = compute_canonical_path_digest(paths)
+
+        monkeypatch.setattr(A, "fetch_hf_tree_pages", lambda client=None: (entries, 1))
+        monkeypatch.setattr(A, "HF_TREE_TOTAL_PAGES", 1)
+        monkeypatch.setattr(A, "HF_TREE_TOTAL_ENTRIES", 4)
+        monkeypatch.setattr(A, "HF_TREE_FILE_COUNT", 4)
+        monkeypatch.setattr(A, "HF_TREE_DIR_COUNT", 0)
+        monkeypatch.setattr(C, "CANONICAL_ALL_ENTRIES_SHA256", digest)
+        monkeypatch.setattr(C, "CANONICAL_FILES_SHA256", digest)
+        monkeypatch.setattr(
+            C,
+            "CANONICAL_DIRS_SHA256",
+            compute_canonical_path_digest([]),
+        )
+
+        inventory = A.fetch_hf_path_inventory()
+        assert inventory["entry_metadata"] == metadata
+
+    def test_acquire_validates_metadata_before_content_download(self, monkeypatch):
+        """Missing allowlisted metadata aborts before any content request."""
+        import posttrainbench_repro.acquisition as A
+
+        metadata = self._entry_metadata()
+        metadata.pop(C.TIME_TAKEN_WITNESS_PATH)
+        monkeypatch.setattr(A, "fetch_github_metadata", lambda client=None: {})
+        monkeypatch.setattr(
+            A,
+            "fetch_hf_path_inventory",
+            lambda client=None: {"entry_metadata": metadata},
+        )
+
+        def forbidden_download(*args, **kwargs):
+            pytest.fail("allowlisted content download happened before validation")
+
+        monkeypatch.setattr(A, "fetch_allowlisted_file", forbidden_download)
+        with pytest.raises(ValueError, match="allowlisted|Allowlisted|metadata"):
+            A.acquire_all(client=RecordingClient())
+
+    def test_acquire_returns_deterministic_consumed_hf_metadata(self, monkeypatch):
+        """The returned bundle identifies every downloaded HF file without bytes."""
+        import posttrainbench_repro.acquisition as A
+
+        trace = b"x" * C.INSTRUCTION_MODEL_TRACE_SIZE
+        contents = {
+            C.CONTAMINATION_WITNESS_PATH: C.CONTAMINATION_WITNESS_BYTES,
+            C.TIME_TAKEN_WITNESS_PATH: C.TIME_TAKEN_WITNESS_BYTES,
+            C.INSTRUCTION_MODEL_JUDGMENT_PATH: C.INSTRUCTION_MODEL_JUDGMENT_BYTES,
+            C.INSTRUCTION_MODEL_TRACE_PATH: trace,
+        }
+        metadata = self._entry_metadata()
+        metadata[C.CONTAMINATION_WITNESS_PATH]["size"] = len(
+            C.CONTAMINATION_WITNESS_BYTES
+        )
+        metadata[C.TIME_TAKEN_WITNESS_PATH]["size"] = len(
+            C.TIME_TAKEN_WITNESS_BYTES
+        )
+        monkeypatch.setattr(A, "fetch_github_metadata", lambda client=None: {})
+        monkeypatch.setattr(
+            A,
+            "fetch_hf_path_inventory",
+            lambda client=None: {"entry_metadata": metadata},
+        )
+        monkeypatch.setattr(
+            A,
+            "fetch_allowlisted_file",
+            lambda path, client=None: contents[path],
+        )
+        monkeypatch.setattr(A, "_verify_bytes", lambda *args: None)
+        monkeypatch.setattr(A, "extract_trace_excerpts", lambda trace_bytes: [])
+
+        acquired = A.acquire_all(client=RecordingClient())
+        consumed = acquired["hf_consumed_files"]
+        assert [item["path"] for item in consumed] == sorted(C.HF_ALLOWLISTED_FILES)
+        for item in consumed:
+            path = item["path"]
+            assert item["raw_url"].endswith(
+                f"/raw/{C.HF_PINNED_REVISION}/{path}"
+            )
+            assert item["sha256"] == hashlib.sha256(contents[path]).hexdigest()
+            assert item["size"] == len(contents[path])
+            assert item["oid"] == metadata[path]["oid"]
+            assert "content" not in item
+
+    def test_provenance_records_every_exact_acquisition(self):
+        """Provenance exposes the exact GitHub and HF request authorities."""
+        from posttrainbench_repro.audit import get_provenance
+
+        acquired = _make_valid_acquired()
+        tree_url = (
+            f"https://api.github.com/repos/{C.GITHUB_REPO}"
+            f"/git/trees/{C.GIT_TREE_ID}?recursive=1"
+        )
+        acquired["github"]["tree_acquisition"] = {
+            "url": tree_url,
+            "acquisition_command": f"GET {tree_url}",
+        }
+        for path, meta in acquired["github"]["blobs"].items():
+            raw_url = (
+                f"https://raw.githubusercontent.com/{C.GITHUB_REPO}"
+                f"/{C.GITHUB_PINNED_COMMIT}/{path}"
+            )
+            meta["raw_url"] = raw_url
+            meta["acquisition_command"] = f"GET {raw_url}"
+
+        hf_tree_url = (
+            f"https://huggingface.co/api/datasets/{C.HF_DATASET_ID}"
+            f"/tree/{C.HF_PINNED_REVISION}"
+            "?recursive=true&expand=false&limit=1000"
+        )
+        acquired["hf_inventory"]["tree_acquisition"] = {
+            "initial_url": hf_tree_url,
+            "acquisition_command": (
+                f"GET {hf_tree_url}; follow Link rel=\"next\" until absent"
+            ),
+        }
+        acquired["hf_consumed_files"] = [
+            {
+                "path": path,
+                "raw_url": (
+                    f"https://huggingface.co/datasets/{C.HF_DATASET_ID}"
+                    f"/raw/{C.HF_PINNED_REVISION}/{path}"
+                ),
+                "acquisition_command": (
+                    "GET "
+                    f"https://huggingface.co/datasets/{C.HF_DATASET_ID}"
+                    f"/raw/{C.HF_PINNED_REVISION}/{path}"
+                ),
+                "sha256": hashlib.sha256(path.encode("utf-8")).hexdigest(),
+                "size": len(path),
+                "oid": hashlib.sha1(path.encode("utf-8")).hexdigest(),
+            }
+            for path in sorted(C.HF_ALLOWLISTED_FILES)
+        ]
+
+        provenance = get_provenance(acquired)
+        assert provenance["source"]["tree_acquisition"] == (
+            acquired["github"]["tree_acquisition"]
+        )
+        for meta in provenance["source"]["consumed_blobs"].values():
+            assert meta["raw_url"].startswith("https://raw.githubusercontent.com/")
+            assert meta["acquisition_command"] == f"GET {meta['raw_url']}"
+        assert provenance["dataset"]["tree_acquisition"] == (
+            acquired["hf_inventory"]["tree_acquisition"]
+        )
+        assert provenance["dataset"]["consumed_files"] == (
+            acquired["hf_consumed_files"]
+        )
+
+
+def _valid_final_claim_inputs() -> tuple[
+    dict[str, Any], dict[str, Any], dict[str, Any]
+]:
+    """Return exact valid claim inputs for one-field mutation tests."""
+    acquired = _make_valid_acquired()
+    acquired["github"]["blob_contents"][
+        "src/commit_utils/commit.sh"
+    ] = _REALISTIC_COMMIT_SH
+    coverage = compute_coverage(acquired["hf_inventory"])
+    protocol = audit_protocol(
+        acquired["github"]["blob_contents"],
+        acquired["github"]["entries"],
+    )
+    reward = audit_reward_hacking(acquired)
+    return coverage, protocol, reward
+
+
+def _mutate_path(obj: Any, path: tuple[Any, ...], value: Any) -> None:
+    current = obj
+    for part in path[:-1]:
+        current = current[part]
+    current[path[-1]] = value
+
+
+_FINAL_GATE_MUTATIONS = [
+    ("coverage", ("cell_counts", "aime2025", 0), 46),
+    ("coverage", ("matrix", 0, "count"), 46),
+    ("protocol", ("num_gpus_default",), 2),
+    ("protocol", ("cuda_device_requirement",), "wrong GPU"),
+    ("protocol", ("request_gpus_binding",), "wrong binding"),
+    ("protocol", ("receives_num_hours",), False),
+    ("protocol", ("solve_timeout_formula",), "wrong formula"),
+    ("protocol", ("timeout_grace_minutes",), 4),
+    ("protocol", ("timeout_formula_found",), False),
+    ("protocol", ("task_dir_10h_suffix",), False),
+    ("protocol", ("evaluation_dirs_present",), C.EXPECTED_EVAL_DIRS[:-1]),
+    (
+        "protocol",
+        ("commit_sh_analysis", "current_models_in_arrays"),
+        ["Qwen/Qwen3-1.7B-Base"],
+    ),
+    (
+        "protocol",
+        ("commit_sh_analysis", "current_benchmarks_in_arrays"),
+        ["aime2025"],
+    ),
+    (
+        "protocol",
+        ("commit_sh_analysis", "htcondor_mpi_is_branch", "hours"),
+        10,
+    ),
+    (
+        "protocol",
+        ("commit_sh_analysis", "htcondor_mpi_is_branch", "gpus"),
+        1,
+    ),
+    (
+        "protocol",
+        ("commit_sh_analysis", "htcondor_branch", "ten_hour_jobs"),
+        6,
+    ),
+    (
+        "protocol",
+        ("commit_sh_analysis", "htcondor_branch", "one_hour_jobs"),
+        0,
+    ),
+    ("reward", ("training_on_test_sets", "status"), "unavailable"),
+    (
+        "reward",
+        ("downloading_instruction_tuned_checkpoint", "status"),
+        "unavailable",
+    ),
+    ("reward", ("using_discovered_api_key", "status"), "partial-support"),
+    (
+        "reward",
+        ("using_discovered_api_key", "inventory_proof", "matching_paths"),
+        1,
+    ),
+    (
+        "reward",
+        (
+            "downloading_instruction_tuned_checkpoint",
+            "trace",
+            "sha256",
+        ),
+        "0" * 64,
+    ),
+    (
+        "reward",
+        ("downloading_instruction_tuned_checkpoint", "trace", "size"),
+        1,
+    ),
+    (
+        "reward",
+        (
+            "downloading_instruction_tuned_checkpoint",
+            "safe_excerpts",
+            0,
+            "text",
+        ),
+        "wrong excerpt",
+    ),
+    (
+        "reward",
+        (
+            "downloading_instruction_tuned_checkpoint",
+            "safe_excerpts",
+            0,
+            "sha256",
+        ),
+        "0" * 64,
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    ("target", "path", "value"),
+    _FINAL_GATE_MUTATIONS,
+    ids=[f"{target}-{path[-1]}" for target, path, _ in _FINAL_GATE_MUTATIONS],
+)
+def test_claim_gate_rejects_every_mutated_authority(target, path, value):
+    """Any changed coverage, protocol, or reward authority aborts claims."""
+    coverage, protocol, reward = _valid_final_claim_inputs()
+    objects = {
+        "coverage": copy.deepcopy(coverage),
+        "protocol": copy.deepcopy(protocol),
+        "reward": copy.deepcopy(reward),
+    }
+    _mutate_path(objects[target], path, value)
+    with pytest.raises(ValueError):
+        evaluate_claims(
+            objects["coverage"],
+            objects["protocol"],
+            objects["reward"],
+        )
 
 
