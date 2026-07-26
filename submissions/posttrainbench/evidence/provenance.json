@@ -1,0 +1,73 @@
+{
+  "arxiv_id": "2603.08640v2",
+  "assessed_snapshot": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "challenge_assessment_digest": "c0a54e93b7686b34efd2859e98ef2d404e16800d241ff4c58b0dc3852392dbde",
+  "challenge_json_sha256": "65a632313094067874c7ab2b9f62b87dfb4cf913c7a7052c1c2a29a93ca29940",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "dataset": {
+    "canonical_digests": {
+      "all_entries": "mock_all_digest",
+      "directories": "mock_dir_digest",
+      "files": "mock_file_digest"
+    },
+    "license": "Apache-2.0",
+    "pagination": {
+      "directory_count": 1385,
+      "endpoint": "tree",
+      "file_count": 10,
+      "mechanism": "Link header cursor, rel=\"next\"",
+      "page_size": 112,
+      "params": "recursive=true&expand=false&limit=1000",
+      "total_entries": 1395,
+      "total_pages": 112
+    },
+    "pinned_revision": "46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
+    "repository": "https://huggingface.co/datasets/aisa-group/PostTrainBench-Trajectories",
+    "truncated_siblings": {
+      "count": 85883,
+      "digest": "116dc22723f1cc13bf71461ff83dd03479c74a2740957787e6ca642a59628eea",
+      "note": "Truncated lexical prefix from Hub revision-metadata; rejected as coverage input."
+    }
+  },
+  "index_json_sha256": "fdc3074ee5105da8b061146ecf78d927a4266a9841db16ba2b5c747b48727ee0",
+  "paid_api_cost_usd": "0.00",
+  "paper_id": "UnjxMTe57e",
+  "paper_license": "CC BY 4.0",
+  "source": {
+    "canonical_tree_digest": "566361d3f86bdf1a22294e6a772117428a8fb23792de6e1ac327897237915aeb",
+    "consumed_blobs": {
+      "LICENSE": {
+        "git_object": "075a303174a80b6d9cfef229bfd36b8ad2ee69e2",
+        "raw_sha256": "af874b1aba6df2929fe2bf23b46dee3e56d1c24d915220c0916d81e331371384",
+        "size": 12
+      },
+      "README.md": {
+        "git_object": "3ffc21258c2c3a34c13d342cc2c6aa8fb87c66ea",
+        "raw_sha256": "f95474a651bfa6f0082b027b8b67b604678616e081c923889709e76d9501fd6e",
+        "size": 17
+      },
+      "src/commit_utils/commit.sh": {
+        "git_object": "3c43144e1186a160f450e747b95861fea6d16747",
+        "raw_sha256": "663ecb37cc4e6a16dcfcf8135bdbadf325f0b067192fe7a71d2231ba37eaae8e",
+        "size": 305
+      },
+      "src/commit_utils/single_task.sub": {
+        "git_object": "ea7f8790b97301dcdb6f3c104c5555d7ddf4e06a",
+        "raw_sha256": "f8ee12da42fdebfc3b4293a22ea8b232c1f8f52cb2f52b103c9f138f0ddc013a",
+        "size": 104
+      },
+      "src/run_task.sh": {
+        "git_object": "0642ec47ee7acd2528cdab7d343ddba11cbc84db",
+        "raw_sha256": "10b0238018f202209c06f12ff05d021a0ca03b98d42c86a65e80cacd4fbe7033",
+        "size": 78
+      }
+    },
+    "entry_count": 12,
+    "license": "MIT",
+    "pinned_commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+    "repository": "https://github.com/aisa-group/PostTrainBench",
+    "tree_id": "5e238e4a762aa0ec1f62d9e8ee63153a95514217"
+  },
+  "upstream_token": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2"
+}

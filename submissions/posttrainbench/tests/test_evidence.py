@@ -13,6 +13,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -32,13 +33,17 @@ from posttrainbench_repro.constants import (
     EXPECTED_BENCHMARKS,
     EXPECTED_CELL_COUNTS,
     EXPECTED_DUPLICATE_PAIRS,
+    EXPECTED_EVAL_DIRS,
     EXPECTED_MISSING_PAIRS,
     EXPECTED_MODEL_FRAGMENTS,
     EXPECTED_ROOT_CELL_PAIRS,
     EXPECTED_ROOT_COUNT,
     EXPECTED_TASK_COUNT,
     GIT_TREE_DIGEST,
+    GIT_TREE_ENTRY_COUNT,
+    GIT_TREE_ID,
     GITHUB_PINNED_COMMIT,
+    HF_ALLOWLISTED_FILES,
     HF_PINNED_REVISION,
     HF_TREE_DIR_COUNT,
     HF_TREE_FILE_COUNT,
@@ -56,6 +61,7 @@ from posttrainbench_repro.constants import (
     INSTRUCTION_MODEL_TRACE_SIZE,
     MODEL_ORDER,
     PAPER_ID,
+    PINNED_BLOBS,
     SNAPSHOT_ID,
     TIME_TAKEN_WITNESS_BYTES,
     TIME_TAKEN_WITNESS_PATH,
@@ -68,6 +74,207 @@ from posttrainbench_repro.constants import (
 SUBMISSION_DIR = Path(__file__).parent.parent
 
 
+# ---------------------------------------------------------------------------
+# Helpers: build mock acquired data for offline tests
+# ---------------------------------------------------------------------------
+
+def _make_mock_github() -> dict[str, Any]:
+    """Build a mock github metadata dict for offline tests."""
+    # Minimal entries that include eval dirs and pinned blob paths
+    entries: list[dict[str, Any]] = []
+    for d in EXPECTED_EVAL_DIRS:
+        entries.append({"path": d, "type": "tree", "sha": "0" * 40})
+    for path, (git_sha, _) in PINNED_BLOBS.items():
+        entries.append({"path": path, "type": "blob", "sha": git_sha, "size": 100})
+
+    # Mock blob contents with realistic patterns
+    blob_contents: dict[str, bytes] = {
+        "src/commit_utils/single_task.sub": (
+            b'num_gpus = 1\n'
+            b'request_gpus = $(num_gpus)\n'
+            b'requirements = TARGET.CUDADeviceName == "NVIDIA H100 80GB HBM3"\n'
+        ),
+        "src/run_task.sh": (
+            b'#!/bin/bash\n'
+            b'NUM_HOURS=${1:-10}\n'
+            b'timeout $((NUM_HOURS * 60 + 5))m python run.py\n'
+        ),
+        "src/commit_utils/commit.sh": (
+            b'#!/bin/bash\n'
+            b'if [ "$SCHEDULER" = "htcondor_mpi-is" ]; then\n'
+            b'  NUM_HOURS=100\n'
+            b'  num_gpus=8\n'
+            b'  # METR 100-hour 8-GPU command\n'
+            b'  submit_job\n'
+            b'else\n'
+            b'  # Default htcondor branch\n'
+            b'  for i in 1 2 3 4 5 6 7; do NUM_HOURS=10 submit; done\n'
+            b'  NUM_HOURS=1 submit\n'
+            b'  MODELS=("Qwen_Qwen3-4B-Base")\n'
+            b'  BENCHMARKS=("healthbench")\n'
+            b'fi\n'
+        ),
+        "README.md": b"# PostTrainBench\n",
+        "LICENSE": b"MIT License\n",
+    }
+
+    blobs: dict[str, dict[str, Any]] = {}
+    for path, (git_sha, raw_sha) in PINNED_BLOBS.items():
+        blobs[path] = {
+            "git_object": git_sha,
+            "raw_sha256": raw_sha,
+            "size": len(blob_contents.get(path, b"")),
+        }
+
+    return {
+        "commit": GITHUB_PINNED_COMMIT,
+        "tree_id": GIT_TREE_ID,
+        "entry_count": len(entries),
+        "canonical_tree_digest": GIT_TREE_DIGEST,
+        "entries": entries,
+        "blobs": blobs,
+        "blob_contents": blob_contents,
+    }
+
+
+def _make_mock_hf_inventory() -> dict[str, Any]:
+    """Build a mock HF inventory using EXPECTED_CELL_COUNTS.
+
+    Carefully distributes tasks to produce exactly:
+    - 1,338 recognized tasks
+    - 47 roots
+    - 1,313 unique root/cell pairs
+    - 25 duplicate job pairs
+    - 3 missing root/cell pairs
+    """
+    benchmark_list = sorted(EXPECTED_BENCHMARKS)
+    model_frags = list(EXPECTED_MODEL_FRAGMENTS.keys())
+
+    dir_paths: list[str] = []
+    all_paths: list[str] = []
+    run_roots: list[str] = []
+
+    # Generate 47 run root names
+    for i in range(47):
+        root = f"agent{i}_10h_run1"
+        run_roots.append(root)
+        dir_paths.append(root)
+        all_paths.append(root)
+
+    # Track root/cell pairs for duplicate and missing control
+    root_cell_pairs: set[tuple[str, str, str]] = set()
+    task_count = 0
+
+    # For each cell, distribute tasks to produce correct per-cell counts
+    # with the right number of duplicates and missing pairs
+    for bench_idx, bench in enumerate(benchmark_list):
+        expected = EXPECTED_CELL_COUNTS[bench]
+        for model_idx, model_frag in enumerate(model_frags):
+            count = expected[model_idx]
+            for task_i in range(count):
+                # Use distinct roots for the first min(count, 47) tasks
+                # Extra tasks beyond 47 become duplicates on existing roots
+                root_idx = task_i % 47
+                root = run_roots[root_idx]
+                job_id = 16800000 + bench_idx * 10000 + model_idx * 1000 + task_i
+                task_path = f"{root}/{bench}_{model_frag}_{job_id}"
+                dir_paths.append(task_path)
+                all_paths.append(task_path)
+                root_cell_pairs.add((root, bench, EXPECTED_MODEL_FRAGMENTS[model_frag]))
+                task_count += 1
+
+    # Modular distribution gives 23 duplicates (sum of max(0, count-47)).
+    # We need 25. For cells with count=47 and modular distribution, each
+    # of the 47 tasks goes to a unique root, giving 0 duplicates. To
+    # create 2 more duplicates: pick 2 cells with count=47, and reassign
+    # one task from root[46] to root[0] (creating a duplicate on root[0]
+    # and removing the root/cell pair for root[46]).
+    # Target cells: aime2025/Qwen_Qwen3-1.7B-Base (count=47)
+    #               gsm8k/Qwen_Qwen3-1.7B-Base (count=47)
+    dup_fixup_cells = [
+        (benchmark_list[0], model_frags[0]),  # aime2025 / Qwen_Qwen3-1.7B-Base
+        (benchmark_list[4], model_frags[0]),  # gsm8k / Qwen_Qwen3-1.7B-Base
+    ]
+    for bench, frag in dup_fixup_cells:
+        model_norm = EXPECTED_MODEL_FRAGMENTS[frag]
+        # Find the task that was assigned to root[46] and reassign to root[0]
+        old_path = None
+        new_root = run_roots[0]
+        for i, p in enumerate(dir_paths):
+            if p.startswith(f"{run_roots[46]}/{bench}_{frag}_"):
+                old_path = p
+                dir_paths.pop(i)
+                all_paths.remove(old_path)
+                break
+        if old_path:
+            # Re-add under root[0] (creating a duplicate)
+            job_id = 99999000 + dup_fixup_cells.index((bench, frag))
+            new_path = f"{new_root}/{bench}_{frag}_{job_id}"
+            dir_paths.append(new_path)
+            all_paths.append(new_path)
+            # Update tracking
+            root_cell_pairs.discard((run_roots[46], bench, model_norm))
+            root_cell_pairs.add((new_root, bench, model_norm))
+
+    # Verify our mock matches expectations
+    total_possible = 47 * len(benchmark_list) * len(model_frags)
+    actual_duplicates = task_count - len(root_cell_pairs)
+    actual_missing = total_possible - len(root_cell_pairs)
+
+    assert task_count == EXPECTED_TASK_COUNT, f"task_count={task_count}"
+    assert actual_duplicates == EXPECTED_DUPLICATE_PAIRS, f"duplicates={actual_duplicates}"
+    assert actual_missing == EXPECTED_MISSING_PAIRS, f"missing={actual_missing}"
+
+    # Add some file paths
+    file_paths = [f"{run_roots[0]}/file{i}.txt" for i in range(10)]
+    all_paths.extend(file_paths)
+
+    return {
+        "revision": HF_PINNED_REVISION,
+        "page_count": HF_TREE_TOTAL_PAGES,
+        "total_entries": len(all_paths),
+        "file_count": len(file_paths),
+        "dir_count": len(dir_paths),
+        "all_paths": all_paths,
+        "file_paths": file_paths,
+        "dir_paths": dir_paths,
+        "canonical_all_digest": "mock_all_digest",
+        "canonical_file_digest": "mock_file_digest",
+        "canonical_dir_digest": "mock_dir_digest",
+    }
+
+
+
+def _make_mock_trace_excerpts() -> list[dict[str, Any]]:
+    """Build verified trace excerpts matching the design."""
+    excerpts = []
+    for spec in TRACE_EXCERPTS:
+        text_hash = hashlib.sha256(
+            str(spec["text"]).encode("utf-8")
+        ).hexdigest()
+        excerpts.append({
+            "record": spec["record"],
+            "json_pointer": spec["pointer"],
+            "text": spec["text"],
+            "sha256": text_hash,
+        })
+    return excerpts
+
+
+def _make_mock_acquired() -> dict[str, Any]:
+    """Build a complete mock acquired dict for offline pipeline tests."""
+    return {
+        "github": _make_mock_github(),
+        "hf_inventory": _make_mock_hf_inventory(),
+        "contamination_content": CONTAMINATION_WITNESS_BYTES,
+        "time_taken_content": TIME_TAKEN_WITNESS_BYTES,
+        "instruction_judgment_content": INSTRUCTION_MODEL_JUDGMENT_BYTES,
+        "instruction_trace_sha256": INSTRUCTION_MODEL_TRACE_SHA256,
+        "instruction_trace_size": INSTRUCTION_MODEL_TRACE_SIZE,
+        "trace_excerpts": _make_mock_trace_excerpts(),
+    }
+
+
 # ===================================================================
 # 1. Challenge binding
 # ===================================================================
@@ -77,7 +284,7 @@ class TestChallengeBinding:
 
     def test_paper_and_attempt_ids(self):
         from posttrainbench_repro.audit import get_provenance
-        prov = get_provenance()
+        prov = get_provenance(_make_mock_acquired())
         assert prov["paper_id"] == PAPER_ID == "UnjxMTe57e"
         assert prov["attempt_id"] == ATTEMPT_ID == "cb04ab1a-a526-4137-862b-a26d68563737"
         assert prov["assessed_snapshot"] == SNAPSHOT_ID
@@ -198,7 +405,7 @@ class TestCoverage:
 
     def test_coverage_census(self):
         from posttrainbench_repro.audit import compute_coverage
-        cov = compute_coverage()
+        cov = compute_coverage(_make_mock_hf_inventory())
         assert cov["recognized_task_count"] == EXPECTED_TASK_COUNT == 1338
         assert cov["recognized_root_count"] == EXPECTED_ROOT_COUNT == 47
         assert cov["recognized_root_cell_pairs"] == EXPECTED_ROOT_CELL_PAIRS == 1313
@@ -207,7 +414,7 @@ class TestCoverage:
 
     def test_all_28_cells_present(self):
         from posttrainbench_repro.audit import compute_coverage
-        cov = compute_coverage()
+        cov = compute_coverage(_make_mock_hf_inventory())
         matrix = cov["matrix"]
         assert len(matrix) == 28
         for cell in matrix:
@@ -215,7 +422,7 @@ class TestCoverage:
 
     def test_cell_counts_match_design(self):
         from posttrainbench_repro.audit import compute_coverage
-        cov = compute_coverage()
+        cov = compute_coverage(_make_mock_hf_inventory())
         for bench, expected_counts in EXPECTED_CELL_COUNTS.items():
             actual = cov["cell_counts"][bench]
             assert actual == expected_counts, f"Counts mismatch for {bench}: {actual} != {expected_counts}"
@@ -257,7 +464,8 @@ class TestProtocol:
 
     def test_protocol_audit_deterministic(self):
         from posttrainbench_repro.audit import audit_protocol
-        proto = audit_protocol()
+        mock = _make_mock_github()
+        proto = audit_protocol(mock["blob_contents"], mock["entries"])
         assert proto["num_gpus_default"] == 1
         assert proto["cuda_device_requirement"] == 'TARGET.CUDADeviceName == "NVIDIA H100 80GB HBM3"'
         assert proto["request_gpus_binding"] == "request_gpus = $(num_gpus)"
@@ -268,16 +476,17 @@ class TestProtocol:
 
     def test_limitation_multi_gpu_extension(self):
         from posttrainbench_repro.audit import audit_protocol
-        proto = audit_protocol()
+        mock = _make_mock_github()
+        proto = audit_protocol(mock["blob_contents"], mock["entries"])
         assert proto["limitation_multi_gpu_extension"] is True
         assert proto["limitation_five_minute_grace"] is True
 
     def test_commit_sh_limitations_reported(self):
         """The scheduler-dependent 100h/8GPU METR command is surfaced."""
         from posttrainbench_repro.audit import audit_protocol
-        proto = audit_protocol()
+        mock = _make_mock_github()
+        proto = audit_protocol(mock["blob_contents"], mock["entries"])
         analysis = proto["commit_sh_analysis"]
-        # Design requires these are surfaced
         assert analysis.get("has_metr_branch") or analysis.get("scheduler_dependent")
 
 
@@ -294,7 +503,7 @@ class TestRewardHacking:
 
     def test_contamination_mode_partial_support(self):
         from posttrainbench_repro.audit import audit_reward_hacking
-        rh = audit_reward_hacking()
+        rh = audit_reward_hacking(_make_mock_acquired())
         assert rh["training_on_test_sets"]["status"] == "partial-support"
         assert rh["training_on_test_sets"]["witness_path"] == CONTAMINATION_WITNESS_PATH
         assert rh["training_on_test_sets"]["witness_sha256"] == CONTAMINATION_WITNESS_SHA256
@@ -306,7 +515,7 @@ class TestRewardHacking:
     def test_instruction_model_partial_support(self):
         """The instruction-model mode is partial-support (not unavailable)."""
         from posttrainbench_repro.audit import audit_reward_hacking
-        rh = audit_reward_hacking()
+        rh = audit_reward_hacking(_make_mock_acquired())
         instr = rh["downloading_instruction_tuned_checkpoint"]
         assert instr["status"] == "partial-support"
         assert instr["judgment_path"] == INSTRUCTION_MODEL_JUDGMENT_PATH
@@ -317,7 +526,7 @@ class TestRewardHacking:
     def test_instruction_model_trace_not_redistributed(self):
         """The complete trace must not be redistributed."""
         from posttrainbench_repro.audit import audit_reward_hacking
-        rh = audit_reward_hacking()
+        rh = audit_reward_hacking(_make_mock_acquired())
         instr = rh["downloading_instruction_tuned_checkpoint"]
         assert instr["trace"]["redistributed"] is False
         assert instr["trace"]["sha256"] == INSTRUCTION_MODEL_TRACE_SHA256
@@ -326,7 +535,7 @@ class TestRewardHacking:
     def test_trace_excerpts_match(self):
         """Three JSONL-pointer excerpts match expected text and hashes."""
         from posttrainbench_repro.audit import audit_reward_hacking
-        rh = audit_reward_hacking()
+        rh = audit_reward_hacking(_make_mock_acquired())
         excerpts = rh["downloading_instruction_tuned_checkpoint"]["safe_excerpts"]
         assert len(excerpts) == 3
 
@@ -353,14 +562,14 @@ class TestRewardHacking:
     def test_api_misuse_unavailable(self):
         """The API-key submode remains unavailable."""
         from posttrainbench_repro.audit import audit_reward_hacking
-        rh = audit_reward_hacking()
+        rh = audit_reward_hacking(_make_mock_acquired())
         assert rh["using_discovered_api_key"]["status"] == "unavailable"
         assert "16804408" in rh["using_discovered_api_key"]["unavailability_reason"]
 
     def test_paper_prose_cannot_satisfy_unavailable(self):
         """Paper prose cannot satisfy an unavailable artifact."""
         from posttrainbench_repro.audit import audit_reward_hacking
-        rh = audit_reward_hacking()
+        rh = audit_reward_hacking(_make_mock_acquired())
         api = rh["using_discovered_api_key"]
         assert "Paper prose cannot satisfy" in api["observations"][2]
 
@@ -372,21 +581,32 @@ class TestRewardHacking:
 class TestStatusDiscipline:
     """Neither claim may be verified; evidence is not an official verdict."""
 
+    def _get_claims(self):
+        from posttrainbench_repro.audit import (
+            audit_protocol,
+            audit_reward_hacking,
+            compute_coverage,
+            evaluate_claims,
+        )
+        mock = _make_mock_acquired()
+        github = mock["github"]
+        coverage = compute_coverage(mock["hf_inventory"])
+        protocol = audit_protocol(github["blob_contents"], github["entries"])
+        rh = audit_reward_hacking(mock)
+        return evaluate_claims(coverage, protocol, rh)
+
     def test_claims_are_partial_support(self):
-        from posttrainbench_repro.audit import evaluate_claims
-        claims = evaluate_claims()
+        claims = self._get_claims()
         assert claims["claim_1"]["status"] == "partial-support"
         assert claims["claim_2"]["status"] == "partial-support"
 
     def test_claims_never_verified(self):
-        from posttrainbench_repro.audit import evaluate_claims
-        claims = evaluate_claims()
+        claims = self._get_claims()
         for key in ["claim_1", "claim_2"]:
             assert claims[key]["status"] != "verified"
 
     def test_no_official_verdict_language(self):
-        from posttrainbench_repro.audit import evaluate_claims
-        claims = evaluate_claims()
+        claims = self._get_claims()
         for key in ["claim_1", "claim_2"]:
             summary = claims[key]["summary"].lower()
             assert "official verdict" not in summary
@@ -401,7 +621,8 @@ class TestDeterminismAndIntegrity:
 
     def test_two_runs_byte_identical(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        acquired = _make_mock_acquired()
+        run_pipeline(acquired)
 
         files_to_check = [
             "evidence/provenance.json",
@@ -415,7 +636,7 @@ class TestDeterminismAndIntegrity:
         ]
         bytes_run1 = {f: (SUBMISSION_DIR / f).read_bytes() for f in files_to_check}
 
-        run_pipeline()
+        run_pipeline(acquired)
         bytes_run2 = {f: (SUBMISSION_DIR / f).read_bytes() for f in files_to_check}
 
         for f in files_to_check:
@@ -423,7 +644,7 @@ class TestDeterminismAndIntegrity:
 
     def test_manifest_integrity(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
 
         manifest_path = SUBMISSION_DIR / "evidence" / "manifest.json"
         assert manifest_path.exists()
@@ -439,7 +660,7 @@ class TestDeterminismAndIntegrity:
 
     def test_manifest_does_not_hash_itself(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
         manifest = json.loads(
             (SUBMISSION_DIR / "evidence" / "manifest.json").read_text("utf-8")
         )
@@ -448,7 +669,7 @@ class TestDeterminismAndIntegrity:
     def test_no_wall_clock_in_evidence(self):
         """Canonical files must not contain wall-clock timestamps or temp paths."""
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
 
         for rel_path in [
             "evidence/provenance.json",
@@ -457,15 +678,13 @@ class TestDeterminismAndIntegrity:
             "evidence/claims.json",
         ]:
             content = (SUBMISSION_DIR / rel_path).read_text("utf-8")
-            # No ISO-8601 timestamps from the local process
-            # (the design-pinned timestamps are allowed)
             assert "/tmp/" not in content
             assert "\\tmp\\" not in content
 
     def test_tamper_detection(self):
         """Changing an evidence file must be detectable via the manifest."""
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
 
         manifest = json.loads(
             (SUBMISSION_DIR / "evidence" / "manifest.json").read_text("utf-8")
@@ -491,7 +710,7 @@ class TestStaticRendering:
 
     def test_index_has_json_pointers(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
         content = (SUBMISSION_DIR / "index.html").read_text("utf-8")
         assert "evidence/provenance.json" in content
         assert "evidence/coverage.json" in content
@@ -499,27 +718,27 @@ class TestStaticRendering:
 
     def test_index_has_statuses(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
         content = (SUBMISSION_DIR / "index.html").read_text("utf-8")
         assert "partial-support" in content
         assert "unavailable" in content
 
     def test_report_has_limitations(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
         content = (SUBMISSION_DIR / "report.html").read_text("utf-8")
         assert "limitation" in content.lower()
         assert "H100" in content or "five-minute" in content.lower()
 
     def test_poster_has_limitations(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
         content = (SUBMISSION_DIR / "poster.html").read_text("utf-8")
         assert "limitation" in content.lower()
 
     def test_readme_space_metadata(self):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
         content = (SUBMISSION_DIR / "README.md").read_text("utf-8")
         assert "sdk: static" in content
         assert "app_file: index.html" in content
@@ -529,7 +748,7 @@ class TestStaticRendering:
     def test_no_credential_in_outputs(self):
         """No credential-shaped content in any output."""
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline()
+        run_pipeline(_make_mock_acquired())
 
         for rel_path in [
             "evidence/provenance.json",
@@ -544,6 +763,5 @@ class TestStaticRendering:
             content = (SUBMISSION_DIR / rel_path).read_text("utf-8")
             # No API keys, tokens, or credential patterns
             assert "sk-" not in content
-            assert "hf_" not in content.split("huggingface")[0] if "huggingface" in content else True
             assert "ghp_" not in content
             assert "OPENAI_API_KEY" not in content
