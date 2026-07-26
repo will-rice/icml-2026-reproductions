@@ -171,4 +171,3 @@ def test_theorem_audit_mutation_missing_kv_cache_sharing_fails():
 
         with pytest.raises(ValueError, match="Theorem 4.4 assumptions missing/invalid"):
             audit_theorem(tmp_path)
-

@@ -76,7 +76,6 @@ def test_source_ast_audit_mutation_unrelated_norm_fails():
         with pytest.raises(ValueError, match="Normalized latent-difference freezing predicate not found"):
             audit_source_ast(tmp_path)
 
-
 def test_source_ast_audit_matching_string_elsewhere_does_not_pass():
     project_root = get_project_root()
     sampler_bytes = (
@@ -121,4 +120,3 @@ def test_source_ast_audit_mutation_false_sibling_criterion_fails():
 
         with pytest.raises(ValueError, match="Normalized latent-difference freezing predicate not found"):
             audit_source_ast(tmp_path)
-

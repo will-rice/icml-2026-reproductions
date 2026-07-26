@@ -24,14 +24,17 @@ def test_wavefront_schedule_prefix_truncation():
     res = simulate_wavefront_schedule(outer_steps=10, max_wavefront=8, headway=1, initial_active=1)
     trace = res["canonical_trace"]
 
-    # At step 8, active width reaches max_wavefront=8 (positions 0..7).
-    step8_after = trace[7]["active_positions_after"]
-    assert step8_after == [0, 1, 2, 3, 4, 5, 6, 7]
+    # At capacity, candidate 8 is sampled but prefix truncation retains none of it.
+    step8 = trace[7]
+    assert step8["active_positions_after"] == [0, 1, 2, 3, 4, 5, 6, 7]
+    assert step8["candidate_positions"] == [8]
+    assert step8["retained_appended_positions"] == []
+    assert step8["headway_in_step"] == 0
 
-    # At step 9, pos 8 is attempted. Under prefix truncation, states[:, :max_wavefront]
-    # retains [0..7], 0 appended positions kept, pos 8 is NOT in active positions.
+    # The next candidate is 9; the active prefix remains unchanged.
     step9_after = trace[8]["active_positions_after"]
     assert step9_after == [0, 1, 2, 3, 4, 5, 6, 7]
     assert 0 in step9_after
     assert 8 not in step9_after
-    assert trace[8]["appended_positions"] == []
+    assert trace[8]["candidate_positions"] == [9]
+    assert trace[8]["retained_appended_positions"] == []
