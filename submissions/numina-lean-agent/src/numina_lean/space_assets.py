@@ -20,6 +20,31 @@ EVIDENCE_FILENAMES = (
     "putnam_build.json",
 )
 CLAIM_IDS = ("putnam-12-12", "brascamp-lieb-formalization")
+CHALLENGE_CLAIMS = {
+    "putnam-12-12": (
+        "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 "
+        "problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+    ),
+    "brascamp-lieb-formalization": (
+        "The paper reports successful formalization of the Brascamp-Lieb "
+        "theorem through interaction with mathematicians (Abstract)."
+    ),
+}
+CHALLENGE_CLAIM_SHA256 = {
+    "putnam-12-12": (
+        "d7d651bcc26f53869d99fec6b8fc09814a9f63871fdd782be1feda433b481a17"
+    ),
+    "brascamp-lieb-formalization": (
+        "92d5592ddc6bc3b3a9d64d346516a38082b67dd8607563b52fa0da8b05bdd9ba"
+    ),
+}
+CLAIM_INPUT_FILES = {
+    "putnam-12-12": {"putnam_axioms.json", "putnam_build.json"},
+    "brascamp-lieb-formalization": {
+        "brascamp_lieb_axioms.json",
+        "brascamp_lieb_build.json",
+    },
+}
 SCOPE = "released-proof verification; not agent re-execution or official verdict"
 
 
@@ -42,6 +67,24 @@ def _load_claims(evidence_dir: Path) -> list[dict[str, Any]]:
         claim.get("upstream_revision") != UPSTREAM_REVISION for claim in claims
     ):
         raise ValueError("claims.json contains unexpected upstream provenance")
+    for claim in claims:
+        claim_id = claim["claim_id"]
+        if claim.get("claim") != CHALLENGE_CLAIMS[claim_id]:
+            raise ValueError(f"{claim_id} challenge claim text does not match")
+        digest = hashlib.sha256(claim["claim"].encode("utf-8")).hexdigest()
+        if digest != CHALLENGE_CLAIM_SHA256[claim_id]:
+            raise ValueError(f"{claim_id} challenge claim SHA-256 does not match")
+        input_files = claim.get("input_files", {})
+        if set(input_files) != CLAIM_INPUT_FILES[claim_id]:
+            raise ValueError(f"{claim_id} input_files set does not match")
+        for filename, recorded in input_files.items():
+            actual = hashlib.sha256(
+                (evidence_dir / filename).read_bytes()
+            ).hexdigest()
+            if recorded != {"sha256": actual}:
+                raise ValueError(
+                    f"{claim_id} input_files SHA-256 mismatch for {filename}"
+                )
     return claims
 
 
@@ -50,6 +93,7 @@ def _manifest(evidence_dir: Path) -> dict[str, Any]:
         _read_normalized_json(evidence_dir / filename)
     claims = _load_claims(evidence_dir)
     return {
+        "challenge_claim_sha256": CHALLENGE_CLAIM_SHA256,
         "claim_ids": [claim["claim_id"] for claim in claims],
         "evidence_files": {
             filename: {

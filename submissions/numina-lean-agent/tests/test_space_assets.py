@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import subprocess
 from pathlib import Path
+
+import pytest
 
 from numina_lean.space_assets import EVIDENCE_FILENAMES, render_assets
 
@@ -19,6 +22,12 @@ UPSTREAM_REVISION = (
     "413f2bfd31100187eb6c2d632c9cbf12e3115494"
 )
 CLAIM_IDS = ["putnam-12-12", "brascamp-lieb-formalization"]
+CLAIM_SHA256 = {
+    "putnam-12-12": "d7d651bcc26f53869d99fec6b8fc09814a9f63871fdd782be1feda433b481a17",
+    "brascamp-lieb-formalization": (
+        "92d5592ddc6bc3b3a9d64d346516a38082b67dd8607563b52fa0da8b05bdd9ba"
+    ),
+}
 
 
 def test_manifest_hashes_exactly_five_normalized_evidence_files() -> None:
@@ -30,6 +39,7 @@ def test_manifest_hashes_exactly_five_normalized_evidence_files() -> None:
     )
     assert manifest["upstream_revision"] == UPSTREAM_REVISION
     assert manifest["claim_ids"] == CLAIM_IDS
+    assert manifest["challenge_claim_sha256"] == CLAIM_SHA256
     assert list(manifest["evidence_files"]) == list(EVIDENCE_FILENAMES)
     for filename in EVIDENCE_FILENAMES:
         path = EVIDENCE / filename
@@ -40,6 +50,30 @@ def test_manifest_hashes_exactly_five_normalized_evidence_files() -> None:
         assert manifest["evidence_files"][filename]["sha256"] == hashlib.sha256(
             path.read_bytes()
         ).hexdigest()
+
+
+def test_render_rejects_stale_audit_input(tmp_path: Path) -> None:
+    evidence = tmp_path / "evidence"
+    shutil.copytree(EVIDENCE, evidence)
+    audit_path = evidence / "putnam_build.json"
+    audit = json.loads(audit_path.read_text())
+    audit["exit_code"] = 1
+    audit_path.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n")
+
+    with pytest.raises(ValueError, match="input_files SHA-256 mismatch"):
+        render_assets(evidence, tmp_path)
+
+
+def test_render_rejects_altered_challenge_claim_text(tmp_path: Path) -> None:
+    evidence = tmp_path / "evidence"
+    shutil.copytree(EVIDENCE, evidence)
+    claims_path = evidence / "claims.json"
+    claims = json.loads(claims_path.read_text())
+    claims[0]["claim"] += " Altered."
+    claims_path.write_text(json.dumps(claims, indent=2, sort_keys=True) + "\n")
+
+    with pytest.raises(ValueError, match="challenge claim text"):
+        render_assets(evidence, tmp_path)
 
 
 def test_assets_are_deterministic_and_derived_from_claims(tmp_path: Path) -> None:

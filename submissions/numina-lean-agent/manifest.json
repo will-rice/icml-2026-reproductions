@@ -1,4 +1,8 @@
 {
+  "challenge_claim_sha256": {
+    "brascamp-lieb-formalization": "92d5592ddc6bc3b3a9d64d346516a38082b67dd8607563b52fa0da8b05bdd9ba",
+    "putnam-12-12": "d7d651bcc26f53869d99fec6b8fc09814a9f63871fdd782be1feda433b481a17"
+  },
   "claim_ids": [
     "putnam-12-12",
     "brascamp-lieb-formalization"
