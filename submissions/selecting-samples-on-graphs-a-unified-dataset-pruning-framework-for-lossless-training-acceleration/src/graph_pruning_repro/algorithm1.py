@@ -2,10 +2,16 @@
 
 from __future__ import annotations
 
+import hashlib
 import re
 from collections.abc import Sequence
 
 _NUMBERED_LINE = re.compile(r"^(?P<number>[1-9][0-9]*):(?P<body>.*)$")
+_REVIEWED_TRANSCRIPTION_SHA256 = (
+    "d76e4ad27e1db3256341079e159115938"
+    "51962da2e04bd8b5913cb774ee79249"
+)
+_REVIEWED_TRANSCRIPTION_BYTE_COUNT = 926
 
 
 def _numbered_lines(transcription: Sequence[str]) -> dict[int, str]:
@@ -40,14 +46,32 @@ def audit_literal_algorithm1(
 
     numbered = _numbered_lines(transcription)
     if 8 not in numbered:
-        raise ValueError("transcription is missing numbered line 8")
+        raise ValueError(
+            "reviewed transcription is missing numbered line 8"
+        )
     line_eight = numbered[8]
     if "x⋆" not in line_eight and "x*" not in line_eight:
-        raise ValueError("line 8 must contain the literal x* read")
+        raise ValueError(
+            "reviewed transcription line 8 must contain the literal x* read"
+        )
     required_prefix = set(range(1, 8))
     if not required_prefix.issubset(numbered):
         missing = sorted(required_prefix.difference(numbered))
-        raise ValueError(f"transcription is missing numbered lines {missing}")
+        raise ValueError(
+            "reviewed transcription is missing numbered lines "
+            f"{missing}"
+        )
+    transcription_bytes = (
+        "\n".join(transcription) + "\n"
+    ).encode("utf-8")
+    transcription_digest = hashlib.sha256(transcription_bytes).hexdigest()
+    if (
+        len(transcription_bytes) != _REVIEWED_TRANSCRIPTION_BYTE_COUNT
+        or transcription_digest != _REVIEWED_TRANSCRIPTION_SHA256
+    ):
+        raise ValueError(
+            "reviewed transcription byte count or SHA-256 mismatch"
+        )
 
     return {
         "greedy_path": "paper_algorithm1_literal",
@@ -55,6 +79,8 @@ def audit_literal_algorithm1(
         "line": 8,
         "source_line": line_eight,
         "symbol": "x*",
+        "transcription_sha256": transcription_digest,
+        "transcription_byte_count": len(transcription_bytes),
         "last_executed_line": 7,
         "selected": None,
         "executable_resolution": None,

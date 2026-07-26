@@ -228,6 +228,24 @@ def test_one_minus_inverse_e_comparison_uses_rational_enclosures() -> None:
     )
 
 
+def test_ratio_refinement_has_no_order_256_cap() -> None:
+    factorial = 1
+    e_lower_256 = Fraction(2)
+    for order in range(2, 257):
+        factorial *= order
+        e_lower_256 += Fraction(1, factorial)
+    ratio = Fraction(1) - Fraction(1, e_lower_256)
+
+    result = compare_ratio_to_one_minus_inverse_e(ratio)
+
+    assert result["status"] == "below_bound"
+    assert result["series_order"] == 257
+    assert result["arithmetic"] == "exact_rational"
+    assert result["termination"] == (
+        "unbounded refinement; irrational threshold separates rationals"
+    )
+
+
 @pytest.mark.parametrize(
     "failed_premise",
     (
@@ -366,10 +384,131 @@ def test_full_audit_has_exact_domain_and_bounded_accounting(
     }
     assert search["actual"]["optimum_objective_values"] == 444_870
     assert search["actual"]["classifications"] == 584_604
+    assert search["objective_evaluations_by_phase"] == {
+        "premise": 508_500,
+        "optimum": 444_870,
+    }
     assert all(
         0 <= search["actual"][name] <= ceiling
         for name, ceiling in search["declared_ceiling"].items()
     )
+
+
+def test_distinct_optimum_table_evaluates_once_and_is_shared(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    instance = _symmetric_instance(
+        ("a", "b", "c"),
+        (Fraction(2), Fraction(1), Fraction()),
+        {
+            ("a", "b"): Fraction(-1),
+            ("a", "c"): Fraction(),
+            ("b", "c"): Fraction(),
+        },
+    )
+    calls: list[frozenset[str]] = []
+    original = greedy_module.evaluate_objective
+
+    def recording_objective(
+        current: Instance,
+        selected: frozenset[str],
+        model_variant: str,
+    ) -> Fraction:
+        calls.append(selected)
+        return original(current, selected, model_variant)
+
+    monkeypatch.setattr(
+        greedy_module,
+        "evaluate_objective",
+        recording_objective,
+    )
+    subsets = greedy_module._subsets(instance.vertices)
+    greedy_module._premise_tables(
+        instance,
+        "paper_samplewise_literal",
+        subsets,
+    )
+    premise_calls = tuple(calls)
+    calls.clear()
+
+    optimum_tables, evaluations = greedy_module._build_optimum_tables(
+        instance,
+        "paper_samplewise_literal",
+    )
+
+    assert len(premise_calls) == 8
+    assert evaluations == len(calls) == 7
+    assert set(optimum_tables) == {1, 2, 3}
+    assert sum(len(table) for table in optimum_tables.values()) == 7
+    for budget, table in optimum_tables.items():
+        assert all(len(selected) == budget for selected in table)
+    first_selector_view = optimum_tables
+    second_selector_view = optimum_tables
+    assert first_selector_view is second_selector_view
+
+
+def test_full_audit_distinguishes_premise_and_optimum_evaluations(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    phase: str | None = None
+    calls = {"premise": 0, "optimum": 0}
+    original_objective = greedy_module.evaluate_objective
+    original_premise_tables = greedy_module._premise_tables
+    original_optimum_tables = greedy_module._build_optimum_tables
+
+    def recording_objective(
+        instance: Instance,
+        selected: frozenset[str],
+        model_variant: str,
+    ) -> Fraction:
+        assert phase in calls
+        calls[phase] += 1
+        return original_objective(instance, selected, model_variant)
+
+    def premise_tables(
+        *args: object,
+        **kwargs: object,
+    ) -> object:
+        nonlocal phase
+        assert phase is None
+        phase = "premise"
+        try:
+            return original_premise_tables(*args, **kwargs)
+        finally:
+            phase = None
+
+    def optimum_tables(
+        *args: object,
+        **kwargs: object,
+    ) -> object:
+        nonlocal phase
+        assert phase is None
+        phase = "optimum"
+        try:
+            return original_optimum_tables(*args, **kwargs)
+        finally:
+            phase = None
+
+    monkeypatch.setattr(
+        greedy_module,
+        "evaluate_objective",
+        recording_objective,
+    )
+    monkeypatch.setattr(
+        greedy_module,
+        "_premise_tables",
+        premise_tables,
+    )
+    monkeypatch.setattr(
+        greedy_module,
+        "_build_optimum_tables",
+        optimum_tables,
+    )
+
+    result = run_greedy_audit("task-4-optimum-phase-instrumentation")
+
+    assert calls == {"premise": 508_500, "optimum": 444_870}
+    assert result["greedy_search"]["objective_evaluations_by_phase"] == calls
 
 
 def test_audit_uses_all_canonical_task3_parameter_tuples_and_ids(
@@ -509,6 +648,68 @@ def test_all_formula_ceilings_preflight_before_iteration(
     with pytest.raises(ValueError, match="ceiling"):
         run_greedy_audit("task-4-preflight-regression")
     assert iterations == 0
+
+
+@pytest.mark.parametrize(
+    ("domain_name", "mutated_domain"),
+    (
+        (
+            "_VERTEX_DOMAIN",
+            (Fraction(1), Fraction(), Fraction(2)),
+        ),
+        (
+            "_VERTEX_DOMAIN",
+            (Fraction(), Fraction(1), Fraction(3)),
+        ),
+        (
+            "_VERTEX_DOMAIN",
+            (Fraction(), Fraction(1)),
+        ),
+        (
+            "_EDGE_DOMAIN",
+            (Fraction(), Fraction(-1)),
+        ),
+        (
+            "_EDGE_DOMAIN",
+            (Fraction(-2), Fraction()),
+        ),
+        (
+            "_EDGE_DOMAIN",
+            (Fraction(-1),),
+        ),
+    ),
+)
+def test_exact_domain_tuple_preflights_before_all_work(
+    monkeypatch: pytest.MonkeyPatch,
+    domain_name: str,
+    mutated_domain: tuple[Fraction, ...],
+) -> None:
+    calls = {"traversal": 0, "objective": 0, "score": 0}
+
+    def forbidden_product(*_args: object, **_kwargs: object) -> object:
+        calls["traversal"] += 1
+        raise AssertionError("domain traversal started")
+
+    def forbidden_objective(*_args: object, **_kwargs: object) -> Fraction:
+        calls["objective"] += 1
+        raise AssertionError("objective evaluation started")
+
+    def forbidden_score(*_args: object, **_kwargs: object) -> Fraction:
+        calls["score"] += 1
+        raise AssertionError("candidate scoring started")
+
+    monkeypatch.setattr(greedy_module, domain_name, mutated_domain)
+    monkeypatch.setattr(greedy_module, "product", forbidden_product)
+    monkeypatch.setattr(
+        greedy_module,
+        "evaluate_objective",
+        forbidden_objective,
+    )
+    monkeypatch.setattr(greedy_module, "eq7_score", forbidden_score)
+
+    with pytest.raises(ValueError, match="approved domain"):
+        run_greedy_audit("task-4-domain-preflight-regression")
+    assert calls == {"traversal": 0, "objective": 0, "score": 0}
 
 
 @pytest.mark.parametrize("source_revision", ("", 7))

@@ -7,7 +7,7 @@ import json
 import math
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from fractions import Fraction
-from itertools import combinations, product
+from itertools import combinations, count, product
 
 from .diminishing_returns import (
     canonical_parameterized_instance_id,
@@ -28,8 +28,12 @@ OPTIMUM_VALUE_CEILING = 444_870
 CLASSIFICATION_CEILING = 584_604
 
 _MAX_VERTICES = 4
-_VERTEX_DOMAIN = (Fraction(), Fraction(1), Fraction(2))
-_EDGE_DOMAIN = (Fraction(-1), Fraction())
+_APPROVED_VERTEX_DOMAIN = (Fraction(), Fraction(1), Fraction(2))
+_APPROVED_EDGE_DOMAIN = (Fraction(-1), Fraction())
+_VERTEX_DOMAIN = _APPROVED_VERTEX_DOMAIN
+_EDGE_DOMAIN = _APPROVED_EDGE_DOMAIN
+_SUBSET_MEMBERSHIP_STATES = 2
+_DIMINISHING_RELATION_STATES = 3
 _PREMISE_NAMES = (
     "global_nonnegativity",
     "normalization",
@@ -226,7 +230,7 @@ def compare_ratio_to_one_minus_inverse_e(
         raise TypeError("ratio must be a Fraction")
     factorial = 1
     partial = Fraction(2)
-    for order in range(2, 257):
+    for order in count(2):
         factorial *= order
         partial += Fraction(1, factorial)
         e_lower = partial
@@ -242,13 +246,15 @@ def compare_ratio_to_one_minus_inverse_e(
         return {
             "status": status,
             "arithmetic": "exact_rational",
+            "termination": (
+                "unbounded refinement; irrational threshold separates rationals"
+            ),
             "series_order": order,
             "e_lower": _fraction_text(e_lower),
             "e_upper": _fraction_text(e_upper),
             "threshold_lower": _fraction_text(threshold_lower),
             "threshold_upper": _fraction_text(threshold_upper),
         }
-    raise ArithmeticError("rational e enclosure did not separate the ratio")
 
 
 def _ratio_fraction(classification: Mapping[str, object]) -> Fraction | None:
@@ -331,20 +337,31 @@ def summarize_guarantee(
 def premise_domain_formulas() -> dict[str, int]:
     """Compute every premise-domain total from the approved formulas."""
 
+    _validate_exact_domains()
+    vertex_values = len(_VERTEX_DOMAIN)
+    edge_values = len(_EDGE_DOMAIN)
     weighted_graphs = sum(
-        3**n * 2 ** math.comb(n, 2)
+        vertex_values**n * edge_values ** math.comb(n, 2)
         for n in range(1, _MAX_VERTICES + 1)
     )
     subsets = sum(
-        3**n * 2 ** math.comb(n, 2) * 2**n
+        vertex_values**n
+        * edge_values ** math.comb(n, 2)
+        * _SUBSET_MEMBERSHIP_STATES**n
         for n in range(1, _MAX_VERTICES + 1)
     )
     marginals = sum(
-        3**n * 2 ** math.comb(n, 2) * n * 2 ** (n - 1)
+        vertex_values**n
+        * edge_values ** math.comb(n, 2)
+        * n
+        * _SUBSET_MEMBERSHIP_STATES ** (n - 1)
         for n in range(1, _MAX_VERTICES + 1)
     )
     diminishing = sum(
-        3**n * 2 ** math.comb(n, 2) * n * 3 ** (n - 1)
+        vertex_values**n
+        * edge_values ** math.comb(n, 2)
+        * n
+        * _DIMINISHING_RELATION_STATES ** (n - 1)
         for n in range(1, _MAX_VERTICES + 1)
     )
     per_variant = subsets + marginals + diminishing
@@ -365,12 +382,15 @@ def premise_domain_formulas() -> dict[str, int]:
 def greedy_domain_formulas() -> dict[str, int]:
     """Compute every greedy-domain total from the approved formulas."""
 
+    _validate_exact_domains()
+    vertex_values = len(_VERTEX_DOMAIN)
+    edge_values = len(_EDGE_DOMAIN)
     weighted_cardinality_instances = 0
     optima = 0
     paths = 0
     candidates = 0
     for n in range(1, _MAX_VERTICES + 1):
-        graphs = 3**n * 2 ** math.comb(n, 2)
+        graphs = vertex_values**n * edge_values ** math.comb(n, 2)
         maximum_budget = min(3, n)
         weighted_cardinality_instances += graphs * maximum_budget
         optima += graphs * sum(
@@ -409,7 +429,23 @@ def greedy_domain_formulas() -> dict[str, int]:
     }
 
 
+def _validate_exact_domains() -> None:
+    if (
+        type(_VERTEX_DOMAIN) is not tuple
+        or _VERTEX_DOMAIN != _APPROVED_VERTEX_DOMAIN
+        or any(type(value) is not Fraction for value in _VERTEX_DOMAIN)
+    ):
+        raise ValueError("vertex weights do not match the approved domain")
+    if (
+        type(_EDGE_DOMAIN) is not tuple
+        or _EDGE_DOMAIN != _APPROVED_EDGE_DOMAIN
+        or any(type(value) is not Fraction for value in _EDGE_DOMAIN)
+    ):
+        raise ValueError("edge weights do not match the approved domain")
+
+
 def _preflight_accounting() -> tuple[dict[str, int], dict[str, int]]:
+    _validate_exact_domains()
     premises = premise_domain_formulas()
     greedy = greedy_domain_formulas()
     exact = (
@@ -517,6 +553,32 @@ def _premise_tables(
     return objective_values, marginals
 
 
+def _build_optimum_tables(
+    instance: Instance,
+    model_variant: ModelVariant,
+) -> tuple[dict[int, dict[frozenset[Vertex], Fraction]], int]:
+    """Evaluate each approved optimum candidate once for one variant."""
+
+    tables: dict[int, dict[frozenset[Vertex], Fraction]] = {}
+    evaluations = 0
+    for budget in range(1, min(3, len(instance.vertices)) + 1):
+        candidates = tuple(
+            frozenset(items)
+            for items in combinations(instance.vertices, budget)
+        )
+        table = {
+            selected: evaluate_objective(
+                instance,
+                selected,
+                model_variant,
+            )
+            for selected in candidates
+        }
+        tables[budget] = table
+        evaluations += len(table)
+    return tables, evaluations
+
+
 def _premise_record(
     instance: Instance,
     model_variant: ModelVariant,
@@ -557,7 +619,10 @@ def _premise_record(
             for vertex in instance.vertices
             if vertex != candidate
         )
-        for states in product((0, 1, 2), repeat=len(others)):
+        for states in product(
+            range(_DIMINISHING_RELATION_STATES),
+            repeat=len(others),
+        ):
             a = frozenset(
                 vertex
                 for vertex, state in zip(others, states, strict=True)
@@ -777,16 +842,16 @@ def run_greedy_audit(source_revision: str) -> dict[str, object]:
                 graph_count += 1
 
                 instances: dict[ModelVariant, Instance] = {}
-                objective_tables: dict[
-                    ModelVariant,
-                    dict[frozenset[Vertex], Fraction],
-                ] = {}
                 marginal_tables: dict[
                     ModelVariant,
                     dict[
                         tuple[frozenset[Vertex], Vertex],
                         Fraction,
                     ],
+                ] = {}
+                optimum_tables: dict[
+                    ModelVariant,
+                    dict[int, dict[frozenset[Vertex], Fraction]],
                 ] = {}
                 premise_records: dict[
                     ModelVariant,
@@ -807,8 +872,12 @@ def run_greedy_audit(source_revision: str) -> dict[str, object]:
                         objective_table,
                         marginal_table,
                     )
-                    objective_tables[model_variant] = objective_table
                     marginal_tables[model_variant] = marginal_table
+                    optimum_table, optimum_evaluations = (
+                        _build_optimum_tables(instance, model_variant)
+                    )
+                    optimum_tables[model_variant] = optimum_table
+                    optimum_objective_values += optimum_evaluations
                     premise_records[model_variant] = record
                     premise_record_count += 1
                     subset_objective_values += len(objective_table)
@@ -887,16 +956,8 @@ def run_greedy_audit(source_revision: str) -> dict[str, object]:
                             instance,
                             model_variant,
                         )
-                        objective_table = objective_tables[model_variant]
-                        optimum_candidates = tuple(
-                            frozenset(items)
-                            for items in combinations(vertices, budget)
-                        )
-                        optimum_objective_values += len(optimum_candidates)
-                        optimum_value = max(
-                            objective_table[selected]
-                            for selected in optimum_candidates
-                        )
+                        objective_table = optimum_tables[model_variant][budget]
+                        optimum_value = max(objective_table.values())
 
                         selector_paths = {
                             "paper_eq7_score_greedy": eq7_paths,
@@ -1039,6 +1100,10 @@ def run_greedy_audit(source_revision: str) -> dict[str, object]:
             ),
             "actual": greedy_actual,
             "declared_ceiling": greedy_declared,
+            "objective_evaluations_by_phase": {
+                "premise": subset_objective_values,
+                "optimum": optimum_objective_values,
+            },
             "classification_digest_sha256": (
                 classification_digest.hexdigest()
             ),
