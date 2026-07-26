@@ -70,7 +70,7 @@
   "or": "https://openreview.net/forum?id=h7WBYYJF1Q",
   "orid": "h7WBYYJF1Q",
   "paper_id": "h7WBYYJF1Q",
-  "phase": "deployed",
+  "phase": "submitted",
   "pid": "62383",
   "project_path": "submissions/efficient-parallel-samplers-for-recurrent-depth-models",
   "safety_blocker": null,
@@ -136,10 +136,19 @@
       "owner": "controller-recurrent-design-20260726",
       "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
       "to": "deployed"
+    },
+    {
+      "at": "2026-07-26T10:34:31.992683+00:00",
+      "attestation_id": "0923429d9e8373eff8787ff52c5d82a17f4b2a43c5629c26fe7a240884a1a08f",
+      "fencing_token": 2,
+      "from": "deployed",
+      "owner": "controller-recurrent-design-20260726",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "submitted"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T10:33:52.797812+00:00",
+  "updated_at": "2026-07-26T10:34:31.992683+00:00",
   "upstream_revision": "arxiv:2510.14961v1+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c",
   "vs": "https://icml.cc/virtual/2026/poster/62383",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/recurrent-controller-validation"

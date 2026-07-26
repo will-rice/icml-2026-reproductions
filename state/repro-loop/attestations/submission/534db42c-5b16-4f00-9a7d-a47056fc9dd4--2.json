@@ -1,0 +1,16 @@
+{
+  "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
+  "attempt_number": 2,
+  "attestation_id": "0923429d9e8373eff8787ff52c5d82a17f4b2a43c5629c26fe7a240884a1a08f",
+  "deployment_attestation_id": "e26fa918cf3db54322d0d6d388c662640946d1cb8ce4a763ccb037abeb768166",
+  "kind": "submission",
+  "observed_at": "2026-07-26T10:34:31.992683+00:00",
+  "paper_id": "h7WBYYJF1Q",
+  "payload_sha256": "9925ca5f590021cd06520ca7f8bace0d07fc683f10b3e20458b2d344fd8b6a53",
+  "queue_status": "pending",
+  "snapshot_id": "4453e264715f6fd9c7b790c4b7851811d2c6aebb8a644966e665e8629abca046",
+  "source_commit": "5308666a249a73d8a2dea5d06ac929cbba53c131",
+  "space_id": "wrice/repro-recurrent-depth-parallel-sampler",
+  "space_sha": "312fb3fda761bf6b1ea9e5f66d18c01099b9d63e",
+  "verdict_revision": "c463520f897c34fb500d61e05a2a053f19ae8605"
+}
