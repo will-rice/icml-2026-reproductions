@@ -73,7 +73,7 @@
   "or": "https://openreview.net/forum?id=UnjxMTe57e",
   "orid": "UnjxMTe57e",
   "paper_id": "UnjxMTe57e",
-  "phase": "improving",
+  "phase": "validated",
   "pid": "63667",
   "project_path": "submissions/posttrainbench",
   "safety_blocker": null,
@@ -120,10 +120,19 @@
       "owner": "controller-posttrain-design-20260726",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "improving"
+    },
+    {
+      "at": "2026-07-26T12:35:38.367433+00:00",
+      "attestation_id": "636493a00b612d1d1d7430dc108f358403a965f5403728dcf157d3fec881a219",
+      "fencing_token": 2,
+      "from": "improving",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "validated"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T12:28:35.553287+00:00",
+  "updated_at": "2026-07-26T12:35:38.367433+00:00",
   "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
   "vs": "https://icml.cc/virtual/2026/poster/63667",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
