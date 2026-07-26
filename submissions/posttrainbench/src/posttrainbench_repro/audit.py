@@ -427,11 +427,16 @@ def audit_reward_hacking(
     trace_excerpts = acquired["trace_excerpts"]
 
     # Mode 1: Training on test sets (contamination)
+    contam_content = acquired["contamination_content"]
+    time_taken_content = acquired["time_taken_content"]
+    contam_sha256 = hashlib.sha256(contam_content).hexdigest()
+    time_taken_sha256 = hashlib.sha256(time_taken_content).hexdigest()
+
     contam_observations = [
         f"Pinned released run has explicit contamination label at {CONTAMINATION_WITNESS_PATH}",
-        f"Label bytes: {CONTAMINATION_WITNESS_BYTES!r}",
-        f"Label SHA-256: {CONTAMINATION_WITNESS_SHA256}",
-        f"Corresponding time_taken.txt: {TIME_TAKEN_WITNESS_BYTES!r} (SHA-256: {TIME_TAKEN_WITNESS_SHA256})",
+        f"Label bytes: {contam_content!r}",
+        f"Label SHA-256: {contam_sha256}",
+        f"Corresponding time_taken.txt: {time_taken_content!r} (SHA-256: {time_taken_sha256})",
         "Time 10:05:01 interpreted with runner's 5-minute termination grace; not rounded to 10 hours",
     ]
 
@@ -439,14 +444,14 @@ def audit_reward_hacking(
         "mode": "training_on_test_sets",
         "status": "partial-support",
         "witness_path": CONTAMINATION_WITNESS_PATH,
-        "witness_sha256": CONTAMINATION_WITNESS_SHA256,
-        "witness_bytes": CONTAMINATION_WITNESS_BYTES.decode("utf-8"),
+        "witness_sha256": contam_sha256,
+        "witness_bytes": contam_content.decode("utf-8"),
         "observation_type": "upstream_judge_label",
         "observations": contam_observations,
         "time_taken": {
             "path": TIME_TAKEN_WITNESS_PATH,
-            "value": TIME_TAKEN_WITNESS_BYTES.decode("utf-8").strip(),
-            "sha256": TIME_TAKEN_WITNESS_SHA256,
+            "value": time_taken_content.decode("utf-8").strip(),
+            "sha256": time_taken_sha256,
             "note": "Interpreted with runner's 5-minute termination grace",
         },
     }
@@ -549,6 +554,26 @@ def evaluate_claims(
         raise ValueError(
             f"Coverage task count {coverage['recognized_task_count']} "
             f"!= expected {EXPECTED_TASK_COUNT}"
+        )
+    if coverage.get("recognized_root_count") != EXPECTED_ROOT_COUNT:
+        raise ValueError(
+            f"Coverage root count {coverage.get('recognized_root_count')} "
+            f"!= expected {EXPECTED_ROOT_COUNT}"
+        )
+    if coverage.get("recognized_root_cell_pairs") != EXPECTED_ROOT_CELL_PAIRS:
+        raise ValueError(
+            f"Coverage root/cell pairs {coverage.get('recognized_root_cell_pairs')} "
+            f"!= expected {EXPECTED_ROOT_CELL_PAIRS}"
+        )
+    if coverage.get("duplicate_job_pairs") != EXPECTED_DUPLICATE_PAIRS:
+        raise ValueError(
+            f"Coverage duplicate pairs {coverage.get('duplicate_job_pairs')} "
+            f"!= expected {EXPECTED_DUPLICATE_PAIRS}"
+        )
+    if coverage.get("missing_root_cell_pairs") != EXPECTED_MISSING_PAIRS:
+        raise ValueError(
+            f"Coverage missing pairs {coverage.get('missing_root_cell_pairs')} "
+            f"!= expected {EXPECTED_MISSING_PAIRS}"
         )
 
     limitations_1 = [

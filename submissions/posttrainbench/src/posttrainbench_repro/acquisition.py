@@ -31,6 +31,12 @@ from posttrainbench_repro.constants import (
     HF_TREE_PAGE_SIZE,
     HF_TREE_TOTAL_ENTRIES,
     HF_TREE_TOTAL_PAGES,
+    INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
+    INSTRUCTION_MODEL_JUDGMENT_PATH,
+    INSTRUCTION_MODEL_JUDGMENT_SIZE,
+    INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
+    INSTRUCTION_MODEL_TRACE_PATH,
+    INSTRUCTION_MODEL_TRACE_SIZE,
     PINNED_BLOBS,
     TRACE_EXCERPTS,
 )
@@ -403,57 +409,116 @@ def fetch_allowlisted_file(
 
 
 # ---------------------------------------------------------------------------
+# HF entry metadata validation
+# ---------------------------------------------------------------------------
+
+# Expected HF entry metadata for allowlisted files
+_HF_EXPECTED_ENTRIES: dict[str, tuple[str, int]] = {
+    INSTRUCTION_MODEL_JUDGMENT_PATH: (
+        INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
+        INSTRUCTION_MODEL_JUDGMENT_SIZE,
+    ),
+    INSTRUCTION_MODEL_TRACE_PATH: (
+        INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
+        INSTRUCTION_MODEL_TRACE_SIZE,
+    ),
+}
+
+
+def _validate_hf_entry_metadata(hf_inventory: dict[str, Any]) -> None:
+    """Validate HF entry metadata for allowlisted files.
+
+    Requires every allowlisted path with a known expected object/size
+    to be present as a file entry in the inventory with correct oid and size.
+    """
+    metadata = hf_inventory.get("entry_metadata", {})
+
+    for path, (expected_oid, expected_size) in _HF_EXPECTED_ENTRIES.items():
+        if path not in metadata:
+            raise ValueError(
+                f"Allowlisted path not found in HF entry metadata: {path}"
+            )
+        entry = metadata[path]
+
+        if entry.get("type") != "file":
+            raise ValueError(
+                f"Allowlisted path {path} has type {entry.get('type')!r}, "
+                f"expected 'file'"
+            )
+        if entry.get("oid") != expected_oid:
+            raise ValueError(
+                f"HF entry object mismatch for {path}: "
+                f"{entry.get('oid')} != {expected_oid}"
+            )
+        if entry.get("size") != expected_size:
+            raise ValueError(
+                f"HF entry size mismatch for {path}: "
+                f"{entry.get('size')} != {expected_size}"
+            )
+
+
+# ---------------------------------------------------------------------------
 # JSONL trace excerpt extraction
 # ---------------------------------------------------------------------------
 
 def extract_trace_excerpts(trace_bytes: bytes) -> list[dict[str, Any]]:
     """Parse the JSONL trace and derive the three approved excerpts.
 
-    Each excerpt is identified by its 0-indexed JSONL record number and
-    JSON pointer path.  The function reads the trace, locates each record,
-    navigates the pointer, extracts the text, and verifies its SHA-256.
+    Record numbers in TRACE_EXCERPTS are **one-based physical line numbers**
+    in the raw trace file, including 13 non-JSON preamble lines.  We use
+    ``splitlines()[record_number - 1]`` to locate each line, parse it as
+    JSON, resolve the pointer, require the exact approved safe excerpt as
+    a substring, and hash/emit only that safe excerpt.
 
-    Raises on mutated, missing, or malformed records.
+    Raises on mutated, missing, malformed, or moved records.
     """
-    lines = trace_bytes.split(b"\n")
-    # Filter out empty trailing lines
-    lines = [ln for ln in lines if ln.strip()]
+    raw_lines = trace_bytes.decode("utf-8").splitlines()
 
     results: list[dict[str, Any]] = []
     for spec in TRACE_EXCERPTS:
-        record_idx = spec["record"]
+        line_number = spec["record"]  # one-based physical line
         pointer = spec["pointer"]
+        expected_text = spec["text"]
         expected_sha = spec["sha256"]
 
-        if record_idx >= len(lines):
+        line_idx = line_number - 1  # convert to zero-based index
+        if line_idx < 0 or line_idx >= len(raw_lines):
             raise IndexError(
-                f"Trace has only {len(lines)} records, "
-                f"expected record {record_idx}"
+                f"Trace has only {len(raw_lines)} lines, "
+                f"expected line {line_number}"
             )
 
+        raw_line = raw_lines[line_idx]
         try:
-            record = json.loads(lines[record_idx])
+            record = json.loads(raw_line)
         except json.JSONDecodeError as exc:
             raise ValueError(
-                f"Malformed JSON at record {record_idx}: {exc}"
+                f"Malformed JSON at line {line_number}: {exc}"
             ) from exc
 
         # Navigate the JSON pointer
-        value = _resolve_pointer(record, pointer, record_idx)
-        text = str(value)
+        resolved = _resolve_pointer(record, pointer, line_number)
+        field_text = str(resolved)
 
-        # Verify hash
-        actual_sha = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        # The approved excerpt must be a substring of the resolved field
+        if expected_text not in field_text:
+            raise ValueError(
+                f"Approved excerpt not found as substring in resolved field "
+                f"at line {line_number} pointer {pointer}"
+            )
+
+        # Hash only the safe excerpt, not the full resolved field
+        actual_sha = hashlib.sha256(expected_text.encode("utf-8")).hexdigest()
         if actual_sha != expected_sha:
             raise ValueError(
-                f"Trace excerpt hash mismatch at record {record_idx} "
+                f"Trace excerpt hash mismatch at line {line_number} "
                 f"pointer {pointer}: {actual_sha} != {expected_sha}"
             )
 
         results.append({
-            "record": record_idx,
+            "record": line_number,
             "json_pointer": pointer,
-            "text": text,
+            "text": expected_text,
             "sha256": actual_sha,
         })
 

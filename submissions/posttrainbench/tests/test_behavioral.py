@@ -674,25 +674,42 @@ class TestAllowlistedFileVerification:
 # 7. JSONL trace excerpt extraction
 # ===================================================================
 
+def _build_trace_with_preamble(
+    line_records: dict[int, dict],
+    preamble_count: int = 13,
+) -> bytes:
+    """Build a trace with non-JSON preamble lines and JSON records at one-based positions.
+
+    line_records maps one-based physical line numbers to JSON dicts.
+    Lines not in line_records get placeholder JSON or preamble text.
+    """
+    max_line = max(line_records.keys()) if line_records else preamble_count
+    lines: list[str] = []
+    for line_num in range(1, max_line + 1):
+        if line_num <= preamble_count:
+            lines.append(f"# preamble line {line_num}")
+        elif line_num in line_records:
+            lines.append(json.dumps(line_records[line_num]))
+        else:
+            lines.append(json.dumps({"part": {"text": f"filler for line {line_num}"}}))
+    return "\n".join(lines).encode("utf-8")
+
+
 class TestTraceExcerpts:
     """Trace parsing: real JSONL, missing/malformed/moved/mutated records."""
 
     def _build_trace(self, records: dict[int, dict]) -> bytes:
-        """Build a JSONL trace with specific records at specific positions."""
-        max_idx = max(records.keys()) + 1
-        lines = []
-        for i in range(max_idx):
-            if i in records:
-                lines.append(json.dumps(records[i]))
-            else:
-                lines.append(json.dumps({"part": {"text": f"filler {i}"}}))
-        return "\n".join(lines).encode("utf-8")
+        """Build a JSONL trace with 13 preamble lines and records at one-based positions."""
+        return _build_trace_with_preamble(records)
 
     def test_valid_extraction(self):
         """Valid trace extracts correct text and hash."""
         records = {}
         for spec in C.TRACE_EXCERPTS:
-            records[spec["record"]] = _build_nested(spec["pointer"], spec["text"])
+            # Wrap excerpt in prefix/suffix so it's a substring match
+            records[spec["record"]] = _build_nested(
+                spec["pointer"], "CTX " + spec["text"] + " END"
+            )
         trace = self._build_trace(records)
         results = extract_trace_excerpts(trace)
         assert len(results) == len(C.TRACE_EXCERPTS)
@@ -708,7 +725,7 @@ class TestTraceExcerpts:
 
     def test_malformed_json_fails(self):
         """Non-JSON record raises."""
-        lines = ["NOT JSON"] * 600
+        lines = ["# preamble"] * 13 + ["NOT JSON"] * 600
         trace = "\n".join(lines).encode()
         with pytest.raises(ValueError, match="[Mm]alformed"):
             extract_trace_excerpts(trace)
@@ -717,16 +734,24 @@ class TestTraceExcerpts:
         """Changed text at correct position fails hash verification."""
         spec = C.TRACE_EXCERPTS[0]
         record = _build_nested(spec["pointer"], "TAMPERED TEXT")
-        trace = self._build_trace({spec["record"]: record})
-        with pytest.raises(ValueError, match="hash mismatch"):
+        records = {spec["record"]: record}
+        # Add other excerpts so the trace is long enough
+        for s in C.TRACE_EXCERPTS[1:]:
+            records[s["record"]] = _build_nested(
+                s["pointer"], "P " + s["text"] + " S"
+            )
+        trace = self._build_trace(records)
+        with pytest.raises(ValueError, match="not found|substring|mismatch"):
             extract_trace_excerpts(trace)
 
     def test_moved_record_fails(self):
         """Record at wrong position fails."""
         spec = C.TRACE_EXCERPTS[0]
         wrong_pos = spec["record"] + 1
-        record = _build_nested(spec["pointer"], spec["text"])
-        trace = self._build_trace({wrong_pos: record})
+        record = _build_nested(spec["pointer"], "P " + spec["text"] + " S")
+        records = {wrong_pos: record}
+        records[spec["record"]] = {"different": "structure"}
+        trace = self._build_trace(records)
         # The record at spec["record"] won't have the right pointer/text
         with pytest.raises((ValueError, KeyError)):
             extract_trace_excerpts(trace)
@@ -943,26 +968,6 @@ class TestTransactionalRollback:
 # ===================================================================
 # 13. One-based trace line semantics with preamble lines
 # ===================================================================
-
-def _build_trace_with_preamble(
-    line_records: dict[int, dict],
-    preamble_count: int = 13,
-) -> bytes:
-    """Build a trace with non-JSON preamble lines and JSON records at one-based positions.
-
-    line_records maps one-based physical line numbers to JSON dicts.
-    Lines not in line_records get placeholder JSON or preamble text.
-    """
-    max_line = max(line_records.keys()) if line_records else preamble_count
-    lines: list[str] = []
-    for line_num in range(1, max_line + 1):
-        if line_num <= preamble_count:
-            lines.append(f"# preamble line {line_num}")
-        elif line_num in line_records:
-            lines.append(json.dumps(line_records[line_num]))
-        else:
-            lines.append(json.dumps({"part": {"text": f"filler for line {line_num}"}}))
-    return "\n".join(lines).encode("utf-8")
 
 
 class TestTraceOneBased:
