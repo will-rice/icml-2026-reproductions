@@ -3,6 +3,7 @@ from fractions import Fraction
 
 import pytest
 
+import graph_pruning_repro.shifts as shifts_module
 from graph_pruning_repro.diminishing_returns import (
     canonical_parameterized_instance_id,
 )
@@ -222,3 +223,32 @@ def test_shift_audit_rejects_undeclared_domain_before_iteration(
             max_vertices=max_vertices,
             rational_controls=rational_controls,
         )
+
+
+@pytest.mark.parametrize(
+    ("ceiling_name", "too_small"),
+    (
+        ("SHIFT_CASE_CEILING", 6_458),
+        ("SHIFT_VALUE_CEILING", 45_212),
+        ("RATIONAL_ALPHA_CASE_CEILING", 255),
+        ("RATIONAL_ALPHA_VALUE_CEILING", 1_791),
+    ),
+)
+def test_all_shift_ceilings_preflight_before_iteration(
+    monkeypatch: pytest.MonkeyPatch,
+    ceiling_name: str,
+    too_small: int,
+) -> None:
+    iterations = 0
+
+    def forbidden_product(*_args: object, **_kwargs: object) -> object:
+        nonlocal iterations
+        iterations += 1
+        raise AssertionError("shift audit started iteration")
+
+    monkeypatch.setattr(shifts_module, ceiling_name, too_small)
+    monkeypatch.setattr(shifts_module, "product", forbidden_product)
+
+    with pytest.raises(ValueError, match="ceiling"):
+        run_shift_audit("task-3-preflight-regression")
+    assert iterations == 0

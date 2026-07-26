@@ -2,6 +2,7 @@ from fractions import Fraction
 
 import pytest
 
+import graph_pruning_repro.minimize as minimize_module
 from graph_pruning_repro.diminishing_returns import direct_marginal
 from graph_pruning_repro.minimize import minimize_witness
 from graph_pruning_repro.types import Instance
@@ -86,6 +87,75 @@ def test_minimizer_is_idempotent_and_ignores_mapping_insertion_order() -> None:
 
     assert first == second == third
     assert first["id"] == second["id"] == third["id"]
+
+
+def test_minimizer_repeats_ordered_reductions_to_a_fixed_point() -> None:
+    def relabeling_invariant_property(witness: dict[str, object]) -> bool:
+        vertex_count = len(witness["vertices"])
+        total = sum(
+            witness["vertex_weights"].values(),
+            start=Fraction(),
+        )
+        return (
+            vertex_count == 3
+            and total in {Fraction(1), Fraction(2)}
+        ) or (vertex_count == 2 and total == 0)
+
+    witness = {
+        "property": "fixed_point_regression",
+        "vertices": ("a", "b", "c"),
+        "selected": frozenset(),
+        "candidate": "a",
+        "vertex_weights": {
+            "a": Fraction(1),
+            "b": Fraction(1),
+            "c": Fraction(),
+        },
+        "interactions": {},
+    }
+
+    minimized = minimize_witness(relabeling_invariant_property, witness)
+    repeated = minimize_witness(relabeling_invariant_property, minimized)
+
+    assert relabeling_invariant_property(minimized)
+    assert len(minimized["vertices"]) == 2
+    assert minimized["vertex_weights"] == {
+        "v0": Fraction(),
+        "v1": Fraction(),
+    }
+    assert minimized == repeated
+    assert minimized["id"] == repeated["id"]
+
+
+def test_minimizer_detects_a_reducer_cycle(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    witness = {
+        "property": "cycle_guard",
+        "cycle_bit": 0,
+        "vertices": ("only",),
+        "selected": frozenset(),
+        "candidate": "only",
+        "vertex_weights": {"only": Fraction()},
+        "interactions": {},
+    }
+
+    def toggling_reducer(
+        _predicate: object,
+        current: dict[str, object],
+    ) -> dict[str, object]:
+        toggled = minimize_module._copy_witness(current)
+        toggled["cycle_bit"] = 1 - toggled["cycle_bit"]
+        return toggled
+
+    monkeypatch.setattr(
+        minimize_module,
+        "_reduce_vertices",
+        toggling_reducer,
+    )
+
+    with pytest.raises(AssertionError, match="minimization cycle"):
+        minimize_witness(lambda _witness: True, witness)
 
 
 def test_minimized_ids_distinguish_preserved_property_metadata() -> None:

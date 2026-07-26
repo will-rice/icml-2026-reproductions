@@ -456,6 +456,29 @@ def run_diminishing_returns_audit(
         or asymmetric_ceiling != ASYMMETRIC_CASE_CEILING
     ):
         raise AssertionError("diminishing-returns ceiling formula drift")
+    required_symmetric_variant_cases = (
+        symmetric_ceiling * len(SET_FUNCTION_VARIANTS)
+    )
+    required_symmetric_subset_evaluations = (
+        required_symmetric_variant_cases * 4
+    )
+    required_symmetric_closed_evaluations = (
+        required_symmetric_variant_cases * 2
+    )
+    required_symmetric_primitives = (
+        required_symmetric_subset_evaluations
+        + required_symmetric_closed_evaluations
+    )
+    required_asymmetric_subset_evaluations = asymmetric_ceiling * 4
+    required_asymmetric_closed_evaluations = asymmetric_ceiling * 2
+    required_asymmetric_primitives = (
+        required_asymmetric_subset_evaluations
+        + required_asymmetric_closed_evaluations
+    )
+    if required_symmetric_primitives > SYMMETRIC_PRIMITIVE_CEILING:
+        raise ValueError("symmetric primitive ceiling is below required work")
+    if required_asymmetric_primitives > ASYMMETRIC_PRIMITIVE_CEILING:
+        raise ValueError("asymmetric primitive ceiling is below required work")
 
     symmetric_cases = 0
     symmetric_variant_cases = 0
@@ -504,16 +527,20 @@ def run_diminishing_returns_audit(
 
     if symmetric_cases != SYMMETRIC_CASE_CEILING:
         raise AssertionError("symmetric case accounting drift")
-    if symmetric_variant_cases != symmetric_cases * len(
-        SET_FUNCTION_VARIANTS
-    ):
+    if symmetric_variant_cases != required_symmetric_variant_cases:
         raise AssertionError("symmetric variant accounting drift")
     symmetric_subset_evaluations = symmetric_variant_cases * 4
     symmetric_closed_evaluations = symmetric_variant_cases * 2
     symmetric_primitives = (
         symmetric_subset_evaluations + symmetric_closed_evaluations
     )
-    if symmetric_primitives != SYMMETRIC_PRIMITIVE_CEILING:
+    if (
+        symmetric_subset_evaluations
+        != required_symmetric_subset_evaluations
+        or symmetric_closed_evaluations
+        != required_symmetric_closed_evaluations
+        or symmetric_primitives != required_symmetric_primitives
+    ):
         raise AssertionError("symmetric primitive accounting drift")
 
     asymmetric_cases = 0
@@ -565,7 +592,13 @@ def run_diminishing_returns_audit(
     asymmetric_primitives = (
         asymmetric_subset_evaluations + asymmetric_closed_evaluations
     )
-    if asymmetric_primitives != ASYMMETRIC_PRIMITIVE_CEILING:
+    if (
+        asymmetric_subset_evaluations
+        != required_asymmetric_subset_evaluations
+        or asymmetric_closed_evaluations
+        != required_asymmetric_closed_evaluations
+        or asymmetric_primitives != required_asymmetric_primitives
+    ):
         raise AssertionError("asymmetric primitive accounting drift")
 
     return {

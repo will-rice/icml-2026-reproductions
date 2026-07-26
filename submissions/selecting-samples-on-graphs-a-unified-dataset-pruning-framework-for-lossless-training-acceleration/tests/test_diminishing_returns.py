@@ -484,3 +484,34 @@ def test_diminishing_audit_rejects_undeclared_domains_before_iteration(
             symmetric_max_vertices=symmetric_max_vertices,
             asymmetric_max_vertices=asymmetric_max_vertices,
         )
+
+
+@pytest.mark.parametrize(
+    ("ceiling_name", "too_small"),
+    (
+        ("SYMMETRIC_PRIMITIVE_CEILING", 2_861_279),
+        ("ASYMMETRIC_PRIMITIVE_CEILING", 118_427),
+    ),
+)
+def test_diminishing_primitive_ceilings_preflight_before_iteration(
+    monkeypatch: pytest.MonkeyPatch,
+    ceiling_name: str,
+    too_small: int,
+) -> None:
+    iterations = 0
+
+    def forbidden_product(*_args: object, **_kwargs: object) -> object:
+        nonlocal iterations
+        iterations += 1
+        raise AssertionError("diminishing audit started iteration")
+
+    monkeypatch.setattr(diminishing_returns, ceiling_name, too_small)
+    monkeypatch.setattr(
+        diminishing_returns,
+        "product",
+        forbidden_product,
+    )
+
+    with pytest.raises(ValueError, match="primitive ceiling"):
+        run_diminishing_returns_audit("task-3-preflight-regression")
+    assert iterations == 0

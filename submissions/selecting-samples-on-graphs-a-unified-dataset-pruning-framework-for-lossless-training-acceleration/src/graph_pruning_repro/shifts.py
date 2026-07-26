@@ -351,6 +351,16 @@ def run_shift_audit(
         raise ValueError("shift boundary domain exceeds ceiling")
     if declared_cases != SHIFT_CASE_CEILING or exact_cases != 6_410:
         raise AssertionError("shift boundary ceiling formula drift")
+    required_boundary_value_ceiling = declared_cases * len(_CHANNELS)
+    required_boundary_actual_values = exact_cases * len(_CHANNELS)
+    required_rational_cases = rational_controls
+    required_rational_values = required_rational_cases * len(_CHANNELS)
+    if required_boundary_value_ceiling > SHIFT_VALUE_CEILING:
+        raise ValueError("shift value ceiling is below required work")
+    if required_rational_cases > RATIONAL_ALPHA_CASE_CEILING:
+        raise ValueError("rational-alpha case ceiling is below required work")
+    if required_rational_values > RATIONAL_ALPHA_VALUE_CEILING:
+        raise ValueError("rational-alpha value ceiling is below required work")
 
     boundary_cases = 0
     boundary_values = 0
@@ -417,7 +427,7 @@ def run_shift_audit(
 
     if boundary_cases != exact_cases:
         raise AssertionError("shift boundary case accounting drift")
-    if boundary_values != boundary_cases * len(_CHANNELS):
+    if boundary_values != required_boundary_actual_values:
         raise AssertionError("shift boundary value accounting drift")
     if boundary_values > SHIFT_VALUE_CEILING:
         raise AssertionError("shift boundary value ceiling exceeded")
@@ -466,9 +476,9 @@ def run_shift_audit(
                 rational_case_count += 1
                 rational_value_count += len(channels)
 
-    if rational_case_count != RATIONAL_ALPHA_CASE_CEILING:
+    if rational_case_count != required_rational_cases:
         raise AssertionError("rational-alpha case accounting drift")
-    if rational_value_count != RATIONAL_ALPHA_VALUE_CEILING:
+    if rational_value_count != required_rational_values:
         raise AssertionError("rational-alpha value accounting drift")
 
     return {

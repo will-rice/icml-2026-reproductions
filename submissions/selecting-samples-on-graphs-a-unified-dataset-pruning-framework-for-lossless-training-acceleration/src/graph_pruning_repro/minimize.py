@@ -314,6 +314,24 @@ def _lexicographic_canonicalize(
     return min(candidates, key=_canonical_bytes)
 
 
+def _ordered_reduction_pass(
+    predicate: WitnessPredicate,
+    witness: dict[str, object],
+) -> dict[str, object]:
+    current = witness
+    for reducer in (
+        _reduce_vertices,
+        _reduce_selected,
+        _zero_weights,
+        _reduce_magnitudes,
+        _lexicographic_canonicalize,
+    ):
+        current = reducer(predicate, current)
+        if not _property_holds(predicate, current):
+            raise AssertionError("witness reducer lost predicate")
+    return current
+
+
 def minimize_witness(
     predicate: WitnessPredicate,
     witness: Mapping[str, object],
@@ -325,11 +343,24 @@ def minimize_witness(
     current = _validate_witness(witness)
     if not _property_holds(predicate, current):
         raise ValueError("original witness does not satisfy predicate")
-    current = _reduce_vertices(predicate, current)
-    current = _reduce_selected(predicate, current)
-    current = _zero_weights(predicate, current)
-    current = _reduce_magnitudes(predicate, current)
-    current = _lexicographic_canonicalize(predicate, current)
+
+    # The reachable state space is finite: reducers only delete finite graph
+    # structure, zero values, reduce a fixed denominator's numerator, or pick
+    # one of finitely many relabelings. Repeating a state therefore identifies
+    # a reducer cycle; otherwise the deterministic sequence reaches a fixed
+    # point.
+    seen: set[bytes] = set()
+    while True:
+        before = _canonical_bytes(current)
+        if before in seen:
+            raise AssertionError("witness minimization cycle detected")
+        seen.add(before)
+        reduced = _ordered_reduction_pass(predicate, current)
+        after = _canonical_bytes(reduced)
+        current = reduced
+        if after == before:
+            break
+
     if not _property_holds(predicate, current):
         raise AssertionError("minimized witness lost predicate")
     result = _copy_witness(current)
