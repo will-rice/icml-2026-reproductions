@@ -852,6 +852,30 @@ class TestStaticRendering:
         assert "icml2026-repro" in content
         assert "paper-UnjxMTe57e" in content
 
+    def test_readme_space_colors_use_hf_allowed_palette(self, tmp_path):
+        """Generated Space color fields must pass Hub YAML validation."""
+        from posttrainbench_repro.pipeline import run_pipeline
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
+        frontmatter = (tmp_path / "README.md").read_text("utf-8").split("---", 2)[1]
+        colors = {
+            key: value
+            for line in frontmatter.splitlines()
+            if line.startswith(("colorFrom: ", "colorTo: "))
+            for key, value in [line.split(": ", 1)]
+        }
+        allowed = {
+            "red",
+            "yellow",
+            "green",
+            "blue",
+            "indigo",
+            "purple",
+            "pink",
+            "gray",
+        }
+        assert colors.keys() == {"colorFrom", "colorTo"}
+        assert set(colors.values()) <= allowed
+
     def test_no_credential_in_outputs(self, tmp_path):
         """No credential-shaped content in any output."""
         from posttrainbench_repro.pipeline import run_pipeline
