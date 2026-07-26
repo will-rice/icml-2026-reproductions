@@ -155,3 +155,20 @@ def test_theorem_audit_mutation_unrelated_proof_fails():
 
         with pytest.raises(ValueError, match="Unrelated proof environment found for decoding theorem"):
             audit_theorem(tmp_path)
+
+
+def test_theorem_audit_mutation_missing_kv_cache_sharing_fails():
+    project_root = get_project_root()
+    tex_bytes = (project_root / "vendor" / "arxiv" / "arxiv_submission.tex").read_text(encoding="utf-8")
+
+    # Remove "and KV-cache sharing are employed" from decoding theorem
+    mutated = tex_bytes.replace("and KV-cache sharing are employed", "are employed")
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        (tmp_path / "vendor" / "arxiv").mkdir(parents=True)
+        (tmp_path / "vendor" / "arxiv" / "arxiv_submission.tex").write_text(mutated, encoding="utf-8")
+
+        with pytest.raises(ValueError, match="Theorem 4.4 assumptions missing/invalid"):
+            audit_theorem(tmp_path)
+

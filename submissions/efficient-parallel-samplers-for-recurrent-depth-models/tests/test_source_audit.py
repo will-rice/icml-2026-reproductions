@@ -98,3 +98,27 @@ def test_source_ast_audit_matching_string_elsewhere_does_not_pass():
 
         with pytest.raises(ValueError, match="Normalized latent-difference freezing predicate not found"):
             audit_source_ast(tmp_path)
+
+
+def test_source_ast_audit_mutation_false_sibling_criterion_fails():
+    project_root = get_project_root()
+    sampler_bytes = (
+        project_root / "vendor" / "recurrent-pretraining" / "recpre" / "raven_modeling_minimal.py"
+    ).read_text(encoding="utf-8")
+
+    # Break real criterion and insert if False block containing criterion assignment inside outer latent check
+    old_line = 'criterion = (match_states - matching_prev_states).norm(dim=-1) / match_states.norm(dim=-1)'
+    broken_line = 'criterion = (match_states - matching_prev_states).norm(dim=-1)'
+    false_sibling = 'if False:\n                    criterion = (match_states - matching_prev_states).norm(dim=-1) / match_states.norm(dim=-1)'
+    mutated_bytes = sampler_bytes.replace(old_line, f'{broken_line}\n                {false_sibling}')
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        (tmp_path / "vendor" / "recurrent-pretraining" / "recpre").mkdir(parents=True)
+        (tmp_path / "vendor" / "recurrent-pretraining" / "recpre" / "raven_modeling_minimal.py").write_text(
+            mutated_bytes, encoding="utf-8"
+        )
+
+        with pytest.raises(ValueError, match="Normalized latent-difference freezing predicate not found"):
+            audit_source_ast(tmp_path)
+
