@@ -1,0 +1,21 @@
+{
+  "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
+  "attempt_number": 2,
+  "attestation_id": "e26fa918cf3db54322d0d6d388c662640946d1cb8ce4a763ccb037abeb768166",
+  "kind": "deployment",
+  "observed_at": "2026-07-26T10:33:52.797812+00:00",
+  "owner": "wrice",
+  "payload_sha256": "f36e9539ce0ddf28c1fed2cb0ca4172c42f910ade362892896bdcc58edf5228d",
+  "runtime_stage": "RUNNING",
+  "source_commit": "5308666a249a73d8a2dea5d06ac929cbba53c131",
+  "source_tree_sha256": "bed3e19994cf1f792e804137e8b475d30af3674fbbc547b6eb1999d06b8aeb8c",
+  "space_id": "wrice/repro-recurrent-depth-parallel-sampler",
+  "space_sha": "312fb3fda761bf6b1ea9e5f66d18c01099b9d63e",
+  "tags": [
+    "icml2026-repro",
+    "paper-h7WBYYJF1Q",
+    "region:us",
+    "static"
+  ],
+  "validation_attestation_id": "23c7cc2d9a3a3512d81b5aa65458c5ad26f75472ce74d80ac832a535d4adef84"
+}

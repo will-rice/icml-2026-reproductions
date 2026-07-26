@@ -23,6 +23,7 @@
     }
   ],
   "cpu_only": true,
+  "deployed_sha": "312fb3fda761bf6b1ea9e5f66d18c01099b9d63e",
   "design": {
     "author": "codex-recurrent-design-author-20260726",
     "path": "docs/superpowers/specs/2026-07-26-recurrent-sampler-reproduction-design.md",
@@ -69,13 +70,14 @@
   "or": "https://openreview.net/forum?id=h7WBYYJF1Q",
   "orid": "h7WBYYJF1Q",
   "paper_id": "h7WBYYJF1Q",
-  "phase": "validated",
+  "phase": "deployed",
   "pid": "62383",
   "project_path": "submissions/efficient-parallel-samplers-for-recurrent-depth-models",
   "safety_blocker": null,
   "score": 20,
   "slug": "efficient-parallel-samplers-for-recurrent-depth-models",
   "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+  "space_id": "wrice/repro-recurrent-depth-parallel-sampler",
   "spot": true,
   "sub": "Large Language Models",
   "target_claims": [
@@ -125,10 +127,19 @@
       "owner": "controller-recurrent-design-20260726",
       "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
       "to": "validated"
+    },
+    {
+      "at": "2026-07-26T10:33:52.797812+00:00",
+      "attestation_id": "e26fa918cf3db54322d0d6d388c662640946d1cb8ce4a763ccb037abeb768166",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-recurrent-design-20260726",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "deployed"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T10:33:07.426346+00:00",
+  "updated_at": "2026-07-26T10:33:52.797812+00:00",
   "upstream_revision": "arxiv:2510.14961v1+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c",
   "vs": "https://icml.cc/virtual/2026/poster/62383",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/recurrent-controller-validation"
