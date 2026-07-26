@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from copy import deepcopy
 from html import escape
+from html.parser import HTMLParser
 from pathlib import Path
 
 from graph_pruning_repro.render import (
@@ -19,6 +20,33 @@ from graph_pruning_repro.render import (
 PROJECT_ROOT = Path(__file__).parents[1]
 
 
+class _EvidenceSpanParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.spans: list[tuple[str, str]] = []
+        self._active: tuple[str, list[str]] | None = None
+
+    def handle_starttag(
+        self,
+        tag: str,
+        attrs: list[tuple[str, str | None]],
+    ) -> None:
+        pointer = dict(attrs).get("data-evidence-path")
+        if tag == "span" and pointer is not None:
+            assert self._active is None
+            self._active = (pointer, [])
+
+    def handle_data(self, data: str) -> None:
+        if self._active is not None:
+            self._active[1].append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "span" and self._active is not None:
+            pointer, chunks = self._active
+            self.spans.append((pointer, "".join(chunks)))
+            self._active = None
+
+
 def test_render_leads_with_two_target_claims_and_boundaries() -> None:
     evidence = json.loads(
         (PROJECT_ROOT / "evidence" / "evidence.json").read_text()
@@ -30,7 +58,11 @@ def test_render_leads_with_two_target_claims_and_boundaries() -> None:
     assert evidence["target_claims"][1] in report
     assert "appendix_inline_shift_literal" in report
     assert "modular_shift_candidate" in report
-    assert "1 then 3" in report
+    assert (
+        f"{evidence['witnesses'][1]['intermediate_values']['marginal_empty']} "
+        "then "
+        f"{evidence['witnesses'][1]['intermediate_values']['marginal_y']}"
+    ) in report
     assert "CIFAR-10/100" in report and "unavailable" in report
     assert "https://arxiv.org/pdf/2606.12913v2" in report
 
@@ -83,6 +115,15 @@ def test_every_selected_display_value_has_pointer_metadata() -> None:
         assert f'data-evidence-path="{pointer}"' in poster
         assert str(value) in report
         assert escape(str(value)) in poster
+
+
+def test_each_marked_poster_value_equals_resolved_pointer() -> None:
+    evidence = load_accepted_evidence()
+    parser = _EvidenceSpanParser()
+    parser.feed(render_poster(evidence))
+    assert parser.spans
+    for pointer, displayed_text in parser.spans:
+        assert displayed_text == str(resolve_rfc6901(evidence, pointer))
 
 
 def test_generated_documents_match_evidence_only_rendering() -> None:

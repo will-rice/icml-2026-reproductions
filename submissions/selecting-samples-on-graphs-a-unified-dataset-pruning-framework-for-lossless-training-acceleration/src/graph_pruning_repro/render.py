@@ -311,6 +311,14 @@ def render_report(evidence: Mapping[str, object]) -> str:
     cardinality_index = _cardinality_witness_index(evidence)
     objective_index = _objective_witness_index(evidence)
     ratio_index = _first_defined_ratio_index(evidence)
+    marginal_empty_pointer = (
+        f"/witnesses/{appendix_index}/intermediate_values/marginal_empty"
+    )
+    marginal_y_pointer = (
+        f"/witnesses/{appendix_index}/intermediate_values/marginal_y"
+    )
+    marginal_empty = resolve_rfc6901(evidence, marginal_empty_pointer)
+    marginal_y = resolve_rfc6901(evidence, marginal_y_pointer)
     lines = [
         "# Graph Dataset Pruning Formal-Evidence Reproduction",
         "",
@@ -356,11 +364,11 @@ def render_report(evidence: Mapping[str, object]) -> str:
         "## Appendix shift and proof boundaries",
         "",
         (
-            "The literal Appendix witness is the **1 then 3** marginal "
+            "The literal Appendix witness is the "
+            f"**{marginal_empty} then {marginal_y}** marginal "
             "sequence "
-            f"_(evidence: `/witnesses/{appendix_index}/intermediate_values/"
-            "marginal_empty` and "
-            f"`/witnesses/{appendix_index}/intermediate_values/marginal_y`)_"
+            f"_(evidence: `{marginal_empty_pointer}` and "
+            f"`{marginal_y_pointer}`)_"
             "; the exact rational values follow."
         ),
         _report_value(
@@ -652,6 +660,18 @@ def render_poster(evidence: Mapping[str, object]) -> str:
 
     appendix_index = _appendix_witness_index(evidence)
     ratio_index = _first_defined_ratio_index(evidence)
+    marginal_empty_pointer = (
+        f"/witnesses/{appendix_index}/intermediate_values/marginal_empty"
+    )
+    marginal_y_pointer = (
+        f"/witnesses/{appendix_index}/intermediate_values/marginal_y"
+    )
+    marginal_empty = html.escape(
+        str(resolve_rfc6901(evidence, marginal_empty_pointer))
+    )
+    marginal_y = html.escape(
+        str(resolve_rfc6901(evidence, marginal_y_pointer))
+    )
     body = [
         "<!doctype html>",
         '<html lang="en">',
@@ -685,12 +705,12 @@ def render_poster(evidence: Mapping[str, object]) -> str:
         ),
         (
             f"<p>The literal Appendix witness is "
-            f'<span data-evidence-path="/witnesses/{appendix_index}/'
-            'intermediate_values/marginal_empty">1</span> then'
+            f'<span data-evidence-path="{marginal_empty_pointer}">'
+            f"{marginal_empty}</span> then"
         ),
         (
-            f' <span data-evidence-path="/witnesses/{appendix_index}/'
-            'intermediate_values/marginal_y">3</span>; exact rationals are '
+            f' <span data-evidence-path="{marginal_y_pointer}">'
+            f"{marginal_y}</span>; exact rationals are "
             "listed in the pointer ledger.</p>"
         ),
         "</section>",

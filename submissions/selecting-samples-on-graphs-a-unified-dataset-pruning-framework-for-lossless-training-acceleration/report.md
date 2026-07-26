@@ -16,7 +16,7 @@ This report recomputes formal evidence from the released paper artifact. It does
 
 ## Appendix shift and proof boundaries
 
-The literal Appendix witness is the **1 then 3** marginal sequence _(evidence: `/witnesses/1/intermediate_values/marginal_empty` and `/witnesses/1/intermediate_values/marginal_y`)_; the exact rational values follow.
+The literal Appendix witness is the **1/1 then 3/1** marginal sequence _(evidence: `/witnesses/1/intermediate_values/marginal_empty` and `/witnesses/1/intermediate_values/marginal_y`)_; the exact rational values follow.
 - First marginal: 1/1 _(evidence: `/witnesses/1/intermediate_values/marginal_empty`)_
 - Second marginal: 3/1 _(evidence: `/witnesses/1/intermediate_values/marginal_y`)_
 - Remainder cardinality: 2 _(evidence: `/witnesses/0/intermediate_values/remainder_cardinality`)_
