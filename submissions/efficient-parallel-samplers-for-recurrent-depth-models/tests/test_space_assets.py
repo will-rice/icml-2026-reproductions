@@ -30,3 +30,20 @@ def test_space_assets_offline_and_attributions():
 
     for line in html_content.splitlines():
         assert line == line.rstrip()
+
+
+def test_validated_project_root_is_the_static_space():
+    project_root = get_project_root()
+    run_pipeline(project_root)
+
+    readme = (project_root / "README.md").read_text()
+    assert readme.startswith("---\n")
+    assert "sdk: static" in readme
+    assert "app_file: index.html" in readme
+    assert "icml2026-repro" in readme
+    assert "paper-h7WBYYJF1Q" in readme
+
+    for name in ("index.html", "poster.html", "REPORT.md"):
+        assert (project_root / name).read_bytes() == (
+            project_root / "space" / name
+        ).read_bytes()
