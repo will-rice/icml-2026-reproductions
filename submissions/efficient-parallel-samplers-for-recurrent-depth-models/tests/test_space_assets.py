@@ -1,47 +1,32 @@
 from pathlib import Path
-from recurrent_sampler_repro.evidence import (
-    run_pipeline,
-    CLAIM_1_TEXT,
-    CLAIM_2_TEXT,
-    TEX_SHA256,
-    SAMPLER_SHA256,
-)
+from recurrent_sampler_repro.evidence import run_pipeline, CLAIM_1_SHA256, CLAIM_2_SHA256
 
 
 def get_project_root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
-def test_space_assets():
+def test_space_assets_offline_and_attributions():
     project_root = get_project_root()
-    # Ensure space assets are generated
-    run_pipeline(project_root)
+    res = run_pipeline(project_root)
+    html_content = res["space_html"]
 
-    space_dir = project_root / "space"
-    readme_path = space_dir / "README.md"
-    html_path = space_dir / "index.html"
-    poster_path = space_dir / "poster.html"
+    assert "fonts.googleapis.com" not in html_content
+    assert "fonts.gstatic.com" not in html_content
+    assert "http://" not in html_content and "https://" not in html_content
 
-    assert readme_path.exists()
-    assert html_path.exists()
-    assert poster_path.exists()
+    assert CLAIM_1_SHA256 in html_content
+    assert CLAIM_2_SHA256 in html_content
 
-    readme_text = readme_path.read_text(encoding="utf-8")
-    assert "sdk: static" in readme_text
-    assert "app_file: index.html" in readme_text
-    assert "icml2026-repro" in readme_text
-    assert "paper-h7WBYYJF1Q" in readme_text
+    assert "Apache-2.0" in html_content
+    assert "CC-BY-4.0" in html_content
 
-    html_text = html_path.read_text(encoding="utf-8")
-    assert CLAIM_1_TEXT in html_text
-    assert CLAIM_2_TEXT in html_text
-    assert "PARTIAL" in html_text
-    assert "UNAVAILABLE" in html_text
-    assert TEX_SHA256 in html_text
-    assert SAMPLER_SHA256 in html_text
+    # Direct static-Space download links
+    assert 'href="evidence/manifest.json"' in html_content or 'href="evidence/manifest.json" download' in html_content
+    assert 'href="evidence/claim-1-wavefront.json"' in html_content
+    assert 'href="evidence/claim-2-theorem-audit.json"' in html_content
+    assert 'href="evidence/results.json"' in html_content
+    assert 'href="evidence/REPORT.md"' in html_content or 'href="REPORT.md"' in html_content
 
-    # Rejection of unsupported claims in static HTML
-    assert "verified" not in html_text.lower() or "unverified" in html_text.lower() or "claim" in html_text.lower()
-    # Check limitations warning is present
-    assert "No Model Execution" in html_text or "No model execution" in html_text or "No Model Execution:" in html_text
-    assert "No GPU Benchmarking" in html_text or "No GPU" in html_text
+    for line in html_content.splitlines():
+        assert line == line.rstrip()

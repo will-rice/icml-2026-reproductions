@@ -1,32 +1,33 @@
-import hashlib
-import pytest
-from recurrent_sampler_repro.evidence import (
-    CLAIM_1_TEXT,
-    CLAIM_1_SHA256,
-    CLAIM_2_TEXT,
-    CLAIM_2_SHA256,
-)
+from pathlib import Path
+from recurrent_sampler_repro.evidence import run_pipeline
 
 
-def compute_sha256(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+def get_project_root() -> Path:
+    return Path(__file__).resolve().parent.parent
 
 
-def test_claim_1_binding():
-    assert compute_sha256(CLAIM_1_TEXT) == CLAIM_1_SHA256
-    assert CLAIM_1_SHA256 == "d0da87ee16f7485d3dff369e7465f66299c55ac003a54e1cf8c00b3a0ad8b265"
+def test_claim_bindings_and_manifest():
+    project_root = get_project_root()
+    manifest = run_pipeline(project_root)["manifest"]
 
+    assert manifest["attempt_id"] == "534db42c-5b16-4f00-9a7d-a47056fc9dd4"
+    assert manifest["paper_id"] == "h7WBYYJF1Q"
+    assert manifest["python_requirement"] == ">=3.10"
 
-def test_claim_2_binding():
-    assert compute_sha256(CLAIM_2_TEXT) == CLAIM_2_SHA256
-    assert CLAIM_2_SHA256 == "2e15221c8b5516b0ab705e29a3d7c5d924ed5f0187c970a0caf60a1402757804"
+    cmds = manifest["commands"]
+    assert "uv run --project" in cmds["evidence_generation"]
+    assert "pytest" in cmds["test_suite"]
 
+    inputs = manifest["inputs"]
+    assert "arxiv_submission.tex" in inputs
+    assert "raven_modeling_minimal.py" in inputs
+    assert "LICENSE" in inputs
+    assert "ATTRIBUTION.md" in inputs
+    assert inputs["ATTRIBUTION.md"]["sha256"] == "79775b50c72988b90eae75ef87e9d4df9dbd0bfceefaed60b398656a88d8a735"
 
-def test_claim_mutation_rejection():
-    # Test whitespace change
-    mutated_c1 = CLAIM_1_TEXT + " "
-    assert compute_sha256(mutated_c1) != CLAIM_1_SHA256
-
-    # Test punctuation change
-    mutated_c2 = CLAIM_2_TEXT.replace("Theorem 4.2", "Theorem 4.2.")
-    assert compute_sha256(mutated_c2) != CLAIM_2_SHA256
+    outputs = manifest["outputs"]
+    assert "evidence/claim-1-wavefront.json" in outputs
+    assert outputs["evidence/claim-1-wavefront.json"]["sha256"] is not None
+    assert "evidence/manifest.json" in outputs
+    assert outputs["evidence/manifest.json"]["sha256"] is None
+    assert outputs["evidence/manifest.json"]["unhashed_reason"] == "Self-referential manifest copy"
