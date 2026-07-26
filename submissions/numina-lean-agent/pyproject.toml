@@ -9,6 +9,9 @@ numina-brascamp-lieb-audit = "numina_lean.brascamp_lieb_audit:main"
 numina-evidence = "numina_lean.cli:main"
 numina-space-assets = "numina_lean.space_assets:main"
 
+[dependency-groups]
+dev = ["pytest>=8"]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
