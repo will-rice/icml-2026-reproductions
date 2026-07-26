@@ -73,10 +73,12 @@
   "paper_id": "0bTEd4LpQr",
   "phase": "implementing",
   "pid": "66755",
+  "project_path": "submissions/numina-lean-agent",
   "safety_blocker": null,
   "score": 14,
   "slug": "numina-lean-agent-an-open-and-general-agentic-reasoning-system-for-formal-mathematics",
   "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+  "space_id": "wrice/repro-numina-lean-agent",
   "spot": false,
   "sub": "Large Language Models",
   "target_claims": [
@@ -103,7 +105,7 @@
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T05:53:28.698422+00:00",
+  "updated_at": "2026-07-26T06:04:00.451809+00:00",
   "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
   "vs": "https://icml.cc/virtual/2026/poster/66755"
 }
