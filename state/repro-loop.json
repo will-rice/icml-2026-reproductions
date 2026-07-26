@@ -21,8 +21,8 @@
     "cb04ab1a-a526-4137-862b-a26d68563737": {
       "paper_id": "UnjxMTe57e",
       "path": "repro-loop/attempts/cb04ab1a-a526-4137-862b-a26d68563737.json",
-      "phase": "deployed",
-      "updated_at": "2026-07-26T12:36:25.033693+00:00"
+      "phase": "submitted",
+      "updated_at": "2026-07-26T12:38:53.317640+00:00"
     },
     "e20658d7-250a-5b0c-a015-be453c43e9fc": {
       "paper_id": "vGeNaFHdET",
@@ -123,6 +123,7 @@
     "c7a602950f453855e944ffdd23b68f269be022474d5c12c74b29761e0da8e69a": "repro-loop/snapshots/c7a602950f453855e944ffdd23b68f269be022474d5c12c74b29761e0da8e69a.json",
     "c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97": "repro-loop/snapshots/c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97.json",
     "ca174fcd3c16121da0f6704a7921f1dea9f42651fbd671fb50964cff8ee18074": "repro-loop/snapshots/ca174fcd3c16121da0f6704a7921f1dea9f42651fbd671fb50964cff8ee18074.json",
+    "ceb539d0a6a65c2ca3e4b089513634b0af37b212062b9cd9801dda41518d989c": "repro-loop/snapshots/ceb539d0a6a65c2ca3e4b089513634b0af37b212062b9cd9801dda41518d989c.json",
     "db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df": "repro-loop/snapshots/db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df.json",
     "fe5d79f5307131d7cc35c4e71ef948b5355c3535124541c28de83cba3d9454eb": "repro-loop/snapshots/fe5d79f5307131d7cc35c4e71ef948b5355c3535124541c28de83cba3d9454eb.json"
   },
