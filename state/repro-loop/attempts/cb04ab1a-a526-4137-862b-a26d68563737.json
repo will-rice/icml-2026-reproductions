@@ -1,0 +1,81 @@
+{
+  "alphaxiv": "2603.08640",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2603.08640",
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "authors": [
+    "Ben Rank",
+    "Hardik Bhatnagar",
+    "Ameya Pandurang Prabhu",
+    "Shira Eisenberg",
+    "Karina Nguyen",
+    "Matthias Bethge",
+    "Maksym Andriushchenko"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+      "challenge_claim_sha256": "9c0c1fc52ad2a93a9dbe299532b952948c4ecb674f820fe19f78f6a3c33b0073",
+      "target_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+    },
+    {
+      "challenge_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+      "challenge_claim_sha256": "d185d61e5d886672a739e321e048df2378b71f55cf388ec4097bd2df1a916aad",
+      "target_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+    }
+  ],
+  "cpu_only": true,
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2603.08640",
+  "i": 4754,
+  "insts": [
+    "ELLIS Intitute T\u00fcbingen",
+    "MATS \u00b7 Max Planck Institute for Intelligent Systems, T\u00fcbingen",
+    "University of T\u00fcbingen"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "The best reported agent reaches 23.2% weighted average benchmark performance, while official instruction-tuned models reach 51.1% (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "GPT-5.1 Codex Max reports 89% on BFCL with Gemma-3-4B versus 67% for the official instruction-tuned model (Abstract)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+    },
+    {
+      "status": "unverified",
+      "text": "For GPT-5.1 Codex Max, medium reasoning effort scores higher than low and high effort while using fewer tokens than high effort (Table 2)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=UnjxMTe57e",
+  "orid": "UnjxMTe57e",
+  "paper_id": "UnjxMTe57e",
+  "phase": "selected",
+  "pid": "63667",
+  "safety_blocker": null,
+  "score": 22,
+  "slug": "posttrainbench-can-llm-agents-automate-llm-post-training",
+  "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+  "spot": false,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+    "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+  ],
+  "title": "PostTrainBench: Can LLM Agents Automate LLM Post-Training?",
+  "transitions": [],
+  "type": "Poster",
+  "updated_at": "2026-07-26T05:51:07.284164+00:00",
+  "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
+  "vs": "https://icml.cc/virtual/2026/poster/63667"
+}

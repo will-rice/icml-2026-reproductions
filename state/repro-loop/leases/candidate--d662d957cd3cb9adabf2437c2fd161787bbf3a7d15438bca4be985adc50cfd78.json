@@ -4,6 +4,6 @@
   "expires_at": "2026-07-25T22:16:31.361020+00:00",
   "fencing_token": 1,
   "owner": "scheduler-2b4c6391-5e33-43d6-aad4-261a32840c1f",
-  "released_at": null,
+  "released_at": "2026-07-26T05:51:07.284164+00:00",
   "resource": "candidate:a3GdvuPItd"
 }

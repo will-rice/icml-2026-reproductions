@@ -1,0 +1,82 @@
+{
+  "alphaxiv": "2601.14027",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2601.14027",
+  "attempt_id": "49b12585-ca39-441d-b822-c7da77ed81e9",
+  "authors": [
+    "Junqi Liu",
+    "Zihao Zhou",
+    "Zekai Zhu",
+    "Marco Dos Santos",
+    "Weikun He",
+    "jiawei liu",
+    "Yunzhou Xie",
+    "Junqiao Zhao",
+    "Qiufeng Wang",
+    "Lihong Zhi",
+    "Jia LI",
+    "Wenda Li"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+      "challenge_claim_sha256": "d7d651bcc26f53869d99fec6b8fc09814a9f63871fdd782be1feda433b481a17",
+      "target_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+    },
+    {
+      "challenge_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+      "challenge_claim_sha256": "92d5592ddc6bc3b3a9d64d346516a38082b67dd8607563b52fa0da8b05bdd9ba",
+      "target_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+    }
+  ],
+  "cpu_only": true,
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2601.14027",
+  "i": 2276,
+  "insts": [
+    "Academy of Mathematics and Systems Science, Chinese Academy of Science",
+    "Xi'an Jiaotong-Liverpool University",
+    "Tongji University"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "Numina-Lean-Agent combines Claude Code with Numina-Lean-MCP and specialized tools for Lean interaction, theorem retrieval, informal proving, and auxiliary reasoning (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Ablations show the agent solves 4 Putnam 2025 problems without the informal prover, 11 with the informal prover, and all 12 with the subagent setup (Table 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=0bTEd4LpQr",
+  "orid": "0bTEd4LpQr",
+  "paper_id": "0bTEd4LpQr",
+  "phase": "selected",
+  "pid": "66755",
+  "safety_blocker": null,
+  "score": 14,
+  "slug": "numina-lean-agent-an-open-and-general-agentic-reasoning-system-for-formal-mathematics",
+  "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+  "spot": false,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+    "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+  ],
+  "title": "Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics",
+  "transitions": [],
+  "type": "Poster",
+  "updated_at": "2026-07-26T05:51:07.284164+00:00",
+  "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
+  "vs": "https://icml.cc/virtual/2026/poster/66755"
+}

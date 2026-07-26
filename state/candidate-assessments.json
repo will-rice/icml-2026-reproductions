@@ -1,5 +1,5 @@
 {
-  "assessed_at": "2026-07-25T22:09:21.310757+00:00",
+  "assessed_at": "2026-07-26T05:52:00+00:00",
   "assessments": [
     {
       "artifact_access": true,
@@ -37,6 +37,32 @@
       "artifact_access": true,
       "claim_bindings": [
         {
+          "challenge_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+          "challenge_claim_sha256": "9c0c1fc52ad2a93a9dbe299532b952948c4ecb674f820fe19f78f6a3c33b0073",
+          "target_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+        },
+        {
+          "challenge_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+          "challenge_claim_sha256": "d185d61e5d886672a739e321e048df2378b71f55cf388ec4097bd2df1a916aad",
+          "target_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+        }
+      ],
+      "cpu_only": true,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "UnjxMTe57e",
+      "safety_blocker": null,
+      "score": 22,
+      "target_claims": [
+        "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+        "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+      ],
+      "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2"
+    },
+    {
+      "artifact_access": true,
+      "claim_bindings": [
+        {
           "challenge_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
           "challenge_claim_sha256": "c452eab57d205adb756a93aa35ca0275e1d2054bfb1d3d77925a76ac070c1216",
           "target_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3)."
@@ -58,6 +84,32 @@
         "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
       ],
       "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090"
+    },
+    {
+      "artifact_access": true,
+      "claim_bindings": [
+        {
+          "challenge_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+          "challenge_claim_sha256": "d7d651bcc26f53869d99fec6b8fc09814a9f63871fdd782be1feda433b481a17",
+          "target_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+        },
+        {
+          "challenge_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+          "challenge_claim_sha256": "92d5592ddc6bc3b3a9d64d346516a38082b67dd8607563b52fa0da8b05bdd9ba",
+          "target_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+        }
+      ],
+      "cpu_only": true,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "0bTEd4LpQr",
+      "safety_blocker": null,
+      "score": 14,
+      "target_claims": [
+        "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+        "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+      ],
+      "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
     },
     {
       "artifact_access": false,
@@ -98,6 +150,6 @@
       "upstream_revision": "arxiv:2602.00747v3|github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422|hf-dataset:lucius1022/DeMix_Corpora@82a2effc58eb79bec691280a4e4fc50be0968b1e"
     }
   ],
-  "assessor": "codex-parallel-candidate-assessment-aggregation",
+  "assessor": "codex-controller-candidate-assessment-aggregation-v2",
   "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203"
 }

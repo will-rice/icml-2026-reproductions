@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-26T05:51:07.284164+00:00",
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "expires_at": "2026-07-26T05:56:07.284164+00:00",
+  "fencing_token": 1,
+  "owner": "scheduler-1151f593-dc91-44c0-98e2-c8f143b64301",
+  "released_at": null,
+  "resource": "attempt:cb04ab1a-a526-4137-862b-a26d68563737"
+}
