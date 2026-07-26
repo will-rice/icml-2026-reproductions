@@ -123,7 +123,7 @@ def get_provenance(acquired: dict[str, Any]) -> dict[str, Any]:
                 "endpoint": "tree",
                 "params": "recursive=true&expand=false&limit=1000",
                 "mechanism": "Link header cursor, rel=\"next\"",
-                "page_size": hf_inv["page_count"],
+                "page_size": HF_TREE_PAGE_SIZE,
                 "total_pages": hf_inv["page_count"],
                 "total_entries": hf_inv["total_entries"],
                 "file_count": hf_inv["file_count"],
@@ -493,6 +493,13 @@ def audit_reward_hacking(
         p for p in inventory_paths
         if API_MISUSE_TASK_CLUSTER in p
     ]
+
+    if cluster_paths:
+        raise ValueError(
+            f"API-misuse cluster {API_MISUSE_TASK_CLUSTER} found in inventory "
+            f"({len(cluster_paths)} paths). Cannot emit 'unavailable' when the "
+            f"cluster is present."
+        )
 
     api_misuse = {
         "mode": "using_discovered_api_key",

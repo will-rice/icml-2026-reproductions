@@ -66,10 +66,10 @@ def compute_canonical_tree_digest(
 def fetch_github_tree_entries(
     client: httpx.Client | None = None,
 ) -> list[dict[str, Any]]:
-    """Fetch the recursive Git tree at the pinned commit via GitHub API."""
+    """Fetch the recursive Git tree at the pinned root tree object via GitHub API."""
     url = (
         f"https://api.github.com/repos/{GITHUB_REPO}"
-        f"/git/trees/{GITHUB_PINNED_COMMIT}?recursive=1"
+        f"/git/trees/{GIT_TREE_ID}?recursive=1"
     )
     if client is None:
         with httpx.Client(timeout=_TIMEOUT) as c:
@@ -199,8 +199,8 @@ def _validate_next_url(next_url: str) -> None:
             f"Foreign host in next URL: {parsed.hostname} "
             f"(expected huggingface.co)"
         )
-    expected_prefix = f"/api/datasets/{HF_DATASET_ID}/tree/{HF_PINNED_REVISION}"
-    if not parsed.path.startswith(expected_prefix):
+    expected_path = f"/api/datasets/{HF_DATASET_ID}/tree/{HF_PINNED_REVISION}"
+    if parsed.path != expected_path:
         raise ValueError(
             f"Wrong endpoint/revision in next URL path: {parsed.path}"
         )

@@ -405,27 +405,39 @@ body {{ max-width: 900px; }}
 </head>
 <body>
 <h1>PostTrainBench: Released-Artifact Audit</h1>
-<p>Paper ID: <code>{provenance["paper_id"]}</code> &middot; arXiv: {provenance["arxiv_id"]}</p>
+<p>Paper ID: <code>{provenance["paper_id"]}</code> &middot; arXiv: {provenance["arxiv_id"]}
+{_ptr("evidence/provenance.json#/paper_id")}</p>
 
 <div class="poster-grid">
 <div class="card">
 <h3>Claim 1 {_status_span(claim1["status"])}</h3>
 <p>{_escape(claim1["text"])}</p>
+<p>{_ptr("evidence/claims.json#/claim_1/status")}</p>
 <p><strong>{coverage["recognized_task_count"]}</strong> tasks across
 <strong>{len(coverage["accepted_benchmarks"])}</strong> benchmarks &times;
-<strong>{len(coverage["accepted_models"])}</strong> models</p>
+<strong>{len(coverage["accepted_models"])}</strong> models
+{_ptr("evidence/coverage.json#/recognized_task_count")}</p>
+<p>Roots: {coverage.get("recognized_root_count", "N/A")} &middot;
+Pairs: {coverage.get("recognized_root_cell_pairs", "N/A")} &middot;
+Duplicates: {coverage.get("duplicate_job_pairs", "N/A")}
+{_ptr("evidence/coverage.json#/duplicate_job_pairs")}</p>
 </div>
 
 <div class="card">
 <h3>Claim 2 {_status_span(claim2["status"])}</h3>
 <p>{_escape(claim2["text"])}</p>
-<p>Contamination: {_status_span(contam["status"])} &middot;
-Instruction model: {_status_span(instr["status"])} &middot;
-API misuse: {_status_span(api["status"])}</p>
+<p>{_ptr("evidence/claims.json#/claim_2/status")}</p>
+<p>Contamination: {_status_span(contam["status"])}
+{_ptr("evidence/reward_hacking.json#/training_on_test_sets/status")} &middot;
+Instruction model: {_status_span(instr["status"])}
+{_ptr("evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint/status")} &middot;
+API misuse: {_status_span(api["status"])}
+{_ptr("evidence/reward_hacking.json#/using_discovered_api_key/status")}</p>
 </div>
 </div>
 
 <h2>Coverage Matrix</h2>
+<p>{_ptr("evidence/coverage.json#/cell_counts")}</p>
 {_render_matrix(coverage)}
 
 <h2>Limitations</h2>
@@ -433,6 +445,7 @@ API misuse: {_status_span(api["status"])}</p>
 
 <footer>
 <p>This evidence is not an official challenge verdict.
+{_ptr("evidence/claims.json")}
 <a href="index.html">Full evidence summary</a> &middot;
 <a href="report.html">Detailed report</a></p>
 </footer>

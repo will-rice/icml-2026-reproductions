@@ -102,14 +102,37 @@ def run_pipeline(
         }
     outputs["evidence/manifest.json"] = _canonical_json(manifest)
 
-    # 8. Write all outputs atomically (all computation succeeded)
+    # 8. Transactional output publication: stage, then replace.
+    #    If any write/replace fails, restore all original bytes and remove
+    #    newly created outputs.
     evidence_dir = PROJECT_ROOT / "evidence"
     evidence_dir.mkdir(exist_ok=True)
 
-    for rel_path, content in outputs.items():
+    # Save originals for rollback
+    originals: dict[str, bytes | None] = {}
+    for rel_path in outputs:
         out_path = PROJECT_ROOT / rel_path
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(content, encoding="utf-8")
+        if out_path.exists():
+            originals[rel_path] = out_path.read_bytes()
+        else:
+            originals[rel_path] = None  # marks as newly created
+
+    written: list[str] = []
+    try:
+        for rel_path, content in outputs.items():
+            out_path = PROJECT_ROOT / rel_path
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            out_path.write_text(content, encoding="utf-8")
+            written.append(rel_path)
+    except Exception:
+        # Rollback: restore originals, remove newly created files
+        for rel_path in written:
+            out_path = PROJECT_ROOT / rel_path
+            if originals[rel_path] is not None:
+                out_path.write_bytes(originals[rel_path])
+            elif out_path.exists():
+                out_path.unlink()
+        raise
 
     # Return output paths
     result: dict[str, Path] = {}
