@@ -74,6 +74,7 @@ from posttrainbench_repro.constants import (
     TIME_TAKEN_WITNESS_BYTES,
     TIME_TAKEN_WITNESS_PATH,
     TIME_TAKEN_WITNESS_SHA256,
+    TRACE_EXCERPTS,
     TRUNCATED_SIBLINGS_COUNT,
     TRUNCATED_SIBLINGS_SHA256,
     UPSTREAM_TOKEN,
@@ -110,6 +111,7 @@ def get_provenance(acquired: dict[str, Any]) -> dict[str, Any]:
             "entry_count": github["entry_count"],
             "canonical_tree_digest": github["canonical_tree_digest"],
             "license": SOURCE_LICENSE,
+            "tree_acquisition": github["tree_acquisition"],
             "consumed_blobs": {
                 path: meta
                 for path, meta in sorted(github["blobs"].items())
@@ -134,6 +136,8 @@ def get_provenance(acquired: dict[str, Any]) -> dict[str, Any]:
                 "files": hf_inv["canonical_file_digest"],
                 "directories": hf_inv["canonical_dir_digest"],
             },
+            "tree_acquisition": hf_inv["tree_acquisition"],
+            "consumed_files": acquired["hf_consumed_files"],
             "truncated_siblings": {
                 "count": TRUNCATED_SIBLINGS_COUNT,
                 "digest": TRUNCATED_SIBLINGS_SHA256,
@@ -158,7 +162,29 @@ def compute_coverage(
     Duplicate-job counting is per (root, benchmark, model) pair.
     """
     dir_paths = hf_inventory["dir_paths"]
-    return _compute_coverage_from_dirs(dir_paths)
+    coverage = _compute_coverage_from_dirs(dir_paths)
+    inventory_fields = {
+        "page_count",
+        "total_entries",
+        "file_count",
+        "dir_count",
+        "canonical_all_digest",
+        "canonical_file_digest",
+        "canonical_dir_digest",
+    }
+    if inventory_fields.issubset(hf_inventory):
+        coverage["inventory"] = {
+            "page_count": hf_inventory["page_count"],
+            "total_entries": hf_inventory["total_entries"],
+            "file_count": hf_inventory["file_count"],
+            "dir_count": hf_inventory["dir_count"],
+            "all_entries_digest": hf_inventory["canonical_all_digest"],
+            "file_entries_digest": hf_inventory["canonical_file_digest"],
+            "dir_entries_digest": hf_inventory["canonical_dir_digest"],
+            "rejected_siblings_count": TRUNCATED_SIBLINGS_COUNT,
+            "rejected_siblings_digest": TRUNCATED_SIBLINGS_SHA256,
+        }
+    return coverage
 
 
 def _compute_coverage_from_dirs(
@@ -289,6 +315,11 @@ def audit_protocol(
     if not m:
         raise ValueError("Could not find num_gpus in single_task.sub")
     result["num_gpus_default"] = int(m.group(1))
+    if result["num_gpus_default"] != 1:
+        raise ValueError(
+            f"Expected single_task.sub num_gpus default 1, "
+            f"got {result['num_gpus_default']}"
+        )
 
     # CUDA device requirement
     m = re.search(
@@ -300,6 +331,12 @@ def audit_protocol(
     result["cuda_device_requirement"] = (
         f'TARGET.CUDADeviceName == "{m.group(1)}"'
     )
+    expected_cuda = 'TARGET.CUDADeviceName == "NVIDIA H100 80GB HBM3"'
+    if result["cuda_device_requirement"] != expected_cuda:
+        raise ValueError(
+            "Unexpected CUDADeviceName requirement: "
+            f"{result['cuda_device_requirement']}"
+        )
 
     # request_gpus binding
     m = re.search(r"request_gpus\s*=\s*\$\(num_gpus\)", single_task)
@@ -309,6 +346,8 @@ def audit_protocol(
 
     # NUM_HOURS in run_task.sh
     result["receives_num_hours"] = "NUM_HOURS" in run_task
+    if not result["receives_num_hours"]:
+        raise ValueError("run_task.sh does not receive NUM_HOURS")
 
     # Solve timeout formula (minutes based on NUM_HOURS * 60 + 5)
     timeout_patterns = [
@@ -350,63 +389,159 @@ def audit_protocol(
 def _analyze_commit_sh(content: str) -> dict[str, Any]:
     """Analyze commit.sh for scheduler-dependent branches and limitations.
 
-    Looks for actual METR job submission patterns (not just comments).
+    Parse only active arrays and ``condor_submit_bid`` calls.  The pinned
+    scheduler shape is an authority gate: any changed model, benchmark, job
+    count, hour count, or GPU count aborts evidence generation.
     """
-    analysis: dict[str, Any] = {}
-
-    # Look for actual htcondor_mpi-is branch or METR submission commands
-    # (not just comment mentions)
-    lines = content.split("\n")
     code_lines = [
-        ln for ln in lines
-        if ln.strip() and not ln.strip().startswith("#")
+        line.strip()
+        for line in content.splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
     ]
-    code_text = "\n".join(code_lines)
 
-    # Check for actual branch structure with METR patterns
-    has_metr_branch = bool(
-        re.search(r"htcondor_mpi-is", code_text, re.IGNORECASE)
-        or (re.search(r"NUM_HOURS\s*=\s*100", code_text)
-            and re.search(r"num_gpus\s*=\s*8", code_text))
+    def parse_array(name: str) -> list[str]:
+        match = re.search(
+            rf"(?ms)^\s*{re.escape(name)}\s*=\s*\((.*?)^\s*\)",
+            content,
+        )
+        if not match:
+            raise ValueError(f"commit.sh missing active {name}=(...) array")
+        entries: list[str] = []
+        for raw_line in match.group(1).splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#"):
+                continue
+            item = re.fullmatch(r"""(["'])(.*?)\1(?:\s+#.*)?""", line)
+            if not item:
+                raise ValueError(
+                    f"commit.sh has unparseable active {name} entry: {line}"
+                )
+            entries.append(item.group(2))
+        return entries
+
+    models = parse_array("models")
+    benchmarks = parse_array("evals")
+    if models != ["Qwen/Qwen3-4B-Base"]:
+        raise ValueError(f"commit.sh active model mismatch: {models}")
+    if benchmarks != ["healthbench"]:
+        raise ValueError(
+            f"commit.sh active benchmark mismatch: {benchmarks}"
+        )
+
+    def find_branch_line(
+        prefix: str,
+        scheduler: str,
+        *,
+        start: int = 0,
+    ) -> int:
+        scheduler_re = re.compile(
+            rf"(?:=|==)\s*[\"']{re.escape(scheduler)}[\"']"
+        )
+        matches = [
+            index
+            for index, line in enumerate(code_lines[start:], start)
+            if line.startswith(prefix) and scheduler_re.search(line)
+        ]
+        if len(matches) != 1:
+            raise ValueError(
+                f"commit.sh expected one active {prefix.strip()} "
+                f"{scheduler} branch, found {len(matches)}"
+            )
+        return matches[0]
+
+    mpi_start = find_branch_line("if ", "htcondor_mpi-is")
+    condor_start = find_branch_line(
+        "elif ",
+        "htcondor",
+        start=mpi_start + 1,
     )
-    analysis["has_metr_branch"] = has_metr_branch
-    analysis["scheduler_dependent"] = has_metr_branch
+    else_matches = [
+        index
+        for index, line in enumerate(code_lines[condor_start + 1:], condor_start + 1)
+        if line == "else" or line.startswith("else ")
+    ]
+    if len(else_matches) != 1:
+        raise ValueError(
+            "commit.sh expected one active else after htcondor branch"
+        )
+    else_start = else_matches[0]
+    if not mpi_start < condor_start < else_start:
+        raise ValueError("commit.sh scheduler branch ordering mismatch")
 
-    if has_metr_branch:
-        analysis["htcondor_mpi_is_branch"] = {
+    mpi_lines = code_lines[mpi_start + 1:condor_start]
+    condor_lines = code_lines[condor_start + 1:else_start]
+
+    def parse_jobs(lines: list[str], label: str) -> list[dict[str, int]]:
+        jobs: list[dict[str, int]] = []
+        for line in lines:
+            if not re.match(r"^condor_submit_bid(?:\s|$)", line):
+                continue
+            attrs: dict[str, str] = {}
+            for _, assignment in re.findall(
+                r"""-a\s+(["'])([^"']+)\1""",
+                line,
+            ):
+                key, separator, value = assignment.partition("=")
+                if not separator or key in attrs:
+                    raise ValueError(
+                        f"commit.sh malformed {label} -a argument: {assignment}"
+                    )
+                attrs[key] = value
+            if "num_hours" not in attrs:
+                raise ValueError(
+                    f"commit.sh {label} job missing quoted num_hours"
+                )
+            try:
+                job = {"hours": int(attrs["num_hours"])}
+                if "num_gpus" in attrs:
+                    job["gpus"] = int(attrs["num_gpus"])
+            except ValueError as exc:
+                raise ValueError(
+                    f"commit.sh {label} job has nonnumeric resource value"
+                ) from exc
+            jobs.append(job)
+        return jobs
+
+    mpi_jobs = parse_jobs(mpi_lines, "htcondor_mpi-is")
+    condor_jobs = parse_jobs(condor_lines, "htcondor")
+    if mpi_jobs != [{"hours": 100, "gpus": 8}]:
+        raise ValueError(
+            f"commit.sh MPI job mismatch: expected one 100h/8-GPU job, "
+            f"got {mpi_jobs}"
+        )
+    if any("gpus" in job for job in condor_jobs):
+        raise ValueError("commit.sh htcondor jobs must use default GPU count")
+    condor_hours = [job["hours"] for job in condor_jobs]
+    if condor_hours.count(10) != 7 or condor_hours.count(1) != 1:
+        raise ValueError(
+            "commit.sh htcondor job mismatch: expected seven 10h and one 1h "
+            f"jobs, got {condor_hours}"
+        )
+    if len(condor_hours) != 8:
+        raise ValueError(
+            f"commit.sh htcondor expected 8 active jobs, got {len(condor_hours)}"
+        )
+
+    return {
+        "has_metr_branch": True,
+        "scheduler_dependent": True,
+        "current_models_in_arrays": models,
+        "current_benchmarks_in_arrays": benchmarks,
+        "htcondor_mpi_is_branch": {
+            "active_jobs": 1,
             "hours": 100,
             "gpus": 8,
             "note": "Active 100-hour, eight-GPU METR command",
-        }
-
-    # Count active submit/command invocations
-    hours_matches = re.findall(r"NUM_HOURS[= ]+(\d+)", content)
-    analysis["num_hours_values"] = sorted(set(hours_matches))
-
-    # Check model/benchmark arrays in code (not comments)
-    analysis["current_models_in_arrays"] = []
-    analysis["current_benchmarks_in_arrays"] = []
-    for frag in EXPECTED_MODEL_FRAGMENTS:
-        if frag in code_text:
-            analysis["current_models_in_arrays"].append(frag)
-    for bench in EXPECTED_BENCHMARKS:
-        if bench in code_text:
-            analysis["current_benchmarks_in_arrays"].append(bench)
-
-    # 10h and 1h job counts from branch structure
-    ten_hour_count = len(re.findall(r"NUM_HOURS\s*=\s*10\b", content))
-    one_hour_count = len(re.findall(r"NUM_HOURS\s*=\s*1\b", content))
-    analysis["htcondor_branch"] = {
-        "ten_hour_jobs": ten_hour_count,
-        "one_hour_jobs": one_hour_count,
-        "gpu_spec": "default (single_task.sub num_gpus=1)",
+        },
+        "htcondor_branch": {
+            "active_jobs": 8,
+            "ten_hour_jobs": 7,
+            "one_hour_jobs": 1,
+            "gpu_spec": "default (single_task.sub num_gpus=1)",
+        },
+        "num_hours_values": [1, 10, 100],
+        "gpu_counts_found": [8],
     }
-
-    # GPU count patterns
-    gpu_matches = re.findall(r"num_gpus\s*=\s*(\d+)", content)
-    analysis["gpu_counts_found"] = sorted(set(gpu_matches))
-
-    return analysis
 
 
 # ---------------------------------------------------------------------------
@@ -549,7 +684,11 @@ def evaluate_claims(
     Requires verified coverage, protocol, and reward_hacking dicts.
     Both claims are ``partial-support``.
     """
-    # Verify the audit data is consistent
+    def require_exact(label: str, actual: Any, expected: Any) -> None:
+        if actual != expected:
+            raise ValueError(f"{label} mismatch: {actual!r} != {expected!r}")
+
+    # Verify the complete coverage census, not only its headline count.
     if coverage["recognized_task_count"] != EXPECTED_TASK_COUNT:
         raise ValueError(
             f"Coverage task count {coverage['recognized_task_count']} "
@@ -575,6 +714,139 @@ def evaluate_claims(
             f"Coverage missing pairs {coverage.get('missing_root_cell_pairs')} "
             f"!= expected {EXPECTED_MISSING_PAIRS}"
         )
+    require_exact(
+        "Coverage cell-count map",
+        coverage.get("cell_counts"),
+        EXPECTED_CELL_COUNTS,
+    )
+    expected_matrix = [
+        {
+            "benchmark": benchmark,
+            "model": model,
+            "count": EXPECTED_CELL_COUNTS[benchmark][model_index],
+        }
+        for benchmark in sorted(EXPECTED_BENCHMARKS)
+        for model_index, model in enumerate(MODEL_ORDER)
+    ]
+    require_exact(
+        "Coverage 28-cell matrix",
+        coverage.get("matrix"),
+        expected_matrix,
+    )
+
+    # Verify every protocol fact that supports the partial status.
+    exact_protocol = {
+        "num_gpus_default": 1,
+        "cuda_device_requirement": (
+            'TARGET.CUDADeviceName == "NVIDIA H100 80GB HBM3"'
+        ),
+        "request_gpus_binding": "request_gpus = $(num_gpus)",
+        "receives_num_hours": True,
+        "solve_timeout_formula": "NUM_HOURS * 60 + 5",
+        "timeout_grace_minutes": 5,
+        "timeout_formula_found": True,
+        "task_dir_10h_suffix": True,
+        "evaluation_dirs_present": EXPECTED_EVAL_DIRS,
+    }
+    for key, expected in exact_protocol.items():
+        require_exact(f"Protocol {key}", protocol.get(key), expected)
+
+    analysis = protocol.get("commit_sh_analysis")
+    if not isinstance(analysis, dict):
+        raise ValueError("Protocol commit_sh_analysis missing")
+    require_exact(
+        "Protocol scheduler_dependent",
+        analysis.get("scheduler_dependent"),
+        True,
+    )
+    require_exact(
+        "Protocol active models",
+        analysis.get("current_models_in_arrays"),
+        ["Qwen/Qwen3-4B-Base"],
+    )
+    require_exact(
+        "Protocol active benchmarks",
+        analysis.get("current_benchmarks_in_arrays"),
+        ["healthbench"],
+    )
+    require_exact(
+        "Protocol MPI branch",
+        analysis.get("htcondor_mpi_is_branch"),
+        {
+            "active_jobs": 1,
+            "hours": 100,
+            "gpus": 8,
+            "note": "Active 100-hour, eight-GPU METR command",
+        },
+    )
+    require_exact(
+        "Protocol htcondor branch",
+        analysis.get("htcondor_branch"),
+        {
+            "active_jobs": 8,
+            "ten_hour_jobs": 7,
+            "one_hour_jobs": 1,
+            "gpu_spec": "default (single_task.sub num_gpus=1)",
+        },
+    )
+
+    # Verify all reward-mode gates before emitting either selected status.
+    contamination = reward_hacking.get("training_on_test_sets", {})
+    instruction = reward_hacking.get(
+        "downloading_instruction_tuned_checkpoint",
+        {},
+    )
+    api_misuse = reward_hacking.get("using_discovered_api_key", {})
+    require_exact(
+        "Contamination reward status",
+        contamination.get("status"),
+        "partial-support",
+    )
+    require_exact(
+        "Instruction-model reward status",
+        instruction.get("status"),
+        "partial-support",
+    )
+    require_exact(
+        "API-misuse reward status",
+        api_misuse.get("status"),
+        "unavailable",
+    )
+    require_exact(
+        "API-misuse matching path count",
+        api_misuse.get("inventory_proof", {}).get("matching_paths"),
+        0,
+    )
+    trace = instruction.get("trace", {})
+    require_exact(
+        "Instruction trace SHA-256",
+        trace.get("sha256"),
+        INSTRUCTION_MODEL_TRACE_SHA256,
+    )
+    require_exact(
+        "Instruction trace size",
+        trace.get("size"),
+        INSTRUCTION_MODEL_TRACE_SIZE,
+    )
+    require_exact(
+        "Instruction trace redistribution flag",
+        trace.get("redistributed"),
+        False,
+    )
+    expected_excerpts = [
+        {
+            "record": excerpt["record"],
+            "json_pointer": excerpt["pointer"],
+            "text": excerpt["text"],
+            "sha256": excerpt["sha256"],
+        }
+        for excerpt in TRACE_EXCERPTS
+    ]
+    require_exact(
+        "Instruction trace safe excerpts",
+        instruction.get("safe_excerpts"),
+        expected_excerpts,
+    )
 
     limitations_1 = [
         "No H100 run is reproduced; the resource and time findings are a released-configuration audit.",

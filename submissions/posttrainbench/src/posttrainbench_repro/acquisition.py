@@ -49,6 +49,41 @@ _EXPECTED_HF_BASE = (
 )
 
 
+def _github_tree_url() -> str:
+    return (
+        f"https://api.github.com/repos/{GITHUB_REPO}"
+        f"/git/trees/{GIT_TREE_ID}?recursive=1"
+    )
+
+
+def _github_raw_url(path: str) -> str:
+    return (
+        f"https://raw.githubusercontent.com/{GITHUB_REPO}"
+        f"/{GITHUB_PINNED_COMMIT}/{path}"
+    )
+
+
+def _hf_tree_initial_url() -> str:
+    params = {
+        "recursive": "true",
+        "expand": "false",
+        "limit": str(HF_TREE_PAGE_SIZE),
+    }
+    return f"{_EXPECTED_HF_BASE}?{urlencode(params)}"
+
+
+def _hf_raw_url(path: str) -> str:
+    return (
+        f"https://huggingface.co/datasets/{HF_DATASET_ID}"
+        f"/raw/{HF_PINNED_REVISION}/{path}"
+    )
+
+
+def _get_command(url: str) -> str:
+    """Return the deterministic logical HTTP acquisition command."""
+    return f"GET {url}"
+
+
 # ---------------------------------------------------------------------------
 # Canonical tree digest computation
 # ---------------------------------------------------------------------------
@@ -73,10 +108,7 @@ def fetch_github_tree_entries(
     client: httpx.Client | None = None,
 ) -> list[dict[str, Any]]:
     """Fetch the recursive Git tree at the pinned root tree object via GitHub API."""
-    url = (
-        f"https://api.github.com/repos/{GITHUB_REPO}"
-        f"/git/trees/{GIT_TREE_ID}?recursive=1"
-    )
+    url = _github_tree_url()
     if client is None:
         with httpx.Client(timeout=_TIMEOUT) as c:
             resp = c.get(url, headers={"Accept": "application/vnd.github+json"})
@@ -99,10 +131,7 @@ def fetch_github_raw_file(
     client: httpx.Client | None = None,
 ) -> bytes:
     """Fetch raw file bytes from GitHub at the pinned commit."""
-    url = (
-        f"https://raw.githubusercontent.com/{GITHUB_REPO}"
-        f"/{GITHUB_PINNED_COMMIT}/{path}"
-    )
+    url = _github_raw_url(path)
     if client is None:
         with httpx.Client(timeout=_TIMEOUT, follow_redirects=True) as c:
             resp = c.get(url)
@@ -155,6 +184,8 @@ def fetch_github_metadata(
             "git_object": expected_git_sha,
             "raw_sha256": actual_sha256,
             "size": len(raw),
+            "raw_url": _github_raw_url(path),
+            "acquisition_command": _get_command(_github_raw_url(path)),
         }
         blob_contents[path] = raw
 
@@ -166,6 +197,10 @@ def fetch_github_metadata(
         "entries": entries,
         "blobs": blobs,
         "blob_contents": blob_contents,
+        "tree_acquisition": {
+            "url": _github_tree_url(),
+            "acquisition_command": _get_command(_github_tree_url()),
+        },
     }
 
 
@@ -225,12 +260,7 @@ def fetch_hf_tree_pages(
     - rejects cursor cycles
     - rejects unknown entry types
     """
-    base_url = (
-        f"https://huggingface.co/api/datasets/{HF_DATASET_ID}"
-        f"/tree/{HF_PINNED_REVISION}"
-    )
-    params = {"recursive": "true", "expand": "false", "limit": str(HF_TREE_PAGE_SIZE)}
-    url: str | None = f"{base_url}?{urlencode(params)}"
+    url: str | None = _hf_tree_initial_url()
 
     all_entries: list[dict[str, Any]] = []
     page_count = 0
@@ -311,6 +341,7 @@ def fetch_hf_path_inventory(
     all_paths: list[str] = []
     file_paths: list[str] = []
     dir_paths: list[str] = []
+    entry_metadata: dict[str, dict[str, Any]] = {}
 
     seen: dict[str, str] = {}  # path -> type for conflict detection
     for e in entries:
@@ -325,6 +356,12 @@ def fetch_hf_path_inventory(
             raise ValueError(f"Duplicate path in inventory: {path}")
         seen[path] = etype
         all_paths.append(path)
+        if path in HF_ALLOWLISTED_FILES:
+            entry_metadata[path] = {
+                "type": etype,
+                "oid": e.get("oid"),
+                "size": e.get("size"),
+            }
         if etype == "directory":
             dir_paths.append(path)
         else:
@@ -374,6 +411,14 @@ def fetch_hf_path_inventory(
         "canonical_all_digest": all_digest,
         "canonical_file_digest": file_digest,
         "canonical_dir_digest": dir_digest,
+        "entry_metadata": entry_metadata,
+        "tree_acquisition": {
+            "initial_url": _hf_tree_initial_url(),
+            "acquisition_command": (
+                f"{_get_command(_hf_tree_initial_url())}; "
+                'follow Link rel="next" until absent'
+            ),
+        },
     }
 
 
@@ -395,10 +440,7 @@ def fetch_allowlisted_file(
             f"Path {path!r} is not in the approved allowlist. "
             f"Only {sorted(HF_ALLOWLISTED_FILES)} are permitted."
         )
-    url = (
-        f"https://huggingface.co/datasets/{HF_DATASET_ID}"
-        f"/raw/{HF_PINNED_REVISION}/{path}"
-    )
+    url = _hf_raw_url(path)
     if client is None:
         with httpx.Client(timeout=_TIMEOUT, follow_redirects=True) as c:
             resp = c.get(url)
@@ -433,7 +475,7 @@ def _validate_hf_entry_metadata(hf_inventory: dict[str, Any]) -> None:
     """
     metadata = hf_inventory.get("entry_metadata", {})
 
-    for path, (expected_oid, expected_size) in _HF_EXPECTED_ENTRIES.items():
+    for path in sorted(HF_ALLOWLISTED_FILES):
         if path not in metadata:
             raise ValueError(
                 f"Allowlisted path not found in HF entry metadata: {path}"
@@ -445,6 +487,13 @@ def _validate_hf_entry_metadata(hf_inventory: dict[str, Any]) -> None:
                 f"Allowlisted path {path} has type {entry.get('type')!r}, "
                 f"expected 'file'"
             )
+        if "oid" not in entry or not isinstance(entry["oid"], str):
+            raise ValueError(f"Allowlisted path {path} has missing/invalid oid")
+        if "size" not in entry or not isinstance(entry["size"], int):
+            raise ValueError(f"Allowlisted path {path} has missing/invalid size")
+
+    for path, (expected_oid, expected_size) in _HF_EXPECTED_ENTRIES.items():
+        entry = metadata[path]
         if entry.get("oid") != expected_oid:
             raise ValueError(
                 f"HF entry object mismatch for {path}: "
@@ -587,6 +636,9 @@ def acquire_all(
         # 2. Complete HF paginated tree inventory
         hf_inventory = fetch_hf_path_inventory(client)
 
+        # Validate every allowlisted tree object before any content request.
+        _validate_hf_entry_metadata(hf_inventory)
+
         # 3. Allowlisted HF files
         from posttrainbench_repro.constants import (
             CONTAMINATION_WITNESS_PATH,
@@ -639,9 +691,35 @@ def acquire_all(
         if own_client:
             client.close()
 
+    contents_by_path = {
+        CONTAMINATION_WITNESS_PATH: contam,
+        TIME_TAKEN_WITNESS_PATH: time_taken,
+        INSTRUCTION_MODEL_JUDGMENT_PATH: judgment,
+        INSTRUCTION_MODEL_TRACE_PATH: trace,
+    }
+    consumed_hf_files: list[dict[str, Any]] = []
+    for path in sorted(HF_ALLOWLISTED_FILES):
+        content = contents_by_path[path]
+        metadata = hf_inventory["entry_metadata"][path]
+        if len(content) != metadata["size"]:
+            raise ValueError(
+                f"HF content size mismatch for {path}: "
+                f"{len(content)} != {metadata['size']}"
+            )
+        raw_url = _hf_raw_url(path)
+        consumed_hf_files.append({
+            "path": path,
+            "raw_url": raw_url,
+            "acquisition_command": _get_command(raw_url),
+            "sha256": hashlib.sha256(content).hexdigest(),
+            "size": len(content),
+            "oid": metadata["oid"],
+        })
+
     return {
         "github": github,
         "hf_inventory": hf_inventory,
+        "hf_consumed_files": consumed_hf_files,
         "contamination_content": contam,
         "time_taken_content": time_taken,
         "instruction_judgment_content": judgment,

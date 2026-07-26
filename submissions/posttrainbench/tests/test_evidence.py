@@ -43,7 +43,9 @@ from posttrainbench_repro.constants import (
     GIT_TREE_ENTRY_COUNT,
     GIT_TREE_ID,
     GITHUB_PINNED_COMMIT,
+    GITHUB_REPO,
     HF_ALLOWLISTED_FILES,
+    HF_DATASET_ID,
     HF_PINNED_REVISION,
     HF_TREE_DIR_COUNT,
     HF_TREE_FILE_COUNT,
@@ -73,6 +75,32 @@ from posttrainbench_repro.constants import (
 
 SUBMISSION_DIR = Path(__file__).parent.parent
 
+_REALISTIC_COMMIT_SH = b"""\
+#!/bin/bash
+models=(
+    # "Qwen/Qwen3-1.7B-Base"
+    "Qwen/Qwen3-4B-Base"
+)
+evals=(
+    # "aime2025"
+    "healthbench"
+)
+if [ "${POST_TRAIN_BENCH_JOB_SCHEDULER}" = "htcondor_mpi-is" ]; then
+    condor_submit_bid 100 -a "agent=claude" -a "num_hours=100" -a "num_gpus=8" src/commit_utils/single_task.sub
+elif [ "${POST_TRAIN_BENCH_JOB_SCHEDULER}" = "htcondor" ]; then
+    condor_submit_bid 100 -a "agent=claude" -a "num_hours=10" src/commit_utils/single_task.sub
+    condor_submit_bid 100 -a "agent=claude" -a "num_hours=10" src/commit_utils/single_task.sub
+    condor_submit_bid 100 -a "agent=codex" -a "num_hours=10" src/commit_utils/single_task.sub
+    condor_submit_bid 100 -a "agent=opencode" -a "num_hours=10" src/commit_utils/single_task.sub
+    condor_submit_bid 100 -a "agent=opencode" -a "num_hours=10" src/commit_utils/single_task.sub
+    condor_submit_bid 100 -a "agent=aider" -a "num_hours=10" src/commit_utils/single_task.sub
+    condor_submit_bid 100 -a "agent=aider" -a "num_hours=10" src/commit_utils/single_task.sub
+    condor_submit_bid 100 -a "agent=claude" -a "num_hours=1" src/commit_utils/single_task.sub
+else
+    echo "unsupported"
+fi
+"""
+
 
 # ---------------------------------------------------------------------------
 # Helpers: build mock acquired data for offline tests
@@ -99,33 +127,29 @@ def _make_mock_github() -> dict[str, Any]:
             b'NUM_HOURS=${1:-10}\n'
             b'timeout $((NUM_HOURS * 60 + 5))m python run.py\n'
         ),
-        "src/commit_utils/commit.sh": (
-            b'#!/bin/bash\n'
-            b'if [ "$SCHEDULER" = "htcondor_mpi-is" ]; then\n'
-            b'  NUM_HOURS=100\n'
-            b'  num_gpus=8\n'
-            b'  # METR 100-hour 8-GPU command\n'
-            b'  submit_job\n'
-            b'else\n'
-            b'  # Default htcondor branch\n'
-            b'  for i in 1 2 3 4 5 6 7; do NUM_HOURS=10 submit; done\n'
-            b'  NUM_HOURS=1 submit\n'
-            b'  MODELS=("Qwen_Qwen3-4B-Base")\n'
-            b'  BENCHMARKS=("healthbench")\n'
-            b'fi\n'
-        ),
+        "src/commit_utils/commit.sh": _REALISTIC_COMMIT_SH,
         "README.md": b"# PostTrainBench\n",
         "LICENSE": b"MIT License\n",
     }
 
     blobs: dict[str, dict[str, Any]] = {}
     for path, (git_sha, raw_sha) in PINNED_BLOBS.items():
+        raw_url = (
+            f"https://raw.githubusercontent.com/{GITHUB_REPO}"
+            f"/{GITHUB_PINNED_COMMIT}/{path}"
+        )
         blobs[path] = {
             "git_object": git_sha,
             "raw_sha256": raw_sha,
             "size": len(blob_contents.get(path, b"")),
+            "raw_url": raw_url,
+            "acquisition_command": f"GET {raw_url}",
         }
 
+    tree_url = (
+        f"https://api.github.com/repos/{GITHUB_REPO}"
+        f"/git/trees/{GIT_TREE_ID}?recursive=1"
+    )
     return {
         "commit": GITHUB_PINNED_COMMIT,
         "tree_id": GIT_TREE_ID,
@@ -134,6 +158,10 @@ def _make_mock_github() -> dict[str, Any]:
         "entries": entries,
         "blobs": blobs,
         "blob_contents": blob_contents,
+        "tree_acquisition": {
+            "url": tree_url,
+            "acquisition_command": f"GET {tree_url}",
+        },
     }
 
 
@@ -229,6 +257,33 @@ def _make_mock_hf_inventory() -> dict[str, Any]:
     file_paths = [f"{run_roots[0]}/file{i}.txt" for i in range(10)]
     all_paths.extend(file_paths)
 
+    entry_metadata = {
+        path: {
+            "type": "file",
+            "oid": hashlib.sha1(path.encode("utf-8")).hexdigest(),
+            "size": len(path.encode("utf-8")),
+        }
+        for path in HF_ALLOWLISTED_FILES
+    }
+    entry_metadata[CONTAMINATION_WITNESS_PATH]["size"] = len(
+        CONTAMINATION_WITNESS_BYTES
+    )
+    entry_metadata[TIME_TAKEN_WITNESS_PATH]["size"] = len(
+        TIME_TAKEN_WITNESS_BYTES
+    )
+    entry_metadata[INSTRUCTION_MODEL_JUDGMENT_PATH].update({
+        "oid": INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
+        "size": INSTRUCTION_MODEL_JUDGMENT_SIZE,
+    })
+    entry_metadata[INSTRUCTION_MODEL_TRACE_PATH].update({
+        "oid": INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
+        "size": INSTRUCTION_MODEL_TRACE_SIZE,
+    })
+    tree_url = (
+        f"https://huggingface.co/api/datasets/{HF_DATASET_ID}"
+        f"/tree/{HF_PINNED_REVISION}"
+        "?recursive=true&expand=false&limit=1000"
+    )
     return {
         "revision": HF_PINNED_REVISION,
         "page_count": HF_TREE_TOTAL_PAGES,
@@ -241,6 +296,13 @@ def _make_mock_hf_inventory() -> dict[str, Any]:
         "canonical_all_digest": "mock_all_digest",
         "canonical_file_digest": "mock_file_digest",
         "canonical_dir_digest": "mock_dir_digest",
+        "entry_metadata": entry_metadata,
+        "tree_acquisition": {
+            "initial_url": tree_url,
+            "acquisition_command": (
+                f"GET {tree_url}; follow Link rel=\"next\" until absent"
+            ),
+        },
     }
 
 
@@ -263,9 +325,43 @@ def _make_mock_trace_excerpts() -> list[dict[str, Any]]:
 
 def _make_mock_acquired() -> dict[str, Any]:
     """Build a complete mock acquired dict for offline pipeline tests."""
+    hf_inventory = _make_mock_hf_inventory()
+    content_metadata = {
+        CONTAMINATION_WITNESS_PATH: (
+            CONTAMINATION_WITNESS_SHA256,
+            len(CONTAMINATION_WITNESS_BYTES),
+        ),
+        TIME_TAKEN_WITNESS_PATH: (
+            TIME_TAKEN_WITNESS_SHA256,
+            len(TIME_TAKEN_WITNESS_BYTES),
+        ),
+        INSTRUCTION_MODEL_JUDGMENT_PATH: (
+            INSTRUCTION_MODEL_JUDGMENT_SHA256,
+            INSTRUCTION_MODEL_JUDGMENT_SIZE,
+        ),
+        INSTRUCTION_MODEL_TRACE_PATH: (
+            INSTRUCTION_MODEL_TRACE_SHA256,
+            INSTRUCTION_MODEL_TRACE_SIZE,
+        ),
+    }
+    consumed_hf_files = []
+    for path in sorted(HF_ALLOWLISTED_FILES):
+        raw_url = (
+            f"https://huggingface.co/datasets/{HF_DATASET_ID}"
+            f"/raw/{HF_PINNED_REVISION}/{path}"
+        )
+        consumed_hf_files.append({
+            "path": path,
+            "raw_url": raw_url,
+            "acquisition_command": f"GET {raw_url}",
+            "sha256": content_metadata[path][0],
+            "size": content_metadata[path][1],
+            "oid": hf_inventory["entry_metadata"][path]["oid"],
+        })
     return {
         "github": _make_mock_github(),
-        "hf_inventory": _make_mock_hf_inventory(),
+        "hf_inventory": hf_inventory,
+        "hf_consumed_files": consumed_hf_files,
         "contamination_content": CONTAMINATION_WITNESS_BYTES,
         "time_taken_content": TIME_TAKEN_WITNESS_BYTES,
         "instruction_judgment_content": INSTRUCTION_MODEL_JUDGMENT_BYTES,

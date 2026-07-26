@@ -152,26 +152,28 @@ def _make_valid_acquired(
             b'NUM_HOURS=${1:-10}\n'
             b'timeout $((NUM_HOURS * 60 + 5))m python run.py\n'
         ),
-        "src/commit_utils/commit.sh": (
-            b'#!/bin/bash\n'
-            b'if [ "$SCHEDULER" = "htcondor_mpi-is" ]; then\n'
-            b'  NUM_HOURS=100\n'
-            b'  num_gpus=8\n'
-            b'  submit_job\n'
-            b'else\n'
-            b'  for i in 1 2 3 4 5 6 7; do NUM_HOURS=10 submit; done\n'
-            b'  NUM_HOURS=1 submit\n'
-            b'  MODELS=("Qwen_Qwen3-4B-Base")\n'
-            b'  BENCHMARKS=("healthbench")\n'
-            b'fi\n'
-        ),
+        "src/commit_utils/commit.sh": _REALISTIC_COMMIT_SH,
         "README.md": b"# PostTrainBench\n",
         "LICENSE": b"MIT License\n",
     }
     blobs = {}
     for path, (sha, raw_sha) in C.PINNED_BLOBS.items():
-        blobs[path] = {"git_object": sha, "raw_sha256": raw_sha, "size": 100}
+        raw_url = (
+            f"https://raw.githubusercontent.com/{C.GITHUB_REPO}"
+            f"/{C.GITHUB_PINNED_COMMIT}/{path}"
+        )
+        blobs[path] = {
+            "git_object": sha,
+            "raw_sha256": raw_sha,
+            "size": 100,
+            "raw_url": raw_url,
+            "acquisition_command": f"GET {raw_url}",
+        }
 
+    tree_url = (
+        f"https://api.github.com/repos/{C.GITHUB_REPO}"
+        f"/git/trees/{C.GIT_TREE_ID}?recursive=1"
+    )
     github = {
         "commit": C.GITHUB_PINNED_COMMIT,
         "tree_id": C.GIT_TREE_ID,
@@ -180,6 +182,10 @@ def _make_valid_acquired(
         "entries": entries,
         "blobs": blobs,
         "blob_contents": blob_contents,
+        "tree_acquisition": {
+            "url": tree_url,
+            "acquisition_command": f"GET {tree_url}",
+        },
     }
 
     # Build matching HF inventory
@@ -194,9 +200,43 @@ def _make_valid_acquired(
             "sha256": hashlib.sha256(str(spec["text"]).encode()).hexdigest(),
         })
 
+    consumed_hf_files = []
+    content_metadata = {
+        C.CONTAMINATION_WITNESS_PATH: (
+            C.CONTAMINATION_WITNESS_SHA256,
+            len(C.CONTAMINATION_WITNESS_BYTES),
+        ),
+        C.TIME_TAKEN_WITNESS_PATH: (
+            C.TIME_TAKEN_WITNESS_SHA256,
+            len(C.TIME_TAKEN_WITNESS_BYTES),
+        ),
+        C.INSTRUCTION_MODEL_JUDGMENT_PATH: (
+            C.INSTRUCTION_MODEL_JUDGMENT_SHA256,
+            C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
+        ),
+        C.INSTRUCTION_MODEL_TRACE_PATH: (
+            C.INSTRUCTION_MODEL_TRACE_SHA256,
+            C.INSTRUCTION_MODEL_TRACE_SIZE,
+        ),
+    }
+    for path in sorted(C.HF_ALLOWLISTED_FILES):
+        raw_url = (
+            f"https://huggingface.co/datasets/{C.HF_DATASET_ID}"
+            f"/raw/{C.HF_PINNED_REVISION}/{path}"
+        )
+        consumed_hf_files.append({
+            "path": path,
+            "raw_url": raw_url,
+            "acquisition_command": f"GET {raw_url}",
+            "sha256": content_metadata[path][0],
+            "size": content_metadata[path][1],
+            "oid": hf_inv["entry_metadata"][path]["oid"],
+        })
+
     return {
         "github": github,
         "hf_inventory": hf_inv,
+        "hf_consumed_files": consumed_hf_files,
         "contamination_content": C.CONTAMINATION_WITNESS_BYTES,
         "time_taken_content": C.TIME_TAKEN_WITNESS_BYTES,
         "instruction_judgment_content": C.INSTRUCTION_MODEL_JUDGMENT_BYTES,
@@ -245,6 +285,33 @@ def _make_valid_hf_inventory(
     all_paths = dir_paths + file_paths
     if extra_all_paths:
         all_paths.extend(extra_all_paths)
+    entry_metadata = {
+        path: {
+            "type": "file",
+            "oid": hashlib.sha1(path.encode("utf-8")).hexdigest(),
+            "size": len(path.encode("utf-8")),
+        }
+        for path in C.HF_ALLOWLISTED_FILES
+    }
+    entry_metadata[C.CONTAMINATION_WITNESS_PATH]["size"] = len(
+        C.CONTAMINATION_WITNESS_BYTES
+    )
+    entry_metadata[C.TIME_TAKEN_WITNESS_PATH]["size"] = len(
+        C.TIME_TAKEN_WITNESS_BYTES
+    )
+    entry_metadata[C.INSTRUCTION_MODEL_JUDGMENT_PATH].update({
+        "oid": C.INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
+        "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
+    })
+    entry_metadata[C.INSTRUCTION_MODEL_TRACE_PATH].update({
+        "oid": C.INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
+        "size": C.INSTRUCTION_MODEL_TRACE_SIZE,
+    })
+    tree_url = (
+        f"https://huggingface.co/api/datasets/{C.HF_DATASET_ID}"
+        f"/tree/{C.HF_PINNED_REVISION}"
+        "?recursive=true&expand=false&limit=1000"
+    )
     return {
         "revision": C.HF_PINNED_REVISION,
         "page_count": C.HF_TREE_TOTAL_PAGES,
@@ -257,6 +324,13 @@ def _make_valid_hf_inventory(
         "canonical_all_digest": "mock",
         "canonical_file_digest": "mock",
         "canonical_dir_digest": "mock",
+        "entry_metadata": entry_metadata,
+        "tree_acquisition": {
+            "initial_url": tree_url,
+            "acquisition_command": (
+                f"GET {tree_url}; follow Link rel=\"next\" until absent"
+            ),
+        },
     }
 
 
@@ -893,7 +967,7 @@ class TestProtocolMutated:
 
     def test_missing_timeout_fails(self):
         blobs = self._base_blobs()
-        blobs["src/run_task.sh"] = b"#!/bin/bash\necho hello\n"
+        blobs["src/run_task.sh"] = b"#!/bin/bash\nNUM_HOURS=${1:-10}\necho hello\n"
         with pytest.raises(ValueError, match="timeout"):
             audit_protocol(blobs, self._base_entries())
 
@@ -1096,18 +1170,9 @@ class TestHFEntryMetadata:
         """Wrong Git object for judgment file in HF inventory raises."""
         acquired = _make_valid_acquired()
         inv = acquired["hf_inventory"]
-        inv["entry_metadata"] = {
-            C.INSTRUCTION_MODEL_JUDGMENT_PATH: {
-                "type": "file",
-                "oid": "0000000000000000000000000000000000000000",
-                "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
-            },
-            C.INSTRUCTION_MODEL_TRACE_PATH: {
-                "type": "file",
-                "oid": C.INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
-                "size": C.INSTRUCTION_MODEL_TRACE_SIZE,
-            },
-        }
+        inv["entry_metadata"][C.INSTRUCTION_MODEL_JUDGMENT_PATH]["oid"] = (
+            "0000000000000000000000000000000000000000"
+        )
         with pytest.raises(ValueError, match="object|oid|mismatch"):
             from posttrainbench_repro.acquisition import _validate_hf_entry_metadata
             _validate_hf_entry_metadata(inv)
@@ -1116,18 +1181,7 @@ class TestHFEntryMetadata:
         """Wrong size for trace file in HF inventory raises."""
         acquired = _make_valid_acquired()
         inv = acquired["hf_inventory"]
-        inv["entry_metadata"] = {
-            C.INSTRUCTION_MODEL_JUDGMENT_PATH: {
-                "type": "file",
-                "oid": C.INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
-                "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
-            },
-            C.INSTRUCTION_MODEL_TRACE_PATH: {
-                "type": "file",
-                "oid": C.INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
-                "size": 999,  # Wrong size
-            },
-        }
+        inv["entry_metadata"][C.INSTRUCTION_MODEL_TRACE_PATH]["size"] = 999
         with pytest.raises(ValueError, match="size"):
             from posttrainbench_repro.acquisition import _validate_hf_entry_metadata
             _validate_hf_entry_metadata(inv)
@@ -1145,13 +1199,9 @@ class TestHFEntryMetadata:
         """Allowlisted path that is a directory instead of file raises."""
         acquired = _make_valid_acquired()
         inv = acquired["hf_inventory"]
-        inv["entry_metadata"] = {
-            C.INSTRUCTION_MODEL_JUDGMENT_PATH: {
-                "type": "directory",  # Wrong type
-                "oid": C.INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
-                "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
-            },
-        }
+        inv["entry_metadata"][C.INSTRUCTION_MODEL_JUDGMENT_PATH]["type"] = (
+            "directory"
+        )
         with pytest.raises(ValueError, match="type|file|directory"):
             from posttrainbench_repro.acquisition import _validate_hf_entry_metadata
             _validate_hf_entry_metadata(inv)
@@ -1797,5 +1847,3 @@ def test_claim_gate_rejects_every_mutated_authority(target, path, value):
             objects["protocol"],
             objects["reward"],
         )
-
-
