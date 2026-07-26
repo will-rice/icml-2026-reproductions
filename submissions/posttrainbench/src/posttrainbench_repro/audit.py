@@ -78,6 +78,7 @@ from posttrainbench_repro.constants import (
     TRUNCATED_SIBLINGS_COUNT,
     TRUNCATED_SIBLINGS_SHA256,
     UPSTREAM_TOKEN,
+    VIEWER_DATA_FILE_COUNT,
 )
 
 
@@ -163,6 +164,37 @@ def compute_coverage(
     """
     dir_paths = hf_inventory["dir_paths"]
     coverage = _compute_coverage_from_dirs(dir_paths)
+    coverage["accepted_benchmark_count"] = len(EXPECTED_BENCHMARKS)
+    coverage["accepted_model_count"] = len(EXPECTED_MODEL_FRAGMENTS)
+
+    if "file_paths" in hf_inventory:
+        viewer_dirs = sorted(
+            path
+            for path in dir_paths
+            if path == "viewer_data" or path.startswith("viewer_data/")
+        )
+        viewer_files = sorted(
+            path
+            for path in hf_inventory["file_paths"]
+            if path.startswith("viewer_data/")
+        )
+        if "viewer_data" not in viewer_dirs:
+            raise ValueError(
+                "Verified inventory is missing excluded top-level viewer_data"
+            )
+        if len(viewer_files) != VIEWER_DATA_FILE_COUNT:
+            raise ValueError(
+                "Verified viewer_data auxiliary file count mismatch: "
+                f"{len(viewer_files)} != 2,397"
+            )
+        coverage["excluded_auxiliary_data"] = {
+            "top_level_path": "viewer_data",
+            "present": True,
+            "file_count": len(viewer_files),
+            "directory_count": len(viewer_dirs),
+            "counted_as_task_root": False,
+        }
+
     inventory_fields = {
         "page_count",
         "total_entries",
@@ -295,6 +327,40 @@ def _compute_coverage_from_dirs(
 # Protocol audit
 # ---------------------------------------------------------------------------
 
+def _source_lines(
+    content: str,
+    predicate: Any,
+) -> list[int]:
+    """Return one-based active source lines matching a predicate."""
+    return [
+        line_number
+        for line_number, line in enumerate(content.splitlines(), 1)
+        if line.strip()
+        and not line.lstrip().startswith("#")
+        and predicate(line)
+    ]
+
+
+def _blob_reference(
+    path: str,
+    content: str,
+    predicate: Any,
+    label: str,
+) -> dict[str, Any]:
+    """Build a deterministic path/line reference into one verified blob."""
+    lines = _source_lines(content, predicate)
+    if not lines:
+        raise ValueError(f"Could not source {label} in {path}")
+    git_object_sha1, raw_sha256 = PINNED_BLOBS[path]
+    return {
+        "commit": GITHUB_PINNED_COMMIT,
+        "path": path,
+        "lines": lines,
+        "git_object_sha1": git_object_sha1,
+        "raw_sha256": raw_sha256,
+    }
+
+
 def audit_protocol(
     blob_contents: dict[str, bytes],
     git_entries: list[dict[str, Any]],
@@ -376,9 +442,95 @@ def audit_protocol(
             f"{eval_dirs_found}"
         )
     result["evaluation_dirs_present"] = eval_dirs_found
+    result["evaluation_dir_count"] = len(eval_dirs_found)
 
     # Commit.sh analysis for limitations
     result["commit_sh_analysis"] = _analyze_commit_sh(commit_sh)
+
+    single_task_path = "src/commit_utils/single_task.sub"
+    run_task_path = "src/run_task.sh"
+    commit_path = "src/commit_utils/commit.sh"
+    mpi_job = lambda line: (
+        line.lstrip().startswith("condor_submit_bid")
+        and '"num_hours=100"' in line
+        and '"num_gpus=8"' in line
+    )
+    default_jobs = lambda line: (
+        line.lstrip().startswith("condor_submit_bid")
+        and '"num_hours=' in line
+        and '"num_gpus=' not in line
+    )
+    timeout_line = lambda line: bool(
+        re.search(r"NUM_HOURS.*60.*\+.*5", line)
+    )
+    result["source_references"] = {
+        "num_gpus_default": _blob_reference(
+            single_task_path,
+            single_task,
+            lambda line: bool(re.search(r"num_gpus\s*=\s*1\b", line)),
+            "num_gpus default",
+        ),
+        "cuda_device_requirement": _blob_reference(
+            single_task_path,
+            single_task,
+            lambda line: "NVIDIA H100 80GB HBM3" in line,
+            "CUDA device requirement",
+        ),
+        "request_gpus_binding": _blob_reference(
+            single_task_path,
+            single_task,
+            lambda line: bool(
+                re.search(r"request_gpus\s*=\s*\$\(num_gpus\)", line)
+            ),
+            "request_gpus binding",
+        ),
+        "receives_num_hours": _blob_reference(
+            run_task_path,
+            run_task,
+            lambda line: "NUM_HOURS" in line,
+            "NUM_HOURS input",
+        ),
+        "solve_timeout_formula": _blob_reference(
+            run_task_path,
+            run_task,
+            timeout_line,
+            "solve timeout formula",
+        ),
+        "timeout_grace_minutes": _blob_reference(
+            run_task_path,
+            run_task,
+            timeout_line,
+            "timeout grace",
+        ),
+        "evaluation_dirs_present": {
+            "kind": "git-tree-entries",
+            "paths": eval_dirs_found,
+        },
+        "commit_sh_analysis.current_models_in_arrays": _blob_reference(
+            commit_path,
+            commit_sh,
+            lambda line: line.strip() == '"Qwen/Qwen3-4B-Base"',
+            "active model array",
+        ),
+        "commit_sh_analysis.current_benchmarks_in_arrays": _blob_reference(
+            commit_path,
+            commit_sh,
+            lambda line: line.strip() == '"healthbench"',
+            "active benchmark array",
+        ),
+        "commit_sh_analysis.htcondor_mpi_is_branch": _blob_reference(
+            commit_path,
+            commit_sh,
+            mpi_job,
+            "MPI scheduler job",
+        ),
+        "commit_sh_analysis.htcondor_branch": _blob_reference(
+            commit_path,
+            commit_sh,
+            default_jobs,
+            "default htcondor jobs",
+        ),
+    }
 
     result["limitation_multi_gpu_extension"] = True
     result["limitation_five_minute_grace"] = True

@@ -282,7 +282,16 @@ def _make_valid_hf_inventory(
                 root_cell.add((run_roots[0], bench, mn))
                 break
         task_count += 0  # count unchanged since we replaced, not added
+    dir_paths.extend([
+        "viewer_data",
+        "viewer_data/cache",
+        "viewer_data/cache/nested",
+    ])
     file_paths = [f"{run_roots[0]}/file{i}.txt" for i in range(10)]
+    file_paths.extend(
+        f"viewer_data/auxiliary-{index:04d}.json"
+        for index in range(2397)
+    )
     all_paths = dir_paths + file_paths
     if extra_all_paths:
         all_paths.extend(extra_all_paths)
@@ -491,19 +500,23 @@ class TestFailClosed:
             "evidence/provenance.json": sentinel,
             "index.html": sentinel,
         }
-        with patch("posttrainbench_repro.pipeline.PROJECT_ROOT", tmp_path), \
-             patch("posttrainbench_repro.pipeline.acquire_all", side_effect=RuntimeError("fail")):
+        with patch(
+            "posttrainbench_repro.pipeline.acquire_all",
+            side_effect=RuntimeError("fail"),
+        ):
             with pytest.raises(RuntimeError):
-                generate_evidence()
+                generate_evidence(output_root=tmp_path)
         for rel, expected in originals.items():
             assert (tmp_path / rel).read_bytes() == expected
 
     def test_no_new_outputs_on_failure(self, tmp_path):
         """No new canonical outputs are created on acquisition failure."""
-        with patch("posttrainbench_repro.pipeline.PROJECT_ROOT", tmp_path), \
-             patch("posttrainbench_repro.pipeline.acquire_all", side_effect=RuntimeError("fail")):
+        with patch(
+            "posttrainbench_repro.pipeline.acquire_all",
+            side_effect=RuntimeError("fail"),
+        ):
             with pytest.raises(RuntimeError):
-                generate_evidence()
+                generate_evidence(output_root=tmp_path)
         assert not (tmp_path / "evidence").exists()
 
 
@@ -525,14 +538,15 @@ class TestProductionCallsAcquisition:
             call_log.append("acquire_all")
             return acquired
 
-        def fake_run(acq):
+        def fake_run(acq, *, output_root):
             call_log.append("run_pipeline")
             assert acq is acquired
+            assert output_root == tmp_path
             return {}
 
         with patch("posttrainbench_repro.pipeline.acquire_all", side_effect=fake_acquire), \
              patch("posttrainbench_repro.pipeline.run_pipeline", side_effect=fake_run):
-            generate_evidence()
+            generate_evidence(output_root=tmp_path)
         assert call_log == ["acquire_all", "run_pipeline"]
 
 
@@ -1030,10 +1044,9 @@ class TestTransactionalRollback:
                 raise OSError("disk full")
             return original_write(self, content, *args, **kwargs)
 
-        with patch("posttrainbench_repro.pipeline.PROJECT_ROOT", tmp_path), \
-             patch.object(Path, "write_text", failing_write):
+        with patch.object(Path, "write_text", failing_write):
             with pytest.raises(OSError):
-                run_pipeline(acquired)
+                run_pipeline(acquired, output_root=tmp_path)
 
         # Original provenance.json should be restored
         assert (evidence / "provenance.json").read_bytes() == sentinel
@@ -1300,20 +1313,18 @@ class TestPointerCompleteness:
     def test_poster_has_claim_status_pointers(self):
         """Poster must have JSON pointers for each claim status."""
         acquired = _make_valid_acquired()
-        with patch("posttrainbench_repro.pipeline.PROJECT_ROOT", Path("/tmp/ptb_test")):
-            from posttrainbench_repro.pipeline import _canonical_json
-            from posttrainbench_repro.audit import get_provenance
-            from posttrainbench_repro.render import render_poster_html
-            provenance = get_provenance(acquired)
-            coverage = compute_coverage(acquired["hf_inventory"])
-            protocol = audit_protocol(
-                acquired["github"]["blob_contents"],
-                acquired["github"]["entries"],
-            )
-            coverage_output = {**coverage, "protocol": protocol}
-            rh = audit_reward_hacking(acquired)
-            claims = evaluate_claims(coverage, protocol, rh)
-            poster = render_poster_html(provenance, coverage_output, rh, claims)
+        from posttrainbench_repro.audit import get_provenance
+        from posttrainbench_repro.render import render_poster_html
+        provenance = get_provenance(acquired)
+        coverage = compute_coverage(acquired["hf_inventory"])
+        protocol = audit_protocol(
+            acquired["github"]["blob_contents"],
+            acquired["github"]["entries"],
+        )
+        coverage_output = {**coverage, "protocol": protocol}
+        rh = audit_reward_hacking(acquired)
+        claims = evaluate_claims(coverage, protocol, rh)
+        poster = render_poster_html(provenance, coverage_output, rh, claims)
         assert "evidence/claims.json#/claim_1" in poster
         assert "evidence/claims.json#/claim_2" in poster
         assert "evidence/reward_hacking.json#/training_on_test_sets" in poster
@@ -1881,6 +1892,21 @@ class TestExplicitOutputIsolation:
 
 def _inventory_with_viewer_data(file_count: int = 2397) -> dict[str, Any]:
     inventory = _make_valid_hf_inventory()
+    inventory["dir_paths"] = [
+        path
+        for path in inventory["dir_paths"]
+        if path != "viewer_data" and not path.startswith("viewer_data/")
+    ]
+    inventory["file_paths"] = [
+        path
+        for path in inventory["file_paths"]
+        if not path.startswith("viewer_data/")
+    ]
+    inventory["all_paths"] = [
+        path
+        for path in inventory["all_paths"]
+        if path != "viewer_data" and not path.startswith("viewer_data/")
+    ]
     inventory["dir_paths"].extend([
         "viewer_data",
         "viewer_data/cache",
@@ -1947,6 +1973,10 @@ class TestProtocolSourceReferences:
         for key in expected:
             reference = references[key]
             source = acquired["github"]["blob_contents"][reference["path"]]
+            git_object_sha1, raw_sha256 = C.PINNED_BLOBS[reference["path"]]
+            assert reference["commit"] == C.GITHUB_PINNED_COMMIT
+            assert reference["git_object_sha1"] == git_object_sha1
+            assert reference["raw_sha256"] == raw_sha256
             source_lines = source.decode("utf-8").splitlines()
             assert reference["lines"]
             assert all(1 <= line <= len(source_lines) for line in reference["lines"])
@@ -2184,3 +2214,4 @@ def test_protocol_values_render_adjacent_source_references():
                 + key.replace("~", "~0").replace("/", "~1")
             )
             assert f'data-evidence-pointer="{pointer}"' in page
+        assert C.GITHUB_PINNED_COMMIT in page

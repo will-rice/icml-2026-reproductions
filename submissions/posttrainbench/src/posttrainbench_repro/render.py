@@ -79,6 +79,19 @@ def _ptr(pointer: str) -> str:
     return f'<span class="ptr">{pointer}</span>'
 
 
+def _evidence_value(value_html: str, pointer: str) -> str:
+    """Bind one visible value to the exact canonical JSON value it renders."""
+    return (
+        '<span class="evidence-result" '
+        f'data-evidence-pointer="{_escape(pointer)}">'
+        f"{value_html} {_ptr(pointer)}</span>"
+    )
+
+
+def _status_value(status: str, pointer: str) -> str:
+    return _evidence_value(_status_span(status), pointer)
+
+
 def _escape(text: str) -> str:
     """HTML-escape text."""
     return (
@@ -109,8 +122,13 @@ def _render_matrix(coverage: dict[str, Any]) -> str:
     for bench in benchmarks:
         counts = cell_counts[bench]
         rows.append(f"<tr><td><code>{bench}</code></td>")
-        for c in counts:
-            rows.append(f"<td>{c}</td>")
+        for model_index, count in enumerate(counts):
+            pointer = (
+                f"evidence/coverage.json#/cell_counts/{bench}/{model_index}"
+            )
+            rows.append(
+                f"<td>{_evidence_value(str(count), pointer)}</td>"
+            )
         rows.append("</tr>")
 
     rows.append("</table>")
@@ -127,35 +145,138 @@ def _render_reward_hacking(rh: dict[str, Any]) -> str:
 
     # Mode 1: Contamination
     contam = rh["training_on_test_sets"]
+    contam_base = "evidence/reward_hacking.json#/training_on_test_sets"
     parts.append('<div class="card">')
-    parts.append(f'<h3>Training on Test Sets {_status_span(contam["status"])}</h3>')
-    parts.append(f'<p>{_ptr("evidence/reward_hacking.json#/training_on_test_sets")}</p>')
-    parts.append(f'<p>Witness: <code>{_escape(contam["witness_path"])}</code></p>')
-    parts.append(f'<p>SHA-256: <code>{contam["witness_sha256"]}</code></p>')
-    parts.append(f'<p>Content: <code>{_escape(contam["witness_bytes"])}</code></p>')
-    parts.append(f'<p>Type: {contam["observation_type"]}</p>')
+    parts.append(
+        "<h3>Training on Test Sets "
+        f'{_status_value(contam["status"], contam_base + "/status")}</h3>'
+    )
+    parts.append(
+        "<p>Witness: "
+        + _evidence_value(
+            f'<code>{_escape(contam["witness_path"])}</code>',
+            contam_base + "/witness_path",
+        )
+        + "</p>"
+    )
+    parts.append(
+        "<p>SHA-256: "
+        + _evidence_value(
+            f'<code>{contam["witness_sha256"]}</code>',
+            contam_base + "/witness_sha256",
+        )
+        + "</p>"
+    )
+    parts.append(
+        "<p>Content: "
+        + _evidence_value(
+            f'<code>{_escape(contam["witness_bytes"])}</code>',
+            contam_base + "/witness_bytes",
+        )
+        + "</p>"
+    )
+    parts.append(
+        "<p>Type: "
+        + _evidence_value(
+            _escape(contam["observation_type"]),
+            contam_base + "/observation_type",
+        )
+        + "</p>"
+    )
     parts.append("</div>")
 
     # Mode 2: Instruction-model
     instr = rh["downloading_instruction_tuned_checkpoint"]
+    instr_base = (
+        "evidence/reward_hacking.json#/"
+        "downloading_instruction_tuned_checkpoint"
+    )
     parts.append('<div class="card">')
-    parts.append(f'<h3>Instruction-Tuned Checkpoint {_status_span(instr["status"])}</h3>')
-    parts.append(f'<p>{_ptr("evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint")}</p>')
-    parts.append(f'<p>Judgment: <code>{_escape(instr["judgment_path"])}</code></p>')
-    parts.append(f'<p>Judgment SHA-256: <code>{instr["judgment_sha256"]}</code></p>')
-    parts.append(f'<p>Content: <code>{_escape(instr["judgment_bytes"])}</code> (no trailing newline)</p>')
+    parts.append(
+        "<h3>Instruction-Tuned Checkpoint "
+        f'{_status_value(instr["status"], instr_base + "/status")}</h3>'
+    )
+    parts.append(
+        "<p>Judgment: "
+        + _evidence_value(
+            f'<code>{_escape(instr["judgment_path"])}</code>',
+            instr_base + "/judgment_path",
+        )
+        + "</p>"
+    )
+    parts.append(
+        "<p>Judgment SHA-256: "
+        + _evidence_value(
+            f'<code>{instr["judgment_sha256"]}</code>',
+            instr_base + "/judgment_sha256",
+        )
+        + "</p>"
+    )
+    parts.append(
+        "<p>Content: "
+        + _evidence_value(
+            f'<code>{_escape(instr["judgment_bytes"])}</code>',
+            instr_base + "/judgment_bytes",
+        )
+        + " (no trailing newline)</p>"
+    )
     parts.append("<h4>Safe Trace Excerpts</h4>")
-    for exc in instr.get("safe_excerpts", []):
-        parts.append(f'<div class="excerpt">Record {exc["record"]} {exc["json_pointer"]}: {_escape(str(exc["text"]))}\nSHA-256: {exc["sha256"]}</div>')
-    parts.append(f'<p>Complete trace ({instr["trace"]["size"]:,} bytes) is NOT redistributed.</p>')
+    for index, excerpt in enumerate(instr.get("safe_excerpts", [])):
+        excerpt_base = f"{instr_base}/safe_excerpts/{index}"
+        parts.append(
+            '<div class="excerpt">Record '
+            + _evidence_value(
+                str(excerpt["record"]),
+                excerpt_base + "/record",
+            )
+            + " "
+            + _evidence_value(
+                _escape(excerpt["json_pointer"]),
+                excerpt_base + "/json_pointer",
+            )
+            + ": "
+            + _evidence_value(
+                _escape(str(excerpt["text"])),
+                excerpt_base + "/text",
+            )
+            + "\nSHA-256: "
+            + _evidence_value(
+                excerpt["sha256"],
+                excerpt_base + "/sha256",
+            )
+            + "</div>"
+        )
+    parts.append(
+        "<p>Complete trace ("
+        + _evidence_value(
+            f'{instr["trace"]["size"]:,}',
+            instr_base + "/trace/size",
+        )
+        + " bytes) is "
+        + _evidence_value(
+            "NOT redistributed",
+            instr_base + "/trace/redistributed",
+        )
+        + ".</p>"
+    )
     parts.append("</div>")
 
     # Mode 3: API misuse
     api = rh["using_discovered_api_key"]
+    api_base = "evidence/reward_hacking.json#/using_discovered_api_key"
     parts.append('<div class="card">')
-    parts.append(f'<h3>API Key Discovery {_status_span(api["status"])}</h3>')
-    parts.append(f'<p>{_ptr("evidence/reward_hacking.json#/using_discovered_api_key")}</p>')
-    parts.append(f'<p>{_escape(api["unavailability_reason"])}</p>')
+    parts.append(
+        "<h3>API Key Discovery "
+        f'{_status_value(api["status"], api_base + "/status")}</h3>'
+    )
+    parts.append(
+        "<p>"
+        + _evidence_value(
+            _escape(api["unavailability_reason"]),
+            api_base + "/unavailability_reason",
+        )
+        + "</p>"
+    )
     parts.append("</div>")
 
     return "\n".join(parts)
@@ -171,11 +292,237 @@ def _render_limitations(claims: dict[str, Any]) -> str:
     seen: set[str] = set()
     for claim_key in ["claim_1", "claim_2"]:
         claim = claims[claim_key]
-        for lim in claim.get("limitations", []):
+        for index, lim in enumerate(claim.get("limitations", [])):
             if lim not in seen:
                 seen.add(lim)
-                parts.append(f'<div class="limitation">{_escape(lim)}</div>')
+                pointer = (
+                    f"evidence/claims.json#/{claim_key}/limitations/{index}"
+                )
+                parts.append(
+                    '<div class="limitation">'
+                    f"{_evidence_value(_escape(lim), pointer)}</div>"
+                )
     return "\n".join(parts)
+
+
+def _render_claim(claim: dict[str, Any], claim_key: str, title: str) -> str:
+    base = f"evidence/claims.json#/{claim_key}"
+    return f"""\
+<div class="card">
+<h3>{title} {_status_value(claim["status"], base + "/status")}</h3>
+<p>{_evidence_value(_escape(claim["text"]), base + "/text")}</p>
+<p>SHA-256: {_evidence_value(f'<code>{claim["sha256"]}</code>', base + "/sha256")}</p>
+<p>{_evidence_value(_escape(claim["summary"]), base + "/summary")}</p>
+</div>"""
+
+
+def _render_coverage_summary(coverage: dict[str, Any]) -> str:
+    auxiliary = coverage["excluded_auxiliary_data"]
+    values = [
+        (
+            "Accepted benchmarks",
+            coverage["accepted_benchmark_count"],
+            "accepted_benchmark_count",
+        ),
+        (
+            "Accepted models",
+            coverage["accepted_model_count"],
+            "accepted_model_count",
+        ),
+        ("Recognized tasks", coverage["recognized_task_count"], "recognized_task_count"),
+        ("Recognized roots", coverage["recognized_root_count"], "recognized_root_count"),
+        (
+            "Root/cell pairs",
+            coverage["recognized_root_cell_pairs"],
+            "recognized_root_cell_pairs",
+        ),
+        ("Duplicate pairs", coverage["duplicate_job_pairs"], "duplicate_job_pairs"),
+        ("Missing pairs", coverage["missing_root_cell_pairs"], "missing_root_cell_pairs"),
+        ("Excluded nested task dirs", coverage["excluded_dirs_count"], "excluded_dirs_count"),
+    ]
+    parts = ['<div class="card"><ul>']
+    for label, value, field in values:
+        pointer = f"evidence/coverage.json#/{field}"
+        parts.append(
+            f"<li>{label}: {_evidence_value(str(value), pointer)}</li>"
+        )
+    parts.append(
+        "<li>Excluded auxiliary top-level: "
+        + _evidence_value(
+            f'<code>{_escape(auxiliary["top_level_path"])}</code>',
+            "evidence/coverage.json#/excluded_auxiliary_data/top_level_path",
+        )
+        + "; files: "
+        + _evidence_value(
+            str(auxiliary["file_count"]),
+            "evidence/coverage.json#/excluded_auxiliary_data/file_count",
+        )
+        + "; directories: "
+        + _evidence_value(
+            str(auxiliary["directory_count"]),
+            "evidence/coverage.json#/excluded_auxiliary_data/directory_count",
+        )
+        + "; counted as task root: "
+        + _evidence_value(
+            str(auxiliary["counted_as_task_root"]).lower(),
+            "evidence/coverage.json#/excluded_auxiliary_data/counted_as_task_root",
+        )
+        + "</li>"
+    )
+    parts.append("</ul></div>")
+    return "\n".join(parts)
+
+
+def _source_reference_text(reference: dict[str, Any]) -> str:
+    if "path" in reference:
+        line_text = ",".join(str(line) for line in reference["lines"])
+        return (
+            f'{reference["commit"]}/{reference["path"]}:line {line_text} '
+            f'(blob {reference["git_object_sha1"]}, '
+            f'raw SHA-256 {reference["raw_sha256"]})'
+        )
+    return (
+        f'{reference["kind"]}: '
+        + ", ".join(reference["paths"])
+    )
+
+
+def _render_protocol(coverage: dict[str, Any]) -> str:
+    protocol = coverage["protocol"]
+    analysis = protocol["commit_sh_analysis"]
+    references = protocol["source_references"]
+
+    def source(reference_key: str) -> str:
+        reference = references[reference_key]
+        pointer = (
+            "evidence/coverage.json#/protocol/source_references/"
+            + reference_key
+        )
+        return _evidence_value(
+            _escape(_source_reference_text(reference)),
+            pointer,
+        )
+
+    def item(
+        label: str,
+        value: Any,
+        value_pointer: str,
+        reference_key: str,
+    ) -> str:
+        return (
+            f"<li>{label}: "
+            f"{_evidence_value(_escape(str(value)), value_pointer)}"
+            f"<br>Source: {source(reference_key)}</li>"
+        )
+
+    base = "evidence/coverage.json#/protocol"
+    lines = ['<div class="card"><ul>']
+    lines.append(item(
+        "Default GPUs",
+        protocol["num_gpus_default"],
+        base + "/num_gpus_default",
+        "num_gpus_default",
+    ))
+    lines.append(item(
+        "Device requirement",
+        protocol["cuda_device_requirement"],
+        base + "/cuda_device_requirement",
+        "cuda_device_requirement",
+    ))
+    lines.append(item(
+        "GPU binding",
+        protocol["request_gpus_binding"],
+        base + "/request_gpus_binding",
+        "request_gpus_binding",
+    ))
+    lines.append(item(
+        "Receives NUM_HOURS",
+        str(protocol["receives_num_hours"]).lower(),
+        base + "/receives_num_hours",
+        "receives_num_hours",
+    ))
+    lines.append(item(
+        "Timeout formula",
+        protocol["solve_timeout_formula"],
+        base + "/solve_timeout_formula",
+        "solve_timeout_formula",
+    ))
+    lines.append(item(
+        "Timeout grace minutes",
+        protocol["timeout_grace_minutes"],
+        base + "/timeout_grace_minutes",
+        "timeout_grace_minutes",
+    ))
+    lines.append(item(
+        "Evaluation directories",
+        protocol["evaluation_dir_count"],
+        base + "/evaluation_dir_count",
+        "evaluation_dirs_present",
+    ))
+    lines.append(item(
+        "Active models",
+        ", ".join(analysis["current_models_in_arrays"]),
+        base + "/commit_sh_analysis/current_models_in_arrays",
+        "commit_sh_analysis.current_models_in_arrays",
+    ))
+    lines.append(item(
+        "Active benchmarks",
+        ", ".join(analysis["current_benchmarks_in_arrays"]),
+        base + "/commit_sh_analysis/current_benchmarks_in_arrays",
+        "commit_sh_analysis.current_benchmarks_in_arrays",
+    ))
+    lines.append(item(
+        "MPI hours",
+        analysis["htcondor_mpi_is_branch"]["hours"],
+        base + "/commit_sh_analysis/htcondor_mpi_is_branch/hours",
+        "commit_sh_analysis.htcondor_mpi_is_branch",
+    ))
+    lines.append(item(
+        "MPI GPUs",
+        analysis["htcondor_mpi_is_branch"]["gpus"],
+        base + "/commit_sh_analysis/htcondor_mpi_is_branch/gpus",
+        "commit_sh_analysis.htcondor_mpi_is_branch",
+    ))
+    lines.append(item(
+        "Default-branch ten-hour jobs",
+        analysis["htcondor_branch"]["ten_hour_jobs"],
+        base + "/commit_sh_analysis/htcondor_branch/ten_hour_jobs",
+        "commit_sh_analysis.htcondor_branch",
+    ))
+    lines.append(item(
+        "Default-branch one-hour jobs",
+        analysis["htcondor_branch"]["one_hour_jobs"],
+        base + "/commit_sh_analysis/htcondor_branch/one_hour_jobs",
+        "commit_sh_analysis.htcondor_branch",
+    ))
+    lines.append("</ul></div>")
+    return "\n".join(lines)
+
+
+def _render_reward_status_summary(reward_hacking: dict[str, Any]) -> str:
+    values = [
+        (
+            "Contamination",
+            "training_on_test_sets",
+        ),
+        (
+            "Instruction model",
+            "downloading_instruction_tuned_checkpoint",
+        ),
+        (
+            "API misuse",
+            "using_discovered_api_key",
+        ),
+    ]
+    return " &middot; ".join(
+        label
+        + ": "
+        + _status_value(
+            reward_hacking[key]["status"],
+            f"evidence/reward_hacking.json#/{key}/status",
+        )
+        for label, key in values
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -222,43 +569,15 @@ Attempt: <code>{provenance["attempt_id"]}</code></p>
 
 <h2 id="claims">Selected Claims</h2>
 
-<div class="card">
-<h3>Claim 1 {_status_span(claim1["status"])}</h3>
-<p>{_escape(claim1["text"])}</p>
-<p>{_ptr("evidence/claims.json#/claim_1")}</p>
-<p>SHA-256: <code>{claim1["sha256"]}</code></p>
-<p>{_escape(claim1["summary"])}</p>
-</div>
-
-<div class="card">
-<h3>Claim 2 {_status_span(claim2["status"])}</h3>
-<p>{_escape(claim2["text"])}</p>
-<p>{_ptr("evidence/claims.json#/claim_2")}</p>
-<p>SHA-256: <code>{claim2["sha256"]}</code></p>
-<p>{_escape(claim2["summary"])}</p>
-</div>
+{_render_claim(claim1, "claim_1", "Claim 1")}
+{_render_claim(claim2, "claim_2", "Claim 2")}
 
 <h2 id="coverage">Coverage Matrix (4 Models &times; 7 Benchmarks)</h2>
-<p>{_ptr("evidence/coverage.json#/cell_counts")}</p>
-<p>Recognized tasks: {coverage["recognized_task_count"]}
-{_ptr("evidence/coverage.json#/recognized_task_count")}</p>
-<p>Recognized roots: {coverage.get("recognized_root_count", "N/A")}
-&middot; Root/cell pairs: {coverage.get("recognized_root_cell_pairs", "N/A")}
-&middot; Duplicate pairs: {coverage.get("duplicate_job_pairs", "N/A")}
-&middot; Missing pairs: {coverage.get("missing_root_cell_pairs", "N/A")}</p>
+{_render_coverage_summary(coverage)}
 {_render_matrix(coverage)}
 
 <h2 id="protocol">Protocol Audit</h2>
-<p>{_ptr("evidence/coverage.json#/protocol")}</p>
-<div class="card">
-<ul>
-<li>GPU default: {coverage.get("protocol", {}).get("num_gpus_default", 1)} {_ptr("evidence/coverage.json#/protocol/num_gpus_default")}</li>
-<li>Device: <code>{_escape(str(coverage.get("protocol", {}).get("cuda_device_requirement", "")))}</code></li>
-<li>Binding: <code>{_escape(str(coverage.get("protocol", {}).get("request_gpus_binding", "")))}</code></li>
-<li>Timeout: {coverage.get("protocol", {}).get("solve_timeout_formula", "")} (5-min grace)</li>
-<li>Eval dirs: {len(coverage.get("protocol", {}).get("evaluation_dirs_present", []))} of 7 found</li>
-</ul>
-</div>
+{_render_protocol(coverage)}
 
 <h2 id="reward-hacking">Reward-Hacking Submodes</h2>
 {_render_reward_hacking(reward_hacking)}
@@ -320,38 +639,18 @@ def render_report_html(
 </table>
 </div>
 
-<h2>Claim 1: Coverage {_status_span(claim1["status"])}</h2>
-<div class="card">
-<p>{_escape(claim1["text"])}</p>
-<p>SHA-256: <code>{claim1["sha256"]}</code></p>
-<p>{_escape(claim1["summary"])}</p>
-</div>
+<h2>Claim 1: Coverage</h2>
+{_render_claim(claim1, "claim_1", "Coverage claim")}
 
 <h3>Coverage Matrix</h3>
+{_render_coverage_summary(coverage)}
 {_render_matrix(coverage)}
-<p>Tasks: {coverage["recognized_task_count"]} &middot;
-Roots: {coverage.get("recognized_root_count", "N/A")} &middot;
-Pairs: {coverage.get("recognized_root_cell_pairs", "N/A")} &middot;
-Duplicates: {coverage.get("duplicate_job_pairs", "N/A")} &middot;
-Missing: {coverage.get("missing_root_cell_pairs", "N/A")}</p>
 
 <h3>Protocol Controls</h3>
-<div class="card">
-<ul>
-<li>Default GPUs: {coverage.get("protocol", {}).get("num_gpus_default", 1)}</li>
-<li>Device requirement: <code>{_escape(str(coverage.get("protocol", {}).get("cuda_device_requirement", "")))}</code></li>
-<li>GPU binding: <code>{_escape(str(coverage.get("protocol", {}).get("request_gpus_binding", "")))}</code></li>
-<li>Timeout formula: {coverage.get("protocol", {}).get("solve_timeout_formula", "")} minutes (5-minute grace)</li>
-<li>Evaluation directories: {len(coverage.get("protocol", {}).get("evaluation_dirs_present", []))} of 7</li>
-</ul>
-</div>
+{_render_protocol(coverage)}
 
-<h2>Claim 2: Reward Hacking {_status_span(claim2["status"])}</h2>
-<div class="card">
-<p>{_escape(claim2["text"])}</p>
-<p>SHA-256: <code>{claim2["sha256"]}</code></p>
-<p>{_escape(claim2["summary"])}</p>
-</div>
+<h2>Claim 2: Reward Hacking</h2>
+{_render_claim(claim2, "claim_2", "Reward-hacking claim")}
 
 {_render_reward_hacking(reward_hacking)}
 
@@ -385,9 +684,6 @@ def render_poster_html(
     """Render the poster page."""
     claim1 = claims["claim_1"]
     claim2 = claims["claim_2"]
-    contam = reward_hacking["training_on_test_sets"]
-    instr = reward_hacking["downloading_instruction_tuned_checkpoint"]
-    api = reward_hacking["using_discovered_api_key"]
 
     return f"""\
 <!DOCTYPE html>
@@ -409,36 +705,18 @@ body {{ max-width: 900px; }}
 {_ptr("evidence/provenance.json#/paper_id")}</p>
 
 <div class="poster-grid">
-<div class="card">
-<h3>Claim 1 {_status_span(claim1["status"])}</h3>
-<p>{_escape(claim1["text"])}</p>
-<p>{_ptr("evidence/claims.json#/claim_1/status")}</p>
-<p><strong>{coverage["recognized_task_count"]}</strong> tasks across
-<strong>{len(coverage["accepted_benchmarks"])}</strong> benchmarks &times;
-<strong>{len(coverage["accepted_models"])}</strong> models
-{_ptr("evidence/coverage.json#/recognized_task_count")}</p>
-<p>Roots: {coverage.get("recognized_root_count", "N/A")} &middot;
-Pairs: {coverage.get("recognized_root_cell_pairs", "N/A")} &middot;
-Duplicates: {coverage.get("duplicate_job_pairs", "N/A")}
-{_ptr("evidence/coverage.json#/duplicate_job_pairs")}</p>
+{_render_claim(claim1, "claim_1", "Claim 1")}
+{_render_claim(claim2, "claim_2", "Claim 2")}
 </div>
 
-<div class="card">
-<h3>Claim 2 {_status_span(claim2["status"])}</h3>
-<p>{_escape(claim2["text"])}</p>
-<p>{_ptr("evidence/claims.json#/claim_2/status")}</p>
-<p>Contamination: {_status_span(contam["status"])}
-{_ptr("evidence/reward_hacking.json#/training_on_test_sets/status")} &middot;
-Instruction model: {_status_span(instr["status"])}
-{_ptr("evidence/reward_hacking.json#/downloading_instruction_tuned_checkpoint/status")} &middot;
-API misuse: {_status_span(api["status"])}
-{_ptr("evidence/reward_hacking.json#/using_discovered_api_key/status")}</p>
-</div>
-</div>
+<h2>Coverage Counts</h2>
+{_render_coverage_summary(coverage)}
 
 <h2>Coverage Matrix</h2>
-<p>{_ptr("evidence/coverage.json#/cell_counts")}</p>
 {_render_matrix(coverage)}
+
+<h2>Reward-Hacking Statuses</h2>
+<div class="card"><p>{_render_reward_status_summary(reward_hacking)}</p></div>
 
 <h2>Limitations</h2>
 {_render_limitations(claims)}

@@ -194,6 +194,7 @@ MODEL_ORDER = [
 
 # Excluded top-level directories (not task roots)
 EXCLUDED_TOP_LEVEL = {"viewer_data"}
+VIEWER_DATA_FILE_COUNT = 2397
 
 # ---------------------------------------------------------------------------
 # Contamination witness

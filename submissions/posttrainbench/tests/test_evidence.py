@@ -253,8 +253,19 @@ def _make_mock_hf_inventory() -> dict[str, Any]:
     assert actual_duplicates == EXPECTED_DUPLICATE_PAIRS, f"duplicates={actual_duplicates}"
     assert actual_missing == EXPECTED_MISSING_PAIRS, f"missing={actual_missing}"
 
-    # Add some file paths
+    # Add the excluded auxiliary viewer_data subtree and some ordinary files.
+    viewer_dirs = [
+        "viewer_data",
+        "viewer_data/cache",
+        "viewer_data/cache/nested",
+    ]
+    dir_paths.extend(viewer_dirs)
+    all_paths.extend(viewer_dirs)
     file_paths = [f"{run_roots[0]}/file{i}.txt" for i in range(10)]
+    file_paths.extend(
+        f"viewer_data/auxiliary-{index:04d}.json"
+        for index in range(2397)
+    )
     all_paths.extend(file_paths)
 
     entry_metadata = {
@@ -715,10 +726,10 @@ class TestStatusDiscipline:
 class TestDeterminismAndIntegrity:
     """Two clean generations are byte-identical; manifest resolves."""
 
-    def test_two_runs_byte_identical(self):
+    def test_two_runs_byte_identical(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
         acquired = _make_mock_acquired()
-        run_pipeline(acquired)
+        run_pipeline(acquired, output_root=tmp_path)
 
         files_to_check = [
             "evidence/provenance.json",
@@ -730,42 +741,42 @@ class TestDeterminismAndIntegrity:
             "poster.html",
             "README.md",
         ]
-        bytes_run1 = {f: (SUBMISSION_DIR / f).read_bytes() for f in files_to_check}
+        bytes_run1 = {f: (tmp_path / f).read_bytes() for f in files_to_check}
 
-        run_pipeline(acquired)
-        bytes_run2 = {f: (SUBMISSION_DIR / f).read_bytes() for f in files_to_check}
+        run_pipeline(acquired, output_root=tmp_path)
+        bytes_run2 = {f: (tmp_path / f).read_bytes() for f in files_to_check}
 
         for f in files_to_check:
             assert bytes_run1[f] == bytes_run2[f], f"File {f} differs between runs"
 
-    def test_manifest_integrity(self):
+    def test_manifest_integrity(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
 
-        manifest_path = SUBMISSION_DIR / "evidence" / "manifest.json"
+        manifest_path = tmp_path / "evidence" / "manifest.json"
         assert manifest_path.exists()
         manifest = json.loads(manifest_path.read_text("utf-8"))
 
         for rel_path, meta in manifest.items():
-            full_path = SUBMISSION_DIR / rel_path
+            full_path = tmp_path / rel_path
             assert full_path.exists(), f"Manifest lists missing: {rel_path}"
             actual_bytes = full_path.read_bytes()
             actual_sha = hashlib.sha256(actual_bytes).hexdigest()
             assert actual_sha == meta["sha256"], f"SHA256 mismatch: {rel_path}"
             assert len(actual_bytes) == meta["size"], f"Size mismatch: {rel_path}"
 
-    def test_manifest_does_not_hash_itself(self):
+    def test_manifest_does_not_hash_itself(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
         manifest = json.loads(
-            (SUBMISSION_DIR / "evidence" / "manifest.json").read_text("utf-8")
+            (tmp_path / "evidence" / "manifest.json").read_text("utf-8")
         )
         assert "evidence/manifest.json" not in manifest
 
-    def test_no_wall_clock_in_evidence(self):
+    def test_no_wall_clock_in_evidence(self, tmp_path):
         """Canonical files must not contain wall-clock timestamps or temp paths."""
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
 
         for rel_path in [
             "evidence/provenance.json",
@@ -773,20 +784,20 @@ class TestDeterminismAndIntegrity:
             "evidence/reward_hacking.json",
             "evidence/claims.json",
         ]:
-            content = (SUBMISSION_DIR / rel_path).read_text("utf-8")
+            content = (tmp_path / rel_path).read_text("utf-8")
             assert "/tmp/" not in content
             assert "\\tmp\\" not in content
 
-    def test_tamper_detection(self):
+    def test_tamper_detection(self, tmp_path):
         """Changing an evidence file must be detectable via the manifest."""
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
 
         manifest = json.loads(
-            (SUBMISSION_DIR / "evidence" / "manifest.json").read_text("utf-8")
+            (tmp_path / "evidence" / "manifest.json").read_text("utf-8")
         )
         # Tamper with provenance.json
-        prov_path = SUBMISSION_DIR / "evidence" / "provenance.json"
+        prov_path = tmp_path / "evidence" / "provenance.json"
         original = prov_path.read_bytes()
         prov_path.write_bytes(original + b" ")  # tamper
 
@@ -804,47 +815,47 @@ class TestDeterminismAndIntegrity:
 class TestStaticRendering:
     """HTML contains JSON pointers, limitations, required tags."""
 
-    def test_index_has_json_pointers(self):
+    def test_index_has_json_pointers(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
-        content = (SUBMISSION_DIR / "index.html").read_text("utf-8")
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
+        content = (tmp_path / "index.html").read_text("utf-8")
         assert "evidence/provenance.json" in content
         assert "evidence/coverage.json" in content
         assert "evidence/claims.json" in content
 
-    def test_index_has_statuses(self):
+    def test_index_has_statuses(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
-        content = (SUBMISSION_DIR / "index.html").read_text("utf-8")
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
+        content = (tmp_path / "index.html").read_text("utf-8")
         assert "partial-support" in content
         assert "unavailable" in content
 
-    def test_report_has_limitations(self):
+    def test_report_has_limitations(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
-        content = (SUBMISSION_DIR / "report.html").read_text("utf-8")
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
+        content = (tmp_path / "report.html").read_text("utf-8")
         assert "limitation" in content.lower()
         assert "H100" in content or "five-minute" in content.lower()
 
-    def test_poster_has_limitations(self):
+    def test_poster_has_limitations(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
-        content = (SUBMISSION_DIR / "poster.html").read_text("utf-8")
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
+        content = (tmp_path / "poster.html").read_text("utf-8")
         assert "limitation" in content.lower()
 
-    def test_readme_space_metadata(self):
+    def test_readme_space_metadata(self, tmp_path):
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
-        content = (SUBMISSION_DIR / "README.md").read_text("utf-8")
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
+        content = (tmp_path / "README.md").read_text("utf-8")
         assert "sdk: static" in content
         assert "app_file: index.html" in content
         assert "icml2026-repro" in content
         assert "paper-UnjxMTe57e" in content
 
-    def test_no_credential_in_outputs(self):
+    def test_no_credential_in_outputs(self, tmp_path):
         """No credential-shaped content in any output."""
         from posttrainbench_repro.pipeline import run_pipeline
-        run_pipeline(_make_mock_acquired())
+        run_pipeline(_make_mock_acquired(), output_root=tmp_path)
 
         for rel_path in [
             "evidence/provenance.json",
@@ -856,7 +867,7 @@ class TestStaticRendering:
             "poster.html",
             "README.md",
         ]:
-            content = (SUBMISSION_DIR / rel_path).read_text("utf-8")
+            content = (tmp_path / rel_path).read_text("utf-8")
             # No API keys, tokens, or credential patterns
             assert "sk-" not in content
             assert "ghp_" not in content

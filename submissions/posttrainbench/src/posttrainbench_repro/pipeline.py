@@ -42,6 +42,8 @@ def _canonical_json(obj: Any) -> str:
 
 def run_pipeline(
     acquired: dict[str, Any],
+    *,
+    output_root: Path | None = None,
 ) -> dict[str, Path]:
     """Run the complete evidence pipeline from pre-acquired data.
 
@@ -52,6 +54,7 @@ def run_pipeline(
     succeeds — fail-closed behavior.
     """
     github = acquired["github"]
+    destination = PROJECT_ROOT if output_root is None else Path(output_root)
 
     # 1. Provenance
     provenance = get_provenance(acquired)
@@ -105,13 +108,13 @@ def run_pipeline(
     # 8. Transactional output publication: stage, then replace.
     #    If any write/replace fails, restore all original bytes and remove
     #    newly created outputs.
-    evidence_dir = PROJECT_ROOT / "evidence"
-    evidence_dir.mkdir(exist_ok=True)
+    evidence_dir = destination / "evidence"
+    evidence_dir.mkdir(parents=True, exist_ok=True)
 
     # Save originals for rollback
     originals: dict[str, bytes | None] = {}
     for rel_path in outputs:
-        out_path = PROJECT_ROOT / rel_path
+        out_path = destination / rel_path
         if out_path.exists():
             originals[rel_path] = out_path.read_bytes()
         else:
@@ -120,14 +123,14 @@ def run_pipeline(
     written: list[str] = []
     try:
         for rel_path, content in outputs.items():
-            out_path = PROJECT_ROOT / rel_path
+            out_path = destination / rel_path
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_text(content, encoding="utf-8")
             written.append(rel_path)
     except Exception:
         # Rollback: restore originals, remove newly created files
         for rel_path in written:
-            out_path = PROJECT_ROOT / rel_path
+            out_path = destination / rel_path
             if originals[rel_path] is not None:
                 out_path.write_bytes(originals[rel_path])
             elif out_path.exists():
@@ -137,11 +140,14 @@ def run_pipeline(
     # Return output paths
     result: dict[str, Path] = {}
     for rel_path in CANONICAL_OUTPUTS:
-        result[rel_path] = PROJECT_ROOT / rel_path
+        result[rel_path] = destination / rel_path
     return result
 
 
-def generate_evidence() -> dict[str, Path]:
+def generate_evidence(
+    *,
+    output_root: Path | None = None,
+) -> dict[str, Path]:
     """Canonical production entry point: acquire → verify → emit.
 
     Performs live acquisition from pinned GitHub commit and HF dataset
@@ -149,7 +155,7 @@ def generate_evidence() -> dict[str, Path]:
     fails, no canonical outputs are produced or replaced.
     """
     acquired = acquire_all()
-    return run_pipeline(acquired)
+    return run_pipeline(acquired, output_root=output_root)
 
 
 def main() -> None:
