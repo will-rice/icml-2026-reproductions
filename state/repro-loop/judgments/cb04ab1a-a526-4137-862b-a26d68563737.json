@@ -6,7 +6,12 @@
   "paper_id": "UnjxMTe57e",
   "poll_deadline": "2026-07-27T12:38:00+00:00",
   "poll_limit": 12,
-  "polls": [],
+  "polls": [
+    {
+      "at": "2026-07-26T12:39:56.272333+00:00",
+      "status": "pending"
+    }
+  ],
   "raw_verdict": null,
   "source_revision": null,
   "space_id": "wrice/repro-posttrainbench",
@@ -15,6 +20,6 @@
     "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
     "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
   ],
-  "updated_at": "2026-07-26T12:39:18.761131+00:00",
+  "updated_at": "2026-07-26T12:39:56.272333+00:00",
   "verdict_at": null
 }
