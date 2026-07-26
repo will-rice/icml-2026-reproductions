@@ -328,6 +328,7 @@ def _command(
         return tuple(values)
     values = [
         "agy",
+        "--new-project",
         "--mode",
         "accept-edits" if mode == "implementation" else "plan",
         "--sandbox",

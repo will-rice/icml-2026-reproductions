@@ -249,6 +249,7 @@ def test_launch_spec_is_rooted_at_one_worktree_and_uses_empty_hf_cache(
         assert spec.argv[spec.argv.index("-C") + 1] == str(worktree)
     else:
         assert "--sandbox" in spec.argv
+        assert "--new-project" in spec.argv
     worker_guard.validate_worker_command(spec.argv, runtime)
 
 
