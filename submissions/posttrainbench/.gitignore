@@ -1,0 +1,9 @@
+# PostTrainBench Reproduction Project
+# Override root .gitignore to track the lockfile
+!uv.lock
+
+# Standard Python ignores
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
