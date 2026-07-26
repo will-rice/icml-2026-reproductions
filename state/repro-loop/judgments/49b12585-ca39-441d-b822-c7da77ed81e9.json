@@ -10,6 +10,10 @@
     {
       "at": "2026-07-26T06:26:12.958479+00:00",
       "status": "pending"
+    },
+    {
+      "at": "2026-07-26T06:28:05.938207+00:00",
+      "status": "pending"
     }
   ],
   "raw_verdict": null,
@@ -20,6 +24,6 @@
     "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
     "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
   ],
-  "updated_at": "2026-07-26T06:26:12.958479+00:00",
+  "updated_at": "2026-07-26T06:28:05.938207+00:00",
   "verdict_at": null
 }
