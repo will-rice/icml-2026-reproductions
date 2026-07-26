@@ -75,6 +75,7 @@
   "paper_id": "a3GdvuPItd",
   "phase": "implementing",
   "pid": "63109",
+  "project_path": "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
   "safety_blocker": null,
   "score": 18,
   "slug": "selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
@@ -105,7 +106,7 @@
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-25T23:02:53.200638+00:00",
+  "updated_at": "2026-07-26T04:03:36.708382+00:00",
   "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
   "vs": "https://icml.cc/virtual/2026/poster/63109"
 }
