@@ -39,6 +39,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "",
   "i": 6487,
+  "improvement_attempts": 1,
+  "improvement_reason": "Add required Hugging Face Space metadata/tags and replace the stale README recompute source SHA with the source revision recorded in canonical evidence before any deployment.",
   "insts": [
     "Huazhong University of Science and Technology",
     "Ant Group"
@@ -73,7 +75,7 @@
   "or": "https://openreview.net/forum?id=a3GdvuPItd",
   "orid": "a3GdvuPItd",
   "paper_id": "a3GdvuPItd",
-  "phase": "validated",
+  "phase": "improving",
   "pid": "63109",
   "project_path": "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
   "safety_blocker": null,
@@ -112,10 +114,18 @@
       "owner": "controller-graph-design-20260725",
       "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
       "to": "validated"
+    },
+    {
+      "at": "2026-07-26T04:48:41.789135+00:00",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-graph-design-20260725",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "improving"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T04:47:00.985682+00:00",
+  "updated_at": "2026-07-26T04:48:41.789135+00:00",
   "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
   "vs": "https://icml.cc/virtual/2026/poster/63109"
 }
