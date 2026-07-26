@@ -5,6 +5,7 @@ from fractions import Fraction
 
 import pytest
 
+import graph_pruning_repro.proof_ledger as proof_ledger_module
 from graph_pruning_repro.diminishing_returns import (
     appendix_shift_witness,
     canonical_parameterized_instance_id,
@@ -128,6 +129,35 @@ def test_appendix_literal_ledger_links_shift_witness_everywhere() -> None:
 
 
 def test_cardinality_failure_blocks_downstream_without_relabeling_it() -> None:
+    cardinality_witness = getattr(
+        proof_ledger_module,
+        "cardinality_b_minus_t_witness",
+        lambda: None,
+    )()
+    assert cardinality_witness == {
+        "id": "cardinality-b-minus-t",
+        "property": "optimum_remainder_cardinality_exceeds_b_minus_t",
+        "evidence_kind": "symbolic",
+        "inputs": {
+            "vertices": ["a", "b", "c"],
+            "budget": 2,
+            "iteration": 1,
+            "s_t": ["a"],
+            "s_star": ["b", "c"],
+            "weight_assumptions": "none",
+        },
+        "intermediate_values": {
+            "s_star_minus_s_t": ["b", "c"],
+            "remainder_cardinality": 2,
+            "b_minus_t": 1,
+        },
+        "classification": {
+            "comparison": "2 > 1",
+            "eq28b_cardinality_bound": "contradicted",
+            "eq28a_counterexample": False,
+            "theorem_counterexample": False,
+        },
+    }
     rows = build_symbolic_ledger("paper_samplewise_literal", {})
     cardinality = _conclusion_by_check(
         rows,
@@ -135,7 +165,7 @@ def test_cardinality_failure_blocks_downstream_without_relabeling_it() -> None:
     )
 
     assert cardinality["status"] == "contradicted"
-    assert cardinality["witness_ids"] == ["cardinality-b-minus-t"]
+    assert cardinality["witness_ids"] == [cardinality_witness["id"]]
     eq30 = _conclusion(rows, "30")
     assert eq30["status"] == "not_applicable"
     assert (

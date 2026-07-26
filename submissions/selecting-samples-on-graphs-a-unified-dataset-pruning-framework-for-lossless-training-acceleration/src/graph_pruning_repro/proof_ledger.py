@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Iterable, Mapping, Sequence
+from copy import deepcopy
 from dataclasses import dataclass
 from fractions import Fraction
 from itertools import combinations
@@ -71,6 +72,30 @@ _REPAIRED_TRUE_MARGINAL_VARIANTS = {
     "single_counted_pairwise",
     "half_corrected_samplewise",
     "modular_shift_candidate",
+}
+_CARDINALITY_B_MINUS_T_WITNESS = {
+    "id": "cardinality-b-minus-t",
+    "property": "optimum_remainder_cardinality_exceeds_b_minus_t",
+    "evidence_kind": "symbolic",
+    "inputs": {
+        "vertices": ["a", "b", "c"],
+        "budget": 2,
+        "iteration": 1,
+        "s_t": ["a"],
+        "s_star": ["b", "c"],
+        "weight_assumptions": "none",
+    },
+    "intermediate_values": {
+        "s_star_minus_s_t": ["b", "c"],
+        "remainder_cardinality": 2,
+        "b_minus_t": 1,
+    },
+    "classification": {
+        "comparison": "2 > 1",
+        "eq28b_cardinality_bound": "contradicted",
+        "eq28a_counterexample": False,
+        "theorem_counterexample": False,
+    },
 }
 
 
@@ -242,6 +267,12 @@ def _fraction_text(value: Fraction) -> str:
     return f"{value.numerator}/{value.denominator}"
 
 
+def cardinality_b_minus_t_witness() -> dict[str, object]:
+    """Return the fixed weight-independent Eq. (28b) cardinality witness."""
+
+    return deepcopy(_CARDINALITY_B_MINUS_T_WITNESS)
+
+
 def _canonical_ref(
     model_variant: str,
     instance_id: str,
@@ -301,7 +332,7 @@ def _conclusion_witness_ids(
 ) -> list[str]:
     identifiers: list[str] = []
     if spec.check_id == "optimum_remainder_at_most_b_not_b_minus_t":
-        identifiers.append("cardinality-b-minus-t")
+        identifiers.append(str(_CARDINALITY_B_MINUS_T_WITNESS["id"]))
     if (
         model_variant == "appendix_inline_shift_literal"
         and _depends_on_global_submodularity(spec.key)
