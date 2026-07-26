@@ -67,7 +67,7 @@
     }
   ],
   "paper_id": "vGeNaFHdET",
-  "phase": "deployed",
+  "phase": "submitted",
   "polls": [],
   "project_path": "submissions/eeg-fm-bench",
   "slug": "eeg-fm-bench",
@@ -114,9 +114,18 @@
       "owner": "controller-eeg-reconcile-20260725",
       "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
       "to": "deployed"
+    },
+    {
+      "at": "2026-07-25T23:59:45.878929+00:00",
+      "attestation_id": "d80e7d2f9d6690c3c68a69b59182fcd5583934f36d4e3d612777a3a4d8cb06c5",
+      "fencing_token": 1,
+      "from": "deployed",
+      "owner": "controller-eeg-reconcile-20260725",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "submitted"
     }
   ],
-  "updated_at": "2026-07-25T23:58:07.100708+00:00",
+  "updated_at": "2026-07-25T23:59:45.878929+00:00",
   "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc",
   "verdicts": []
 }
