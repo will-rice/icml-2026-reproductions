@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+import yaml
+
 
 PROJECT_ROOT = Path(__file__).parents[1]
 
@@ -23,6 +25,22 @@ def _parse_pass_counts(status: str) -> tuple[int, int]:
     match = re.fullmatch(r"PASS actual=(\d+) ceiling=(\d+)", status)
     assert match is not None
     return int(match.group(1)), int(match.group(2))
+
+
+def test_space_readme_metadata_and_evidence_revision_command() -> None:
+    readme = (PROJECT_ROOT / "README.md").read_text()
+    assert readme.startswith("---\n")
+    _, front_matter, body = readme.split("---", 2)
+    metadata = yaml.safe_load(front_matter)
+    assert metadata["sdk"] == "gradio"
+    assert metadata["sdk_version"] == "6.20.0"
+    assert metadata["app_file"] == "app.py"
+    assert metadata["tags"] == ["icml2026-repro", "paper-a3GdvuPItd"]
+    assert "license" not in metadata
+    assert "9ef7b07d8cb7349215aa5f780ec346a9024c9396" not in body
+    assert 'Path("evidence/evidence.json")' in body
+    assert '["source_revision"]' in body
+    assert '--source-revision "$EVIDENCE_SOURCE_REVISION"' in body
 
 
 def test_space_import_is_offline_and_does_not_mutate_evidence(
