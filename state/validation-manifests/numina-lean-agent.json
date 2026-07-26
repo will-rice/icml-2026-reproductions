@@ -1,0 +1,50 @@
+{
+  "base_sha": "5715eb86aeb0a269a08b7670b385562b32cf5287",
+  "branch": "impl/numina-v2",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/numina-lean-agent",
+      "python",
+      "-m",
+      "numina_lean.cli",
+      "--evidence-dir",
+      "submissions/numina-lean-agent/evidence"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/numina-lean-agent",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/numina-lean-agent/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-24-numina-lean-agent-reproduction-design.md",
+  "project_path": "submissions/numina-lean-agent",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/numina-v2"
+}
