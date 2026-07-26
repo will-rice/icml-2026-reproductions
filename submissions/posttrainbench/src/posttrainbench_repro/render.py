@@ -759,7 +759,7 @@ def render_readme(
 title: PostTrainBench Reproduction
 emoji: "\U0001f50d"
 colorFrom: blue
-colorTo: cyan
+colorTo: indigo
 sdk: static
 app_file: index.html
 pinned: false

@@ -2,7 +2,7 @@
 title: PostTrainBench Reproduction
 emoji: "🔍"
 colorFrom: blue
-colorTo: cyan
+colorTo: indigo
 sdk: static
 app_file: index.html
 pinned: false
