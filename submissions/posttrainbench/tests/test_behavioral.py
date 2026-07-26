@@ -2197,6 +2197,44 @@ def test_viewer_data_is_visible_with_resolvable_counts_on_every_page():
         ) in page
 
 
+def _assert_adjacent_code_pointer(
+    page: str,
+    *,
+    value: str,
+    pointer: str,
+) -> None:
+    pattern = (
+        rf'<span class="evidence-result" '
+        rf'data-evidence-pointer="{re.escape(pointer)}">'
+        rf"\s*<code>{re.escape(value)}</code>\s*"
+        rf'<span class="ptr">{re.escape(pointer)}</span>\s*</span>'
+    )
+    assert re.search(pattern, page)
+
+
+def test_index_ids_have_exact_adjacent_provenance_pointers():
+    pages, _ = _rendered_evidence_documents()
+    _assert_adjacent_code_pointer(
+        pages["index"],
+        value="UnjxMTe57e",
+        pointer="evidence/provenance.json#/paper_id",
+    )
+    _assert_adjacent_code_pointer(
+        pages["index"],
+        value="cb04ab1a-a526-4137-862b-a26d68563737",
+        pointer="evidence/provenance.json#/attempt_id",
+    )
+
+
+def test_poster_arxiv_has_exact_adjacent_provenance_pointer():
+    pages, _ = _rendered_evidence_documents()
+    _assert_adjacent_code_pointer(
+        pages["poster"],
+        value="2603.08640v2",
+        pointer="evidence/provenance.json#/arxiv_id",
+    )
+
+
 def test_protocol_values_render_adjacent_source_references():
     pages, _ = _rendered_evidence_documents()
     for page_name in ("index", "report"):
