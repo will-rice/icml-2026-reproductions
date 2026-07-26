@@ -69,6 +69,8 @@ def _load_claims(evidence_dir: Path) -> list[dict[str, Any]]:
         raise ValueError("claims.json contains unexpected upstream provenance")
     for claim in claims:
         claim_id = claim["claim_id"]
+        if claim.get("status") != "partial-support":
+            raise ValueError(f"{claim_id} status must be partial-support")
         if claim.get("claim") != CHALLENGE_CLAIMS[claim_id]:
             raise ValueError(f"{claim_id} challenge claim text does not match")
         digest = hashlib.sha256(claim["claim"].encode("utf-8")).hexdigest()

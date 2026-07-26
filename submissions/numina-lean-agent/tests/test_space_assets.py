@@ -76,6 +76,18 @@ def test_render_rejects_altered_challenge_claim_text(tmp_path: Path) -> None:
         render_assets(evidence, tmp_path)
 
 
+def test_render_rejects_non_partial_support_status(tmp_path: Path) -> None:
+    evidence = tmp_path / "evidence"
+    shutil.copytree(EVIDENCE, evidence)
+    claims_path = evidence / "claims.json"
+    claims = json.loads(claims_path.read_text())
+    claims[0]["status"] = "does-not-support"
+    claims_path.write_text(json.dumps(claims, indent=2, sort_keys=True) + "\n")
+
+    with pytest.raises(ValueError, match="status must be partial-support"):
+        render_assets(evidence, tmp_path)
+
+
 def test_assets_are_deterministic_and_derived_from_claims(tmp_path: Path) -> None:
     first = tmp_path / "first"
     second = tmp_path / "second"
