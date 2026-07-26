@@ -72,7 +72,7 @@
   "or": "https://openreview.net/forum?id=0bTEd4LpQr",
   "orid": "0bTEd4LpQr",
   "paper_id": "0bTEd4LpQr",
-  "phase": "submitted",
+  "phase": "judging",
   "pid": "66755",
   "project_path": "submissions/numina-lean-agent",
   "safety_blocker": null,
@@ -130,10 +130,19 @@
       "owner": "controller-numina-validation-20260726",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "submitted"
+    },
+    {
+      "at": "2026-07-26T06:26:12.669348+00:00",
+      "attestation_id": "c0fefa4b9f1701835fc2b6f1bf2a157c25168755514072d7ea24d1ccb1d52360",
+      "fencing_token": 2,
+      "from": "submitted",
+      "owner": "controller-numina-validation-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T06:25:54.582437+00:00",
+  "updated_at": "2026-07-26T06:26:12.669348+00:00",
   "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
   "vs": "https://icml.cc/virtual/2026/poster/66755"
 }
