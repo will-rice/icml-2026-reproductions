@@ -115,7 +115,7 @@ Relevant pinned blobs and raw-byte digests:
 |---|---|---|
 | `README.md` | `3ffc21258c2c3a34c13d342cc2c6aa8fb87c66ea` | `f95474a651bfa6f0082b027b8b67b604678616e081c923889709e76d9501fd6e` |
 | `src/commit_utils/commit.sh` | `3c43144e1186a160f450e747b95861fea6d16747` | `663ecb37cc4e6a16dcfcf8135bdbadf325f0b067192fe7a71d2231ba37eaae8e` |
-| `src/commit_utils/single_task.sub` | `fe58698ef40084b9a0e556a517a7781e87b4d6c5` | `f8ee12da42fdebfc3b4293a22ea8b232c1f8f52cb2f52b103c9f138f0ddc013a` |
+| `src/commit_utils/single_task.sub` | `ea7f8790b97301dcdb6f3c104c5555d7ddf4e06a` | `f8ee12da42fdebfc3b4293a22ea8b232c1f8f52cb2f52b103c9f138f0ddc013a` |
 | `src/run_task.sh` | `0642ec47ee7acd2528cdab7d343ddba11cbc84db` | `10b0238018f202209c06f12ff05d021a0ca03b98d42c86a65e80cacd4fbe7033` |
 | `LICENSE` | `075a303174a80b6d9cfef229bfd36b8ad2ee69e2` | `af874b1aba6df2929fe2bf23b46dee3e56d1c24d915220c0916d81e331371384` |
 
