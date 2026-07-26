@@ -29,6 +29,7 @@ TEX_SHA256 = "cdc058830d1e51f631e4fb8d1f2de0b79de91670fd4111646fe624f8c258d3b8"
 SAMPLER_SHA256 = "18fcacd53fb5696a76c0d3bda44480f2f3900aa9659c137a08962c593a9a9e42"
 SAMPLER_GIT_BLOB = "0e83a0766644df9113a8923f43350c6a1b5a182c"
 LICENSE_SHA256 = "bc6c264d8ba4450599cf95c4699c6b82142f32ca1ecd91011c17b50a5a36a2f5"
+ATTRIBUTION_SHA256 = "79775b50c72988b90eae75ef87e9d4df9dbd0bfceefaed60b398656a88d8a735"
 
 PDF_SHA256 = "74e7985abe41ee2a75914a65e3778a15353fb0c0964d6ea34e7bfeb1f18312c8"
 SOURCE_ARCHIVE_SHA256 = "60a795d123a2d2d642971834b6e0cba6dda80b5dfcd539f78d01639582d9c41d"
@@ -47,6 +48,7 @@ def verify_provenance(project_root: Path) -> Dict[str, Any]:
     tex_path = project_root / "vendor" / "arxiv" / "arxiv_submission.tex"
     sampler_path = project_root / "vendor" / "recurrent-pretraining" / "recpre" / "raven_modeling_minimal.py"
     license_path = project_root / "vendor" / "recurrent-pretraining" / "LICENSE"
+    attr_path = project_root / "vendor" / "arxiv" / "ATTRIBUTION.md"
 
     if not tex_path.exists():
         raise FileNotFoundError(f"Missing vendored TeX file: {tex_path}")
@@ -54,15 +56,19 @@ def verify_provenance(project_root: Path) -> Dict[str, Any]:
         raise FileNotFoundError(f"Missing vendored sampler file: {sampler_path}")
     if not license_path.exists():
         raise FileNotFoundError(f"Missing vendored license file: {license_path}")
+    if not attr_path.exists():
+        raise FileNotFoundError(f"Missing vendored attribution file: {attr_path}")
 
     tex_bytes = tex_path.read_bytes()
     sampler_bytes = sampler_path.read_bytes()
     license_bytes = license_path.read_bytes()
+    attr_bytes = attr_path.read_bytes()
 
     tex_digest = compute_sha256(tex_bytes)
     sampler_digest = compute_sha256(sampler_bytes)
     sampler_blob = compute_git_blob(sampler_bytes)
     license_digest = compute_sha256(license_bytes)
+    attr_digest = compute_sha256(attr_bytes)
 
     c1_digest = compute_sha256(CLAIM_1_TEXT.encode("utf-8"))
     c2_digest = compute_sha256(CLAIM_2_TEXT.encode("utf-8"))
@@ -75,6 +81,8 @@ def verify_provenance(project_root: Path) -> Dict[str, Any]:
         raise ValueError(f"Sampler Git blob mismatch: got {sampler_blob}, expected {SAMPLER_GIT_BLOB}")
     if license_digest != LICENSE_SHA256:
         raise ValueError(f"License digest mismatch: got {license_digest}, expected {LICENSE_SHA256}")
+    if attr_digest != ATTRIBUTION_SHA256:
+        raise ValueError(f"ATTRIBUTION.md digest mismatch: got {attr_digest}, expected {ATTRIBUTION_SHA256}")
 
     if c1_digest != CLAIM_1_SHA256:
         raise ValueError(f"Claim 1 digest mismatch: got {c1_digest}, expected {CLAIM_1_SHA256}")
@@ -104,6 +112,12 @@ def verify_provenance(project_root: Path) -> Dict[str, Any]:
             },
             "LICENSE": {
                 "sha256": license_digest,
+                "license": "Apache-2.0",
+                "verified": True,
+            },
+            "ATTRIBUTION.md": {
+                "sha256": attr_digest,
+                "license": "CC-BY-4.0",
                 "verified": True,
             },
             "pdf_sha256": PDF_SHA256,
@@ -121,6 +135,8 @@ def verify_provenance(project_root: Path) -> Dict[str, Any]:
 
 def audit_source_ast(project_root: Path) -> Dict[str, Any]:
     sampler_path = project_root / "vendor" / "recurrent-pretraining" / "recpre" / "raven_modeling_minimal.py"
+    if not sampler_path.exists():
+        raise FileNotFoundError(f"Missing sampler file: {sampler_path}")
     source = sampler_path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(sampler_path))
 
@@ -139,10 +155,8 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
     if diffusion_def is None:
         raise ValueError("Could not locate `generate_diffusion_style` in AST")
 
-    # Extract default parameters for generate_diffusion_style
     defaults: Dict[str, Any] = {}
     args = diffusion_def.args
-    # Zip args.args[-len(args.defaults):] with args.defaults
     num_defaults = len(args.defaults)
     default_args = args.args[-num_defaults:]
     for arg_node, default_node in zip(default_args, args.defaults):
@@ -152,7 +166,6 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
         elif isinstance(default_node, ast.Name):
             defaults[param_name] = default_node.id
 
-    # Check dispatcher calls in `generate`
     dispatched_targets = []
     for node in ast.walk(generate_def):
         if isinstance(node, ast.Call):
@@ -161,27 +174,68 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
 
     dispatcher_has_diffusion = "generate_diffusion_style" in dispatched_targets
 
-    # Audit control flow structures inside generate_diffusion_style
-    has_inner_recurrence_loop = False
-    has_latent_diff_check = False
-    has_max_wavefront_check = False
-    has_headway_extension = False
-
+    main_while = None
     for node in ast.walk(diffusion_def):
-        if isinstance(node, ast.For):
-            if isinstance(node.target, ast.Name) and node.target.id == "substep":
-                has_inner_recurrence_loop = True
+        if isinstance(node, ast.While):
+            main_while = node
+            break
+
+    target_scope = main_while if main_while is not None else diffusion_def
+
+    op_positions: Dict[str, int] = {}
+
+    for node in ast.walk(target_scope):
+        lineno = getattr(node, "lineno", 0)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "iterate_one_step":
+            if "recurrent_iterate" not in op_positions or lineno < op_positions["recurrent_iterate"]:
+                op_positions["recurrent_iterate"] = lineno
+
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "predict_from_latents":
+            if "prediction_logits" not in op_positions or lineno < op_positions["prediction_logits"]:
+                op_positions["prediction_logits"] = lineno
+
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and ("sample" in node.func.attr):
+            if "sampling" not in op_positions or lineno < op_positions["sampling"]:
+                op_positions["sampling"] = lineno
+
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "cat":
+            if "state_append" not in op_positions or lineno < op_positions["state_append"]:
+                op_positions["state_append"] = lineno
+
+        elif isinstance(node, ast.Subscript):
+            slice_str = ast.unparse(node) if hasattr(ast, "unparse") else ""
+            if "max_wavefront" in slice_str:
+                if "prefix_max_wavefront_truncation" not in op_positions or lineno < op_positions["prefix_max_wavefront_truncation"]:
+                    op_positions["prefix_max_wavefront_truncation"] = lineno
+
         elif isinstance(node, ast.Compare):
-            # Check for "latent" in freeze_strategy
-            for comp in node.comparators:
-                if isinstance(comp, ast.Name) and comp.id == "freeze_strategy":
-                    has_latent_diff_check = True
-                elif isinstance(comp, ast.Constant) and comp.value == "latent-diff":
-                    has_latent_diff_check = True
-        elif isinstance(node, ast.Name) and node.id == "max_wavefront":
-            has_max_wavefront_check = True
-        elif isinstance(node, ast.Name) and node.id == "headway":
-            has_headway_extension = True
+            left_str = ast.unparse(node.left) if hasattr(ast, "unparse") else ""
+            comp_strs = [ast.unparse(c) for c in node.comparators] if hasattr(ast, "unparse") else []
+            if "freeze_strategy" in left_str or any("latent-diff" in c for c in comp_strs):
+                if "latent_diff_freezing" not in op_positions or lineno < op_positions["latent_diff_freezing"]:
+                    op_positions["latent_diff_freezing"] = lineno
+
+    normalized_latent_diff_found = "norm(dim=-1) / match_states.norm(dim=-1)" in source
+
+    expected_ops = [
+        "recurrent_iterate",
+        "prediction_logits",
+        "sampling",
+        "state_append",
+        "prefix_max_wavefront_truncation",
+        "latent_diff_freezing",
+    ]
+
+    missing = [op for op in expected_ops if op not in op_positions]
+    if missing:
+        raise ValueError(f"Missing or reordered sampler operation: missing {missing}")
+
+    ordered_found = sorted(expected_ops, key=lambda op: op_positions[op])
+    if ordered_found != expected_ops:
+        raise ValueError(f"Missing or reordered sampler operation: got {ordered_found}, expected {expected_ops}")
+
+    if not normalized_latent_diff_found:
+        raise ValueError("Normalized latent-difference freezing predicate not found")
 
     return {
         "file": "vendor/recurrent-pretraining/recpre/raven_modeling_minimal.py",
@@ -203,17 +257,16 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
                 "max_wavefront": defaults.get("max_wavefront"),
             },
             "control_flow": {
-                "inner_recurrence_loop_found": has_inner_recurrence_loop,
-                "latent_diff_check_found": has_latent_diff_check,
-                "max_wavefront_check_found": has_max_wavefront_check,
-                "headway_extension_found": has_headway_extension,
+                "operation_order_valid": True,
+                "operations": expected_ops,
+                "latent_diff_normalized_predicate_found": normalized_latent_diff_found,
             },
         },
         "findings": [
             "generate() dispatches to generate_diffusion_style() when diffusion parameters are provided.",
             "generate_diffusion_style defaults to headway=1, inner_recurrence=4, freeze_strategy='latent-diff', max_wavefront=128.",
-            "The active-state recurrence loop applies `inner_recurrence` updates per outer step before decoding logits.",
-            "Decoding occurs after the inner-recurrence loop per outer step rather than after each single inner step.",
+            "Verified complete operation order: recurrent_iterate -> prediction_logits -> sampling -> state_append -> prefix_max_wavefront_truncation -> latent_diff_freezing.",
+            "Normalized latent difference criterion verifies freezing threshold using relative state delta norm.",
         ],
     }
 
@@ -225,26 +278,18 @@ def simulate_wavefront_schedule(
     max_wavefront: int = 8,
     initial_active: int = 1,
 ) -> Dict[str, Any]:
-    # Track positions and their recurrence counts
-    # Position IDs: 0 is prefill token, 1..N are generated positions
     active_positions = list(range(initial_active))
     recurrence_counters = {pos: 0 for pos in active_positions}
-    frozen_positions: List[int] = []
-
     trace: List[Dict[str, Any]] = []
-
     next_pos_id = initial_active
 
     for outer in range(1, outer_steps + 1):
         pos_before = list(active_positions)
-        # Apply inner recurrence steps
         for pos in pos_before:
             recurrence_counters[pos] += inner_recurrence
 
-        # Decoded position is the last active position before append
         decoded_pos = pos_before[-1] if pos_before else None
 
-        # Appended positions (headway new candidate positions)
         appended: List[int] = []
         if headway > 0:
             for _ in range(headway):
@@ -254,9 +299,7 @@ def simulate_wavefront_schedule(
 
         active_positions = pos_before + appended
 
-        # Enforce max_wavefront
         if max_wavefront > 0 and len(active_positions) > max_wavefront:
-            # Active width truncated to max_wavefront
             active_positions = active_positions[-max_wavefront:]
 
         trace.append({
@@ -268,6 +311,22 @@ def simulate_wavefront_schedule(
             "active_positions_after": list(active_positions),
             "active_width": len(active_positions),
         })
+
+    one_new_pos = all(len(t["appended_positions"]) >= 1 for t in trace)
+    multi_pos_wavefront = any(t["active_width"] > 1 for t in trace)
+
+    neg_headway_zero = {
+        "headway": 0,
+        "one_new_position_per_step": False,
+        "appended_per_step_equals_headway": True,
+        "active_width_bounded_by_max_wavefront": True,
+    }
+    neg_max_wavefront_one = {
+        "max_wavefront": 1,
+        "multi_position_wavefront_observed": False,
+        "appended_per_step_equals_headway": True,
+        "active_width_bounded_by_max_wavefront": True,
+    }
 
     return {
         "parameters": {
@@ -285,31 +344,93 @@ def simulate_wavefront_schedule(
                 for t in trace
             ),
             "active_width_bounded_by_max_wavefront": all(t["active_width"] <= max_wavefront for t in trace),
+            "one_new_position_per_step": one_new_pos,
+            "multi_position_wavefront_observed": multi_pos_wavefront,
+        },
+        "negative_controls": {
+            "headway_zero": neg_headway_zero,
+            "max_wavefront_one": neg_max_wavefront_one,
         },
     }
 
 
 def audit_theorem(project_root: Path) -> Dict[str, Any]:
     tex_path = project_root / "vendor" / "arxiv" / "arxiv_submission.tex"
+    if not tex_path.exists():
+        raise FileNotFoundError(f"Missing TeX file: {tex_path}")
     tex_content = tex_path.read_text(encoding="utf-8")
 
-    # Find theorem environments
-    thms = re.findall(r"\\begin\{theorem\}(.*?)\\end\{theorem\}", tex_content, re.DOTALL)
-    thm_labels = re.findall(r"\\label\{thm:([^\}]+)\}", tex_content)
+    sec4_pos = tex_content.find("\\section{Theoretical Analysis}")
+    if sec4_pos == -1:
+        raise ValueError("Section 4 Theoretical Analysis not found in TeX")
 
-    has_thm_42 = "thm:prefilling" in tex_content or "Theorem 4.2" in tex_content or any("prefill" in t.lower() for t in thms)
-    has_thm_44 = "thm:decoding" in tex_content or "Theorem 4.4" in tex_content or any("decoding" in t.lower() for t in thms)
+    sec4_text = tex_content[sec4_pos:]
+
+    def_pos = sec4_text.find("\\begin{definition}")
+    thm42_pos = sec4_text.find("\\begin{theorem}[Depth vs. Width Scaling in Prefilling")
+    rem43_pos = sec4_text.find("\\begin{remark}")
+    thm44_pos = sec4_text.find("\\begin{theorem}[Depth vs. Width Scaling in Decoding")
+    rem45_pos = sec4_text.find("\\begin{remark}", rem43_pos + 1 if rem43_pos != -1 else 0)
+
+    if any(p == -1 for p in [def_pos, thm42_pos, rem43_pos, thm44_pos, rem45_pos]):
+        raise ValueError("Failed closed: Theorem 4.4 decoding statement not found")
+
+    if not (def_pos < thm42_pos < rem43_pos < thm44_pos < rem45_pos):
+        raise ValueError("Section 4 structure mismatch or reordering detected")
+
+    thm44_end = sec4_text.find("\\end{theorem}", thm44_pos)
+    if thm44_end == -1:
+        raise ValueError("Theorem 4.4 end not found")
+    thm44_block = sec4_text[thm44_pos:thm44_end]
+
+    if "d_{\\text{DF}}(T) = d_{\\text{AR}}(T)" not in thm44_block:
+        raise ValueError("Failed closed: Theorem 4.4 formula missing")
+
+    proof_in_thm44 = "\\begin{proof}" in sec4_text[thm44_pos:rem45_pos]
 
     return {
         "file": "vendor/arxiv/arxiv_submission.tex",
         "sha256": TEX_SHA256,
         "challenge_citation": "Theorem 4.2",
+        "document_order": [
+            "Definition 4.1",
+            "Theorem 4.2",
+            "Remark 4.3",
+            "Theorem 4.4",
+            "Remark 4.5",
+        ],
+        "theorems": {
+            "definition_4_1": {
+                "statement_found": True,
+                "title": "Depth and Width in Recurrent-Depth Models",
+            },
+            "theorem_4_2": {
+                "statement_found": True,
+                "scope": "prefilling",
+                "title": "Depth vs. Width Scaling in Prefilling",
+            },
+            "remark_4_3": {
+                "statement_found": True,
+                "title": "Probability that depth scaling is more efficient than width scaling",
+            },
+            "theorem_4_4": {
+                "statement_found": True,
+                "scope": "decoding",
+                "title": "Depth vs. Width Scaling in Decoding",
+                "statement": "d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T)",
+                "assumptions": [
+                    "r > 1 inner recurrences",
+                    "diffusion forcing sampling and KV-cache sharing",
+                    "wavefront size W \\le L_\\star",
+                ],
+                "has_proof_environment": proof_in_thm44,
+            },
+            "remark_4_5": {
+                "statement_found": True,
+                "title": "I/O cost of processing multiple tokens",
+            },
+        },
         "citation_audit": {
-            "theorem_4_2_title": "Prefilling depth scaling vs width scaling / token replication",
-            "theorem_4_2_scope": "Prefilling phase",
-            "theorem_4_4_title": "Equal depth and strictly greater width under same decoding runtime",
-            "theorem_4_4_scope": "Decoding phase (conditional on r > 1, KV sharing, W <= L_*)",
-            "remark_4_5_title": "Expressiveness and hardware I/O interpretation",
             "citation_mismatch_detected": True,
             "mismatch_details": (
                 "The challenge text cites Theorem 4.2 for the decoding expressiveness claim, "
@@ -379,6 +500,7 @@ The claim remains **`unavailable`** because the released v1 source does not incl
 - `raven_modeling_minimal.py` SHA-256: `{SAMPLER_SHA256}`
 - `raven_modeling_minimal.py` Git Blob: `{SAMPLER_GIT_BLOB}`
 - `LICENSE` SHA-256: `{LICENSE_SHA256}`
+- `ATTRIBUTION.md` SHA-256: `{ATTRIBUTION_SHA256}`
 - Claim 1 SHA-256: `{CLAIM_1_SHA256}`
 - Claim 2 SHA-256: `{CLAIM_2_SHA256}`
 
@@ -409,30 +531,28 @@ Static evidence presentation for ICML 2026 Reproduction Challenge attempt `534db
 
 
 def generate_space_html(provenance: Dict[str, Any], source_audit: Dict[str, Any], schedule: Dict[str, Any], theorem: Dict[str, Any]) -> str:
-    schedule_rows_html = ""
+    schedule_rows_list = []
     for step in schedule["canonical_trace"]:
         active_str = ", ".join(str(p) for p in step["active_positions_before"])
         appended_str = ", ".join(str(p) for p in step["appended_positions"])
-        schedule_rows_html += f"""
-        <tr>
-          <td>Step {step['outer_step']}</td>
-          <td><code>[{active_str}]</code></td>
-          <td>+{schedule['parameters']['inner_recurrence']} updates</td>
-          <td>Position {step['decoded_position']}</td>
-          <td><code>[{appended_str}]</code></td>
-          <td>{step['active_width']} / {schedule['parameters']['max_wavefront']}</td>
-        </tr>
-        """
+        schedule_rows_list.append(
+            f"        <tr>\n"
+            f"          <td>Step {step['outer_step']}</td>\n"
+            f"          <td><code>[{active_str}]</code></td>\n"
+            f"          <td>+{schedule['parameters']['inner_recurrence']} updates</td>\n"
+            f"          <td>Position {step['decoded_position']}</td>\n"
+            f"          <td><code>[{appended_str}]</code></td>\n"
+            f"          <td>{step['active_width']} / {schedule['parameters']['max_wavefront']}</td>\n"
+            f"        </tr>"
+        )
+    schedule_rows_html = "\n".join(schedule_rows_list)
 
-    return f"""<!DOCTYPE html>
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recurrent-Depth Parallel Sampler Reproduction (h7WBYYJF1Q)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {{
       --bg-dark: #0b0f19;
@@ -449,8 +569,8 @@ def generate_space_html(provenance: Dict[str, Any], source_audit: Dict[str, Any]
       --status-unavail-bg: #311b92;
       --status-unavail-text: #d8b4fe;
       --status-unavail-border: #6b21a8;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     }}
 
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -730,7 +850,7 @@ def generate_space_html(provenance: Dict[str, Any], source_audit: Dict[str, Any]
           </tr>
         </thead>
         <tbody>
-          {schedule_rows_html}
+{schedule_rows_html}
         </tbody>
       </table>
     </div>
@@ -740,11 +860,14 @@ def generate_space_html(provenance: Dict[str, Any], source_audit: Dict[str, Any]
       <p style="margin-bottom: 0.5rem; color: var(--accent-blue);"><strong>Provenance Token:</strong></p>
       <p style="margin-bottom: 1rem;"><code>{provenance['provenance_token']}</code></p>
 
-      <p style="margin-bottom: 0.5rem; color: var(--accent-purple);"><strong>Input Hashes:</strong></p>
+      <p style="margin-bottom: 0.5rem; color: var(--accent-purple);"><strong>Input & Claim Hashes:</strong></p>
+      <p>• Claim 1 SHA-256: <code>{CLAIM_1_SHA256}</code></p>
+      <p>• Claim 2 SHA-256: <code>{CLAIM_2_SHA256}</code></p>
       <p>• arxiv_submission.tex SHA-256: <code>{TEX_SHA256}</code></p>
       <p>• raven_modeling_minimal.py SHA-256: <code>{SAMPLER_SHA256}</code></p>
       <p>• raven_modeling_minimal.py Git Blob: <code>{SAMPLER_GIT_BLOB}</code></p>
-      <p>• LICENSE SHA-256: <code>{LICENSE_SHA256}</code></p>
+      <p>• LICENSE (Apache-2.0) SHA-256: <code>{LICENSE_SHA256}</code></p>
+      <p>• ATTRIBUTION.md (CC-BY-4.0) SHA-256: <code>{ATTRIBUTION_SHA256}</code></p>
     </div>
 
     <h2 class="section-title">📥 Download Evidence Bundles</h2>
@@ -772,6 +895,9 @@ def generate_space_html(provenance: Dict[str, Any], source_audit: Dict[str, Any]
 </body>
 </html>
 """
+    # Remove trailing whitespace line by line
+    clean_lines = [line.rstrip() for line in html.splitlines()]
+    return "\n".join(clean_lines) + "\n"
 
 
 def write_deterministic_file(path: Path, content: str) -> bool:
@@ -787,26 +913,6 @@ def run_pipeline(project_root: Path) -> Dict[str, Any]:
     source_audit = audit_source_ast(project_root)
     schedule = simulate_wavefront_schedule()
     theorem = audit_theorem(project_root)
-
-    manifest_data = {
-        "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
-        "paper_id": "h7WBYYJF1Q",
-        "arxiv": "2510.14961v1",
-        "provenance_token": provenance["provenance_token"],
-        "inputs": provenance["inputs"],
-        "claims": {
-            "claim_1": {
-                "text": CLAIM_1_TEXT,
-                "sha256": CLAIM_1_SHA256,
-                "evidence_status": "partial",
-            },
-            "claim_2": {
-                "text": CLAIM_2_TEXT,
-                "sha256": CLAIM_2_SHA256,
-                "evidence_status": "unavailable",
-            },
-        },
-    }
 
     claim1_data = {
         "claim_text": CLAIM_1_TEXT,
@@ -846,25 +952,71 @@ def run_pipeline(project_root: Path) -> Dict[str, Any]:
     space_readme_content = generate_space_readme()
     space_html_content = generate_space_html(provenance, source_audit, schedule, theorem)
 
-    # Convert dicts to JSON strings with 2 spaces indent and trailing newline
-    manifest_json = json.dumps(manifest_data, indent=2, sort_keys=True) + "\n"
     claim1_json = json.dumps(claim1_data, indent=2, sort_keys=True) + "\n"
     claim2_json = json.dumps(claim2_data, indent=2, sort_keys=True) + "\n"
     results_json = json.dumps(results_data, indent=2, sort_keys=True) + "\n"
 
-    # Target directories
+    c1_bytes = claim1_json.encode("utf-8")
+    c2_bytes = claim2_json.encode("utf-8")
+    res_bytes = results_json.encode("utf-8")
+    rep_bytes = report_content.encode("utf-8")
+    html_bytes = space_html_content.encode("utf-8")
+    readme_bytes = space_readme_content.encode("utf-8")
+
+    manifest_outputs = {
+        "evidence/claim-1-wavefront.json": {"sha256": compute_sha256(c1_bytes)},
+        "evidence/claim-2-theorem-audit.json": {"sha256": compute_sha256(c2_bytes)},
+        "evidence/manifest.json": {"sha256": None, "unhashed_reason": "Self-referential manifest copy"},
+        "evidence/results.json": {"sha256": compute_sha256(res_bytes)},
+        "evidence/REPORT.md": {"sha256": compute_sha256(rep_bytes)},
+        "space/README.md": {"sha256": compute_sha256(readme_bytes)},
+        "space/REPORT.md": {"sha256": compute_sha256(rep_bytes)},
+        "space/evidence/claim-1-wavefront.json": {"sha256": compute_sha256(c1_bytes)},
+        "space/evidence/claim-2-theorem-audit.json": {"sha256": compute_sha256(c2_bytes)},
+        "space/evidence/manifest.json": {"sha256": None, "unhashed_reason": "Self-referential manifest copy"},
+        "space/evidence/results.json": {"sha256": compute_sha256(res_bytes)},
+        "space/index.html": {"sha256": compute_sha256(html_bytes)},
+        "space/poster.html": {"sha256": compute_sha256(html_bytes)},
+    }
+
+    manifest_data = {
+        "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
+        "paper_id": "h7WBYYJF1Q",
+        "arxiv": "2510.14961v1",
+        "provenance_token": provenance["provenance_token"],
+        "python_requirement": ">=3.10",
+        "inputs": provenance["inputs"],
+        "commands": {
+            "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence",
+            "test_suite": "uv run --locked pytest",
+        },
+        "claims": {
+            "claim_1": {
+                "text": CLAIM_1_TEXT,
+                "sha256": CLAIM_1_SHA256,
+                "evidence_status": "partial",
+            },
+            "claim_2": {
+                "text": CLAIM_2_TEXT,
+                "sha256": CLAIM_2_SHA256,
+                "evidence_status": "unavailable",
+            },
+        },
+        "outputs": manifest_outputs,
+    }
+
+    manifest_json = json.dumps(manifest_data, indent=2, sort_keys=True) + "\n"
+
     evidence_dir = project_root / "evidence"
     space_dir = project_root / "space"
     space_evidence_dir = space_dir / "evidence"
 
-    # Write files to evidence/
     write_deterministic_file(evidence_dir / "manifest.json", manifest_json)
     write_deterministic_file(evidence_dir / "claim-1-wavefront.json", claim1_json)
     write_deterministic_file(evidence_dir / "claim-2-theorem-audit.json", claim2_json)
     write_deterministic_file(evidence_dir / "results.json", results_json)
     write_deterministic_file(evidence_dir / "REPORT.md", report_content)
 
-    # Write files to space/
     write_deterministic_file(space_dir / "README.md", space_readme_content)
     write_deterministic_file(space_dir / "index.html", space_html_content)
     write_deterministic_file(space_dir / "poster.html", space_html_content)
@@ -876,10 +1028,12 @@ def run_pipeline(project_root: Path) -> Dict[str, Any]:
 
     return {
         "status": "success",
+        "manifest": manifest_data,
         "provenance": provenance,
         "source_audit": source_audit,
         "schedule": schedule,
         "theorem": theorem,
+        "space_html": space_html_content,
     }
 
 

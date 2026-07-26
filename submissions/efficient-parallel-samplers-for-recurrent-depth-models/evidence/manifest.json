@@ -13,8 +13,18 @@
       "text": "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2)."
     }
   },
+  "commands": {
+    "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence",
+    "test_suite": "uv run --locked pytest"
+  },
   "inputs": {
+    "ATTRIBUTION.md": {
+      "license": "CC-BY-4.0",
+      "sha256": "79775b50c72988b90eae75ef87e9d4df9dbd0bfceefaed60b398656a88d8a735",
+      "verified": true
+    },
     "LICENSE": {
+      "license": "Apache-2.0",
       "sha256": "bc6c264d8ba4450599cf95c4699c6b82142f32ca1ecd91011c17b50a5a36a2f5",
       "verified": true
     },
@@ -30,6 +40,50 @@
     },
     "source_archive_sha256": "60a795d123a2d2d642971834b6e0cba6dda80b5dfcd539f78d01639582d9c41d"
   },
+  "outputs": {
+    "evidence/REPORT.md": {
+      "sha256": "68f2381daaea8672e0cd48a7e5a183dcfff4484bb2762feb6b8610f7b5f0835b"
+    },
+    "evidence/claim-1-wavefront.json": {
+      "sha256": "acf810e5780d93c937ca8800b9ec6d502ee881fa638c490f8eef821288251622"
+    },
+    "evidence/claim-2-theorem-audit.json": {
+      "sha256": "9fc29f76f7ee42d159f25d378244b357d0a6eea8745fbdf4004fa43c04da0f86"
+    },
+    "evidence/manifest.json": {
+      "sha256": null,
+      "unhashed_reason": "Self-referential manifest copy"
+    },
+    "evidence/results.json": {
+      "sha256": "487e2994ca3010a6289d6b48b508b02d6c00b11fadb2d356a2f0329b17e06396"
+    },
+    "space/README.md": {
+      "sha256": "d8df6642131d5defdd20c240c6dd88b93c2e33f21d545e398381d30e9a0a825e"
+    },
+    "space/REPORT.md": {
+      "sha256": "68f2381daaea8672e0cd48a7e5a183dcfff4484bb2762feb6b8610f7b5f0835b"
+    },
+    "space/evidence/claim-1-wavefront.json": {
+      "sha256": "acf810e5780d93c937ca8800b9ec6d502ee881fa638c490f8eef821288251622"
+    },
+    "space/evidence/claim-2-theorem-audit.json": {
+      "sha256": "9fc29f76f7ee42d159f25d378244b357d0a6eea8745fbdf4004fa43c04da0f86"
+    },
+    "space/evidence/manifest.json": {
+      "sha256": null,
+      "unhashed_reason": "Self-referential manifest copy"
+    },
+    "space/evidence/results.json": {
+      "sha256": "487e2994ca3010a6289d6b48b508b02d6c00b11fadb2d356a2f0329b17e06396"
+    },
+    "space/index.html": {
+      "sha256": "ab4466d4a4a9d1451f02fc564205495a1eb7758c6a64537659e4223d7f57a520"
+    },
+    "space/poster.html": {
+      "sha256": "ab4466d4a4a9d1451f02fc564205495a1eb7758c6a64537659e4223d7f57a520"
+    }
+  },
   "paper_id": "h7WBYYJF1Q",
-  "provenance_token": "arxiv:2510.14961v1+pdf-sha256:74e7985abe41ee2a75914a65e3778a15353fb0c0964d6ea34e7bfeb1f18312c8+source-sha256:60a795d123a2d2d642971834b6e0cba6dda80b5dfcd539f78d01639582d9c41d+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c"
+  "provenance_token": "arxiv:2510.14961v1+pdf-sha256:74e7985abe41ee2a75914a65e3778a15353fb0c0964d6ea34e7bfeb1f18312c8+source-sha256:60a795d123a2d2d642971834b6e0cba6dda80b5dfcd539f78d01639582d9c41d+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c",
+  "python_requirement": ">=3.10"
 }

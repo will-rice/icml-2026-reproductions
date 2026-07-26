@@ -6,13 +6,15 @@
     "challenge_citation": "Theorem 4.2",
     "citation_audit": {
       "citation_mismatch_detected": true,
-      "mismatch_details": "The challenge text cites Theorem 4.2 for the decoding expressiveness claim, whereas arXiv v1 states the prefilling result in Theorem 4.2 and the same-runtime decoding result in Theorem 4.4.",
-      "remark_4_5_title": "Expressiveness and hardware I/O interpretation",
-      "theorem_4_2_scope": "Prefilling phase",
-      "theorem_4_2_title": "Prefilling depth scaling vs width scaling / token replication",
-      "theorem_4_4_scope": "Decoding phase (conditional on r > 1, KV sharing, W <= L_*)",
-      "theorem_4_4_title": "Equal depth and strictly greater width under same decoding runtime"
+      "mismatch_details": "The challenge text cites Theorem 4.2 for the decoding expressiveness claim, whereas arXiv v1 states the prefilling result in Theorem 4.2 and the same-runtime decoding result in Theorem 4.4."
     },
+    "document_order": [
+      "Definition 4.1",
+      "Theorem 4.2",
+      "Remark 4.3",
+      "Theorem 4.4",
+      "Remark 4.5"
+    ],
     "evidence_status": "unavailable",
     "file": "vendor/arxiv/arxiv_submission.tex",
     "proof_reproduced": false,
@@ -21,6 +23,37 @@
       "Theorem 4.4 decoding expressiveness requires hardware-dependent I/O memory bandwidth assumptions.",
       "The released arXiv v1 source does not contain an independently checkable proof of the decoding theorem."
     ],
-    "sha256": "cdc058830d1e51f631e4fb8d1f2de0b79de91670fd4111646fe624f8c258d3b8"
+    "sha256": "cdc058830d1e51f631e4fb8d1f2de0b79de91670fd4111646fe624f8c258d3b8",
+    "theorems": {
+      "definition_4_1": {
+        "statement_found": true,
+        "title": "Depth and Width in Recurrent-Depth Models"
+      },
+      "remark_4_3": {
+        "statement_found": true,
+        "title": "Probability that depth scaling is more efficient than width scaling"
+      },
+      "remark_4_5": {
+        "statement_found": true,
+        "title": "I/O cost of processing multiple tokens"
+      },
+      "theorem_4_2": {
+        "scope": "prefilling",
+        "statement_found": true,
+        "title": "Depth vs. Width Scaling in Prefilling"
+      },
+      "theorem_4_4": {
+        "assumptions": [
+          "r > 1 inner recurrences",
+          "diffusion forcing sampling and KV-cache sharing",
+          "wavefront size W \\le L_\\star"
+        ],
+        "has_proof_environment": false,
+        "scope": "decoding",
+        "statement": "d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T)",
+        "statement_found": true,
+        "title": "Depth vs. Width Scaling in Decoding"
+      }
+    }
   }
 }

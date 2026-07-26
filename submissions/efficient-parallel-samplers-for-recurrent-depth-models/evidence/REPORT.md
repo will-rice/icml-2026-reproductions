@@ -49,6 +49,7 @@ The claim remains **`unavailable`** because the released v1 source does not incl
 - `raven_modeling_minimal.py` SHA-256: `18fcacd53fb5696a76c0d3bda44480f2f3900aa9659c137a08962c593a9a9e42`
 - `raven_modeling_minimal.py` Git Blob: `0e83a0766644df9113a8923f43350c6a1b5a182c`
 - `LICENSE` SHA-256: `bc6c264d8ba4450599cf95c4699c6b82142f32ca1ecd91011c17b50a5a36a2f5`
+- `ATTRIBUTION.md` SHA-256: `79775b50c72988b90eae75ef87e9d4df9dbd0bfceefaed60b398656a88d8a735`
 - Claim 1 SHA-256: `d0da87ee16f7485d3dff369e7465f66299c55ac003a54e1cf8c00b3a0ad8b265`
 - Claim 2 SHA-256: `2e15221c8b5516b0ab705e29a3d7c5d924ed5f0187c970a0caf60a1402757804`
 

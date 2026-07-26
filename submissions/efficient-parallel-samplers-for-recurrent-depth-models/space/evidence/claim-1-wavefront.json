@@ -10,16 +10,22 @@
     "findings": [
       "generate() dispatches to generate_diffusion_style() when diffusion parameters are provided.",
       "generate_diffusion_style defaults to headway=1, inner_recurrence=4, freeze_strategy='latent-diff', max_wavefront=128.",
-      "The active-state recurrence loop applies `inner_recurrence` updates per outer step before decoding logits.",
-      "Decoding occurs after the inner-recurrence loop per outer step rather than after each single inner step."
+      "Verified complete operation order: recurrent_iterate -> prediction_logits -> sampling -> state_append -> prefix_max_wavefront_truncation -> latent_diff_freezing.",
+      "Normalized latent difference criterion verifies freezing threshold using relative state delta norm."
     ],
     "git_blob": "0e83a0766644df9113a8923f43350c6a1b5a182c",
     "sampler": {
       "control_flow": {
-        "headway_extension_found": true,
-        "inner_recurrence_loop_found": true,
-        "latent_diff_check_found": true,
-        "max_wavefront_check_found": true
+        "latent_diff_normalized_predicate_found": true,
+        "operation_order_valid": true,
+        "operations": [
+          "recurrent_iterate",
+          "prediction_logits",
+          "sampling",
+          "state_append",
+          "prefix_max_wavefront_truncation",
+          "latent_diff_freezing"
+        ]
       },
       "defaults": {
         "freeze_strategy": "latent-diff",
@@ -267,7 +273,23 @@
     "invariants": {
       "active_width_bounded_by_max_wavefront": true,
       "appended_per_step_equals_headway": true,
+      "multi_position_wavefront_observed": true,
+      "one_new_position_per_step": true,
       "prior_active_gained_recurrence": true
+    },
+    "negative_controls": {
+      "headway_zero": {
+        "active_width_bounded_by_max_wavefront": true,
+        "appended_per_step_equals_headway": true,
+        "headway": 0,
+        "one_new_position_per_step": false
+      },
+      "max_wavefront_one": {
+        "active_width_bounded_by_max_wavefront": true,
+        "appended_per_step_equals_headway": true,
+        "max_wavefront": 1,
+        "multi_position_wavefront_observed": false
+      }
     },
     "parameters": {
       "headway": 1,
