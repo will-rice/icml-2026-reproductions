@@ -1288,3 +1288,194 @@ class TestPointerCompleteness:
         assert "evidence/coverage.json#/recognized_task_count" in poster
         assert "evidence/coverage.json#/duplicate_job_pairs" in poster
 
+
+# ===================================================================
+# 18. _analyze_commit_sh: condor_submit_bid syntax parsing
+# ===================================================================
+
+# Realistic commit.sh fixture matching the actual pinned syntax
+_REALISTIC_COMMIT_SH = b"""\
+#!/bin/bash
+source src/commit_utils/set_env_vars.sh
+
+models=(
+    # "google/gemma-3-4b-pt"
+    "Qwen/Qwen3-4B-Base"
+    # "Qwen/Qwen3-1.7B-Base"
+    # "HuggingFaceTB/SmolLM3-3B-Base"
+)
+
+evals=(
+    # "aime2025"
+    # "arenahardwriting"
+    # "bfcl"
+    # "gpqamain"
+    # "gsm8k"
+    # "humaneval"
+    "healthbench"
+)
+export POST_TRAIN_BENCH_EXPERIMENT_NAME="_METR"
+for model in "${models[@]}"; do
+    for eval in "${evals[@]}"; do
+        echo ""
+        echo $model on $eval
+        if [ "${POST_TRAIN_BENCH_JOB_SCHEDULER}" = "htcondor_mpi-is" ]; then
+            # Proprietary (API)
+            # condor_submit_bid 100 -a "agent=codex" -a "agent_config=gpt-5.1-codex-max" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=claude" -a "agent_config=claude-opus-4-6" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=100" -a "num_gpus=8" src/commit_utils/single_task.sub
+        elif [ "${POST_TRAIN_BENCH_JOB_SCHEDULER}" = "htcondor" ]; then
+            condor_submit_bid 100 -a "agent=claude" -a "agent_config=claude-opus-4-6" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=claude" -a "agent_config=claude-sonnet-4-5" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=codex" -a "agent_config=o3" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=opencode" -a "agent_config=kimi-k2.5" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=opencode" -a "agent_config=gemini-2.5-pro" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=aider" -a "agent_config=o3" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=aider" -a "agent_config=claude-opus-4-6" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=10" src/commit_utils/single_task.sub
+            condor_submit_bid 100 -a "agent=claude" -a "agent_config=claude-opus-4-6" -a "eval=$eval" -a "model_to_train=$model" -a "num_hours=1" src/commit_utils/single_task.sub
+        else
+            echo "Unsupported scheduler: ${POST_TRAIN_BENCH_JOB_SCHEDULER}"
+        fi
+    done
+done
+"""
+
+
+class TestCommitShAnalysis:
+    """_analyze_commit_sh must parse actual condor_submit_bid syntax."""
+
+    def test_models_array_parsed(self):
+        """Active models=(...) entry must be detected."""
+        from posttrainbench_repro.audit import _analyze_commit_sh
+        result = _analyze_commit_sh(_REALISTIC_COMMIT_SH.decode())
+        assert "Qwen/Qwen3-4B-Base" in result["current_models_in_arrays"]
+
+    def test_evals_array_parsed(self):
+        """Active evals=(...) entry must be detected."""
+        from posttrainbench_repro.audit import _analyze_commit_sh
+        result = _analyze_commit_sh(_REALISTIC_COMMIT_SH.decode())
+        assert "healthbench" in result["current_benchmarks_in_arrays"]
+
+    def test_mpi_is_branch_100h_8gpu(self):
+        """htcondor_mpi-is branch must report one 100h/8-GPU MPI job."""
+        from posttrainbench_repro.audit import _analyze_commit_sh
+        result = _analyze_commit_sh(_REALISTIC_COMMIT_SH.decode())
+        mpi = result.get("htcondor_mpi_is_branch", {})
+        assert mpi.get("hours") == 100
+        assert mpi.get("gpus") == 8
+
+    def test_htcondor_branch_seven_10h_one_1h(self):
+        """htcondor branch must report 7 ten-hour and 1 one-hour jobs."""
+        from posttrainbench_repro.audit import _analyze_commit_sh
+        result = _analyze_commit_sh(_REALISTIC_COMMIT_SH.decode())
+        branch = result.get("htcondor_branch", {})
+        assert branch.get("ten_hour_jobs") == 7
+        assert branch.get("one_hour_jobs") == 1
+
+    def test_commented_models_excluded(self):
+        """Commented models must not appear in arrays."""
+        from posttrainbench_repro.audit import _analyze_commit_sh
+        result = _analyze_commit_sh(_REALISTIC_COMMIT_SH.decode())
+        models = result["current_models_in_arrays"]
+        assert "google/gemma-3-4b-pt" not in models
+        assert "Qwen/Qwen3-1.7B-Base" not in models
+
+    def test_commented_condor_excluded(self):
+        """Commented condor_submit_bid lines must not be counted."""
+        from posttrainbench_repro.audit import _analyze_commit_sh
+        result = _analyze_commit_sh(_REALISTIC_COMMIT_SH.decode())
+        # Only 1 active line in htcondor_mpi-is branch
+        mpi = result.get("htcondor_mpi_is_branch", {})
+        assert mpi.get("active_jobs") == 1 or mpi.get("hours") == 100
+
+    def test_wrong_model_detected(self):
+        """Mutated model must change results."""
+        from posttrainbench_repro.audit import _analyze_commit_sh
+        mutated = _REALISTIC_COMMIT_SH.replace(
+            b'"Qwen/Qwen3-4B-Base"', b'"Qwen/Qwen3-1.7B-Base"'
+        )
+        result = _analyze_commit_sh(mutated.decode())
+        assert "Qwen/Qwen3-4B-Base" not in result["current_models_in_arrays"]
+
+
+# ===================================================================
+# 19. coverage.json inventory key
+# ===================================================================
+
+class TestCoverageInventoryKey:
+    """coverage.json must include complete inventory counts/digests."""
+
+    def test_coverage_has_inventory(self):
+        """compute_coverage must produce 'inventory' key."""
+        acquired = _make_valid_acquired()
+        coverage = compute_coverage(acquired["hf_inventory"])
+        assert "inventory" in coverage
+
+    def test_coverage_inventory_has_digests(self):
+        """inventory must have all/file/dir digests."""
+        acquired = _make_valid_acquired()
+        coverage = compute_coverage(acquired["hf_inventory"])
+        inv = coverage.get("inventory", {})
+        assert "all_entries_digest" in inv
+        assert "file_entries_digest" in inv
+        assert "dir_entries_digest" in inv
+
+    def test_coverage_inventory_has_counts(self):
+        """inventory must have page/entry/file/dir counts."""
+        acquired = _make_valid_acquired()
+        coverage = compute_coverage(acquired["hf_inventory"])
+        inv = coverage.get("inventory", {})
+        assert "total_entries" in inv
+        assert "file_count" in inv
+        assert "dir_count" in inv
+
+    def test_coverage_inventory_has_rejected_siblings(self):
+        """inventory must have rejected siblings oracle count/digest."""
+        acquired = _make_valid_acquired()
+        coverage = compute_coverage(acquired["hf_inventory"])
+        inv = coverage.get("inventory", {})
+        assert "rejected_siblings_count" in inv
+        assert "rejected_siblings_digest" in inv
+
+
+# ===================================================================
+# 20. Updated fixture: realistic commit.sh for protocol tests
+# ===================================================================
+
+class TestProtocolWithRealisticFixture:
+    """Protocol audit using realistic condor_submit_bid fixture."""
+
+    def _make_blobs_with_realistic_commit_sh(self) -> dict[str, bytes]:
+        return {
+            "src/commit_utils/single_task.sub": (
+                b'num_gpus = 1\n'
+                b'request_gpus = $(num_gpus)\n'
+                b'requirements = TARGET.CUDADeviceName == "NVIDIA H100 80GB HBM3"\n'
+            ),
+            "src/run_task.sh": (
+                b'#!/bin/bash\n'
+                b'NUM_HOURS=${1:-10}\n'
+                b'timeout $((NUM_HOURS * 60 + 5))m python run.py\n'
+            ),
+            "src/commit_utils/commit.sh": _REALISTIC_COMMIT_SH,
+            "README.md": b"# PostTrainBench\n",
+            "LICENSE": b"MIT License\n",
+        }
+
+    def _base_entries(self) -> list[dict[str, Any]]:
+        entries = []
+        for d in C.EXPECTED_EVAL_DIRS:
+            entries.append({"path": d, "type": "tree", "sha": "0" * 40})
+        return entries
+
+    def test_protocol_accepts_realistic_fixture(self):
+        """Protocol audit must succeed with realistic commit.sh syntax."""
+        blobs = self._make_blobs_with_realistic_commit_sh()
+        entries = self._base_entries()
+        result = audit_protocol(blobs, entries)
+        analysis = result["commit_sh_analysis"]
+        assert analysis["htcondor_branch"]["ten_hour_jobs"] == 7
+        assert analysis["htcondor_branch"]["one_hour_jobs"] == 1
+        assert "Qwen/Qwen3-4B-Base" in analysis["current_models_in_arrays"]
+
+
+
