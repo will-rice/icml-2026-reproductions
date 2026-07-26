@@ -55,6 +55,7 @@
           1
         ],
         "decoded_position": 0,
+        "headway_in_step": 1,
         "outer_step": 1,
         "recurrence_counters_snapshot": {
           "0": 4
@@ -75,6 +76,7 @@
           2
         ],
         "decoded_position": 1,
+        "headway_in_step": 1,
         "outer_step": 2,
         "recurrence_counters_snapshot": {
           "0": 8,
@@ -98,6 +100,7 @@
           3
         ],
         "decoded_position": 2,
+        "headway_in_step": 1,
         "outer_step": 3,
         "recurrence_counters_snapshot": {
           "0": 12,
@@ -124,6 +127,7 @@
           4
         ],
         "decoded_position": 3,
+        "headway_in_step": 1,
         "outer_step": 4,
         "recurrence_counters_snapshot": {
           "0": 16,
@@ -153,6 +157,7 @@
           5
         ],
         "decoded_position": 4,
+        "headway_in_step": 1,
         "outer_step": 5,
         "recurrence_counters_snapshot": {
           "0": 20,
@@ -185,6 +190,7 @@
           6
         ],
         "decoded_position": 5,
+        "headway_in_step": 1,
         "outer_step": 6,
         "recurrence_counters_snapshot": {
           "0": 24,
@@ -220,6 +226,7 @@
           7
         ],
         "decoded_position": 6,
+        "headway_in_step": 1,
         "outer_step": 7,
         "recurrence_counters_snapshot": {
           "0": 28,
@@ -233,14 +240,14 @@
       },
       {
         "active_positions_after": [
+          0,
           1,
           2,
           3,
           4,
           5,
           6,
-          7,
-          8
+          7
         ],
         "active_positions_before": [
           0,
@@ -253,10 +260,9 @@
           7
         ],
         "active_width": 8,
-        "appended_positions": [
-          8
-        ],
+        "appended_positions": [],
         "decoded_position": 7,
+        "headway_in_step": 0,
         "outer_step": 8,
         "recurrence_counters_snapshot": {
           "0": 32,

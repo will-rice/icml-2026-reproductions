@@ -14,8 +14,8 @@
     }
   },
   "commands": {
-    "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence",
-    "test_suite": "uv run --locked pytest"
+    "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models",
+    "test_suite": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests"
   },
   "inputs": {
     "ATTRIBUTION.md": {
@@ -45,7 +45,7 @@
       "sha256": "68f2381daaea8672e0cd48a7e5a183dcfff4484bb2762feb6b8610f7b5f0835b"
     },
     "evidence/claim-1-wavefront.json": {
-      "sha256": "acf810e5780d93c937ca8800b9ec6d502ee881fa638c490f8eef821288251622"
+      "sha256": "f698b4c709fad4f8ada0563559e7a924533a96819d10c1a4ced05c31389b891c"
     },
     "evidence/claim-2-theorem-audit.json": {
       "sha256": "9fc29f76f7ee42d159f25d378244b357d0a6eea8745fbdf4004fa43c04da0f86"
@@ -64,7 +64,7 @@
       "sha256": "68f2381daaea8672e0cd48a7e5a183dcfff4484bb2762feb6b8610f7b5f0835b"
     },
     "space/evidence/claim-1-wavefront.json": {
-      "sha256": "acf810e5780d93c937ca8800b9ec6d502ee881fa638c490f8eef821288251622"
+      "sha256": "f698b4c709fad4f8ada0563559e7a924533a96819d10c1a4ced05c31389b891c"
     },
     "space/evidence/claim-2-theorem-audit.json": {
       "sha256": "9fc29f76f7ee42d159f25d378244b357d0a6eea8745fbdf4004fa43c04da0f86"
@@ -77,10 +77,10 @@
       "sha256": "487e2994ca3010a6289d6b48b508b02d6c00b11fadb2d356a2f0329b17e06396"
     },
     "space/index.html": {
-      "sha256": "ab4466d4a4a9d1451f02fc564205495a1eb7758c6a64537659e4223d7f57a520"
+      "sha256": "4ee35ea1d7e64b5b8e424500ea60d5dc447b212bab30198090f9a6b1657e3d49"
     },
     "space/poster.html": {
-      "sha256": "ab4466d4a4a9d1451f02fc564205495a1eb7758c6a64537659e4223d7f57a520"
+      "sha256": "4ee35ea1d7e64b5b8e424500ea60d5dc447b212bab30198090f9a6b1657e3d49"
     }
   },
   "paper_id": "h7WBYYJF1Q",

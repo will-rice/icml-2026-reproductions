@@ -208,14 +208,25 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
                 if "prefix_max_wavefront_truncation" not in op_positions or lineno < op_positions["prefix_max_wavefront_truncation"]:
                     op_positions["prefix_max_wavefront_truncation"] = lineno
 
-        elif isinstance(node, ast.Compare):
-            left_str = ast.unparse(node.left) if hasattr(ast, "unparse") else ""
-            comp_strs = [ast.unparse(c) for c in node.comparators] if hasattr(ast, "unparse") else []
-            if "freeze_strategy" in left_str or any("latent-diff" in c for c in comp_strs):
-                if "latent_diff_freezing" not in op_positions or lineno < op_positions["latent_diff_freezing"]:
-                    op_positions["latent_diff_freezing"] = lineno
+    # Locate the exact freeze_strategy == "latent-diff" AST branch and structurally compare criterion assignment
+    latent_diff_branch_found = False
+    for node in ast.walk(diffusion_def):
+        if isinstance(node, ast.If):
+            test_str = ast.unparse(node.test) if hasattr(ast, "unparse") else ""
+            if "latent-diff" in test_str or ("latent" in test_str and "freeze_strategy" in test_str):
+                for child in ast.walk(node):
+                    if isinstance(child, ast.Assign):
+                        target_names = [ast.unparse(t) for t in child.targets] if hasattr(ast, "unparse") else []
+                        if "criterion" in target_names:
+                            val_str = ast.unparse(child.value) if hasattr(ast, "unparse") else ""
+                            if "norm(dim=-1) / match_states.norm(dim=-1)" in val_str and "match_states" in val_str:
+                                latent_diff_branch_found = True
+                                lineno = getattr(child, "lineno", getattr(node, "lineno", 0))
+                                if "latent_diff_freezing" not in op_positions or lineno < op_positions["latent_diff_freezing"]:
+                                    op_positions["latent_diff_freezing"] = lineno
 
-    normalized_latent_diff_found = "norm(dim=-1) / match_states.norm(dim=-1)" in source
+    if not latent_diff_branch_found:
+        raise ValueError("Normalized latent-difference freezing predicate not found")
 
     expected_ops = [
         "recurrent_iterate",
@@ -233,9 +244,6 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
     ordered_found = sorted(expected_ops, key=lambda op: op_positions[op])
     if ordered_found != expected_ops:
         raise ValueError(f"Missing or reordered sampler operation: got {ordered_found}, expected {expected_ops}")
-
-    if not normalized_latent_diff_found:
-        raise ValueError("Normalized latent-difference freezing predicate not found")
 
     return {
         "file": "vendor/recurrent-pretraining/recpre/raven_modeling_minimal.py",
@@ -259,7 +267,7 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
             "control_flow": {
                 "operation_order_valid": True,
                 "operations": expected_ops,
-                "latent_diff_normalized_predicate_found": normalized_latent_diff_found,
+                "latent_diff_normalized_predicate_found": latent_diff_branch_found,
             },
         },
         "findings": [
@@ -271,7 +279,7 @@ def audit_source_ast(project_root: Path) -> Dict[str, Any]:
     }
 
 
-def simulate_wavefront_schedule(
+def simulate_wavefront_schedule_core(
     outer_steps: int = 8,
     inner_recurrence: int = 4,
     headway: int = 1,
@@ -297,36 +305,30 @@ def simulate_wavefront_schedule(
                 recurrence_counters[next_pos_id] = 0
                 next_pos_id += 1
 
-        active_positions = pos_before + appended
-
-        if max_wavefront > 0 and len(active_positions) > max_wavefront:
-            active_positions = active_positions[-max_wavefront:]
+        states_extent = len(pos_before) + len(appended)
+        if max_wavefront > 0 and states_extent > max_wavefront:
+            positions_kept = max_wavefront - (states_extent - headway)
+            headway_in_step = max(0, positions_kept)
+            active_positions = (pos_before + appended)[:max_wavefront]
+            appended_retained = appended[:headway_in_step]
+        else:
+            headway_in_step = headway
+            active_positions = pos_before + appended
+            appended_retained = appended
 
         trace.append({
             "outer_step": outer,
             "active_positions_before": pos_before,
             "recurrence_counters_snapshot": {str(k): recurrence_counters[k] for k in pos_before},
             "decoded_position": decoded_pos,
-            "appended_positions": appended,
+            "appended_positions": appended_retained,
+            "headway_in_step": headway_in_step,
             "active_positions_after": list(active_positions),
             "active_width": len(active_positions),
         })
 
-    one_new_pos = all(len(t["appended_positions"]) >= 1 for t in trace)
+    one_new_pos = headway >= 1 and all(len(t["appended_positions"]) >= 1 for t in trace if len(t["active_positions_before"]) < max_wavefront)
     multi_pos_wavefront = any(t["active_width"] > 1 for t in trace)
-
-    neg_headway_zero = {
-        "headway": 0,
-        "one_new_position_per_step": False,
-        "appended_per_step_equals_headway": True,
-        "active_width_bounded_by_max_wavefront": True,
-    }
-    neg_max_wavefront_one = {
-        "max_wavefront": 1,
-        "multi_position_wavefront_observed": False,
-        "appended_per_step_equals_headway": True,
-        "active_width_bounded_by_max_wavefront": True,
-    }
 
     return {
         "parameters": {
@@ -338,7 +340,7 @@ def simulate_wavefront_schedule(
         },
         "canonical_trace": trace,
         "invariants": {
-            "appended_per_step_equals_headway": all(len(t["appended_positions"]) == headway for t in trace),
+            "appended_per_step_equals_headway": all(len(t["appended_positions"]) == t["headway_in_step"] for t in trace),
             "prior_active_gained_recurrence": all(
                 all(t["recurrence_counters_snapshot"][str(p)] >= inner_recurrence for p in t["active_positions_before"])
                 for t in trace
@@ -347,11 +349,55 @@ def simulate_wavefront_schedule(
             "one_new_position_per_step": one_new_pos,
             "multi_position_wavefront_observed": multi_pos_wavefront,
         },
-        "negative_controls": {
-            "headway_zero": neg_headway_zero,
-            "max_wavefront_one": neg_max_wavefront_one,
+    }
+
+
+def simulate_wavefront_schedule(
+    outer_steps: int = 8,
+    inner_recurrence: int = 4,
+    headway: int = 1,
+    max_wavefront: int = 8,
+    initial_active: int = 1,
+) -> Dict[str, Any]:
+    canonical = simulate_wavefront_schedule_core(
+        outer_steps=outer_steps,
+        inner_recurrence=inner_recurrence,
+        headway=headway,
+        max_wavefront=max_wavefront,
+        initial_active=initial_active,
+    )
+
+    hz_sim = simulate_wavefront_schedule_core(
+        outer_steps=outer_steps,
+        inner_recurrence=inner_recurrence,
+        headway=0,
+        max_wavefront=max_wavefront,
+        initial_active=initial_active,
+    )
+
+    mw1_sim = simulate_wavefront_schedule_core(
+        outer_steps=outer_steps,
+        inner_recurrence=inner_recurrence,
+        headway=headway,
+        max_wavefront=1,
+        initial_active=initial_active,
+    )
+
+    canonical["negative_controls"] = {
+        "headway_zero": {
+            "headway": 0,
+            "one_new_position_per_step": hz_sim["invariants"]["one_new_position_per_step"],
+            "appended_per_step_equals_headway": hz_sim["invariants"]["appended_per_step_equals_headway"],
+            "active_width_bounded_by_max_wavefront": hz_sim["invariants"]["active_width_bounded_by_max_wavefront"],
+        },
+        "max_wavefront_one": {
+            "max_wavefront": 1,
+            "multi_position_wavefront_observed": mw1_sim["invariants"]["multi_position_wavefront_observed"],
+            "appended_per_step_equals_headway": mw1_sim["invariants"]["appended_per_step_equals_headway"],
+            "active_width_bounded_by_max_wavefront": mw1_sim["invariants"]["active_width_bounded_by_max_wavefront"],
         },
     }
+    return canonical
 
 
 def audit_theorem(project_root: Path) -> Dict[str, Any]:
@@ -360,54 +406,131 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
         raise FileNotFoundError(f"Missing TeX file: {tex_path}")
     tex_content = tex_path.read_text(encoding="utf-8")
 
-    sec4_pos = tex_content.find("\\section{Theoretical Analysis}")
+    # 1. Parse \newtheorem declarations to find environments sharing section theorem counter
+    newtheorem_matches = re.findall(r"\\newtheorem\{([^}]+)\}(?:\[([^\]]+)\])?\{([^}]+)\}(?:\[([^\]]+)\])?", tex_content)
+    env_titles: Dict[str, str] = {}
+    section_counter_envs = set()
+
+    for name, opt1, title, opt2 in newtheorem_matches:
+        env_titles[name] = title
+        if opt1 == "theorem" or opt2 == "section" or name in ("theorem", "definition", "remark", "lemma", "proposition", "corollary"):
+            section_counter_envs.add(name)
+
+    # 2. Count non-commented sections up to Theoretical Analysis
+    sec_num = 0
+    sec4_pos = -1
+    for match in re.finditer(r"^[ \t]*\\section\{([^}]+)\}", tex_content, re.MULTILINE):
+        sec_name = match.group(1)
+        sec_num += 1
+        if "Theoretical Analysis" in sec_name:
+            sec4_pos = match.start()
+            sec4_num = sec_num
+            break
+
     if sec4_pos == -1:
-        raise ValueError("Section 4 Theoretical Analysis not found in TeX")
+        raise ValueError("Section Theoretical Analysis not found in TeX")
 
-    sec4_text = tex_content[sec4_pos:]
+    # Find end of Section 4 (next \section)
+    next_sec_match = re.search(r"^[ \t]*\\section\{", tex_content[sec4_pos + 1:], re.MULTILINE)
+    sec4_end = (sec4_pos + 1 + next_sec_match.start()) if next_sec_match else len(tex_content)
+    sec4_text = tex_content[sec4_pos:sec4_end]
 
-    def_pos = sec4_text.find("\\begin{definition}")
-    thm42_pos = sec4_text.find("\\begin{theorem}[Depth vs. Width Scaling in Prefilling")
-    rem43_pos = sec4_text.find("\\begin{remark}")
-    thm44_pos = sec4_text.find("\\begin{theorem}[Depth vs. Width Scaling in Decoding")
-    rem45_pos = sec4_text.find("\\begin{remark}", rem43_pos + 1 if rem43_pos != -1 else 0)
+    # 3. Parse environments in Section 4 in document order
+    env_pattern = r"\\begin\{(" + "|".join(re.escape(e) for e in section_counter_envs) + r")\}(?:\[([^\]]+)\])?"
+    env_matches = list(re.finditer(env_pattern, sec4_text))
 
-    if any(p == -1 for p in [def_pos, thm42_pos, rem43_pos, thm44_pos, rem45_pos]):
-        raise ValueError("Failed closed: Theorem 4.4 decoding statement not found")
+    if not env_matches:
+        raise ValueError("Failed closed: No theorem environments found in Section 4")
 
-    if not (def_pos < thm42_pos < rem43_pos < thm44_pos < rem45_pos):
-        raise ValueError("Section 4 structure mismatch or reordering detected")
+    parsed_envs = []
+    counter = 1
+    for m in env_matches:
+        env_type = m.group(1)
+        raw_title = m.group(2) or ""
+        label_num = f"{sec4_num}.{counter}"
+        counter += 1
 
-    thm44_end = sec4_text.find("\\end{theorem}", thm44_pos)
-    if thm44_end == -1:
-        raise ValueError("Theorem 4.4 end not found")
-    thm44_block = sec4_text[thm44_pos:thm44_end]
+        env_name_cap = env_titles.get(env_type, env_type.capitalize())
+        full_label = f"{env_name_cap} {label_num}"
 
-    if "d_{\\text{DF}}(T) = d_{\\text{AR}}(T)" not in thm44_block:
-        raise ValueError("Failed closed: Theorem 4.4 formula missing")
+        title_clean = raw_title.split(",")[0].strip() if raw_title else env_name_cap
 
-    proof_in_thm44 = "\\begin{proof}" in sec4_text[thm44_pos:rem45_pos]
+        block_start = m.start()
+        block_end = sec4_text.find(f"\\end{{{env_type}}}", block_start)
+        if block_end == -1:
+            block_end = sec4_text.find("\\end{", block_start + 1)
+        block_content = sec4_text[block_start:block_end] if block_end != -1 else sec4_text[block_start:]
+
+        parsed_envs.append({
+            "env_type": env_type,
+            "label_num": label_num,
+            "full_label": full_label,
+            "title": title_clean,
+            "raw_title": raw_title,
+            "block_content": block_content,
+            "start": block_start,
+            "end": block_end,
+        })
+
+    expected_sequence = [
+        ("definition", "4.1", "Depth"),
+        ("theorem", "4.2", "Prefilling"),
+        ("remark", "4.3", None),
+        ("theorem", "4.4", "Decoding"),
+        ("remark", "4.5", None),
+    ]
+
+    if len(parsed_envs) != len(expected_sequence):
+        raise ValueError("Section 4 structure mismatch or counter shift detected")
+
+    for (exp_type, exp_num, exp_keyword), env in zip(expected_sequence, parsed_envs):
+        if env["label_num"] != exp_num:
+            raise ValueError("Section 4 structure mismatch or counter shift detected")
+        if env["env_type"] != exp_type:
+            raise ValueError("Section 4 structure mismatch or reordering detected")
+        if exp_keyword is not None and (exp_keyword not in env["raw_title"] and exp_keyword not in env["title"]):
+            raise ValueError("Section 4 structure mismatch or reordering detected")
+
+    thm44 = parsed_envs[3]
+    thm44_block = thm44["block_content"]
+
+    if "d_{\\text{DF}}(T) = d_{\\text{AR}}(T)" not in thm44_block or "w_{\\text{DF}}(T) > w_{\\text{AR}}(T)" not in thm44_block:
+        raise ValueError("Theorem 4.4 equation or inequality missing/invalid")
+
+    has_recurrence = "r > 1" in thm44_block
+    has_wavefront = ("W \\le L" in thm44_block) or ("W \\leq L" in thm44_block)
+    has_df = "diffusion forcing" in thm44_block
+
+    if not (has_recurrence and has_wavefront and has_df):
+        raise ValueError("Theorem 4.4 assumptions missing/invalid")
+
+    thm44_end = thm44["end"]
+    rem45_start = parsed_envs[4]["start"]
+    following_text = sec4_text[thm44_end:rem45_start]
+    proof_in_thm44 = ("\\begin{proof}" in thm44_block) or ("\\begin{proof}" in following_text)
+
+    if proof_in_thm44:
+        raise ValueError("Unrelated proof environment found for decoding theorem")
+
+    cit_match = re.search(r"Theorem\s+\d+\.\d+", CLAIM_2_TEXT)
+    challenge_citation = cit_match.group(0) if cit_match else "Theorem 4.2"
+
+    citation_mismatch = (challenge_citation != thm44["full_label"])
 
     return {
         "file": "vendor/arxiv/arxiv_submission.tex",
-        "sha256": TEX_SHA256,
-        "challenge_citation": "Theorem 4.2",
-        "document_order": [
-            "Definition 4.1",
-            "Theorem 4.2",
-            "Remark 4.3",
-            "Theorem 4.4",
-            "Remark 4.5",
-        ],
+        "sha256": compute_sha256(tex_path.read_bytes()),
+        "challenge_citation": challenge_citation,
+        "document_order": [e["full_label"] for e in parsed_envs],
         "theorems": {
             "definition_4_1": {
                 "statement_found": True,
-                "title": "Depth and Width in Recurrent-Depth Models",
+                "title": parsed_envs[0]["title"],
             },
             "theorem_4_2": {
                 "statement_found": True,
                 "scope": "prefilling",
-                "title": "Depth vs. Width Scaling in Prefilling",
+                "title": parsed_envs[1]["title"],
             },
             "remark_4_3": {
                 "statement_found": True,
@@ -416,7 +539,7 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
             "theorem_4_4": {
                 "statement_found": True,
                 "scope": "decoding",
-                "title": "Depth vs. Width Scaling in Decoding",
+                "title": parsed_envs[3]["title"],
                 "statement": "d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T)",
                 "assumptions": [
                     "r > 1 inner recurrences",
@@ -431,21 +554,22 @@ def audit_theorem(project_root: Path) -> Dict[str, Any]:
             },
         },
         "citation_audit": {
-            "citation_mismatch_detected": True,
+            "citation_mismatch_detected": citation_mismatch,
             "mismatch_details": (
-                "The challenge text cites Theorem 4.2 for the decoding expressiveness claim, "
-                "whereas arXiv v1 states the prefilling result in Theorem 4.2 and the same-runtime "
-                "decoding result in Theorem 4.4."
+                f"The challenge text cites {challenge_citation} for the decoding expressiveness claim, "
+                f"whereas arXiv v1 states the prefilling result in Theorem 4.2 and the same-runtime "
+                f"decoding result in {thm44['full_label']}."
             ),
         },
         "evidence_status": "unavailable",
         "proof_reproduced": False,
         "reasons_unavailable": [
-            "The challenge string cites Theorem 4.2, which is the prefilling result, not the decoding result.",
+            f"The challenge string cites {challenge_citation}, which is the prefilling result, not the decoding result.",
             "Theorem 4.4 decoding expressiveness requires hardware-dependent I/O memory bandwidth assumptions.",
             "The released arXiv v1 source does not contain an independently checkable proof of the decoding theorem.",
         ],
     }
+
 
 
 def generate_report_markdown(provenance: Dict[str, Any], source_audit: Dict[str, Any], schedule: Dict[str, Any], theorem: Dict[str, Any]) -> str:
@@ -987,8 +1111,8 @@ def run_pipeline(project_root: Path) -> Dict[str, Any]:
         "python_requirement": ">=3.10",
         "inputs": provenance["inputs"],
         "commands": {
-            "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence",
-            "test_suite": "uv run --locked pytest",
+            "evidence_generation": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m recurrent_sampler_repro.evidence --project-root submissions/efficient-parallel-samplers-for-recurrent-depth-models",
+            "test_suite": "uv run --project submissions/efficient-parallel-samplers-for-recurrent-depth-models python -m pytest submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests",
         },
         "claims": {
             "claim_1": {

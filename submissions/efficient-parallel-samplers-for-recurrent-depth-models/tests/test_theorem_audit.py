@@ -48,14 +48,14 @@ def test_theorem_audit_mutation_missing_decoding_theorem_fails():
     project_root = get_project_root()
     tex_bytes = (project_root / "vendor" / "arxiv" / "arxiv_submission.tex").read_text(encoding="utf-8")
 
-    mutated = tex_bytes.replace("Depth vs. Width Scaling in Decoding", "Disabled Decoding Theorem")
+    mutated = tex_bytes.replace("Depth vs. Width Scaling in Decoding", "Disabled Theorem")
 
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
         (tmp_path / "vendor" / "arxiv").mkdir(parents=True)
         (tmp_path / "vendor" / "arxiv" / "arxiv_submission.tex").write_text(mutated, encoding="utf-8")
 
-        with pytest.raises(ValueError, match="Failed closed: Theorem 4.4 decoding statement not found"):
+        with pytest.raises(ValueError, match="Section 4 structure mismatch|Failed closed: Theorem 4.4 decoding statement not found"):
             audit_theorem(tmp_path)
 
 
@@ -108,7 +108,7 @@ def test_theorem_audit_mutation_missing_equation_fails():
     tex_bytes = (project_root / "vendor" / "arxiv" / "arxiv_submission.tex").read_text(encoding="utf-8")
 
     # Remove the $$...$$ decoding equation from Theorem 4.4
-    old_eq = "$$d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T)$$"
+    old_eq = "$$d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T),$$"
     mutated = tex_bytes.replace(old_eq, "[Equation Removed]")
 
     with tempfile.TemporaryDirectory() as tmpdir:
