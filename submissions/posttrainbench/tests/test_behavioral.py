@@ -938,3 +938,348 @@ class TestTransactionalRollback:
 
         # Original provenance.json should be restored
         assert (evidence / "provenance.json").read_bytes() == sentinel
+
+
+# ===================================================================
+# 13. One-based trace line semantics with preamble lines
+# ===================================================================
+
+def _build_trace_with_preamble(
+    line_records: dict[int, dict],
+    preamble_count: int = 13,
+) -> bytes:
+    """Build a trace with non-JSON preamble lines and JSON records at one-based positions.
+
+    line_records maps one-based physical line numbers to JSON dicts.
+    Lines not in line_records get placeholder JSON or preamble text.
+    """
+    max_line = max(line_records.keys()) if line_records else preamble_count
+    lines: list[str] = []
+    for line_num in range(1, max_line + 1):
+        if line_num <= preamble_count:
+            lines.append(f"# preamble line {line_num}")
+        elif line_num in line_records:
+            lines.append(json.dumps(line_records[line_num]))
+        else:
+            lines.append(json.dumps({"part": {"text": f"filler for line {line_num}"}}))
+    return "\n".join(lines).encode("utf-8")
+
+
+class TestTraceOneBased:
+    """Trace extraction uses one-based physical lines including 13 preamble lines.
+
+    The approved excerpts are substrings within resolved fields, not full values.
+    """
+
+    def _excerpt_spec(self, idx: int = 0) -> dict:
+        return C.TRACE_EXCERPTS[idx]
+
+    def _build_full_trace(self) -> bytes:
+        """Build a trace with all 3 excerpts at their correct one-based lines."""
+        records = {}
+        for spec in C.TRACE_EXCERPTS:
+            # The resolved field contains the excerpt as a substring
+            # plus prefix and suffix text around it
+            prefix = "PREFIX TEXT: some context here. "
+            suffix = " SUFFIX text after."
+            full_value = prefix + spec["text"] + suffix
+            records[spec["record"]] = _build_nested(spec["pointer"], full_value)
+        return _build_trace_with_preamble(records)
+
+    def test_valid_one_based_extraction(self):
+        """Extracts correct substring from one-based physical lines."""
+        trace = self._build_full_trace()
+        results = extract_trace_excerpts(trace)
+        assert len(results) == 3
+        for i, spec in enumerate(C.TRACE_EXCERPTS):
+            assert results[i]["text"] == spec["text"]
+            assert results[i]["sha256"] == spec["sha256"]
+
+    def test_wrong_physical_line_fails(self):
+        """Record at wrong line number fails extraction."""
+        spec = self._excerpt_spec(0)
+        prefix = "PREFIX "
+        full_value = prefix + spec["text"] + " SUFFIX"
+        # Put the record at line 501 instead of 500
+        records = {spec["record"] + 1: _build_nested(spec["pointer"], full_value)}
+        # Put a valid but wrong record at line 500
+        records[spec["record"]] = {"different": "structure"}
+        trace = _build_trace_with_preamble(records)
+        with pytest.raises((KeyError, ValueError)):
+            extract_trace_excerpts(trace)
+
+    def test_missing_substring_fails(self):
+        """Resolved field without the approved substring fails."""
+        spec = self._excerpt_spec(0)
+        # The field value doesn't contain the approved excerpt
+        records = {spec["record"]: _build_nested(spec["pointer"], "completely different text")}
+        # Must also have the other records
+        for s in C.TRACE_EXCERPTS[1:]:
+            prefix = "P "
+            records[s["record"]] = _build_nested(s["pointer"], prefix + s["text"] + " S")
+        trace = _build_trace_with_preamble(records)
+        with pytest.raises(ValueError, match="substring|not found|mismatch"):
+            extract_trace_excerpts(trace)
+
+    def test_wrong_pointer_fails(self):
+        """Wrong JSON pointer at correct line fails."""
+        spec = self._excerpt_spec(0)
+        # Put value at a different pointer path
+        records = {spec["record"]: {"wrong": {"path": spec["text"]}}}
+        trace = _build_trace_with_preamble(records)
+        with pytest.raises((KeyError, ValueError)):
+            extract_trace_excerpts(trace)
+
+    def test_malformed_target_json_fails(self):
+        """Malformed JSON at the target line fails."""
+        lines = ["# preamble"] * 13
+        for i in range(14, 532):
+            lines.append(json.dumps({"part": {"text": f"filler {i}"}}))
+        # Make line 500 malformed
+        lines[499] = "NOT VALID JSON {{{{"
+        trace = "\n".join(lines).encode()
+        with pytest.raises(ValueError, match="[Mm]alformed"):
+            extract_trace_excerpts(trace)
+
+    def test_changed_excerpt_hash_fails(self):
+        """Changed excerpt text still in the field fails hash check."""
+        spec = self._excerpt_spec(0)
+        # Similar but different text
+        tampered = spec["text"][:-1] + "X"
+        records = {spec["record"]: _build_nested(spec["pointer"], tampered)}
+        for s in C.TRACE_EXCERPTS[1:]:
+            records[s["record"]] = _build_nested(s["pointer"], "P " + s["text"] + " S")
+        trace = _build_trace_with_preamble(records)
+        with pytest.raises(ValueError):
+            extract_trace_excerpts(trace)
+
+    def test_preamble_not_treated_as_json(self):
+        """The 13 preamble lines must not be parsed as JSON records."""
+        # Put a valid JSON record at preamble line 5 with the excerpt
+        spec = self._excerpt_spec(0)
+        lines = []
+        for i in range(1, 532):
+            if i <= 13:
+                if i == 5:
+                    # Sneaky: valid JSON at a preamble position
+                    lines.append(json.dumps(_build_nested(spec["pointer"], spec["text"])))
+                else:
+                    lines.append(f"# preamble {i}")
+            elif i == spec["record"]:
+                lines.append(json.dumps({"wrong": "structure"}))
+            else:
+                lines.append(json.dumps({"part": {"text": f"filler {i}"}}))
+        for s in C.TRACE_EXCERPTS[1:]:
+            while len(lines) < s["record"]:
+                lines.append(json.dumps({"part": {"text": "pad"}}))
+            lines[s["record"] - 1] = json.dumps(
+                _build_nested(s["pointer"], "P " + s["text"] + " S")
+            )
+        trace = "\n".join(lines).encode()
+        # Line 500 has wrong structure, so this should fail
+        with pytest.raises((KeyError, ValueError)):
+            extract_trace_excerpts(trace)
+
+
+# ===================================================================
+# 14. HF entry metadata: object/size validation for allowlisted files
+# ===================================================================
+
+class TestHFEntryMetadata:
+    """Validate HF entry object IDs and sizes for allowlisted files."""
+
+    def test_judgment_wrong_object_fails(self):
+        """Wrong Git object for judgment file in HF inventory raises."""
+        acquired = _make_valid_acquired()
+        inv = acquired["hf_inventory"]
+        inv["entry_metadata"] = {
+            C.INSTRUCTION_MODEL_JUDGMENT_PATH: {
+                "type": "file",
+                "oid": "0000000000000000000000000000000000000000",
+                "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
+            },
+            C.INSTRUCTION_MODEL_TRACE_PATH: {
+                "type": "file",
+                "oid": C.INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
+                "size": C.INSTRUCTION_MODEL_TRACE_SIZE,
+            },
+        }
+        with pytest.raises(ValueError, match="object|oid|mismatch"):
+            from posttrainbench_repro.acquisition import _validate_hf_entry_metadata
+            _validate_hf_entry_metadata(inv)
+
+    def test_trace_wrong_size_fails(self):
+        """Wrong size for trace file in HF inventory raises."""
+        acquired = _make_valid_acquired()
+        inv = acquired["hf_inventory"]
+        inv["entry_metadata"] = {
+            C.INSTRUCTION_MODEL_JUDGMENT_PATH: {
+                "type": "file",
+                "oid": C.INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
+                "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
+            },
+            C.INSTRUCTION_MODEL_TRACE_PATH: {
+                "type": "file",
+                "oid": C.INSTRUCTION_MODEL_TRACE_GIT_OBJECT,
+                "size": 999,  # Wrong size
+            },
+        }
+        with pytest.raises(ValueError, match="size"):
+            from posttrainbench_repro.acquisition import _validate_hf_entry_metadata
+            _validate_hf_entry_metadata(inv)
+
+    def test_missing_allowlisted_path_fails(self):
+        """Allowlisted path not present in HF inventory raises."""
+        acquired = _make_valid_acquired()
+        inv = acquired["hf_inventory"]
+        inv["entry_metadata"] = {}  # No entries
+        with pytest.raises(ValueError, match="not found|missing"):
+            from posttrainbench_repro.acquisition import _validate_hf_entry_metadata
+            _validate_hf_entry_metadata(inv)
+
+    def test_allowlisted_path_is_directory_fails(self):
+        """Allowlisted path that is a directory instead of file raises."""
+        acquired = _make_valid_acquired()
+        inv = acquired["hf_inventory"]
+        inv["entry_metadata"] = {
+            C.INSTRUCTION_MODEL_JUDGMENT_PATH: {
+                "type": "directory",  # Wrong type
+                "oid": C.INSTRUCTION_MODEL_JUDGMENT_GIT_OBJECT,
+                "size": C.INSTRUCTION_MODEL_JUDGMENT_SIZE,
+            },
+        }
+        with pytest.raises(ValueError, match="type|file|directory"):
+            from posttrainbench_repro.acquisition import _validate_hf_entry_metadata
+            _validate_hf_entry_metadata(inv)
+
+
+# ===================================================================
+# 15. Coverage gating: exact inventory metadata and computed coverage
+# ===================================================================
+
+class TestCoverageGating:
+    """Coverage must require exact inventory metadata and computed coverage."""
+
+    def test_wrong_root_count_in_evaluate_claims(self):
+        """Wrong recognized_root_count prevents claims."""
+        coverage = {
+            "recognized_task_count": C.EXPECTED_TASK_COUNT,
+            "recognized_root_count": 46,  # Wrong
+            "recognized_root_cell_pairs": C.EXPECTED_ROOT_CELL_PAIRS,
+            "duplicate_job_pairs": C.EXPECTED_DUPLICATE_PAIRS,
+            "missing_root_cell_pairs": C.EXPECTED_MISSING_PAIRS,
+        }
+        protocol = {"commit_sh_analysis": {"htcondor_branch": {"ten_hour_jobs": 7, "one_hour_jobs": 1}}}
+        rh = _make_minimal_rh()
+        with pytest.raises(ValueError, match="root"):
+            evaluate_claims(coverage, protocol, rh)
+
+    def test_wrong_duplicate_count_in_evaluate_claims(self):
+        """Wrong duplicate_job_pairs prevents claims."""
+        coverage = {
+            "recognized_task_count": C.EXPECTED_TASK_COUNT,
+            "recognized_root_count": C.EXPECTED_ROOT_COUNT,
+            "recognized_root_cell_pairs": C.EXPECTED_ROOT_CELL_PAIRS,
+            "duplicate_job_pairs": 99,  # Wrong
+            "missing_root_cell_pairs": C.EXPECTED_MISSING_PAIRS,
+        }
+        protocol = {"commit_sh_analysis": {"htcondor_branch": {"ten_hour_jobs": 7, "one_hour_jobs": 1}}}
+        rh = _make_minimal_rh()
+        with pytest.raises(ValueError, match="duplicate"):
+            evaluate_claims(coverage, protocol, rh)
+
+    def test_wrong_root_cell_pairs_in_evaluate_claims(self):
+        """Wrong root_cell_pairs prevents claims."""
+        coverage = {
+            "recognized_task_count": C.EXPECTED_TASK_COUNT,
+            "recognized_root_count": C.EXPECTED_ROOT_COUNT,
+            "recognized_root_cell_pairs": 1300,  # Wrong
+            "duplicate_job_pairs": C.EXPECTED_DUPLICATE_PAIRS,
+            "missing_root_cell_pairs": C.EXPECTED_MISSING_PAIRS,
+        }
+        protocol = {"commit_sh_analysis": {"htcondor_branch": {"ten_hour_jobs": 7, "one_hour_jobs": 1}}}
+        rh = _make_minimal_rh()
+        with pytest.raises(ValueError, match="pair"):
+            evaluate_claims(coverage, protocol, rh)
+
+
+def _make_minimal_rh() -> dict[str, Any]:
+    """Minimal reward-hacking dict for evaluate_claims tests."""
+    return {
+        "training_on_test_sets": {"status": "partial-support"},
+        "downloading_instruction_tuned_checkpoint": {"status": "partial-support"},
+        "using_discovered_api_key": {
+            "status": "unavailable",
+            "inventory_proof": {"matching_paths": 0},
+        },
+    }
+
+
+# ===================================================================
+# 16. Reward-hacking: verified bytes, not constant substitution
+# ===================================================================
+
+class TestRewardHackingVerifiedBytes:
+    """audit_reward_hacking must output supplied verified bytes, not constants."""
+
+    def test_contamination_uses_supplied_bytes(self):
+        """Contamination witness_bytes must come from acquired, not constants."""
+        acquired = _make_valid_acquired()
+        # Change the acquired contamination content to something different
+        acquired["contamination_content"] = b"different contamination\n"
+        rh = audit_reward_hacking(acquired)
+        contam = rh["training_on_test_sets"]
+        # If using constants, it would be "contamination detected\n"
+        # If using supplied bytes, it would be "different contamination\n"
+        assert contam["witness_bytes"] != "contamination detected\n", \
+            "Must use supplied bytes, not constants"
+
+
+# ===================================================================
+# 17. Pointer completeness: behavioral test for rendered output
+# ===================================================================
+
+class TestPointerCompleteness:
+    """Rendered HTML must contain resolvable JSON pointers for every result."""
+
+    def test_poster_has_claim_status_pointers(self):
+        """Poster must have JSON pointers for each claim status."""
+        acquired = _make_valid_acquired()
+        with patch("posttrainbench_repro.pipeline.PROJECT_ROOT", Path("/tmp/ptb_test")):
+            from posttrainbench_repro.pipeline import _canonical_json
+            from posttrainbench_repro.audit import get_provenance
+            from posttrainbench_repro.render import render_poster_html
+            provenance = get_provenance(acquired)
+            coverage = compute_coverage(acquired["hf_inventory"])
+            protocol = audit_protocol(
+                acquired["github"]["blob_contents"],
+                acquired["github"]["entries"],
+            )
+            coverage_output = {**coverage, "protocol": protocol}
+            rh = audit_reward_hacking(acquired)
+            claims = evaluate_claims(coverage, protocol, rh)
+            poster = render_poster_html(provenance, coverage_output, rh, claims)
+        assert "evidence/claims.json#/claim_1" in poster
+        assert "evidence/claims.json#/claim_2" in poster
+        assert "evidence/reward_hacking.json#/training_on_test_sets" in poster
+        assert "evidence/reward_hacking.json#/using_discovered_api_key" in poster
+        assert "evidence/coverage.json#/cell_counts" in poster
+
+    def test_poster_has_count_pointers(self):
+        """Poster must have JSON pointers for coverage counts."""
+        acquired = _make_valid_acquired()
+        from posttrainbench_repro.audit import get_provenance
+        from posttrainbench_repro.render import render_poster_html
+        provenance = get_provenance(acquired)
+        coverage = compute_coverage(acquired["hf_inventory"])
+        protocol = audit_protocol(
+            acquired["github"]["blob_contents"],
+            acquired["github"]["entries"],
+        )
+        coverage_output = {**coverage, "protocol": protocol}
+        rh = audit_reward_hacking(acquired)
+        claims = evaluate_claims(coverage, protocol, rh)
+        poster = render_poster_html(provenance, coverage_output, rh, claims)
+        assert "evidence/coverage.json#/recognized_task_count" in poster
+        assert "evidence/coverage.json#/duplicate_job_pairs" in poster
+
