@@ -3,8 +3,8 @@
     "64bfe193-333b-4b37-9683-9ac25ca5ac27": {
       "paper_id": "a3GdvuPItd",
       "path": "repro-loop/attempts/64bfe193-333b-4b37-9683-9ac25ca5ac27.json",
-      "phase": "deployed",
-      "updated_at": "2026-07-26T05:40:09.222498+00:00"
+      "phase": "blocked",
+      "updated_at": "2026-07-26T05:42:52.668882+00:00"
     },
     "e20658d7-250a-5b0c-a015-be453c43e9fc": {
       "paper_id": "vGeNaFHdET",
@@ -86,7 +86,9 @@
     "1a58165c03eb647a57fb5ed3c366152e270eaa8847dcfb3b678ed8a5c421b3ba": "repro-loop/snapshots/1a58165c03eb647a57fb5ed3c366152e270eaa8847dcfb3b678ed8a5c421b3ba.json",
     "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d": "repro-loop/snapshots/35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d.json",
     "37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd": "repro-loop/snapshots/37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd.json",
+    "61b023054291d666a76987dd4bb380c31660f75882eae8e68379e022c9be6481": "repro-loop/snapshots/61b023054291d666a76987dd4bb380c31660f75882eae8e68379e022c9be6481.json",
     "827aea0aec55e82eb0b591c52370285165d7db79de179b36967eb196d440121c": "repro-loop/snapshots/827aea0aec55e82eb0b591c52370285165d7db79de179b36967eb196d440121c.json",
+    "a6c347be7dc639d2580cfc690f5451943ec421ea1c84e77178159b6778b33609": "repro-loop/snapshots/a6c347be7dc639d2580cfc690f5451943ec421ea1c84e77178159b6778b33609.json",
     "bb4e4816a8b63d7cafa4496d4f97fd68a76325be1353559f66c2d399dea17f8b": "repro-loop/snapshots/bb4e4816a8b63d7cafa4496d4f97fd68a76325be1353559f66c2d399dea17f8b.json",
     "c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97": "repro-loop/snapshots/c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97.json",
     "db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df": "repro-loop/snapshots/db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df.json"

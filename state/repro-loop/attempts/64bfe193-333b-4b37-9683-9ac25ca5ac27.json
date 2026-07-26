@@ -13,6 +13,8 @@
     "Nong Sang",
     "Changxin Gao"
   ],
+  "blocked_from": "deployed",
+  "blocker": "Fresh assessed snapshot 61b023054291d666a76987dd4bb380c31660f75882eae8e68379e022c9be6481 contains an official verdict for paper a3GdvuPItd at conflicting Space MarxistLeninist/repro-selecting-samples-on-graphs revision a14d296f80c609006e9b9eb79927efb5186ca742; attest-submission therefore refused with ValueError: verdict even though wrice/repro-graph-pruning revision 3c483996fffc32b05074d909330df05cfb4e6b80 is live and queued pending. Next action: challenge operator resolves the conflicting canonical paper verdict/queue; then resume from deployed with a fresh assessed snapshot.",
   "claim_bindings": [
     {
       "challenge_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
@@ -76,7 +78,7 @@
   "or": "https://openreview.net/forum?id=a3GdvuPItd",
   "orid": "a3GdvuPItd",
   "paper_id": "a3GdvuPItd",
-  "phase": "deployed",
+  "phase": "blocked",
   "pid": "63109",
   "project_path": "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
   "safety_blocker": null,
@@ -142,10 +144,18 @@
       "owner": "controller-graph-design-20260725",
       "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
       "to": "deployed"
+    },
+    {
+      "at": "2026-07-26T05:42:52.668882+00:00",
+      "fencing_token": 2,
+      "from": "deployed",
+      "owner": "controller-graph-design-20260725",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "blocked"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T05:40:09.222498+00:00",
+  "updated_at": "2026-07-26T05:42:52.668882+00:00",
   "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
   "vs": "https://icml.cc/virtual/2026/poster/63109"
 }
