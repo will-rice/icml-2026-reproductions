@@ -40,6 +40,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2603.08640",
   "i": 4754,
+  "improvement_attempts": 1,
+  "improvement_reason": "Replace invalid Hugging Face Space README colorTo metadata rejected by the live YAML validator.",
   "insts": [
     "ELLIS Intitute T\u00fcbingen",
     "MATS \u00b7 Max Planck Institute for Intelligent Systems, T\u00fcbingen",
@@ -71,7 +73,7 @@
   "or": "https://openreview.net/forum?id=UnjxMTe57e",
   "orid": "UnjxMTe57e",
   "paper_id": "UnjxMTe57e",
-  "phase": "validated",
+  "phase": "improving",
   "pid": "63667",
   "project_path": "submissions/posttrainbench",
   "safety_blocker": null,
@@ -110,10 +112,18 @@
       "owner": "controller-posttrain-design-20260726",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "validated"
+    },
+    {
+      "at": "2026-07-26T12:28:35.553287+00:00",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "improving"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T12:26:05.959354+00:00",
+  "updated_at": "2026-07-26T12:28:35.553287+00:00",
   "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
   "vs": "https://icml.cc/virtual/2026/poster/63667",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
