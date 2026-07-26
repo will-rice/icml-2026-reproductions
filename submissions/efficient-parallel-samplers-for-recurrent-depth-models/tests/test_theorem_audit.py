@@ -83,3 +83,75 @@ def test_theorem_audit_mutation_reordering_fails():
 
         with pytest.raises(ValueError, match="Section 4 structure mismatch or reordering detected"):
             audit_theorem(tmp_path)
+
+
+def test_theorem_audit_mutation_counter_shifting_inserted_env_fails():
+    project_root = get_project_root()
+    tex_bytes = (project_root / "vendor" / "arxiv" / "arxiv_submission.tex").read_text(encoding="utf-8")
+
+    # Insert a new definition before Theorem 4.4, shifting its counter to 4.5
+    t44_pos = tex_bytes.find("\\begin{theorem}[Depth vs. Width Scaling in Decoding")
+    inserted = "\\begin{definition}[Counter Shift Environment]\nDummy definition.\n\\end{definition}\n"
+    mutated = tex_bytes[:t44_pos] + inserted + tex_bytes[t44_pos:]
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        (tmp_path / "vendor" / "arxiv").mkdir(parents=True)
+        (tmp_path / "vendor" / "arxiv" / "arxiv_submission.tex").write_text(mutated, encoding="utf-8")
+
+        with pytest.raises(ValueError, match="Section 4 structure mismatch or counter shift detected"):
+            audit_theorem(tmp_path)
+
+
+def test_theorem_audit_mutation_missing_equation_fails():
+    project_root = get_project_root()
+    tex_bytes = (project_root / "vendor" / "arxiv" / "arxiv_submission.tex").read_text(encoding="utf-8")
+
+    # Remove the $$...$$ decoding equation from Theorem 4.4
+    old_eq = "$$d_{\\text{DF}}(T) = d_{\\text{AR}}(T) \\quad \\text{and} \\quad w_{\\text{DF}}(T) > w_{\\text{AR}}(T)$$"
+    mutated = tex_bytes.replace(old_eq, "[Equation Removed]")
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        (tmp_path / "vendor" / "arxiv").mkdir(parents=True)
+        (tmp_path / "vendor" / "arxiv" / "arxiv_submission.tex").write_text(mutated, encoding="utf-8")
+
+        with pytest.raises(ValueError, match="Theorem 4.4 equation or inequality missing/invalid"):
+            audit_theorem(tmp_path)
+
+
+def test_theorem_audit_mutation_reversed_inequality_fails():
+    project_root = get_project_root()
+    tex_bytes = (project_root / "vendor" / "arxiv" / "arxiv_submission.tex").read_text(encoding="utf-8")
+
+    # Reverse the > inequality to < in Theorem 4.4
+    old_eq = "w_{\\text{DF}}(T) > w_{\\text{AR}}(T)"
+    new_eq = "w_{\\text{DF}}(T) < w_{\\text{AR}}(T)"
+    mutated = tex_bytes.replace(old_eq, new_eq)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        (tmp_path / "vendor" / "arxiv").mkdir(parents=True)
+        (tmp_path / "vendor" / "arxiv" / "arxiv_submission.tex").write_text(mutated, encoding="utf-8")
+
+        with pytest.raises(ValueError, match="Theorem 4.4 equation or inequality missing/invalid"):
+            audit_theorem(tmp_path)
+
+
+def test_theorem_audit_mutation_unrelated_proof_fails():
+    project_root = get_project_root()
+    tex_bytes = (project_root / "vendor" / "arxiv" / "arxiv_submission.tex").read_text(encoding="utf-8")
+
+    # Attach an unrelated proof environment to Theorem 4.4
+    t44_end = tex_bytes.find("\\end{theorem}", tex_bytes.find("\\begin{theorem}[Depth vs. Width Scaling in Decoding"))
+    assert t44_end != -1
+    inserted_proof = "\n\\begin{proof}\nFake proof.\n\\end{proof}\n"
+    mutated = tex_bytes[:t44_end + len("\\end{theorem}")] + inserted_proof + tex_bytes[t44_end + len("\\end{theorem}"):]
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        (tmp_path / "vendor" / "arxiv").mkdir(parents=True)
+        (tmp_path / "vendor" / "arxiv" / "arxiv_submission.tex").write_text(mutated, encoding="utf-8")
+
+        with pytest.raises(ValueError, match="Unrelated proof environment found for decoding theorem"):
+            audit_theorem(tmp_path)

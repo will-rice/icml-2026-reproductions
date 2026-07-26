@@ -17,3 +17,21 @@ def test_wavefront_schedule_negative_controls_recorded():
     ctrls = res["negative_controls"]
     assert ctrls["headway_zero"]["one_new_position_per_step"] is False
     assert ctrls["max_wavefront_one"]["multi_position_wavefront_observed"] is False
+
+
+def test_wavefront_schedule_prefix_truncation():
+    # Model lines 1382-1388: states[:, :max_wavefront] retains the prefix, not suffix.
+    res = simulate_wavefront_schedule(outer_steps=10, max_wavefront=8, headway=1, initial_active=1)
+    trace = res["canonical_trace"]
+
+    # At step 8, active width reaches max_wavefront=8 (positions 0..7).
+    step8_after = trace[7]["active_positions_after"]
+    assert step8_after == [0, 1, 2, 3, 4, 5, 6, 7]
+
+    # At step 9, pos 8 is attempted. Under prefix truncation, states[:, :max_wavefront]
+    # retains [0..7], 0 appended positions kept, pos 8 is NOT in active positions.
+    step9_after = trace[8]["active_positions_after"]
+    assert step9_after == [0, 1, 2, 3, 4, 5, 6, 7]
+    assert 0 in step9_after
+    assert 8 not in step9_after
+    assert trace[8]["appended_positions"] == []

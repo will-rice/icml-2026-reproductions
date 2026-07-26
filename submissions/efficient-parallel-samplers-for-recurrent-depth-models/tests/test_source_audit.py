@@ -61,10 +61,33 @@ def test_source_ast_audit_mutation_unrelated_norm_fails():
         project_root / "vendor" / "recurrent-pretraining" / "recpre" / "raven_modeling_minimal.py"
     ).read_text(encoding="utf-8")
 
-    # Replace normalized latent diff with unnormalized norm
+    # Replace normalized latent diff with unnormalized norm inside the branch
     old_line = 'criterion = (match_states - matching_prev_states).norm(dim=-1) / match_states.norm(dim=-1)'
     new_line = 'criterion = (match_states - matching_prev_states).norm(dim=-1)'
     mutated_bytes = sampler_bytes.replace(old_line, new_line)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir)
+        (tmp_path / "vendor" / "recurrent-pretraining" / "recpre").mkdir(parents=True)
+        (tmp_path / "vendor" / "recurrent-pretraining" / "recpre" / "raven_modeling_minimal.py").write_text(
+            mutated_bytes, encoding="utf-8"
+        )
+
+        with pytest.raises(ValueError, match="Normalized latent-difference freezing predicate not found"):
+            audit_source_ast(tmp_path)
+
+
+def test_source_ast_audit_matching_string_elsewhere_does_not_pass():
+    project_root = get_project_root()
+    sampler_bytes = (
+        project_root / "vendor" / "recurrent-pretraining" / "recpre" / "raven_modeling_minimal.py"
+    ).read_text(encoding="utf-8")
+
+    # Insert matching string as comment outside branch, but break actual criterion assignment inside branch
+    old_line = 'criterion = (match_states - matching_prev_states).norm(dim=-1) / match_states.norm(dim=-1)'
+    comment_line = '    # (match_states - matching_prev_states).norm(dim=-1) / match_states.norm(dim=-1)'
+    broken_line = 'criterion = (match_states - matching_prev_states).norm(dim=-1)'
+    mutated_bytes = sampler_bytes.replace(old_line, f'{comment_line}\n                    {broken_line}')
 
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
