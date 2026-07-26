@@ -18,6 +18,8 @@
     "Jia LI",
     "Wenda Li"
   ],
+  "blocked_from": "judging",
+  "blocker": "Judgment deadline 2026-07-26T08:00:00+00:00 elapsed without an official verdict. Fresh immutable snapshot 2e97bf39d410d687e8a56462f06388dcb4fa9765e98a9f4ba4892549d8237a78 fetched at 2026-07-26T09:12:02.045509+00:00 shows exact Space wrice/repro-numina-lean-agent at submitted SHA f79268b7718b50a1dfeb0a4bfd96299e59dfe2ab still tagged and uniquely queued pending for paper 0bTEd4LpQr, with no matching official verdict. The bounded watch used 2 of 12 polls. Next action: after the challenge operator publishes the exact official verdict, resume judging under a current fenced controller lease, take one fresh immutable assessed snapshot, and run sync-verdict against that snapshot.",
   "claim_bindings": [
     {
       "challenge_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
@@ -72,7 +74,7 @@
   "or": "https://openreview.net/forum?id=0bTEd4LpQr",
   "orid": "0bTEd4LpQr",
   "paper_id": "0bTEd4LpQr",
-  "phase": "judging",
+  "phase": "blocked",
   "pid": "66755",
   "project_path": "submissions/numina-lean-agent",
   "safety_blocker": null,
@@ -139,10 +141,18 @@
       "owner": "controller-numina-validation-20260726",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-26T09:12:51.803268+00:00",
+      "fencing_token": 3,
+      "from": "judging",
+      "owner": "controller-numina-deadline-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "blocked"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T06:26:12.669348+00:00",
+  "updated_at": "2026-07-26T09:12:51.803268+00:00",
   "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
   "vs": "https://icml.cc/virtual/2026/poster/66755"
 }
