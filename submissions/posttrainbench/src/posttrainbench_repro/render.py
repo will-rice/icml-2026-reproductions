@@ -551,10 +551,15 @@ def render_index_html(
 </head>
 <body>
 <h1>PostTrainBench Reproduction</h1>
-<p>Paper: PostTrainBench: Can LLM Agents Automate LLM Post-Training?
-{_ptr("evidence/provenance.json#/paper_id")}</p>
-<p>Paper ID: <code>{provenance["paper_id"]}</code> &middot;
-Attempt: <code>{provenance["attempt_id"]}</code></p>
+<p>Paper: PostTrainBench: Can LLM Agents Automate LLM Post-Training?</p>
+<p>Paper ID: {_evidence_value(
+    f'<code>{_escape(provenance["paper_id"])}</code>',
+    "evidence/provenance.json#/paper_id",
+)} &middot;
+Attempt: {_evidence_value(
+    f'<code>{_escape(provenance["attempt_id"])}</code>',
+    "evidence/provenance.json#/attempt_id",
+)}</p>
 
 <nav>
 <a href="#claims">Claims</a>
@@ -701,8 +706,13 @@ body {{ max-width: 900px; }}
 </head>
 <body>
 <h1>PostTrainBench: Released-Artifact Audit</h1>
-<p>Paper ID: <code>{provenance["paper_id"]}</code> &middot; arXiv: {provenance["arxiv_id"]}
-{_ptr("evidence/provenance.json#/paper_id")}</p>
+<p>Paper ID: {_evidence_value(
+    f'<code>{_escape(provenance["paper_id"])}</code>',
+    "evidence/provenance.json#/paper_id",
+)} &middot; arXiv: {_evidence_value(
+    f'<code>{_escape(provenance["arxiv_id"])}</code>',
+    "evidence/provenance.json#/arxiv_id",
+)}</p>
 
 <div class="poster-grid">
 {_render_claim(claim1, "claim_1", "Claim 1")}
