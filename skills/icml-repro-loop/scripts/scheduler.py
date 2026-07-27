@@ -23,6 +23,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import attestations  # noqa: E402
 import attempts  # noqa: E402
 import leases  # noqa: E402
+import score_rate  # noqa: E402
 import state  # noqa: E402
 import store  # noqa: E402
 
@@ -152,7 +153,6 @@ def rank_eligible_candidates(
     eligible = []
     for candidate in snapshot["candidates"]:
         paper_id = _identity(candidate.get("paper_id"), "paper_id")
-        score = candidate.get("score")
         estimated_cost = candidate.get("estimated_api_cost_usd")
         if (
             paper_id in claimed
@@ -165,19 +165,24 @@ def rank_eligible_candidates(
             or candidate.get("cpu_only") is not True
             or candidate.get("safety_blocker") is not None
             or candidate.get("licensing_blocker") is not None
-            or type(score) not in {int, float}
-            or not math.isfinite(score)
+            or candidate.get("score_rate") is None
             or type(estimated_cost) not in {int, float}
             or not math.isfinite(estimated_cost)
             or estimated_cost < 0
             or estimated_cost > 10
         ):
             continue
+        try:
+            score_rate.validate_envelope(
+                candidate["score_rate"], candidate.get("live_claims")
+            )
+        except ValueError:
+            continue
         state.validate_target_claims(candidate["target_claims"])
         eligible.append(copy.deepcopy(candidate))
     return sorted(
         eligible,
-        key=lambda candidate: (-candidate["score"], candidate["paper_id"]),
+        key=score_rate.ranking_key,
     )
 
 

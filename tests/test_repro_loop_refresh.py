@@ -1,6 +1,7 @@
 """Tests for immutable, recorded live-refresh snapshots."""
 
 from datetime import datetime, timezone
+import copy
 import hashlib
 import importlib
 import json
@@ -170,6 +171,27 @@ def assessment(**updates) -> dict:
     return value
 
 
+def score_rate_for_claims(*claims: str) -> dict:
+    return {
+        "claim_expectations": [
+            {
+                "challenge_claim_sha256": hashlib.sha256(claim.encode("utf-8")).hexdigest(),
+                "p_verified": 0.5,
+                "p_falsified": 0.25,
+                "p_toy": 0.1,
+            }
+            for claim in claims
+        ],
+        "judged_before_deadline_probability": 0.8,
+        "remaining_hours_p90": 2.0,
+        "reusable_implementation": False,
+        "direct_artifact_score": 4,
+        "full_score_claim_paths": len(claims),
+        "remaining_time_variance_hours2": 0.25,
+        "primary_risk": "Artifact schema may have drifted.",
+    }
+
+
 def canonical_json(value: dict) -> bytes:
     return json.dumps(
         value, allow_nan=False, separators=(",", ":"), sort_keys=True
@@ -244,12 +266,40 @@ def test_refresh_uses_current_challenge_and_explicit_matching_assessments(
         "snapshot_id": refresh.canonical_snapshot_id(snapshot),
         **snapshot,
     }
-    assert scheduler.rank_eligible_candidates(persisted) == [assessed]
+    assert scheduler.rank_eligible_candidates(persisted) == []
     assessment_document = json.loads(assessments_path.read_text(encoding="utf-8"))
     assert snapshot["assessments"]["content_sha256"] == hashlib.sha256(
         canonical_json(assessment_document)
     ).hexdigest()
     assert snapshot["assessments"]["records"] == [assessment()]
+
+
+def test_refresh_merges_source_bound_score_rate_and_keeps_legacy_readable(
+    recorded_hub_client, assessments_path
+):
+    refresh = load_module("refresh")
+    scheduler = load_module("scheduler")
+    document = json.loads(assessments_path.read_text(encoding="utf-8"))
+    legacy = copy.deepcopy(document["assessments"][0])
+    document["assessments"][0]["score_rate"] = score_rate_for_claims(
+        "Claim A1", "Claim A2"
+    )
+    assessments_path.write_text(json.dumps(document), encoding="utf-8")
+
+    snapshot = refresh.fetch_live_snapshot(
+        recorded_hub_client, OBSERVED_AT, refresh.load_assessments(assessments_path)
+    )
+    persisted = {
+        "snapshot_id": refresh.canonical_snapshot_id(snapshot),
+        **snapshot,
+    }
+
+    assert refresh._valid_assessment_record(legacy)
+    assert not refresh._valid_assessment_record(legacy, require_score_rate=True)
+    assert snapshot["candidates"][0]["score_rate"] == document["assessments"][0][
+        "score_rate"
+    ]
+    assert scheduler.rank_eligible_candidates(persisted) == [snapshot["candidates"][0]]
 
 
 def test_raw_refresh_persists_current_revision_and_claims_for_inspection(
@@ -859,6 +909,11 @@ def test_persisted_assessed_snapshot_can_admit_candidate(
     store = load_module("store")
     paths = store.StatePaths(tmp_path / "repro-loop.json")
     store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    document = json.loads(assessments_path.read_text(encoding="utf-8"))
+    document["assessments"][0]["score_rate"] = score_rate_for_claims(
+        "Claim A1", "Claim A2"
+    )
+    assessments_path.write_text(json.dumps(document), encoding="utf-8")
     snapshot = refresh.fetch_live_snapshot(
         recorded_hub_client,
         OBSERVED_AT,

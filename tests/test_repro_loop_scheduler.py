@@ -75,6 +75,33 @@ def now():
 
 
 def paper(paper_id: str, score: int = 0) -> dict:
+    score_rate = {
+        "claim_expectations": [
+            {
+                "challenge_claim_sha256": hashlib.sha256(
+                    b"Challenge claim 1"
+                ).hexdigest(),
+                "p_verified": 0.5,
+                "p_falsified": 0.25,
+                "p_toy": 0.1,
+            },
+            {
+                "challenge_claim_sha256": hashlib.sha256(
+                    b"Challenge claim 2"
+                ).hexdigest(),
+                "p_verified": 0.0,
+                "p_falsified": 0.5,
+                "p_toy": 0.25,
+            },
+        ],
+        "judged_before_deadline_probability": 0.8,
+        "remaining_hours_p90": 2.0,
+        "reusable_implementation": False,
+        "direct_artifact_score": 4,
+        "full_score_claim_paths": 2,
+        "remaining_time_variance_hours2": 0.25,
+        "primary_risk": "Artifact schema may have drifted.",
+    }
     return {
         "paper_id": paper_id,
         "title": f"Paper {paper_id}",
@@ -103,10 +130,23 @@ def paper(paper_id: str, score: int = 0) -> dict:
         ],
         "estimated_api_cost_usd": 0.0,
         "score": score,
+        "score_rate": score_rate,
         "artifact_access": True,
         "cpu_only": True,
         "safety_blocker": None,
         "licensing_blocker": None,
+    }
+
+
+def snapshot_for_candidates(now, candidates):
+    return {
+        "snapshot_id": "snapshot-1",
+        "fetched_at": now.isoformat(),
+        "source_revision": "source-1",
+        "candidates": candidates,
+        "queued_submissions": [],
+        "tagged_spaces": [],
+        "verdicts": [],
     }
 
 
@@ -218,7 +258,34 @@ def test_scheduler_admits_exactly_twenty_runnable_attempts(
 
     assert len(report.created_attempt_ids) == 20
     assert len(attempts.runnable_attempt_ids(paths)) == 20
-    assert report.paper_ids == tuple(f"paper-{number}" for number in range(20))
+    assert report.paper_ids == tuple(
+        sorted(f"paper-{number}" for number in range(22))[:20]
+    )
+
+
+def test_scheduler_admits_higher_expected_points_per_hour_before_legacy_score(
+    scheduler, now
+):
+    higher_legacy_score = paper("paper-legacy", 100)
+    higher_legacy_score["score_rate"]["judged_before_deadline_probability"] = 0.2
+    higher_points_per_hour = paper("paper-rate", 1)
+    higher_points_per_hour["score_rate"]["judged_before_deadline_probability"] = 0.9
+
+    ranked = scheduler.rank_eligible_candidates(
+        snapshot_for_candidates(now, [higher_legacy_score, higher_points_per_hour])
+    )
+
+    assert [candidate["paper_id"] for candidate in ranked] == [
+        "paper-rate",
+        "paper-legacy",
+    ]
+
+
+def test_scheduler_keeps_non_cpu_candidate_with_score_rate_ineligible(scheduler, now):
+    candidate = paper("paper-a", 10)
+    candidate["cpu_only"] = False
+
+    assert scheduler.rank_eligible_candidates(snapshot_for_candidates(now, [candidate])) == []
 
 
 @pytest.mark.parametrize(

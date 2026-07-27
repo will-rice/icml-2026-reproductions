@@ -17,6 +17,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import store  # noqa: E402
+import score_rate  # noqa: E402
 
 
 CHALLENGE_REPO = "ICML-2026-agent-repro/challenge"
@@ -33,6 +34,7 @@ ASSESSMENT_KEYS = {
     "licensing_blocker",
     "estimated_api_cost_usd",
 }
+SCORE_RATE_ASSESSMENT_KEYS = ASSESSMENT_KEYS | {"score_rate"}
 SNAPSHOT_KEYS = {
     "fetched_at",
     "source_revision",
@@ -555,9 +557,16 @@ def _paper_id(record: object) -> str:
 def _assessment_matches(assessment: dict, live_claims: list[dict]) -> bool:
     if not _valid_assessment_record(assessment):
         return False
-    return _valid_claim_bindings(
+    if not _valid_claim_bindings(
         assessment["claim_bindings"], assessment["target_claims"], live_claims
-    )
+    ):
+        return False
+    if "score_rate" in assessment:
+        try:
+            score_rate.validate_envelope(assessment["score_rate"], live_claims)
+        except ValueError:
+            return False
+    return True
 
 
 def _valid_claim_bindings(
@@ -594,8 +603,15 @@ def _valid_claim_bindings(
     return binding_targets == target_claims
 
 
-def _valid_assessment_record(record: object) -> bool:
-    if type(record) is not dict or set(record) != ASSESSMENT_KEYS:
+def _valid_assessment_record(
+    record: object, *, require_score_rate: bool = False
+) -> bool:
+    if type(record) is not dict:
+        return False
+    keys = set(record)
+    if keys != ASSESSMENT_KEYS and keys != SCORE_RATE_ASSESSMENT_KEYS:
+        return False
+    if require_score_rate and keys != SCORE_RATE_ASSESSMENT_KEYS:
         return False
     score = record["score"]
     cost = record["estimated_api_cost_usd"]
