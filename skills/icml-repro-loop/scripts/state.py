@@ -328,6 +328,13 @@ def _run_v6_command(
     arguments: argparse.Namespace,
     *,
     worker_runner=None,
+    validation_operation=None,
+    deployment_operation=None,
+    submission_operation=None,
+    verdict_operation=None,
+    utc_now=None,
+    monotonic_ns=None,
+    session_id_factory=None,
 ) -> object:
     import attempts
     import leases
@@ -507,49 +514,128 @@ def _run_v6_command(
             paths, arguments.attempt_id, lease, arguments.status, now
         )
     if arguments.command == "attest-validation":
-        import controller
+        import telemetry
 
-        manifest = json.loads(arguments.manifest.read_text(encoding="utf-8"))
-        return controller.attest_validation(
+        operation = validation_operation
+        if operation is None:
+            import controller
+
+            manifest = json.loads(
+                arguments.manifest.read_text(encoding="utf-8")
+            )
+            operation = lambda: controller.attest_validation(
+                paths,
+                arguments.attempt_id,
+                lease,
+                manifest,
+                controller.run_command,
+                now,
+            )
+        return telemetry.run_stage(
             paths,
             arguments.attempt_id,
-            lease,
-            manifest,
-            controller.run_command,
-            now,
+            "validation",
+            operation,
+            **_telemetry_kwargs(
+                utc_now, monotonic_ns, session_id_factory
+            ),
         )
     if arguments.command == "publish-deployment":
-        from huggingface_hub import HfApi
-        import controller
+        import telemetry
 
-        return controller.publish_and_attest_deployment(
+        operation = deployment_operation
+        if operation is None:
+            from huggingface_hub import HfApi
+            import controller
+
+            operation = lambda: controller.publish_and_attest_deployment(
+                paths,
+                arguments.attempt_id,
+                lease,
+                arguments.space_id,
+                arguments.source_dir,
+                HfApi(),
+                now,
+            )
+        return telemetry.run_stage(
             paths,
             arguments.attempt_id,
-            lease,
-            arguments.space_id,
-            arguments.source_dir,
-            HfApi(),
-            now,
+            "deployment",
+            operation,
+            **_telemetry_kwargs(
+                utc_now, monotonic_ns, session_id_factory
+            ),
         )
     if arguments.command == "attest-submission":
+        import telemetry
+
+        operation = submission_operation
+        if operation is None:
+            import controller
+
+            operation = lambda: controller.attest_submission(
+                paths,
+                arguments.attempt_id,
+                lease,
+                arguments.snapshot_id,
+                now,
+            )
+        result = operation()
+        telemetry.record_observation(
+            paths,
+            arguments.attempt_id,
+            "submission-observed",
+            arguments.snapshot_id,
+            result,
+            **_observation_kwargs(utc_now, session_id_factory),
+        )
+        return result
+    import telemetry
+
+    operation = verdict_operation
+    if operation is None:
         import controller
 
-        return controller.attest_submission(
+        operation = lambda: controller.sync_verdict(
             paths,
             arguments.attempt_id,
             lease,
             arguments.snapshot_id,
             now,
         )
-    import controller
-
-    return controller.sync_verdict(
+    result = operation()
+    telemetry.record_observation(
         paths,
         arguments.attempt_id,
-        lease,
+        "verdict-observed",
         arguments.snapshot_id,
-        now,
+        result,
+        **_observation_kwargs(utc_now, session_id_factory),
     )
+    return result
+
+
+def _telemetry_kwargs(utc_now, monotonic_ns, session_id_factory) -> dict:
+    return {
+        key: value
+        for key, value in {
+            "utc_now": utc_now,
+            "monotonic_ns": monotonic_ns,
+            "session_id_factory": session_id_factory,
+        }.items()
+        if value is not None
+    }
+
+
+def _observation_kwargs(utc_now, session_id_factory) -> dict:
+    return {
+        key: value
+        for key, value in {
+            "utc_now": utc_now,
+            "session_id_factory": session_id_factory,
+        }.items()
+        if value is not None
+    }
 
 
 def _reconstruct_attempt_lease(paths, attempt_id, owner, fencing_token, leases, store):

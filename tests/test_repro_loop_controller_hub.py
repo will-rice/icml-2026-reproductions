@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import copy
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -26,6 +27,8 @@ import controller
 import leases
 import refresh
 import store
+import state
+import telemetry
 
 
 NOW = datetime(2026, 7, 25, 18, 0, tzinfo=timezone.utc)
@@ -688,3 +691,98 @@ def test_state_cli_exposes_controller_hub_commands():
     assert result.returncode == 0
     assert "publish-deployment" in result.stdout
     assert "attest-submission" in result.stdout
+
+
+def test_state_measures_injected_deployment_operation(hub_case):
+    result = {"transitions": [{"attestation_id": "b" * 64}]}
+    arguments = argparse.Namespace(
+        command="publish-deployment",
+        path=hub_case["paths"].index,
+        attempt_id="a1",
+        owner=hub_case["lease"].owner,
+        fencing_token=hub_case["lease"].fencing_token,
+        space_id=SPACE_ID,
+        source_dir=Path("unused-injected-source"),
+        now=NOW.isoformat(),
+    )
+
+    returned = state._run_v6_command(
+        arguments,
+        deployment_operation=lambda: result,
+        utc_now=iter(
+            ["2026-07-27T01:00:00+00:00", "2026-07-27T01:00:02+00:00"]
+        ).__next__,
+        monotonic_ns=iter([3_000_000_000, 5_000_000_000]).__next__,
+        session_id_factory=lambda: "deployment-stage",
+    )
+
+    assert returned is result
+    assert hub_case["client"].calls == []
+    finished = telemetry.read_session(
+        hub_case["paths"], "deployment-stage"
+    )[-1]
+    assert finished["elapsed_seconds"] == 2.0
+    assert finished["attestation_id"] == "b" * 64
+
+
+def test_state_observes_submission_only_after_injected_success(hub_case):
+    result = {"transitions": [{"attestation_id": "c" * 64}]}
+    snapshot_id = "d" * 64
+    arguments = argparse.Namespace(
+        command="attest-submission",
+        path=hub_case["paths"].index,
+        attempt_id="a1",
+        owner=hub_case["lease"].owner,
+        fencing_token=hub_case["lease"].fencing_token,
+        snapshot_id=snapshot_id,
+        now=NOW.isoformat(),
+    )
+
+    returned = state._run_v6_command(
+        arguments,
+        submission_operation=lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        session_id_factory=lambda: "submission-observation",
+    )
+
+    assert returned is result
+    assert telemetry.read_session(
+        hub_case["paths"], "submission-observation"
+    ) == [
+        {
+            "version": 1,
+            "session_id": "submission-observation",
+            "sequence": 0,
+            "event": "observation",
+            "name": "submission-observed",
+            "attempt_id": "a1",
+            "snapshot_id": snapshot_id,
+            "attestation_id": "c" * 64,
+            "observed_at": "2026-07-27T01:00:00+00:00",
+        }
+    ]
+
+
+def test_state_does_not_observe_failed_submission(hub_case):
+    arguments = argparse.Namespace(
+        command="attest-submission",
+        path=hub_case["paths"].index,
+        attempt_id="a1",
+        owner=hub_case["lease"].owner,
+        fencing_token=hub_case["lease"].fencing_token,
+        snapshot_id="d" * 64,
+        now=NOW.isoformat(),
+    )
+
+    def fail():
+        raise RuntimeError("authoritative failure")
+
+    with pytest.raises(RuntimeError, match="authoritative failure"):
+        state._run_v6_command(
+            arguments,
+            submission_operation=fail,
+            utc_now=lambda: "2026-07-27T01:00:00+00:00",
+            session_id_factory=lambda: "failed-submission",
+        )
+
+    assert telemetry.read_session(hub_case["paths"], "failed-submission") == []

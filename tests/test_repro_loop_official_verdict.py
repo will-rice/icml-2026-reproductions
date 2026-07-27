@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import copy
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -26,6 +27,8 @@ import leases
 import refresh
 import scheduler
 import store
+import state
+import telemetry
 
 
 NOW = datetime(2026, 7, 25, 18, 0, tzinfo=timezone.utc)
@@ -355,6 +358,44 @@ def test_sync_verdict_copies_exact_official_claims_and_completes_atomically(
     assert verdict_attestation["paper_id"] == PAPER_ID
     assert verdict_attestation["judged_at"] == official_verdict()["judged_at"]
     assert verdict_attestation["claims"] == expected["claims"]
+
+
+def test_state_observes_verdict_only_after_injected_success(submitted_case):
+    result = {"transitions": [{"attestation_id": "e" * 64}]}
+    snapshot_id = "f" * 64
+    arguments = argparse.Namespace(
+        command="sync-verdict",
+        path=submitted_case["paths"].index,
+        attempt_id="a1",
+        owner=submitted_case["lease"].owner,
+        fencing_token=submitted_case["lease"].fencing_token,
+        snapshot_id=snapshot_id,
+        now=NOW.isoformat(),
+    )
+
+    returned = state._run_v6_command(
+        arguments,
+        verdict_operation=lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        session_id_factory=lambda: "verdict-observation",
+    )
+
+    assert returned is result
+    assert telemetry.read_session(
+        submitted_case["paths"], "verdict-observation"
+    ) == [
+        {
+            "version": 1,
+            "session_id": "verdict-observation",
+            "sequence": 0,
+            "event": "observation",
+            "name": "verdict-observed",
+            "attempt_id": "a1",
+            "snapshot_id": snapshot_id,
+            "attestation_id": "e" * 64,
+            "observed_at": "2026-07-27T01:00:00+00:00",
+        }
+    ]
 
 
 def test_sync_verdict_selects_only_bound_targets_from_larger_official_verdict(

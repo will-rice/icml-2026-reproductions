@@ -218,3 +218,92 @@ def test_iter_sessions_sorts_validated_session_histories(paths, telemetry):
         ["session-a"],
         ["session-b"],
     ]
+
+
+def test_run_stage_records_real_elapsed_time(paths, telemetry):
+    utc_values = iter(
+        ["2026-07-27T01:00:00+00:00", "2026-07-27T01:00:04+00:00"]
+    )
+    monotonic_values = iter([2_000_000_000, 6_000_000_000])
+    result = {"attestation_id": "a" * 64}
+
+    returned = telemetry.run_stage(
+        paths,
+        "attempt-a",
+        "validation",
+        lambda: result,
+        utc_now=lambda: next(utc_values),
+        monotonic_ns=lambda: next(monotonic_values),
+        session_id_factory=lambda: "stage-a",
+    )
+
+    assert returned is result
+    assert telemetry.read_session(paths, "stage-a") == [
+        {
+            "version": 1,
+            "session_id": "stage-a",
+            "sequence": 0,
+            "event": "stage-started",
+            "attempt_id": "attempt-a",
+            "stage": "validation",
+            "observed_at": "2026-07-27T01:00:00+00:00",
+            "monotonic_ns": 2_000_000_000,
+        },
+        {
+            "version": 1,
+            "session_id": "stage-a",
+            "sequence": 1,
+            "event": "stage-finished",
+            "observed_at": "2026-07-27T01:00:04+00:00",
+            "monotonic_ns": 6_000_000_000,
+            "elapsed_seconds": 4.0,
+            "outcome": "passed",
+            "attestation_id": "a" * 64,
+        },
+    ]
+
+
+def test_run_stage_records_failure_without_serializing_error_text(
+    paths, telemetry
+):
+    error = RuntimeError("token-shaped-sensitive-text")
+
+    def fail():
+        raise error
+
+    with pytest.raises(RuntimeError, match="token-shaped") as raised:
+        telemetry.run_stage(
+            paths,
+            "attempt-a",
+            "deployment",
+            fail,
+            utc_now=lambda: "2026-07-27T01:00:00+00:00",
+            monotonic_ns=iter([1_000_000_000, 1_500_000_000]).__next__,
+            session_id_factory=lambda: "stage-b",
+        )
+
+    assert raised.value is error
+    event = telemetry.read_session(paths, "stage-b")[-1]
+    assert event["outcome"] == "failed"
+    assert event["error_type"] == "RuntimeError"
+    assert event["elapsed_seconds"] == 0.5
+    assert "attestation_id" not in event
+    assert "token-shaped-sensitive-text" not in json.dumps(event)
+
+
+def test_run_stage_exposes_nested_controller_attestation(paths, telemetry):
+    result = {"transitions": [{"attestation_id": "b" * 64}]}
+
+    telemetry.run_stage(
+        paths,
+        "attempt-a",
+        "deployment",
+        lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        monotonic_ns=iter([1_000_000_000, 2_000_000_000]).__next__,
+        session_id_factory=lambda: "stage-c",
+    )
+
+    assert telemetry.read_session(paths, "stage-c")[-1]["attestation_id"] == (
+        "b" * 64
+    )

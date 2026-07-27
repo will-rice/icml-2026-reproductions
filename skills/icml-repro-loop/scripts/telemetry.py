@@ -1,11 +1,14 @@
 """Append-only controller telemetry for reproduction-loop operations."""
 
 from collections.abc import Iterator
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
 import re
 import sys
+import time
+from uuid import uuid4
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -17,6 +20,101 @@ from store import StatePaths, read_json, validate_id  # noqa: E402
 
 RESERVED_KEYS = {"version", "session_id", "sequence", "event"}
 EVENT_FILE_PATTERN = re.compile(r"[0-9]+-[A-Za-z0-9._-]+\.json")
+
+
+def run_stage(
+    paths: StatePaths,
+    attempt_id: str,
+    stage: str,
+    operation,
+    *,
+    utc_now=None,
+    monotonic_ns=time.monotonic_ns,
+    session_id_factory=None,
+) -> object:
+    """Measure one authoritative controller operation without changing it."""
+    utc_now = utc_now or _utc_now
+    session_id_factory = session_id_factory or (lambda: uuid4().hex)
+    session_id = session_id_factory()
+    started_counter = monotonic_ns()
+    append_event(
+        paths,
+        session_id,
+        0,
+        "stage-started",
+        {
+            "attempt_id": attempt_id,
+            "stage": stage,
+            "observed_at": utc_now(),
+            "monotonic_ns": started_counter,
+        },
+    )
+    try:
+        result = operation()
+    except BaseException as error:
+        finished_counter = monotonic_ns()
+        append_event(
+            paths,
+            session_id,
+            1,
+            "stage-finished",
+            {
+                "observed_at": utc_now(),
+                "monotonic_ns": finished_counter,
+                "elapsed_seconds": (
+                    finished_counter - started_counter
+                )
+                / 1_000_000_000,
+                "outcome": "failed",
+                "error_type": type(error).__name__,
+            },
+        )
+        raise
+
+    finished_counter = monotonic_ns()
+    payload = {
+        "observed_at": utc_now(),
+        "monotonic_ns": finished_counter,
+        "elapsed_seconds": (finished_counter - started_counter)
+        / 1_000_000_000,
+        "outcome": "passed",
+    }
+    attestation_id = _result_attestation_id(result)
+    if attestation_id is not None:
+        payload["attestation_id"] = attestation_id
+    append_event(paths, session_id, 1, "stage-finished", payload)
+    return result
+
+
+def record_observation(
+    paths: StatePaths,
+    attempt_id: str,
+    name: str,
+    snapshot_id: str,
+    result: object,
+    *,
+    utc_now=None,
+    session_id_factory=None,
+) -> dict:
+    """Record one successful immutable controller observation."""
+    utc_now = utc_now or _utc_now
+    session_id_factory = session_id_factory or (lambda: uuid4().hex)
+    attestation_id = _result_attestation_id(result)
+    if attestation_id is None:
+        raise ValueError("attestation_id")
+    return append_event(
+        paths,
+        session_id_factory(),
+        0,
+        "observation",
+        {
+            "name": name,
+            "attempt_id": attempt_id,
+            "snapshot_id": snapshot_id,
+            "attestation_id": attestation_id,
+            "observed_at": utc_now(),
+        },
+    )
 
 
 def append_event(
@@ -172,6 +270,26 @@ def _validate_event_record(
 
 def _is_monotonic_counter(value: object) -> bool:
     return type(value) is int and value >= 0
+
+
+def _result_attestation_id(result: object) -> str | None:
+    if type(result) is not dict:
+        return None
+    attestation_id = result.get("attestation_id")
+    if type(attestation_id) is str:
+        return attestation_id
+    transitions = result.get("transitions")
+    if type(transitions) is not list or not transitions:
+        return None
+    transition = transitions[-1]
+    if type(transition) is not dict:
+        return None
+    attestation_id = transition.get("attestation_id")
+    return attestation_id if type(attestation_id) is str else None
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
 
 def _fsync_directory(path: Path) -> None:

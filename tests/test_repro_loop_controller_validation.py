@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 from collections import defaultdict
 import copy
 from datetime import datetime, timedelta, timezone
@@ -26,6 +27,8 @@ import attempts
 import controller
 import leases
 import store
+import state
+import telemetry
 
 
 NOW = datetime(2026, 7, 25, 18, 0, tzinfo=timezone.utc)
@@ -716,6 +719,36 @@ def test_real_runner_keeps_generated_caches_outside_source_tree(tmp_path: Path):
     assert controller._source_tree_sha256(tmp_path) == before
     assert not list(tmp_path.rglob("__pycache__"))
     assert not list(tmp_path.rglob(".pytest_cache"))
+
+
+def test_state_measures_injected_validation_operation(validation_case):
+    paths, lease, _manifest = validation_case
+    result = {"transitions": [{"attestation_id": "a" * 64}]}
+    arguments = argparse.Namespace(
+        command="attest-validation",
+        path=paths.index,
+        attempt_id="a1",
+        owner=lease.owner,
+        fencing_token=lease.fencing_token,
+        manifest=Path("unused-injected-manifest.json"),
+        now=NOW.isoformat(),
+    )
+
+    returned = state._run_v6_command(
+        arguments,
+        validation_operation=lambda: result,
+        utc_now=iter(
+            ["2026-07-27T01:00:00+00:00", "2026-07-27T01:00:03+00:00"]
+        ).__next__,
+        monotonic_ns=iter([2_000_000_000, 5_000_000_000]).__next__,
+        session_id_factory=lambda: "validation-stage",
+    )
+
+    assert returned is result
+    finished = telemetry.read_session(paths, "validation-stage")[-1]
+    assert finished["outcome"] == "passed"
+    assert finished["elapsed_seconds"] == 3.0
+    assert finished["attestation_id"] == "a" * 64
 
 
 def test_state_cli_exposes_attest_validation_command():
