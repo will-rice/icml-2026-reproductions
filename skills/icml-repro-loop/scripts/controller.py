@@ -137,6 +137,11 @@ def attest_validation(
     attempt = attempts.read_attempt(paths, attempt_id)
     _assert_attempt_fence(paths, attempt_id, lease, now)
     worktree, commands = _validate_manifest(attempt, manifest)
+    transition_updates = (
+        {"project_path": manifest["project_path"]}
+        if attempt.get("project_path") is None
+        else {}
+    )
     check_results: list[CommandResult] = []
 
     top_level = _checked(
@@ -282,7 +287,7 @@ def attest_validation(
         attempt_id,
         "validated",
         attestation_id,
-        {},
+        transition_updates,
         lease,
         completed_at,
     )
@@ -632,7 +637,11 @@ def _validate_manifest(
     _git_sha(manifest["base_sha"], "base_sha")
     project_path = _relative_path(manifest["project_path"], "project_path")
     design_path = _relative_path(manifest["design_path"], "design_path")
-    if attempt.get("project_path") != project_path:
+    registered_project_path = attempt.get("project_path")
+    if registered_project_path is None:
+        slug = _nonempty_string(attempt.get("slug"), "slug")
+        registered_project_path = f"submissions/{slug}"
+    if registered_project_path != project_path:
         raise ValueError("project_path")
     _validated_project_source(worktree, project_path, "project_path")
     design = attempt.get("design")

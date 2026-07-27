@@ -256,6 +256,21 @@ def test_validation_requires_attempt_registered_paths(
         )
 
 
+def test_validation_persists_deterministic_project_path_for_scheduled_attempt(
+    validation_case,
+):
+    paths, lease, manifest = validation_case
+    with store.locked_json(paths.attempt("a1"), store.validate_attempt) as attempt:
+        attempt.pop("project_path")
+
+    validated = controller.attest_validation(
+        paths, "a1", lease, manifest, FakeRunner(manifest), NOW
+    )
+
+    assert validated["phase"] == "validated"
+    assert validated["project_path"] == "submissions/paper-1"
+
+
 def test_validation_requires_exact_registered_worktree(validation_case):
     paths, lease, manifest = validation_case
     runner = FakeRunner(manifest, top_level=str(Path(manifest["worktree"]).parent))
