@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-27T12:46:54.038120+00:00",
+  "attempt_id": "3d164e18-39ef-416e-b986-96b5a5d4e12d",
+  "expires_at": "2026-07-27T14:46:54.038120+00:00",
+  "fencing_token": 2,
+  "owner": "controller-design-mhc",
+  "released_at": null,
+  "resource": "attempt:3d164e18-39ef-416e-b986-96b5a5d4e12d"
+}

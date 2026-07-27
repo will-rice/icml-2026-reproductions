@@ -1,0 +1,157 @@
+{
+  "alphaxiv": "2601.15282",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2601.15282",
+  "attempt_id": "8c21f2dc-a357-422e-9c1b-79a4d417e3dc",
+  "authors": [
+    "Yufan Deng",
+    "Zilin Pan",
+    "Hongyu Zhang",
+    "Xiaojie Li",
+    "Huruoqing",
+    "Yufei Ding",
+    "Yiming Zou",
+    "Yan Zeng",
+    "Zhou Daquan"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "RBench evaluates robot-oriented video generation across five task domains and four embodiments with task-level and visual-fidelity sub-metrics (Figure 1).",
+      "challenge_claim_sha256": "99ffc0281d7d5e3ac03a0bf1fb99daf9f031baad1429e5cdec333c0897ee9879",
+      "target_claim": "RBench evaluates robot-oriented video generation across five task domains and four embodiments with task-level and visual-fidelity sub-metrics (Figure 1)."
+    },
+    {
+      "challenge_claim": "The benchmark evaluates 25 open-source, commercial, and robotics-specific video models across task and embodiment dimensions (Table 2).",
+      "challenge_claim_sha256": "dc5738899435534d5da2718e1dc2b60e31f303709c42cea1928ddc0073eb72da",
+      "target_claim": "The benchmark evaluates 25 open-source, commercial, and robotics-specific video models across task and embodiment dimensions (Table 2)."
+    },
+    {
+      "challenge_claim": "RBench captures robotic video failure modes including structural distortion, floating components, and key-action omission (Figure 2).",
+      "challenge_claim_sha256": "58a5216fe79a73988c9ee0def52b8d8c5a70f277afa2ff424ea802daf57295d2",
+      "target_claim": "RBench captures robotic video failure modes including structural distortion, floating components, and key-action omission (Figure 2)."
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "root",
+    "path": "docs/superpowers/plans/2026-07-27-rbench-evidence.md",
+    "recorded_at": "2026-07-27T12:47:03.495294+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-27T12:47:03.790761+00:00",
+    "reviewer": "assess_knowmore_mechanistic"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2601.15282",
+  "i": 5002,
+  "insts": [
+    "Peking University, Bytedance Seed",
+    "Peking University",
+    "Tiktok"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "RBench evaluates robot-oriented video generation across five task domains and four embodiments with task-level and visual-fidelity sub-metrics (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "RBench reports a Spearman correlation coefficient of 0.96 with human evaluations (Abstract)."
+    },
+    {
+      "status": "unverified",
+      "text": "The benchmark evaluates 25 open-source, commercial, and robotics-specific video models across task and embodiment dimensions (Table 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "RoVid-X is reported as a 4M-video robotic video dataset with 1300+ skills, 720P resolution, optical flow, diverse robotic forms, and diverse captions (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "RBench captures robotic video failure modes including structural distortion, floating components, and key-action omission (Figure 2)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=p5QSlnwume",
+  "orid": "p5QSlnwume",
+  "paper_id": "p5QSlnwume",
+  "phase": "implementing",
+  "pid": "61543",
+  "safety_blocker": null,
+  "score": 17,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "99ffc0281d7d5e3ac03a0bf1fb99daf9f031baad1429e5cdec333c0897ee9879",
+        "p_falsified": 0.03,
+        "p_toy": 0.3,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "486a0bce766ce999ad669c8f7d3ef144e60223456e9bbb9d41dd70ff863168d8",
+        "p_falsified": 0.05,
+        "p_toy": 0.2,
+        "p_verified": 0.03
+      },
+      {
+        "challenge_claim_sha256": "dc5738899435534d5da2718e1dc2b60e31f303709c42cea1928ddc0073eb72da",
+        "p_falsified": 0.05,
+        "p_toy": 0.3,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "04c95e9612dfd094a920d54f534f4f3516e42f66003887b473d60e9161ba3bec",
+        "p_falsified": 0.04,
+        "p_toy": 0.55,
+        "p_verified": 0.18
+      },
+      {
+        "challenge_claim_sha256": "58a5216fe79a73988c9ee0def52b8d8c5a70f277afa2ff424ea802daf57295d2",
+        "p_falsified": 0.07,
+        "p_toy": 0.6,
+        "p_verified": 0.08
+      }
+    ],
+    "direct_artifact_score": 4,
+    "full_score_claim_paths": 2,
+    "judged_before_deadline_probability": 0.8,
+    "primary_risk": "Missing complete license notices constrain redistribution, and no raw human-rating artifact supports the reported 0.96 correlation.",
+    "remaining_hours_p90": 8.0,
+    "remaining_time_variance_hours2": 6.25,
+    "reusable_implementation": true
+  },
+  "slug": "rethinking-video-generation-model-for-the-embodied-world",
+  "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+  "spot": false,
+  "sub": "Generative Models and Autoencoders",
+  "target_claims": [
+    "RBench evaluates robot-oriented video generation across five task domains and four embodiments with task-level and visual-fidelity sub-metrics (Figure 1).",
+    "The benchmark evaluates 25 open-source, commercial, and robotics-specific video models across task and embodiment dimensions (Table 2).",
+    "RBench captures robotic video failure modes including structural distortion, floating components, and key-action omission (Figure 2)."
+  ],
+  "title": "Rethinking Video Generation Model for the Embodied World",
+  "transitions": [
+    {
+      "at": "2026-07-27T12:47:03.218326+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-design-rbench",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-27T12:47:03.790761+00:00",
+      "fencing_token": 2,
+      "from": "design-pending",
+      "owner": "controller-design-rbench",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "implementing"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-27T12:47:03.790761+00:00",
+  "upstream_revision": "arxiv:2601.15282v1+github:DAGroup-PKU/ReVidgen@b03df27f0376faa148dcd8cd620a1989a32ca979+hf-dataset:DAGroup-PKU/RBench@6bdccf349ff5a8f68302428351e94f34ecd62450+hf-space:DAGroup-PKU/RBench-Leaderboard@6b66282843a5d863af4271fb07ba1641d1d33334+hf-space:DAGroup-PKU/RBench-Leaderboard@5dd6d55e454e22dbf7bd34ea5fbbeda5bc0f9b07",
+  "vs": "https://icml.cc/virtual/2026/poster/61543"
+}

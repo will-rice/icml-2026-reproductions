@@ -1,0 +1,168 @@
+{
+  "alphaxiv": "2512.24880",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2512.24880",
+  "attempt_id": "3d164e18-39ef-416e-b986-96b5a5d4e12d",
+  "authors": [
+    "Zhenda Xie",
+    "Yixuan Wei",
+    "Huanqi Cao",
+    "Chenggang Zhao",
+    "Chengqi Deng",
+    "Jiashi Li",
+    "Damai Dai",
+    "Huazuo Gao",
+    "Mingyu Xu",
+    "Kuai Yu",
+    "Liang Zhao",
+    "Shangyan Zhou",
+    "Zhean Xu",
+    "Zhengyan Zhang",
+    "Wangding Zeng",
+    "Shengding Hu",
+    "Yuqing Wang",
+    "Jingyang Yuan",
+    "Lean Wang",
+    "Wenfeng Liang"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "mHC constrains hyper-connection residual mappings by projecting them onto a manifold to preserve stability relative to unconstrained HC (Figure 1, Section 4.1).",
+      "challenge_claim_sha256": "bdf296450b900b06ca2efbc1ffe702d9547371e3d847e6a31c71d977e0bfa052",
+      "target_claim": "mHC constrains hyper-connection residual mappings by projecting them onto a manifold to preserve stability relative to unconstrained HC (Figure 1, Section 4.1)."
+    },
+    {
+      "challenge_claim": "HC component ablations test the roles of pre, post, and residual mappings while maintaining dimensional consistency with fixed mappings (Table 1).",
+      "challenge_claim_sha256": "fa35812d9e1626bcfe1702f946f3926128f6012071af6ef378e0241e30881823",
+      "target_claim": "HC component ablations test the roles of pre, post, and residual mappings while maintaining dimensional consistency with fixed mappings (Table 1)."
+    },
+    {
+      "challenge_claim": "Training and propagation analyses show unconstrained HC has larger loss gaps, gradient norms, and residual propagation instability than mHC (Figure 2, Figure 3, Figure 5, Figure 7).",
+      "challenge_claim_sha256": "15537486e4923b51864ce7b52999581519cde779ca9e03eda2ad93117abc9735",
+      "target_claim": "Training and propagation analyses show unconstrained HC has larger loss gaps, gradient norms, and residual propagation instability than mHC (Figure 2, Figure 3, Figure 5, Figure 7)."
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "assess_knowmore_mechanistic",
+    "path": "docs/superpowers/plans/2026-07-27-mhc-evidence.md",
+    "recorded_at": "2026-07-27T12:47:02.662294+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-27T12:47:02.942747+00:00",
+    "reviewer": "assess_timerewarder_agoq"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2512.24880",
+  "i": 2947,
+  "insts": [
+    "DeepSeek AI",
+    "Hangzhou DeepSeek Artificial Intelligence Co., Ltd",
+    "Tsinghua University, Tsinghua University"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "mHC constrains hyper-connection residual mappings by projecting them onto a manifold to preserve stability relative to unconstrained HC (Figure 1, Section 4.1)."
+    },
+    {
+      "status": "unverified",
+      "text": "HC component ablations test the roles of pre, post, and residual mappings while maintaining dimensional consistency with fixed mappings (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Training and propagation analyses show unconstrained HC has larger loss gaps, gradient norms, and residual propagation instability than mHC (Figure 2, Figure 3, Figure 5, Figure 7)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper introduces kernel fusion, recomputing, and communication-overlap infrastructure to reduce mHC system overhead (Section 4.3, Table 2, Table 3, Figure 4)."
+    },
+    {
+      "status": "unverified",
+      "text": "At 27B scale, mHC outperforms the baseline and surpasses HC on most zero-shot and few-shot downstream benchmarks (Table 4)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=mDhyxu8WRb",
+  "orid": "mDhyxu8WRb",
+  "paper_id": "mDhyxu8WRb",
+  "phase": "implementing",
+  "pid": "61870",
+  "safety_blocker": null,
+  "score": 19,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "bdf296450b900b06ca2efbc1ffe702d9547371e3d847e6a31c71d977e0bfa052",
+        "p_falsified": 0.05,
+        "p_toy": 0.45,
+        "p_verified": 0.45
+      },
+      {
+        "challenge_claim_sha256": "fa35812d9e1626bcfe1702f946f3926128f6012071af6ef378e0241e30881823",
+        "p_falsified": 0.05,
+        "p_toy": 0.6,
+        "p_verified": 0.2
+      },
+      {
+        "challenge_claim_sha256": "15537486e4923b51864ce7b52999581519cde779ca9e03eda2ad93117abc9735",
+        "p_falsified": 0.1,
+        "p_toy": 0.65,
+        "p_verified": 0.1
+      },
+      {
+        "challenge_claim_sha256": "2fd1e3570d1437de16597b0b942dc8d2f4a0045e84fd066bf01da44a86c86959",
+        "p_falsified": 0.03,
+        "p_toy": 0.2,
+        "p_verified": 0.02
+      },
+      {
+        "challenge_claim_sha256": "f67e1f1f781f58d9e6c928002254a5dda7d94078db32408893971d6985094a02",
+        "p_falsified": 0.02,
+        "p_toy": 0.1,
+        "p_verified": 0.01
+      }
+    ],
+    "direct_artifact_score": 3,
+    "full_score_claim_paths": 1,
+    "judged_before_deadline_probability": 0.85,
+    "primary_risk": "The pinned implementation is an unofficial prototype, and synthetic structural checks may receive toy rather than full-credit verdicts.",
+    "remaining_hours_p90": 6.0,
+    "remaining_time_variance_hours2": 2.25,
+    "reusable_implementation": true
+  },
+  "slug": "mhc-manifold-constrained-hyper-connections",
+  "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+  "spot": true,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "mHC constrains hyper-connection residual mappings by projecting them onto a manifold to preserve stability relative to unconstrained HC (Figure 1, Section 4.1).",
+    "HC component ablations test the roles of pre, post, and residual mappings while maintaining dimensional consistency with fixed mappings (Table 1).",
+    "Training and propagation analyses show unconstrained HC has larger loss gaps, gradient norms, and residual propagation instability than mHC (Figure 2, Figure 3, Figure 5, Figure 7)."
+  ],
+  "title": "mHC: Manifold-Constrained Hyper-Connections",
+  "transitions": [
+    {
+      "at": "2026-07-27T12:47:02.398925+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-design-mhc",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-27T12:47:02.942747+00:00",
+      "fencing_token": 2,
+      "from": "design-pending",
+      "owner": "controller-design-mhc",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "implementing"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-27T12:47:02.942747+00:00",
+  "upstream_revision": "arxiv:2512.24880v2+github:tokenbender/mHC-manifold-constrained-hyper-connections@ad20d0d8db4d6fc7e8d9b148281167141da20d47",
+  "vs": "https://icml.cc/virtual/2026/poster/61870"
+}

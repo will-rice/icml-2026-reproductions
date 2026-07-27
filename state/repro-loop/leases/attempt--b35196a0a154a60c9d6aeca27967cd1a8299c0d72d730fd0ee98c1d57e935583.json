@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-27T12:46:53.809412+00:00",
+  "attempt_id": "bf0d2300-4479-4e3c-ba99-bb023ee6751e",
+  "expires_at": "2026-07-27T14:46:53.809412+00:00",
+  "fencing_token": 2,
+  "owner": "controller-design-timerewarder",
+  "released_at": null,
+  "resource": "attempt:bf0d2300-4479-4e3c-ba99-bb023ee6751e"
+}
