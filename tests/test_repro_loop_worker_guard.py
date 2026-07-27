@@ -15,6 +15,7 @@ SCRIPTS = ROOT / "skills" / "icml-repro-loop" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 import worker_guard
+import store
 
 
 def write_contract(
@@ -54,6 +55,32 @@ def pass_preflight(runtime: str, worktree: Path) -> None:
         request.control_path.write_text(request.marker, encoding="utf-8")
 
     worker_guard.preflight_runtime(runtime, worktree, isolated)
+
+
+def launch_spec(
+    runtime: str,
+    model: str,
+    worktree: Path,
+    contract: Path,
+) -> worker_guard.LaunchSpec:
+    return worker_guard.launch_spec(
+        runtime,
+        model,
+        worktree,
+        contract,
+        attempt_id="attempt-a",
+        paper_id="paper-a",
+        project_path="submissions/paper-a",
+    )
+
+
+class CompletedProcess:
+    pid = 4242
+    returncode = 0
+
+    def wait(self, timeout=None):
+        assert timeout == 30
+        return self.returncode
 
 
 @pytest.mark.parametrize(
@@ -229,11 +256,14 @@ def test_launch_spec_is_rooted_at_one_worktree_and_uses_empty_hf_cache(
     monkeypatch.setenv("GH_TOKEN", "secret")
     monkeypatch.setenv("HF_HOME", "/tmp/inherited-hf-cache")
 
-    spec = worker_guard.launch_spec(runtime, "model-a", worktree, contract)
+    spec = launch_spec(runtime, "model-a", worktree, contract)
 
     assert spec.cwd == worktree
     assert spec.contract == contract
     assert spec.mode == "implementation"
+    assert spec.attempt_id == "attempt-a"
+    assert spec.paper_id == "paper-a"
+    assert spec.project_path == "submissions/paper-a"
     assert "--add-dir" not in spec.argv
     assert "HF_TOKEN" not in spec.env
     assert "GH_TOKEN" not in spec.env
@@ -305,7 +335,7 @@ def test_unproven_runtime_is_limited_to_read_only_research(
     implementation = write_contract(worktree)
 
     with pytest.raises(RuntimeError, match="preflight"):
-        worker_guard.launch_spec(
+        launch_spec(
             runtime,
             "model-a",
             worktree,
@@ -317,7 +347,7 @@ def test_unproven_runtime_is_limited_to_read_only_research(
         mode="research",
         contract_path=worktree / ".superpowers" / "research-contract.json",
     )
-    spec = worker_guard.launch_spec(
+    spec = launch_spec(
         runtime,
         "model-a",
         worktree,
@@ -341,7 +371,7 @@ def test_contract_and_project_paths_must_remain_inside_assigned_worktree(
         contract_path=tmp_path / "outside-contract.json",
     )
     with pytest.raises(ValueError, match="contract"):
-        worker_guard.launch_spec(
+        launch_spec(
             "codex",
             "model-a",
             worktree,
@@ -354,9 +384,231 @@ def test_contract_and_project_paths_must_remain_inside_assigned_worktree(
         project_path="../other-paper",
     )
     with pytest.raises(ValueError, match="project_path"):
-        worker_guard.launch_spec(
+        launch_spec(
             "codex",
             "model-a",
             worktree,
             escaping_project,
         )
+
+
+def test_run_worker_wraps_process_with_launch_and_exit_events(
+    tmp_path, monkeypatch
+):
+    worktree = tmp_path / "paper-worktree"
+    worktree.mkdir()
+    contract = write_contract(worktree)
+    pass_preflight("codex", worktree)
+    spec = worker_guard.launch_spec(
+        "codex",
+        "model-a",
+        worktree,
+        contract,
+        attempt_id="attempt-a",
+        paper_id="paper-a",
+        project_path="submissions/paper-a",
+    )
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    clock_values = iter(
+        [
+            "2026-07-27T00:00:00+00:00",
+            "2026-07-27T00:00:01+00:00",
+            "2026-07-27T00:00:06+00:00",
+        ]
+    )
+    monotonic_values = iter([1_000_000_000, 6_000_000_000])
+
+    result = worker_guard.run_worker(
+        paths,
+        spec,
+        timeout_seconds=30,
+        process_factory=lambda *args, **kwargs: CompletedProcess(),
+        utc_now=lambda: next(clock_values),
+        monotonic_ns=lambda: next(monotonic_values),
+        session_id_factory=lambda: "session-a",
+        git_head=lambda _path: "a" * 40,
+    )
+
+    events = worker_guard.telemetry.read_session(paths, "session-a")
+    assert [event["event"] for event in events] == [
+        "worker-queued",
+        "worker-launched",
+        "worker-exited",
+    ]
+    assert events[1]["pid"] == 4242
+    assert events[2]["exit_code"] == 0
+    assert events[2]["outcome"] == "proposal"
+    assert result["elapsed_seconds"] == 5.0
+
+
+def test_run_worker_records_nonzero_exit_as_failed(tmp_path: Path):
+    class FailedProcess(CompletedProcess):
+        returncode = 7
+
+    paths, spec = worker_run_fixture(tmp_path)
+
+    result = worker_guard.run_worker(
+        paths,
+        spec,
+        timeout_seconds=30,
+        process_factory=lambda *args, **kwargs: FailedProcess(),
+        utc_now=iter_values(
+            "2026-07-27T00:00:00+00:00",
+            "2026-07-27T00:00:01+00:00",
+            "2026-07-27T00:00:06+00:00",
+        ),
+        monotonic_ns=iter_values(1_000_000_000, 6_000_000_000),
+        session_id_factory=lambda: "session-failed",
+        git_head=lambda _path: "b" * 40,
+    )
+
+    exit_event = worker_guard.telemetry.read_session(
+        paths, "session-failed"
+    )[-1]
+    assert exit_event["exit_code"] == 7
+    assert exit_event["signal"] is None
+    assert exit_event["outcome"] == "failed"
+    assert result["elapsed_seconds"] == 5.0
+
+
+def test_run_worker_terminates_and_reraises_keyboard_interrupt(tmp_path: Path):
+    class InterruptedProcess:
+        pid = 4242
+        returncode = None
+        terminated = False
+
+        def wait(self, timeout=None):
+            if not self.terminated:
+                assert timeout == 30
+                raise KeyboardInterrupt
+            self.returncode = -15
+            return self.returncode
+
+        def terminate(self):
+            self.terminated = True
+
+    paths, spec = worker_run_fixture(tmp_path)
+    process = InterruptedProcess()
+
+    with pytest.raises(KeyboardInterrupt):
+        worker_guard.run_worker(
+            paths,
+            spec,
+            timeout_seconds=30,
+            process_factory=lambda *args, **kwargs: process,
+            utc_now=iter_values(
+                "2026-07-27T00:00:00+00:00",
+                "2026-07-27T00:00:01+00:00",
+                "2026-07-27T00:00:06+00:00",
+            ),
+            monotonic_ns=iter_values(1_000_000_000, 6_000_000_000),
+            session_id_factory=lambda: "session-interrupted",
+            git_head=lambda _path: "c" * 40,
+        )
+
+    exit_event = worker_guard.telemetry.read_session(
+        paths, "session-interrupted"
+    )[-1]
+    assert process.terminated is True
+    assert exit_event["exit_code"] is None
+    assert exit_event["signal"] == 15
+    assert exit_event["outcome"] == "interrupted"
+
+
+def test_run_worker_terminates_timed_out_child(tmp_path: Path):
+    class TimedOutProcess:
+        pid = 4242
+        returncode = None
+        terminated = False
+
+        def wait(self, timeout=None):
+            if not self.terminated:
+                assert timeout == 30
+                raise worker_guard.subprocess.TimeoutExpired("codex", timeout)
+            self.returncode = -15
+            return self.returncode
+
+        def terminate(self):
+            self.terminated = True
+
+    paths, spec = worker_run_fixture(tmp_path)
+    process = TimedOutProcess()
+
+    result = worker_guard.run_worker(
+        paths,
+        spec,
+        timeout_seconds=30,
+        process_factory=lambda *args, **kwargs: process,
+        utc_now=iter_values(
+            "2026-07-27T00:00:00+00:00",
+            "2026-07-27T00:00:01+00:00",
+            "2026-07-27T00:00:06+00:00",
+        ),
+        monotonic_ns=iter_values(1_000_000_000, 6_000_000_000),
+        session_id_factory=lambda: "session-timeout",
+        git_head=lambda _path: "d" * 40,
+    )
+
+    exit_event = worker_guard.telemetry.read_session(
+        paths, "session-timeout"
+    )[-1]
+    assert process.terminated is True
+    assert exit_event["signal"] == 15
+    assert exit_event["outcome"] == "timed_out"
+    assert result["elapsed_seconds"] == 5.0
+
+
+@pytest.mark.parametrize(
+    ("downloaded_bytes", "expected"),
+    [(2048, 2048), (None, None)],
+)
+def test_run_worker_records_runtime_download_bytes_when_available(
+    tmp_path: Path,
+    downloaded_bytes: int | None,
+    expected: int | None,
+):
+    class DownloadProcess(CompletedProcess):
+        pass
+
+    process = DownloadProcess()
+    if downloaded_bytes is not None:
+        process.downloaded_bytes = downloaded_bytes
+    paths, spec = worker_run_fixture(tmp_path)
+
+    worker_guard.run_worker(
+        paths,
+        spec,
+        timeout_seconds=30,
+        process_factory=lambda *args, **kwargs: process,
+        utc_now=iter_values(
+            "2026-07-27T00:00:00+00:00",
+            "2026-07-27T00:00:01+00:00",
+            "2026-07-27T00:00:06+00:00",
+        ),
+        monotonic_ns=iter_values(1_000_000_000, 6_000_000_000),
+        session_id_factory=lambda: "session-download",
+        git_head=lambda _path: "e" * 40,
+    )
+
+    exit_event = worker_guard.telemetry.read_session(
+        paths, "session-download"
+    )[-1]
+    assert exit_event["downloaded_bytes"] == expected
+
+
+def worker_run_fixture(
+    tmp_path: Path,
+) -> tuple[store.StatePaths, worker_guard.LaunchSpec]:
+    worktree = tmp_path / "paper-worktree"
+    worktree.mkdir()
+    contract = write_contract(worktree)
+    pass_preflight("codex", worktree)
+    return (
+        store.StatePaths(tmp_path / "repro-loop.json"),
+        launch_spec("codex", "model-a", worktree, contract),
+    )
+
+
+def iter_values(*values):
+    iterator = iter(values)
+    return lambda: next(iterator)

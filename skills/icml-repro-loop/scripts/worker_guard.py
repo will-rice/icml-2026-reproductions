@@ -4,13 +4,19 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from datetime import datetime, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
+import time
 from typing import Protocol
 from uuid import uuid4
+
+import telemetry
 
 
 RUNTIMES = {"codex", "antigravity"}
@@ -56,6 +62,9 @@ class LaunchSpec:
     env: dict[str, str]
     contract: Path
     mode: str
+    attempt_id: str
+    paper_id: str
+    project_path: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -231,12 +240,23 @@ def launch_spec(
     model: str,
     worktree: Path,
     contract: Path,
+    *,
+    attempt_id: str,
+    paper_id: str,
+    project_path: str,
 ) -> LaunchSpec:
     """Build a launch specification from one controller-authored contract."""
     runtime = _runtime(runtime)
     model = _nonempty(model, "model")
     worktree = _worktree(worktree)
     contract, record = _contract(worktree, contract)
+    for field, expected in (
+        ("attempt_id", attempt_id),
+        ("paper_id", paper_id),
+        ("project_path", project_path),
+    ):
+        if record[field] != _nonempty(expected, field):
+            raise ValueError(field)
     mode = record["mode"]
     if mode == "implementation":
         _require_preflight(worktree, runtime)
@@ -254,7 +274,117 @@ def launch_spec(
         env=_worker_environment(worktree),
         contract=contract,
         mode=mode,
+        attempt_id=attempt_id,
+        paper_id=paper_id,
+        project_path=project_path,
     )
+
+
+def run_worker(
+    paths,
+    spec: LaunchSpec,
+    *,
+    timeout_seconds: int | None = None,
+    work_kind: str = "implementation",
+    process_factory=subprocess.Popen,
+    utc_now=None,
+    monotonic_ns=time.monotonic_ns,
+    session_id_factory=None,
+    git_head=None,
+) -> dict:
+    """Run one worker child and durably measure its process boundary."""
+    if timeout_seconds is not None and (
+        type(timeout_seconds) is not int or timeout_seconds <= 0
+    ):
+        raise ValueError("timeout_seconds")
+    if work_kind not in {"implementation", "correction"}:
+        raise ValueError("work_kind")
+    utc_now = utc_now or _utc_now
+    session_id_factory = session_id_factory or (lambda: uuid4().hex)
+    git_head = git_head or _git_head
+    session_id = session_id_factory()
+    contract_sha256 = hashlib.sha256(spec.contract.read_bytes()).hexdigest()
+    common = {
+        "attempt_id": spec.attempt_id,
+        "paper_id": spec.paper_id,
+        "project_path": spec.project_path,
+        "runtime": spec.runtime,
+        "model": _option_value(spec.argv, "--model"),
+        "worktree": str(spec.cwd),
+        "contract_sha256": contract_sha256,
+        "work_kind": work_kind,
+    }
+    telemetry.append_event(
+        paths,
+        session_id,
+        0,
+        "worker-queued",
+        {**common, "observed_at": utc_now()},
+    )
+    git_sha_before = git_head(spec.cwd)
+    process = process_factory(spec.argv, cwd=spec.cwd, env=spec.env)
+    launch_counter = monotonic_ns()
+    telemetry.append_event(
+        paths,
+        session_id,
+        1,
+        "worker-launched",
+        {
+            **common,
+            "observed_at": utc_now(),
+            "pid": process.pid,
+            "monotonic_ns": launch_counter,
+            "git_sha_before": git_sha_before,
+        },
+    )
+
+    interrupted = False
+    outcome = "proposal"
+    try:
+        return_code = process.wait(timeout=timeout_seconds)
+        if return_code != 0:
+            outcome = "failed"
+    except subprocess.TimeoutExpired:
+        outcome = "timed_out"
+        process.terminate()
+        return_code = process.wait()
+    except KeyboardInterrupt:
+        interrupted = True
+        outcome = "interrupted"
+        process.terminate()
+        return_code = process.wait()
+
+    exit_counter = monotonic_ns()
+    exit_code, signal = _exit_status(return_code)
+    telemetry.append_event(
+        paths,
+        session_id,
+        2,
+        "worker-exited",
+        {
+            **common,
+            "observed_at": utc_now(),
+            "monotonic_ns": exit_counter,
+            "git_sha_after": git_head(spec.cwd),
+            "exit_code": exit_code,
+            "signal": signal,
+            "downloaded_bytes": _downloaded_bytes(process),
+            "outcome": outcome,
+        },
+    )
+    summary = telemetry.summarize_worker_session(
+        telemetry.read_session(paths, session_id)
+    )
+    result = {
+        **summary,
+        "outcome": outcome,
+        "exit_code": exit_code,
+        "signal": signal,
+        "downloaded_bytes": _downloaded_bytes(process),
+    }
+    if interrupted:
+        raise KeyboardInterrupt
+    return result
 
 
 def _validate_codex_command(argv: tuple[str, ...]) -> None:
@@ -473,6 +603,34 @@ def _nonempty(value: object, field: str) -> str:
     if type(value) is not str or not value or value != value.strip():
         raise ValueError(field)
     return value
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _git_head(worktree: Path) -> str:
+    return subprocess.run(
+        ["git", "-C", str(worktree), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+
+def _exit_status(return_code: object) -> tuple[int | None, int | None]:
+    if type(return_code) is not int:
+        return None, None
+    if return_code < 0:
+        return None, -return_code
+    return return_code, None
+
+
+def _downloaded_bytes(process: object) -> int | None:
+    value = getattr(process, "downloaded_bytes", None)
+    if type(value) is int and value >= 0:
+        return value
+    return None
 
 
 def _atomic_json_write(path: Path, value: dict) -> None:

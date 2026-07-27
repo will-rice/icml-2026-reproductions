@@ -165,6 +165,18 @@ def main() -> None:
     renew_parser.add_argument("path", type=Path)
     _add_fence_arguments(renew_parser)
     renew_parser.add_argument("--now")
+    worker_parser = commands.add_parser(
+        "run-worker", help="run one fenced paper worker with telemetry"
+    )
+    worker_parser.add_argument("path", type=Path)
+    _add_fence_arguments(worker_parser)
+    worker_parser.add_argument(
+        "--runtime", choices=("codex", "antigravity"), required=True
+    )
+    worker_parser.add_argument("--model", required=True)
+    worker_parser.add_argument("--worktree", type=Path, required=True)
+    worker_parser.add_argument("--contract", type=Path, required=True)
+    worker_parser.add_argument("--timeout-seconds", type=int)
     transition_attempt_parser = commands.add_parser(
         "transition-attempt",
         help="transition one fenced non-authoritative attempt edge",
@@ -263,6 +275,7 @@ def main() -> None:
         "scheduler-pass",
         "claim-attempt",
         "renew-attempt",
+        "run-worker",
         "transition-attempt",
         "record-design",
         "review-design",
@@ -311,7 +324,11 @@ def _add_fence_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--fencing-token", type=int, required=True)
 
 
-def _run_v6_command(arguments: argparse.Namespace) -> object:
+def _run_v6_command(
+    arguments: argparse.Namespace,
+    *,
+    worker_runner=None,
+) -> object:
     import attempts
     import leases
     import scheduler
@@ -402,6 +419,39 @@ def _run_v6_command(arguments: argparse.Namespace) -> object:
         leases,
         store,
     )
+    if arguments.command == "run-worker":
+        import worker_guard
+
+        leases.assert_fence(paths, lease)
+        attempt = attempts.read_attempt(paths, arguments.attempt_id)
+        if attempt["phase"] not in {"implementing", "improving"}:
+            raise ValueError("phase")
+        project_path = attempt.get("project_path")
+        if project_path is None:
+            slug = attempt.get("slug")
+            if type(slug) is not str or not slug:
+                raise ValueError("project_path")
+            project_path = f"submissions/{slug}"
+        spec = worker_guard.launch_spec(
+            arguments.runtime,
+            arguments.model,
+            arguments.worktree,
+            arguments.contract,
+            attempt_id=attempt["attempt_id"],
+            paper_id=attempt["paper_id"],
+            project_path=project_path,
+        )
+        run = worker_runner or worker_guard.run_worker
+        return run(
+            paths,
+            spec,
+            timeout_seconds=arguments.timeout_seconds,
+            work_kind=(
+                "implementation"
+                if attempt["phase"] == "implementing"
+                else "correction"
+            ),
+        )
     if arguments.command == "renew-attempt":
         return _lease_identity(leases.renew_attempt(paths, lease, now))
     if arguments.command == "transition-attempt":

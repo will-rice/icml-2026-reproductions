@@ -1,5 +1,6 @@
 """Tests for persistent ICML reproduction loop state."""
 
+import argparse
 import importlib.util
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -1484,6 +1485,7 @@ def test_cli_help_names_schema_v6_operations():
         "watch-attempt",
         "record-poll",
         "sync-verdict",
+        "run-worker",
     ):
         assert command in help_text
 
@@ -1906,6 +1908,120 @@ def test_attempt_mutation_requires_full_lease_identity(tmp_path: Path, missing: 
 
     assert result.returncode != 0
     assert missing in result.stderr
+
+
+@pytest.mark.parametrize(
+    ("phase", "expected_work_kind"),
+    [("implementing", "implementation"), ("improving", "correction")],
+)
+def test_run_worker_uses_fenced_attempt_identity_and_phase_work_kind(
+    tmp_path: Path,
+    phase: str,
+    expected_work_kind: str,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a2"]
+    if phase == "improving":
+        make_attempt_improving(paths, lease)
+    lease = make_lease_live(paths, lease)
+    worktree, contract = worker_contract(
+        tmp_path, "a2", "paper-2", "submissions/paper-2"
+    )
+    captured = {}
+
+    def worker_runner(
+        actual_paths,
+        spec,
+        *,
+        timeout_seconds,
+        work_kind,
+    ):
+        captured.update(
+            {
+                "paths": actual_paths,
+                "attempt_id": spec.attempt_id,
+                "paper_id": spec.paper_id,
+                "project_path": spec.project_path,
+                "timeout_seconds": timeout_seconds,
+                "work_kind": work_kind,
+            }
+        )
+        return {"session_id": "session-a", "outcome": "proposal"}
+
+    result = state_module()._run_v6_command(
+        run_worker_arguments(paths, lease, worktree, contract),
+        worker_runner=worker_runner,
+    )
+
+    assert result == {"session_id": "session-a", "outcome": "proposal"}
+    assert captured == {
+        "paths": paths,
+        "attempt_id": "a2",
+        "paper_id": "paper-2",
+        "project_path": "submissions/paper-2",
+        "timeout_seconds": 30,
+        "work_kind": expected_work_kind,
+    }
+
+
+def test_run_worker_rejects_stale_fence_before_reading_contract(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = make_lease_live(paths, attempt_leases["a2"])
+    arguments = run_worker_arguments(
+        paths,
+        lease,
+        tmp_path / "missing-worktree",
+        tmp_path / "missing-contract.json",
+    )
+    arguments.owner = "stale-owner"
+
+    with pytest.raises(ValueError, match="owner"):
+        state_module()._run_v6_command(
+            arguments,
+            worker_runner=lambda *args, **kwargs: pytest.fail(
+                "stale worker was launched"
+            ),
+        )
+
+
+def test_run_worker_rejects_contract_attempt_identity_mismatch(
+    tmp_path: Path,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = make_lease_live(paths, attempt_leases["a2"])
+    worktree, contract = worker_contract(
+        tmp_path, "wrong-attempt", "paper-2", "submissions/paper-2"
+    )
+
+    with pytest.raises(ValueError, match="attempt_id"):
+        state_module()._run_v6_command(
+            run_worker_arguments(paths, lease, worktree, contract),
+            worker_runner=lambda *args, **kwargs: pytest.fail(
+                "mismatched worker was launched"
+            ),
+        )
+
+
+def test_run_worker_rejects_non_worker_phase_before_reading_contract(
+    tmp_path: Path,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = make_lease_live(paths, attempt_leases["a1"])
+    arguments = run_worker_arguments(
+        paths,
+        lease,
+        tmp_path / "missing-worktree",
+        tmp_path / "missing-contract.json",
+        attempt_id="a1",
+    )
+
+    with pytest.raises(ValueError, match="phase"):
+        state_module()._run_v6_command(
+            arguments,
+            worker_runner=lambda *args, **kwargs: pytest.fail(
+                "selected worker was launched"
+            ),
+        )
 
 
 def test_transition_attempt_reconstructs_and_validates_persisted_lease(tmp_path: Path):
@@ -2721,6 +2837,122 @@ def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
             deployed_sha="submitted-sha",
         )
     return paths, attempt_leases
+
+
+def worker_contract(
+    tmp_path: Path,
+    attempt_id: str,
+    paper_id: str,
+    project_path: str,
+) -> tuple[Path, Path]:
+    scripts = str(STATE_MODULE_PATH.parent)
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    import worker_guard
+
+    worktree = (tmp_path / f"worktree-{attempt_id}").resolve()
+    worktree.mkdir()
+    contract = worktree / ".superpowers" / "worker-contract.json"
+    contract.parent.mkdir(parents=True)
+    contract.write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "attempt_id": attempt_id,
+                "paper_id": paper_id,
+                "worktree": str(worktree),
+                "project_path": project_path,
+                "mode": "implementation",
+            },
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    def isolated(request):
+        request.control_path.parent.mkdir(parents=True, exist_ok=True)
+        request.control_path.write_text(request.marker, encoding="utf-8")
+
+    worker_guard.preflight_runtime("codex", worktree, isolated)
+    return worktree, contract
+
+
+def run_worker_arguments(
+    paths,
+    lease,
+    worktree: Path,
+    contract: Path,
+    *,
+    attempt_id: str = "a2",
+) -> argparse.Namespace:
+    return argparse.Namespace(
+        command="run-worker",
+        path=paths.index,
+        attempt_id=attempt_id,
+        owner=lease.owner,
+        fencing_token=lease.fencing_token,
+        runtime="codex",
+        model="model-a",
+        worktree=worktree,
+        contract=contract,
+        timeout_seconds=30,
+    )
+
+
+def make_attempt_improving(paths, lease) -> None:
+    scripts = str(STATE_MODULE_PATH.parent)
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    import attestations
+    import attempts
+
+    attestation_id = persist_test_attestation(
+        attestations, paths, "validation", "a2"
+    )
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    attempts.transition_attested(
+        paths,
+        "a2",
+        "validated",
+        attestation_id,
+        {},
+        lease,
+        now,
+    )
+    attempts.transition_attempt(
+        paths,
+        "a2",
+        "improving",
+        lease,
+        now,
+        improvement_attempts=1,
+        improvement_reason="Correct validation failure",
+    )
+
+
+def make_lease_live(paths, lease):
+    scripts = str(STATE_MODULE_PATH.parent)
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    import leases
+    import store
+
+    value = {
+        "resource": lease.resource,
+        "owner": lease.owner,
+        "attempt_id": lease.attempt_id,
+        "acquired_at": lease.acquired_at,
+        "expires_at": "2999-07-27T00:00:00+00:00",
+        "fencing_token": lease.fencing_token,
+        "released_at": lease.released_at,
+    }
+    store.atomic_json_write(
+        paths.resource_lease(lease.resource),
+        value,
+        leases.validate_lease,
+    )
+    return leases.Lease(**value)
 
 
 def persist_test_attestation(
