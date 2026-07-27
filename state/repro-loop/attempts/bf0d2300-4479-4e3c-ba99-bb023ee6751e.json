@@ -34,6 +34,7 @@
     }
   ],
   "cpu_only": true,
+  "deployed_sha": "3133ac032927790cbc6351aff7ee1aa86ae4df62",
   "design": {
     "author": "assess_terminal_mhc_rbench",
     "path": "docs/superpowers/plans/2026-07-27-timerewarder-evidence.md",
@@ -47,6 +48,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2509.26627",
   "i": 5804,
+  "improvement_attempts": 2,
+  "improvement_reason": "Add safetensors to the Space requirements after the corrected src import reached the next live startup dependency and failed.",
   "insts": [
     "IIIS, Tsinghua University",
     "Shanghai Jiao Tong University",
@@ -82,7 +85,7 @@
   "or": "https://openreview.net/forum?id=XztRm216YS",
   "orid": "XztRm216YS",
   "paper_id": "XztRm216YS",
-  "phase": "validated",
+  "phase": "judging",
   "pid": "63337",
   "project_path": "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance",
   "safety_blocker": null,
@@ -136,6 +139,7 @@
   },
   "slug": "timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance",
   "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+  "space_id": "wrice/repro-timerewarder",
   "spot": true,
   "sub": "Inverse",
   "target_claims": [
@@ -170,10 +174,71 @@
       "owner": "controller-timerewarder-validation-20260727",
       "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
       "to": "validated"
+    },
+    {
+      "at": "2026-07-27T18:09:19.021930+00:00",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-timerewarder-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T18:13:08.205237+00:00",
+      "attestation_id": "57330fd1cdf25efad082fc8a8dda56dcdfb1d02e1bdc767bfbee073c09b64448",
+      "fencing_token": 3,
+      "from": "improving",
+      "owner": "controller-timerewarder-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T18:19:27.308923+00:00",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-timerewarder-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T18:22:48.751334+00:00",
+      "attestation_id": "f5869d8d7076b1b4720147d69296e6c167084102397806b876e90e0a270b5592",
+      "fencing_token": 3,
+      "from": "improving",
+      "owner": "controller-timerewarder-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T18:34:36.339436+00:00",
+      "attestation_id": "48e9b231063d7be4b68a63b933caca47a8f26f9e493c9d01766d518ef6f6f1cd",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-timerewarder-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T18:37:42.939157+00:00",
+      "attestation_id": "d318180e75c646701032019f8ecb8917a3ef88c5af7f9c78e3e3860f68cc76c1",
+      "fencing_token": 3,
+      "from": "deployed",
+      "owner": "controller-timerewarder-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T18:38:01.965062+00:00",
+      "attestation_id": "d226034283652146d964c4469a02beaff63dfeea93bb4193044700757faf4790",
+      "fencing_token": 3,
+      "from": "submitted",
+      "owner": "controller-timerewarder-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T17:51:23.857253+00:00",
+  "updated_at": "2026-07-27T18:38:01.965062+00:00",
   "upstream_revision": "arxiv:2509.26627v3+github:CowAndSheep/TimeRewarder@f54234b67bd3f1fa190f62498d38513a2140f23f+hf-model:CowAndSheep/timerewarder@23eded140eb8c8d9f194243a115d218b5072d800+hf-dataset:CowAndSheep/timerewarder-demos@b966abcebc110dd97dd96018e395180e069756c4",
   "vs": "https://icml.cc/virtual/2026/poster/63337"
 }

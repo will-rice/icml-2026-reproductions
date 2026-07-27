@@ -33,6 +33,7 @@
     }
   ],
   "cpu_only": true,
+  "deployed_sha": "2f59706efdd24ddbdf1c37f19f5ed4f5c5f53ab3",
   "design": {
     "author": "root",
     "path": "docs/superpowers/plans/2026-07-27-rbench-evidence.md",
@@ -77,7 +78,7 @@
   "or": "https://openreview.net/forum?id=p5QSlnwume",
   "orid": "p5QSlnwume",
   "paper_id": "p5QSlnwume",
-  "phase": "validated",
+  "phase": "judging",
   "pid": "61543",
   "project_path": "submissions/rethinking-video-generation-model-for-the-embodied-world",
   "safety_blocker": null,
@@ -125,6 +126,7 @@
   },
   "slug": "rethinking-video-generation-model-for-the-embodied-world",
   "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+  "space_id": "wrice/repro-rbench",
   "spot": false,
   "sub": "Generative Models and Autoencoders",
   "target_claims": [
@@ -158,10 +160,37 @@
       "owner": "controller-rbench-validation-20260727",
       "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
       "to": "validated"
+    },
+    {
+      "at": "2026-07-27T18:08:15.926711+00:00",
+      "attestation_id": "3fe2876ac0f7c71672844b7dd34b44e9a19f23e8518c9a0ce50f104c65b25a04",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-rbench-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T18:37:49.671984+00:00",
+      "attestation_id": "afd5d22ebb652164a6ffa2b76315837be19c52a443371e54e6aa25c9fde6be66",
+      "fencing_token": 3,
+      "from": "deployed",
+      "owner": "controller-rbench-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T18:38:07.551386+00:00",
+      "attestation_id": "512c18bd9e46afc4b4d8a17f20a547c63bf20268deeb81e9ccab6a5f64818c04",
+      "fencing_token": 3,
+      "from": "submitted",
+      "owner": "controller-rbench-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T18:01:01.835632+00:00",
+  "updated_at": "2026-07-27T18:38:07.551386+00:00",
   "upstream_revision": "arxiv:2601.15282v1+github:DAGroup-PKU/ReVidgen@b03df27f0376faa148dcd8cd620a1989a32ca979+hf-dataset:DAGroup-PKU/RBench@6bdccf349ff5a8f68302428351e94f34ecd62450+hf-space:DAGroup-PKU/RBench-Leaderboard@6b66282843a5d863af4271fb07ba1641d1d33334+hf-space:DAGroup-PKU/RBench-Leaderboard@5dd6d55e454e22dbf7bd34ea5fbbeda5bc0f9b07",
   "vs": "https://icml.cc/virtual/2026/poster/61543"
 }

@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-27T18:38:01.965062+00:00",
+  "attempt_id": "bf0d2300-4479-4e3c-ba99-bb023ee6751e",
+  "expires_at": "2026-07-27T18:43:01.965062+00:00",
+  "fencing_token": 1,
+  "owner": "judgment-bf0d2300-4479-4e3c-ba99-bb023ee6751e",
+  "released_at": "2026-07-27T18:38:01.965062+00:00",
+  "resource": "submitted-sha:3133ac032927790cbc6351aff7ee1aa86ae4df62"
+}

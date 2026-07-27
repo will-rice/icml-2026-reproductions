@@ -1,0 +1,627 @@
+{
+  "status": "complete",
+  "targets": [
+    {
+      "path": "repro-loop/attestations/validation/2fc3b006-3307-4fc3-8df6-c000379298c4--3.json",
+      "value": {
+        "attempt_id": "2fc3b006-3307-4fc3-8df6-c000379298c4",
+        "attempt_number": 3,
+        "attestation_id": "f69cbf5833d293beac5ba17d6520e0b31bfbd2d462d60233f8b0d25abd0f40e4",
+        "base_sha": "f10520582b64c9cc76e539f7141abcb179115439",
+        "branch": "impl/points-agoq-clean",
+        "checks": [
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "--show-toplevel"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "fddcbe47e5f6d3edd08a80f4ccd22d8b2c2428fc8fc79c9a37832b79319facb7"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain",
+              "--ignored",
+              "--untracked-files=all",
+              "--",
+              "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "branch",
+              "--show-current"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "199880d536585e5b0fbe16aefeabae523dea652435aa21db2338e5f9161f5f0f"
+          },
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "HEAD"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "c1f390b81fc63a0925f1664f9987131f2793f7369195955cbed91a593131aa43"
+          },
+          {
+            "argv": [
+              "git",
+              "diff",
+              "--name-only",
+              "f10520582b64c9cc76e539f7141abcb179115439...HEAD"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "5890a125961d743c2e385f3ead946912c49049be5387efa048664500e31d804f"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "status",
+              "--porcelain",
+              "--ignored",
+              "--untracked-files=all",
+              "--",
+              "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "argv": [
+              "git",
+              "branch",
+              "--show-current"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "199880d536585e5b0fbe16aefeabae523dea652435aa21db2338e5f9161f5f0f"
+          },
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "HEAD"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "c1f390b81fc63a0925f1664f9987131f2793f7369195955cbed91a593131aa43"
+          },
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "HEAD^{tree}"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "f6acb2cc6ad5fc7a7e68e007d7caea3c10d89f04976943fda2d3722db4e83908"
+          }
+        ],
+        "commands": [
+          {
+            "argv": [
+              "uv",
+              "run",
+              "--project",
+              "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms",
+              "python",
+              "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms/generate_evidence.py",
+              "--output",
+              "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms/evidence.json"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "3a0ac20361249648c86dcdc5f420403288316b25fa99db1f70b6394a886fe55d",
+            "stdout_sha256": "75d8389e0f9162cf1e910917ff993e508c2ec73cfd214fa4e50564447e648719"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "--project",
+              "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms",
+              "python",
+              "-m",
+              "pytest",
+              "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms/tests",
+              "-q"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "b6fbf01a7ec0630e9bddc6aa05a88ed8a7621e158ae47724f5e1c144210862b7",
+            "stdout_sha256": "01dca1ea07245f837c38c519f9d5291d9d7b1e795902fc168e91168bab08019f"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "pytest",
+              "-q"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "b1477864bf4dc459bac6cfe8bebc0247b441ad966ede31141ceb05a5ca3ce7d6",
+            "stdout_sha256": "587285f6caabbcf8d9fa223de6c694c7dd3a038c6b6e2bb3e9b5549510b52276"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+              "skills/icml-repro-loop"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "1b9232de568d6f3f98b2479d63af8e2d6caf679315d5fcf47b017e6ef9c4952c",
+            "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+          },
+          {
+            "argv": [
+              "uv",
+              "run",
+              "pre-commit",
+              "run",
+              "-a"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "f843c21c0981a12f6675fbe83f85c21cb4d1d0f18d2215b828d9d387bfe85328",
+            "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+          }
+        ],
+        "design_path": "docs/superpowers/plans/2026-07-27-agoq-evidence.md",
+        "environment": [
+          {
+            "argv": [
+              "git",
+              "--version"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+          },
+          {
+            "argv": [
+              "uv",
+              "--version"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+          },
+          {
+            "argv": [
+              "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+              "--version"
+            ],
+            "returncode": 0,
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+          }
+        ],
+        "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+        "kind": "validation",
+        "observed_at": "2026-07-27T18:19:17.738506+00:00",
+        "payload_sha256": "f25467baf5c81d3311f960ed4feb97446868d52a6e009526d1fd2e36e53f8178",
+        "project_path": "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms",
+        "source_commit": "5644535eb41820fba20a0e617aa4e7b33b69086c",
+        "source_tree": "88fe9465f54e555d986896817a8b7fdff53ef116",
+        "source_tree_sha256": "9ec877d3894c0b8a343886be72ebacbe7dc6305b0e0423abe43655611783cba4",
+        "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/points-agoq-clean"
+      }
+    },
+    {
+      "path": "repro-loop/attempts/2fc3b006-3307-4fc3-8df6-c000379298c4.json",
+      "value": {
+        "alphaxiv": "2605.00539",
+        "area": "Deep Learning",
+        "artifact_access": true,
+        "arxiv": "2605.00539",
+        "attempt_id": "2fc3b006-3307-4fc3-8df6-c000379298c4",
+        "authors": [
+          "WenXiang Lin",
+          "HuangJunTao",
+          "ZhangLuHan",
+          "Lilaiyi",
+          "Xiang Bao",
+          "mengyang zhang",
+          "BingWang Wang",
+          "Shaohuai Shi"
+        ],
+        "claim_bindings": [
+          {
+            "challenge_claim": "AGoQ combines layer-aware activation quantization and precision-preserved gradient quantization within Megatron-LM-style distributed training (Section 3).",
+            "challenge_claim_sha256": "0b198b87a5abf16409a547a6f5277a41a62eac4a791b71cada94b054c65a1a13",
+            "target_claim": "AGoQ combines layer-aware activation quantization and precision-preserved gradient quantization within Megatron-LM-style distributed training (Section 3)."
+          },
+          {
+            "challenge_claim": "Layer-aware activation quantization reduces cached activation memory for a transformer layer from 28U in BF16 and 16.5U in COAT to 7.75U (Table 1).",
+            "challenge_claim_sha256": "89292ed940125355f402bc04bc847acbed65f01bd0718124cceb88416ec24228",
+            "target_claim": "Layer-aware activation quantization reduces cached activation memory for a transformer layer from 28U in BF16 and 16.5U in COAT to 7.75U (Table 1)."
+          },
+          {
+            "challenge_claim": "Dynamic Bit-width Compensation for Pipeline Parallelism assigns higher activation bit-widths to underutilized pipeline stages while maintaining near-4-bit activation storage (Section 4.2).",
+            "challenge_claim_sha256": "a5a088563e0ab1a912f212da4246d90e8df679e6312e494ec486f0c38953b5bf",
+            "target_claim": "Dynamic Bit-width Compensation for Pipeline Parallelism assigns higher activation bit-widths to underutilized pipeline stages while maintaining near-4-bit activation storage (Section 4.2)."
+          },
+          {
+            "challenge_claim": "Kernel fusion combines quantization/dequantization with adjacent GEMM operations to reduce activation-quantization overhead (Figure 4).",
+            "challenge_claim_sha256": "88c789000f385b4692435064cb66b427ecbfd05b92c0632adde7681cb7b69eaa",
+            "target_claim": "Kernel fusion combines quantization/dequantization with adjacent GEMM operations to reduce activation-quantization overhead (Figure 4)."
+          }
+        ],
+        "cpu_only": true,
+        "design": {
+          "author": "assess_timerewarder_agoq",
+          "path": "docs/superpowers/plans/2026-07-27-agoq-evidence.md",
+          "recorded_at": "2026-07-27T12:47:00.997828+00:00"
+        },
+        "design_review": {
+          "decision": "approved",
+          "reviewed_at": "2026-07-27T12:47:01.286103+00:00",
+          "reviewer": "assess_terminal_mhc_rbench"
+        },
+        "estimated_api_cost_usd": 0.0,
+        "hf": "2605.00539",
+        "i": 6780,
+        "improvement_attempts": 2,
+        "improvement_reason": "Add the Space requirements file after the Python 3.12 runtime exposed Gradio 4.44 incompatibility with the platform huggingface_hub 1.x package.",
+        "insts": [
+          "Harbin Institute of Technology, Shenzhen",
+          "Harbin Institute of Technology",
+          "Huawei Technologies Ltd."
+        ],
+        "licensing_blocker": null,
+        "live_claims": [
+          {
+            "status": "unverified",
+            "text": "AGoQ combines layer-aware activation quantization and precision-preserved gradient quantization within Megatron-LM-style distributed training (Section 3)."
+          },
+          {
+            "status": "unverified",
+            "text": "Layer-aware activation quantization reduces cached activation memory for a transformer layer from 28U in BF16 and 16.5U in COAT to 7.75U (Table 1)."
+          },
+          {
+            "status": "unverified",
+            "text": "Dynamic Bit-width Compensation for Pipeline Parallelism assigns higher activation bit-widths to underutilized pipeline stages while maintaining near-4-bit activation storage (Section 4.2)."
+          },
+          {
+            "status": "unverified",
+            "text": "Kernel fusion combines quantization/dequantization with adjacent GEMM operations to reduce activation-quantization overhead (Figure 4)."
+          },
+          {
+            "status": "unverified",
+            "text": "On LLaMA2-13B sequence lengths from 32K to 80K, AGoQ reports faster training than Megatron-LM and ZeRO-1 while avoiding activation recomputation in the listed settings (Table 2)."
+          },
+          {
+            "status": "unverified",
+            "text": "AGoQ reports lower memory than COAT and comparable or faster training time on OLMo-1B at 24K and 32K sequence lengths (Table 3)."
+          }
+        ],
+        "or": "https://openreview.net/forum?id=ymHDVBwmta",
+        "orid": "ymHDVBwmta",
+        "paper_id": "ymHDVBwmta",
+        "phase": "validated",
+        "pid": "60582",
+        "project_path": "submissions/agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms",
+        "safety_blocker": null,
+        "score": 21,
+        "score_rate": {
+          "claim_expectations": [
+            {
+              "challenge_claim_sha256": "0b198b87a5abf16409a547a6f5277a41a62eac4a791b71cada94b054c65a1a13",
+              "p_falsified": 0.08,
+              "p_toy": 0.08,
+              "p_verified": 0.8
+            },
+            {
+              "challenge_claim_sha256": "89292ed940125355f402bc04bc847acbed65f01bd0718124cceb88416ec24228",
+              "p_falsified": 0.1,
+              "p_toy": 0.15,
+              "p_verified": 0.7
+            },
+            {
+              "challenge_claim_sha256": "a5a088563e0ab1a912f212da4246d90e8df679e6312e494ec486f0c38953b5bf",
+              "p_falsified": 0.1,
+              "p_toy": 0.2,
+              "p_verified": 0.65
+            },
+            {
+              "challenge_claim_sha256": "88c789000f385b4692435064cb66b427ecbfd05b92c0632adde7681cb7b69eaa",
+              "p_falsified": 0.08,
+              "p_toy": 0.12,
+              "p_verified": 0.75
+            },
+            {
+              "challenge_claim_sha256": "a513e6751344f810d77db2b7cd9a2fac9cf9ceab94f2a583a0247f917e64145d",
+              "p_falsified": 0.01,
+              "p_toy": 0.03,
+              "p_verified": 0.01
+            },
+            {
+              "challenge_claim_sha256": "7391424029d3da524d5b5dfe17c88119ee6b0b7d1808ec6d0bc80366630efd1a",
+              "p_falsified": 0.01,
+              "p_toy": 0.03,
+              "p_verified": 0.01
+            }
+          ],
+          "direct_artifact_score": 4,
+          "full_score_claim_paths": 4,
+          "judged_before_deadline_probability": 0.9,
+          "primary_risk": "CPU static evidence can establish implementation mechanisms and memory algebra but cannot reproduce the multi-GPU performance tables.",
+          "remaining_hours_p90": 9.0,
+          "remaining_time_variance_hours2": 6.25,
+          "reusable_implementation": true
+        },
+        "slug": "agoq-activation-and-gradient-quantization-for-memory-efficient-distributed-training-of-llms",
+        "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+        "spot": false,
+        "sub": "Large Language Models",
+        "target_claims": [
+          "AGoQ combines layer-aware activation quantization and precision-preserved gradient quantization within Megatron-LM-style distributed training (Section 3).",
+          "Layer-aware activation quantization reduces cached activation memory for a transformer layer from 28U in BF16 and 16.5U in COAT to 7.75U (Table 1).",
+          "Dynamic Bit-width Compensation for Pipeline Parallelism assigns higher activation bit-widths to underutilized pipeline stages while maintaining near-4-bit activation storage (Section 4.2).",
+          "Kernel fusion combines quantization/dequantization with adjacent GEMM operations to reduce activation-quantization overhead (Figure 4)."
+        ],
+        "title": "AGoQ: Activation and Gradient Quantization for Memory-Efficient Distributed Training of LLMs",
+        "transitions": [
+          {
+            "at": "2026-07-27T12:47:00.688397+00:00",
+            "fencing_token": 2,
+            "from": "selected",
+            "owner": "controller-design-agoq",
+            "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+            "to": "design-pending"
+          },
+          {
+            "at": "2026-07-27T12:47:01.286103+00:00",
+            "fencing_token": 2,
+            "from": "design-pending",
+            "owner": "controller-design-agoq",
+            "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+            "to": "implementing"
+          },
+          {
+            "at": "2026-07-27T17:45:53.127105+00:00",
+            "attestation_id": "9de2b9019f8741a35aa1b49700b1f7cc19585ef2981c37a8dde711ab6a19aadb",
+            "fencing_token": 3,
+            "from": "implementing",
+            "owner": "controller-agoq-validation-20260727",
+            "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+            "to": "validated"
+          },
+          {
+            "at": "2026-07-27T18:04:58.988067+00:00",
+            "fencing_token": 3,
+            "from": "validated",
+            "owner": "controller-agoq-validation-20260727",
+            "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+            "to": "improving"
+          },
+          {
+            "at": "2026-07-27T18:07:57.388952+00:00",
+            "attestation_id": "eb73114942c2f22a691387e516314f30b9a559eb4999611a37f5a73b52d58457",
+            "fencing_token": 3,
+            "from": "improving",
+            "owner": "controller-agoq-validation-20260727",
+            "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+            "to": "validated"
+          },
+          {
+            "at": "2026-07-27T18:16:12.780035+00:00",
+            "fencing_token": 3,
+            "from": "validated",
+            "owner": "controller-agoq-validation-20260727",
+            "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+            "to": "improving"
+          },
+          {
+            "at": "2026-07-27T18:19:17.738506+00:00",
+            "attestation_id": "f69cbf5833d293beac5ba17d6520e0b31bfbd2d462d60233f8b0d25abd0f40e4",
+            "fencing_token": 3,
+            "from": "improving",
+            "owner": "controller-agoq-validation-20260727",
+            "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+            "to": "validated"
+          }
+        ],
+        "type": "Poster",
+        "updated_at": "2026-07-27T18:19:17.738506+00:00",
+        "upstream_revision": "arxiv:2605.00539v2+github:Eutenacity/AGoQ@006fa0f6318228d1fcd6727f0578c0e548e5cbff",
+        "vs": "https://icml.cc/virtual/2026/poster/60582"
+      }
+    },
+    {
+      "path": "repro-loop.json",
+      "value": {
+        "attempts": {
+          "2fc3b006-3307-4fc3-8df6-c000379298c4": {
+            "paper_id": "ymHDVBwmta",
+            "path": "repro-loop/attempts/2fc3b006-3307-4fc3-8df6-c000379298c4.json",
+            "phase": "validated",
+            "updated_at": "2026-07-27T18:19:17.738506+00:00"
+          },
+          "3d164e18-39ef-416e-b986-96b5a5d4e12d": {
+            "paper_id": "mDhyxu8WRb",
+            "path": "repro-loop/attempts/3d164e18-39ef-416e-b986-96b5a5d4e12d.json",
+            "phase": "deployed",
+            "updated_at": "2026-07-27T18:08:08.015970+00:00"
+          },
+          "49b12585-ca39-441d-b822-c7da77ed81e9": {
+            "paper_id": "0bTEd4LpQr",
+            "path": "repro-loop/attempts/49b12585-ca39-441d-b822-c7da77ed81e9.json",
+            "phase": "blocked",
+            "updated_at": "2026-07-26T09:12:51.803268+00:00"
+          },
+          "534db42c-5b16-4f00-9a7d-a47056fc9dd4": {
+            "paper_id": "h7WBYYJF1Q",
+            "path": "repro-loop/attempts/534db42c-5b16-4f00-9a7d-a47056fc9dd4.json",
+            "phase": "judging",
+            "updated_at": "2026-07-26T10:34:48.644385+00:00"
+          },
+          "64bfe193-333b-4b37-9683-9ac25ca5ac27": {
+            "paper_id": "a3GdvuPItd",
+            "path": "repro-loop/attempts/64bfe193-333b-4b37-9683-9ac25ca5ac27.json",
+            "phase": "judging",
+            "updated_at": "2026-07-27T17:29:48.375651+00:00"
+          },
+          "8c21f2dc-a357-422e-9c1b-79a4d417e3dc": {
+            "paper_id": "p5QSlnwume",
+            "path": "repro-loop/attempts/8c21f2dc-a357-422e-9c1b-79a4d417e3dc.json",
+            "phase": "deployed",
+            "updated_at": "2026-07-27T18:08:15.926711+00:00"
+          },
+          "bf0d2300-4479-4e3c-ba99-bb023ee6751e": {
+            "paper_id": "XztRm216YS",
+            "path": "repro-loop/attempts/bf0d2300-4479-4e3c-ba99-bb023ee6751e.json",
+            "phase": "validated",
+            "updated_at": "2026-07-27T18:13:08.205237+00:00"
+          },
+          "cb04ab1a-a526-4137-862b-a26d68563737": {
+            "paper_id": "UnjxMTe57e",
+            "path": "repro-loop/attempts/cb04ab1a-a526-4137-862b-a26d68563737.json",
+            "phase": "judging",
+            "updated_at": "2026-07-26T12:39:18.761131+00:00"
+          },
+          "e20658d7-250a-5b0c-a015-be453c43e9fc": {
+            "paper_id": "vGeNaFHdET",
+            "path": "repro-loop/attempts/e20658d7-250a-5b0c-a015-be453c43e9fc.json",
+            "phase": "blocked",
+            "updated_at": "2026-07-26T06:00:38.978738+00:00"
+          }
+        },
+        "history": {
+          "c5819c75-8a2a-538d-850e-805bc2325a6d": {
+            "paper_id": "HMu24dTKkJ",
+            "path": "repro-loop/attempts/c5819c75-8a2a-538d-850e-805bc2325a6d.json",
+            "phase": "implementing",
+            "updated_at": "schema-v3-migration:f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354"
+          }
+        },
+        "max_runnable_attempts": 20,
+        "rejections": [
+          {
+            "checked_at": "2026-07-21",
+            "paper_id": "4M5Kj2UqaM",
+            "reason": "Already judged; challenge policy excludes judged papers from selection.",
+            "title": "AgentSelect"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "gvWsViQBYB",
+            "reason": "Live challenge refresh found two existing reproduction Spaces (NaveenVenu/gvWsViQBYB and arvkevi/adamw-shampoo-convergence-repro); duplicate selection is ineligible under the workspace rubric.",
+            "title": "Convergence Rate Analysis of the AdamW-Style Shampoo: Unifying One-sided and Two-Sided Preconditioning"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "9GRlBVAXq8",
+            "reason": "Live challenge refresh found three existing reproduction Spaces; duplicate selection is ineligible under the workspace rubric.",
+            "title": "On the Convergence Rate of LoRA Gradient Descent"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "8Fhq7QpYfI",
+            "reason": "Substantive fidelity and scaling-law reproduction requires neural-wavefunction GPU training; autonomous GPU work is ineligible under the reproduction-loop constraint, and paper tables alone are not reproduced evidence.",
+            "title": "WF-Bench: A Benchmark for Neural-Network WaveFunction Expressivity and Scaling Laws"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "mWxEAgz3xu",
+            "reason": "Survey-statistics claims require raw practitioner data; the paper releases only anonymized aggregate statistics, so claims are not independently testable (self-report only).",
+            "title": "Measuring Agents in Production"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "MqzZ9X6m7f",
+            "reason": "Position paper; claims are argumentative proposals with no independently testable computation or released artifact.",
+            "title": "Position: Sustainable Open-Source AI Requires Tracking the Cumulative Footprint"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "ycj3XWCh6E",
+            "reason": "Position paper; claims are argumentative, no independently testable evidence artifact.",
+            "title": "Position: LLM Serving Needs Mathematical Optimization and Algorithmic Foundations"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "GnqHK8Ww98",
+            "reason": "All substantive claims require meta-RL teacher and student LLM training on GPU; outside the CPU-only reproduction boundary.",
+            "title": "Teaching Models to Teach Themselves: Reasoning at the Edge of Learnability"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "71030",
+            "reason": "Claims require GPT-2 Large/XL and Qwen3-8B (continued) pretraining; GPU training is ineligible for the autonomous loop.",
+            "title": "OPUS: Towards Efficient and Principled Data Selection in Large Language Model Pretraining"
+          }
+        ],
+        "resource_limits": {
+          "metered_api_reserved_usd": 10.0,
+          "publication_per_provider": 20
+        },
+        "snapshots": {
+          "0418f56a5b54bd79ac2987be045fe9c73d4d1d53d7beb3276c02adc6cfca0f22": "repro-loop/snapshots/0418f56a5b54bd79ac2987be045fe9c73d4d1d53d7beb3276c02adc6cfca0f22.json",
+          "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce": "repro-loop/snapshots/05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce.json",
+          "1a58165c03eb647a57fb5ed3c366152e270eaa8847dcfb3b678ed8a5c421b3ba": "repro-loop/snapshots/1a58165c03eb647a57fb5ed3c366152e270eaa8847dcfb3b678ed8a5c421b3ba.json",
+          "1cbc32ef33d39cdec12c213eae30a8abe510dbe78430f917e5e1e002bb942389": "repro-loop/snapshots/1cbc32ef33d39cdec12c213eae30a8abe510dbe78430f917e5e1e002bb942389.json",
+          "2227a86ba2500ba9b75150533ed18823347248630acbbdb9f5601f2b4c755a55": "repro-loop/snapshots/2227a86ba2500ba9b75150533ed18823347248630acbbdb9f5601f2b4c755a55.json",
+          "2e97bf39d410d687e8a56462f06388dcb4fa9765e98a9f4ba4892549d8237a78": "repro-loop/snapshots/2e97bf39d410d687e8a56462f06388dcb4fa9765e98a9f4ba4892549d8237a78.json",
+          "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d": "repro-loop/snapshots/35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d.json",
+          "37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd": "repro-loop/snapshots/37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd.json",
+          "3bbfda6c9def2e9042b80e63f1362442afff4188410d78db1ec2c6309799a785": "repro-loop/snapshots/3bbfda6c9def2e9042b80e63f1362442afff4188410d78db1ec2c6309799a785.json",
+          "4453e264715f6fd9c7b790c4b7851811d2c6aebb8a644966e665e8629abca046": "repro-loop/snapshots/4453e264715f6fd9c7b790c4b7851811d2c6aebb8a644966e665e8629abca046.json",
+          "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6": "repro-loop/snapshots/44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6.json",
+          "4f62c2ac2df94cd0e2695273cfcde18e0c8f97e39499117bed67c53702a36d62": "repro-loop/snapshots/4f62c2ac2df94cd0e2695273cfcde18e0c8f97e39499117bed67c53702a36d62.json",
+          "593c9bc2f11b9808a9392f92f07519ee8713643520306a9e9baf338b515117aa": "repro-loop/snapshots/593c9bc2f11b9808a9392f92f07519ee8713643520306a9e9baf338b515117aa.json",
+          "5c0da46c15867b7383f8f388801d334a137d4988c237f7cbf9ae67257bde22d8": "repro-loop/snapshots/5c0da46c15867b7383f8f388801d334a137d4988c237f7cbf9ae67257bde22d8.json",
+          "61b023054291d666a76987dd4bb380c31660f75882eae8e68379e022c9be6481": "repro-loop/snapshots/61b023054291d666a76987dd4bb380c31660f75882eae8e68379e022c9be6481.json",
+          "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617": "repro-loop/snapshots/69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617.json",
+          "69b615ebff20f7c997671bf3edba6d18837d7a68e922d45ba859595a4c8824fb": "repro-loop/snapshots/69b615ebff20f7c997671bf3edba6d18837d7a68e922d45ba859595a4c8824fb.json",
+          "7873570fc215842492ff6cbe8e73116224fdc361e755b81172dcd5d73755d17c": "repro-loop/snapshots/7873570fc215842492ff6cbe8e73116224fdc361e755b81172dcd5d73755d17c.json",
+          "7b51c2e046f4dece4f0363d231aa07a5b784b194fc4b8a03683af66d2b6b68c8": "repro-loop/snapshots/7b51c2e046f4dece4f0363d231aa07a5b784b194fc4b8a03683af66d2b6b68c8.json",
+          "827aea0aec55e82eb0b591c52370285165d7db79de179b36967eb196d440121c": "repro-loop/snapshots/827aea0aec55e82eb0b591c52370285165d7db79de179b36967eb196d440121c.json",
+          "a50f1050b21f95ab9361b78d2d378f70e8b0cd9ed827dd38d8fbf2266f9a21f3": "repro-loop/snapshots/a50f1050b21f95ab9361b78d2d378f70e8b0cd9ed827dd38d8fbf2266f9a21f3.json",
+          "a6c347be7dc639d2580cfc690f5451943ec421ea1c84e77178159b6778b33609": "repro-loop/snapshots/a6c347be7dc639d2580cfc690f5451943ec421ea1c84e77178159b6778b33609.json",
+          "bb4e4816a8b63d7cafa4496d4f97fd68a76325be1353559f66c2d399dea17f8b": "repro-loop/snapshots/bb4e4816a8b63d7cafa4496d4f97fd68a76325be1353559f66c2d399dea17f8b.json",
+          "c7a602950f453855e944ffdd23b68f269be022474d5c12c74b29761e0da8e69a": "repro-loop/snapshots/c7a602950f453855e944ffdd23b68f269be022474d5c12c74b29761e0da8e69a.json",
+          "c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97": "repro-loop/snapshots/c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97.json",
+          "ca174fcd3c16121da0f6704a7921f1dea9f42651fbd671fb50964cff8ee18074": "repro-loop/snapshots/ca174fcd3c16121da0f6704a7921f1dea9f42651fbd671fb50964cff8ee18074.json",
+          "ceb539d0a6a65c2ca3e4b089513634b0af37b212062b9cd9801dda41518d989c": "repro-loop/snapshots/ceb539d0a6a65c2ca3e4b089513634b0af37b212062b9cd9801dda41518d989c.json",
+          "d33ba365cf22df3c572b16034a06bfdb272582300ffb0d9b708e26447c979702": "repro-loop/snapshots/d33ba365cf22df3c572b16034a06bfdb272582300ffb0d9b708e26447c979702.json",
+          "db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df": "repro-loop/snapshots/db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df.json",
+          "fe5d79f5307131d7cc35c4e71ef948b5355c3535124541c28de83cba3d9454eb": "repro-loop/snapshots/fe5d79f5307131d7cc35c4e71ef948b5355c3535124541c28de83cba3d9454eb.json"
+        },
+        "total_api_cost_usd": 0.0,
+        "version": 6
+      }
+    }
+  ]
+}

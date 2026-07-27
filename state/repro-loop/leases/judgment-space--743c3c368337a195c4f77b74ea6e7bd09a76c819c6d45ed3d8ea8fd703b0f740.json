@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-27T18:38:04.698306+00:00",
+  "attempt_id": "3d164e18-39ef-416e-b986-96b5a5d4e12d",
+  "expires_at": "2026-07-27T18:43:04.698306+00:00",
+  "fencing_token": 1,
+  "owner": "judgment-3d164e18-39ef-416e-b986-96b5a5d4e12d",
+  "released_at": "2026-07-27T18:38:04.698306+00:00",
+  "resource": "judgment-space:wrice/repro-mhc"
+}
