@@ -93,9 +93,12 @@ def report_paths(tmp_path: Path, records: list[dict]):
     return paths
 
 
-def live_candidate(paper_id: str, *, claims: int) -> dict:
+def live_candidate(
+    paper_id: str, *, claims: int, slug: str | None = None
+) -> dict:
     return {
         "paper_id": paper_id,
+        "slug": paper_id if slug is None else slug,
         "title": f"Paper {paper_id}",
         "live_claims": [
             {"text": f"{paper_id} claim {number}", "status": "extracted"}
@@ -121,7 +124,7 @@ def test_census_excludes_claimed_and_finds_existing_project(tmp_path: Path):
     (project / "pyproject.toml").write_text("[project]\nname='paper-fast'\n")
     snapshot = raw_snapshot(
         candidates=[
-            live_candidate("paper-fast", claims=5),
+            live_candidate("paper-fast-id", slug="paper-fast", claims=5),
             live_candidate("paper-claimed", claims=6),
             live_candidate("paper-one-claim", claims=1),
         ],
@@ -137,8 +140,8 @@ def test_census_excludes_claimed_and_finds_existing_project(tmp_path: Path):
 
     assert rows == [
         {
-            "paper_id": "paper-fast",
-            "title": "Paper paper-fast",
+            "paper_id": "paper-fast-id",
+            "title": "Paper paper-fast-id",
             "claim_count": 5,
             "existing_projects": [
                 {"path": str(project), "git_head": "a" * 40}

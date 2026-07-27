@@ -1582,6 +1582,7 @@ def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
             "candidates": [
                 {
                     "paper_id": "census-cli-paper",
+                    "slug": "census-cli-paper",
                     "title": "Census CLI Paper",
                     "live_claims": [
                         {"text": "Claim one", "status": "extracted"},
@@ -1601,14 +1602,24 @@ def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
         if path.is_file()
     }
 
+    unrelated_cwd = tmp_path / "unrelated-cwd"
+    unrelated_cwd.mkdir()
     result = json.loads(
-        run_cli(
-            "candidate-census",
-            str(paths.index),
-            "--snapshot-id",
-            snapshot_id,
-            "--workspace-root",
-            str(REPOSITORY_ROOT.parents[1]),
+        subprocess.run(
+            [
+                sys.executable,
+                str(STATE_MODULE_PATH),
+                "candidate-census",
+                str(paths.index),
+                "--snapshot-id",
+                snapshot_id,
+                "--workspace-root",
+                str(REPOSITORY_ROOT.parents[1]),
+            ],
+            check=True,
+            capture_output=True,
+            cwd=unrelated_cwd,
+            text=True,
         ).stdout
     )
 
@@ -1638,15 +1649,18 @@ def test_registered_worktree_roots_are_workspace_bounded_and_injected(
     second = workspace / "second"
     porcelain = f"worktree {second}\nHEAD b\n\nworktree {first}\nHEAD a\n"
 
+    seen = []
     roots = module._registered_worktree_roots(
-        workspace, git_worktree_list=lambda: porcelain
+        workspace,
+        git_worktree_list=lambda root: seen.append(root) or porcelain,
     )
 
     assert roots == [first.resolve(), second.resolve()]
+    assert seen == [workspace.resolve()]
     with pytest.raises(ValueError, match="worktree"):
         module._registered_worktree_roots(
             workspace,
-            git_worktree_list=lambda: "worktree /outside/worktree\nHEAD c\n",
+            git_worktree_list=lambda _root: "worktree /outside/worktree\nHEAD c\n",
         )
 
 

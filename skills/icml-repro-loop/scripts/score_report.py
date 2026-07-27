@@ -117,12 +117,13 @@ def candidate_census(
         if type(candidate) is not dict:
             raise ValueError("candidates")
         paper_id = _identity(candidate.get("paper_id"), "paper_id")
+        slug = _identity(candidate.get("slug"), "slug")
         live_claims = candidate.get("live_claims")
         if type(live_claims) is not list:
             raise ValueError("live_claims")
         if paper_id in claimed or len(live_claims) < 2:
             continue
-        existing_projects = _existing_projects(paper_id, roots, git_head)
+        existing_projects = _existing_projects(slug, roots, git_head)
         rows.append(
             {
                 "paper_id": paper_id,
@@ -142,10 +143,10 @@ def candidate_census(
     )
 
 
-def _existing_projects(paper_id: str, roots: list[Path], git_head) -> list[dict]:
+def _existing_projects(slug: str, roots: list[Path], git_head) -> list[dict]:
     projects = []
     for worktree in roots:
-        project = worktree / "submissions" / paper_id
+        project = worktree / "submissions" / slug
         if not project.is_dir() or not (project / "pyproject.toml").is_file():
             continue
         try:

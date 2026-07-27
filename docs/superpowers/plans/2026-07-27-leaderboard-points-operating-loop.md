@@ -984,7 +984,7 @@ def test_census_excludes_claimed_and_finds_existing_project(
     (project / "pyproject.toml").write_text("[project]\nname='paper-fast'\n")
     snapshot = raw_snapshot(
         candidates=[
-            live_candidate("paper-fast", claims=5),
+            live_candidate("paper-fast-id", slug="paper-fast", claims=5),
             live_candidate("paper-claimed", claims=6),
             live_candidate("paper-one-claim", claims=1),
         ],
@@ -993,7 +993,7 @@ def test_census_excludes_claimed_and_finds_existing_project(
 
     rows = score_report.candidate_census(paths, snapshot, [worktree])
 
-    assert [row["paper_id"] for row in rows] == ["paper-fast"]
+    assert [row["paper_id"] for row in rows] == ["paper-fast-id"]
     assert rows[0]["claim_count"] == 5
     assert rows[0]["existing_projects"] == [
         {"path": str(project), "git_head": "a" * 40}
@@ -1042,9 +1042,10 @@ Return:
 Sort by existing project first, then descending claim count, then paper ID.
 The CLI discovers registered roots from `git worktree list --porcelain`,
 requires every discovered root to be below `--workspace-root`, and passes the
-resolved roots to `candidate_census`. A directory is reusable only when its
-paper ID matches and `git rev-parse HEAD` succeeds; otherwise record no project
-instead of an unpinned path.
+resolved roots to `candidate_census`. A directory is reusable only when the
+candidate's validated slug maps exactly to `submissions/<slug>` and `git
+rev-parse HEAD` succeeds; otherwise record no project instead of an unpinned
+path. The census row remains identified by the candidate's paper ID.
 
 - [ ] **Step 4: Run census/state tests and verify GREEN**
 

@@ -352,7 +352,7 @@ def _registered_worktree_roots(
         git_worktree_list = _git_worktree_list
     workspace = workspace_root.resolve()
     roots = []
-    for line in git_worktree_list().splitlines():
+    for line in git_worktree_list(workspace).splitlines():
         if not line.startswith("worktree "):
             continue
         worktree = Path(line.removeprefix("worktree ")).resolve()
@@ -364,9 +364,9 @@ def _registered_worktree_roots(
     return sorted(set(roots), key=str)
 
 
-def _git_worktree_list() -> str:
+def _git_worktree_list(workspace_root: Path) -> str:
     return subprocess.run(
-        ["git", "worktree", "list", "--porcelain"],
+        ["git", "-C", str(workspace_root), "worktree", "list", "--porcelain"],
         check=True,
         capture_output=True,
         text=True,
