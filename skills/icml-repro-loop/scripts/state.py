@@ -7,6 +7,7 @@ import json
 import math
 import os
 import re
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -147,6 +148,13 @@ def main() -> None:
     score_report_parser.add_argument("--snapshot-id", required=True)
     score_report_parser.add_argument("--username", required=True)
     score_report_parser.add_argument("--rank-observation-json", type=Path)
+    census_parser = commands.add_parser(
+        "candidate-census",
+        help="report unclaimed live candidates and exact reusable projects",
+    )
+    census_parser.add_argument("path", type=Path)
+    census_parser.add_argument("--snapshot-id", required=True)
+    census_parser.add_argument("--workspace-root", type=Path, required=True)
     authority_parser = commands.add_parser(
         "audit-authority",
         help="audit and optionally quarantine unsupported local completions",
@@ -280,6 +288,7 @@ def main() -> None:
         "show-attempt",
         "show-snapshot",
         "score-report",
+        "candidate-census",
         "audit-authority",
         "scheduler-pass",
         "claim-attempt",
@@ -331,6 +340,37 @@ def _add_fence_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--attempt-id", required=True)
     parser.add_argument("--owner", required=True)
     parser.add_argument("--fencing-token", type=int, required=True)
+
+
+def _registered_worktree_roots(
+    workspace_root: Path,
+    *,
+    git_worktree_list=None,
+) -> list[Path]:
+    """Return the registered worktrees, rejecting roots outside the workspace."""
+    if git_worktree_list is None:
+        git_worktree_list = _git_worktree_list
+    workspace = workspace_root.resolve()
+    roots = []
+    for line in git_worktree_list().splitlines():
+        if not line.startswith("worktree "):
+            continue
+        worktree = Path(line.removeprefix("worktree ")).resolve()
+        try:
+            worktree.relative_to(workspace)
+        except ValueError as error:
+            raise ValueError("worktree") from error
+        roots.append(worktree)
+    return sorted(set(roots), key=str)
+
+
+def _git_worktree_list() -> str:
+    return subprocess.run(
+        ["git", "worktree", "list", "--porcelain"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
 
 
 def _run_v6_command(
@@ -403,6 +443,13 @@ def _run_v6_command(
             arguments.username,
             rank_observation,
         )
+    if arguments.command == "candidate-census":
+        import refresh
+        import score_report
+
+        snapshot = refresh.read_snapshot(paths, arguments.snapshot_id)
+        worktree_roots = _registered_worktree_roots(arguments.workspace_root)
+        return score_report.candidate_census(paths, snapshot, worktree_roots)
     if arguments.command == "audit-authority":
         import authority_audit
 

@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import copy
-from datetime import datetime
+from datetime import datetime, timezone
 import math
 from pathlib import Path
+import subprocess
 import sys
 from urllib.parse import urlparse
 
@@ -77,6 +78,84 @@ def candidate_queue(snapshot: dict) -> list[dict]:
         }
         for candidate in ranked
     ]
+
+
+def read_git_head(worktree: Path) -> str:
+    """Return the exact checked-out revision for one registered worktree."""
+    result = subprocess.run(
+        ["git", "-C", str(worktree), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    head = result.stdout.strip()
+    if not head or "\n" in head:
+        raise ValueError("git_head")
+    return head
+
+
+def candidate_census(
+    paths: store.StatePaths,
+    snapshot: dict,
+    worktree_roots: list[Path],
+    *,
+    git_head=read_git_head,
+) -> list[dict]:
+    """List unclaimed live candidates without assessing feasibility or score."""
+    if type(snapshot) is not dict or type(snapshot.get("candidates")) is not list:
+        raise ValueError("candidates")
+    import scheduler
+
+    index = store.read_json(paths.index)
+    store.validate_index(index)
+    claimed = scheduler._claimed_paper_ids(
+        paths, index, snapshot, datetime.now(timezone.utc)
+    )
+    roots = sorted({Path(root).resolve() for root in worktree_roots}, key=str)
+    rows = []
+    for candidate in snapshot["candidates"]:
+        if type(candidate) is not dict:
+            raise ValueError("candidates")
+        paper_id = _identity(candidate.get("paper_id"), "paper_id")
+        live_claims = candidate.get("live_claims")
+        if type(live_claims) is not list:
+            raise ValueError("live_claims")
+        if paper_id in claimed or len(live_claims) < 2:
+            continue
+        existing_projects = _existing_projects(paper_id, roots, git_head)
+        rows.append(
+            {
+                "paper_id": paper_id,
+                "title": candidate.get("title"),
+                "claim_count": len(live_claims),
+                "existing_projects": existing_projects,
+                "authority": "research-required",
+            }
+        )
+    return sorted(
+        rows,
+        key=lambda row: (
+            not row["existing_projects"],
+            -row["claim_count"],
+            row["paper_id"],
+        ),
+    )
+
+
+def _existing_projects(paper_id: str, roots: list[Path], git_head) -> list[dict]:
+    projects = []
+    for worktree in roots:
+        project = worktree / "submissions" / paper_id
+        if not project.is_dir() or not (project / "pyproject.toml").is_file():
+            continue
+        try:
+            head = git_head(worktree)
+        except (OSError, subprocess.CalledProcessError, ValueError):
+            continue
+        if type(head) is not str or not head:
+            continue
+        projects.append({"path": str(project), "git_head": head})
+    return sorted(projects, key=lambda record: record["path"])
 
 
 def build_report(

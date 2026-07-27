@@ -13,6 +13,7 @@ SCRIPTS = (
 )
 sys.path.insert(0, str(SCRIPTS))
 score_report = importlib.import_module("score_report")
+leases = importlib.import_module("leases")
 store = importlib.import_module("store")
 telemetry = importlib.import_module("telemetry")
 
@@ -90,6 +91,130 @@ def report_paths(tmp_path: Path, records: list[dict]):
         }
     store.atomic_json_write(paths.index, index, store.validate_index)
     return paths
+
+
+def live_candidate(paper_id: str, *, claims: int) -> dict:
+    return {
+        "paper_id": paper_id,
+        "title": f"Paper {paper_id}",
+        "live_claims": [
+            {"text": f"{paper_id} claim {number}", "status": "extracted"}
+            for number in range(claims)
+        ],
+    }
+
+
+def raw_snapshot(*, candidates: list[dict], **records: list[dict]) -> dict:
+    return {
+        "candidates": candidates,
+        "queued_submissions": records.get("queued_submissions", []),
+        "tagged_spaces": records.get("tagged_spaces", []),
+        "verdicts": records.get("verdicts", []),
+    }
+
+
+def test_census_excludes_claimed_and_finds_existing_project(tmp_path: Path):
+    paths = report_paths(tmp_path, [])
+    worktree = tmp_path / "paper-worktree"
+    project = worktree / "submissions" / "paper-fast"
+    project.mkdir(parents=True)
+    (project / "pyproject.toml").write_text("[project]\nname='paper-fast'\n")
+    snapshot = raw_snapshot(
+        candidates=[
+            live_candidate("paper-fast", claims=5),
+            live_candidate("paper-claimed", claims=6),
+            live_candidate("paper-one-claim", claims=1),
+        ],
+        tagged_spaces=[{"paper_id": "paper-claimed", "space_id": "org/claimed"}],
+    )
+
+    rows = score_report.candidate_census(
+        paths,
+        snapshot,
+        [worktree],
+        git_head=lambda _worktree: "a" * 40,
+    )
+
+    assert rows == [
+        {
+            "paper_id": "paper-fast",
+            "title": "Paper paper-fast",
+            "claim_count": 5,
+            "existing_projects": [
+                {"path": str(project), "git_head": "a" * 40}
+            ],
+            "authority": "research-required",
+        }
+    ]
+
+
+def test_census_excludes_every_durable_and_live_claim_source(tmp_path: Path):
+    paths = report_paths(
+        tmp_path,
+        [
+            attempt("active", "attempt-paper", "implementing"),
+            attempt("history", "history-paper", "complete"),
+        ],
+    )
+    index = store.read_json(paths.index)
+    index["attempts"].pop("history")
+    index["history"]["history"] = {
+        "path": str(paths.attempt("history").relative_to(paths.index.parent)),
+        "paper_id": "history-paper",
+        "phase": "complete",
+        "updated_at": "2026-07-27T00:00:00+00:00",
+    }
+    index["rejections"] = [
+        {"paper_id": "rejected-paper", "reason": "Already assessed."}
+    ]
+    store.atomic_json_write(paths.index, index, store.validate_index)
+    lease = {
+        "resource": "candidate:leased-paper",
+        "owner": "scheduler",
+        "attempt_id": "lease-attempt",
+        "acquired_at": "2026-07-27T00:00:00+00:00",
+        "expires_at": "2099-07-27T00:00:00+00:00",
+        "fencing_token": 1,
+        "released_at": None,
+    }
+    store.atomic_json_write(
+        paths.resource_lease(lease["resource"]), lease, leases.validate_lease
+    )
+    snapshot = raw_snapshot(
+        candidates=[
+            live_candidate(paper_id, claims=2)
+            for paper_id in (
+                "attempt-paper",
+                "history-paper",
+                "leased-paper",
+                "queued-paper",
+                "space-paper",
+                "verdict-paper",
+                "rejected-paper",
+                "available-paper",
+            )
+        ],
+        queued_submissions=[{"paper_id": "queued-paper"}],
+        tagged_spaces=[{"paper_id": "space-paper"}],
+        verdicts=[{"paper_id": "verdict-paper"}],
+    )
+
+    rows = score_report.candidate_census(
+        paths,
+        snapshot,
+        [],
+        git_head=lambda _worktree: "a" * 40,
+    )
+
+    assert rows == [
+        {
+            "paper_id": "available-paper",
+            "title": "Paper available-paper",
+            "claim_count": 2,
+            "existing_projects": [],
+            "authority": "research-required",
+        }
+    ]
 
 
 def append_worker(

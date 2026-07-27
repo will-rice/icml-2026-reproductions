@@ -1560,6 +1560,96 @@ def test_score_report_cli_reads_verified_snapshot_without_writing_state(
     assert before == after
 
 
+def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
+    tmp_path: Path,
+):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh"):
+        sys.modules.pop(name, None)
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    snapshot_id = refresh.persist_snapshot(
+        paths,
+        {
+            "fetched_at": "2026-07-27T00:00:00+00:00",
+            "source_revision": "source-a",
+            "sources": {},
+            "assessments": None,
+            "candidates": [
+                {
+                    "paper_id": "census-cli-paper",
+                    "title": "Census CLI Paper",
+                    "live_claims": [
+                        {"text": "Claim one", "status": "extracted"},
+                        {"text": "Claim two", "status": "extracted"},
+                    ],
+                }
+            ],
+            "queued_submissions": [],
+            "tagged_spaces": [],
+            "verdicts": [],
+            "spaces": [],
+        },
+    )
+    before = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+
+    result = json.loads(
+        run_cli(
+            "candidate-census",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--workspace-root",
+            str(REPOSITORY_ROOT.parents[1]),
+        ).stdout
+    )
+
+    after = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+    assert result == [
+        {
+            "paper_id": "census-cli-paper",
+            "title": "Census CLI Paper",
+            "claim_count": 2,
+            "existing_projects": [],
+            "authority": "research-required",
+        }
+    ]
+    assert before == after
+
+
+def test_registered_worktree_roots_are_workspace_bounded_and_injected(
+    tmp_path: Path,
+):
+    module = state_module()
+    workspace = tmp_path / "workspace"
+    first = workspace / "first"
+    second = workspace / "second"
+    porcelain = f"worktree {second}\nHEAD b\n\nworktree {first}\nHEAD a\n"
+
+    roots = module._registered_worktree_roots(
+        workspace, git_worktree_list=lambda: porcelain
+    )
+
+    assert roots == [first.resolve(), second.resolve()]
+    with pytest.raises(ValueError, match="worktree"):
+        module._registered_worktree_roots(
+            workspace,
+            git_worktree_list=lambda: "worktree /outside/worktree\nHEAD c\n",
+        )
+
+
 @pytest.mark.parametrize("command", ["claim-attempt", "renew-attempt"])
 @pytest.mark.parametrize("missing", ["attempt-id", "owner", "fencing-token"])
 def test_attempt_lease_commands_require_explicit_identity(
