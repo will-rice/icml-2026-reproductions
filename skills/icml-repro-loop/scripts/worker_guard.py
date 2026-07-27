@@ -29,6 +29,7 @@ CONTRACT_KEYS = {
     "paper_id",
     "worktree",
     "project_path",
+    "plan_path",
     "mode",
 }
 MODES = {"implementation", "research"}
@@ -64,6 +65,7 @@ class LaunchSpec:
     cwd: Path
     env: dict[str, str]
     contract: Path
+    plan: Path
     mode: str
     attempt_id: str
     paper_id: str
@@ -252,7 +254,7 @@ def launch_spec(
     runtime = _runtime(runtime)
     model = _nonempty(model, "model")
     worktree = _worktree(worktree)
-    contract, record = _contract(worktree, contract)
+    contract, plan, record = _contract(worktree, contract)
     for field, expected in (
         ("attempt_id", attempt_id),
         ("paper_id", paper_id),
@@ -265,6 +267,8 @@ def launch_spec(
         _require_preflight(worktree, runtime)
     prompt = (
         f"Read and follow the controller-authored worker contract at {contract}. "
+        f"Then read the approved implementation plan at {plan}. "
+        "Execute that plan task by task, including its tests and commits. "
         "Return the commit, commands run, evidence paths, and concerns as a "
         "proposal. Do not perform controller lifecycle actions."
     )
@@ -276,6 +280,7 @@ def launch_spec(
         cwd=worktree,
         env=_worker_environment(worktree),
         contract=contract,
+        plan=plan,
         mode=mode,
         attempt_id=attempt_id,
         paper_id=paper_id,
@@ -501,7 +506,7 @@ def _command(
     return tuple(values)
 
 
-def _contract(worktree: Path, contract: Path) -> tuple[Path, dict]:
+def _contract(worktree: Path, contract: Path) -> tuple[Path, Path, dict]:
     original = Path(contract)
     if not original.is_absolute():
         raise ValueError("contract")
@@ -516,7 +521,14 @@ def _contract(worktree: Path, contract: Path) -> tuple[Path, dict]:
         raise ValueError("contract")
     if value["version"] != 1:
         raise ValueError("contract")
-    for field in ("attempt_id", "paper_id", "worktree", "project_path", "mode"):
+    for field in (
+        "attempt_id",
+        "paper_id",
+        "worktree",
+        "project_path",
+        "plan_path",
+        "mode",
+    ):
         _nonempty(value[field], field)
     if value["worktree"] != str(worktree):
         raise ValueError("worktree")
@@ -531,7 +543,26 @@ def _contract(worktree: Path, contract: Path) -> tuple[Path, dict]:
         or not (worktree / project_path).resolve().is_relative_to(worktree)
     ):
         raise ValueError("project_path")
-    return resolved, value
+    plan_path = Path(value["plan_path"])
+    if (
+        plan_path.is_absolute()
+        or ".." in plan_path.parts
+        or len(plan_path.parts) < 4
+        or plan_path.parts[:3] != ("docs", "superpowers", "plans")
+        or plan_path.suffix != ".md"
+    ):
+        raise ValueError("plan_path")
+    try:
+        plan = (worktree / plan_path).resolve(strict=True)
+    except OSError as error:
+        raise ValueError("plan_path") from error
+    if (
+        plan != worktree / plan_path
+        or not plan.is_file()
+        or not plan.is_relative_to(worktree)
+    ):
+        raise ValueError("plan_path")
+    return resolved, plan, value
 
 
 def _require_preflight(worktree: Path, runtime: str) -> None:

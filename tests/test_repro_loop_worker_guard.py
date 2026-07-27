@@ -25,6 +25,9 @@ def write_contract(
     project_path: str = "submissions/paper-a",
     contract_path: Path | None = None,
 ) -> Path:
+    plan = worktree / "docs" / "superpowers" / "plans" / "paper-a.md"
+    plan.parent.mkdir(parents=True, exist_ok=True)
+    plan.write_text("# Paper A implementation plan\n", encoding="utf-8")
     path = contract_path or worktree / ".superpowers" / "worker-contract.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -35,6 +38,7 @@ def write_contract(
                 "paper_id": "paper-a",
                 "worktree": str(worktree),
                 "project_path": project_path,
+                "plan_path": "docs/superpowers/plans/paper-a.md",
                 "mode": mode,
             },
             sort_keys=True,
@@ -260,10 +264,13 @@ def test_launch_spec_is_rooted_at_one_worktree_and_uses_empty_hf_cache(
 
     assert spec.cwd == worktree
     assert spec.contract == contract
+    assert spec.plan == worktree / "docs/superpowers/plans/paper-a.md"
     assert spec.mode == "implementation"
     assert spec.attempt_id == "attempt-a"
     assert spec.paper_id == "paper-a"
     assert spec.project_path == "submissions/paper-a"
+    assert str(spec.plan) in spec.argv[-1]
+    assert "Execute that plan" in spec.argv[-1]
     assert "--add-dir" not in spec.argv
     assert "HF_TOKEN" not in spec.env
     assert "GH_TOKEN" not in spec.env

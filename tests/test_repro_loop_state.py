@@ -3019,6 +3019,9 @@ def worker_contract(
     worktree.mkdir()
     contract = worktree / ".superpowers" / "worker-contract.json"
     contract.parent.mkdir(parents=True)
+    plan = worktree / "docs" / "superpowers" / "plans" / "paper.md"
+    plan.parent.mkdir(parents=True)
+    plan.write_text("# Paper implementation plan\n", encoding="utf-8")
     contract.write_text(
         json.dumps(
             {
@@ -3027,6 +3030,7 @@ def worker_contract(
                 "paper_id": paper_id,
                 "worktree": str(worktree),
                 "project_path": project_path,
+                "plan_path": "docs/superpowers/plans/paper.md",
                 "mode": "implementation",
             },
             sort_keys=True,
