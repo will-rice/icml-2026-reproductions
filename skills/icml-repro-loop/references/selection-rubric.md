@@ -168,8 +168,8 @@ eligible candidate.
 
 Persist every ineligible candidate and reason in the coordinator before
 continuing. One bounded pass admits only enough candidates to restore 20
-runnable paper attempts. Judging, blocked, and complete attempts do not consume
-runnable implementation capacity and never stop unrelated work.
+runnable paper attempts. Submitted, judging, blocked, and complete attempts do
+not consume runnable implementation capacity and never stop unrelated work.
 
 ```bash
 raw_id=$(uv run python skills/icml-repro-loop/scripts/state.py refresh-live state/repro-loop.json | uv run python -c 'import json,sys; print(json.load(sys.stdin)["snapshot_id"])')

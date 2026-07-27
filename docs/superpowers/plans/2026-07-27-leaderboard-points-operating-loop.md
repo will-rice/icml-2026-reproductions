@@ -17,7 +17,8 @@
 - Workers have internet and whole-worktree write access but no Hub/GitHub credentials or coordinator-state authority.
 - Autonomous GPU work remains ineligible.
 - Estimated paid API cost remains at most USD 10 per paper.
-- Judging and blocked attempts do not consume runnable implementation capacity.
+- Submitted, judging, and blocked attempts do not consume runnable
+  implementation capacity.
 - Telemetry records actual process/stage boundaries; Git and phase timestamps are never reported as worker runtime.
 - Do not run, modify, test, or format `submissions/nape/`.
 - Preserve the user's existing unstaged `docs/HANDOFF.md` changes.
@@ -1108,8 +1109,8 @@ source-bound score-rate assessments, admits the higher-rate eligible paper,
 records a complete implementation worker session plus validation/deployment
 events, and asserts the final report keeps official points, pending estimates,
 capacity, and measured durations distinct. Add explicit regression assertions
-that attempts in `judging` or `blocked` do not consume runnable capacity. Do
-not add prose-grep or text-presence assertions.
+that attempts in `submitted`, `judging`, or `blocked` do not consume runnable
+capacity. Do not add prose-grep or text-presence assertions.
 
 - [ ] **Step 2: Run the behavior tests and verify RED**
 

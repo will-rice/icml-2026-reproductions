@@ -111,10 +111,10 @@ success.
    does not prove submission. Reject a duplicate paper or conflicting canonical
    attempt.
 8. Use `watch-attempt` with a finite positive poll limit and aware deadline.
-   Persist observations through `record-poll`. Judging and blocked attempts do
-   not consume runnable implementation capacity: refill their lanes without
-   waiting. At either bound without a verdict, persist a blocker; pending is
-   not success.
+   Persist observations through `record-poll`. Submitted, judging, and blocked
+   attempts do not consume runnable implementation capacity: refill their
+   lanes without waiting. At either bound without a verdict, persist a blocker;
+   pending is not success.
 9. Use `sync-verdict` with only a fresh immutable snapshot ID. It verifies exact
    paper, Space, deployed SHA, verdict dataset revision, judged timestamp, and
    claim bindings. Preserve official `verified`, `falsified`, `toy`, and

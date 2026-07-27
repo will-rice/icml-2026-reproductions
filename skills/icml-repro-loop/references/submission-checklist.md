@@ -92,9 +92,9 @@ exact live observation. Intention and worker self-report are not evidence.
 - [ ] Evidence is not the official verdict. Simulations cannot enter judgment
   state. Require exact live snapshot observation. Wait for and import the
   official record. Permissions do not grant authority.
-- [ ] Judging and blocked attempts release runnable implementation capacity;
-  refill through a bounded `scheduler-pass` without waiting for unrelated
-  verdicts or blockers.
+- [ ] Submitted, judging, and blocked attempts release runnable implementation
+  capacity; refill through a bounded `scheduler-pass` without waiting for
+  unrelated verdicts or blockers.
 
 ## Census And Score Report
 

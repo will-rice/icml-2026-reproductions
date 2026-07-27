@@ -178,6 +178,26 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
         paths,
         index,
         {
+            "attempt_id": "already-submitted",
+            "paper_id": "paper-submitted",
+            "phase": "submitted",
+            "updated_at": OBSERVED_AT,
+            "live_claims": [
+                {
+                    "text": f"paper-submitted claim {number}",
+                    "status": "extracted",
+                }
+                for number in (1, 2)
+            ],
+            "score_rate": _score_rate(
+                "paper-submitted", p_verified=0.125, hours=1.0
+            ),
+        },
+    )
+    _write_attempt(
+        paths,
+        index,
+        {
             "attempt_id": "already-judging",
             "paper_id": "paper-pending",
             "phase": "judging",
@@ -267,7 +287,8 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
 
     admission = scheduler.scheduler_pass(paths, assessed_id, NOW)
 
-    # Judging and blocked attempts do not consume runnable implementation slots.
+    # Submitted, judging, and blocked attempts do not consume implementation
+    # slots.
     assert admission.paper_ids == ("paper-fast", "paper-slow")
     fast_assignment = admission.assignments[0]
 
@@ -330,8 +351,12 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
         session_id_factory=lambda: "deployment-session",
     )
 
-    report_snapshot = copy.deepcopy(assessed_snapshot)
-    report_snapshot["verdicts"] = [
+    final_payload = {
+        key: copy.deepcopy(value)
+        for key, value in assessed_snapshot.items()
+        if key != "snapshot_id"
+    }
+    final_payload["verdicts"] = [
         {
             "space_id": "wrice/repro-fast",
             "paper_id": "paper-fast",
@@ -342,6 +367,10 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
             ],
         }
     ]
+    final_id = refresh.persist_snapshot(paths, final_payload)
+    report_snapshot = refresh.read_snapshot(paths, final_id)
+    assert final_id == refresh.canonical_snapshot_id(final_payload)
+    assert final_id != assessed_id
     rank = {
         "observed_at": "2026-07-27T12:04:00+00:00",
         "source_url": "https://example.test/leaderboard",
@@ -366,7 +395,7 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
     assert before_report == after_report
     assert report["official"] == {
         "authority": "official-verdict-snapshot",
-        "snapshot_id": assessed_id,
+        "snapshot_id": final_id,
         "username": "wrice",
         "points": 3,
         "max_points": 4,
@@ -382,20 +411,38 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
                 "phase": "judging",
                 "expected_points": 0.5,
                 "authority": "estimate",
-            }
+            },
+            {
+                "attempt_id": "already-submitted",
+                "paper_id": "paper-submitted",
+                "phase": "submitted",
+                "expected_points": 0.5,
+                "authority": "estimate",
+            },
         ],
-        "expected_points": 0.5,
+        "expected_points": 1.0,
     }
+    assert [row["authority"] for row in report["candidate_queue"]] == [
+        "estimate",
+        "estimate",
+    ]
+    assert report["candidate_queue"][0]["paper_id"] == "paper-fast"
+    assert (
+        report["candidate_queue"][0]["authority"]
+        != report["official"]["authority"]
+    )
     assert report["capacity"] == {
         "max_runnable": 20,
         "runnable": 20,
         "idle": 0,
     }
+    assert report["telemetry"]["worker_queue_seconds"] == 5.0
     assert report["telemetry"]["worker_process_seconds"] == 6.0
     assert report["telemetry"]["implementation_sessions"] == 1
     assert report["telemetry"]["correction_sessions"] == 0
     assert report["telemetry"]["validation_seconds"] == 3.0
     assert report["telemetry"]["deployment_seconds"] == 4.0
+    assert report["telemetry"]["first_launch_to_submission_seconds"] is None
     assert score_report.build_report(paths, report_snapshot, "wrice")[
         "official"
     ]["rank_observation"] is None

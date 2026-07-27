@@ -71,7 +71,7 @@ BLOCKABLE_PHASES = {
     "judging",
     "improving",
 }
-RUNNABLE_PHASES = BLOCKABLE_PHASES - {"judging"}
+RUNNABLE_PHASES = BLOCKABLE_PHASES - {"submitted", "judging"}
 JUDGMENT_PHASES = {"submitted", "judging"}
 VERDICT_STATUSES = {
     "verified",

@@ -137,7 +137,8 @@ Incomplete intervals report `null`.
 `refresh-live` persists snapshots, while scheduling, worker launch, leases,
 design/lifecycle transitions, attestations, verdict sync, publication, and
 repair are controller mutations. Never run the latter commands from a paper
-worker. Judging and blocked attempts release runnable implementation capacity.
+worker. Submitted, judging, and blocked attempts release runnable
+implementation capacity.
 
 ## Verify The Workspace
 
