@@ -1,9 +1,9 @@
 {
-  "acquired_at": "2026-07-26T10:34:48.644385+00:00",
+  "acquired_at": "2026-07-27T20:08:38.500299+00:00",
   "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
-  "expires_at": "2026-07-26T10:39:48.644385+00:00",
-  "fencing_token": 1,
+  "expires_at": "2026-07-27T20:13:38.500299+00:00",
+  "fencing_token": 2,
   "owner": "judgment-534db42c-5b16-4f00-9a7d-a47056fc9dd4",
-  "released_at": "2026-07-26T10:34:48.644385+00:00",
+  "released_at": "2026-07-27T20:08:38.500299+00:00",
   "resource": "judgment-space:wrice/repro-recurrent-depth-parallel-sampler"
 }

@@ -1,26 +1,21 @@
 {
   "attempt_id": "3d164e18-39ef-416e-b986-96b5a5d4e12d",
-  "attempt_number": 1,
-  "created_at": "2026-07-27T18:38:04.698306+00:00",
+  "attempt_number": 2,
+  "created_at": "2026-07-27T20:08:36.764063+00:00",
   "normalized_verdict": null,
   "paper_id": "mDhyxu8WRb",
-  "poll_deadline": "2026-07-28T00:00:00+00:00",
-  "poll_limit": 12,
-  "polls": [
-    {
-      "at": "2026-07-27T18:38:26.351374+00:00",
-      "status": "pending"
-    }
-  ],
+  "poll_deadline": "2026-07-29T20:00:00+00:00",
+  "poll_limit": 288,
+  "polls": [],
   "raw_verdict": null,
   "source_revision": null,
   "space_id": "wrice/repro-mhc",
-  "submitted_sha": "3f06c565afbe22a322324441f4bfc63400e95f55",
+  "submitted_sha": "01d2e47d60f05c0c780e5f14cfb83886682a8a5e",
   "target_claims": [
     "mHC constrains hyper-connection residual mappings by projecting them onto a manifold to preserve stability relative to unconstrained HC (Figure 1, Section 4.1).",
     "HC component ablations test the roles of pre, post, and residual mappings while maintaining dimensional consistency with fixed mappings (Table 1).",
     "Training and propagation analyses show unconstrained HC has larger loss gaps, gradient norms, and residual propagation instability than mHC (Figure 2, Figure 3, Figure 5, Figure 7)."
   ],
-  "updated_at": "2026-07-27T18:38:26.351374+00:00",
+  "updated_at": "2026-07-27T20:08:36.764063+00:00",
   "verdict_at": null
 }

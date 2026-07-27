@@ -34,7 +34,7 @@
     }
   ],
   "cpu_only": true,
-  "deployed_sha": "3133ac032927790cbc6351aff7ee1aa86ae4df62",
+  "deployed_sha": "4028c2adedc1b8b959c2bad627d87d56bdcb1eb5",
   "design": {
     "author": "assess_terminal_mhc_rbench",
     "path": "docs/superpowers/plans/2026-07-27-timerewarder-evidence.md",
@@ -48,8 +48,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2509.26627",
   "i": 5804,
-  "improvement_attempts": 2,
-  "improvement_reason": "Add safetensors to the Space requirements after the corrected src import reached the next live startup dependency and failed.",
+  "improvement_attempts": 3,
+  "improvement_reason": "Expose substantive evidence under root pages/*.md so the official judge can read the logbook.",
   "insts": [
     "IIIS, Tsinghua University",
     "Shanghai Jiao Tong University",
@@ -235,10 +235,54 @@
       "owner": "controller-timerewarder-validation-20260727",
       "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-27T19:42:44.163724+00:00",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T19:59:01.677904+00:00",
+      "attestation_id": "62710d7dbd5d3ca8f8f75b26a3fdbdefc6371ee5e8f9d65c38482a9b92f408c9",
+      "fencing_token": 4,
+      "from": "improving",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T20:05:52.939521+00:00",
+      "attestation_id": "0d136e2916fd700aca97047a0d22dbb9924f3b099686a693921d8a17641ed147",
+      "fencing_token": 4,
+      "from": "validated",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T20:07:11.121685+00:00",
+      "attestation_id": "b89fcf71be38458cd22827b0337af9e594f7ffbf47c8b28db58fd87720dfae7d",
+      "fencing_token": 4,
+      "from": "deployed",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T20:08:37.180286+00:00",
+      "attestation_id": "5c1738cd063284757ca39ea5844b02781f658423a88f33c33bfefaabd24ee1a6",
+      "fencing_token": 4,
+      "from": "submitted",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T18:38:01.965062+00:00",
+  "updated_at": "2026-07-27T20:08:37.180286+00:00",
   "upstream_revision": "arxiv:2509.26627v3+github:CowAndSheep/TimeRewarder@f54234b67bd3f1fa190f62498d38513a2140f23f+hf-model:CowAndSheep/timerewarder@23eded140eb8c8d9f194243a115d218b5072d800+hf-dataset:CowAndSheep/timerewarder-demos@b966abcebc110dd97dd96018e395180e069756c4",
   "vs": "https://icml.cc/virtual/2026/poster/63337"
 }

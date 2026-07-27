@@ -305,10 +305,7 @@ def watch_attempt(
         previous = store.read_json(path)
         validate_judgment_record(previous)
         _require_judgment(previous, attempt_id)
-        if (
-            previous["raw_verdict"] is None
-            or previous["attempt_number"] != attempt_number - 1
-        ):
+        if previous["attempt_number"] != attempt_number - 1:
             raise ValueError("judgment")
         archive_path = paths.judgment_archive(
             attempt_id, previous["attempt_number"]

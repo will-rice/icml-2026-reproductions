@@ -1,0 +1,14 @@
+{
+  "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
+  "attempt_number": 3,
+  "attestation_id": "18b0a7713e0a9d69574a6456947dff0650560474f2266932c95b6b21d234f1fc",
+  "kind": "authority-audit",
+  "observed_at": "2026-07-27T20:08:38.500299+00:00",
+  "payload_sha256": "73038df0d8ce905c403c4a9a220e26ff633d5fb2b9592aa496f28a2599d1b2b3",
+  "poll_deadline": "2026-07-29T20:00:00+00:00",
+  "poll_limit": 288,
+  "source_commit": "79e6996b189d888cd973e3d794fc2c12381ac535",
+  "space_id": "wrice/repro-recurrent-depth-parallel-sampler",
+  "space_sha": "8a846be963365273694e3582e01904a9817ca998",
+  "submission_attestation_id": "3becb7b0b46dea2ce90258d74ceb787cb9f52b8d8f94184af89e149c614a89e8"
+}

@@ -324,6 +324,7 @@ def publish_and_attest_deployment(
     if actual_source != expected_source:
         raise ValueError("source_dir")
     _require_current_validated_tree(worktree, actual_source, validation)
+    _require_scoring_pages(actual_source)
 
     client.create_repo(
         repo_id=space_id,
@@ -397,6 +398,26 @@ def publish_and_attest_deployment(
         lease,
         completed_at,
     )
+
+
+def _require_scoring_pages(source_dir: Path) -> None:
+    """Require the exact root Markdown surface consumed by the official judge."""
+    pages = source_dir / "pages"
+    if not pages.is_dir() or pages.is_symlink():
+        raise ValueError("scoring pages")
+    markdown = sorted(
+        path
+        for path in pages.glob("*.md")
+        if path.is_file() and not path.is_symlink()
+    )
+    try:
+        substantive_characters = sum(
+            len(path.read_text(encoding="utf-8").strip()) for path in markdown
+        )
+    except (OSError, UnicodeError) as error:
+        raise ValueError("scoring pages") from error
+    if substantive_characters < 200:
+        raise ValueError("scoring pages")
 
 
 def attest_submission(

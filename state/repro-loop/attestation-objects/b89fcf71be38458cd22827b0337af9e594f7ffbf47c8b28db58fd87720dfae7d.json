@@ -1,0 +1,16 @@
+{
+  "attempt_id": "bf0d2300-4479-4e3c-ba99-bb023ee6751e",
+  "attempt_number": 4,
+  "attestation_id": "b89fcf71be38458cd22827b0337af9e594f7ffbf47c8b28db58fd87720dfae7d",
+  "deployment_attestation_id": "0d136e2916fd700aca97047a0d22dbb9924f3b099686a693921d8a17641ed147",
+  "kind": "submission",
+  "observed_at": "2026-07-27T20:07:11.121685+00:00",
+  "paper_id": "XztRm216YS",
+  "payload_sha256": "25ca35b5afe938b039451d2549e4ef515d4343584cc6cf96f4d8afc2b726fdcf",
+  "queue_status": "pending",
+  "snapshot_id": "454e676a873546b0ae8cd590efe1b988d9e67cf2175cef82cba3a2ac3b773ec4",
+  "source_commit": "7b04bb144e3117243d0d11f57ef2e609c8f901e4",
+  "space_id": "wrice/repro-timerewarder",
+  "space_sha": "4028c2adedc1b8b959c2bad627d87d56bdcb1eb5",
+  "verdict_revision": "a571e91134bf8ba5076e72a7638114253c4b7de8"
+}

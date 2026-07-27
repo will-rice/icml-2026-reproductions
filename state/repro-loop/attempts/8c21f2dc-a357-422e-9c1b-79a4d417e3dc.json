@@ -33,7 +33,7 @@
     }
   ],
   "cpu_only": true,
-  "deployed_sha": "2f59706efdd24ddbdf1c37f19f5ed4f5c5f53ab3",
+  "deployed_sha": "7cd795feaa4efd8dd1a1630a9bb77ad0e2e37fec",
   "design": {
     "author": "root",
     "path": "docs/superpowers/plans/2026-07-27-rbench-evidence.md",
@@ -47,6 +47,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2601.15282",
   "i": 5002,
+  "improvement_attempts": 1,
+  "improvement_reason": "Expose substantive evidence under root pages/*.md so the official judge can read the logbook.",
   "insts": [
     "Peking University, Bytedance Seed",
     "Peking University",
@@ -187,10 +189,54 @@
       "owner": "controller-rbench-validation-20260727",
       "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-27T19:42:43.881087+00:00",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T20:03:46.106843+00:00",
+      "attestation_id": "a4829cd0267b48962156db23e629b0dea2bc7f9a7a29fa64c46925ccd9c1a87a",
+      "fencing_token": 4,
+      "from": "improving",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T20:06:14.385042+00:00",
+      "attestation_id": "1474e1e9846bf29824364adfa85f8445aaf961ebb1f69bb36bd8306233621b32",
+      "fencing_token": 4,
+      "from": "validated",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T20:07:14.720226+00:00",
+      "attestation_id": "0d67837927c2341393f7ec078a251fb5bd80d7c3a86c1aa6305c10f358c5ae11",
+      "fencing_token": 4,
+      "from": "deployed",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T20:08:39.349012+00:00",
+      "attestation_id": "f70b1beefd26fa01f6c2bc9db5de94f89d70a315d4e6dc7ab8f169e4b39a6009",
+      "fencing_token": 4,
+      "from": "submitted",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T18:38:07.551386+00:00",
+  "updated_at": "2026-07-27T20:08:39.349012+00:00",
   "upstream_revision": "arxiv:2601.15282v1+github:DAGroup-PKU/ReVidgen@b03df27f0376faa148dcd8cd620a1989a32ca979+hf-dataset:DAGroup-PKU/RBench@6bdccf349ff5a8f68302428351e94f34ecd62450+hf-space:DAGroup-PKU/RBench-Leaderboard@6b66282843a5d863af4271fb07ba1641d1d33334+hf-space:DAGroup-PKU/RBench-Leaderboard@5dd6d55e454e22dbf7bd34ea5fbbeda5bc0f9b07",
   "vs": "https://icml.cc/virtual/2026/poster/61543"
 }

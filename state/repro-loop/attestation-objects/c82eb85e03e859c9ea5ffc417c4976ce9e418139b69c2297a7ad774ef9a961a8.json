@@ -1,0 +1,232 @@
+{
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "attempt_number": 3,
+  "attestation_id": "c82eb85e03e859c9ea5ffc417c4976ce9e418139b69c2297a7ad774ef9a961a8",
+  "base_sha": "2e620fa7fcbb68537932ddad5cab51b8cd9c4874",
+  "branch": "validate/posttrainbench",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "7410c034616aec225783563c2ddb88171c4c889e5f8d35a1a298fb6b126be54a"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/posttrainbench"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "18de329bfa43b8b8ee3ac4e211234ac83ff275c5dede0e70361569faa8e385a1"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c2eedaf928bb21ba2bb098f449ff45ba53055778beaa50d89214e5dd71774f33"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "2e620fa7fcbb68537932ddad5cab51b8cd9c4874...HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "1a54cdef664c65411df0f9ff4bcd7be330b46ba28a1aaf6442544d98f2468abd"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/posttrainbench"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "18de329bfa43b8b8ee3ac4e211234ac83ff275c5dede0e70361569faa8e385a1"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c2eedaf928bb21ba2bb098f449ff45ba53055778beaa50d89214e5dd71774f33"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "60bbd1e74b1b9bed185fe693a6aeeb3f8803364d9089e901f60736660ba986dd"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/posttrainbench",
+        "--locked",
+        "posttrainbench-evidence"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "67f49b649c021072298a3117dc8e917fd99a0ca7a2405075cadd4f0b141b60dd",
+      "stdout_sha256": "8e23724a957ddedb165f280a10b9485ba66ce97c80abbf58f09df733a9791230"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/posttrainbench",
+        "python",
+        "-m",
+        "pytest",
+        "submissions/posttrainbench/tests",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "f3a2579e3014fd60c3974dfab351896ada0a589b6f1a08ab7294b521db482a87",
+      "stdout_sha256": "ab330016e971fa501c883b038c7ffad5b56c5caa7774402e484059378c30960e"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "efac020d0146e671df206d144e70051f3202ff4f746e2b1a98251ba6688d5afa",
+      "stdout_sha256": "dcf4254bd02e54ecf37d658350ccc04a0a5e9bbba592d2a4c9e4594cb93fa056"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "skills/icml-repro-loop"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "d47c8f265afd169824cab218dc9bfe6eb26852c6c02863371367cae282982892",
+      "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pre-commit",
+        "run",
+        "-a"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "f35b0006255cc77bd86f0ec955dfbfbc457487f393f055587e0f7c71b74c05f3",
+      "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+    }
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-26-posttrainbench-reproduction-design.md",
+  "environment": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+    },
+    {
+      "argv": [
+        "uv",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+    },
+    {
+      "argv": [
+        "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+    }
+  ],
+  "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+  "kind": "validation",
+  "observed_at": "2026-07-27T20:00:31.634104+00:00",
+  "payload_sha256": "1d5cce8ace5a82308bde6832cb4a733febd85aec68e33e07d8621d6eebd03ace",
+  "project_path": "submissions/posttrainbench",
+  "source_commit": "af677fb9b6b32fc320ee88289bc8d8074bfd34f4",
+  "source_tree": "1fd662bbcff2c24d56e101aafab42e97f14060cc",
+  "source_tree_sha256": "f8631fd63c34684d108753a9193a02e2b5b0733d60725acb211145b63613f0fe",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
+}

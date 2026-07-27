@@ -1,0 +1,14 @@
+{
+  "attempt_id": "3d164e18-39ef-416e-b986-96b5a5d4e12d",
+  "attempt_number": 2,
+  "attestation_id": "e9978fdc620668d84b975d56dc41b0d475464fbbe14eaecf8737280378a46396",
+  "kind": "authority-audit",
+  "observed_at": "2026-07-27T20:07:26.948632+00:00",
+  "payload_sha256": "b64f89409eda483772538b66877baa81fd2addc61f7fb4212ccbbf06ae3c3f4e",
+  "poll_deadline": "2026-07-29T20:00:00+00:00",
+  "poll_limit": 288,
+  "source_commit": "4ddd8501a357b22904af3b0c561b7fbe2b71e60f",
+  "space_id": "wrice/repro-mhc",
+  "space_sha": "01d2e47d60f05c0c780e5f14cfb83886682a8a5e",
+  "submission_attestation_id": "14aed00f6295e5fd254dfbd23f490dc0838e4c21027acb62215304cc97bac61f"
+}

@@ -1,0 +1,237 @@
+{
+  "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+  "attempt_number": 3,
+  "attestation_id": "b45320c5bd143e101f3761266693d2c8d8237542cf99cab25199b1ffc87dec0e",
+  "base_sha": "a8aa5e202f88da2970e1e9862ff8b8ef1558ee2e",
+  "branch": "validate/eeg-fm-bench",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "cac7d309d02bb3feb692ca95210b4817c3a62555bc4da7174768ca871965146a"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/eeg-fm-bench"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a0969714cc70b1218ce81e63ac90a2a893793bc60d9fd17c28db9cdd13073600"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "41bbba0a7e2988f2d1c43c620583329fa66e7d5164a8f19c7e7063744cd87490"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "a8aa5e202f88da2970e1e9862ff8b8ef1558ee2e...HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "dc7d14c4d34b4b8d686c2521027ddf1a5981703da292cc00bcfaeb6a93efa18a"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/eeg-fm-bench"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a0969714cc70b1218ce81e63ac90a2a893793bc60d9fd17c28db9cdd13073600"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "41bbba0a7e2988f2d1c43c620583329fa66e7d5164a8f19c7e7063744cd87490"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "61ee8e9bf325c60cda9ef9c7658b32b293e01ec1414c2483c2adc87c2dd5e269"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/eeg-fm-bench",
+        "python",
+        "-m",
+        "eeg_fm_bench_repro.cli",
+        "--cache-dir",
+        "/tmp/icml-eeg-controller-validation-cache",
+        "--output-dir",
+        "submissions/eeg-fm-bench/evidence"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "158badbbdde507d24daa671a125093923fc0992c389cb40ed34c0cdce6f6f8d4",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/eeg-fm-bench",
+        "python",
+        "-m",
+        "pytest",
+        "submissions/eeg-fm-bench/tests",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "c3a33647d35ecf804b768067387dbc5f0a5aae3a8dbaf1025eb8b06abea0e7b1",
+      "stdout_sha256": "ec8931cdb4f3d5e61c5ed0d1e7166d4dc742adeab63b92acd64cd8f3ba37b66e"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "8fe070c47141891320f45c6ec26acb1253f191ac774e459b2ccc8a001ca8bfdb",
+      "stdout_sha256": "ae167a0e4006a8753aa0408b2addfd0211a615bcac6ffa1babbbb0ce35e1a377"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "skills/icml-repro-loop"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "23df2d45375761eae67317813f4b5513ed41bf806918502848d90231e6f7c569",
+      "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pre-commit",
+        "run",
+        "-a"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "00c38c7aa17e319d68ceda8e2160be41af2634dc3c64315613762dafed45136c",
+      "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+    }
+  ],
+  "design_path": "docs/superpowers/plans/2026-07-24-eeg-fm-bench.md",
+  "environment": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+    },
+    {
+      "argv": [
+        "uv",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+    },
+    {
+      "argv": [
+        "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+    }
+  ],
+  "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+  "kind": "validation",
+  "observed_at": "2026-07-27T19:55:48.203922+00:00",
+  "payload_sha256": "55498bf388c805dcddbd7ea697fc6b54bd7e4cf28d8c390e1e00f64dd3297fa2",
+  "project_path": "submissions/eeg-fm-bench",
+  "source_commit": "ba557640fa14c92ce775ede923601acb3ec95766",
+  "source_tree": "7a353561668dc4add34b8755e104b0562c696904",
+  "source_tree_sha256": "4f6fb722e1409636989829a1861c2a111d690c1ae2482dc9f5dc0b6e828c5881",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/eeg-controller-validation"
+}

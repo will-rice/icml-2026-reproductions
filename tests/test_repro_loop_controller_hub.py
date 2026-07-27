@@ -153,6 +153,11 @@ def hub_case(tmp_path: Path, monkeypatch):
     (source_dir / "app.py").write_text(
         "print('paper a')\n", encoding="utf-8"
     )
+    pages = source_dir / "pages"
+    pages.mkdir()
+    (pages / "reproduction.md").write_text(
+        "Reproduced evidence. " * 20, encoding="utf-8"
+    )
     git(worktree, "init", "-b", "attempt-paper-a")
     git(worktree, "config", "user.name", "Test Controller")
     git(worktree, "config", "user.email", "controller@example.test")
@@ -201,6 +206,26 @@ def deploy(case: dict) -> dict:
         case["client"],
         NOW,
     )
+
+
+@pytest.mark.parametrize(
+    "relative_path,content",
+    [
+        ("space/pages/reproduction.md", "nested evidence " * 20),
+        ("pages/reproduction.md", "x" * 199),
+        ("pages/reproduction.txt", "valid evidence " * 20),
+    ],
+)
+def test_scoring_pages_require_direct_substantive_markdown(
+    tmp_path: Path, relative_path: str, content: str
+):
+    source_dir = tmp_path / "source"
+    page = source_dir / relative_path
+    page.parent.mkdir(parents=True)
+    page.write_text(content, encoding="utf-8")
+
+    with pytest.raises(ValueError, match="scoring pages"):
+        controller._require_scoring_pages(source_dir)
 
 
 def snapshot_payload(
@@ -400,6 +425,20 @@ def test_publication_requires_authoritative_validation_attestation(hub_case):
     hub_case["paths"].attestation("validation", "a1").unlink()
 
     with pytest.raises(ValueError, match="validation"):
+        deploy(hub_case)
+
+    assert hub_case["client"].calls == []
+
+
+def test_publication_checks_scoring_pages_before_hub_mutation(
+    hub_case, monkeypatch
+):
+    def reject_pages(source_dir):
+        raise ValueError("scoring pages")
+
+    monkeypatch.setattr(controller, "_require_scoring_pages", reject_pages)
+
+    with pytest.raises(ValueError, match="scoring pages"):
         deploy(hub_case)
 
     assert hub_case["client"].calls == []

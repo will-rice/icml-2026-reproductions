@@ -1,0 +1,14 @@
+{
+  "attempt_id": "49b12585-ca39-441d-b822-c7da77ed81e9",
+  "attempt_number": 2,
+  "attestation_id": "09ef0929476e24e338746bd2feca85ee15b0582ac313be146b4196aab9d19b94",
+  "kind": "authority-audit",
+  "observed_at": "2026-07-27T20:08:37.672441+00:00",
+  "payload_sha256": "4c7ea230980989648baf85c60512e9701b7c8f8d80e3780910892c096250d9d9",
+  "poll_deadline": "2026-07-29T20:00:00+00:00",
+  "poll_limit": 288,
+  "source_commit": "65206532c5b50a178cce5f484dac664d21acb822",
+  "space_id": "wrice/repro-numina-lean-agent",
+  "space_sha": "6b3a2d57ac607b030f2a4050d403f878cfff88cc",
+  "submission_attestation_id": "37a5217c15cdba53109e79e129e37b04b2faea7cbb05627d3b3fa6d9caeaca55"
+}

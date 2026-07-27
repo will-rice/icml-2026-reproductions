@@ -18,8 +18,6 @@
     "Jia LI",
     "Wenda Li"
   ],
-  "blocked_from": "judging",
-  "blocker": "Judgment deadline 2026-07-26T08:00:00+00:00 elapsed without an official verdict. Fresh immutable snapshot 2e97bf39d410d687e8a56462f06388dcb4fa9765e98a9f4ba4892549d8237a78 fetched at 2026-07-26T09:12:02.045509+00:00 shows exact Space wrice/repro-numina-lean-agent at submitted SHA f79268b7718b50a1dfeb0a4bfd96299e59dfe2ab still tagged and uniquely queued pending for paper 0bTEd4LpQr, with no matching official verdict. The bounded watch used 2 of 12 polls. Next action: after the challenge operator publishes the exact official verdict, resume judging under a current fenced controller lease, take one fresh immutable assessed snapshot, and run sync-verdict against that snapshot.",
   "claim_bindings": [
     {
       "challenge_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
@@ -33,7 +31,7 @@
     }
   ],
   "cpu_only": true,
-  "deployed_sha": "f79268b7718b50a1dfeb0a4bfd96299e59dfe2ab",
+  "deployed_sha": "6b3a2d57ac607b030f2a4050d403f878cfff88cc",
   "design": {
     "author": "codex-numina-design-author-20260724",
     "path": "docs/superpowers/specs/2026-07-24-numina-lean-agent-reproduction-design.md",
@@ -47,6 +45,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2601.14027",
   "i": 2276,
+  "improvement_attempts": 1,
+  "improvement_reason": "Expose substantive evidence under root pages/*.md so the official judge can read the logbook.",
   "insts": [
     "Academy of Mathematics and Systems Science, Chinese Academy of Science",
     "Xi'an Jiaotong-Liverpool University",
@@ -74,7 +74,7 @@
   "or": "https://openreview.net/forum?id=0bTEd4LpQr",
   "orid": "0bTEd4LpQr",
   "paper_id": "0bTEd4LpQr",
-  "phase": "blocked",
+  "phase": "judging",
   "pid": "66755",
   "project_path": "submissions/numina-lean-agent",
   "safety_blocker": null,
@@ -149,10 +149,63 @@
       "owner": "controller-numina-deadline-20260726",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "blocked"
+    },
+    {
+      "at": "2026-07-27T19:42:13.591774+00:00",
+      "attestation_id": "c0fefa4b9f1701835fc2b6f1bf2a157c25168755514072d7ea24d1ccb1d52360",
+      "fencing_token": 4,
+      "from": "blocked",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "judging"
+    },
+    {
+      "at": "2026-07-27T19:42:44.757697+00:00",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T19:58:12.878489+00:00",
+      "attestation_id": "b6655cef17b1527e7ef10198277c7a583f2c980f7ba7bb45a119c62589200164",
+      "fencing_token": 4,
+      "from": "improving",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T20:03:05.531066+00:00",
+      "attestation_id": "71278d2c02f73dcfd7aaa2751d00d65611b6a476310b5e9f691c065f949b62e0",
+      "fencing_token": 4,
+      "from": "validated",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T20:07:11.835832+00:00",
+      "attestation_id": "37a5217c15cdba53109e79e129e37b04b2faea7cbb05627d3b3fa6d9caeaca55",
+      "fencing_token": 4,
+      "from": "deployed",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T20:08:37.672441+00:00",
+      "attestation_id": "09ef0929476e24e338746bd2feca85ee15b0582ac313be146b4196aab9d19b94",
+      "fencing_token": 4,
+      "from": "submitted",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T09:12:51.803268+00:00",
+  "updated_at": "2026-07-27T20:08:37.672441+00:00",
   "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
   "vs": "https://icml.cc/virtual/2026/poster/66755"
 }

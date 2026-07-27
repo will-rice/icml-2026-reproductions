@@ -1,0 +1,21 @@
+{
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "attempt_number": 3,
+  "attestation_id": "8541d3782ff0d746242bc607e3b7ea5389e2112e64d2eb524a7c7905ad2f9e05",
+  "kind": "deployment",
+  "observed_at": "2026-07-27T20:03:44.184829+00:00",
+  "owner": "wrice",
+  "payload_sha256": "1f61d99ac51612f324d5e7145399c457ae7e328fd6e5697206e9fed63b460218",
+  "runtime_stage": "RUNNING",
+  "source_commit": "af677fb9b6b32fc320ee88289bc8d8074bfd34f4",
+  "source_tree_sha256": "f8631fd63c34684d108753a9193a02e2b5b0733d60725acb211145b63613f0fe",
+  "space_id": "wrice/repro-posttrainbench",
+  "space_sha": "58d2a911b46973be40f908d0438b6dabc303e338",
+  "tags": [
+    "icml2026-repro",
+    "paper-UnjxMTe57e",
+    "region:us",
+    "static"
+  ],
+  "validation_attestation_id": "c82eb85e03e859c9ea5ffc417c4976ce9e418139b69c2297a7ad774ef9a961a8"
+}

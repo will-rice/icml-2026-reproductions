@@ -1,0 +1,80 @@
+{
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "assessor": "codex-controller-demix-assessment-20260727",
+  "assessed_at": "2026-07-27T20:10:00+00:00",
+  "assessments": [
+    {
+      "paper_id": "uyRIOjFgOn",
+      "score": 8,
+      "target_claims": [
+        "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1).",
+        "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2).",
+        "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3).",
+        "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract)."
+      ],
+      "claim_bindings": [
+        {
+          "target_claim": "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1).",
+          "challenge_claim": "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1).",
+          "challenge_claim_sha256": "17d177648a7dbe41682375ee2ac948afb374945bd70145a82997ab4f8286e345"
+        },
+        {
+          "target_claim": "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2).",
+          "challenge_claim": "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2).",
+          "challenge_claim_sha256": "0caad463272ccd3b16f7c9a9501b5c6ab2a2df0510ab1b664cebd1b527f762b7"
+        },
+        {
+          "target_claim": "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3).",
+          "challenge_claim": "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3).",
+          "challenge_claim_sha256": "11476b2265a8bb85ccee5e5a090ab7fcbb8a0dee343b37ae1c2f55ed97036cbc"
+        },
+        {
+          "target_claim": "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract).",
+          "challenge_claim": "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract).",
+          "challenge_claim_sha256": "fddd8a2acfd1b2107a42869dd584c366b65b7153c386c6fbef063ba1eff8eaa8"
+        }
+      ],
+      "upstream_revision": "arxiv:2602.00747v3+github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422+hf-dataset:lucius1022/DeMix_Corpora@82a2effc58eb79bec691280a4e4fc50be0968b1e",
+      "artifact_access": true,
+      "cpu_only": true,
+      "safety_blocker": null,
+      "licensing_blocker": null,
+      "estimated_api_cost_usd": 0.0,
+      "score_rate": {
+        "claim_expectations": [
+          {
+            "challenge_claim_sha256": "17d177648a7dbe41682375ee2ac948afb374945bd70145a82997ab4f8286e345",
+            "p_verified": 0.35,
+            "p_falsified": 0.05,
+            "p_toy": 0.45
+          },
+          {
+            "challenge_claim_sha256": "0caad463272ccd3b16f7c9a9501b5c6ab2a2df0510ab1b664cebd1b527f762b7",
+            "p_verified": 0.01,
+            "p_falsified": 0.01,
+            "p_toy": 0.03
+          },
+          {
+            "challenge_claim_sha256": "11476b2265a8bb85ccee5e5a090ab7fcbb8a0dee343b37ae1c2f55ed97036cbc",
+            "p_verified": 0.01,
+            "p_falsified": 0.01,
+            "p_toy": 0.03
+          },
+          {
+            "challenge_claim_sha256": "fddd8a2acfd1b2107a42869dd584c366b65b7153c386c6fbef063ba1eff8eaa8",
+            "p_verified": 0.2,
+            "p_falsified": 0.05,
+            "p_toy": 0.45
+          }
+        ],
+        "judged_before_deadline_probability": 0.9,
+        "remaining_hours_p90": 1.0,
+        "reusable_implementation": true,
+        "direct_artifact_score": 2,
+        "full_score_claim_paths": 0,
+        "remaining_time_variance_hours2": 0.25,
+        "primary_risk": "Released benchmark-result CSVs and a CPU-feasible path for the 48 GB component checkpoints are unavailable."
+      }
+    }
+  ]
+}

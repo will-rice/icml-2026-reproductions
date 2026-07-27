@@ -269,6 +269,8 @@ def launch_spec(
         f"Read and follow the controller-authored worker contract at {contract}. "
         f"Then read the approved implementation plan at {plan}. "
         "Execute that plan task by task, including its tests and commits. "
+        "Include at least 200 substantive characters of judge-readable "
+        "evidence in direct root pages/*.md files under the project path. "
         "Work directly in this session. Do not delegate or spawn nested agents. "
         "Return the commit, commands run, evidence paths, and concerns as a "
         "proposal. Do not perform controller lifecycle actions."

@@ -1,0 +1,235 @@
+{
+  "attempt_id": "8c21f2dc-a357-422e-9c1b-79a4d417e3dc",
+  "attempt_number": 2,
+  "attestation_id": "a4829cd0267b48962156db23e629b0dea2bc7f9a7a29fa64c46925ccd9c1a87a",
+  "base_sha": "c42998bd85f682ed438848eadcd0c97bc516926b",
+  "branch": "impl/points-rbench-validation",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "af61e88290ba9d83d99f838316823773ac2d48227a8473be12ac33ddbb115221"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/rethinking-video-generation-model-for-the-embodied-world"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "6078249d563df9f86fbb66213ad4f13818c313162cc2f3022101a1e2eed25e1d"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "87c8bc87d4fbdc6bf0554dfa562f05659b6cc3bd6260635e21a539fb1f6078ca"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "c42998bd85f682ed438848eadcd0c97bc516926b...HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "bd3600042c05199cd55fe4355a9632cbb3e525df1be7cf749af6949871cf9ea4"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/rethinking-video-generation-model-for-the-embodied-world"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "6078249d563df9f86fbb66213ad4f13818c313162cc2f3022101a1e2eed25e1d"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "87c8bc87d4fbdc6bf0554dfa562f05659b6cc3bd6260635e21a539fb1f6078ca"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "a9321679bf9c1ee71d967d87d751fb42d08a2b4ed2ba910bc474255258f07e14"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/rethinking-video-generation-model-for-the-embodied-world",
+        "rbench-repro",
+        "validate",
+        "submissions/rethinking-video-generation-model-for-the-embodied-world/evidence/results.json",
+        "--schema",
+        "submissions/rethinking-video-generation-model-for-the-embodied-world/schema/evidence-v1.schema.json"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "62bfabb977abdf76f3b79b60e945b70e018b613d539e04bf3b38e032eec97dda",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/rethinking-video-generation-model-for-the-embodied-world",
+        "python",
+        "-m",
+        "pytest",
+        "submissions/rethinking-video-generation-model-for-the-embodied-world/tests",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "b054bf1bb49252be40d34360501a4523feb82932e895ca25ccd98483c635b36a",
+      "stdout_sha256": "caf568741fc0f2fde47ddb118952a948af49f09f4555737cbe1af7cbb952daac"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "151e3e99aba0dc5aafe5823d541e196f58407de3e749f89e189f08a5679fcdf0",
+      "stdout_sha256": "0df49365d90d3a239059d155614fc44dc3d853feca5d08c0d32d188084a93df4"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "skills/icml-repro-loop"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "12997c2730d739af2e0482769351d6821e16bdeef214be5e626beafd002b8714",
+      "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pre-commit",
+        "run",
+        "-a"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "09d19ccc2885ccb506d4efe879784152b1fda97c37bff160d7cd00e4233c8b4e",
+      "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+    }
+  ],
+  "design_path": "docs/superpowers/plans/2026-07-27-rbench-evidence.md",
+  "environment": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+    },
+    {
+      "argv": [
+        "uv",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+    },
+    {
+      "argv": [
+        "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+    }
+  ],
+  "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+  "kind": "validation",
+  "observed_at": "2026-07-27T20:03:46.106843+00:00",
+  "payload_sha256": "ae6e2ed44f1e452c9fd113deb4555b0a9c1ade5bd4c1edc4612320920dbc226e",
+  "project_path": "submissions/rethinking-video-generation-model-for-the-embodied-world",
+  "source_commit": "26761e0ca48d34e4274844becb3d8e4f126b2b8b",
+  "source_tree": "9ef5859d5131686320a557b647364fb6ecc1b387",
+  "source_tree_sha256": "b16c54650571618ffcdd8182988bff8529f3978068d51f95283f1907edfda252",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/points-rbench-clean"
+}

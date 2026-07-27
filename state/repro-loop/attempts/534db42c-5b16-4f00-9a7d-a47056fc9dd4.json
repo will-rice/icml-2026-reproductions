@@ -9,8 +9,6 @@
     "Xinyu Yang",
     "Guinan Su"
   ],
-  "blocked_from": "judging",
-  "blocker": "Judgment deadline 2026-07-27T10:35:00+00:00 elapsed without an official verdict. Fresh immutable assessed snapshot f8b158b6e7a2b437473119e7fe234529a4569e5fb2d416302bec60198280be82 shows exact Space wrice/repro-recurrent-depth-parallel-sampler at submitted SHA 312fb3fda761bf6b1ea9e5f66d18c01099b9d63e still tagged and uniquely queued pending for paper h7WBYYJF1Q, with no matching official verdict. The bounded watch used 1 of 12 polls. Next action: after the challenge operator publishes the exact official verdict, resume judging under a current fenced controller lease, take one fresh immutable assessed snapshot, and run sync-verdict against that snapshot.",
   "branch": "validate/recurrent-sampler",
   "claim_bindings": [
     {
@@ -25,7 +23,7 @@
     }
   ],
   "cpu_only": true,
-  "deployed_sha": "312fb3fda761bf6b1ea9e5f66d18c01099b9d63e",
+  "deployed_sha": "8a846be963365273694e3582e01904a9817ca998",
   "design": {
     "author": "codex-recurrent-design-author-20260726",
     "path": "docs/superpowers/specs/2026-07-26-recurrent-sampler-reproduction-design.md",
@@ -39,8 +37,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2510.14961",
   "i": 2013,
-  "improvement_attempts": 1,
-  "improvement_reason": "Make the controller-validated project root itself a runnable static Hugging Face Space; the initial proposal placed the entrypoint and metadata only in a nested space directory.",
+  "improvement_attempts": 2,
+  "improvement_reason": "Expose substantive evidence under root pages/*.md so the official judge can read the logbook.",
   "insts": [
     "ELLIS Institute &  Max-Planck Institute for Intelligent Systems, T\u00fcbingen AI Center",
     "Carnegie Mellon University",
@@ -72,7 +70,7 @@
   "or": "https://openreview.net/forum?id=h7WBYYJF1Q",
   "orid": "h7WBYYJF1Q",
   "paper_id": "h7WBYYJF1Q",
-  "phase": "blocked",
+  "phase": "judging",
   "pid": "62383",
   "project_path": "submissions/efficient-parallel-samplers-for-recurrent-depth-models",
   "safety_blocker": null,
@@ -164,10 +162,63 @@
       "owner": "controller-pending-space-audit-20260727",
       "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
       "to": "blocked"
+    },
+    {
+      "at": "2026-07-27T19:42:14.211396+00:00",
+      "attestation_id": "4e8ebafd00cfe8439ebb5c3fd7f1c415049851e0ad1508a5fab39a99fe454d81",
+      "fencing_token": 3,
+      "from": "blocked",
+      "owner": "controller-pending-space-audit-20260727",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "judging"
+    },
+    {
+      "at": "2026-07-27T19:42:45.340615+00:00",
+      "fencing_token": 3,
+      "from": "judging",
+      "owner": "controller-pending-space-audit-20260727",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T19:58:06.176850+00:00",
+      "attestation_id": "96ddc411fcfc04a756f5eb4e6c14b64ac5419f9520671c618e0476e38ed00361",
+      "fencing_token": 3,
+      "from": "improving",
+      "owner": "controller-pending-space-audit-20260727",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T20:03:35.946641+00:00",
+      "attestation_id": "57231ec22d6521fdba098b3da2e6b3a0a645181f1472e0882eeb39553834796c",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-pending-space-audit-20260727",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T20:07:13.269031+00:00",
+      "attestation_id": "3becb7b0b46dea2ce90258d74ceb787cb9f52b8d8f94184af89e149c614a89e8",
+      "fencing_token": 3,
+      "from": "deployed",
+      "owner": "controller-pending-space-audit-20260727",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T20:08:38.500299+00:00",
+      "attestation_id": "18b0a7713e0a9d69574a6456947dff0650560474f2266932c95b6b21d234f1fc",
+      "fencing_token": 3,
+      "from": "submitted",
+      "owner": "controller-pending-space-audit-20260727",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T19:17:56.382001+00:00",
+  "updated_at": "2026-07-27T20:08:38.500299+00:00",
   "upstream_revision": "arxiv:2510.14961v1+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c",
   "vs": "https://icml.cc/virtual/2026/poster/62383",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/recurrent-controller-validation"

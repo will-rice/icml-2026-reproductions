@@ -26,7 +26,7 @@
     }
   ],
   "cpu_only": true,
-  "deployed_sha": "3c483996fffc32b05074d909330df05cfb4e6b80",
+  "deployed_sha": "8dbb59964438e1e335ceb5888de6e7f0e5687d40",
   "design": {
     "author": "codex-graph-pruning-design-author-v2",
     "path": "docs/superpowers/specs/2026-07-24-graph-pruning-reproduction-design.md",
@@ -40,8 +40,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "",
   "i": 6487,
-  "improvement_attempts": 1,
-  "improvement_reason": "Add required Hugging Face Space metadata/tags and replace the stale README recompute source SHA with the source revision recorded in canonical evidence before any deployment.",
+  "improvement_attempts": 2,
+  "improvement_reason": "Expose substantive evidence under root pages/*.md so the official judge can read the logbook.",
   "insts": [
     "Huazhong University of Science and Technology",
     "Ant Group"
@@ -177,10 +177,54 @@
       "owner": "controller-graph-distinct-20260727",
       "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-27T19:42:44.451611+00:00",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T20:08:57.348518+00:00",
+      "attestation_id": "a5e1218e4e7b91ea6d9e21093929b0a2175e436736e88d9ded353a4eb13d0006",
+      "fencing_token": 4,
+      "from": "improving",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T20:15:56.379989+00:00",
+      "attestation_id": "f18a977c8a07b982f9af543a1fee24e383251d927ff373b12610a78d43f835c2",
+      "fencing_token": 4,
+      "from": "validated",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T20:16:31.502247+00:00",
+      "attestation_id": "ebbd2bb30afaf89c44d4390209fcbab395eb12d84b6be07fc54251ce8799c2d6",
+      "fencing_token": 4,
+      "from": "deployed",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T20:16:32.200496+00:00",
+      "attestation_id": "3d4cf4ca62a4e0362561ead454f8e45be152c3a114390a79475d7d0fdf8c2bd3",
+      "fencing_token": 4,
+      "from": "submitted",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T17:29:48.375651+00:00",
+  "updated_at": "2026-07-27T20:16:32.200496+00:00",
   "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
   "vs": "https://icml.cc/virtual/2026/poster/63109"
 }

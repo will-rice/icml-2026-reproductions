@@ -1,0 +1,27 @@
+{
+  "attempt_id": "2fc3b006-3307-4fc3-8df6-c000379298c4",
+  "attempt_number": 4,
+  "created_at": "2026-07-27T18:37:56.679840+00:00",
+  "normalized_verdict": null,
+  "paper_id": "ymHDVBwmta",
+  "poll_deadline": "2026-07-28T00:00:00+00:00",
+  "poll_limit": 12,
+  "polls": [
+    {
+      "at": "2026-07-27T18:38:20.715021+00:00",
+      "status": "pending"
+    }
+  ],
+  "raw_verdict": null,
+  "source_revision": null,
+  "space_id": "wrice/repro-agoq",
+  "submitted_sha": "8ad1c55e08108d441c54f19fee781f6f5796d954",
+  "target_claims": [
+    "AGoQ combines layer-aware activation quantization and precision-preserved gradient quantization within Megatron-LM-style distributed training (Section 3).",
+    "Layer-aware activation quantization reduces cached activation memory for a transformer layer from 28U in BF16 and 16.5U in COAT to 7.75U (Table 1).",
+    "Dynamic Bit-width Compensation for Pipeline Parallelism assigns higher activation bit-widths to underutilized pipeline stages while maintaining near-4-bit activation storage (Section 4.2).",
+    "Kernel fusion combines quantization/dequantization with adjacent GEMM operations to reduce activation-quantization overhead (Figure 4)."
+  ],
+  "updated_at": "2026-07-27T18:38:20.715021+00:00",
+  "verdict_at": null
+}

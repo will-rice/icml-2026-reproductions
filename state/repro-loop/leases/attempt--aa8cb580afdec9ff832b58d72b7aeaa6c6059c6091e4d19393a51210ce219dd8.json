@@ -1,9 +1,9 @@
 {
-  "acquired_at": "2026-07-26T05:33:33.480613+00:00",
+  "acquired_at": "2026-07-27T19:42:08.552003+00:00",
   "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
-  "expires_at": "2026-07-26T07:33:33.480613+00:00",
-  "fencing_token": 2,
-  "owner": "controller-eeg-reconcile-20260726",
-  "released_at": "2026-07-27T12:33:55.178904+00:00",
+  "expires_at": "2026-07-27T21:42:08.552003+00:00",
+  "fencing_token": 3,
+  "owner": "controller-scoring-format-20260727",
+  "released_at": null,
   "resource": "attempt:e20658d7-250a-5b0c-a015-be453c43e9fc"
 }

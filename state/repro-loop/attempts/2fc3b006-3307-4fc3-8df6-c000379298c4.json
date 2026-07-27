@@ -37,7 +37,7 @@
     }
   ],
   "cpu_only": true,
-  "deployed_sha": "8ad1c55e08108d441c54f19fee781f6f5796d954",
+  "deployed_sha": "ad63bdd25120add59ada427994563d1299ee63c0",
   "design": {
     "author": "assess_timerewarder_agoq",
     "path": "docs/superpowers/plans/2026-07-27-agoq-evidence.md",
@@ -51,8 +51,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2605.00539",
   "i": 6780,
-  "improvement_attempts": 3,
-  "improvement_reason": "Pin Starlette below 1.0 because Gradio 4.44.1 calls the removed legacy TemplateResponse(name, context) API and the live Space resolves Starlette 1.0.",
+  "improvement_attempts": 4,
+  "improvement_reason": "Expose substantive evidence under root pages/*.md so the official judge can read the logbook.",
   "insts": [
     "Harbin Institute of Technology, Shenzhen",
     "Harbin Institute of Technology",
@@ -255,10 +255,54 @@
       "owner": "controller-agoq-validation-20260727",
       "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-27T19:42:43.263388+00:00",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-27T19:54:21.167577+00:00",
+      "attestation_id": "8541dc30cfa0c9411bfba6cb27514cd45a5e59c595814580dbfb05847644bcaf",
+      "fencing_token": 4,
+      "from": "improving",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T20:05:19.268869+00:00",
+      "attestation_id": "dd4b607984ae05b6be99077aa42306462578dae5f51f080e41967c12da050415",
+      "fencing_token": 4,
+      "from": "validated",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T20:07:09.691501+00:00",
+      "attestation_id": "aff577aefd21b5adc9f4e3933ec6cdeb892f155a30717196d9d31c47b6957018",
+      "fencing_token": 4,
+      "from": "deployed",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-27T20:08:36.339526+00:00",
+      "attestation_id": "816749104cf56c786bdd2f42a7ec04f5a554ea8669606577e700aec2a578d557",
+      "fencing_token": 4,
+      "from": "submitted",
+      "owner": "controller-scoring-format-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T18:37:56.679840+00:00",
+  "updated_at": "2026-07-27T20:08:36.339526+00:00",
   "upstream_revision": "arxiv:2605.00539v2+github:Eutenacity/AGoQ@006fa0f6318228d1fcd6727f0578c0e548e5cbff",
   "vs": "https://icml.cc/virtual/2026/poster/60582"
 }

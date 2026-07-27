@@ -1,0 +1,14 @@
+{
+  "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+  "attempt_number": 3,
+  "attestation_id": "8ac1ee5b7679fa0b835c3878317abd47f8c39df9ec77c5ce11e51bececf31464",
+  "kind": "authority-audit",
+  "observed_at": "2026-07-27T20:08:38.081139+00:00",
+  "payload_sha256": "9504bc24df7a674586df5de4c2a7925450dafd452988d3758e29826ac235d5a0",
+  "poll_deadline": "2026-07-29T20:00:00+00:00",
+  "poll_limit": 288,
+  "source_commit": "ba557640fa14c92ce775ede923601acb3ec95766",
+  "space_id": "wrice/repro-eeg-fm-bench",
+  "space_sha": "0c4079407f1f32796537820bf42c5bfe67ddb658",
+  "submission_attestation_id": "1685a41466885b9e42b28f02d759fd382837fa54d4152c007088e653ee764ff8"
+}

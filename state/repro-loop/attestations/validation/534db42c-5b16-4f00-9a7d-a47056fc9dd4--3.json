@@ -1,0 +1,236 @@
+{
+  "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
+  "attempt_number": 3,
+  "attestation_id": "96ddc411fcfc04a756f5eb4e6c14b64ac5419f9520671c618e0476e38ed00361",
+  "base_sha": "5308666a249a73d8a2dea5d06ac929cbba53c131",
+  "branch": "validate/recurrent-sampler",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "bf476f18de076fb90b61e8b5df4cfb5192a4f5f452a32a5af06e6a692191352e"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/efficient-parallel-samplers-for-recurrent-depth-models"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "60ae6fa50c46c1ee535cacc90ea60eead30a166833ed027f81446cd089907b31"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "1a2f7835e1364674aa3da8fc5d1c3a6f786fe598ad221bf7321ca65c8888dcb6"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "5308666a249a73d8a2dea5d06ac929cbba53c131...HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "99981a2ed00c66853c0e206a749d1c974fc35d33ebc03cd15bc1a3823b55d19c"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/efficient-parallel-samplers-for-recurrent-depth-models"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "60ae6fa50c46c1ee535cacc90ea60eead30a166833ed027f81446cd089907b31"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "1a2f7835e1364674aa3da8fc5d1c3a6f786fe598ad221bf7321ca65c8888dcb6"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "25cec779f46ddaac41ce60e011d1e7a3dccf7fe944e77434cc7b88e27a510222"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "submissions/efficient-parallel-samplers-for-recurrent-depth-models",
+        "python",
+        "-m",
+        "recurrent_sampler_repro.evidence",
+        "--project-root",
+        "submissions/efficient-parallel-samplers-for-recurrent-depth-models"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "bbc56efd0e2f6ece04f9dead91082a5925b7883b863dca32f2bb404677950ea4",
+      "stdout_sha256": "b6a03d20850c5a40bd722bc063ad5074a7550041585c3d3e083084f835c56f82"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/efficient-parallel-samplers-for-recurrent-depth-models",
+        "python",
+        "-m",
+        "pytest",
+        "submissions/efficient-parallel-samplers-for-recurrent-depth-models/tests",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "0c458ab8ea333d357f2c8362ca773af1f929d8d362265440c37a772f35ec8bd8",
+      "stdout_sha256": "d1bb6c718f1c776bdec49ef6d26e8983c4202728b0e85c00a8489310689684b7"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "b7b4765d0c903c91db9bd93196bb8e65298e53b27706151d1e72f14b6486512e",
+      "stdout_sha256": "2b2b08a7769f16dbb2c395c19c1a3a98150c84b1aff35adce2f922640762d3de"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "skills/icml-repro-loop"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "fe97d1431cde39208bf76a799d64436e4cb0b53f48f3e7ff1c8c7b22ecc0c6f1",
+      "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pre-commit",
+        "run",
+        "-a"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "24833a45687f45c60c3109118f354a5e70f2c8c65821df4e8287aa874a419401",
+      "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+    }
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-26-recurrent-sampler-reproduction-design.md",
+  "environment": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+    },
+    {
+      "argv": [
+        "uv",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+    },
+    {
+      "argv": [
+        "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+    }
+  ],
+  "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+  "kind": "validation",
+  "observed_at": "2026-07-27T19:58:06.176850+00:00",
+  "payload_sha256": "4ab0119d727ca4635d51ccce476a5fa9bb3c098dd6d8f1706c2602dbb290c7e0",
+  "project_path": "submissions/efficient-parallel-samplers-for-recurrent-depth-models",
+  "source_commit": "79e6996b189d888cd973e3d794fc2c12381ac535",
+  "source_tree": "46c8187b7b34d479ce9afb76c4e4194ac02fc718",
+  "source_tree_sha256": "f8ebc386650b056dedf4a7f18a486c34b5b222344912078ca410a1fbee74db03",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/recurrent-controller-validation"
+}

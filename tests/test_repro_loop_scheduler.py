@@ -663,8 +663,9 @@ def test_judgment_retains_submission_identity_and_bounded_poll_provenance(
     assert store.read_json(paths.judgment(assignment.attempt_id)) == recorded
 
 
-def test_second_judgment_archives_finalized_first_round(
-    paths, store, now, scheduler
+@pytest.mark.parametrize("finalize_first", [True, False])
+def test_second_judgment_archives_superseded_first_round(
+    paths, store, now, scheduler, finalize_first
 ):
     snapshot_id = write_snapshot(store, paths, now, [paper("paper-a", 10)])
     assignment = scheduler.scheduler_pass(paths, snapshot_id, now).assignments[0]
@@ -673,15 +674,16 @@ def test_second_judgment_archives_finalized_first_round(
         paths, assignment.attempt_id, assignment.writer_lease, 2, now + TTL, now
     )
     finalized = copy.deepcopy(first)
-    finalized.update(
-        {
-            "raw_verdict": {"result": "official"},
-            "normalized_verdict": normalized_verdict(),
-            "source_revision": "verdict-revision-1",
-            "verdict_at": (now + timedelta(minutes=1)).isoformat(),
-            "updated_at": (now + timedelta(minutes=1)).isoformat(),
-        }
-    )
+    if finalize_first:
+        finalized.update(
+            {
+                "raw_verdict": {"result": "official"},
+                "normalized_verdict": normalized_verdict(),
+                "source_revision": "verdict-revision-1",
+                "verdict_at": (now + timedelta(minutes=1)).isoformat(),
+                "updated_at": (now + timedelta(minutes=1)).isoformat(),
+            }
+        )
     store.atomic_json_write(
         paths.judgment(assignment.attempt_id),
         finalized,
