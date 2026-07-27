@@ -656,7 +656,6 @@ def invalid_submission_payload(case: dict, variant: str) -> dict:
         ("revision", "revision"),
         ("paper", "paper"),
         ("duplicate", "duplicate"),
-        ("conflicting-verdict", "verdict"),
     ],
 )
 def test_submission_rejects_nonexact_live_observation(
@@ -678,6 +677,23 @@ def test_submission_rejects_nonexact_live_observation(
 
     assert attempts.read_attempt(hub_case["paths"], "a1")["phase"] == "deployed"
     assert not hub_case["paths"].attestation("submission", "a1").exists()
+
+
+def test_submission_allows_other_owner_verdict_for_same_paper(hub_case):
+    deploy(hub_case)
+    observed_at = NOW + timedelta(minutes=5)
+    payload = invalid_submission_payload(hub_case, "conflicting-verdict")
+    snapshot_id = persist_snapshot(hub_case, payload)
+
+    transitioned = controller.attest_submission(
+        hub_case["paths"],
+        "a1",
+        hub_case["lease"],
+        snapshot_id,
+        observed_at,
+    )
+
+    assert transitioned["phase"] == "submitted"
 
 
 def test_state_cli_exposes_controller_hub_commands():

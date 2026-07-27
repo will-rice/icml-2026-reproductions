@@ -418,13 +418,6 @@ def attest_submission(
     paper_id = attempt["paper_id"]
     space_id = deployment["space_id"]
     space_sha = deployment["space_sha"]
-    for verdict in snapshot["verdicts"]:
-        if (
-            type(verdict) is dict
-            and verdict.get("paper_id") == paper_id
-            and verdict.get("space_id") != space_id
-        ):
-            raise ValueError("verdict")
 
     exact_spaces = [
         space for space in snapshot["spaces"] if space["space_id"] == space_id
