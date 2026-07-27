@@ -1764,6 +1764,33 @@ def test_scheduler_assignment_drives_documented_cli_lifecycle(tmp_path: Path):
                     {"text": "Challenge claim 1", "status": "extracted"},
                     {"text": "Challenge claim 2", "status": "extracted"},
                 ],
+                "score_rate": {
+                    "claim_expectations": [
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                b"Challenge claim 1"
+                            ).hexdigest(),
+                            "p_verified": 0.5,
+                            "p_falsified": 0.25,
+                            "p_toy": 0.1,
+                        },
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                b"Challenge claim 2"
+                            ).hexdigest(),
+                            "p_verified": 0.0,
+                            "p_falsified": 0.5,
+                            "p_toy": 0.25,
+                        },
+                    ],
+                    "judged_before_deadline_probability": 0.8,
+                    "remaining_hours_p90": 2.0,
+                    "reusable_implementation": False,
+                    "direct_artifact_score": 4,
+                    "full_score_claim_paths": 2,
+                    "remaining_time_variance_hours2": 0.25,
+                    "primary_risk": "Artifact schema may have drifted.",
+                },
                 "estimated_api_cost_usd": 0.0,
                 "score": 10,
                 "artifact_access": True,

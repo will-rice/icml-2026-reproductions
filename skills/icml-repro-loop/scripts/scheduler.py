@@ -147,15 +147,42 @@ def read_fresh_snapshot(
 def rank_eligible_candidates(
     snapshot: dict, claimed_paper_ids: set[str] | None = None
 ) -> list[dict]:
-    """Return eligible unclaimed candidates in deterministic score order."""
-    _validate_snapshot(snapshot)
+    """Return score-rate-assessed admission candidates in deterministic order."""
     claimed = set() if claimed_paper_ids is None else claimed_paper_ids
+    eligible = _eligible_candidates(
+        snapshot,
+        claimed_paper_ids=claimed,
+        require_score_rate=True,
+    )
+    return sorted(
+        eligible,
+        key=score_rate.ranking_key,
+    )
+
+
+def legacy_reconciliation_candidates(snapshot: dict) -> list[dict]:
+    """Return eligible legacy candidates without making a new admission."""
+    return _eligible_candidates(
+        snapshot,
+        claimed_paper_ids=set(),
+        require_score_rate=False,
+    )
+
+
+def _eligible_candidates(
+    snapshot: dict,
+    *,
+    claimed_paper_ids: set[str],
+    require_score_rate: bool,
+) -> list[dict]:
+    _validate_snapshot(snapshot)
     eligible = []
     for candidate in snapshot["candidates"]:
         paper_id = _identity(candidate.get("paper_id"), "paper_id")
+        legacy_score = candidate.get("score")
         estimated_cost = candidate.get("estimated_api_cost_usd")
         if (
-            paper_id in claimed
+            paper_id in claimed_paper_ids
             or type(candidate.get("target_claims")) is not list
             or len(candidate["target_claims"]) < 2
             or not _has_current_claim_bindings(candidate)
@@ -165,25 +192,29 @@ def rank_eligible_candidates(
             or candidate.get("cpu_only") is not True
             or candidate.get("safety_blocker") is not None
             or candidate.get("licensing_blocker") is not None
-            or candidate.get("score_rate") is None
+            or (
+                not require_score_rate
+                and (
+                    type(legacy_score) not in {int, float}
+                    or not math.isfinite(legacy_score)
+                )
+            )
             or type(estimated_cost) not in {int, float}
             or not math.isfinite(estimated_cost)
             or estimated_cost < 0
             or estimated_cost > 10
         ):
             continue
-        try:
-            score_rate.validate_envelope(
-                candidate["score_rate"], candidate.get("live_claims")
-            )
-        except ValueError:
-            continue
+        if require_score_rate:
+            try:
+                score_rate.validate_envelope(
+                    candidate.get("score_rate"), candidate.get("live_claims")
+                )
+            except ValueError:
+                continue
         state.validate_target_claims(candidate["target_claims"])
         eligible.append(copy.deepcopy(candidate))
-    return sorted(
-        eligible,
-        key=score_rate.ranking_key,
-    )
+    return eligible
 
 
 def _has_current_claim_bindings(candidate: dict) -> bool:

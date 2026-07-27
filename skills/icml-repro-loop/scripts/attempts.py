@@ -321,7 +321,7 @@ def reconcile_legacy_attempt(
     assessment = refresh.assessment_record_for_snapshot(snapshot, paper_id)
     candidates = [
         candidate
-        for candidate in scheduler.rank_eligible_candidates(snapshot)
+        for candidate in scheduler.legacy_reconciliation_candidates(snapshot)
         if candidate["paper_id"] == paper_id
     ]
     if len(candidates) != 1:

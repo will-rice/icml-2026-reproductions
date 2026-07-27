@@ -21,6 +21,7 @@ import attempts
 import leases
 import migrate_v6
 import refresh
+import scheduler
 import store
 
 
@@ -251,6 +252,10 @@ def assessed_snapshot(paths: store.StatePaths) -> tuple[str, dict]:
 def test_reconcile_migrated_eeg_binds_fresh_claims_and_design(tmp_path: Path):
     paths, lease, approval_ref = migrated_eeg(tmp_path)
     snapshot_id, candidate = assessed_snapshot(paths)
+    snapshot = refresh.read_snapshot(paths, snapshot_id)
+    assert "score_rate" not in candidate
+    assert scheduler.rank_eligible_candidates(snapshot) == []
+    assert scheduler.legacy_reconciliation_candidates(snapshot) == [candidate]
     design_content_sha256 = hashlib.sha256(
         (tmp_path / DESIGN_PATH).read_bytes()
     ).hexdigest()
