@@ -1,0 +1,168 @@
+{
+  "alphaxiv": "2603.08640",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2603.08640",
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "authors": [
+    "Ben Rank",
+    "Hardik Bhatnagar",
+    "Ameya Pandurang Prabhu",
+    "Shira Eisenberg",
+    "Karina Nguyen",
+    "Matthias Bethge",
+    "Maksym Andriushchenko"
+  ],
+  "branch": "validate/posttrainbench",
+  "claim_bindings": [
+    {
+      "challenge_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+      "challenge_claim_sha256": "9c0c1fc52ad2a93a9dbe299532b952948c4ecb674f820fe19f78f6a3c33b0073",
+      "target_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+    },
+    {
+      "challenge_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+      "challenge_claim_sha256": "d185d61e5d886672a739e321e048df2378b71f55cf388ec4097bd2df1a916aad",
+      "target_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+    }
+  ],
+  "cpu_only": true,
+  "deployed_sha": "a7b634e5769d8d489cf6ef0b03b26013ea6db783",
+  "design": {
+    "author": "codex-posttrain-design-author-20260726",
+    "path": "docs/superpowers/specs/2026-07-26-posttrainbench-reproduction-design.md",
+    "recorded_at": "2026-07-26T09:17:30.617752+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-26T09:20:26.554344+00:00",
+    "reviewer": "codex-posttrain-independent-design-reviewer-20260726"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2603.08640",
+  "i": 4754,
+  "improvement_attempts": 1,
+  "improvement_reason": "Replace invalid Hugging Face Space README colorTo metadata rejected by the live YAML validator.",
+  "insts": [
+    "ELLIS Intitute T\u00fcbingen",
+    "MATS \u00b7 Max Planck Institute for Intelligent Systems, T\u00fcbingen",
+    "University of T\u00fcbingen"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "The best reported agent reaches 23.2% weighted average benchmark performance, while official instruction-tuned models reach 51.1% (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "GPT-5.1 Codex Max reports 89% on BFCL with Gemma-3-4B versus 67% for the official instruction-tuned model (Abstract)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+    },
+    {
+      "status": "unverified",
+      "text": "For GPT-5.1 Codex Max, medium reasoning effort scores higher than low and high effort while using fewer tokens than high effort (Table 2)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=UnjxMTe57e",
+  "orid": "UnjxMTe57e",
+  "paper_id": "UnjxMTe57e",
+  "phase": "judging",
+  "pid": "63667",
+  "project_path": "submissions/posttrainbench",
+  "safety_blocker": null,
+  "score": 22,
+  "slug": "posttrainbench-can-llm-agents-automate-llm-post-training",
+  "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+  "space_id": "wrice/repro-posttrainbench",
+  "spot": false,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+    "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+  ],
+  "title": "PostTrainBench: Can LLM Agents Automate LLM Post-Training?",
+  "transitions": [
+    {
+      "at": "2026-07-26T09:17:26.603865+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-26T09:20:26.554344+00:00",
+      "fencing_token": 2,
+      "from": "design-pending",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-26T12:26:05.959354+00:00",
+      "attestation_id": "1c9b5d53807d690dd240fdae53c3e4315584293eafc91e152234b5f012e94918",
+      "fencing_token": 2,
+      "from": "implementing",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-26T12:28:35.553287+00:00",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-26T12:35:38.367433+00:00",
+      "attestation_id": "636493a00b612d1d1d7430dc108f358403a965f5403728dcf157d3fec881a219",
+      "fencing_token": 2,
+      "from": "improving",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-26T12:36:25.033693+00:00",
+      "attestation_id": "9b42d5d46adc38b3516413658301c92df1d8234c3ddb6209e00676768d97b6ce",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-26T12:38:53.317640+00:00",
+      "attestation_id": "ee3f7e5706d034c6fb8a6760a096bb09ac8e2f0ea2331eeadcd839a14f38929b",
+      "fencing_token": 2,
+      "from": "deployed",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-26T12:39:18.761131+00:00",
+      "attestation_id": "003bf3a284f1fda9c89952bea92d598e0644c9acfa5cd29045c690b72c84f5ae",
+      "fencing_token": 2,
+      "from": "submitted",
+      "owner": "controller-posttrain-design-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "judging"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-26T12:39:18.761131+00:00",
+  "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
+  "vs": "https://icml.cc/virtual/2026/poster/63667",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
+}

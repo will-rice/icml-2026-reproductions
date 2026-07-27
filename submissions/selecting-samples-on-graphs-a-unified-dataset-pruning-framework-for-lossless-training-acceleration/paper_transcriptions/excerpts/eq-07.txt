@@ -1,0 +1,1 @@
+I(x_i | S) = Δ(x_i | S) = α I^in(x_i) + I^ex(x_i | S).  (7)

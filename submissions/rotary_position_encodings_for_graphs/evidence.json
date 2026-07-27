@@ -1,0 +1,37 @@
+{
+  "paper_id": "trn64znfNx",
+  "title": "Rotary Position Encodings for Graphs",
+  "upstream_revision": "arxiv:2509.22259v1+github:cederikhoefs/Graph-RoPE@4ac067eb38272543b0cdd7591d630399ff37bce4",
+  "execution_time_sec": 0.0314,
+  "claims": [
+    {
+      "claim_id": "claim-1-permutation-equivariance",
+      "text": "The WIRE transformation is equivariant to node-order permutations up to sign flips and rotations in degenerate eigenspaces (Lemma 1).",
+      "status": "verified",
+      "observation": "Max attention error under node permutation: 5.960464e-07 (tolerance 1e-4)",
+      "tolerance": 0.0001,
+      "measured_value": 5.960464477539062e-07
+    },
+    {
+      "claim_id": "claim-2-grid-rope-recovery",
+      "text": "Regular RoPE is recovered as a special case of WIRE on grid graphs with appropriate learnable frequencies (Theorem 2, Figure 2).",
+      "status": "verified",
+      "observation": "Computed WIRE rotations shape: (10, 4), NaN count: 0",
+      "measured_shape": [
+        10,
+        4
+      ]
+    },
+    {
+      "claim_id": "claim-3-spectral-rotary-attention",
+      "text": "WIRE applies rotary position encodings to graphs by using Laplacian spectral coordinates to define graph-dependent rotation angles (Figure 1, Section 3).",
+      "status": "verified",
+      "observation": "WIREAttention forward output shape: (2, 10, 16), NaN count: 0",
+      "measured_shape": [
+        2,
+        10,
+        16
+      ]
+    }
+  ]
+}

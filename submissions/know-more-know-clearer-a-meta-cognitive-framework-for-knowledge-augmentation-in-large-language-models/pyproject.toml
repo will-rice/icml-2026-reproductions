@@ -1,0 +1,18 @@
+[project]
+name = "know-more-know-clearer-repro"
+version = "0.1.0"
+description = "Reproduction of Know More, Know Clearer: A Meta-Cognitive Framework for Knowledge Augmentation in Large Language Models"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26.0",
+    "scipy>=1.11.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

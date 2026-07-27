@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-25T23:02:43.353492+00:00",
+  "attempt_id": "64bfe193-333b-4b37-9683-9ac25ca5ac27",
+  "expires_at": "2026-07-26T07:19:25.761037+00:00",
+  "fencing_token": 2,
+  "owner": "controller-graph-design-20260725",
+  "released_at": null,
+  "resource": "attempt:64bfe193-333b-4b37-9683-9ac25ca5ac27"
+}

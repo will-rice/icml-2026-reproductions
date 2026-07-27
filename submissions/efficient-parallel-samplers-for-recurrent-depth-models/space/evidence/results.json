@@ -1,0 +1,18 @@
+{
+  "attempt_id": "534db42c-5b16-4f00-9a7d-a47056fc9dd4",
+  "claims": [
+    {
+      "claim_text": "The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1).",
+      "evidence_file": "evidence/claim-1-wavefront.json",
+      "sha256": "d0da87ee16f7485d3dff369e7465f66299c55ac003a54e1cf8c00b3a0ad8b265",
+      "status": "partial"
+    },
+    {
+      "claim_text": "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2).",
+      "evidence_file": "evidence/claim-2-theorem-audit.json",
+      "sha256": "2e15221c8b5516b0ab705e29a3d7c5d924ed5f0187c970a0caf60a1402757804",
+      "status": "unavailable"
+    }
+  ],
+  "paper_id": "h7WBYYJF1Q"
+}

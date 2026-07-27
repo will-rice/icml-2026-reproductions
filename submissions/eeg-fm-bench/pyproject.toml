@@ -1,0 +1,37 @@
+[project]
+name = "eeg-fm-bench-repro"
+version = "0.1.0"
+description = "Deterministic CPU audit of the released EEG-FM-Bench artifact"
+requires-python = ">=3.11"
+dependencies = [
+  "gradio==6.20.0",
+  "mne>=1.9",
+  "numpy>=2.0",
+  "trackio>=0.31.5",
+  "torch>=2.4",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eeg_fm_bench_repro"]

@@ -1,0 +1,181 @@
+{
+  "assessed_at": "2026-07-26T05:52:00+00:00",
+  "assessments": [
+    {
+      "artifact_access": true,
+      "claim_bindings": [
+        {
+          "challenge_claim": "EEG-FM-Bench curates 14 public datasets spanning 10 canonical EEG paradigms with standardized preprocessing and evaluation (Figure 1).",
+          "challenge_claim_sha256": "7aaa6179aeb9c0f747a5636bce809a9e2391521b3a36550ccedf57373f4b8338",
+          "target_claim": "fourteen-dataset-ten-paradigm-curation"
+        },
+        {
+          "challenge_claim": "EEG-FM-Bench curates 14 public datasets spanning 10 canonical EEG paradigms with standardized preprocessing and evaluation (Figure 1).",
+          "challenge_claim_sha256": "7aaa6179aeb9c0f747a5636bce809a9e2391521b3a36550ccedf57373f4b8338",
+          "target_claim": "standardized-preprocessing-reproducibility"
+        },
+        {
+          "challenge_claim": "The benchmark evaluates frozen-backbone single-task fine-tuning, full-parameter single-task fine-tuning, and full-parameter multi-task fine-tuning strategies (Figure 1).",
+          "challenge_claim_sha256": "b4b21e7b72456354cbc04c9b1b9650a7949b0fdf8cc0fd70d47d492c536e9d36",
+          "target_claim": "three-strategy-evaluation-harness"
+        }
+      ],
+      "cpu_only": true,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "vGeNaFHdET",
+      "safety_blocker": null,
+      "score": 21,
+      "target_claims": [
+        "fourteen-dataset-ten-paradigm-curation",
+        "standardized-preprocessing-reproducibility",
+        "three-strategy-evaluation-harness"
+      ],
+      "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc"
+    },
+    {
+      "artifact_access": true,
+      "claim_bindings": [
+        {
+          "challenge_claim": "The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1).",
+          "challenge_claim_sha256": "d0da87ee16f7485d3dff369e7465f66299c55ac003a54e1cf8c00b3a0ad8b265",
+          "target_claim": "The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1)."
+        },
+        {
+          "challenge_claim": "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2).",
+          "challenge_claim_sha256": "2e15221c8b5516b0ab705e29a3d7c5d924ed5f0187c970a0caf60a1402757804",
+          "target_claim": "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2)."
+        }
+      ],
+      "cpu_only": true,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "h7WBYYJF1Q",
+      "safety_blocker": null,
+      "score": 20,
+      "target_claims": [
+        "The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1).",
+        "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2)."
+      ],
+      "upstream_revision": "arxiv:2510.14961v1+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c"
+    },
+    {
+      "artifact_access": true,
+      "claim_bindings": [
+        {
+          "challenge_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+          "challenge_claim_sha256": "9c0c1fc52ad2a93a9dbe299532b952948c4ecb674f820fe19f78f6a3c33b0073",
+          "target_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+        },
+        {
+          "challenge_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+          "challenge_claim_sha256": "d185d61e5d886672a739e321e048df2378b71f55cf388ec4097bd2df1a916aad",
+          "target_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+        }
+      ],
+      "cpu_only": true,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "UnjxMTe57e",
+      "safety_blocker": null,
+      "score": 22,
+      "target_claims": [
+        "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+        "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+      ],
+      "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2"
+    },
+    {
+      "artifact_access": true,
+      "claim_bindings": [
+        {
+          "challenge_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
+          "challenge_claim_sha256": "c452eab57d205adb756a93aa35ca0275e1d2054bfb1d3d77925a76ac070c1216",
+          "target_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3)."
+        },
+        {
+          "challenge_claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F).",
+          "challenge_claim_sha256": "0564a2d47c07bc76bfccbe33c25677fc72d3af29567cc780d55c9367857ebcfe",
+          "target_claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
+        }
+      ],
+      "cpu_only": true,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "a3GdvuPItd",
+      "safety_blocker": null,
+      "score": 18,
+      "target_claims": [
+        "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
+        "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
+      ],
+      "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090"
+    },
+    {
+      "artifact_access": true,
+      "claim_bindings": [
+        {
+          "challenge_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+          "challenge_claim_sha256": "d7d651bcc26f53869d99fec6b8fc09814a9f63871fdd782be1feda433b481a17",
+          "target_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+        },
+        {
+          "challenge_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+          "challenge_claim_sha256": "92d5592ddc6bc3b3a9d64d346516a38082b67dd8607563b52fa0da8b05bdd9ba",
+          "target_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+        }
+      ],
+      "cpu_only": true,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "0bTEd4LpQr",
+      "safety_blocker": null,
+      "score": 14,
+      "target_claims": [
+        "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+        "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+      ],
+      "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+    },
+    {
+      "artifact_access": false,
+      "claim_bindings": [
+        {
+          "challenge_claim": "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1).",
+          "challenge_claim_sha256": "17d177648a7dbe41682375ee2ac948afb374945bd70145a82997ab4f8286e345",
+          "target_claim": "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1)."
+        },
+        {
+          "challenge_claim": "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2).",
+          "challenge_claim_sha256": "0caad463272ccd3b16f7c9a9501b5c6ab2a2df0510ab1b664cebd1b527f762b7",
+          "target_claim": "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2)."
+        },
+        {
+          "challenge_claim": "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3).",
+          "challenge_claim_sha256": "11476b2265a8bb85ccee5e5a090ab7fcbb8a0dee343b37ae1c2f55ed97036cbc",
+          "target_claim": "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3)."
+        },
+        {
+          "challenge_claim": "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract).",
+          "challenge_claim_sha256": "fddd8a2acfd1b2107a42869dd584c366b65b7153c386c6fbef063ba1eff8eaa8",
+          "target_claim": "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract)."
+        }
+      ],
+      "cpu_only": false,
+      "estimated_api_cost_usd": 0.0,
+      "licensing_blocker": null,
+      "paper_id": "uyRIOjFgOn",
+      "safety_blocker": null,
+      "score": 8,
+      "target_claims": [
+        "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1).",
+        "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2).",
+        "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3).",
+        "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract)."
+      ],
+      "upstream_revision": "arxiv:2602.00747v3|github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422|hf-dataset:lucius1022/DeMix_Corpora@82a2effc58eb79bec691280a4e4fc50be0968b1e"
+    }
+  ],
+  "assessor": "codex-controller-candidate-assessment-aggregation-v2",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203"
+}

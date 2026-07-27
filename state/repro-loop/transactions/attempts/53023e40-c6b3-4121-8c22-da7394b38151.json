@@ -1,0 +1,226 @@
+{
+  "status": "complete",
+  "targets": [
+    {
+      "path": "repro-loop/attempts/cb04ab1a-a526-4137-862b-a26d68563737.json",
+      "value": {
+        "alphaxiv": "2603.08640",
+        "area": "Deep Learning",
+        "artifact_access": true,
+        "arxiv": "2603.08640",
+        "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+        "authors": [
+          "Ben Rank",
+          "Hardik Bhatnagar",
+          "Ameya Pandurang Prabhu",
+          "Shira Eisenberg",
+          "Karina Nguyen",
+          "Matthias Bethge",
+          "Maksym Andriushchenko"
+        ],
+        "claim_bindings": [
+          {
+            "challenge_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+            "challenge_claim_sha256": "9c0c1fc52ad2a93a9dbe299532b952948c4ecb674f820fe19f78f6a3c33b0073",
+            "target_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+          },
+          {
+            "challenge_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+            "challenge_claim_sha256": "d185d61e5d886672a739e321e048df2378b71f55cf388ec4097bd2df1a916aad",
+            "target_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+          }
+        ],
+        "cpu_only": true,
+        "estimated_api_cost_usd": 0.0,
+        "hf": "2603.08640",
+        "i": 4754,
+        "insts": [
+          "ELLIS Intitute T\u00fcbingen",
+          "MATS \u00b7 Max Planck Institute for Intelligent Systems, T\u00fcbingen",
+          "University of T\u00fcbingen"
+        ],
+        "licensing_blocker": null,
+        "live_claims": [
+          {
+            "status": "unverified",
+            "text": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+          },
+          {
+            "status": "unverified",
+            "text": "The best reported agent reaches 23.2% weighted average benchmark performance, while official instruction-tuned models reach 51.1% (Figure 1)."
+          },
+          {
+            "status": "unverified",
+            "text": "GPT-5.1 Codex Max reports 89% on BFCL with Gemma-3-4B versus 67% for the official instruction-tuned model (Abstract)."
+          },
+          {
+            "status": "unverified",
+            "text": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+          },
+          {
+            "status": "unverified",
+            "text": "For GPT-5.1 Codex Max, medium reasoning effort scores higher than low and high effort while using fewer tokens than high effort (Table 2)."
+          }
+        ],
+        "or": "https://openreview.net/forum?id=UnjxMTe57e",
+        "orid": "UnjxMTe57e",
+        "paper_id": "UnjxMTe57e",
+        "phase": "design-pending",
+        "pid": "63667",
+        "safety_blocker": null,
+        "score": 22,
+        "slug": "posttrainbench-can-llm-agents-automate-llm-post-training",
+        "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+        "spot": false,
+        "sub": "Large Language Models",
+        "target_claims": [
+          "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+          "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+        ],
+        "title": "PostTrainBench: Can LLM Agents Automate LLM Post-Training?",
+        "transitions": [
+          {
+            "at": "2026-07-26T09:17:26.603865+00:00",
+            "fencing_token": 2,
+            "from": "selected",
+            "owner": "controller-posttrain-design-20260726",
+            "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+            "to": "design-pending"
+          }
+        ],
+        "type": "Poster",
+        "updated_at": "2026-07-26T09:17:26.603865+00:00",
+        "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
+        "vs": "https://icml.cc/virtual/2026/poster/63667"
+      }
+    },
+    {
+      "path": "repro-loop.json",
+      "value": {
+        "attempts": {
+          "49b12585-ca39-441d-b822-c7da77ed81e9": {
+            "paper_id": "0bTEd4LpQr",
+            "path": "repro-loop/attempts/49b12585-ca39-441d-b822-c7da77ed81e9.json",
+            "phase": "blocked",
+            "updated_at": "2026-07-26T09:12:51.803268+00:00"
+          },
+          "534db42c-5b16-4f00-9a7d-a47056fc9dd4": {
+            "paper_id": "h7WBYYJF1Q",
+            "path": "repro-loop/attempts/534db42c-5b16-4f00-9a7d-a47056fc9dd4.json",
+            "phase": "selected",
+            "updated_at": "2026-07-26T05:52:40.828422+00:00"
+          },
+          "64bfe193-333b-4b37-9683-9ac25ca5ac27": {
+            "paper_id": "a3GdvuPItd",
+            "path": "repro-loop/attempts/64bfe193-333b-4b37-9683-9ac25ca5ac27.json",
+            "phase": "blocked",
+            "updated_at": "2026-07-26T05:42:52.668882+00:00"
+          },
+          "cb04ab1a-a526-4137-862b-a26d68563737": {
+            "paper_id": "UnjxMTe57e",
+            "path": "repro-loop/attempts/cb04ab1a-a526-4137-862b-a26d68563737.json",
+            "phase": "design-pending",
+            "updated_at": "2026-07-26T09:17:26.603865+00:00"
+          },
+          "e20658d7-250a-5b0c-a015-be453c43e9fc": {
+            "paper_id": "vGeNaFHdET",
+            "path": "repro-loop/attempts/e20658d7-250a-5b0c-a015-be453c43e9fc.json",
+            "phase": "blocked",
+            "updated_at": "2026-07-26T06:00:38.978738+00:00"
+          }
+        },
+        "history": {
+          "c5819c75-8a2a-538d-850e-805bc2325a6d": {
+            "paper_id": "HMu24dTKkJ",
+            "path": "repro-loop/attempts/c5819c75-8a2a-538d-850e-805bc2325a6d.json",
+            "phase": "implementing",
+            "updated_at": "schema-v3-migration:f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354"
+          }
+        },
+        "max_runnable_attempts": 20,
+        "rejections": [
+          {
+            "checked_at": "2026-07-21",
+            "paper_id": "4M5Kj2UqaM",
+            "reason": "Already judged; challenge policy excludes judged papers from selection.",
+            "title": "AgentSelect"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "gvWsViQBYB",
+            "reason": "Live challenge refresh found two existing reproduction Spaces (NaveenVenu/gvWsViQBYB and arvkevi/adamw-shampoo-convergence-repro); duplicate selection is ineligible under the workspace rubric.",
+            "title": "Convergence Rate Analysis of the AdamW-Style Shampoo: Unifying One-sided and Two-Sided Preconditioning"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "9GRlBVAXq8",
+            "reason": "Live challenge refresh found three existing reproduction Spaces; duplicate selection is ineligible under the workspace rubric.",
+            "title": "On the Convergence Rate of LoRA Gradient Descent"
+          },
+          {
+            "checked_at": "2026-07-22",
+            "paper_id": "8Fhq7QpYfI",
+            "reason": "Substantive fidelity and scaling-law reproduction requires neural-wavefunction GPU training; autonomous GPU work is ineligible under the reproduction-loop constraint, and paper tables alone are not reproduced evidence.",
+            "title": "WF-Bench: A Benchmark for Neural-Network WaveFunction Expressivity and Scaling Laws"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "mWxEAgz3xu",
+            "reason": "Survey-statistics claims require raw practitioner data; the paper releases only anonymized aggregate statistics, so claims are not independently testable (self-report only).",
+            "title": "Measuring Agents in Production"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "MqzZ9X6m7f",
+            "reason": "Position paper; claims are argumentative proposals with no independently testable computation or released artifact.",
+            "title": "Position: Sustainable Open-Source AI Requires Tracking the Cumulative Footprint"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "ycj3XWCh6E",
+            "reason": "Position paper; claims are argumentative, no independently testable evidence artifact.",
+            "title": "Position: LLM Serving Needs Mathematical Optimization and Algorithmic Foundations"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "GnqHK8Ww98",
+            "reason": "All substantive claims require meta-RL teacher and student LLM training on GPU; outside the CPU-only reproduction boundary.",
+            "title": "Teaching Models to Teach Themselves: Reasoning at the Edge of Learnability"
+          },
+          {
+            "checked_at": "2026-07-24",
+            "paper_id": "71030",
+            "reason": "Claims require GPT-2 Large/XL and Qwen3-8B (continued) pretraining; GPU training is ineligible for the autonomous loop.",
+            "title": "OPUS: Towards Efficient and Principled Data Selection in Large Language Model Pretraining"
+          }
+        ],
+        "resource_limits": {
+          "metered_api_reserved_usd": 10.0,
+          "publication_per_provider": 20
+        },
+        "snapshots": {
+          "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce": "repro-loop/snapshots/05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce.json",
+          "1a58165c03eb647a57fb5ed3c366152e270eaa8847dcfb3b678ed8a5c421b3ba": "repro-loop/snapshots/1a58165c03eb647a57fb5ed3c366152e270eaa8847dcfb3b678ed8a5c421b3ba.json",
+          "1cbc32ef33d39cdec12c213eae30a8abe510dbe78430f917e5e1e002bb942389": "repro-loop/snapshots/1cbc32ef33d39cdec12c213eae30a8abe510dbe78430f917e5e1e002bb942389.json",
+          "2e97bf39d410d687e8a56462f06388dcb4fa9765e98a9f4ba4892549d8237a78": "repro-loop/snapshots/2e97bf39d410d687e8a56462f06388dcb4fa9765e98a9f4ba4892549d8237a78.json",
+          "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d": "repro-loop/snapshots/35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d.json",
+          "37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd": "repro-loop/snapshots/37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd.json",
+          "3bbfda6c9def2e9042b80e63f1362442afff4188410d78db1ec2c6309799a785": "repro-loop/snapshots/3bbfda6c9def2e9042b80e63f1362442afff4188410d78db1ec2c6309799a785.json",
+          "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6": "repro-loop/snapshots/44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6.json",
+          "4f62c2ac2df94cd0e2695273cfcde18e0c8f97e39499117bed67c53702a36d62": "repro-loop/snapshots/4f62c2ac2df94cd0e2695273cfcde18e0c8f97e39499117bed67c53702a36d62.json",
+          "61b023054291d666a76987dd4bb380c31660f75882eae8e68379e022c9be6481": "repro-loop/snapshots/61b023054291d666a76987dd4bb380c31660f75882eae8e68379e022c9be6481.json",
+          "69b615ebff20f7c997671bf3edba6d18837d7a68e922d45ba859595a4c8824fb": "repro-loop/snapshots/69b615ebff20f7c997671bf3edba6d18837d7a68e922d45ba859595a4c8824fb.json",
+          "827aea0aec55e82eb0b591c52370285165d7db79de179b36967eb196d440121c": "repro-loop/snapshots/827aea0aec55e82eb0b591c52370285165d7db79de179b36967eb196d440121c.json",
+          "a6c347be7dc639d2580cfc690f5451943ec421ea1c84e77178159b6778b33609": "repro-loop/snapshots/a6c347be7dc639d2580cfc690f5451943ec421ea1c84e77178159b6778b33609.json",
+          "bb4e4816a8b63d7cafa4496d4f97fd68a76325be1353559f66c2d399dea17f8b": "repro-loop/snapshots/bb4e4816a8b63d7cafa4496d4f97fd68a76325be1353559f66c2d399dea17f8b.json",
+          "c7a602950f453855e944ffdd23b68f269be022474d5c12c74b29761e0da8e69a": "repro-loop/snapshots/c7a602950f453855e944ffdd23b68f269be022474d5c12c74b29761e0da8e69a.json",
+          "c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97": "repro-loop/snapshots/c7fac3866b7d26ca07c6d2923996a328b9514681db2d0948d0ed68db24fbaa97.json",
+          "db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df": "repro-loop/snapshots/db3ea12705102bf29736063b4035b0d17b291b3e6aa406d77358363dfa0cd8df.json",
+          "fe5d79f5307131d7cc35c4e71ef948b5355c3535124541c28de83cba3d9454eb": "repro-loop/snapshots/fe5d79f5307131d7cc35c4e71ef948b5355c3535124541c28de83cba3d9454eb.json"
+        },
+        "total_api_cost_usd": 0.0,
+        "version": 6
+      }
+    }
+  ]
+}

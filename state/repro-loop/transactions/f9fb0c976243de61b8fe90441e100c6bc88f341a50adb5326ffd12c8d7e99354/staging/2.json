@@ -1,0 +1,20 @@
+{
+  "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+  "design_approved": true,
+  "estimated_api_cost_usd": 0.0,
+  "improvement_attempts": 0,
+  "paper_id": "vGeNaFHdET",
+  "phase": "implementing",
+  "polls": [],
+  "project_path": "submissions/eeg-fm-bench",
+  "slug": "eeg-fm-bench",
+  "target_claims": [
+    "fourteen-dataset-ten-paradigm-curation",
+    "standardized-preprocessing-reproducibility",
+    "three-strategy-evaluation-harness"
+  ],
+  "title": "EEG-FM-Bench: A Comprehensive Benchmark for the Systematic Evaluation and Diagnostic Analyses of EEG Foundation Models",
+  "updated_at": "schema-v3-migration:f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354",
+  "upstream_revision": "arxiv:2508.17742v3+github:xw1216/EEG-FM-Bench@325398d7d057ecc1216fb3510d70c16eb60337cc",
+  "verdicts": []
+}

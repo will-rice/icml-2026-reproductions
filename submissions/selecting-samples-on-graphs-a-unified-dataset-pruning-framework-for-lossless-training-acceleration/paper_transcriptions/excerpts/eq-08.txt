@@ -1,0 +1,1 @@
+x⋆ ← arg max_{x_i ∈ T \ S_t} I(x_i | S_t),  S_{t+1} ← S_t ∪ {x⋆}.  (8)

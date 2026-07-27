@@ -1,0 +1,1 @@
+max_{C ⊆ V} [Σ_{v_i ∈ C} w_i + Σ_{{v_i,v_j} ⊆ C} a_ij],  s.t. |C| = b.  (3)

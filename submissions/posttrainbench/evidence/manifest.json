@@ -1,0 +1,34 @@
+{
+  "README.md": {
+    "sha256": "dee20810660aa7486f14b251e8fd3a7b6b8e2b655b806069f1306e2ff62930de",
+    "size": 1930
+  },
+  "evidence/claims.json": {
+    "sha256": "8a15f2f6acf22100480560ea43ec1afc8fcb6a93d34c3f780e10b772abb08714",
+    "size": 2742
+  },
+  "evidence/coverage.json": {
+    "sha256": "502fa46174377a32648d62f453abec8b40fd71f7e563c23cf212b8da4a24c47c",
+    "size": 10186
+  },
+  "evidence/provenance.json": {
+    "sha256": "412388cac3da90029940348089522d91bf6546cea9bb6eaf462aac2089e64dcd",
+    "size": 8781
+  },
+  "evidence/reward_hacking.json": {
+    "sha256": "accb4273ec64c5c6cc6a9bb79909950ae6e217085ed404d6558e12b83a6c092a",
+    "size": 4615
+  },
+  "index.html": {
+    "sha256": "1b01c156b247e91b55828079b983bfc2b85a2c7128ab798706c7f43090a05c90",
+    "size": 35271
+  },
+  "poster.html": {
+    "sha256": "cf5d8bff99f3eafa35ffecc4cf088e1b316bd565a96ded89b9c864431235948d",
+    "size": 18193
+  },
+  "report.html": {
+    "sha256": "97775027d3bffbcaf932c599f9b9e2e4c1e83fed65ae1e882df93c04e92dd1c7",
+    "size": 35806
+  }
+}

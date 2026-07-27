@@ -1,0 +1,45 @@
+{
+  "base_sha": "1111111111111111111111111111111111111111",
+  "branch": "attempt-paper-1",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "python",
+      "submissions/paper-1/evidence.py"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/paper-1",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/paper-1/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "/opt/codex/skill-creator/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ],
+  "design_path": "docs/designs/paper-1.md",
+  "project_path": "submissions/paper-1",
+  "worktree": "/replace/in/test"
+}

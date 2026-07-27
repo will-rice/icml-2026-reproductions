@@ -1,0 +1,1 @@
+I^in_revised(x_i) = I^in(x_i) + Σ_{j=1}^{|Ŝ|} η.

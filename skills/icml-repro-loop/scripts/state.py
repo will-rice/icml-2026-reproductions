@@ -2,11 +2,12 @@
 
 import argparse
 import copy
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 import math
 import os
 import re
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -24,7 +25,9 @@ PHASES = {
     "complete",
     "blocked",
 }
-STATE_VERSION = 3
+# Retained as the migration source schema; new scheduler state uses store.py.
+SCHEMA_V3_VERSION = 3
+STATE_VERSION = SCHEMA_V3_VERSION
 STATE_KEYS = {
     "version",
     "phase",
@@ -68,6 +71,8 @@ BLOCKABLE_PHASES = {
     "judging",
     "improving",
 }
+RUNNABLE_PHASES = BLOCKABLE_PHASES - {"submitted", "judging"}
+JUDGMENT_PHASES = {"submitted", "judging"}
 VERDICT_STATUSES = {
     "verified",
     "partial",
@@ -105,70 +110,644 @@ ALLOWED = {
 def main() -> None:
     """Run the state management command-line interface."""
     parser = argparse.ArgumentParser(
-        description=(
-            "Manage schema-v3 reproduction state. Selection JSON requires "
-            "estimated_api_cost_usd, upstream_revision, and target_claims; "
-            "judging transitions "
-            "require poll_limit and poll_deadline; blocked transitions require "
-            "blocker and archival requires abandon=true; improving requires "
-            "improvement_reason and claim-level verdicts; verdict transitions "
-            "append authoritative history and judging budgets are round-scoped."
-        )
+        description="Manage explicit fenced schema-v6 reproduction attempts."
     )
     commands = parser.add_subparsers(dest="command", required=True)
-    for command in ("init", "show"):
-        subparser = commands.add_parser(command, help=f"{command} state")
-        subparser.add_argument("path", type=Path)
-    select_parser = commands.add_parser(
-        "select",
-        help="select a paper with explicit cost, revision, and target claims",
+    migrate_parser = commands.add_parser(
+        "migrate-v6", help="migrate schema-v3 state to the sharded schema-v6 store"
     )
-    select_parser.add_argument("path", type=Path)
-    select_parser.add_argument("paper_json")
-    reject_parser = commands.add_parser("reject", help="record an idle rejection")
-    reject_parser.add_argument("path", type=Path)
-    reject_parser.add_argument("candidate_json")
-    update_parser = commands.add_parser(
-        "update", help="persist judging polls, cost, or external IDs"
+    migrate_parser.add_argument("path", type=Path)
+    migrate_mode = migrate_parser.add_mutually_exclusive_group(required=True)
+    migrate_mode.add_argument("--dry-run", action="store_true")
+    migrate_mode.add_argument("--apply", action="store_true")
+    migrate_parser.add_argument("--expected-source-sha256")
+    refresh_parser = commands.add_parser(
+        "refresh-live", help="fetch and persist one immutable live Hub snapshot"
     )
-    update_parser.add_argument("path", type=Path)
-    update_parser.add_argument("updates_json")
-    transition_parser = commands.add_parser(
-        "transition", help="change phase with required phase metadata"
+    refresh_parser.add_argument("path", type=Path)
+    refresh_parser.add_argument("--assessments-json", type=Path)
+    list_parser = commands.add_parser("list-attempts", help="list explicit attempts")
+    list_parser.add_argument("path", type=Path)
+    list_parser.add_argument("--phase", choices=sorted(PHASES))
+    list_parser.add_argument("--runnable", action="store_true")
+    show_attempt_parser = commands.add_parser(
+        "show-attempt", help="show one explicitly identified attempt"
     )
-    transition_parser.add_argument("path", type=Path)
-    transition_parser.add_argument("phase", choices=sorted(PHASES))
-    transition_parser.add_argument("updates_json")
+    show_attempt_parser.add_argument("path", type=Path)
+    show_attempt_parser.add_argument("--attempt-id", required=True)
+    show_snapshot_parser = commands.add_parser(
+        "show-snapshot", help="show one immutable content-verified snapshot"
+    )
+    show_snapshot_parser.add_argument("path", type=Path)
+    show_snapshot_parser.add_argument("--snapshot-id", required=True)
+    score_report_parser = commands.add_parser(
+        "score-report",
+        help="report offline official points, capacity, queue, and telemetry",
+    )
+    score_report_parser.add_argument("path", type=Path)
+    score_report_parser.add_argument("--snapshot-id", required=True)
+    score_report_parser.add_argument("--username", required=True)
+    score_report_parser.add_argument("--rank-observation-json", type=Path)
+    census_parser = commands.add_parser(
+        "candidate-census",
+        help="report unclaimed live candidates and exact reusable projects",
+    )
+    census_parser.add_argument("path", type=Path)
+    census_parser.add_argument("--snapshot-id", required=True)
+    census_parser.add_argument("--workspace-root", type=Path, required=True)
+    authority_parser = commands.add_parser(
+        "audit-authority",
+        help="audit and optionally quarantine unsupported local completions",
+    )
+    authority_parser.add_argument("path", type=Path)
+    authority_parser.add_argument("--snapshot-id", required=True)
+    authority_parser.add_argument("--repair", action="store_true")
+    authority_parser.add_argument("--now")
+    scheduler_parser = commands.add_parser(
+        "scheduler-pass", help="refill runnable lanes from one immutable snapshot"
+    )
+    scheduler_parser.add_argument("path", type=Path)
+    scheduler_parser.add_argument("--snapshot-id", required=True)
+    scheduler_parser.add_argument("--now")
+    claim_parser = commands.add_parser(
+        "claim-attempt", help="claim an active attempt from an expected predecessor"
+    )
+    claim_parser.add_argument("path", type=Path)
+    _add_fence_arguments(claim_parser)
+    claim_parser.add_argument("--now")
+    renew_parser = commands.add_parser(
+        "renew-attempt", help="renew one exact live attempt writer"
+    )
+    renew_parser.add_argument("path", type=Path)
+    _add_fence_arguments(renew_parser)
+    renew_parser.add_argument("--now")
+    worker_parser = commands.add_parser(
+        "run-worker", help="run one fenced paper worker with telemetry"
+    )
+    worker_parser.add_argument("path", type=Path)
+    _add_fence_arguments(worker_parser)
+    worker_parser.add_argument(
+        "--runtime", choices=("codex", "antigravity"), required=True
+    )
+    worker_parser.add_argument("--model", required=True)
+    worker_parser.add_argument("--worktree", type=Path, required=True)
+    worker_parser.add_argument("--contract", type=Path, required=True)
+    worker_parser.add_argument("--timeout-seconds", type=int)
+    transition_attempt_parser = commands.add_parser(
+        "transition-attempt",
+        help="transition one fenced non-authoritative attempt edge",
+    )
+    transition_attempt_parser.add_argument("path", type=Path)
+    transition_attempt_parser.add_argument("phase", choices=sorted(PHASES))
+    _add_fence_arguments(transition_attempt_parser)
+    transition_attempt_parser.add_argument("--updates-json", default="{}")
+    transition_attempt_parser.add_argument("--now")
+    design_parser = commands.add_parser(
+        "record-design", help="record one fenced paper-specific design"
+    )
+    design_parser.add_argument("path", type=Path)
+    _add_fence_arguments(design_parser)
+    design_parser.add_argument("--author", required=True)
+    design_parser.add_argument("--design-path", required=True)
+    design_parser.add_argument("--now")
+    review_parser = commands.add_parser(
+        "review-design", help="record an independent fenced design review"
+    )
+    review_parser.add_argument("path", type=Path)
+    _add_fence_arguments(review_parser)
+    review_parser.add_argument("--reviewer", required=True)
+    review_parser.add_argument(
+        "--decision", choices=("approved", "rejected"), required=True
+    )
+    review_parser.add_argument("--now")
+    reconcile_parser = commands.add_parser(
+        "reconcile-legacy-attempt",
+        help="bind one migrated attempt to fresh claims and design provenance",
+    )
+    reconcile_parser.add_argument("path", type=Path)
+    _add_fence_arguments(reconcile_parser)
+    reconcile_parser.add_argument("--snapshot-id", required=True)
+    reconcile_parser.add_argument("--design-author", required=True)
+    reconcile_parser.add_argument("--design-path", required=True)
+    reconcile_parser.add_argument("--reviewer", required=True)
+    reconcile_parser.add_argument("--approval-ref", required=True)
+    reconcile_parser.add_argument("--now")
+    watch_parser = commands.add_parser(
+        "watch-attempt", help="create a bounded fenced judgment record"
+    )
+    watch_parser.add_argument("path", type=Path)
+    _add_fence_arguments(watch_parser)
+    watch_parser.add_argument("--poll-limit", type=int, required=True)
+    watch_parser.add_argument("--poll-deadline", required=True)
+    watch_parser.add_argument("--now")
+    poll_parser = commands.add_parser(
+        "record-poll", help="append one fenced judgment poll"
+    )
+    poll_parser.add_argument("path", type=Path)
+    _add_fence_arguments(poll_parser)
+    poll_parser.add_argument("--status", required=True)
+    poll_parser.add_argument("--now")
+    verdict_parser = commands.add_parser(
+        "sync-verdict",
+        help="import one exact official snapshot verdict",
+    )
+    verdict_parser.add_argument("path", type=Path)
+    _add_fence_arguments(verdict_parser)
+    verdict_parser.add_argument("--snapshot-id", required=True)
+    verdict_parser.add_argument("--now")
+    validation_parser = commands.add_parser(
+        "attest-validation",
+        help="run and attest one fenced paper validation",
+    )
+    validation_parser.add_argument("path", type=Path)
+    _add_fence_arguments(validation_parser)
+    validation_parser.add_argument("--manifest", type=Path, required=True)
+    validation_parser.add_argument("--now")
+    deployment_parser = commands.add_parser(
+        "publish-deployment",
+        help="publish and attest one fenced validated Space",
+    )
+    deployment_parser.add_argument("path", type=Path)
+    _add_fence_arguments(deployment_parser)
+    deployment_parser.add_argument("--space-id", required=True)
+    deployment_parser.add_argument("--source-dir", type=Path, required=True)
+    deployment_parser.add_argument("--now")
+    submission_parser = commands.add_parser(
+        "attest-submission",
+        help="attest one exact fenced live submission observation",
+    )
+    submission_parser.add_argument("path", type=Path)
+    _add_fence_arguments(submission_parser)
+    submission_parser.add_argument("--snapshot-id", required=True)
+    submission_parser.add_argument("--now")
     arguments = parser.parse_args()
 
-    if arguments.command == "init":
-        if arguments.path.exists():
-            raise FileExistsError(arguments.path)
-        state = new_state()
-        save_state(arguments.path, state)
-    elif arguments.command == "show":
-        state = load_state(arguments.path)
-    elif arguments.command == "select":
-        state = select_paper(load_state(arguments.path), json.loads(arguments.paper_json))
-        save_state(arguments.path, state)
-    elif arguments.command == "reject":
-        state = reject_candidate(
-            load_state(arguments.path), json.loads(arguments.candidate_json)
+    if arguments.command in {
+        "refresh-live",
+        "list-attempts",
+        "show-attempt",
+        "show-snapshot",
+        "score-report",
+        "candidate-census",
+        "audit-authority",
+        "scheduler-pass",
+        "claim-attempt",
+        "renew-attempt",
+        "run-worker",
+        "transition-attempt",
+        "record-design",
+        "review-design",
+        "reconcile-legacy-attempt",
+        "watch-attempt",
+        "record-poll",
+        "sync-verdict",
+        "attest-validation",
+        "publish-deployment",
+        "attest-submission",
+    }:
+        state = _run_v6_command(arguments)
+    elif arguments.command == "migrate-v6":
+        import migrate_v6
+        import store
+
+        paths = store.StatePaths(arguments.path)
+        plan = migrate_v6.plan_for_existing_migration(paths)
+        legacy = plan.source
+        if arguments.dry_run:
+            state = {
+                "active_attempts": len(plan.index["attempts"]),
+                "archived_attempts": len(plan.index["history"]),
+                "rejections": len(plan.index["rejections"]),
+                "max_runnable_attempts": plan.index["max_runnable_attempts"],
+                "source_state_sha256": plan.source_sha256,
+                "total_api_cost_usd": plan.index["total_api_cost_usd"],
+            }
+        else:
+            if arguments.expected_source_sha256 is None:
+                migrate_parser.error(
+                    "--apply requires --expected-source-sha256"
+                )
+            if arguments.expected_source_sha256 != plan.source_sha256:
+                migrate_parser.error(
+                    "--expected-source-sha256 does not match the migration source"
+                )
+            migrate_v6.apply_checked_v6_migration(paths, plan)
+            state = migrate_v6.verify_semantic_equivalence(legacy, paths)
+    print(json.dumps(state, indent=2, sort_keys=True))
+
+
+def _add_fence_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--attempt-id", required=True)
+    parser.add_argument("--owner", required=True)
+    parser.add_argument("--fencing-token", type=int, required=True)
+
+
+def _registered_worktree_roots(
+    workspace_root: Path,
+    *,
+    git_worktree_list=None,
+) -> list[Path]:
+    """Return the registered worktrees, rejecting roots outside the workspace."""
+    if git_worktree_list is None:
+        git_worktree_list = _git_worktree_list
+    workspace = workspace_root.resolve()
+    roots = []
+    for line in git_worktree_list(workspace).splitlines():
+        if not line.startswith("worktree "):
+            continue
+        worktree = Path(line.removeprefix("worktree ")).resolve()
+        try:
+            worktree.relative_to(workspace)
+        except ValueError as error:
+            raise ValueError("worktree") from error
+        roots.append(worktree)
+    return sorted(set(roots), key=str)
+
+
+def _git_worktree_list(workspace_root: Path) -> str:
+    return subprocess.run(
+        ["git", "-C", str(workspace_root), "worktree", "list", "--porcelain"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+
+
+def _run_v6_command(
+    arguments: argparse.Namespace,
+    *,
+    worker_runner=None,
+    validation_operation=None,
+    deployment_operation=None,
+    submission_operation=None,
+    verdict_operation=None,
+    utc_now=None,
+    monotonic_ns=None,
+    session_id_factory=None,
+) -> object:
+    import attempts
+    import leases
+    import scheduler
+    import store
+
+    paths = store.StatePaths(arguments.path)
+    if arguments.command == "refresh-live":
+        from huggingface_hub import HfApi
+        import refresh
+
+        observed_at = datetime.now(timezone.utc).isoformat()
+        assessment_input = (
+            None
+            if arguments.assessments_json is None
+            else refresh.load_assessments(arguments.assessments_json)
         )
-        save_state(arguments.path, state)
-    elif arguments.command == "update":
-        state = update_current(
-            load_state(arguments.path), **json.loads(arguments.updates_json)
+        snapshot = refresh.fetch_live_snapshot(
+            HfApi(), observed_at, assessment_input
         )
-        save_state(arguments.path, state)
-    else:
-        state = transition(
-            load_state(arguments.path),
+        return {"snapshot_id": refresh.persist_snapshot(paths, snapshot)}
+    if arguments.command == "list-attempts":
+        index = store.read_json(paths.index)
+        store.validate_index(index)
+        records = [
+            attempts.read_attempt(paths, attempt_id)
+            for attempt_id in sorted(index["attempts"])
+        ]
+        if arguments.phase is not None:
+            records = [
+                record for record in records if record["phase"] == arguments.phase
+            ]
+        if arguments.runnable:
+            records = [
+                record for record in records if record["phase"] in RUNNABLE_PHASES
+            ]
+        return records
+    if arguments.command == "show-attempt":
+        return attempts.read_attempt(paths, arguments.attempt_id)
+    if arguments.command == "show-snapshot":
+        import refresh
+
+        return refresh.read_snapshot(paths, arguments.snapshot_id)
+    if arguments.command == "score-report":
+        import refresh
+        import score_report
+
+        snapshot = refresh.read_snapshot(paths, arguments.snapshot_id)
+        rank_observation = (
+            None
+            if arguments.rank_observation_json is None
+            else store.read_json(arguments.rank_observation_json)
+        )
+        return score_report.build_report(
+            paths,
+            snapshot,
+            arguments.username,
+            rank_observation,
+        )
+    if arguments.command == "candidate-census":
+        import refresh
+        import score_report
+
+        snapshot = refresh.read_snapshot(paths, arguments.snapshot_id)
+        worktree_roots = _registered_worktree_roots(arguments.workspace_root)
+        return score_report.candidate_census(paths, snapshot, worktree_roots)
+    if arguments.command == "audit-authority":
+        import authority_audit
+
+        if arguments.repair:
+            authority_audit.recover_transactions(paths)
+        report = authority_audit.audit(paths, arguments.snapshot_id)
+        if not arguments.repair:
+            return report
+        report = authority_audit.reusable_repair_report(paths, report)
+        return {
+            "report": report,
+            "repair": authority_audit.repair(
+                paths,
+                report,
+                _cli_datetime(arguments.now),
+            ),
+        }
+    now = _cli_datetime(getattr(arguments, "now", None))
+    if arguments.command == "scheduler-pass":
+        report = scheduler.scheduler_pass(paths, arguments.snapshot_id, now)
+        return {
+            "assignments": [
+                {
+                    "attempt_id": assignment.attempt_id,
+                    "paper_id": assignment.paper_id,
+                    "owner": assignment.writer_lease.owner,
+                    "fencing_token": assignment.writer_lease.fencing_token,
+                }
+                for assignment in report.assignments
+            ]
+        }
+    if arguments.command == "claim-attempt":
+        lease = leases.claim_attempt(
+            paths,
+            arguments.attempt_id,
+            arguments.owner,
+            arguments.fencing_token,
+            now,
+        )
+        return _lease_identity(lease)
+    lease = _reconstruct_attempt_lease(
+        paths,
+        arguments.attempt_id,
+        arguments.owner,
+        arguments.fencing_token,
+        leases,
+        store,
+    )
+    if arguments.command == "run-worker":
+        import worker_guard
+
+        leases.assert_fence(paths, lease)
+        attempt = attempts.read_attempt(paths, arguments.attempt_id)
+        if attempt["phase"] not in {"implementing", "improving"}:
+            raise ValueError("phase")
+        project_path = attempt.get("project_path")
+        if project_path is None:
+            slug = attempt.get("slug")
+            if type(slug) is not str or not slug:
+                raise ValueError("project_path")
+            project_path = f"submissions/{slug}"
+        spec = worker_guard.launch_spec(
+            arguments.runtime,
+            arguments.model,
+            arguments.worktree,
+            arguments.contract,
+            attempt_id=attempt["attempt_id"],
+            paper_id=attempt["paper_id"],
+            project_path=project_path,
+        )
+        run = worker_runner or worker_guard.run_worker
+        return run(
+            paths,
+            spec,
+            timeout_seconds=arguments.timeout_seconds,
+            work_kind=(
+                "implementation"
+                if attempt["phase"] == "implementing"
+                else "correction"
+            ),
+        )
+    if arguments.command == "renew-attempt":
+        return _lease_identity(leases.renew_attempt(paths, lease, now))
+    if arguments.command == "transition-attempt":
+        return attempts.transition_attempt(
+            paths,
+            arguments.attempt_id,
             arguments.phase,
+            lease,
+            now,
             **json.loads(arguments.updates_json),
         )
-        save_state(arguments.path, state)
-    print(json.dumps(state, indent=2, sort_keys=True))
+    if arguments.command == "record-design":
+        return attempts.record_design(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.author,
+            arguments.design_path,
+            now,
+        )
+    if arguments.command == "review-design":
+        return attempts.record_design_review(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.reviewer,
+            arguments.decision,
+            now,
+        )
+    if arguments.command == "reconcile-legacy-attempt":
+        return attempts.reconcile_legacy_attempt(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.snapshot_id,
+            design_author=arguments.design_author,
+            design_path=arguments.design_path,
+            reviewer=arguments.reviewer,
+            approval_ref=arguments.approval_ref,
+            now=now,
+        )
+    if arguments.command == "watch-attempt":
+        return scheduler.watch_attempt(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.poll_limit,
+            _cli_datetime(arguments.poll_deadline),
+            now,
+        )
+    if arguments.command == "record-poll":
+        return scheduler.record_poll(
+            paths, arguments.attempt_id, lease, arguments.status, now
+        )
+    if arguments.command == "attest-validation":
+        import telemetry
+
+        operation = validation_operation
+        if operation is None:
+            import controller
+
+            manifest = json.loads(
+                arguments.manifest.read_text(encoding="utf-8")
+            )
+            operation = lambda: controller.attest_validation(
+                paths,
+                arguments.attempt_id,
+                lease,
+                manifest,
+                controller.run_command,
+                now,
+            )
+        return telemetry.run_stage(
+            paths,
+            arguments.attempt_id,
+            "validation",
+            operation,
+            **_telemetry_kwargs(
+                utc_now, monotonic_ns, session_id_factory
+            ),
+        )
+    if arguments.command == "publish-deployment":
+        import telemetry
+
+        operation = deployment_operation
+        if operation is None:
+            from huggingface_hub import HfApi
+            import controller
+
+            operation = lambda: controller.publish_and_attest_deployment(
+                paths,
+                arguments.attempt_id,
+                lease,
+                arguments.space_id,
+                arguments.source_dir,
+                HfApi(),
+                now,
+            )
+        return telemetry.run_stage(
+            paths,
+            arguments.attempt_id,
+            "deployment",
+            operation,
+            **_telemetry_kwargs(
+                utc_now, monotonic_ns, session_id_factory
+            ),
+        )
+    if arguments.command == "attest-submission":
+        import telemetry
+
+        operation = submission_operation
+        if operation is None:
+            import controller
+
+            operation = lambda: controller.attest_submission(
+                paths,
+                arguments.attempt_id,
+                lease,
+                arguments.snapshot_id,
+                now,
+            )
+        result = operation()
+        try:
+            telemetry.record_observation(
+                paths,
+                arguments.attempt_id,
+                "submission-observed",
+                arguments.snapshot_id,
+                result,
+                **_observation_kwargs(utc_now, session_id_factory),
+            )
+        except BaseException:
+            pass
+        return result
+    import telemetry
+
+    operation = verdict_operation
+    if operation is None:
+        import controller
+
+        operation = lambda: controller.sync_verdict(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.snapshot_id,
+            now,
+        )
+    result = operation()
+    try:
+        telemetry.record_observation(
+            paths,
+            arguments.attempt_id,
+            "verdict-observed",
+            arguments.snapshot_id,
+            result,
+            **_observation_kwargs(utc_now, session_id_factory),
+        )
+    except BaseException:
+        pass
+    return result
+
+
+def _telemetry_kwargs(utc_now, monotonic_ns, session_id_factory) -> dict:
+    return {
+        key: value
+        for key, value in {
+            "utc_now": utc_now,
+            "monotonic_ns": monotonic_ns,
+            "session_id_factory": session_id_factory,
+        }.items()
+        if value is not None
+    }
+
+
+def _observation_kwargs(utc_now, session_id_factory) -> dict:
+    return {
+        key: value
+        for key, value in {
+            "utc_now": utc_now,
+            "session_id_factory": session_id_factory,
+        }.items()
+        if value is not None
+    }
+
+
+def _reconstruct_attempt_lease(paths, attempt_id, owner, fencing_token, leases, store):
+    resource = f"attempt:{attempt_id}"
+    value = store.read_json(paths.resource_lease(resource))
+    leases.validate_lease(value)
+    if value["resource"] != resource:
+        raise ValueError("resource")
+    if value["attempt_id"] != attempt_id:
+        raise ValueError("attempt_id")
+    if value["owner"] != owner:
+        raise ValueError("owner")
+    if value["fencing_token"] != fencing_token:
+        raise ValueError("fencing_token")
+    return leases.Lease(**value)
+
+
+def _lease_identity(lease) -> dict:
+    return {
+        "attempt_id": lease.attempt_id,
+        "owner": lease.owner,
+        "fencing_token": lease.fencing_token,
+        "acquired_at": lease.acquired_at,
+        "expires_at": lease.expires_at,
+    }
+
+
+def _cli_datetime(value: str | None) -> datetime:
+    if value is None:
+        return datetime.now(timezone.utc)
+    parsed = parse_aware_datetime(value, "now")
+    if parsed.utcoffset() != timezone.utc.utcoffset(parsed):
+        raise ValueError("now")
+    return parsed.astimezone(timezone.utc)
 
 
 def new_state() -> dict:

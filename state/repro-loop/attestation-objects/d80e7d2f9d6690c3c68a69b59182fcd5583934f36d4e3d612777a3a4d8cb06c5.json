@@ -1,0 +1,16 @@
+{
+  "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+  "attempt_number": 2,
+  "attestation_id": "d80e7d2f9d6690c3c68a69b59182fcd5583934f36d4e3d612777a3a4d8cb06c5",
+  "deployment_attestation_id": "25e9043e28a592b467af434fe1e61ccec7e3599bb59cbc294139e61db80dd464",
+  "kind": "submission",
+  "observed_at": "2026-07-25T23:59:45.878929+00:00",
+  "paper_id": "vGeNaFHdET",
+  "payload_sha256": "a2cf82bd01007142fc47a39f896c78ad7f1e9f8a68a34185a77eb61db35f9f75",
+  "queue_status": "pending",
+  "snapshot_id": "827aea0aec55e82eb0b591c52370285165d7db79de179b36967eb196d440121c",
+  "source_commit": "a8aa5e202f88da2970e1e9862ff8b8ef1558ee2e",
+  "space_id": "wrice/repro-eeg-fm-bench",
+  "space_sha": "26252685754f34eceaac6a9bf7ce85468573eb95",
+  "verdict_revision": "95bb698fa4b45238f18959209ff12866d2bb41e3"
+}

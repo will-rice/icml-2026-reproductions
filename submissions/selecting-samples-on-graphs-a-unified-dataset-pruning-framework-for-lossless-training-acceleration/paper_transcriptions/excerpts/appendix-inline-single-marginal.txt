@@ -1,0 +1,2 @@
+Independent derivation for the separately repaired single-counted objective:
+Δ_single(x | S) = α I^in(x) + Σ_{j ∈ S} a_xj + αη(2|S| + 1).

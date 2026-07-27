@@ -1,0 +1,29 @@
+{
+  "attempt_id": "49b12585-ca39-441d-b822-c7da77ed81e9",
+  "attempt_number": 1,
+  "created_at": "2026-07-26T06:26:12.669348+00:00",
+  "normalized_verdict": null,
+  "paper_id": "0bTEd4LpQr",
+  "poll_deadline": "2026-07-26T08:00:00+00:00",
+  "poll_limit": 12,
+  "polls": [
+    {
+      "at": "2026-07-26T06:26:12.958479+00:00",
+      "status": "pending"
+    },
+    {
+      "at": "2026-07-26T06:28:05.938207+00:00",
+      "status": "pending"
+    }
+  ],
+  "raw_verdict": null,
+  "source_revision": null,
+  "space_id": "wrice/repro-numina-lean-agent",
+  "submitted_sha": "f79268b7718b50a1dfeb0a4bfd96299e59dfe2ab",
+  "target_claims": [
+    "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+    "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+  ],
+  "updated_at": "2026-07-26T06:28:05.938207+00:00",
+  "verdict_at": null
+}

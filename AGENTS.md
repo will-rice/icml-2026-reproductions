@@ -1,7 +1,8 @@
 # ICML 2026 Reproduction Workspace
 
-Read `docs/HANDOFF.md` before starting work and `docs/REMOTE_SETUP.md` before
-running commands on a new host.
+Read `docs/HANDOFF.md` and inspect the version in `state/repro-loop.json`
+before starting work. If it is schema-v3, stop at the migration gate described
+below. Read `docs/REMOTE_SETUP.md` before running commands on a new host.
 
 ## Objective
 
@@ -14,26 +15,75 @@ paper-reported values as reproduced measurements.
 - `submissions/<paper>/`: independent project, tests, evidence bundle, and
   Space source for one paper.
 - `skills/icml-repro-loop/`: versioned source for the reproduction-loop skill.
-- `state/repro-loop.json`: resumable machine state for the reproduction loop.
-- `docs/HANDOFF.md`: current mutable state and next action.
+- `state/repro-loop.json`: authoritative coordinator state; schema-v3 remains
+  in place until its explicit controller migration installs the schema-v6 index.
+- `state/repro-loop/`: fenced attempt, judgment, lease, and snapshot shards.
 - `docs/REMOTE_SETUP.md`: host prerequisites, authentication checks, skill
   installation, and verification commands.
+
+## Trust Boundary
+
+Paper workers are untrusted proposal producers. They may write only the
+controller-assigned paper worktree/project after
+`skills/icml-repro-loop/scripts/worker_guard.py` has constructed the launch and
+its runtime preflight has passed. They never receive Hub credentials or write
+the coordinator state, skill source, another submission, or controller
+documents. They do not deploy, submit, poll, import verdicts, merge, or claim
+external phases.
+
+The controller alone validates proposals, mutates external services, records
+live observations, imports official verdicts, repairs authority, and integrates
+branches. Full host permissions do not transfer that authority to a worker.
 
 ## Workflow
 
 1. When processing challenge papers, require and follow `icml-repro-loop`.
-   Resume from `state/repro-loop.json` and update it after every phase change
-   and external mutation.
-2. Inspect the paper's live challenge status before claiming, selecting, or
+   Do not run schema-v6 lifecycle commands against schema-v3 state. Verify its
+   migration with `migrate-v6 --dry-run`, then wait for explicit controller
+   authority before the real migration. After migration, resume every
+   materially affected attempt from the schema-v6 index and shards.
+   A migrated schema-v3 attempt must be bound once through
+   `reconcile-legacy-attempt` to a fresh assessed snapshot and explicit design
+   approval provenance before controller validation.
+2. Run `refresh-live` without assessments, then inspect the immutable raw result
+   with `show-snapshot`. Assess its pinned `challenge.json` candidates in
+   parallel from primary artifacts. Raw challenge metadata is never an
+   assessment.
+3. Write explicit assessment JSON with that challenge revision, assessor,
+   timestamp, scores, selected live claims, upstream pins, feasibility
+   decisions, and costs. Run `refresh-live --assessments-json PATH`; on revision
+   drift, discard it and restart from a new raw snapshot.
+4. Pass the assessed immutable snapshot ID to one bounded scheduler pass; no
+   state command other than `refresh-live` uses the network.
+5. Maintain up to 20 runnable paper attempts. A complete or blocked attempt
+   frees capacity; a blocker remains attached only to its attempt and is never
+   auto-abandoned.
+6. Give each implementation agent one current two-hour writer lease. Renew it
+   before expiry with `renew-attempt`; after expiry or release, only a successor
+   may use `claim-attempt` with the exact predecessor token. Every reclaim
+   increments the fence, so the stale owner can never write again.
+7. Name the explicit attempt ID for every lifecycle operation. Mutations also
+   require its owner and current fencing token; never infer a current attempt.
+8. Persist each paper-specific design with fenced `record-design`, then require
+   approval through `review-design` by a different reviewer. One rejection must
+   not stop unrelated lanes.
+9. Inspect each paper's immutable live snapshot before claiming, selecting, or
    publishing it.
-3. Pin every upstream repository or dataset revision used as evidence.
-4. Write a failing test before evidence-generation code.
-5. Run the submission's pytest suite and `uv run pre-commit run -a`.
-6. Record commands, revisions, environment, and outputs in a machine-readable
+10. Pin every upstream repository or dataset revision used as evidence.
+11. Write a failing test before evidence-generation code.
+12. Run the submission's pytest suite and `uv run pre-commit run -a`.
+13. Record commands, revisions, environment, and outputs in a machine-readable
    evidence bundle.
-7. Deploy each paper to a separate Hugging Face Space and verify the exact
+14. Deploy each paper to a separate Hugging Face Space and verify the exact
    deployed commit.
-8. Update `docs/HANDOFF.md` after every material milestone.
+15. Account genuinely metered services against reservations. Codex and
+   Antigravity subscription use records USD 0.00.
+16. Persist every material milestone, next action, and blocker in the affected
+   attempt shard; snapshots and judgment shards retain live provenance.
+17. Treat every worker result as a proposal. Require immutable controller
+    attestations from `attest-validation`, `publish-deployment`,
+    `attest-submission`, `watch-attempt`, and `sync-verdict` for the
+    corresponding phases.
 
 ## Constraints
 

@@ -2,15 +2,42 @@
 
 ## Loop State
 
-- `state/repro-loop.json` is authoritative and currently records `idle` with
-  no current paper, no history, one recorded rejection, and USD 0.00 total API
-  cost.
+- `state/repro-loop.json` is authoritative and currently records
+  `implementing` for `vGeNaFHdET` (EEG-FM-Bench, slug `eeg-fm-bench`) with
+  `design_approved: true` under the user's 2026-07-24 standing directive that
+  the loop run completely autonomously (design gates are approved on
+  presentation). History holds one archived abandoned attempt (`HMu24dTKkJ` —
+  see below); total API cost USD 0.00.
+- Autonomous mode: do not pause for design or deployment approval. Still
+  never autonomously abandon a blocked attempt; persist blocker + HANDOFF and
+  return control instead.
 - The state file uses schema version 3. Selection requires explicit
   `estimated_api_cost_usd`, immutable `upstream_revision`, and at least two
   unique `target_claims`. Each judging entry starts a new poll round; verdict
   history is authoritative and the final `verdict` mirrors its last record.
 - The source skill is `skills/icml-repro-loop/`; install it according to
   `docs/REMOTE_SETUP.md` before using a new host.
+
+## 2026-07-24 Live Refresh: Paper Already Scored
+
+- The official `ICML-2026-agent-repro/verdicts` dataset (revision
+  `3d3350a34469a6ee1b25a2d749f578578bf606d9`, fetched 2026-07-24) already
+  contains a verdict for `HMu24dTKkJ`, judged `2026-07-22T16:03:19+00:00`
+  against Space
+  `wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures`
+  at exact SHA `5af083f86c4ab0e98ee65a01e3995669f288849b`. Claim verdicts:
+  three `toy` (Theorem 1 TV bound, imperfect score estimation, trace lemma)
+  and two `inconclusive` (Assumption 1 closeness, prior-work contrast).
+- The same dataset holds the NAPE verdict (`NvPgRwURDC`, judged
+  2026-07-21T21:52:09+00:00) at Space SHA
+  `6ce52a53872fbbbc73da1efe313e224a9c9c853c`.
+- Both papers were therefore already scored by the official judge via the
+  parallel reproduction lineage; continuing the current attempt would create
+  an ineligible duplicate submission, so the loop is blocked awaiting a user
+  decision.
+- Before the discovery, two CLI agents completed plan Tasks 1-3 (GMM
+  primitives, deterministic DDPM audits, evidence CLI) on branch
+  `impl/diff-gmm-integration` (unmerged; Tasks 4-5 not started).
 
 ## Published Parent Repository
 
@@ -39,33 +66,51 @@ participate in that commit's hash.
   or resumed. Its historical artifacts were the
   [official repository](https://github.com/Ancientshi/AgentSelect) and the
   [full dataset](https://drive.google.com/drive/folders/1wAzaUxOzPrwuF4s_iRT4NlRqV8gbLKe6?usp=sharing).
-- WF-Bench was the latest read-only candidate. It is not yet selected and has
-  not received a paper-specific implementation design approval.
+- A live challenge refresh on 2026-07-22 found 2,610 reproduction Spaces.
+  AdamW-style Shampoo (`gvWsViQBYB`) had two active reproductions and LoRA
+  Gradient Descent (`9GRlBVAXq8`) had three; both were persisted as rejected.
+- WF-Bench (`8Fhq7QpYfI`) was unclaimed but was persisted as rejected because
+  its substantive fidelity/scaling reproduction requires GPU training, which
+  is outside the autonomous reproduction-loop boundary.
+- Submission 2493, Dimension-Free Convergence of Diffusion Models for
+  Approximate Gaussian Mixtures (`HMu24dTKkJ`), was selected at immutable
+  revision `arxiv:2504.05300v1` with USD 0.00 estimated API cost.
 
 ## Next Action
 
-Use `icml-repro-loop` to refresh the live challenge status and re-evaluate
-WF-Bench. Do not select AgentSelect.
+`state/repro-loop.json` is `implementing`. Execute
+`docs/superpowers/plans/2026-07-24-eeg-fm-bench.md` autonomously with
+test-driven development under `submissions/eeg-fm-bench/`: Tasks 1-2 in
+parallel via codex/agy CLI agents, then Task 3 (evidence CLI), Task 4
+(logbook/poster), and Task 5 (live refresh, dedicated Space, exact-SHA
+verification, submission, bounded judging).
 
-Before selecting WF-Bench, perform a fresh live status, primary-artifact,
-license, provenance, and CPU-feasibility check, compare the top eligible
-candidates as required by the selection rubric, and persist each ineligible
-candidate while idle with:
+Selection comparison on 2026-07-24 (all three live and unclaimed, no verdict,
+no tagged Space):
 
-```bash
-uv run python skills/icml-repro-loop/scripts/state.py reject state/repro-loop.json CANDIDATE_JSON
-```
+| Candidate | Base | Penalties | Final | CPU estimate | Main risk |
+| --- | ---: | ---: | ---: | --- | --- |
+| EEG-FM-Bench (`vGeNaFHdET`) | 18 | 0 | 18 | under 2 hours | registration-gated raw datasets; GPU performance claims out of scope |
+| Graph dataset pruning (`a3GdvuPItd`) | 14 | -2 | 12 | under 30 min | no released code; synthetic theorem audits risk `toy` verdicts |
+| NorMuon (`m1IRWFAMsa`) | 13 | -2 | 11 | under 2 hours | no released code; headline claims are 1.1B/5.4B GPU training |
 
-`reject` records the candidate decision without a phase transition. If WF-Bench
-remains eligible and is selected, use
-`superpowers:brainstorming`, persist `design-pending`, present a paper-specific
-design, and wait for explicit user approval before writing evidence code.
+Rejected and persisted this round: `mWxEAgz3xu` (aggregate-only data),
+`MqzZ9X6m7f` and `ycj3XWCh6E` (position papers, no testable claims),
+`GnqHK8Ww98` and `71030` (GPU training required).
 
-Selection JSON now includes the target claim names:
+The old `impl/*` branches/worktrees for the abandoned diffusion attempt
+remain unmerged and must never be deployed or submitted.
 
-```bash
-uv run python skills/icml-repro-loop/scripts/state.py select state/repro-loop.json '{"paper_id":"PAPER_ID","title":"TITLE","slug":"paper-slug","estimated_api_cost_usd":0.0,"upstream_revision":"REVISION","target_claims":["claim-1","claim-2"]}'
-```
+The selected target claims are:
+
+1. `fourteen-dataset-ten-paradigm-curation`,
+2. `standardized-preprocessing-reproducibility`, and
+3. `three-strategy-evaluation-harness`.
+
+Paper-reported Figure 1 lists are context only. Computed evidence comes from
+the pinned repository census, deterministic preprocessing checks, and CPU
+smoke runs of the three harness strategies. GPU-only leaderboard and
+representation-analysis claims remain explicitly unavailable.
 
 Use the judging, improvement, and completion JSON examples in
 `skills/icml-repro-loop/references/submission-checklist.md`; improvement and

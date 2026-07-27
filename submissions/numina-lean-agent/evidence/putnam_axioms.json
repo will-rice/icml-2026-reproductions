@@ -1,0 +1,254 @@
+{
+  "putnam_2025_a1": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_a1.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_a2": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_a2.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_a3": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_a3.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_a4": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_a4.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_a5": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_a5.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_a6": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_a6.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_b1": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_b1.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_b2": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_b2.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_b3": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_b3.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_b4": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_b4.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_b5": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_b5.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  },
+  "putnam_2025_b6": {
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "NuminaPutnam2025/putnam_2025_b6.lean"
+    ],
+    "exit_code": 0,
+    "lean_toolchain": "leanprover/lean4:v4.26.0",
+    "mathlib_revision": "v4.26.0",
+    "mathlib_sha": "2df2f0150c275ad53cb3c90f7c98ec15a56a1a67",
+    "pinned_sha": "60d33c8ba19af905bd731e938ebde1c5b8c76519",
+    "repository_url": "https://github.com/project-numina/Numina-Putnam2025.git",
+    "scope": "released-proof verification; not agent re-execution",
+    "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494"
+  }
+}

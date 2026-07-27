@@ -1,0 +1,26 @@
+{
+  "source_sha256": "f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354",
+  "status": "complete",
+  "targets": [
+    {
+      "sha256": "bbf81ce74c0c04ed229347dbf1c008318bc90d96abcf02abcaa8a9cbf6acbfde",
+      "staging": "repro-loop/transactions/f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354/staging/0.json",
+      "target": "repro-loop.json"
+    },
+    {
+      "sha256": "4c8db1edeb0ac0aeb6600c9cb8b06f68aa374fa4c567d84050cd844f1536352c",
+      "staging": "repro-loop/transactions/f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354/staging/1.json",
+      "target": "repro-loop/attempts/c5819c75-8a2a-538d-850e-805bc2325a6d.json"
+    },
+    {
+      "sha256": "0cf0f2537080e47d41767ad629b152f48356d2c39542f90845f4abfd9d6b4416",
+      "staging": "repro-loop/transactions/f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354/staging/2.json",
+      "target": "repro-loop/attempts/e20658d7-250a-5b0c-a015-be453c43e9fc.json"
+    },
+    {
+      "sha256": "f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354",
+      "staging": "repro-loop/transactions/f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354/staging/3.json",
+      "target": "repro-loop/v3-backups/f9fb0c976243de61b8fe90441e100c6bc88f341a50adb5326ffd12c8d7e99354.json"
+    }
+  ]
+}

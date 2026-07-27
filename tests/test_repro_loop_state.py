@@ -1,12 +1,17 @@
 """Tests for persistent ICML reproduction loop state."""
 
+import argparse
 import importlib.util
+from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 from pathlib import Path
 import subprocess
 import sys
 
 import pytest
+
+from repro_loop_attestation_fixtures import add_attestation_fields
 
 
 STATE_MODULE_PATH = (
@@ -15,6 +20,18 @@ STATE_MODULE_PATH = (
     / "icml-repro-loop"
     / "scripts"
     / "state.py"
+)
+REPOSITORY_ROOT = STATE_MODULE_PATH.parents[3]
+REPRO_SKILL_PATH = REPOSITORY_ROOT / "skills" / "icml-repro-loop" / "SKILL.md"
+SUBMISSION_CHECKLIST_PATH = (
+    REPOSITORY_ROOT
+    / "skills"
+    / "icml-repro-loop"
+    / "references"
+    / "submission-checklist.md"
+)
+EVAL_SCENARIOS_PATH = (
+    REPOSITORY_ROOT / "evals" / "icml-repro-loop" / "scenarios.json"
 )
 
 
@@ -408,61 +425,6 @@ def test_transition_rejects_undeclared_transitions(source: str, target: str):
 
     with pytest.raises(ValueError, match="phase"):
         module.transition(state_in_phase(module, source), target, **updates_for(target))
-
-
-def test_cli_initializes_shows_selects_and_transitions_state(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-    paper_json = json.dumps(paper())
-
-    run_cli("init", str(path))
-    assert json.loads(run_cli("show", str(path)).stdout)["phase"] == "idle"
-    run_cli("select", str(path), paper_json)
-    run_cli("transition", str(path), "design-pending", "{}")
-
-    assert json.loads(run_cli("show", str(path)).stdout)["phase"] == "design-pending"
-
-
-def test_cli_rejects_candidate_without_changing_idle_phase(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-
-    run_cli("init", str(path))
-    rejected = json.loads(run_cli("reject", str(path), json.dumps(rejection())).stdout)
-
-    assert rejected["phase"] == "idle"
-    assert rejected["rejections"] == [rejection()]
-    assert json.loads(run_cli("show", str(path)).stdout) == rejected
-
-
-def test_cli_updates_current_without_changing_phase(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-    run_cli("init", str(path))
-    run_cli("select", str(path), json.dumps(paper()))
-
-    updated = json.loads(
-        run_cli(
-            "update",
-            str(path),
-            json.dumps(
-                {
-                    "external_ids": {"submission": "submission-123"},
-                }
-            ),
-        ).stdout
-    )
-
-    assert updated["phase"] == "selected"
-    assert updated["current"]["external_ids"] == {
-        "submission": "submission-123"
-    }
-    assert state_module().load_state(path) == updated
-
-
-def test_cli_init_creates_parent_directory(tmp_path: Path):
-    path = tmp_path / "state" / "repro-loop.json"
-
-    run_cli("init", str(path))
-
-    assert json.loads(run_cli("show", str(path)).stdout) == state_module().new_state()
 
 
 @pytest.mark.parametrize(
@@ -884,17 +846,6 @@ def test_abandoned_blocked_attempt_is_archived_and_cannot_be_reselected():
     assert idle["total_api_cost_usd"] == 2.5
     with pytest.raises(ValueError, match="paper_id"):
         module.select_paper(idle, paper())
-
-
-def test_cli_init_refuses_to_overwrite_existing_state(tmp_path: Path):
-    path = tmp_path / "repro-loop.json"
-    run_cli("init", str(path))
-    persisted = path.read_text(encoding="utf-8")
-
-    with pytest.raises(subprocess.CalledProcessError):
-        run_cli("init", str(path))
-
-    assert path.read_text(encoding="utf-8") == persisted
 
 
 def test_select_derives_project_path_and_rejects_historical_project_path():
@@ -1516,16 +1467,980 @@ def test_persisted_state_validates_improvement_attempts(
             module.load_state(path)
 
 
-def test_cli_help_names_required_transition_metadata():
+def test_cli_help_names_schema_v6_operations():
     help_text = run_cli("--help").stdout
 
-    assert "upstream_revision" in help_text
-    assert "target_claims" in help_text
-    assert "poll_limit" in help_text
-    assert "blocker" in help_text
-    assert "abandon" in help_text
-    assert "improvement_reason" in help_text
-    assert "claim-level verdicts" in help_text
+    for command in (
+        "migrate-v6",
+        "refresh-live",
+        "list-attempts",
+        "show-snapshot",
+        "show-attempt",
+        "scheduler-pass",
+        "claim-attempt",
+        "renew-attempt",
+        "transition-attempt",
+        "record-design",
+        "review-design",
+        "watch-attempt",
+        "record-poll",
+        "sync-verdict",
+        "run-worker",
+    ):
+        assert command in help_text
+
+
+@pytest.mark.parametrize(
+    "command", ["init", "show", "select", "reject", "update", "transition"]
+)
+def test_cli_does_not_register_legacy_schema_v3_commands(command: str):
+    result = run_cli_unchecked(command)
+
+    assert result.returncode != 0
+    assert "invalid choice" in result.stderr
+
+
+def test_show_snapshot_requires_explicit_snapshot_id(tmp_path: Path):
+    result = run_cli_unchecked("show-snapshot", str(tmp_path / "repro-loop.json"))
+
+    assert result.returncode != 0
+    assert "snapshot-id" in result.stderr
+
+
+def test_score_report_cli_reads_verified_snapshot_without_writing_state(
+    tmp_path: Path,
+):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh"):
+        sys.modules.pop(name, None)
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    snapshot_id = refresh.persist_snapshot(
+        paths,
+        {
+            "fetched_at": "2026-07-27T00:00:00+00:00",
+            "source_revision": "source-a",
+            "sources": {},
+            "assessments": None,
+            "candidates": [],
+            "queued_submissions": [],
+            "tagged_spaces": [],
+            "verdicts": [],
+            "spaces": [],
+        },
+    )
+    before = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+
+    result = json.loads(
+        run_cli(
+            "score-report",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--username",
+            "wrice",
+        ).stdout
+    )
+
+    after = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+    assert result["official"]["points"] == 0
+    assert result["official"]["snapshot_id"] == snapshot_id
+    assert before == after
+
+
+def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
+    tmp_path: Path,
+):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh"):
+        sys.modules.pop(name, None)
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    snapshot_id = refresh.persist_snapshot(
+        paths,
+        {
+            "fetched_at": "2026-07-27T00:00:00+00:00",
+            "source_revision": "source-a",
+            "sources": {},
+            "assessments": None,
+            "candidates": [
+                {
+                    "paper_id": "census-cli-paper",
+                    "slug": "census-cli-paper",
+                    "title": "Census CLI Paper",
+                    "live_claims": [
+                        {"text": "Claim one", "status": "extracted"},
+                        {"text": "Claim two", "status": "extracted"},
+                    ],
+                }
+            ],
+            "queued_submissions": [],
+            "tagged_spaces": [],
+            "verdicts": [],
+            "spaces": [],
+        },
+    )
+    before = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+
+    unrelated_cwd = tmp_path / "unrelated-cwd"
+    unrelated_cwd.mkdir()
+    git_common_dir = subprocess.run(
+        ["git", "rev-parse", "--git-common-dir"],
+        check=True,
+        capture_output=True,
+        cwd=REPOSITORY_ROOT,
+        text=True,
+    ).stdout.strip()
+    workspace_root = (REPOSITORY_ROOT / git_common_dir).resolve().parent
+    result = json.loads(
+        subprocess.run(
+            [
+                sys.executable,
+                str(STATE_MODULE_PATH),
+                "candidate-census",
+                str(paths.index),
+                "--snapshot-id",
+                snapshot_id,
+                "--workspace-root",
+                str(workspace_root),
+            ],
+            check=True,
+            capture_output=True,
+            cwd=unrelated_cwd,
+            text=True,
+        ).stdout
+    )
+
+    after = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+    assert result == [
+        {
+            "paper_id": "census-cli-paper",
+            "title": "Census CLI Paper",
+            "claim_count": 2,
+            "existing_projects": [],
+            "authority": "research-required",
+        }
+    ]
+    assert before == after
+
+
+def test_registered_worktree_roots_are_workspace_bounded_and_injected(
+    tmp_path: Path,
+):
+    module = state_module()
+    workspace = tmp_path / "workspace"
+    first = workspace / "first"
+    second = workspace / "second"
+    porcelain = f"worktree {second}\nHEAD b\n\nworktree {first}\nHEAD a\n"
+
+    seen = []
+    roots = module._registered_worktree_roots(
+        workspace,
+        git_worktree_list=lambda root: seen.append(root) or porcelain,
+    )
+
+    assert roots == [first.resolve(), second.resolve()]
+    assert seen == [workspace.resolve()]
+    with pytest.raises(ValueError, match="worktree"):
+        module._registered_worktree_roots(
+            workspace,
+            git_worktree_list=lambda _root: "worktree /outside/worktree\nHEAD c\n",
+        )
+
+
+@pytest.mark.parametrize("command", ["claim-attempt", "renew-attempt"])
+@pytest.mark.parametrize("missing", ["attempt-id", "owner", "fencing-token"])
+def test_attempt_lease_commands_require_explicit_identity(
+    tmp_path: Path, command: str, missing: str
+):
+    arguments = [
+        command,
+        str(tmp_path / "repro-loop.json"),
+        "--attempt-id",
+        "a1",
+        "--owner",
+        "worker-1",
+        "--fencing-token",
+        "0",
+    ]
+    option = f"--{missing}"
+    index = arguments.index(option)
+    del arguments[index : index + 2]
+
+    result = run_cli_unchecked(*arguments)
+
+    assert result.returncode != 0
+    assert missing in result.stderr
+
+
+def test_cli_reclaims_and_renews_attempt_with_explicit_json_identity(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    predecessor = attempt_leases["a1"]
+
+    claimed = json.loads(
+        run_cli(
+            "claim-attempt",
+            str(paths.index),
+            "--attempt-id",
+            "a1",
+            "--owner",
+            "implementation-agent",
+            "--fencing-token",
+            str(predecessor.fencing_token),
+            "--now",
+            "2026-07-24T20:00:00+00:00",
+        ).stdout
+    )
+    renewed = json.loads(
+        run_cli(
+            "renew-attempt",
+            str(paths.index),
+            "--attempt-id",
+            "a1",
+            "--owner",
+            "implementation-agent",
+            "--fencing-token",
+            str(claimed["fencing_token"]),
+            "--now",
+            "2026-07-24T21:00:00+00:00",
+        ).stdout
+    )
+
+    assert claimed == {
+        "attempt_id": "a1",
+        "owner": "implementation-agent",
+        "fencing_token": 2,
+        "acquired_at": "2026-07-24T20:00:00+00:00",
+        "expires_at": "2026-07-24T22:00:00+00:00",
+    }
+    assert renewed == {
+        **claimed,
+        "expires_at": "2026-07-24T23:00:00+00:00",
+    }
+
+
+def test_cli_attempt_lease_chronology_boundaries(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    predecessor = attempt_leases["a1"]
+    identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        "successor",
+        "--fencing-token",
+        str(predecessor.fencing_token),
+    )
+
+    backdated_claim = run_cli_unchecked(
+        "claim-attempt",
+        str(paths.index),
+        *identity,
+        "--now",
+        "2026-07-24T17:59:59.999999+00:00",
+    )
+    assert backdated_claim.returncode != 0
+    assert "now" in backdated_claim.stderr
+
+    claimed = json.loads(
+        run_cli(
+            "claim-attempt",
+            str(paths.index),
+            *identity,
+            "--now",
+            "2026-07-24T19:00:00+00:00",
+        ).stdout
+    )
+    current_identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        claimed["owner"],
+        "--fencing-token",
+        str(claimed["fencing_token"]),
+    )
+    boundary = json.loads(
+        run_cli(
+            "renew-attempt",
+            str(paths.index),
+            *current_identity,
+            "--now",
+            claimed["acquired_at"],
+        ).stdout
+    )
+    assert boundary["expires_at"] == claimed["expires_at"]
+
+    extended = json.loads(
+        run_cli(
+            "renew-attempt",
+            str(paths.index),
+            *current_identity,
+            "--now",
+            "2026-07-24T20:00:00+00:00",
+        ).stdout
+    )
+    backdated_renewal = run_cli_unchecked(
+        "renew-attempt",
+        str(paths.index),
+        *current_identity,
+        "--now",
+        "2026-07-24T19:30:00+00:00",
+    )
+    assert extended["expires_at"] == "2026-07-24T22:00:00+00:00"
+    assert backdated_renewal.returncode != 0
+    assert "now" in backdated_renewal.stderr
+
+
+def test_cli_renew_attempt_rejects_archived_attempt(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a1"]
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    sys.modules.pop("store", None)
+    import store
+
+    with store.locked_json(paths.index, store.validate_index) as index:
+        index["history"]["a1"] = index["attempts"].pop("a1")
+
+    result = run_cli_unchecked(
+        "renew-attempt",
+        str(paths.index),
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+        "--now",
+        "2026-07-24T18:01:00+00:00",
+    )
+
+    assert result.returncode != 0
+    assert "attempt_id" in result.stderr
+
+
+def test_cli_records_design_then_independent_review(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a1"]
+    identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+        "--now",
+        "2026-07-24T18:00:00+00:00",
+    )
+    run_cli(
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        *identity,
+    )
+
+    designed = json.loads(
+        run_cli(
+            "record-design",
+            str(paths.index),
+            *identity,
+            "--author",
+            "author-agent",
+            "--design-path",
+            "docs/designs/paper-a.md",
+        ).stdout
+    )
+    reviewed = json.loads(
+        run_cli(
+            "review-design",
+            str(paths.index),
+            *identity,
+            "--reviewer",
+            "reviewer-agent",
+            "--decision",
+            "approved",
+        ).stdout
+    )
+
+    assert designed["design"]["author"] == "author-agent"
+    assert reviewed["phase"] == "implementing"
+    assert reviewed["design_review"]["reviewer"] == "reviewer-agent"
+
+
+def test_scheduler_assignment_drives_documented_cli_lifecycle(tmp_path: Path):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh"):
+        sys.modules.pop(name, None)
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    payload = {
+        "fetched_at": now.isoformat(),
+        "source_revision": "source-1",
+        "candidates": [
+            {
+                "paper_id": "paper-a",
+                "title": "Paper A",
+                "slug": "paper-a",
+                "upstream_revision": "revision-a",
+                "target_claims": ["claim-1", "claim-2"],
+                "claim_bindings": [
+                    {
+                        "target_claim": "claim-1",
+                        "challenge_claim": "Challenge claim 1",
+                        "challenge_claim_sha256": hashlib.sha256(
+                            b"Challenge claim 1"
+                        ).hexdigest(),
+                    },
+                    {
+                        "target_claim": "claim-2",
+                        "challenge_claim": "Challenge claim 2",
+                        "challenge_claim_sha256": hashlib.sha256(
+                            b"Challenge claim 2"
+                        ).hexdigest(),
+                    },
+                ],
+                "live_claims": [
+                    {"text": "Challenge claim 1", "status": "extracted"},
+                    {"text": "Challenge claim 2", "status": "extracted"},
+                ],
+                "score_rate": {
+                    "claim_expectations": [
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                b"Challenge claim 1"
+                            ).hexdigest(),
+                            "p_verified": 0.5,
+                            "p_falsified": 0.25,
+                            "p_toy": 0.1,
+                        },
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                b"Challenge claim 2"
+                            ).hexdigest(),
+                            "p_verified": 0.0,
+                            "p_falsified": 0.5,
+                            "p_toy": 0.25,
+                        },
+                    ],
+                    "judged_before_deadline_probability": 0.8,
+                    "remaining_hours_p90": 2.0,
+                    "reusable_implementation": False,
+                    "direct_artifact_score": 4,
+                    "full_score_claim_paths": 2,
+                    "remaining_time_variance_hours2": 0.25,
+                    "primary_risk": "Artifact schema may have drifted.",
+                },
+                "estimated_api_cost_usd": 0.0,
+                "score": 10,
+                "artifact_access": True,
+                "cpu_only": True,
+                "safety_blocker": None,
+                "licensing_blocker": None,
+            }
+        ],
+        "queued_submissions": [],
+        "tagged_spaces": [],
+        "verdicts": [],
+    }
+    snapshot_id = refresh.canonical_snapshot_id(payload)
+    snapshot = {"snapshot_id": snapshot_id, **payload}
+    snapshot_path = paths.root / "snapshots" / f"{snapshot_id}.json"
+    store.atomic_json_write(snapshot_path, snapshot, store.validate_snapshot)
+    with store.locked_json(paths.index, store.validate_index) as index:
+        index["snapshots"][snapshot_id] = str(
+            snapshot_path.relative_to(paths.index.parent)
+        )
+
+    scheduler_output = json.loads(
+        run_cli(
+            "scheduler-pass",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+    assignment = scheduler_output["assignments"][0]
+    identity = (
+        "--attempt-id",
+        assignment["attempt_id"],
+        "--owner",
+        assignment["owner"],
+        "--fencing-token",
+        str(assignment["fencing_token"]),
+        "--now",
+        now.isoformat(),
+    )
+    run_cli(
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        *identity,
+    )
+    run_cli(
+        "record-design",
+        str(paths.index),
+        *identity,
+        "--author",
+        "author-agent",
+        "--design-path",
+        "docs/designs/paper-a.md",
+    )
+    reviewed = json.loads(
+        run_cli(
+            "review-design",
+            str(paths.index),
+            *identity,
+            "--reviewer",
+            "reviewer-agent",
+            "--decision",
+            "approved",
+        ).stdout
+    )
+
+    assert assignment["paper_id"] == "paper-a"
+    assert reviewed["phase"] == "implementing"
+
+
+def test_list_attempts_requires_no_ambiguous_current(tmp_path: Path):
+    paths, _leases = schema_v6_attempts(tmp_path)
+    result = run_cli_unchecked(
+        "list-attempts", str(paths.index), "--phase", "implementing"
+    )
+
+    assert result.returncode == 0
+    records = json.loads(result.stdout)
+    assert [record["attempt_id"] for record in records] == ["a2"]
+    assert all(record["phase"] == "implementing" for record in records)
+
+
+def test_show_attempt_requires_explicit_attempt_id(tmp_path: Path):
+    paths, _leases = schema_v6_attempts(tmp_path)
+    result = run_cli_unchecked("show-attempt", str(paths.index))
+
+    assert result.returncode != 0
+    assert "attempt-id" in result.stderr
+
+
+@pytest.mark.parametrize("missing", ["attempt-id", "owner", "fencing-token"])
+def test_attempt_mutation_requires_full_lease_identity(tmp_path: Path, missing: str):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    arguments = [
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        "--attempt-id",
+        "a1",
+        "--owner",
+        attempt_leases["a1"].owner,
+        "--fencing-token",
+        str(attempt_leases["a1"].fencing_token),
+    ]
+    option = f"--{missing}"
+    index = arguments.index(option)
+    del arguments[index : index + 2]
+
+    result = run_cli_unchecked(*arguments)
+
+    assert result.returncode != 0
+    assert missing in result.stderr
+
+
+@pytest.mark.parametrize(
+    ("phase", "expected_work_kind"),
+    [("implementing", "implementation"), ("improving", "correction")],
+)
+def test_run_worker_uses_fenced_attempt_identity_and_phase_work_kind(
+    tmp_path: Path,
+    phase: str,
+    expected_work_kind: str,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a2"]
+    if phase == "improving":
+        make_attempt_improving(paths, lease)
+    lease = make_lease_live(paths, lease)
+    worktree, contract = worker_contract(
+        tmp_path, "a2", "paper-2", "submissions/paper-2"
+    )
+    captured = {}
+
+    def worker_runner(
+        actual_paths,
+        spec,
+        *,
+        timeout_seconds,
+        work_kind,
+    ):
+        captured.update(
+            {
+                "paths": actual_paths,
+                "attempt_id": spec.attempt_id,
+                "paper_id": spec.paper_id,
+                "project_path": spec.project_path,
+                "timeout_seconds": timeout_seconds,
+                "work_kind": work_kind,
+            }
+        )
+        return {"session_id": "session-a", "outcome": "proposal"}
+
+    result = state_module()._run_v6_command(
+        run_worker_arguments(paths, lease, worktree, contract),
+        worker_runner=worker_runner,
+    )
+
+    assert result == {"session_id": "session-a", "outcome": "proposal"}
+    assert captured == {
+        "paths": paths,
+        "attempt_id": "a2",
+        "paper_id": "paper-2",
+        "project_path": "submissions/paper-2",
+        "timeout_seconds": 30,
+        "work_kind": expected_work_kind,
+    }
+
+
+def test_run_worker_rejects_stale_fence_before_reading_contract(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = make_lease_live(paths, attempt_leases["a2"])
+    arguments = run_worker_arguments(
+        paths,
+        lease,
+        tmp_path / "missing-worktree",
+        tmp_path / "missing-contract.json",
+    )
+    arguments.owner = "stale-owner"
+
+    with pytest.raises(ValueError, match="owner"):
+        state_module()._run_v6_command(
+            arguments,
+            worker_runner=lambda *args, **kwargs: pytest.fail(
+                "stale worker was launched"
+            ),
+        )
+
+
+def test_run_worker_rejects_contract_attempt_identity_mismatch(
+    tmp_path: Path,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = make_lease_live(paths, attempt_leases["a2"])
+    worktree, contract = worker_contract(
+        tmp_path, "wrong-attempt", "paper-2", "submissions/paper-2"
+    )
+
+    with pytest.raises(ValueError, match="attempt_id"):
+        state_module()._run_v6_command(
+            run_worker_arguments(paths, lease, worktree, contract),
+            worker_runner=lambda *args, **kwargs: pytest.fail(
+                "mismatched worker was launched"
+            ),
+        )
+
+
+def test_run_worker_rejects_non_worker_phase_before_reading_contract(
+    tmp_path: Path,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = make_lease_live(paths, attempt_leases["a1"])
+    arguments = run_worker_arguments(
+        paths,
+        lease,
+        tmp_path / "missing-worktree",
+        tmp_path / "missing-contract.json",
+        attempt_id="a1",
+    )
+
+    with pytest.raises(ValueError, match="phase"):
+        state_module()._run_v6_command(
+            arguments,
+            worker_runner=lambda *args, **kwargs: pytest.fail(
+                "selected worker was launched"
+            ),
+        )
+
+
+def test_transition_attempt_reconstructs_and_validates_persisted_lease(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a1"]
+
+    transitioned = json.loads(
+        run_cli(
+            "transition-attempt",
+            str(paths.index),
+            "design-pending",
+            "--attempt-id",
+            "a1",
+            "--owner",
+            lease.owner,
+            "--fencing-token",
+            str(lease.fencing_token),
+            "--now",
+            "2026-07-24T18:00:00+00:00",
+        ).stdout
+    )
+
+    assert transitioned["attempt_id"] == "a1"
+    assert transitioned["phase"] == "design-pending"
+
+
+def test_cli_transitions_validated_attempt_to_one_predeployment_correction(
+    tmp_path: Path,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a2"]
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases", "attestations", "attempts"):
+        sys.modules.pop(name, None)
+    import attestations
+    import attempts
+
+    first_id = persist_test_attestation(
+        attestations, paths, "validation", "a2"
+    )
+    attempts.transition_attested(
+        paths,
+        "a2",
+        "validated",
+        first_id,
+        {},
+        lease,
+        datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc),
+    )
+    first_bytes = paths.attestation("validation", "a2", 1).read_bytes()
+
+    transitioned = json.loads(
+        run_cli(
+            "transition-attempt",
+            str(paths.index),
+            "improving",
+            "--attempt-id",
+            "a2",
+            "--owner",
+            lease.owner,
+            "--fencing-token",
+            str(lease.fencing_token),
+            "--updates-json",
+            json.dumps(
+                {
+                    "improvement_attempts": 1,
+                    "improvement_reason": "Correct validation provenance",
+                }
+            ),
+            "--now",
+            "2026-07-24T18:00:00+00:00",
+        ).stdout
+    )
+
+    assert transitioned["phase"] == "improving"
+    assert transitioned["improvement_attempts"] == 1
+    assert transitioned["improvement_reason"] == "Correct validation provenance"
+    assert paths.attestation("validation", "a2", 1).read_bytes() == first_bytes
+
+
+def test_transition_attempt_rejects_owner_mismatch(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    result = run_cli_unchecked(
+        "transition-attempt",
+        str(paths.index),
+        "design-pending",
+        "--attempt-id",
+        "a1",
+        "--owner",
+        "not-the-owner",
+        "--fencing-token",
+        str(attempt_leases["a1"].fencing_token),
+    )
+
+    assert result.returncode != 0
+    assert "owner" in result.stderr
+
+
+def test_cli_transition_attempt_rejects_attested_complete_phase(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path, submitted=True)
+    lease = attempt_leases["a1"]
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases", "attestations", "attempts"):
+        sys.modules.pop(name, None)
+    import attestations
+    import attempts
+
+    attestation_id = persist_test_attestation(
+        attestations, paths, "authority-audit", "a1"
+    )
+    attempts.transition_attested(
+        paths,
+        "a1",
+        "judging",
+        attestation_id,
+        {},
+        lease,
+        datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc),
+    )
+
+    result = run_cli_unchecked(
+        "transition-attempt",
+        str(paths.index),
+        "complete",
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+        "--now",
+        "2026-07-24T18:00:00+00:00",
+    )
+
+    assert result.returncode != 0
+    assert "attestation" in result.stderr
+
+
+def test_cli_judgment_commands_preserve_fenced_scheduler_signatures(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path, submitted=True)
+    lease = attempt_leases["a1"]
+    identity = (
+        "--attempt-id",
+        "a1",
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+    )
+
+    watched = json.loads(
+        run_cli(
+            "watch-attempt",
+            str(paths.index),
+            *identity,
+            "--poll-limit",
+            "2",
+            "--poll-deadline",
+            "2026-07-24T19:00:00+00:00",
+            "--now",
+            "2026-07-24T18:00:00+00:00",
+        ).stdout
+    )
+    polled = json.loads(
+        run_cli(
+            "record-poll",
+            str(paths.index),
+            *identity,
+            "--status",
+            "pending",
+            "--now",
+            "2026-07-24T18:01:00+00:00",
+        ).stdout
+    )
+    rejected = run_cli_unchecked(
+        "record-verdict",
+        str(paths.index),
+        *identity,
+    )
+
+    assert watched["attempt_id"] == "a1"
+    assert polled["polls"][-1]["status"] == "pending"
+    assert json.loads(paths.attempt("a1").read_text(encoding="utf-8"))[
+        "phase"
+    ] == "judging"
+    assert rejected.returncode != 0
+
+
+def test_skill_preserves_worker_controller_authority_contract():
+    skill = REPRO_SKILL_PATH.read_text(encoding="utf-8")
+    checklist = SUBMISSION_CHECKLIST_PATH.read_text(encoding="utf-8")
+    combined = f"{skill}\n{checklist}"
+
+    for required in (
+        "Worker Or Controller?",
+        "proposal, never authority",
+        "write only the assigned worktree",
+        "attest-validation",
+        "publish-deployment",
+        "attest-submission",
+        "watch-attempt",
+        "sync-verdict",
+        "audit-authority",
+        "verified",
+        "falsified",
+        "toy",
+        "inconclusive",
+        "Evidence is not the official verdict.",
+        "Simulations cannot enter judgment state.",
+        "Require exact live snapshot observation.",
+        "Wait for and import the official record.",
+        "Permissions do not grant authority.",
+    ):
+        assert required in combined
+    for forbidden in (
+        "record-verdict",
+        "--raw-verdict",
+        "--normalized-verdict",
+        "transition-attempt state/repro-loop.json complete",
+    ):
+        assert forbidden not in combined
+
+
+def test_worker_boundary_is_required_by_workspace_and_remote_setup():
+    agents = (REPOSITORY_ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    remote = (REPOSITORY_ROOT / "docs" / "REMOTE_SETUP.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "Paper workers are untrusted" in agents
+    assert "worker_guard.py" in agents
+    assert "worker_guard.py" in remote
+    assert "--dangerously-skip-permissions" in remote
+    assert "HF_HUB_DISABLE_IMPLICIT_TOKEN" in remote
+
+
+def test_skill_evals_cover_authority_failure_modes():
+    scenarios = json.loads(EVAL_SCENARIOS_PATH.read_text(encoding="utf-8"))
+    by_id = {scenario["id"]: scenario for scenario in scenarios}
+
+    assert {
+        "no-official-verdict",
+        "wrong-space-sha",
+        "missing-paper-tag",
+        "space-config-error",
+        "duplicate-paper",
+        "cross-paper-edit",
+        "official-toy-verdict",
+    } <= set(by_id)
+    assert "do not complete" in by_id["no-official-verdict"]["must"]
+    assert "preserve toy exactly" in by_id["official-toy-verdict"]["must"]
+    assert "reject cross-paper write" in by_id["cross-paper-edit"]["must"]
 
 
 @pytest.mark.parametrize(
@@ -1998,4 +2913,226 @@ def run_cli(*arguments: str) -> subprocess.CompletedProcess[str]:
         check=True,
         capture_output=True,
         text=True,
+    )
+
+
+def run_cli_unchecked(*arguments: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(STATE_MODULE_PATH), *arguments],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+
+def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases", "attestations", "attempts"):
+        sys.modules.pop(name, None)
+    import store
+    import leases
+    import attestations
+    import attempts
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    attempt_leases = {}
+    for number, phase in ((1, "selected"), (2, "implementing")):
+        attempt_id = f"a{number}"
+        lease = leases.acquire_lease(
+            paths,
+            f"attempt:{attempt_id}",
+            f"owner-{number}",
+            attempt_id,
+            now,
+            timedelta(hours=1),
+        )
+        attempt_leases[attempt_id] = lease
+        attempts.create_attempt(
+            paths,
+            attempt_id,
+            {
+                "paper_id": f"paper-{number}",
+                "title": f"Paper {number}",
+                "slug": f"paper-{number}",
+                "upstream_revision": f"revision-{number}",
+                "target_claims": ["claim-1", "claim-2"],
+                "estimated_api_cost_usd": 0.0,
+            },
+            lease,
+            "snapshot-1",
+            now,
+        )
+        if phase == "implementing":
+            attempts.transition_attempt(
+                paths, attempt_id, "design-pending", lease, now
+            )
+            attempts.record_design(
+                paths, attempt_id, lease, "author", "design.md", now
+            )
+            attempts.record_design_review(
+                paths, attempt_id, lease, "reviewer", "approved", now
+            )
+    if submitted:
+        lease = attempt_leases["a1"]
+        attempts.transition_attempt(paths, "a1", "design-pending", lease, now)
+        attempts.record_design(paths, "a1", lease, "author", "design.md", now)
+        attempts.record_design_review(
+            paths, "a1", lease, "reviewer", "approved", now
+        )
+        for phase, kind in (
+            ("validated", "validation"),
+            ("deployed", "deployment"),
+            ("submitted", "submission"),
+        ):
+            attestation_id = persist_test_attestation(
+                attestations, paths, kind, "a1"
+            )
+            attempts.transition_attested(
+                paths, "a1", phase, attestation_id, {}, lease, now
+            )
+        attempts.update_attempt(
+            paths,
+            "a1",
+            lease,
+            now,
+            space_id="org/paper-a",
+            deployed_sha="submitted-sha",
+        )
+    return paths, attempt_leases
+
+
+def worker_contract(
+    tmp_path: Path,
+    attempt_id: str,
+    paper_id: str,
+    project_path: str,
+) -> tuple[Path, Path]:
+    scripts = str(STATE_MODULE_PATH.parent)
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    import worker_guard
+
+    worktree = (tmp_path / f"worktree-{attempt_id}").resolve()
+    worktree.mkdir()
+    contract = worktree / ".superpowers" / "worker-contract.json"
+    contract.parent.mkdir(parents=True)
+    contract.write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "attempt_id": attempt_id,
+                "paper_id": paper_id,
+                "worktree": str(worktree),
+                "project_path": project_path,
+                "mode": "implementation",
+            },
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    def isolated(request):
+        request.control_path.parent.mkdir(parents=True, exist_ok=True)
+        request.control_path.write_text(request.marker, encoding="utf-8")
+
+    worker_guard.preflight_runtime("codex", worktree, isolated)
+    return worktree, contract
+
+
+def run_worker_arguments(
+    paths,
+    lease,
+    worktree: Path,
+    contract: Path,
+    *,
+    attempt_id: str = "a2",
+) -> argparse.Namespace:
+    return argparse.Namespace(
+        command="run-worker",
+        path=paths.index,
+        attempt_id=attempt_id,
+        owner=lease.owner,
+        fencing_token=lease.fencing_token,
+        runtime="codex",
+        model="model-a",
+        worktree=worktree,
+        contract=contract,
+        timeout_seconds=30,
+    )
+
+
+def make_attempt_improving(paths, lease) -> None:
+    scripts = str(STATE_MODULE_PATH.parent)
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    import attestations
+    import attempts
+
+    attestation_id = persist_test_attestation(
+        attestations, paths, "validation", "a2"
+    )
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    attempts.transition_attested(
+        paths,
+        "a2",
+        "validated",
+        attestation_id,
+        {},
+        lease,
+        now,
+    )
+    attempts.transition_attempt(
+        paths,
+        "a2",
+        "improving",
+        lease,
+        now,
+        improvement_attempts=1,
+        improvement_reason="Correct validation failure",
+    )
+
+
+def make_lease_live(paths, lease):
+    scripts = str(STATE_MODULE_PATH.parent)
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    import leases
+    import store
+
+    value = {
+        "resource": lease.resource,
+        "owner": lease.owner,
+        "attempt_id": lease.attempt_id,
+        "acquired_at": lease.acquired_at,
+        "expires_at": "2999-07-27T00:00:00+00:00",
+        "fencing_token": lease.fencing_token,
+        "released_at": lease.released_at,
+    }
+    store.atomic_json_write(
+        paths.resource_lease(lease.resource),
+        value,
+        leases.validate_lease,
+    )
+    return leases.Lease(**value)
+
+
+def persist_test_attestation(
+    attestations, paths, kind: str, attempt_id: str, attempt_number: int = 1
+) -> str:
+    record = {
+        "kind": kind,
+        "attempt_id": attempt_id,
+        "attempt_number": attempt_number,
+        "observed_at": "2026-07-24T18:00:00+00:00",
+        "source_commit": "abc123",
+        "payload_sha256": "1" * 64,
+    }
+    add_attestation_fields(record)
+    return attestations.persist(
+        paths,
+        record,
     )

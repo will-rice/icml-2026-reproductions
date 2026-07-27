@@ -1,0 +1,155 @@
+{
+    "mix_0": {
+        "general_target": 1173,
+        "math_very_high": 568,
+        "math_high": 69,
+        "math_medium": 50,
+        "code_very_high": 152,
+        "code_high": 288,
+        "code_medium": 633
+    },
+    "mix_1": {
+        "general_target": 208,
+        "math_very_high": 284,
+        "math_high": 34.5,
+        "math_medium": 0,
+        "code_very_high": 102,
+        "code_high": 141,
+        "code_medium": 269
+    },
+    "mix_2": {
+        "general_target": 0.3906,
+        "math_very_high": 0.1484,
+        "math_high": 0.062,
+        "math_medium": 0.0,
+        "code_very_high": 0.0096,
+        "code_high": 0.0,
+        "code_medium": 0.3892
+    },
+    "mix_3": {
+        "general_target": 0.5692,
+        "math_very_high": 0.0006,
+        "math_high": 0.0,
+        "math_medium": 0.0006,
+        "code_very_high": 0.0108,
+        "code_high": 0.2006,
+        "code_medium": 0.2182
+    },
+    "mix_4": {
+        "general_target": 0.3416,
+        "math_very_high": 0.3274,
+        "math_high": 0.0568,
+        "math_medium": 0.0652,
+        "code_very_high": 0.0004,
+        "code_high": 0.0576,
+        "code_medium": 0.151
+    },
+    "mix_5": {
+        "general_target": 0.6528,
+        "math_very_high": 0.0038,
+        "math_high": 0.0094,
+        "math_medium": 0.001,
+        "code_very_high": 0.0018,
+        "code_high": 0.0674,
+        "code_medium": 0.2638
+    },
+    "mix_6": {
+        "general_target": 0.479,
+        "math_very_high": 0.2412,
+        "math_high": 0.0,
+        "math_medium": 0.0034,
+        "code_very_high": 0.0,
+        "code_high": 0.0118,
+        "code_medium": 0.2648
+    },
+    "mix_7": {
+        "general_target": 0.3886,
+        "math_very_high": 0.0248,
+        "math_high": 0.0,
+        "math_medium": 0.0,
+        "code_very_high": 0.0,
+        "code_high": 0.0,
+        "code_medium": 0.5866
+    },
+    "mix_8": {
+        "general_target": 0.0,
+        "math_very_high": 0.2134,
+        "math_high": 0.0,
+        "math_medium": 0.0,
+        "code_very_high": 0.0436,
+        "code_high": 0.0,
+        "code_medium": 0.743
+    },
+    "mix_9": {
+        "general_target": 0.8592,
+        "math_very_high": 0.0002,
+        "math_high": 0.0,
+        "math_medium": 0.0862,
+        "code_very_high": 0.0456,
+        "code_high": 0.0,
+        "code_medium": 0.0088
+    },
+    "mix_10": {
+        "general_target": 0.5122,
+        "math_very_high": 0.1184,
+        "math_high": 0.0012,
+        "math_medium": 0.0006,
+        "code_very_high": 0.0004,
+        "code_high": 0.1746,
+        "code_medium": 0.1926
+    },
+    "mix_11": {
+        "general_target": 0.577,
+        "math_very_high": 0.383,
+        "math_high": 0.0,
+        "math_medium": 0.0402,
+        "code_very_high": 0.0,
+        "code_high": 0.0,
+        "code_medium": 0.0
+    },
+    "mix_12": {
+        "general_target": 0.2076,
+        "math_very_high": 0.4052,
+        "math_high": 0.0016,
+        "math_medium": 0.0,
+        "code_very_high": 0.0548,
+        "code_high": 0.1474,
+        "code_medium": 0.1836
+    },
+    "mix_13": {
+        "general_target": 0.553,
+        "math_very_high": 0.0372,
+        "math_high": 0.0044,
+        "math_medium": 0.1094,
+        "code_very_high": 0.0308,
+        "code_high": 0.1084,
+        "code_medium": 0.157
+    },
+    "mix_14": {
+        "general_target": 0.1338,
+        "math_very_high": 0.0028,
+        "math_high": 0.0,
+        "math_medium": 0.0,
+        "code_very_high": 0.0424,
+        "code_high": 0.1496,
+        "code_medium": 0.6716
+    },
+    "mix_15": {
+        "general_target": 0.0878,
+        "math_very_high": 0.4182,
+        "math_high": 0.0676,
+        "math_medium": 0.0388,
+        "code_very_high": 0.0008,
+        "code_high": 0.1198,
+        "code_medium": 0.267
+    },
+    "mix_16": {
+        "general_target": 0.3064,
+        "math_very_high": 0.0618,
+        "math_high": 0.0002,
+        "math_medium": 0.0316,
+        "code_very_high": 0.0,
+        "code_high": 0.0064,
+        "code_medium": 0.5936
+    }
+}

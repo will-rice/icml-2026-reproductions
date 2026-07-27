@@ -33,9 +33,11 @@ orx --help
 ```
 
 `git submodule status` must produce no entries. Authenticate interactively if
-either authentication check fails. AgentSelect setup used to begin by reading
-`docs/HANDOFF.md`; it is now judged and must not be selected, so always use
-that file as the authoritative current-paper entry point.
+either authentication check fails. Resume work from `state/repro-loop.json`
+and its referenced attempt shards. First inspect its schema: retained schema v3
+must receive only the write-free migration dry-run until an explicit,
+digest-pinned migration is separately authorized; schema v6 has no single
+current paper and should be inspected by listing attempts.
 
 ## Verify Required Superpowers Skills
 
@@ -86,6 +88,58 @@ test -L "$CODEX_HOME/skills/icml-repro-loop"
 test "$(readlink "$CODEX_HOME/skills/icml-repro-loop")" = "$PWD/skills/icml-repro-loop"
 ```
 
+## Verify The Worker Boundary
+
+Paper implementation workers must be launched only from a controller-authored
+contract through
+`skills/icml-repro-loop/scripts/worker_guard.py`. Before the first
+implementation launch for each runtime/worktree pair, run its
+`preflight_runtime` probe. The probe must execute its inside-worktree control
+write while denying both the synthetic outside-worktree write and synthetic
+credential-file read. If it cannot prove both denials, issue only a read-only
+research contract.
+
+The constructed worker environment removes `HF_TOKEN`,
+`HUGGING_FACE_HUB_TOKEN`, `GH_TOKEN`, Git credential helpers, and inherited
+Hugging Face caches; it sets `HF_HUB_DISABLE_IMPLICIT_TOKEN=1` and redirects
+the Hub cache to an empty ignored directory inside the assigned worktree.
+Antigravity launches require `--sandbox`; Codex implementation launches
+require `-s workspace-write -C <assigned-worktree>`. Never launch a worker
+with `--dangerously-skip-permissions`,
+`--dangerously-bypass-approvals-and-sandbox`, danger-full-access, or
+`--add-dir`.
+
+Verify the deterministic boundary tests on every host:
+
+```bash
+uv run pytest tests/test_repro_loop_worker_guard.py -q
+```
+
+## Verify The Points Operating Loop
+
+Use the state CLI for every worker launch and score/capacity observation:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py run-worker --help
+uv run python skills/icml-repro-loop/scripts/state.py candidate-census --help
+uv run python skills/icml-repro-loop/scripts/state.py score-report --help
+```
+
+`run-worker` records queue/launch/exit observations around the actual guarded
+child. Worker process duration comes only from complete launch/exit monotonic
+counters; queue duration comes from queued/launched observations. Git
+timestamps and phase timestamps are not worker runtime. A launch from
+`implementing` is implementation work and one from `improving` is correction
+work. Controller validation and deployment remain separately measured stages.
+Incomplete intervals report `null`.
+
+`candidate-census`, `score-report`, `show-*`, and `list-attempts` are read-only.
+`refresh-live` persists snapshots, while scheduling, worker launch, leases,
+design/lifecycle transitions, attestations, verdict sync, publication, and
+repair are controller mutations. Never run the latter commands from a paper
+worker. Submitted, judging, and blocked attempts release runnable
+implementation capacity.
+
 ## Verify The Workspace
 
 ```bash
@@ -94,8 +148,30 @@ uv sync --frozen
 uv run pytest -q
 uv run "$CODEX_HOME/skills/.system/skill-creator/scripts/quick_validate.py" skills/icml-repro-loop
 uv run pre-commit run -a
+state_schema="$(
+  uv run python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["version"])' \
+    state/repro-loop.json
+)"
+case "$state_schema" in
+  3)
+    uv run python skills/icml-repro-loop/scripts/state.py \
+      migrate-v6 state/repro-loop.json --dry-run
+    ;;
+  6)
+    uv run python skills/icml-repro-loop/scripts/state.py \
+      list-attempts state/repro-loop.json
+    ;;
+  *)
+    printf 'Unsupported reproduction state schema: %s\n' "$state_schema" >&2
+    exit 1
+    ;;
+esac
 git status --short
 ```
+
+The host-verification sequence never applies a migration. A separately
+authorized schema-v3 migration must use both `--apply` and the exact
+`--expected-source-sha256` reported by the reviewed dry-run.
 
 `git status --short` must produce no output after fresh tests. The ignored
 environment, cache, coverage, OS, and `.superpowers` paths must not dirty Git.

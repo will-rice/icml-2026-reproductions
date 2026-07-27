@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-26T09:11:41.620787+00:00",
+  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
+  "expires_at": "2026-07-26T14:21:15.825737+00:00",
+  "fencing_token": 2,
+  "owner": "controller-posttrain-design-20260726",
+  "released_at": null,
+  "resource": "attempt:cb04ab1a-a526-4137-862b-a26d68563737"
+}

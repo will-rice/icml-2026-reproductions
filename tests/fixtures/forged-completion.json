@@ -1,0 +1,41 @@
+{
+  "actual_api_cost_usd": 0.0,
+  "attempt_id": "a-forged",
+  "deployed_sha": "ffffffffffffffffffffffffffffffffffffffff",
+  "estimated_api_cost_usd": 0.0,
+  "external_ids": {
+    "claimed_submission_id": "synthetic-submission"
+  },
+  "paper_id": "paper-forged",
+  "phase": "complete",
+  "space_id": "wrice/repro-paper-forged",
+  "target_claims": [
+    "claim-1",
+    "claim-2"
+  ],
+  "transitions": [
+    {
+      "at": "2026-07-25T12:00:00+00:00",
+      "fencing_token": 1,
+      "from": "judging",
+      "owner": "paper-worker",
+      "snapshot_id": "old-snapshot",
+      "to": "complete"
+    }
+  ],
+  "updated_at": "2026-07-25T12:00:00+00:00",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "claim-1",
+        "status": "verified"
+      },
+      {
+        "claim": "claim-2",
+        "status": "verified"
+      }
+    ]
+  },
+  "verdict_at": "2026-07-25T12:00:00+00:00",
+  "verdict_source_revision": "worker-authored"
+}

@@ -1,0 +1,376 @@
+"""Tests for the append-only reproduction-loop telemetry store."""
+
+import importlib.util
+import json
+from pathlib import Path
+import sys
+
+import pytest
+
+
+SCRIPTS_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "skills"
+    / "icml-repro-loop"
+    / "scripts"
+)
+STORE_MODULE_PATH = SCRIPTS_PATH / "store.py"
+TELEMETRY_MODULE_PATH = SCRIPTS_PATH / "telemetry.py"
+
+
+def load_module(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+@pytest.fixture
+def store():
+    return load_module("repro_loop_telemetry_store", STORE_MODULE_PATH)
+
+
+@pytest.fixture
+def telemetry():
+    sys.modules.pop("telemetry", None)
+    return load_module("telemetry", TELEMETRY_MODULE_PATH)
+
+
+@pytest.fixture
+def paths(tmp_path, store):
+    return store.StatePaths(tmp_path / "repro-loop.json")
+
+
+def test_events_are_append_only_and_ordered(paths, telemetry):
+    queued = telemetry.append_event(
+        paths,
+        "session-a",
+        0,
+        "worker-queued",
+        {
+            "attempt_id": "attempt-a",
+            "paper_id": "paper-a",
+            "observed_at": "2026-07-27T00:00:00+00:00",
+        },
+    )
+    assert queued["sequence"] == 0
+    with pytest.raises(FileExistsError):
+        telemetry.append_event(
+            paths,
+            "session-a",
+            0,
+            "worker-queued",
+            {
+                "attempt_id": "attempt-a",
+                "paper_id": "paper-a",
+                "observed_at": "2026-07-27T00:00:00+00:00",
+            },
+        )
+    assert telemetry.read_session(paths, "session-a") == [queued]
+    with pytest.raises(ValueError, match="reserved"):
+        telemetry.append_event(
+            paths,
+            "session-a",
+            1,
+            "worker-launched",
+            {"session_id": "spoofed"},
+        )
+
+
+def test_missing_exit_is_open_and_has_no_guessed_duration(paths, telemetry):
+    telemetry.append_event(
+        paths,
+        "session-a",
+        0,
+        "worker-launched",
+        {
+            "attempt_id": "attempt-a",
+            "paper_id": "paper-a",
+            "observed_at": "2026-07-27T00:00:00+00:00",
+            "monotonic_ns": 100,
+        },
+    )
+    summary = telemetry.summarize_worker_session(
+        telemetry.read_session(paths, "session-a")
+    )
+    assert summary["status"] == "open"
+    assert summary["elapsed_seconds"] is None
+
+
+def test_exited_worker_uses_monotonic_duration(paths, telemetry):
+    telemetry.append_event(
+        paths,
+        "session-a",
+        0,
+        "worker-launched",
+        {"monotonic_ns": 1_000_000_000},
+    )
+    telemetry.append_event(
+        paths,
+        "session-a",
+        1,
+        "worker-exited",
+        {"monotonic_ns": 3_500_000_000},
+    )
+
+    summary = telemetry.summarize_worker_session(
+        telemetry.read_session(paths, "session-a")
+    )
+
+    assert summary == {
+        "session_id": "session-a",
+        "status": "exited",
+        "elapsed_seconds": 2.5,
+    }
+
+
+def test_exit_before_launch_counter_has_no_guessed_duration(paths, telemetry):
+    telemetry.append_event(
+        paths,
+        "session-a",
+        0,
+        "worker-launched",
+        {"monotonic_ns": 200},
+    )
+    telemetry.append_event(
+        paths,
+        "session-a",
+        1,
+        "worker-exited",
+        {"monotonic_ns": 100},
+    )
+
+    summary = telemetry.summarize_worker_session(
+        telemetry.read_session(paths, "session-a")
+    )
+
+    assert summary["status"] == "exited"
+    assert summary["elapsed_seconds"] is None
+
+
+@pytest.mark.parametrize(
+    ("records", "message"),
+    [
+        (
+            [
+                (0, "worker-queued", "session-a"),
+                (0, "worker-launched", "session-a"),
+            ],
+            "sequence",
+        ),
+        ([(0, "worker-queued", "session-b")], "session_id"),
+        ([(1, "worker-queued", "session-a")], "sequence"),
+    ],
+)
+def test_read_session_rejects_corrupt_history(paths, telemetry, records, message):
+    for sequence, event, record_session_id in records:
+        path = paths.telemetry_event("session-a", sequence, event)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps(
+                {
+                    "version": 1,
+                    "session_id": record_session_id,
+                    "sequence": sequence,
+                    "event": event,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    with pytest.raises(ValueError, match=message):
+        telemetry.read_session(paths, "session-a")
+
+
+def test_read_session_rejects_boolean_version(paths, telemetry):
+    path = paths.telemetry_event("session-a", 0, "worker-queued")
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        json.dumps(
+            {
+                "version": True,
+                "session_id": "session-a",
+                "sequence": 0,
+                "event": "worker-queued",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="version"):
+        telemetry.read_session(paths, "session-a")
+
+
+def test_iter_sessions_sorts_validated_session_histories(paths, telemetry):
+    telemetry.append_event(
+        paths, "session-b", 0, "worker-queued", {"paper_id": "paper-b"}
+    )
+    telemetry.append_event(
+        paths, "session-a", 0, "worker-queued", {"paper_id": "paper-a"}
+    )
+
+    histories = list(telemetry.iter_sessions(paths))
+
+    assert [[event["session_id"] for event in history] for history in histories] == [
+        ["session-a"],
+        ["session-b"],
+    ]
+
+
+def test_run_stage_records_real_elapsed_time(paths, telemetry):
+    utc_values = iter(
+        ["2026-07-27T01:00:00+00:00", "2026-07-27T01:00:04+00:00"]
+    )
+    monotonic_values = iter([2_000_000_000, 6_000_000_000])
+    result = {"attestation_id": "a" * 64}
+
+    returned = telemetry.run_stage(
+        paths,
+        "attempt-a",
+        "validation",
+        lambda: result,
+        utc_now=lambda: next(utc_values),
+        monotonic_ns=lambda: next(monotonic_values),
+        session_id_factory=lambda: "stage-a",
+    )
+
+    assert returned is result
+    assert telemetry.read_session(paths, "stage-a") == [
+        {
+            "version": 1,
+            "session_id": "stage-a",
+            "sequence": 0,
+            "event": "stage-started",
+            "attempt_id": "attempt-a",
+            "stage": "validation",
+            "observed_at": "2026-07-27T01:00:00+00:00",
+            "monotonic_ns": 2_000_000_000,
+        },
+        {
+            "version": 1,
+            "session_id": "stage-a",
+            "sequence": 1,
+            "event": "stage-finished",
+            "observed_at": "2026-07-27T01:00:04+00:00",
+            "monotonic_ns": 6_000_000_000,
+            "elapsed_seconds": 4.0,
+            "outcome": "passed",
+            "attestation_id": "a" * 64,
+        },
+    ]
+
+
+def test_run_stage_records_failure_without_serializing_error_text(
+    paths, telemetry
+):
+    error = RuntimeError("token-shaped-sensitive-text")
+
+    def fail():
+        raise error
+
+    with pytest.raises(RuntimeError, match="token-shaped") as raised:
+        telemetry.run_stage(
+            paths,
+            "attempt-a",
+            "deployment",
+            fail,
+            utc_now=lambda: "2026-07-27T01:00:00+00:00",
+            monotonic_ns=iter([1_000_000_000, 1_500_000_000]).__next__,
+            session_id_factory=lambda: "stage-b",
+        )
+
+    assert raised.value is error
+    event = telemetry.read_session(paths, "stage-b")[-1]
+    assert event["outcome"] == "failed"
+    assert event["error_type"] == "RuntimeError"
+    assert event["elapsed_seconds"] == 0.5
+    assert "attestation_id" not in event
+    assert "token-shaped-sensitive-text" not in json.dumps(event)
+
+
+def test_run_stage_returns_exact_result_when_finish_write_fails(
+    paths, telemetry, monkeypatch
+):
+    result = object()
+    real_append = telemetry.append_event
+
+    def fail_finish(paths, session_id, sequence, event, payload):
+        if event == "stage-finished":
+            raise OSError("telemetry-write-sensitive-text")
+        return real_append(paths, session_id, sequence, event, payload)
+
+    monkeypatch.setattr(telemetry, "append_event", fail_finish)
+
+    returned = telemetry.run_stage(
+        paths,
+        "attempt-a",
+        "validation",
+        lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        monotonic_ns=iter([1_000_000_000, 2_000_000_000]).__next__,
+        session_id_factory=lambda: "stage-finish-write-failed",
+    )
+
+    assert returned is result
+    assert [
+        event["event"]
+        for event in telemetry.read_session(
+            paths, "stage-finish-write-failed"
+        )
+    ] == ["stage-started"]
+
+
+def test_run_stage_reraises_exact_operation_error_when_failure_write_fails(
+    paths, telemetry, monkeypatch
+):
+    operation_error = RuntimeError("operation-sensitive-text")
+    real_append = telemetry.append_event
+
+    def fail_finish(paths, session_id, sequence, event, payload):
+        if event == "stage-finished":
+            raise OSError("telemetry-write-sensitive-text")
+        return real_append(paths, session_id, sequence, event, payload)
+
+    def fail_operation():
+        raise operation_error
+
+    monkeypatch.setattr(telemetry, "append_event", fail_finish)
+
+    with pytest.raises(RuntimeError) as raised:
+        telemetry.run_stage(
+            paths,
+            "attempt-a",
+            "deployment",
+            fail_operation,
+            utc_now=lambda: "2026-07-27T01:00:00+00:00",
+            monotonic_ns=iter([1_000_000_000, 2_000_000_000]).__next__,
+            session_id_factory=lambda: "stage-failure-write-failed",
+        )
+
+    assert raised.value is operation_error
+    encoded = json.dumps(
+        telemetry.read_session(paths, "stage-failure-write-failed")
+    )
+    assert "operation-sensitive-text" not in encoded
+    assert "telemetry-write-sensitive-text" not in encoded
+
+
+def test_run_stage_exposes_nested_controller_attestation(paths, telemetry):
+    result = {"transitions": [{"attestation_id": "b" * 64}]}
+
+    telemetry.run_stage(
+        paths,
+        "attempt-a",
+        "deployment",
+        lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        monotonic_ns=iter([1_000_000_000, 2_000_000_000]).__next__,
+        session_id_factory=lambda: "stage-c",
+    )
+
+    assert telemetry.read_session(paths, "stage-c")[-1]["attestation_id"] == (
+        "b" * 64
+    )

@@ -1,0 +1,158 @@
+{
+  "alphaxiv": "2601.14027",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2601.14027",
+  "attempt_id": "49b12585-ca39-441d-b822-c7da77ed81e9",
+  "authors": [
+    "Junqi Liu",
+    "Zihao Zhou",
+    "Zekai Zhu",
+    "Marco Dos Santos",
+    "Weikun He",
+    "jiawei liu",
+    "Yunzhou Xie",
+    "Junqiao Zhao",
+    "Qiufeng Wang",
+    "Lihong Zhi",
+    "Jia LI",
+    "Wenda Li"
+  ],
+  "blocked_from": "judging",
+  "blocker": "Judgment deadline 2026-07-26T08:00:00+00:00 elapsed without an official verdict. Fresh immutable snapshot 2e97bf39d410d687e8a56462f06388dcb4fa9765e98a9f4ba4892549d8237a78 fetched at 2026-07-26T09:12:02.045509+00:00 shows exact Space wrice/repro-numina-lean-agent at submitted SHA f79268b7718b50a1dfeb0a4bfd96299e59dfe2ab still tagged and uniquely queued pending for paper 0bTEd4LpQr, with no matching official verdict. The bounded watch used 2 of 12 polls. Next action: after the challenge operator publishes the exact official verdict, resume judging under a current fenced controller lease, take one fresh immutable assessed snapshot, and run sync-verdict against that snapshot.",
+  "claim_bindings": [
+    {
+      "challenge_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+      "challenge_claim_sha256": "d7d651bcc26f53869d99fec6b8fc09814a9f63871fdd782be1feda433b481a17",
+      "target_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+    },
+    {
+      "challenge_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+      "challenge_claim_sha256": "92d5592ddc6bc3b3a9d64d346516a38082b67dd8607563b52fa0da8b05bdd9ba",
+      "target_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+    }
+  ],
+  "cpu_only": true,
+  "deployed_sha": "f79268b7718b50a1dfeb0a4bfd96299e59dfe2ab",
+  "design": {
+    "author": "codex-numina-design-author-20260724",
+    "path": "docs/superpowers/specs/2026-07-24-numina-lean-agent-reproduction-design.md",
+    "recorded_at": "2026-07-26T05:53:28.517071+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-26T05:53:28.698422+00:00",
+    "reviewer": "codex-numina-independent-design-reviewer-20260724"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2601.14027",
+  "i": 2276,
+  "insts": [
+    "Academy of Mathematics and Systems Science, Chinese Academy of Science",
+    "Xi'an Jiaotong-Liverpool University",
+    "Tongji University"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "Numina-Lean-Agent combines Claude Code with Numina-Lean-MCP and specialized tools for Lean interaction, theorem retrieval, informal proving, and auxiliary reasoning (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Ablations show the agent solves 4 Putnam 2025 problems without the informal prover, 11 with the informal prover, and all 12 with the subagent setup (Table 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=0bTEd4LpQr",
+  "orid": "0bTEd4LpQr",
+  "paper_id": "0bTEd4LpQr",
+  "phase": "blocked",
+  "pid": "66755",
+  "project_path": "submissions/numina-lean-agent",
+  "safety_blocker": null,
+  "score": 14,
+  "slug": "numina-lean-agent-an-open-and-general-agentic-reasoning-system-for-formal-mathematics",
+  "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+  "space_id": "wrice/repro-numina-lean-agent",
+  "spot": false,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+    "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+  ],
+  "title": "Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics",
+  "transitions": [
+    {
+      "at": "2026-07-26T05:53:28.332049+00:00",
+      "fencing_token": 1,
+      "from": "selected",
+      "owner": "scheduler-b31c5bae-59c3-4641-933d-64a6db43e469",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-26T05:53:28.698422+00:00",
+      "fencing_token": 1,
+      "from": "design-pending",
+      "owner": "scheduler-b31c5bae-59c3-4641-933d-64a6db43e469",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-26T06:23:12.865446+00:00",
+      "attestation_id": "6af4634cec9fcfbe29d8dd627c6c8b9acbaa5a7afe351e958ef31487d09e1e87",
+      "fencing_token": 2,
+      "from": "implementing",
+      "owner": "controller-numina-validation-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-26T06:24:34.856331+00:00",
+      "attestation_id": "75637368d5bb567e33e8552e6c27baaedc9a161eda6f7f5f142c9b0ad4fda3f4",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-numina-validation-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-26T06:25:54.582437+00:00",
+      "attestation_id": "872bbd43734e8590cd20bd70898e98fe6dc268273a833ae20bac284f7f2ae665",
+      "fencing_token": 2,
+      "from": "deployed",
+      "owner": "controller-numina-validation-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-26T06:26:12.669348+00:00",
+      "attestation_id": "c0fefa4b9f1701835fc2b6f1bf2a157c25168755514072d7ea24d1ccb1d52360",
+      "fencing_token": 2,
+      "from": "submitted",
+      "owner": "controller-numina-validation-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "judging"
+    },
+    {
+      "at": "2026-07-26T09:12:51.803268+00:00",
+      "fencing_token": 3,
+      "from": "judging",
+      "owner": "controller-numina-deadline-20260726",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "blocked"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-26T09:12:51.803268+00:00",
+  "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
+  "vs": "https://icml.cc/virtual/2026/poster/66755"
+}

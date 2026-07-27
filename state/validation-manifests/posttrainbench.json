@@ -1,0 +1,47 @@
+{
+  "base_sha": "aaa917ce6559b01b3a6441f11b8489de339d9493",
+  "branch": "validate/posttrainbench",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/posttrainbench",
+      "--locked",
+      "posttrainbench-evidence"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/posttrainbench",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/posttrainbench/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-26-posttrainbench-reproduction-design.md",
+  "project_path": "submissions/posttrainbench",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
+}

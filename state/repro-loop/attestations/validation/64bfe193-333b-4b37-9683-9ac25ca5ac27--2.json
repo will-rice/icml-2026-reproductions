@@ -1,0 +1,235 @@
+{
+  "attempt_id": "64bfe193-333b-4b37-9683-9ac25ca5ac27",
+  "attempt_number": 2,
+  "attestation_id": "7604592a23063d87c5d4a3d2c3896bfb5b958250db659c1a538963bffa9d7d3e",
+  "base_sha": "e3740d0bda1c08fe0bb4759f4a02ee92b9a48e1f",
+  "branch": "validate/graph-pruning-v3",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "b644eb805ceb829aaef06ea5a2c69d47a559ff39db4d8d34f5e88969403f7fdc"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "f869c8e071eb7d7edc4b294d6b5ca44516b3315b721dd4b505e39a5a9c2f65c7"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c3eb07fb093bf864000cdcae55a909f443bca53fb6c3a0dc3de1331fe3d306fb"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "e3740d0bda1c08fe0bb4759f4a02ee92b9a48e1f...HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "bc46d33c9d5e3d22436dd6731cb23cf3b9a4409fb5f4b45ee5fa99ac2af5babc"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "f869c8e071eb7d7edc4b294d6b5ca44516b3315b721dd4b505e39a5a9c2f65c7"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c3eb07fb093bf864000cdcae55a909f443bca53fb6c3a0dc3de1331fe3d306fb"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "fcc01b80088b52bdaa3d8fb03876c62620d63b4266ca61afa44410f6fe8496ef"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
+        "python",
+        "-m",
+        "graph_pruning_repro.cli",
+        "validate",
+        "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration/evidence/evidence.json"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "c91f92327b207563037a9dc8ef0c15a4b423ee5ad93f17aea15b0bd5d6a3e62a",
+      "stdout_sha256": "42c8c409e80761ca5ff07a1706b65a73381aa9130e5437058640d30d3cf4b3d0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
+        "python",
+        "-m",
+        "pytest",
+        "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration/tests",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "8bca4a3b0902018e03da8977ce621a22265d6dea2b1db32ea93e5f2c225378ef",
+      "stdout_sha256": "64ad7fbb49b753a735c65902ef39eef5199ef06ef709f7edc5d2053a6bf15e69"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "bd24e45f321d5336ea433746f43ad93b008734681a441af988af89865678a3e6",
+      "stdout_sha256": "605d5444682a7bdb37f75085e4ec72b841930a213305fd05f26c4bb67dfe2c78"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "skills/icml-repro-loop"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "d06766ecff967ef2b29d2ae1163f9997102ee2742520beb75a4c5caa785ccfd5",
+      "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pre-commit",
+        "run",
+        "-a"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "a891a3ade82751881be0a958717c55ea37fc45c2bd2e6721efa475f5c07c079a",
+      "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+    }
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-24-graph-pruning-reproduction-design.md",
+  "environment": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+    },
+    {
+      "argv": [
+        "uv",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+    },
+    {
+      "argv": [
+        "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+    }
+  ],
+  "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+  "kind": "validation",
+  "observed_at": "2026-07-26T05:19:17.191765+00:00",
+  "payload_sha256": "a44d47eff1e0d07a07a932d5187c30e6e8b92e1bb1658a19200c8cf5617b8a90",
+  "project_path": "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
+  "source_commit": "ab954b0ded07728df41c7bbfe3fdbb4c65970768",
+  "source_tree": "08c2280a496357d37034e28bc949f099fba10dba",
+  "source_tree_sha256": "35b7d59d18dc3c9d01671ccee0a5aad90851d27e66cc1d0a9fbbbfdd81799691",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/graph-pruning-validation-v3"
+}

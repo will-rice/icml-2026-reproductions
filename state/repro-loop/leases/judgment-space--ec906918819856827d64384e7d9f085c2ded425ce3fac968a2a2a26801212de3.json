@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-26T06:26:12.669348+00:00",
+  "attempt_id": "49b12585-ca39-441d-b822-c7da77ed81e9",
+  "expires_at": "2026-07-26T06:31:12.669348+00:00",
+  "fencing_token": 1,
+  "owner": "judgment-49b12585-ca39-441d-b822-c7da77ed81e9",
+  "released_at": "2026-07-26T06:26:12.669348+00:00",
+  "resource": "judgment-space:wrice/repro-numina-lean-agent"
+}

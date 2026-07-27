@@ -1,0 +1,270 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://icml-2026-agent-repro.example/schema/graph-pruning-evidence-v1.json",
+  "title": "Canonical graph pruning formal-evidence bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "attempt_id",
+    "source_revision",
+    "paper",
+    "target_claims",
+    "environment",
+    "transcriptions",
+    "searches",
+    "witnesses",
+    "guarantee_violations",
+    "out_of_premise_diagnostics",
+    "proof_ledger",
+    "claim_results",
+    "unavailable_claims",
+    "commands",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "attempt_id": {
+      "const": "64bfe193-333b-4b37-9683-9ac25ca5ac27"
+    },
+    "source_revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "paper": {
+      "type": "object",
+      "required": [
+        "challenge_id",
+        "revision",
+        "source_url",
+        "pdf_byte_count",
+        "pdf_sha256",
+        "license",
+        "pdf_acquisition_command"
+      ],
+      "properties": {
+        "challenge_id": {"type": "string"},
+        "revision": {"type": "string"},
+        "source_url": {"type": "string"},
+        "pdf_byte_count": {"type": "integer", "minimum": 1},
+        "pdf_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "license": {"type": "string"},
+        "pdf_acquisition_command": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "target_claims": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"type": "string"}
+    },
+    "environment": {
+      "type": "object"
+    },
+    "transcriptions": {
+      "type": "object",
+      "required": ["set_sha256", "records"],
+      "properties": {
+        "set_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "records": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "object"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "searches": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "evidence_kind",
+          "completed",
+          "status",
+          "components",
+          "result"
+        ],
+        "properties": {
+          "id": {"type": "string"},
+          "evidence_kind": {
+            "enum": ["symbolic", "exhaustive_finite", "non_exhaustive"]
+          },
+          "completed": {"const": true},
+          "status": {"const": "pass"},
+          "components": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "actual",
+                "declared_ceiling",
+                "completed"
+              ],
+              "properties": {
+                "id": {"type": "string"},
+                "actual": {"type": "integer", "minimum": 0},
+                "declared_ceiling": {"type": "integer", "minimum": 0},
+                "completed": {"const": true}
+              },
+              "additionalProperties": false
+            }
+          },
+          "result": {"type": "object"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "witnesses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "property",
+          "artifact_path",
+          "artifact_sha256"
+        ],
+        "properties": {
+          "id": {"type": "string"},
+          "property": {"type": "string"},
+          "artifact_path": {
+            "type": "string",
+            "pattern": "^evidence/witnesses/[0-9a-f]{16}\\.json$"
+          },
+          "artifact_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "guarantee_violations": {
+      "type": "array",
+      "items": {"type": "object"}
+    },
+    "out_of_premise_diagnostics": {
+      "type": "array",
+      "items": {"type": "object"}
+    },
+    "proof_ledger": {
+      "type": "object",
+      "required": ["symbolic", "finite"],
+      "properties": {
+        "symbolic": {"type": "object"},
+        "finite": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "claim_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "audit",
+          "model_variant",
+          "evidence_kind",
+          "status",
+          "witness_ids"
+        ],
+        "properties": {
+          "id": {"type": "string"},
+          "audit": {"type": "string"},
+          "model_variant": {"type": "string"},
+          "evidence_kind": {
+            "enum": ["symbolic", "exhaustive_finite", "non_exhaustive"]
+          },
+          "status": {
+            "enum": ["supported", "contradicted", "not_applicable"]
+          },
+          "witness_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "unavailable_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "reason"],
+        "properties": {
+          "id": {"type": "string"},
+          "status": {"const": "unavailable"},
+          "reason": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "argv",
+          "return_code",
+          "completed",
+          "status",
+          "actual",
+          "ceiling"
+        ],
+        "properties": {
+          "id": {"type": "string"},
+          "argv": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "return_code": {"const": 0},
+          "completed": {"const": true},
+          "status": {"const": "completed"},
+          "actual": {"type": "integer", "minimum": 0},
+          "ceiling": {"const": 13833860}
+        },
+        "additionalProperties": false
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"type": "string"},
+          "render_pointers": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "paths": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
