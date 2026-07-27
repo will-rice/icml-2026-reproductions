@@ -499,6 +499,8 @@ def _command(
         "--mode",
         "accept-edits" if mode == "implementation" else "plan",
         "--sandbox",
+        "--print-timeout",
+        "2h",
     ]
     if model is not None:
         values.extend(("--model", model))

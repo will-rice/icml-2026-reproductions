@@ -287,6 +287,7 @@ def test_launch_spec_is_rooted_at_one_worktree_and_uses_empty_hf_cache(
     else:
         assert "--sandbox" in spec.argv
         assert "--new-project" in spec.argv
+        assert spec.argv[spec.argv.index("--print-timeout") + 1] == "2h"
     worker_guard.validate_worker_command(spec.argv, runtime)
 
 
