@@ -1,4 +1,4 @@
-exclude: ^(?:submissions/nape/|submissions/[^/]+/(?:evidence/inputs/upstream|artifacts/source)/)
+exclude: ^(?:submissions/nape/|submissions/[^/]+/(?:evidence/inputs/upstream|artifacts/source|inputs/[^/]+)/)
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks

@@ -10,5 +10,6 @@ def test_pre_commit_excludes_byte_exact_upstream_evidence() -> None:
     for path in (
         "submissions/example/evidence/inputs/upstream/source.py",
         "submissions/example/artifacts/source/repository/source.py",
+        "submissions/example/inputs/upstream/source.json",
     ):
         assert re.search(config["exclude"], path)
