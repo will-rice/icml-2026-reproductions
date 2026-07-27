@@ -1604,6 +1604,14 @@ def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
 
     unrelated_cwd = tmp_path / "unrelated-cwd"
     unrelated_cwd.mkdir()
+    git_common_dir = subprocess.run(
+        ["git", "rev-parse", "--git-common-dir"],
+        check=True,
+        capture_output=True,
+        cwd=REPOSITORY_ROOT,
+        text=True,
+    ).stdout.strip()
+    workspace_root = (REPOSITORY_ROOT / git_common_dir).resolve().parent
     result = json.loads(
         subprocess.run(
             [
@@ -1614,7 +1622,7 @@ def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
                 "--snapshot-id",
                 snapshot_id,
                 "--workspace-root",
-                str(REPOSITORY_ROOT.parents[1]),
+                str(workspace_root),
             ],
             check=True,
             capture_output=True,
