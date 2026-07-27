@@ -23,6 +23,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import attestations  # noqa: E402
 import attempts  # noqa: E402
 import leases  # noqa: E402
+import publication_policy  # noqa: E402
 import refresh  # noqa: E402
 import scheduler  # noqa: E402
 import store  # noqa: E402
@@ -45,7 +46,6 @@ ENVIRONMENT_ALLOWLIST = {
     "SSL_CERT_FILE",
     "UV_CACHE_DIR",
 }
-ALLOWED_SPACE_OWNERS = frozenset({"wrice"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -305,8 +305,8 @@ def publish_and_attest_deployment(
     validation = _authoritative_attestation(
         paths, attempt, "validation", "validated"
     )
-    owner = _space_owner(space_id)
-    if owner not in ALLOWED_SPACE_OWNERS:
+    owner = publication_policy.space_owner(space_id)
+    if owner not in publication_policy.ALLOWED_SPACE_OWNERS:
         raise ValueError("owner")
 
     worktree = Path(validation["worktree"])
@@ -344,8 +344,8 @@ def publish_and_attest_deployment(
     )
     if live_sha != upload_sha:
         raise ValueError("revision")
-    live_owner = _space_owner(live_space_id)
-    if live_owner not in ALLOWED_SPACE_OWNERS:
+    live_owner = publication_policy.space_owner(live_space_id)
+    if live_owner not in publication_policy.ALLOWED_SPACE_OWNERS:
         raise ValueError("owner")
     tags = _hub_attribute(info, "tags")
     if (
@@ -436,11 +436,11 @@ def attest_submission(
         raise ValueError("revision")
     if exact_space["paper_ids"] != [paper_id]:
         raise ValueError("paper")
-    owner = _space_owner(space_id)
+    owner = publication_policy.space_owner(space_id)
     canonical_spaces = [
         space
         for space in snapshot["spaces"]
-        if _space_owner(space["space_id"]) == owner
+        if publication_policy.space_owner(space["space_id"]) == owner
         and paper_id in space["paper_ids"]
     ]
     if len(canonical_spaces) != 1:
@@ -961,14 +961,6 @@ def _hub_attribute(value: object, field: str):
     if result is None:
         raise ValueError(field)
     return result
-
-
-def _space_owner(space_id: object) -> str:
-    space_id = _nonempty_string(space_id, "space")
-    owner, separator, name = space_id.partition("/")
-    if not separator or not owner or not name or "/" in name:
-        raise ValueError("space")
-    return owner
 
 
 def _parsed_timestamp(value: object, field: str) -> datetime:

@@ -6,6 +6,7 @@ import argparse
 import copy
 from datetime import datetime, timedelta, timezone
 import hashlib
+import importlib
 import json
 import os
 from pathlib import Path
@@ -691,6 +692,23 @@ def test_state_cli_exposes_controller_hub_commands():
     assert result.returncode == 0
     assert "publish-deployment" in result.stdout
     assert "attest-submission" in result.stdout
+
+
+def test_publication_policy_validates_allowlisted_space_owners():
+    publication_policy = importlib.import_module("publication_policy")
+
+    assert "wrice" in publication_policy.ALLOWED_SPACE_OWNERS
+    assert publication_policy.space_owner("wrice/repro-paper") == "wrice"
+    for invalid in (
+        None,
+        "",
+        "wrice",
+        "/repro-paper",
+        "wrice/",
+        "wrice/repro-paper/extra",
+    ):
+        with pytest.raises(ValueError, match="space_id"):
+            publication_policy.space_owner(invalid)
 
 
 def test_state_measures_injected_deployment_operation(hub_case):
