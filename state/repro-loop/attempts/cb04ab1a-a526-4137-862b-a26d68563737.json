@@ -13,6 +13,8 @@
     "Matthias Bethge",
     "Maksym Andriushchenko"
   ],
+  "blocked_from": "judging",
+  "blocker": "Judgment deadline 2026-07-27T12:38:00+00:00 elapsed without an official verdict. Fresh immutable assessed snapshot f8b158b6e7a2b437473119e7fe234529a4569e5fb2d416302bec60198280be82 shows exact Space wrice/repro-posttrainbench at submitted SHA a7b634e5769d8d489cf6ef0b03b26013ea6db783 still tagged and uniquely queued pending for paper UnjxMTe57e, with no matching official verdict. The bounded watch used 1 of 12 polls. Next action: after the challenge operator publishes the exact official verdict, resume judging under a current fenced controller lease, take one fresh immutable assessed snapshot, and run sync-verdict against that snapshot.",
   "branch": "validate/posttrainbench",
   "claim_bindings": [
     {
@@ -74,7 +76,7 @@
   "or": "https://openreview.net/forum?id=UnjxMTe57e",
   "orid": "UnjxMTe57e",
   "paper_id": "UnjxMTe57e",
-  "phase": "judging",
+  "phase": "blocked",
   "pid": "63667",
   "project_path": "submissions/posttrainbench",
   "safety_blocker": null,
@@ -158,10 +160,18 @@
       "owner": "controller-posttrain-design-20260726",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-27T19:18:02.638165+00:00",
+      "fencing_token": 3,
+      "from": "judging",
+      "owner": "controller-pending-space-audit-20260727",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "blocked"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-26T12:39:18.761131+00:00",
+  "updated_at": "2026-07-27T19:18:02.638165+00:00",
   "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
   "vs": "https://icml.cc/virtual/2026/poster/63667",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
