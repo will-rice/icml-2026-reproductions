@@ -271,6 +271,7 @@ def test_launch_spec_is_rooted_at_one_worktree_and_uses_empty_hf_cache(
     assert spec.project_path == "submissions/paper-a"
     assert str(spec.plan) in spec.argv[-1]
     assert "Execute that plan" in spec.argv[-1]
+    assert "Do not delegate" in spec.argv[-1]
     assert "--add-dir" not in spec.argv
     assert "HF_TOKEN" not in spec.env
     assert "GH_TOKEN" not in spec.env
