@@ -72,6 +72,10 @@ def test_state_paths_create_independent_shards(tmp_path):
     assert paths.lease("attempt--attempt-1") == (
         tmp_path / "repro-loop/leases/attempt--attempt-1.json"
     )
+    assert paths.telemetry_event("session-1", 7, "worker-launched") == (
+        tmp_path
+        / "repro-loop/telemetry/session-1/0007-worker-launched.json"
+    )
 
 
 @pytest.mark.parametrize("identifier", ["", "../escape", "has/slash", "white space"])
@@ -80,6 +84,14 @@ def test_state_paths_reject_unsafe_identifiers(tmp_path, identifier):
 
     with pytest.raises(ValueError, match="identifier"):
         paths.attempt(identifier)
+
+
+@pytest.mark.parametrize("sequence", [-1, True, 1.5])
+def test_telemetry_event_rejects_invalid_sequences(tmp_path, sequence):
+    paths = store_module().StatePaths(tmp_path / "repro-loop.json")
+
+    with pytest.raises(ValueError, match="sequence"):
+        paths.telemetry_event("session-1", sequence, "worker-launched")
 
 
 def test_new_index_has_twenty_paper_capacity():

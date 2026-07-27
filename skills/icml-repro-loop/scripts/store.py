@@ -118,6 +118,21 @@ class StatePaths:
         digest = hashlib.sha256(provider.encode("utf-8")).hexdigest()
         return self.root / "cost-reservations" / f"{attempt_id}--{digest}.json"
 
+    def telemetry_event(
+        self, session_id: str, sequence: int, event: str
+    ) -> Path:
+        """Resolve one immutable controller telemetry event slot."""
+        validate_id(session_id)
+        validate_id(event)
+        if type(sequence) is not int or sequence < 0:
+            raise ValueError("sequence")
+        return (
+            self.root
+            / "telemetry"
+            / session_id
+            / f"{sequence:04d}-{event}.json"
+        )
+
 
 def new_index() -> dict:
     """Return an empty schema-v6 coordinator index."""
