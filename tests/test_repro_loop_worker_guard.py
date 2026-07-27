@@ -518,6 +518,65 @@ def test_run_worker_persists_exit_when_post_run_git_lookup_fails(
     assert b"sensitive git failure" not in session_bytes
 
 
+def test_run_worker_reaps_child_when_launch_telemetry_fails(
+    tmp_path: Path, monkeypatch
+):
+    class LaunchTelemetryFailureProcess:
+        pid = 4242
+
+        def __init__(self):
+            self.terminated = False
+            self.killed = False
+            self.wait_timeouts = []
+
+        def wait(self, timeout=None):
+            self.wait_timeouts.append(timeout)
+            assert self.terminated is True
+            if not self.killed:
+                raise worker_guard.subprocess.TimeoutExpired("codex", timeout)
+            return -9
+
+        def terminate(self):
+            self.terminated = True
+
+        def kill(self):
+            self.killed = True
+
+    paths, spec = worker_run_fixture(tmp_path)
+    process = LaunchTelemetryFailureProcess()
+    telemetry_error = RuntimeError("launch telemetry unavailable")
+    append_event = worker_guard.telemetry.append_event
+
+    def fail_launch_event(*args, **kwargs):
+        if args[3] == "worker-launched":
+            raise telemetry_error
+        return append_event(*args, **kwargs)
+
+    monkeypatch.setattr(worker_guard.telemetry, "append_event", fail_launch_event)
+
+    with pytest.raises(RuntimeError) as raised:
+        worker_guard.run_worker(
+            paths,
+            spec,
+            timeout_seconds=30,
+            process_factory=lambda *args, **kwargs: process,
+            utc_now=iter_values(
+                "2026-07-27T00:00:00+00:00",
+                "2026-07-27T00:00:01+00:00",
+            ),
+            monotonic_ns=iter_values(1_000_000_000),
+            session_id_factory=lambda: "session-launch-telemetry-failure",
+            git_head=lambda _path: "b" * 40,
+            termination_grace_seconds=2,
+            kill_reap_seconds=3,
+        )
+
+    assert raised.value is telemetry_error
+    assert process.terminated is True
+    assert process.killed is True
+    assert process.wait_timeouts == [2, 3]
+
+
 def test_run_worker_terminates_and_reraises_keyboard_interrupt(tmp_path: Path):
     class InterruptedProcess:
         pid = 4242

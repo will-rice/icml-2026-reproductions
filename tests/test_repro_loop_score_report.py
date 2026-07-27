@@ -151,6 +151,19 @@ def test_census_excludes_claimed_and_finds_existing_project(tmp_path: Path):
     ]
 
 
+def test_census_rejects_candidate_without_a_nonempty_title(tmp_path: Path):
+    paths = report_paths(tmp_path, [])
+    malformed = live_candidate("paper-missing-title", claims=2)
+    malformed["title"] = None
+
+    with pytest.raises(ValueError, match="title"):
+        score_report.candidate_census(
+            paths,
+            raw_snapshot(candidates=[malformed]),
+            [],
+        )
+
+
 def test_census_excludes_every_durable_and_live_claim_source(tmp_path: Path):
     paths = report_paths(
         tmp_path,

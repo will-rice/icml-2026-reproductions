@@ -118,6 +118,7 @@ def candidate_census(
             raise ValueError("candidates")
         paper_id = _identity(candidate.get("paper_id"), "paper_id")
         slug = _identity(candidate.get("slug"), "slug")
+        title = _identity(candidate.get("title"), "title")
         live_claims = candidate.get("live_claims")
         if type(live_claims) is not list:
             raise ValueError("live_claims")
@@ -127,7 +128,7 @@ def candidate_census(
         rows.append(
             {
                 "paper_id": paper_id,
-                "title": candidate.get("title"),
+                "title": title,
                 "claim_count": len(live_claims),
                 "existing_projects": existing_projects,
                 "authority": "research-required",

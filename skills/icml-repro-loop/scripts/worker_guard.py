@@ -335,19 +335,30 @@ def run_worker(
     git_sha_before = git_head(spec.cwd)
     process = process_factory(spec.argv, cwd=spec.cwd, env=spec.env)
     launch_counter = monotonic_ns()
-    telemetry.append_event(
-        paths,
-        session_id,
-        1,
-        "worker-launched",
-        {
-            **common,
-            "observed_at": utc_now(),
-            "pid": process.pid,
-            "monotonic_ns": launch_counter,
-            "git_sha_before": git_sha_before,
-        },
-    )
+    try:
+        telemetry.append_event(
+            paths,
+            session_id,
+            1,
+            "worker-launched",
+            {
+                **common,
+                "observed_at": utc_now(),
+                "pid": process.pid,
+                "monotonic_ns": launch_counter,
+                "git_sha_before": git_sha_before,
+            },
+        )
+    except BaseException:
+        try:
+            _terminate_and_reap(
+                process,
+                termination_grace_seconds,
+                kill_reap_seconds,
+            )
+        except BaseException:
+            pass
+        raise
 
     interrupted = False
     exit_observed = True
