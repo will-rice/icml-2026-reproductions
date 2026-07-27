@@ -508,14 +508,52 @@ def test_scheduler_excludes_every_durable_or_live_claim_source(
         now,
         [paper(candidate, 10) for candidate in sorted(excluded)]
         + [paper("eligible", 1)],
-        queued_submissions=[{"paper_id": "queued"}],
-        tagged_spaces=[{"paper_id": "tagged", "space_id": "org/tagged"}],
-        verdicts=[{"paper_id": "verdict", "source_revision": "verdict-rev"}],
+        queued_submissions=[
+            {"paper_id": "queued", "space_id": "wrice/queued"}
+        ],
+        tagged_spaces=[
+            {"paper_id": "tagged", "space_id": "wrice/tagged"}
+        ],
+        verdicts=[
+            {
+                "paper_id": "verdict",
+                "space_id": "wrice/verdict",
+                "source_revision": "verdict-rev",
+            }
+        ],
     )
 
     report = scheduler.scheduler_pass(paths, snapshot_id, now)
 
     assert report.paper_ids == ("eligible",)
+
+
+def test_external_contributor_records_do_not_claim_scheduler_candidate(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10)],
+        queued_submissions=[
+            {"paper_id": "paper-a", "space_id": "other/queued"}
+        ],
+        tagged_spaces=[
+            {"paper_id": "paper-a", "space_id": "other/tagged"}
+        ],
+        verdicts=[
+            {
+                "paper_id": "paper-a",
+                "space_id": "other/verdict",
+                "source_revision": "verdict-rev",
+            }
+        ],
+    )
+
+    report = scheduler.scheduler_pass(paths, snapshot_id, now)
+
+    assert report.paper_ids == ("paper-a",)
 
 
 def test_rejection_committed_before_insertion_wins(

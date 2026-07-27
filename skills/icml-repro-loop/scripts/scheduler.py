@@ -23,6 +23,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import attestations  # noqa: E402
 import attempts  # noqa: E402
 import leases  # noqa: E402
+import publication_policy  # noqa: E402
 import score_rate  # noqa: E402
 import state  # noqa: E402
 import store  # noqa: E402
@@ -560,8 +561,7 @@ def _claimed_paper_ids(
         for record in index["rejections"]
         if type(record) is dict and type(record.get("paper_id")) is str
     )
-    for field in ("queued_submissions", "tagged_spaces", "verdicts"):
-        claimed.update(record["paper_id"] for record in snapshot[field])
+    claimed.update(_external_claimed_paper_ids(snapshot))
     lease_directory = paths.root / "leases"
     for path in lease_directory.glob("*.json"):
         value = store.read_json(path)
@@ -572,6 +572,20 @@ def _claimed_paper_ids(
             and _parse(value["expires_at"], "expires_at") > now
         ):
             claimed.add(value["resource"].removeprefix("candidate:"))
+    return claimed
+
+
+def _external_claimed_paper_ids(snapshot: dict) -> set[str]:
+    """Return papers already represented by our publishing account."""
+    claimed = set()
+    for field in ("queued_submissions", "tagged_spaces", "verdicts"):
+        for record in snapshot[field]:
+            try:
+                owner = publication_policy.space_owner(record.get("space_id"))
+            except ValueError:
+                continue
+            if owner in publication_policy.ALLOWED_SPACE_OWNERS:
+                claimed.add(record["paper_id"])
     return claimed
 
 
