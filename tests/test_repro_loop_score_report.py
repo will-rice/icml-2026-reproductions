@@ -128,7 +128,9 @@ def test_census_excludes_claimed_and_finds_existing_project(tmp_path: Path):
             live_candidate("paper-claimed", claims=6),
             live_candidate("paper-one-claim", claims=1),
         ],
-        tagged_spaces=[{"paper_id": "paper-claimed", "space_id": "org/claimed"}],
+        tagged_spaces=[
+            {"paper_id": "paper-claimed", "space_id": "wrice/claimed"}
+        ],
     )
 
     rows = score_report.candidate_census(
@@ -210,9 +212,15 @@ def test_census_excludes_every_durable_and_live_claim_source(tmp_path: Path):
                 "available-paper",
             )
         ],
-        queued_submissions=[{"paper_id": "queued-paper"}],
-        tagged_spaces=[{"paper_id": "space-paper"}],
-        verdicts=[{"paper_id": "verdict-paper"}],
+        queued_submissions=[
+            {"paper_id": "queued-paper", "space_id": "wrice/queued"}
+        ],
+        tagged_spaces=[
+            {"paper_id": "space-paper", "space_id": "wrice/space"}
+        ],
+        verdicts=[
+            {"paper_id": "verdict-paper", "space_id": "wrice/verdict"}
+        ],
     )
 
     rows = score_report.candidate_census(

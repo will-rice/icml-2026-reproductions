@@ -296,6 +296,8 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
     worktree.mkdir()
     contract = worktree / "worker-contract.json"
     contract.write_text('{"scope":"paper-fast"}\n', encoding="utf-8")
+    plan = worktree / "paper-fast-plan.md"
+    plan.write_text("# Paper Fast Plan\n", encoding="utf-8")
     worker_guard.run_worker(
         paths,
         worker_guard.LaunchSpec(
@@ -304,6 +306,7 @@ def test_points_pipeline_preserves_authority_and_releases_nonrunnable_capacity(
             cwd=worktree,
             env={},
             contract=contract,
+            plan=plan,
             mode="implementation",
             attempt_id=fast_assignment.attempt_id,
             paper_id="paper-fast",
