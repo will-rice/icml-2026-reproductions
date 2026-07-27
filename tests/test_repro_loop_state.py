@@ -1507,6 +1507,59 @@ def test_show_snapshot_requires_explicit_snapshot_id(tmp_path: Path):
     assert "snapshot-id" in result.stderr
 
 
+def test_score_report_cli_reads_verified_snapshot_without_writing_state(
+    tmp_path: Path,
+):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh"):
+        sys.modules.pop(name, None)
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    snapshot_id = refresh.persist_snapshot(
+        paths,
+        {
+            "fetched_at": "2026-07-27T00:00:00+00:00",
+            "source_revision": "source-a",
+            "sources": {},
+            "assessments": None,
+            "candidates": [],
+            "queued_submissions": [],
+            "tagged_spaces": [],
+            "verdicts": [],
+            "spaces": [],
+        },
+    )
+    before = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+
+    result = json.loads(
+        run_cli(
+            "score-report",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--username",
+            "wrice",
+        ).stdout
+    )
+
+    after = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+    assert result["official"]["points"] == 0
+    assert result["official"]["snapshot_id"] == snapshot_id
+    assert before == after
+
+
 @pytest.mark.parametrize("command", ["claim-attempt", "renew-attempt"])
 @pytest.mark.parametrize("missing", ["attempt-id", "owner", "fencing-token"])
 def test_attempt_lease_commands_require_explicit_identity(

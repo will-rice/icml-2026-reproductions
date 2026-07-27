@@ -139,6 +139,14 @@ def main() -> None:
     )
     show_snapshot_parser.add_argument("path", type=Path)
     show_snapshot_parser.add_argument("--snapshot-id", required=True)
+    score_report_parser = commands.add_parser(
+        "score-report",
+        help="report offline official points, capacity, queue, and telemetry",
+    )
+    score_report_parser.add_argument("path", type=Path)
+    score_report_parser.add_argument("--snapshot-id", required=True)
+    score_report_parser.add_argument("--username", required=True)
+    score_report_parser.add_argument("--rank-observation-json", type=Path)
     authority_parser = commands.add_parser(
         "audit-authority",
         help="audit and optionally quarantine unsupported local completions",
@@ -271,6 +279,7 @@ def main() -> None:
         "list-attempts",
         "show-attempt",
         "show-snapshot",
+        "score-report",
         "audit-authority",
         "scheduler-pass",
         "claim-attempt",
@@ -378,6 +387,22 @@ def _run_v6_command(
         import refresh
 
         return refresh.read_snapshot(paths, arguments.snapshot_id)
+    if arguments.command == "score-report":
+        import refresh
+        import score_report
+
+        snapshot = refresh.read_snapshot(paths, arguments.snapshot_id)
+        rank_observation = (
+            None
+            if arguments.rank_observation_json is None
+            else store.read_json(arguments.rank_observation_json)
+        )
+        return score_report.build_report(
+            paths,
+            snapshot,
+            arguments.username,
+            rank_observation,
+        )
     if arguments.command == "audit-authority":
         import authority_audit
 
