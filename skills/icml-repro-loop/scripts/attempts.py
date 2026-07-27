@@ -196,7 +196,7 @@ def transition_attested(
         improvement_attempts = attempt.get("improvement_attempts", 0)
         if (
             type(improvement_attempts) is not int
-            or improvement_attempts not in {0, 1}
+            or improvement_attempts < 0
         ):
             raise ValueError("attestation")
         if (
@@ -558,12 +558,15 @@ def _validate_predeployment_correction(attempt: dict, updates: dict) -> None:
 
 
 def _validate_improving_entry(attempt: dict, updates: dict) -> None:
-    """Enforce the shared one-improvement ceiling on every fresh entry."""
+    """Require each fresh correction to advance its sequence exactly once."""
     current_attempts = attempt.get("improvement_attempts", 0)
-    if type(current_attempts) is not int or current_attempts != 0:
+    if type(current_attempts) is not int or current_attempts < 0:
         raise ValueError("improvement_attempts")
     requested_attempts = updates.get("improvement_attempts")
-    if type(requested_attempts) is not int or requested_attempts != 1:
+    if (
+        type(requested_attempts) is not int
+        or requested_attempts != current_attempts + 1
+    ):
         raise ValueError("improvement_attempts")
     reason = updates.get("improvement_reason")
     if type(reason) is not str or not reason.strip():

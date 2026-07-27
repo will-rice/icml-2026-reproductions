@@ -243,7 +243,7 @@ def validate_attempt(attempt: dict) -> None:
     improvement_attempts = attempt.get("improvement_attempts", 0)
     if (
         type(improvement_attempts) is not int
-        or improvement_attempts not in {0, 1}
+        or improvement_attempts < 0
     ):
         raise ValueError("improvement_attempts")
     if improvement_attempts == 0:

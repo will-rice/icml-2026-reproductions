@@ -497,7 +497,7 @@ def test_predeployment_correction_requires_exact_count_and_nonempty_reason(
     assert attempts.read_attempt(paths, attempt_id)["phase"] == "validated"
 
 
-def test_predeployment_correction_rejects_second_improvement(
+def test_predeployment_correction_allows_next_numbered_improvement(
     paths, attempts_and_leases, attempts, attestations, now
 ):
     attempt_id, lease, _, _ = attempts_and_leases
@@ -529,16 +529,32 @@ def test_predeployment_correction_rejects_second_improvement(
         paths, attempt_id, "validated", second_id, {}, lease, now
     )
 
-    with pytest.raises(ValueError, match="improvement_attempts"):
-        attempts.transition_attempt(
-            paths,
+    improved = attempts.transition_attempt(
+        paths,
+        attempt_id,
+        "improving",
+        lease,
+        now,
+        improvement_attempts=2,
+        improvement_reason="Correct a second observed predeployment failure",
+    )
+
+    assert improved["phase"] == "improving"
+    assert improved["improvement_attempts"] == 2
+
+    third_id = attestations.persist(
+        paths,
+        attestation_record(
+            "validation",
             attempt_id,
-            "improving",
-            lease,
-            now,
-            improvement_attempts=1,
-            improvement_reason="Try again",
-        )
+            attempt_number=3,
+            source_commit="8" * 40,
+        ),
+    )
+    validated = attempts.transition_attested(
+        paths, attempt_id, "validated", third_id, {}, lease, now
+    )
+    assert validated["phase"] == "validated"
 
 
 @pytest.mark.parametrize(
@@ -684,7 +700,7 @@ def test_other_generic_transition_cannot_rewrite_consumed_correction(
     ("mutation", "error"),
     [
         ({"improvement_attempts": 0}, "improvement_reason"),
-        ({"improvement_attempts": 2}, "improvement_attempts"),
+        ({"improvement_attempts": -1}, "improvement_attempts"),
         ({"improvement_reason": ""}, "improvement_reason"),
         ({"improvement_reason": None}, "improvement_reason"),
     ],
