@@ -1479,6 +1479,7 @@ def test_cli_help_names_schema_v6_operations():
         "scheduler-pass",
         "claim-attempt",
         "renew-attempt",
+        "resume-attempt",
         "transition-attempt",
         "record-design",
         "review-design",
@@ -2211,6 +2212,56 @@ def test_transition_attempt_reconstructs_and_validates_persisted_lease(tmp_path:
 
     assert transitioned["attempt_id"] == "a1"
     assert transitioned["phase"] == "design-pending"
+
+
+def test_resume_attempt_reuses_attestation_for_blocked_external_phase(
+    tmp_path: Path,
+):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a2"]
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases", "attestations", "attempts"):
+        sys.modules.pop(name, None)
+    import attestations
+    import attempts
+
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    validation_id = persist_test_attestation(
+        attestations, paths, "validation", "a2"
+    )
+    attempts.transition_attested(
+        paths, "a2", "validated", validation_id, {}, lease, now
+    )
+    deployment_id = persist_test_attestation(
+        attestations, paths, "deployment", "a2"
+    )
+    attempts.transition_attested(
+        paths, "a2", "deployed", deployment_id, {}, lease, now
+    )
+    attempts.transition_attempt(
+        paths, "a2", "blocked", lease, now, blocker="external conflict"
+    )
+
+    resumed = json.loads(
+        run_cli(
+            "resume-attempt",
+            str(paths.index),
+            "--attempt-id",
+            "a2",
+            "--owner",
+            lease.owner,
+            "--fencing-token",
+            str(lease.fencing_token),
+            "--now",
+            "2026-07-24T18:00:00+00:00",
+        ).stdout
+    )
+
+    assert resumed["phase"] == "deployed"
+    assert resumed["transitions"][-1]["attestation_id"] == deployment_id
+    assert "blocked_from" not in resumed
+    assert "blocker" not in resumed
 
 
 def test_cli_transitions_validated_attempt_to_one_predeployment_correction(

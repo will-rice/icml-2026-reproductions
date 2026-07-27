@@ -181,6 +181,13 @@ def main() -> None:
     renew_parser.add_argument("path", type=Path)
     _add_fence_arguments(renew_parser)
     renew_parser.add_argument("--now")
+    resume_parser = commands.add_parser(
+        "resume-attempt",
+        help="resume one blocked attempt using its recorded authority",
+    )
+    resume_parser.add_argument("path", type=Path)
+    _add_fence_arguments(resume_parser)
+    resume_parser.add_argument("--now")
     worker_parser = commands.add_parser(
         "run-worker", help="run one fenced paper worker with telemetry"
     )
@@ -293,6 +300,7 @@ def main() -> None:
         "scheduler-pass",
         "claim-attempt",
         "renew-attempt",
+        "resume-attempt",
         "run-worker",
         "transition-attempt",
         "record-design",
@@ -533,6 +541,39 @@ def _run_v6_command(
         )
     if arguments.command == "renew-attempt":
         return _lease_identity(leases.renew_attempt(paths, lease, now))
+    if arguments.command == "resume-attempt":
+        attempt = attempts.read_attempt(paths, arguments.attempt_id)
+        if attempt.get("phase") != "blocked":
+            raise ValueError("phase")
+        target = attempt.get("blocked_from")
+        if target in attempts.ATTESTED_PHASE_KINDS:
+            transition = next(
+                (
+                    record
+                    for record in reversed(attempt.get("transitions", []))
+                    if record.get("to") == target
+                    and type(record.get("attestation_id")) is str
+                ),
+                None,
+            )
+            if transition is None:
+                raise ValueError("attestation")
+            return attempts.transition_attested(
+                paths,
+                arguments.attempt_id,
+                target,
+                transition["attestation_id"],
+                {},
+                lease,
+                now,
+            )
+        return attempts.transition_attempt(
+            paths,
+            arguments.attempt_id,
+            target,
+            lease,
+            now,
+        )
     if arguments.command == "transition-attempt":
         return attempts.transition_attempt(
             paths,
