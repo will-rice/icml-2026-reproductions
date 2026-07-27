@@ -1,0 +1,244 @@
+{
+  "attempt_id": "bf0d2300-4479-4e3c-ba99-bb023ee6751e",
+  "attempt_number": 1,
+  "attestation_id": "afac28039c853cc19bbcf5da0bf0b9bb10ab5f2139b826d860263776d13b73d7",
+  "base_sha": "0c745fdf564e535e5afe25d275548026ada52765",
+  "branch": "impl/points-timerewarder-validation",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "dbf3ad63a0e9f8923845a49685bf2b9b79dd17bed07dce533f80106f25ef5ee3"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "94a91f33f66c9e84fe0d5f4c60b705d8635125aea5142c777be528279aa0609a"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e482e7f09fca1b3f4cc73bfeec2789a6b466e4b639c92e69057a509631496c37"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "0c745fdf564e535e5afe25d275548026ada52765...HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d1163bf726c0c0b5d285c47ddf69624f4bddbb9156d46579cf8972c3f59d6a44"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "94a91f33f66c9e84fe0d5f4c60b705d8635125aea5142c777be528279aa0609a"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e482e7f09fca1b3f4cc73bfeec2789a6b466e4b639c92e69057a509631496c37"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "4e2848e0cd21fc60ab5ae6f0e01154c4fc91a1f510218fb72a931de8b9559f0d"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance",
+        "timerewarder-repro",
+        "build-evidence",
+        "--manifest",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance/artifacts/manifest.json",
+        "--acquisition",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance/artifacts/acquisition.json",
+        "--registry",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance/artifacts/checkpoints.json",
+        "--source-root",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance/artifacts/source",
+        "--representative",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance/artifacts/representative.json",
+        "--output",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance/artifacts/evidence.json"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "77e3f0ee1a8d0b2db9e02ffdf61f8a92fc3a14562df5ea851d3c4b22f81e4084",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance",
+        "python",
+        "-m",
+        "pytest",
+        "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance/tests",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "c5ff6a90433a7e875009d5f3e8e8c2d4e960176a3dd6841fbc68d7a2c58d00cc",
+      "stdout_sha256": "a95f16da3f2782d6aa7ce0ebe275b7fe1ee810a5326f888b8f315f7285315180"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "5d554df76244870a7b4ab5c33331c3fd862f9efe49ff7e48a4158e1d01bf90cd",
+      "stdout_sha256": "041d6e51350b9fc043beae4e20d45e11171a1217a6b5db76c2bd3136e7c179c5"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "skills/icml-repro-loop"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "1166a74978b62ad767eb68ad0e3d460099897521b57587e2d1e8c78ee72031d4",
+      "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pre-commit",
+        "run",
+        "-a"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "8cbcfbe75590d1f5b89fb0a17e75ff31b114ee0ee5f3de986fdc8923c590de58",
+      "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+    }
+  ],
+  "design_path": "docs/superpowers/plans/2026-07-27-timerewarder-evidence.md",
+  "environment": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+    },
+    {
+      "argv": [
+        "uv",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+    },
+    {
+      "argv": [
+        "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+    }
+  ],
+  "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+  "kind": "validation",
+  "observed_at": "2026-07-27T17:51:23.857253+00:00",
+  "payload_sha256": "8f0982ecc7e8b6533b2a0f794a5d618da380f01608959b3cdc3fab6f61fd13b8",
+  "project_path": "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance",
+  "source_commit": "8c676c3d19a6682d1e688ee2f431d8320c54aa8a",
+  "source_tree": "c7e001fb332068c99258e6e43d911950a856309c",
+  "source_tree_sha256": "e062d5769d86fd6b3a4e849b250221b4697e530cf62cd7166fe933dbc4ecb645",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/points-timerewarder-clean"
+}

@@ -77,8 +77,9 @@
   "or": "https://openreview.net/forum?id=p5QSlnwume",
   "orid": "p5QSlnwume",
   "paper_id": "p5QSlnwume",
-  "phase": "implementing",
+  "phase": "validated",
   "pid": "61543",
+  "project_path": "submissions/rethinking-video-generation-model-for-the-embodied-world",
   "safety_blocker": null,
   "score": 17,
   "score_rate": {
@@ -148,10 +149,19 @@
       "owner": "controller-design-rbench",
       "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
       "to": "implementing"
+    },
+    {
+      "at": "2026-07-27T18:01:01.835632+00:00",
+      "attestation_id": "b945c107df9830deebd24c2ca99d59cac4627f8d66d8f17576dda6cfa4e34d4a",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-rbench-validation-20260727",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "validated"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T12:47:03.790761+00:00",
+  "updated_at": "2026-07-27T18:01:01.835632+00:00",
   "upstream_revision": "arxiv:2601.15282v1+github:DAGroup-PKU/ReVidgen@b03df27f0376faa148dcd8cd620a1989a32ca979+hf-dataset:DAGroup-PKU/RBench@6bdccf349ff5a8f68302428351e94f34ecd62450+hf-space:DAGroup-PKU/RBench-Leaderboard@6b66282843a5d863af4271fb07ba1641d1d33334+hf-space:DAGroup-PKU/RBench-Leaderboard@5dd6d55e454e22dbf7bd34ea5fbbeda5bc0f9b07",
   "vs": "https://icml.cc/virtual/2026/poster/61543"
 }

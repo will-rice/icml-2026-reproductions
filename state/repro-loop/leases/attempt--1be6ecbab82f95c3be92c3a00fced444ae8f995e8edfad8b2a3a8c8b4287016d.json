@@ -1,9 +1,9 @@
 {
-  "acquired_at": "2026-07-27T12:46:54.285314+00:00",
+  "acquired_at": "2026-07-27T17:32:50.275191+00:00",
   "attempt_id": "8c21f2dc-a357-422e-9c1b-79a4d417e3dc",
-  "expires_at": "2026-07-27T14:46:54.285314+00:00",
-  "fencing_token": 2,
-  "owner": "controller-design-rbench",
+  "expires_at": "2026-07-27T19:32:50.275191+00:00",
+  "fencing_token": 3,
+  "owner": "controller-rbench-validation-20260727",
   "released_at": null,
   "resource": "attempt:8c21f2dc-a357-422e-9c1b-79a4d417e3dc"
 }
