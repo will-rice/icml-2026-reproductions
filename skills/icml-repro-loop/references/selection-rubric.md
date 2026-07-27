@@ -6,7 +6,11 @@ Run raw `refresh-live` and inspect it with `show-snapshot`, then inspect source 
 
 A candidate is eligible only when all of these are true:
 
-- It has no active/history attempt, candidate lease, queued submission, tagged Space, or verdict in the snapshot and durable store. Judged and historical papers remain excluded.
+- It has no active/history attempt, candidate lease, rejection, queued
+  submission, tagged Space, or verdict owned by our allowlisted publishing
+  account in the snapshot and durable store. Another contributor's Space or
+  verdict does not exclude a distinct reproduction. Our judged and historical
+  papers remain excluded.
 - At least two distinct paper claims are independently testable. A claim is independently testable only when released artifacts or a feasible computation can verify it without treating the paper's reported value as evidence.
 - It does not require GPU training. Explicitly requested GPU projects are outside this skill.
 - The estimated cumulative paid-API cost for the paper is at most USD 10. More than USD 10 is ineligible, not merely a score penalty.

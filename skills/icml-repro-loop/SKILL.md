@@ -108,8 +108,9 @@ success.
    `CONFIG_ERROR`, wrong SHA, missing tag, or a healthy-looking UI is not a
    deployment attestation.
 7. Fetch a new assessed snapshot and use `attest-submission`. Space existence
-   does not prove submission. Reject a duplicate paper or conflicting canonical
-   attempt.
+   does not prove submission. Another contributor's reproduction does not
+   block our distinct Space. Reject a duplicate local attempt or a second
+   canonical Space for the paper under the allowlisted publishing owner.
 8. Use `watch-attempt` with a finite positive poll limit and aware deadline.
    Persist observations through `record-poll`. Submitted, judging, and blocked
    attempts do not consume runnable implementation capacity: refill their
