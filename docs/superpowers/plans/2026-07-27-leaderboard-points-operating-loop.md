@@ -1081,8 +1081,11 @@ git commit -m "feat: inventory unclaimed papers and existing implementations"
 - Modify: `skills/icml-repro-loop/references/selection-rubric.md`
 - Modify: `skills/icml-repro-loop/references/submission-checklist.md`
 - Modify: `docs/REMOTE_SETUP.md`
-- Modify: `docs/HANDOFF.md` (controller append only; do not stage)
-- Modify: `tests/test_repro_loop_state.py`
+- Modify: `skills/icml-repro-loop/scripts/state.py` (only if the integration
+  test exposes the nonblocking-judging capacity regression)
+- Modify: `docs/superpowers/plans/2026-07-27-leaderboard-points-operating-loop.md`
+- Modify: `tests/test_repro_loop_score_report.py` (only if that regression
+  changes its capacity expectation)
 - Create: `tests/test_repro_loop_points_pipeline.py`
 
 **Interfaces:**
@@ -1090,40 +1093,37 @@ git commit -m "feat: inventory unclaimed papers and existing implementations"
 - Produces: operator instructions that make score-rate assessment, instrumented
   worker launch, reporting, and census the default workflow.
 
-- [ ] **Step 1: Write failing documentation-contract assertions**
+- [ ] **Step 1: Write failing behavior tests**
 
-```python
-def test_operator_docs_require_score_rate_and_instrumented_launch():
-    skill = (ROOT / "skills/icml-repro-loop/SKILL.md").read_text()
-    remote = (ROOT / "docs/REMOTE_SETUP.md").read_text()
-    rubric = (
-        ROOT / "skills/icml-repro-loop/references/selection-rubric.md"
-    ).read_text()
+Before editing the skill, dispatch a fresh read-only agent on one realistic
+scenario combining deadline pressure, legacy-score pressure, a direct-worker
+launch shortcut, Git-derived runtime pressure, judging/blocked capacity, and
+pressure to merge estimates with official points. Require an exact safe
+operator sequence, CLI commands, rank-observation shape, telemetry semantics,
+correction classification, and read-only versus mutating authority. Record its
+verbatim response and exact operational gaps in the ignored Task 7 report.
 
-    assert "expected points per remaining hour" in skill
-    assert "state.py run-worker" in skill
-    assert "state.py score-report" in skill
-    assert "state.py candidate-census" in rubric
-    assert "Git timestamps are not worker runtime" in remote
-```
-
-Add one end-to-end fixture that starts with a raw census, attaches two
+Add one real end-to-end fixture that starts with a raw census, attaches two
 source-bound score-rate assessments, admits the higher-rate eligible paper,
 records a complete implementation worker session plus validation/deployment
 events, and asserts the final report keeps official points, pending estimates,
 capacity, and measured durations distinct. Add explicit regression assertions
-that attempts in `judging` or `blocked` do not consume runnable capacity.
+that attempts in `judging` or `blocked` do not consume runnable capacity. Do
+not add prose-grep or text-presence assertions.
 
-- [ ] **Step 2: Run the documentation test and verify RED**
+- [ ] **Step 2: Run the behavior tests and verify RED**
 
 Run:
 
 ```bash
 env UV_CACHE_DIR=/tmp/icml-repro-uv-cache uv run pytest \
-  tests/test_repro_loop_state.py::test_operator_docs_require_score_rate_and_instrumented_launch -q
+  tests/test_repro_loop_points_pipeline.py -q
 ```
 
-Expected: fails on the first missing phrase.
+Expected: the integration test fails at the missing behavior, not fixture
+setup. Record the fresh-agent skill gap before any skill edit. After the
+minimal implementation and documentation edits, dispatch a different fresh
+agent on the same scenario and require compliant behavior.
 
 - [ ] **Step 3: Update operator documentation**
 
@@ -1172,18 +1172,8 @@ env UV_CACHE_DIR=/tmp/icml-repro-uv-cache uv run python \
 ```
 
 Document the exact rank-observation schema and that omitting the file reports
-`rank_observation=null`. After all implementation verification passes, use
-`apply_patch` to append this exact milestone to `docs/HANDOFF.md` without
-altering existing lines:
-
-```markdown
-- 2026-07-27: Implemented the approved leaderboard-points operating loop:
-  source-bound score-rate scheduling, actual worker/controller telemetry,
-  read-only score/capacity reporting, and broad unclaimed-paper census.
-```
-
-Do not stage `docs/HANDOFF.md`; its pre-existing changes remain unowned and the
-controller will reconcile the combined handoff update separately.
+`rank_observation=null`. Do not modify `docs/HANDOFF.md` in the isolated
+worktree; the controller reconciles that milestone after integration.
 
 - [ ] **Step 4: Run focused and full verification**
 
@@ -1217,9 +1207,8 @@ git diff --check
 git status --short
 ```
 
-Expected: every command passes; `submissions/nape/` remains untouched; the only
-remaining unrelated worktree modification is the user's prior
-`docs/HANDOFF.md` edit plus the controller's appended milestone.
+Expected: every command passes; `docs/HANDOFF.md`, `submissions/nape/`, state,
+paper submissions, and external services remain untouched.
 
 - [ ] **Step 5: Commit Task 7 without absorbing unrelated handoff changes**
 
@@ -1230,8 +1219,10 @@ git add \
   skills/icml-repro-loop/SKILL.md \
   skills/icml-repro-loop/references/selection-rubric.md \
   skills/icml-repro-loop/references/submission-checklist.md \
+  skills/icml-repro-loop/scripts/state.py \
   docs/REMOTE_SETUP.md \
-  tests/test_repro_loop_state.py \
+  docs/superpowers/plans/2026-07-27-leaderboard-points-operating-loop.md \
+  tests/test_repro_loop_score_report.py \
   tests/test_repro_loop_points_pipeline.py
 git diff --cached --check
 git commit -m "docs: operate reproduction loop by expected leaderboard points"

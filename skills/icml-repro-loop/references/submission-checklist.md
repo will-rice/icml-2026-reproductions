@@ -7,8 +7,8 @@ exact live observation. Intention and worker self-report are not evidence.
 
 - [ ] The controller contract names one attempt, paper, absolute worktree,
   `submissions/<paper>/` project path, and `implementation` or `research` mode.
-- [ ] An implementation worker was launched only through `worker_guard.py`
-  after its runtime preflight passed.
+- [ ] An implementation worker was launched only through fenced
+  `state.py run-worker` after its runtime preflight passed.
 - [ ] The worker environment contains no `HF_TOKEN`,
   `HUGGING_FACE_HUB_TOKEN`, `GH_TOKEN`, credential helper, inherited Hugging
   Face cache, or implicit-token loading.
@@ -17,6 +17,13 @@ exact live observation. Intention and worker self-report are not evidence.
   authority.
 - [ ] A runtime that cannot enforce isolation received only a read-only
   research contract.
+- [ ] Worker queue time comes from queued/launched UTC observations; worker
+  process time comes from launched/exited monotonic counters. Git revisions
+  identify inputs and outputs and are never runtime estimates.
+- [ ] A worker launched from `implementing` records
+  `work_kind="implementation"`; one launched from `improving` records
+  `work_kind="correction"`. Validation and deployment are separate controller
+  stage intervals.
 
 ## Upstream And Claims
 
@@ -85,6 +92,45 @@ exact live observation. Intention and worker self-report are not evidence.
 - [ ] Evidence is not the official verdict. Simulations cannot enter judgment
   state. Require exact live snapshot observation. Wait for and import the
   official record. Permissions do not grant authority.
+- [ ] Judging and blocked attempts release runnable implementation capacity;
+  refill through a bounded `scheduler-pass` without waiting for unrelated
+  verdicts or blockers.
+
+## Census And Score Report
+
+- [ ] Run `candidate-census` only against an immutable raw snapshot. Its
+  `authority="research-required"` rows and candidate-slug project matches are
+  discovery inputs, not assessments.
+- [ ] Run `score-report` after every worker exit, validation/deployment
+  outcome, and verdict refresh. It is read-only: it must not recover, repair,
+  update, or transition coordinator state.
+- [ ] Keep `official` snapshot-derived verdict points separate from
+  `pending_judgment` estimates and `candidate_queue` estimates. Never add
+  estimated points to the official total.
+- [ ] Read capacity from `capacity.max_runnable`, `runnable`, and `idle`.
+  Telemetry reports actual `worker_queue_seconds`, `worker_process_seconds`,
+  `validation_seconds`, `deployment_seconds`, and
+  `first_launch_to_submission_seconds`; incomplete intervals are `null`, not
+  phase- or Git-derived guesses. Session counts distinguish implementation
+  from correction, and judged point rates use only complete measured
+  intervals.
+- [ ] Supply a rank observation only as JSON with exactly this schema; omit the
+  option to report `rank_observation=null`:
+
+```json
+{
+  "observed_at": "2026-07-27T12:00:00+00:00",
+  "source_url": "https://example.org/leaderboard",
+  "username": "wrice",
+  "points": 12,
+  "rank": 7
+}
+```
+
+The timestamp must be timezone-aware, the URL HTTP(S), `rank` a positive
+integer, and `username` and integer `points` must exactly match the report's
+requested user and snapshot-derived official points. The report does not
+scrape or infer rank.
 
 ## Historical Repair
 
@@ -103,10 +149,19 @@ Every fenced attempt command also takes `--attempt-id ATTEMPT --owner OWNER
 --fencing-token TOKEN`.
 
 ```bash
+uv run python skills/icml-repro-loop/scripts/state.py run-worker state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --runtime codex --model MODEL --worktree /ABSOLUTE/WORKTREE --contract /ABSOLUTE/WORKTREE/.superpowers/worker-contract.json
 uv run python skills/icml-repro-loop/scripts/state.py attest-validation state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --manifest validation-manifest.json
 uv run python skills/icml-repro-loop/scripts/state.py publish-deployment state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --space-id OWNER/SPACE --source-dir submissions/PAPER
 uv run python skills/icml-repro-loop/scripts/state.py attest-submission state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --snapshot-id SNAPSHOT
 uv run python skills/icml-repro-loop/scripts/state.py watch-attempt state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --poll-limit 12 --poll-deadline 2026-07-25T18:00:00+00:00
 uv run python skills/icml-repro-loop/scripts/state.py sync-verdict state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --snapshot-id SNAPSHOT
 uv run python skills/icml-repro-loop/scripts/state.py audit-authority state/repro-loop.json --snapshot-id SNAPSHOT
+uv run python skills/icml-repro-loop/scripts/state.py score-report state/repro-loop.json --snapshot-id SNAPSHOT --username wrice --rank-observation-json state/wrice-rank-observation.json
 ```
+
+Read-only/reporting commands are `list-attempts`, `show-attempt`,
+`show-snapshot`, `candidate-census`, `score-report`, and `audit-authority`
+without `--repair`. `refresh-live` writes immutable snapshots;
+`scheduler-pass`, `run-worker`, lease/design/transition commands, lifecycle
+attestations, `sync-verdict`, and `audit-authority --repair` mutate coordinator
+or external authority and are controller-only.

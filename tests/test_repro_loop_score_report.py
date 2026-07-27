@@ -580,7 +580,7 @@ def test_build_report_uses_only_explicit_attempt_and_telemetry_evidence(
         "papers": [],
         "expected_points": 0,
     }
-    assert report["capacity"] == {"max_runnable": 20, "runnable": 4, "idle": 16}
+    assert report["capacity"] == {"max_runnable": 20, "runnable": 3, "idle": 17}
     assert report["phases"] == {
         "blocked": 1,
         "implementing": 1,

@@ -29,11 +29,12 @@ permissions do not change the role.
 2. return commit, commands, evidence paths, and concerns as a **proposal, never authority**;
 3. never claim or perform external phases.
 
-An implementation worker must be launched through `worker_guard.py` after
-`preflight_runtime` proves outside-worktree writes and synthetic
-credential-file reads are denied. `launch_spec` constructs the command and
-sanitized environment. An unenforceable runtime may receive only a read-only
-research contract.
+An implementation worker must be launched through controller command
+`state.py run-worker` after `preflight_runtime` proves outside-worktree writes
+and synthetic credential-file reads are denied. It constructs the guarded
+command and sanitized environment, then records the actual child-process
+boundary. An unenforceable runtime may receive only a read-only research
+contract.
 
 ### Controller recipe
 
@@ -76,9 +77,13 @@ success.
    `refresh-live`, then inspect the immutable result through `show-snapshot`.
    Bare challenge metadata never supplies feasibility, score, cost, targets,
    or an upstream pin.
-2. Inspect primary artifacts and write assessment JSON following
+2. Run read-only `candidate-census` on the raw snapshot and registered
+   worktrees. It identifies broad unclaimed work and candidate-slug project
+   reuse; it never supplies feasibility or score. Inspect primary artifacts and
+   write assessment JSON following
    [selection-rubric.md](references/selection-rubric.md). Bind each target to
-   exact live challenge text and SHA-256. Run
+   exact live challenge text and SHA-256, and estimate conservative expected
+   points per remaining hour. Run
    `refresh-live --assessments-json PATH`; revision drift requires a new raw
    refresh and assessment.
    A schema-v3 migrated attempt cannot advance on its legacy
@@ -92,7 +97,9 @@ success.
 4. Create one controller-authored worker contract naming the attempt, paper,
    absolute isolated worktree, `submissions/<paper>/` path, and mode. Strip
    Hub/GitHub credentials, disable Hugging Face implicit-token loading, run the
-   guard preflight, and launch only the constructed spec.
+   guard preflight, and launch only with fenced `state.py run-worker`.
+   `implementing` launches are implementation sessions; `improving` launches
+   are correction sessions.
 5. Treat the worker result as a proposal. Review its diff and use
    `attest-validation`; worker-reported tests or local JSON cannot advance the
    phase.
@@ -104,8 +111,10 @@ success.
    does not prove submission. Reject a duplicate paper or conflicting canonical
    attempt.
 8. Use `watch-attempt` with a finite positive poll limit and aware deadline.
-   Persist observations through `record-poll`. At either bound without a
-   verdict, persist a blocker and refill capacity; pending is not success.
+   Persist observations through `record-poll`. Judging and blocked attempts do
+   not consume runnable implementation capacity: refill their lanes without
+   waiting. At either bound without a verdict, persist a blocker; pending is
+   not success.
 9. Use `sync-verdict` with only a fresh immutable snapshot ID. It verifies exact
    paper, Space, deployed SHA, verdict dataset revision, judged timestamp, and
    claim bindings. Preserve official `verified`, `falsified`, `toy`, and
@@ -113,6 +122,12 @@ success.
 10. Before trusting pre-hardening history, run `audit-authority` read-only,
     inspect every decision, then use `--repair` to quarantine unsupported
     completions. Repair never modifies external Spaces.
+11. Run read-only `score-report` after each worker exit, controller validation
+    or deployment outcome, and official verdict refresh. Keep official verdict
+    points, pending estimates, rank observation, runnable capacity, and actual
+    telemetry separate. Follow
+    [submission-checklist.md](references/submission-checklist.md) for the exact
+    report and rank-observation contracts.
 
 All attempt mutations require explicit `--attempt-id`, `--owner`, and
 `--fencing-token`. Renew the current two-hour lease before expiry. A successor
@@ -159,3 +174,12 @@ relying on remembered signatures:
 ```bash
 uv run python skills/icml-repro-loop/scripts/state.py --help
 ```
+
+The operating pass is raw `refresh-live` → `show-snapshot` and
+`candidate-census` → source-bound assessments → assessed `refresh-live` →
+`scheduler-pass` → design review → `run-worker` → controller attestations →
+`score-report`. `show-*`, `list-attempts`, `candidate-census`, `score-report`,
+and `audit-authority` without `--repair` are read-only. `refresh-live`,
+`scheduler-pass`, `run-worker`, lease/design/lifecycle commands, controller
+attestations, `sync-verdict`, and `audit-authority --repair` mutate local or
+external authority; only the controller may run them.

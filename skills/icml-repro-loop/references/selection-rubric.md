@@ -14,20 +14,55 @@ A candidate is eligible only when all of these are true:
 - Its execution path is not known to be unsafe. Unresolved safety ambiguity pauses selection; a workload proven safe inside an approved isolation boundary may remain eligible.
 - Its paper identity, candidate status, artifact availability, and expected execution path have been checked from live or primary sources.
 
-## Assessment Input
+## Census And Assessment Input
+
+Run `candidate-census` on the raw snapshot before research. It lists unclaimed
+papers with at least two extracted claims and any revision-pinned project found
+at the candidate's validated `submissions/<slug>` path in a registered
+worktree. A census row has research authority only: it never supplies
+feasibility, score, cost, targets, or an upstream pin.
 
 The assessment file has top-level `challenge_revision`, `assessor`,
-`assessed_at`, and `assessments`. Each assessment contains exactly `paper_id`,
+`assessed_at`, and `assessments`. New assessments contain exactly `paper_id`,
 `score`, `target_claims`, `claim_bindings`, `upstream_revision`,
-`artifact_access`, `cpu_only`, `safety_blocker`, `licensing_blocker`, and
-`estimated_api_cost_usd`. `claim_bindings` has one object per target claim, in
-target order, with exactly `target_claim`, `challenge_claim`, and
-`challenge_claim_sha256`. The target must match its corresponding
-`target_claims` entry; `challenge_claim` must be text from the pinned current
-live extracted claims; and its SHA-256 must be the UTF-8 digest of that exact
-text. Unmatched and unassessed papers remain in snapshot provenance but are
-ineligible. A stale document revision aborts assessed refresh; rerun discovery
-and assessment.
+`artifact_access`, `cpu_only`, `safety_blocker`, `licensing_blocker`,
+`estimated_api_cost_usd`, and `score_rate`. Historical records without
+`score_rate` remain readable but cannot be newly admitted. `claim_bindings` has
+one object per target claim, in target order, with exactly `target_claim`,
+`challenge_claim`, and `challenge_claim_sha256`. The target must match its
+corresponding `target_claims` entry; `challenge_claim` must be text from the
+pinned current live extracted claims; and its SHA-256 must be the UTF-8 digest
+of that exact text. Unmatched and unassessed papers remain in snapshot
+provenance but are ineligible. A stale document revision aborts assessed
+refresh; rerun discovery and assessment.
+
+`score_rate` contains exactly:
+
+```json
+{
+  "claim_expectations": [
+    {
+      "challenge_claim_sha256": "64 lowercase hex characters",
+      "p_verified": 0.5,
+      "p_falsified": 0.1,
+      "p_toy": 0.2
+    }
+  ],
+  "judged_before_deadline_probability": 0.8,
+  "remaining_hours_p90": 2.0,
+  "reusable_implementation": false,
+  "direct_artifact_score": 4,
+  "full_score_claim_paths": 2,
+  "remaining_time_variance_hours2": 0.25,
+  "primary_risk": "Artifact schema may have drifted."
+}
+```
+
+There is one expectation per live claim, in live order, bound by exact claim
+SHA-256. Each probability is in `[0,1]` and the three probabilities for one
+claim sum to at most one. P90 hours are finite and positive. Estimate all
+remaining implementation, validation, deployment, submission, and correction
+work—not only the evidence command.
 
 ## Base Score
 
@@ -104,26 +139,42 @@ Apply every relevant penalty after the base score; penalties are cumulative:
 
 Do not hide an eligibility failure with a high score. Record each penalty and the source observation that caused it.
 
-## Selection Decision
+## Expected Points And Selection Decision
 
-Rank by final score. Before selection, compare the top three eligible candidates side by side. If fewer than three are eligible, document the exhausted pool and compare every eligible candidate.
+Official claim points are exactly `verified=2`, `falsified=2`, `toy=1`, and
+`inconclusive=0`. Assessments are estimates, never official verdicts:
 
-| Candidate | Base | Penalties | Final | Testable claims | CPU estimate | API estimate | Main risk |
-| --- | ---: | ---: | ---: | ---: | --- | ---: | --- |
-| A |  |  |  |  |  |  |  |
-| B |  |  |  |  |  |  |  |
-| C |  |  |  |  |  |  |  |
+```text
+expected_points = Σ(2*p_verified + 2*p_falsified + p_toy)
+priority = expected_points * judged_before_deadline_probability
+           / max(remaining_hours_p90, 0.25)
+```
 
-The scheduler selects highest scores unless a documented tie-break favors
-stronger direct evidence, lower execution risk, or lower cost. Persist every
-ineligible candidate and reason in the coordinator before continuing. One
-bounded pass admits only enough candidates to restore 20 runnable paper
-attempts; blocked and complete attempts create capacity without stopping other
-work.
+Rank eligible candidates by descending priority. Resolve exact ties by reusable
+implementation first, then higher direct-artifact score, more full-score claim
+paths, lower remaining-time variance, lower paid API cost, and paper ID. The
+legacy rubric score remains useful assessment context but is not the scheduler
+ranking key.
+
+Before selection, compare the top three eligible candidates side by side. If
+fewer than three are eligible, document the exhausted pool and compare every
+eligible candidate.
+
+| Candidate | Expected points | Deadline probability | P90 hours | Points/hour priority | API estimate | Main risk |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| A |  |  |  |  |  |  |
+| B |  |  |  |  |  |  |
+| C |  |  |  |  |  |  |
+
+Persist every ineligible candidate and reason in the coordinator before
+continuing. One bounded pass admits only enough candidates to restore 20
+runnable paper attempts. Judging, blocked, and complete attempts do not consume
+runnable implementation capacity and never stop unrelated work.
 
 ```bash
 raw_id=$(uv run python skills/icml-repro-loop/scripts/state.py refresh-live state/repro-loop.json | uv run python -c 'import json,sys; print(json.load(sys.stdin)["snapshot_id"])')
 uv run python skills/icml-repro-loop/scripts/state.py show-snapshot state/repro-loop.json --snapshot-id "$raw_id"
+uv run python skills/icml-repro-loop/scripts/state.py candidate-census state/repro-loop.json --snapshot-id "$raw_id" --workspace-root /home/will/projects/icml-2026-reproductions
 uv run python skills/icml-repro-loop/scripts/state.py refresh-live state/repro-loop.json --assessments-json state/candidate-assessments.json
 uv run python skills/icml-repro-loop/scripts/state.py scheduler-pass state/repro-loop.json --snapshot-id SNAPSHOT_ID
 ```

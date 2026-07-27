@@ -115,6 +115,30 @@ Verify the deterministic boundary tests on every host:
 uv run pytest tests/test_repro_loop_worker_guard.py -q
 ```
 
+## Verify The Points Operating Loop
+
+Use the state CLI for every worker launch and score/capacity observation:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py run-worker --help
+uv run python skills/icml-repro-loop/scripts/state.py candidate-census --help
+uv run python skills/icml-repro-loop/scripts/state.py score-report --help
+```
+
+`run-worker` records queue/launch/exit observations around the actual guarded
+child. Worker process duration comes only from complete launch/exit monotonic
+counters; queue duration comes from queued/launched observations. Git
+timestamps and phase timestamps are not worker runtime. A launch from
+`implementing` is implementation work and one from `improving` is correction
+work. Controller validation and deployment remain separately measured stages.
+Incomplete intervals report `null`.
+
+`candidate-census`, `score-report`, `show-*`, and `list-attempts` are read-only.
+`refresh-live` persists snapshots, while scheduling, worker launch, leases,
+design/lifecycle transitions, attestations, verdict sync, publication, and
+repair are controller mutations. Never run the latter commands from a paper
+worker. Judging and blocked attempts release runnable implementation capacity.
+
 ## Verify The Workspace
 
 ```bash
