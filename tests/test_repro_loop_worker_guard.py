@@ -471,21 +471,76 @@ def test_run_worker_records_nonzero_exit_as_failed(tmp_path: Path):
     assert result["elapsed_seconds"] == 5.0
 
 
+def test_run_worker_persists_exit_when_post_run_git_lookup_fails(
+    tmp_path: Path,
+):
+    paths, spec = worker_run_fixture(tmp_path)
+    git_results = iter(["f" * 40, RuntimeError("sensitive git failure")])
+
+    def git_head(_path):
+        result = next(git_results)
+        if isinstance(result, Exception):
+            raise result
+        return result
+
+    result = worker_guard.run_worker(
+        paths,
+        spec,
+        timeout_seconds=30,
+        process_factory=lambda *args, **kwargs: CompletedProcess(),
+        utc_now=iter_values(
+            "2026-07-27T00:00:00+00:00",
+            "2026-07-27T00:00:01+00:00",
+            "2026-07-27T00:00:06+00:00",
+        ),
+        monotonic_ns=iter_values(1_000_000_000, 6_000_000_000),
+        session_id_factory=lambda: "session-git-failure",
+        git_head=git_head,
+    )
+
+    exit_event = worker_guard.telemetry.read_session(
+        paths, "session-git-failure"
+    )[-1]
+    assert exit_event["outcome"] == "proposal"
+    assert exit_event["git_sha_after"] is None
+    assert exit_event["monotonic_ns"] == 6_000_000_000
+    assert result["elapsed_seconds"] == 5.0
+    session_bytes = b"".join(
+        path.read_bytes()
+        for path in sorted(
+            (
+                paths.root
+                / "telemetry"
+                / "session-git-failure"
+            ).iterdir()
+        )
+    )
+    assert b"sensitive git failure" not in session_bytes
+
+
 def test_run_worker_terminates_and_reraises_keyboard_interrupt(tmp_path: Path):
     class InterruptedProcess:
         pid = 4242
         returncode = None
         terminated = False
+        killed = False
+        wait_timeouts = []
 
         def wait(self, timeout=None):
+            self.wait_timeouts.append(timeout)
             if not self.terminated:
                 assert timeout == 30
                 raise KeyboardInterrupt
-            self.returncode = -15
+            if not self.killed:
+                raise worker_guard.subprocess.TimeoutExpired("codex", timeout)
+            self.returncode = -9
             return self.returncode
 
         def terminate(self):
             self.terminated = True
+
+        def kill(self):
+            self.killed = True
 
     paths, spec = worker_run_fixture(tmp_path)
     process = InterruptedProcess()
@@ -504,14 +559,18 @@ def test_run_worker_terminates_and_reraises_keyboard_interrupt(tmp_path: Path):
             monotonic_ns=iter_values(1_000_000_000, 6_000_000_000),
             session_id_factory=lambda: "session-interrupted",
             git_head=lambda _path: "c" * 40,
+            termination_grace_seconds=2,
+            kill_reap_seconds=3,
         )
 
     exit_event = worker_guard.telemetry.read_session(
         paths, "session-interrupted"
     )[-1]
     assert process.terminated is True
+    assert process.killed is True
+    assert process.wait_timeouts == [30, 2, 3]
     assert exit_event["exit_code"] is None
-    assert exit_event["signal"] == 15
+    assert exit_event["signal"] == 9
     assert exit_event["outcome"] == "interrupted"
 
 
@@ -520,16 +579,24 @@ def test_run_worker_terminates_timed_out_child(tmp_path: Path):
         pid = 4242
         returncode = None
         terminated = False
+        killed = False
+        wait_timeouts = []
 
         def wait(self, timeout=None):
+            self.wait_timeouts.append(timeout)
             if not self.terminated:
                 assert timeout == 30
                 raise worker_guard.subprocess.TimeoutExpired("codex", timeout)
-            self.returncode = -15
+            if not self.killed:
+                raise worker_guard.subprocess.TimeoutExpired("codex", timeout)
+            self.returncode = -9
             return self.returncode
 
         def terminate(self):
             self.terminated = True
+
+        def kill(self):
+            self.killed = True
 
     paths, spec = worker_run_fixture(tmp_path)
     process = TimedOutProcess()
@@ -547,15 +614,66 @@ def test_run_worker_terminates_timed_out_child(tmp_path: Path):
         monotonic_ns=iter_values(1_000_000_000, 6_000_000_000),
         session_id_factory=lambda: "session-timeout",
         git_head=lambda _path: "d" * 40,
+        termination_grace_seconds=2,
+        kill_reap_seconds=3,
     )
 
     exit_event = worker_guard.telemetry.read_session(
         paths, "session-timeout"
     )[-1]
     assert process.terminated is True
-    assert exit_event["signal"] == 15
+    assert process.killed is True
+    assert process.wait_timeouts == [30, 2, 3]
+    assert exit_event["signal"] == 9
     assert exit_event["outcome"] == "timed_out"
     assert result["elapsed_seconds"] == 5.0
+
+
+def test_run_worker_does_not_invent_duration_when_killed_child_cannot_reap(
+    tmp_path: Path,
+):
+    class UnreapedProcess:
+        pid = 4242
+        returncode = None
+        wait_timeouts = []
+
+        def wait(self, timeout=None):
+            self.wait_timeouts.append(timeout)
+            raise worker_guard.subprocess.TimeoutExpired("codex", timeout)
+
+        def terminate(self):
+            pass
+
+        def kill(self):
+            pass
+
+    paths, spec = worker_run_fixture(tmp_path)
+    process = UnreapedProcess()
+
+    result = worker_guard.run_worker(
+        paths,
+        spec,
+        timeout_seconds=30,
+        process_factory=lambda *args, **kwargs: process,
+        utc_now=iter_values(
+            "2026-07-27T00:00:00+00:00",
+            "2026-07-27T00:00:01+00:00",
+            "2026-07-27T00:00:06+00:00",
+        ),
+        monotonic_ns=iter_values(1_000_000_000),
+        session_id_factory=lambda: "session-unreaped",
+        git_head=lambda _path: "e" * 40,
+        termination_grace_seconds=2,
+        kill_reap_seconds=3,
+    )
+
+    exit_event = worker_guard.telemetry.read_session(
+        paths, "session-unreaped"
+    )[-1]
+    assert process.wait_timeouts == [30, 2, 3]
+    assert exit_event["outcome"] == "timed_out"
+    assert exit_event["monotonic_ns"] is None
+    assert result["elapsed_seconds"] is None
 
 
 @pytest.mark.parametrize(

@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import shutil
@@ -20,6 +21,8 @@ import telemetry
 
 
 RUNTIMES = {"codex", "antigravity"}
+TERMINATION_GRACE_SECONDS = 5
+KILL_REAP_SECONDS = 5
 CONTRACT_KEYS = {
     "version",
     "attempt_id",
@@ -291,6 +294,8 @@ def run_worker(
     monotonic_ns=time.monotonic_ns,
     session_id_factory=None,
     git_head=None,
+    termination_grace_seconds: int | float = TERMINATION_GRACE_SECONDS,
+    kill_reap_seconds: int | float = KILL_REAP_SECONDS,
 ) -> dict:
     """Run one worker child and durably measure its process boundary."""
     if timeout_seconds is not None and (
@@ -299,6 +304,12 @@ def run_worker(
         raise ValueError("timeout_seconds")
     if work_kind not in {"implementation", "correction"}:
         raise ValueError("work_kind")
+    termination_grace_seconds = _positive_seconds(
+        termination_grace_seconds, "termination_grace_seconds"
+    )
+    kill_reap_seconds = _positive_seconds(
+        kill_reap_seconds, "kill_reap_seconds"
+    )
     utc_now = utc_now or _utc_now
     session_id_factory = session_id_factory or (lambda: uuid4().hex)
     git_head = git_head or _git_head
@@ -339,6 +350,7 @@ def run_worker(
     )
 
     interrupted = False
+    exit_observed = True
     outcome = "proposal"
     try:
         return_code = process.wait(timeout=timeout_seconds)
@@ -346,16 +358,25 @@ def run_worker(
             outcome = "failed"
     except subprocess.TimeoutExpired:
         outcome = "timed_out"
-        process.terminate()
-        return_code = process.wait()
+        return_code, exit_observed = _terminate_and_reap(
+            process,
+            termination_grace_seconds,
+            kill_reap_seconds,
+        )
     except KeyboardInterrupt:
         interrupted = True
         outcome = "interrupted"
-        process.terminate()
-        return_code = process.wait()
+        return_code, exit_observed = _terminate_and_reap(
+            process,
+            termination_grace_seconds,
+            kill_reap_seconds,
+        )
 
-    exit_counter = monotonic_ns()
+    exit_counter = monotonic_ns() if exit_observed else None
     exit_code, signal = _exit_status(return_code)
+    git_sha_after = (
+        _optional_git_head(git_head, spec.cwd) if exit_observed else None
+    )
     telemetry.append_event(
         paths,
         session_id,
@@ -365,7 +386,7 @@ def run_worker(
             **common,
             "observed_at": utc_now(),
             "monotonic_ns": exit_counter,
-            "git_sha_after": git_head(spec.cwd),
+            "git_sha_after": git_sha_after,
             "exit_code": exit_code,
             "signal": signal,
             "downloaded_bytes": _downloaded_bytes(process),
@@ -624,6 +645,40 @@ def _exit_status(return_code: object) -> tuple[int | None, int | None]:
     if return_code < 0:
         return None, -return_code
     return return_code, None
+
+
+def _terminate_and_reap(
+    process: object,
+    termination_grace_seconds: int | float,
+    kill_reap_seconds: int | float,
+) -> tuple[object, bool]:
+    process.terminate()
+    try:
+        return process.wait(timeout=termination_grace_seconds), True
+    except subprocess.TimeoutExpired:
+        process.kill()
+        try:
+            return process.wait(timeout=kill_reap_seconds), True
+        except subprocess.TimeoutExpired:
+            return None, False
+
+
+def _optional_git_head(git_head, worktree: Path) -> str | None:
+    try:
+        return git_head(worktree)
+    except Exception:
+        return None
+
+
+def _positive_seconds(value: object, field: str) -> int | float:
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(value)
+        or value <= 0
+    ):
+        raise ValueError(field)
+    return value
 
 
 def _downloaded_bytes(process: object) -> int | None:
