@@ -52,37 +52,43 @@ def run_stage(
     try:
         result = operation()
     except BaseException as error:
-        finished_counter = monotonic_ns()
-        append_event(
-            paths,
-            session_id,
-            1,
-            "stage-finished",
-            {
-                "observed_at": utc_now(),
-                "monotonic_ns": finished_counter,
-                "elapsed_seconds": (
-                    finished_counter - started_counter
-                )
-                / 1_000_000_000,
-                "outcome": "failed",
-                "error_type": type(error).__name__,
-            },
-        )
+        try:
+            finished_counter = monotonic_ns()
+            append_event(
+                paths,
+                session_id,
+                1,
+                "stage-finished",
+                {
+                    "observed_at": utc_now(),
+                    "monotonic_ns": finished_counter,
+                    "elapsed_seconds": (
+                        finished_counter - started_counter
+                    )
+                    / 1_000_000_000,
+                    "outcome": "failed",
+                    "error_type": type(error).__name__,
+                },
+            )
+        except BaseException:
+            pass
         raise
 
-    finished_counter = monotonic_ns()
-    payload = {
-        "observed_at": utc_now(),
-        "monotonic_ns": finished_counter,
-        "elapsed_seconds": (finished_counter - started_counter)
-        / 1_000_000_000,
-        "outcome": "passed",
-    }
-    attestation_id = _result_attestation_id(result)
-    if attestation_id is not None:
-        payload["attestation_id"] = attestation_id
-    append_event(paths, session_id, 1, "stage-finished", payload)
+    try:
+        finished_counter = monotonic_ns()
+        payload = {
+            "observed_at": utc_now(),
+            "monotonic_ns": finished_counter,
+            "elapsed_seconds": (finished_counter - started_counter)
+            / 1_000_000_000,
+            "outcome": "passed",
+        }
+        attestation_id = _result_attestation_id(result)
+        if attestation_id is not None:
+            payload["attestation_id"] = attestation_id
+        append_event(paths, session_id, 1, "stage-finished", payload)
+    except BaseException:
+        pass
     return result
 
 

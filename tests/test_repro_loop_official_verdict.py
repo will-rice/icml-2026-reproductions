@@ -398,6 +398,39 @@ def test_state_observes_verdict_only_after_injected_success(submitted_case):
     ]
 
 
+def test_state_returns_verdict_result_when_observation_write_fails(
+    submitted_case, monkeypatch
+):
+    result = {"transitions": [{"attestation_id": "e" * 64}]}
+    arguments = argparse.Namespace(
+        command="sync-verdict",
+        path=submitted_case["paths"].index,
+        attempt_id="a1",
+        owner=submitted_case["lease"].owner,
+        fencing_token=submitted_case["lease"].fencing_token,
+        snapshot_id="f" * 64,
+        now=NOW.isoformat(),
+    )
+
+    def fail_observation(*_args, **_kwargs):
+        raise OSError("telemetry-observation-sensitive-text")
+
+    active_telemetry = sys.modules["telemetry"]
+    monkeypatch.setattr(active_telemetry, "append_event", fail_observation)
+
+    returned = state._run_v6_command(
+        arguments,
+        verdict_operation=lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        session_id_factory=lambda: "verdict-observation-failed",
+    )
+
+    assert returned is result
+    assert active_telemetry.read_session(
+        submitted_case["paths"], "verdict-observation-failed"
+    ) == []
+
+
 def test_sync_verdict_selects_only_bound_targets_from_larger_official_verdict(
     submitted_case,
 ):

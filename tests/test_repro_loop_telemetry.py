@@ -291,6 +291,73 @@ def test_run_stage_records_failure_without_serializing_error_text(
     assert "token-shaped-sensitive-text" not in json.dumps(event)
 
 
+def test_run_stage_returns_exact_result_when_finish_write_fails(
+    paths, telemetry, monkeypatch
+):
+    result = object()
+    real_append = telemetry.append_event
+
+    def fail_finish(paths, session_id, sequence, event, payload):
+        if event == "stage-finished":
+            raise OSError("telemetry-write-sensitive-text")
+        return real_append(paths, session_id, sequence, event, payload)
+
+    monkeypatch.setattr(telemetry, "append_event", fail_finish)
+
+    returned = telemetry.run_stage(
+        paths,
+        "attempt-a",
+        "validation",
+        lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        monotonic_ns=iter([1_000_000_000, 2_000_000_000]).__next__,
+        session_id_factory=lambda: "stage-finish-write-failed",
+    )
+
+    assert returned is result
+    assert [
+        event["event"]
+        for event in telemetry.read_session(
+            paths, "stage-finish-write-failed"
+        )
+    ] == ["stage-started"]
+
+
+def test_run_stage_reraises_exact_operation_error_when_failure_write_fails(
+    paths, telemetry, monkeypatch
+):
+    operation_error = RuntimeError("operation-sensitive-text")
+    real_append = telemetry.append_event
+
+    def fail_finish(paths, session_id, sequence, event, payload):
+        if event == "stage-finished":
+            raise OSError("telemetry-write-sensitive-text")
+        return real_append(paths, session_id, sequence, event, payload)
+
+    def fail_operation():
+        raise operation_error
+
+    monkeypatch.setattr(telemetry, "append_event", fail_finish)
+
+    with pytest.raises(RuntimeError) as raised:
+        telemetry.run_stage(
+            paths,
+            "attempt-a",
+            "deployment",
+            fail_operation,
+            utc_now=lambda: "2026-07-27T01:00:00+00:00",
+            monotonic_ns=iter([1_000_000_000, 2_000_000_000]).__next__,
+            session_id_factory=lambda: "stage-failure-write-failed",
+        )
+
+    assert raised.value is operation_error
+    encoded = json.dumps(
+        telemetry.read_session(paths, "stage-failure-write-failed")
+    )
+    assert "operation-sensitive-text" not in encoded
+    assert "telemetry-write-sensitive-text" not in encoded
+
+
 def test_run_stage_exposes_nested_controller_attestation(paths, telemetry):
     result = {"transitions": [{"attestation_id": "b" * 64}]}
 

@@ -786,3 +786,36 @@ def test_state_does_not_observe_failed_submission(hub_case):
         )
 
     assert telemetry.read_session(hub_case["paths"], "failed-submission") == []
+
+
+def test_state_returns_submission_result_when_observation_write_fails(
+    hub_case, monkeypatch
+):
+    result = {"transitions": [{"attestation_id": "c" * 64}]}
+    arguments = argparse.Namespace(
+        command="attest-submission",
+        path=hub_case["paths"].index,
+        attempt_id="a1",
+        owner=hub_case["lease"].owner,
+        fencing_token=hub_case["lease"].fencing_token,
+        snapshot_id="d" * 64,
+        now=NOW.isoformat(),
+    )
+
+    def fail_observation(*_args, **_kwargs):
+        raise OSError("telemetry-observation-sensitive-text")
+
+    active_telemetry = sys.modules["telemetry"]
+    monkeypatch.setattr(active_telemetry, "append_event", fail_observation)
+
+    returned = state._run_v6_command(
+        arguments,
+        submission_operation=lambda: result,
+        utc_now=lambda: "2026-07-27T01:00:00+00:00",
+        session_id_factory=lambda: "submission-observation-failed",
+    )
+
+    assert returned is result
+    assert active_telemetry.read_session(
+        hub_case["paths"], "submission-observation-failed"
+    ) == []

@@ -581,14 +581,17 @@ def _run_v6_command(
                 now,
             )
         result = operation()
-        telemetry.record_observation(
-            paths,
-            arguments.attempt_id,
-            "submission-observed",
-            arguments.snapshot_id,
-            result,
-            **_observation_kwargs(utc_now, session_id_factory),
-        )
+        try:
+            telemetry.record_observation(
+                paths,
+                arguments.attempt_id,
+                "submission-observed",
+                arguments.snapshot_id,
+                result,
+                **_observation_kwargs(utc_now, session_id_factory),
+            )
+        except BaseException:
+            pass
         return result
     import telemetry
 
@@ -604,14 +607,17 @@ def _run_v6_command(
             now,
         )
     result = operation()
-    telemetry.record_observation(
-        paths,
-        arguments.attempt_id,
-        "verdict-observed",
-        arguments.snapshot_id,
-        result,
-        **_observation_kwargs(utc_now, session_id_factory),
-    )
+    try:
+        telemetry.record_observation(
+            paths,
+            arguments.attempt_id,
+            "verdict-observed",
+            arguments.snapshot_id,
+            result,
+            **_observation_kwargs(utc_now, session_id_factory),
+        )
+    except BaseException:
+        pass
     return result
 
 
