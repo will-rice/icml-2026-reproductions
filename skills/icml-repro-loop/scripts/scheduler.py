@@ -91,7 +91,10 @@ class SchedulerReport:
 
 
 def scheduler_pass(
-    paths: store.StatePaths, snapshot_id: str, now: datetime
+    paths: store.StatePaths,
+    snapshot_id: str,
+    now: datetime,
+    adopt_space_id: str | None = None,
 ) -> SchedulerReport:
     """Admit ranked eligible candidates without exceeding runnable capacity."""
     observed_at = _datetime(now)
@@ -103,9 +106,12 @@ def scheduler_pass(
     vacancies = index["max_runnable_attempts"] - len(
         attempts.runnable_attempt_ids(paths)
     )
-    candidates = rank_eligible_candidates(
-        snapshot, _claimed_paper_ids(paths, index, snapshot, observed_at)
-    )
+    claimed = _claimed_paper_ids(paths, index, snapshot, observed_at)
+    if adopt_space_id is not None:
+        claimed.discard(
+            _adoptable_owned_tagged_paper(index, snapshot, adopt_space_id)
+        )
+    candidates = rank_eligible_candidates(snapshot, claimed)
     return _admit_up_to(
         paths,
         candidates,
@@ -540,6 +546,49 @@ def _admit_up_to(
             )
         )
     return SchedulerReport(tuple(assignments))
+
+
+def _adoptable_owned_tagged_paper(
+    index: dict, snapshot: dict, space_id: str
+) -> str:
+    """Resolve one explicit untracked Space without weakening duplicate checks."""
+    space_id = _identity(space_id, "space_id")
+    owner = publication_policy.space_owner(space_id)
+    if owner not in publication_policy.ALLOWED_SPACE_OWNERS:
+        raise ValueError("space_id")
+    matches = {
+        record["paper_id"]
+        for record in snapshot["tagged_spaces"]
+        if record.get("space_id") == space_id
+    }
+    if len(matches) != 1:
+        raise ValueError("space_id")
+    paper_id = matches.pop()
+    if any(
+        reference["paper_id"] == paper_id
+        for section in ("attempts", "history")
+        for reference in index[section].values()
+    ) or any(
+        record.get("paper_id") == paper_id for record in index["rejections"]
+    ):
+        raise ValueError("paper_id")
+    owned_spaces = {
+        record.get("space_id")
+        for record in snapshot["tagged_spaces"]
+        if record.get("paper_id") == paper_id
+        and publication_policy.space_owner(record.get("space_id")) in
+        publication_policy.ALLOWED_SPACE_OWNERS
+    }
+    if owned_spaces != {space_id}:
+        raise ValueError("space_id")
+    if any(
+        record.get("paper_id") == paper_id
+        and publication_policy.space_owner(record.get("space_id")) in
+        publication_policy.ALLOWED_SPACE_OWNERS
+        for record in snapshot["verdicts"]
+    ):
+        raise ValueError("verdict")
+    return paper_id
 
 
 def _claimed_paper_ids(

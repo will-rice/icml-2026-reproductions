@@ -1,0 +1,48 @@
+{
+  "base_sha": "64341f03331dedf265c8dc42ae3d2e6478ef74fe",
+  "branch": "validate/demix-controller-validation",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training",
+      "python",
+      "-c",
+      "import runpy,sys; root='submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training'; sys.path.insert(0,root+'/src'); sys.argv=['demix.pipeline','--input',root+'/evidence/inputs/sampled_mixture.json','--provenance',root+'/evidence/provenance.json','--output',root+'/evidence/bundle.json']; runpy.run_module('demix.pipeline',run_name='__main__')"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-25-demix-reproduction-design.md",
+  "project_path": "submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/demix-controller-validation"
+}

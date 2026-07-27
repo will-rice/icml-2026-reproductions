@@ -1491,6 +1491,12 @@ def test_cli_help_names_schema_v6_operations():
         assert command in help_text
 
 
+def test_scheduler_cli_exposes_explicit_tagged_space_adoption():
+    help_text = run_cli("scheduler-pass", "--help").stdout
+
+    assert "--adopt-space-id" in help_text
+
+
 @pytest.mark.parametrize(
     "command", ["init", "show", "select", "reject", "update", "transition"]
 )

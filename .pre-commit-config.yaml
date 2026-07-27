@@ -7,7 +7,7 @@ repos:
       - id: check-json
       - id: check-yaml
       - id: end-of-file-fixer
-        exclude: ^submissions/efficient-parallel-samplers-for-recurrent-depth-models/vendor/arxiv/arxiv_submission\.tex$
+        exclude: ^(?:submissions/efficient-parallel-samplers-for-recurrent-depth-models/vendor/arxiv/arxiv_submission\.tex|submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/evidence/inputs/sampled_mixture\.json)$
       - id: trailing-whitespace
         exclude: ^submissions/efficient-parallel-samplers-for-recurrent-depth-models/vendor/arxiv/arxiv_submission\.tex$
       - id: check-added-large-files

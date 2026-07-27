@@ -168,6 +168,7 @@ def main() -> None:
     )
     scheduler_parser.add_argument("path", type=Path)
     scheduler_parser.add_argument("--snapshot-id", required=True)
+    scheduler_parser.add_argument("--adopt-space-id")
     scheduler_parser.add_argument("--now")
     claim_parser = commands.add_parser(
         "claim-attempt", help="claim an active attempt from an expected predecessor"
@@ -477,7 +478,12 @@ def _run_v6_command(
         }
     now = _cli_datetime(getattr(arguments, "now", None))
     if arguments.command == "scheduler-pass":
-        report = scheduler.scheduler_pass(paths, arguments.snapshot_id, now)
+        report = scheduler.scheduler_pass(
+            paths,
+            arguments.snapshot_id,
+            now,
+            adopt_space_id=arguments.adopt_space_id,
+        )
         return {
             "assignments": [
                 {

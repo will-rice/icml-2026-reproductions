@@ -556,6 +556,36 @@ def test_external_contributor_records_do_not_claim_scheduler_candidate(
     assert report.paper_ids == ("paper-a",)
 
 
+def test_scheduler_explicitly_adopts_one_owned_tagged_space(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_snapshot(
+        store,
+        paths,
+        now,
+        [paper("legacy-paper", 10)],
+        tagged_spaces=[
+            {
+                "paper_id": "legacy-paper",
+                "space_id": "wrice/legacy-space",
+            }
+        ],
+    )
+
+    assert scheduler.scheduler_pass(paths, snapshot_id, now).assignments == ()
+    if "adopt_space_id" not in scheduler.scheduler_pass.__code__.co_varnames:
+        pytest.fail("scheduler-pass lacks explicit Space adoption")
+
+    report = scheduler.scheduler_pass(
+        paths,
+        snapshot_id,
+        now,
+        adopt_space_id="wrice/legacy-space",
+    )
+
+    assert report.paper_ids == ("legacy-paper",)
+
+
 def test_rejection_committed_before_insertion_wins(
     paths, store, now, scheduler, monkeypatch
 ):
