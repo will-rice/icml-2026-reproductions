@@ -16,6 +16,43 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Correction Gate — 2026-07-28, round 6
+
+Use `icml-repro-loop`, `superpowers:test-driven-development`,
+`superpowers:systematic-debugging`, and
+`superpowers:verification-before-completion`. Controller review rejected
+proposal `618f724e8aff048dce03239aea3c56ef35736556`. Preserve that commit as
+the rejected proposal. For every item below, first add a behavioral regression
+and record its expected RED failure against `618f724e`.
+
+1. `execute_raco_trajectory` now computes the requested CAGrad-Clip quantities,
+   but `_run_theorem_31_audit` drops the weighted anchors, CAGrad directions,
+   next iterates, loss-before/loss-after pairs, and per-step descent booleans.
+   Consequently canonical `evidence/results.json` cannot substantiate that its
+   advertised trajectory used RACO rather than the old pure-`g0` update.
+   Persist a closed-schema `steps` array of exactly ten records for
+   `t=0,...,9`. Each record must contain the step index, current iterate,
+   weighted anchor, actual CAGrad-Clip direction, next iterate, loss before,
+   loss after, `M(theta_t)`, weighted-gradient norm, descent-bound boolean, and
+   `M(theta_t) <= ||grad L_w(theta_t)||` boolean. Assert each numeric identity
+   independently in the evidence test, including
+   `theta_next = theta - eta * cagrad_direction`. Do not mix the terminal
+   `t=T` diagnostics into these per-update records. Claim 8 may be `supported`
+   only if all ten step records pass both booleans and both finite-horizon
+   squared bounds pass.
+2. The artifact manifest uses GitHub HTML `/blob/<commit>/...` pages, not the
+   immutable raw artifact URLs required by the round-5 gate. Bind each
+   artifact ID to its exact
+   `https://raw.githubusercontent.com/PeterLauLukChen/RACO/84a943c34f38520c7e0c9dd3066517c111b3c8fa/<path>`
+   URL (with correct path encoding) and reject a `/blob/` URL even when it
+   contains the pinned commit. Regenerate canonical evidence and the
+   provenance page so they expose those exact raw URLs.
+3. Regenerate canonical evidence and every affected page. Compare two
+   independent evidence generations byte-for-byte; run the full submission
+   suite, frozen-lock verification, root pytest, skill validation, pre-commit,
+   and `git diff --check`. Commit only the assigned submission after this
+   durable controller-plan commit.
+
 ## Controller Correction Gate — 2026-07-28, round 5
 
 Use `icml-repro-loop`, `superpowers:test-driven-development`,
