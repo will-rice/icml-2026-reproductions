@@ -16,6 +16,23 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller No-op Recovery Gate — 2026-07-28, round 8
+
+Guarded round 7 (`861f3d381e18494d9ea7f27211845562`) ran
+`claude-opus-4-6-thinking` for only 13.34551123 seconds, printed only
+“I'll start by reading the worker contract and the implementation plan,” and
+exited code zero at the unchanged base
+`8fb639cb595aea019090f13f12714e5149e2005a`. It made no file change, commit,
+or implementation proposal. Treat that session as a no-op, not validation.
+
+For round 8, use `gemini-3.1-pro-high` and execute the full round-7 correction
+gate. Begin by running the preserved RED tests in `test_evidence.py` and
+`test_provenance.py`; then implement production code, schema, generated
+evidence, and pages until they pass. Do not return after reading or merely
+describing the plan. A valid proposal must contain a new commit derived from
+this durable gate, a clean worktree, regenerated deterministic evidence, and
+the exact verification command outputs required by round 7.
+
 ## Controller Correction Gate — 2026-07-28, round 7
 
 Use `icml-repro-loop`, `superpowers:test-driven-development`,
