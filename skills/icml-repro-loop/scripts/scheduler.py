@@ -196,6 +196,7 @@ def claim_next(
             snapshot_id,
             observed_at,
             owner=owner,
+            writer_lease_ttl=leases.ATTEMPT_WORK_LEASE_TTL,
         )
         if not report.assignments:
             raise NoEligiblePaper("no eligible paper")
@@ -640,6 +641,7 @@ def _admit_up_to(
     snapshot_id: str,
     now: datetime,
     owner: str | None = None,
+    writer_lease_ttl: timedelta = ADMISSION_LEASE_TTL,
 ) -> SchedulerReport:
     assignments = []
     for candidate in candidates:
@@ -664,7 +666,7 @@ def _admit_up_to(
                 assignment_owner,
                 attempt_id,
                 now,
-                ADMISSION_LEASE_TTL,
+                writer_lease_ttl,
             )
             attempts.create_attempt(
                 paths,

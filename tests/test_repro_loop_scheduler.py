@@ -333,6 +333,24 @@ def test_claim_next_selects_exactly_one_highest_rate_paper(
     assert len(store.read_json(paths.index)["attempts"]) == 1
 
 
+def test_claim_next_uses_two_hour_writer_lease_and_five_minute_candidate_lock(
+    paths, store, leases, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+
+    assignment = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+
+    candidate = store.read_json(paths.resource_lease("candidate:paper-a"))
+    assert datetime.fromisoformat(candidate["expires_at"]) == (
+        now + scheduler.ADMISSION_LEASE_TTL
+    )
+    assert datetime.fromisoformat(assignment.writer_lease.expires_at) == (
+        now + leases.ATTEMPT_WORK_LEASE_TTL
+    )
+
+
 def test_concurrent_claim_next_never_assigns_one_paper_twice(
     paths, store, now, scheduler
 ):
@@ -442,6 +460,9 @@ def test_claim_next_reclaims_same_released_blocked_attempt(
     assert reclaimed.paper_id == "paper-a"
     assert reclaimed.writer_lease.owner == "owner-2"
     assert reclaimed.writer_lease.fencing_token == 2
+    assert datetime.fromisoformat(reclaimed.writer_lease.expires_at) == (
+        now + leases.ATTEMPT_WORK_LEASE_TTL
+    )
     after = scheduler.attempts.read_attempt(paths, first.attempt_id)
     assert after["phase"] == "blocked"
     for field in ("blocker", "next_action", "blocked_from"):
