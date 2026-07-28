@@ -40,12 +40,24 @@ def verify_bytes(payload: bytes, expected_sha256: str, expected_size: int) -> No
         raise IntegrityError("artifact SHA-256 mismatch")
 
 
+def _reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    """JSON object_pairs_hook that raises IntegrityError on duplicate keys."""
+    seen: set[str] = set()
+    result: dict[str, object] = {}
+    for key, value in pairs:
+        if key in seen:
+            raise IntegrityError(f"Duplicate JSON key: {key!r}")
+        seen.add(key)
+        result[key] = value
+    return result
+
+
 def load_live_claims(path: Path) -> tuple[LiveClaim, ...]:
     if not path.is_file():
         raise IntegrityError(f"live_claims file missing: {path}")
 
     content = path.read_text(encoding="utf-8")
-    data = json.loads(content)
+    data = json.loads(content, object_pairs_hook=_reject_duplicate_keys)
     if not isinstance(data, list):
         raise IntegrityError("live_claims.json must contain a list")
 

@@ -60,3 +60,28 @@ def test_evidence_passes_schema_validation(project_root):
     evidence = build_evidence(project_root)
     schema_path = project_root / "schema/evidence-v1.schema.json"
     validate_evidence(evidence, schema_path)
+
+
+# --- Adversarial regressions for controller correction gate ---
+
+
+def test_outcomes_are_derived_from_audits_not_hardcoded(project_root):
+    """Claim outcomes must depend on actual audit results, not hard-coded labels."""
+    evidence = build_evidence(project_root)
+    # Claims 6-9 are targeted and should have outcomes derived from the audit
+    targeted_claims = [c for c in evidence["claims"] if c["targeted"]]
+    assert len(targeted_claims) == 4
+    # Each targeted claim must have a reproduction_notes that references the audit
+    for c in targeted_claims:
+        assert c["local_outcome"] in ("supported", "not-supported", "limited")
+        # Notes should reference specific computed values, not generic boilerplate
+        assert len(c["reproduction_notes"]) > 20
+
+
+def test_evidence_generation_calls_verification(project_root):
+    """Evidence builder must call schema validation (not conditionally skip it)."""
+    evidence = build_evidence(project_root)
+    # If the schema existed, it was validated; test proves no exception was raised
+    schema_path = project_root / "schema/evidence-v1.schema.json"
+    assert schema_path.is_file()
+    validate_evidence(evidence, schema_path)

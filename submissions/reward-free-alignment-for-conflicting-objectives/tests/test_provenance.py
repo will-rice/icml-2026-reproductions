@@ -49,3 +49,18 @@ def test_manifest_binds_attempt_snapshot_and_upstream(project_root):
         "arxiv:2602.02495v3+"
         "github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa"
     )
+
+
+# --- Adversarial regressions for controller correction gate ---
+
+
+def test_duplicate_json_keys_rejected(project_root, tmp_path):
+    """Duplicate JSON keys in live_claims.json must be rejected."""
+    dup_json = tmp_path / "dup_claims.json"
+    # Create a JSON file with a duplicate key inside an object
+    dup_json.write_text(
+        '[{"ordinal": 1, "text": "a", "sha256": "x", "targeted": false, "ordinal": 2}]',
+        encoding="utf-8",
+    )
+    with pytest.raises(IntegrityError, match="[Dd]uplicate"):
+        load_live_claims(dup_json)

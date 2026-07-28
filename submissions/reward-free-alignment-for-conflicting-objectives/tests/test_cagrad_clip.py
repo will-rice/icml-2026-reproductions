@@ -60,3 +60,56 @@ def test_zero_weight_coordinate_cannot_be_reintroduced():
         c=0.4,
     )
     assert result.clipped_coefficients[1].item() == 0.0
+
+
+# --- Adversarial regressions for controller correction gate ---
+
+
+def test_zero_radius_minimizes_h_not_shortcut_to_w():
+    """c=0 regression: h(alpha) = alpha*dot(g1,g0) + (1-alpha)*dot(g2,g0).
+
+    With g1=[1,0], g2=[0,1], w=[0.6,0.4]: g0=[0.6,0.4].
+    h(alpha) = 0.4 + 0.2*alpha, minimized at alpha=0.
+    Previous bug returned alpha=w1=0.6.
+    """
+    g1, g2 = tensor([1.0, 0.0]), tensor([0.0, 1.0])
+    weights = tensor([0.6, 0.4])
+    solution = solve_two_objective_alpha(g1, g2, weights, c=0.0)
+    assert abs(solution.alpha - 0.0) < 1e-9, (
+        f"c=0: expected alpha=0 but got {solution.alpha}"
+    )
+    assert solution.singular_case == "zero_radius"
+
+
+def test_colinear_minimizes_h_not_shortcut_to_w():
+    """Colinear regression: g2=2*g1 with w=[0.5,0.5].
+
+    g0 = 0.5*g1 + 0.5*2*g1 = 1.5*g1; mix = (2-alpha)*g1.
+    h(alpha) = (2-alpha)*(dot(g1,g0) + c*||g0||*||g1||), minimized at alpha=1.
+    Previous bug returned alpha=w1=0.5.
+    """
+    g1, g2 = tensor([1.0, 2.0]), tensor([2.0, 4.0])
+    weights = tensor([0.5, 0.5])
+    solution = solve_two_objective_alpha(g1, g2, weights, c=0.4)
+    assert abs(solution.alpha - 1.0) < 1e-9, (
+        f"colinear: expected alpha=1 but got {solution.alpha}"
+    )
+    assert solution.singular_case == "colinear_gradients"
+
+
+def test_c_equals_one_is_rejected():
+    """c=1 is forbidden because Theorem 3.1 requires 0 <= c < 1."""
+    with pytest.raises(ValueError, match="c"):
+        solve_two_objective_alpha(
+            tensor([1.0, 0.0]), tensor([0.0, 1.0]),
+            tensor([0.5, 0.5]), c=1.0,
+        )
+
+
+def test_c_greater_than_one_is_rejected():
+    """c>1 is also forbidden."""
+    with pytest.raises(ValueError, match="c"):
+        solve_two_objective_alpha(
+            tensor([1.0, 0.0]), tensor([0.0, 1.0]),
+            tensor([0.5, 0.5]), c=1.5,
+        )

@@ -11,10 +11,11 @@ Gradients $g_k = \nabla_\theta \mathcal{L}_k(\theta)$ are computed separately fo
 ## Recomputed Observations & Verification
 
 - **Closed-Form Match:** Evaluated policy gap $\Delta = -0.2 - (-0.8) = 0.6$, reference gap $\Delta_{ref} = -0.4 - (-0.6) = 0.2$, $\beta = 0.5$.
-  - Recomputed Loss: $0.643063$
-  - Closed-Form Expected: $-\log \sigma(0.5 \times (0.6 - 0.2)) = -\log \sigma(0.2) = 0.643063$
+  - Recomputed Loss: $0.598139$
+  - Closed-Form Expected: $-\log \sigma(0.5 \times (0.6 - 0.2)) = -\log \sigma(0.2) = 0.598139$
   - Residual: $< 10^{-12}$
 - **Separation Check:** Verified that objective losses return 1D tensor of shape $(K,)$ and independent gradient tuples.
+- **Claim 6 Local Outcome:** `supported` — derived from closed-form match verification, not hard-coded.
 
 ## Verification Commands & Source Pins
 
@@ -22,3 +23,5 @@ Gradients $g_k = \nabla_\theta \mathcal{L}_k(\theta)$ are computed separately fo
 - Test suite: `tests/test_pairwise.py`
 - Command: `uv run --extra dev pytest tests/test_pairwise.py`
 - Source Pin: Paper Section 3; Repository `PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa`
+
+> **Notice:** Local outcomes (`supported`, `limited`, `not-supported`) are not an official verdict from challenge controllers.

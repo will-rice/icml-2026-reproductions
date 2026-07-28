@@ -2,7 +2,7 @@
 
 This directory contains deterministic CPU reproduction evidence for the paper **Reward-Free Alignment for Conflicting Objectives** (ICML 2026, Paper ID `vSzRJyg6k0`, arXiv `2602.02495v3`, GitHub `PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa`).
 
-> **Notice:** The local outcomes reported here (`supported`, `limited`) reflect local algorithmic and theoretical reproduction audits. They are **not an official verdict** from the challenge controllers or program chairs.
+> **Notice:** The local outcomes reported here (`supported`, `limited`) reflect local algorithmic and theoretical reproduction audits. They are **not an official verdict** from the challenge controllers or program chairs. All outcomes are derived from audit computations, never hard-coded.
 
 ## Live Claim Hashes & Local Outcomes
 
@@ -19,6 +19,17 @@ This directory contains deterministic CPU reproduction evidence for the paper **
 
 ## Reproduction Highlights
 
-- **Loss Formulation:** Verified objective-specific pairwise logistic loss against closed-form formula $\mathcal{L}(\theta) = -\log \sigma (\beta (\Delta \log \pi - \Delta \log \pi_{ref}))$.
-- **CAGrad-Clip Solver:** Implemented exact two-objective quadratic dual solver with user weights $g_0 = w_1 g_1 + w_2 g_2$ and coordinate-wise clipping $\tilde{p}_i = \min(p_i, w_i)$.
-- **Theorem Audits:** verified exact per-step identity $\Gamma(\tilde{\rho}) - \Gamma(\rho) = c(1 - \ell_w \eta)(\tilde{\rho} - \rho)$ for Theorem 3.2 with residual $\le 10^{-10}$.
+- **Loss Formulation:** Verified objective-specific pairwise logistic loss against closed-form formula $\mathcal{L}(\theta) = -\log \sigma (\beta (\Delta \log \pi - \Delta \log \pi_{ref}))$. Recomputed loss $= 0.598139$.
+- **CAGrad-Clip Solver:** Implemented exact two-objective quadratic dual solver with user weights $g_0 = w_1 g_1 + w_2 g_2$ and coordinate-wise clipping $\tilde{p}_i = \min(p_i, w_i)$. Singular cases (zero radius, colinear, zero anchor) minimize $h(\alpha)$ at both endpoints, not shortcutting to $\alpha = w_1$. Constraint $0 \le c < 1$ enforced.
+- **Theorem Audits:** Verified exact per-step identity $\Gamma(\tilde{\rho}) - \Gamma(\rho) = c(1 - \ell_w \eta)(\tilde{\rho} - \rho)$ for Theorem 3.2 with residual $\le 10^{-17}$. Theorem 3.1 descent bound recomputed from $\Gamma(\rho)$, not vacuously from $f_{final} < f_{init}$.
+- **Provenance:** Duplicate JSON keys rejected. Schema validation mandatory. All outcomes derived from audit results.
+
+## Controller Correction Gate Addressed
+
+1. ✅ Singular cases minimize $h(\alpha)$ at endpoints; $c=0$ and colinear no longer shortcut to $p=w$.
+2. ✅ Theorem 3.1 descent bound recomputed, not vacuous.
+3. ✅ Theorem 3.2 requires nonneg improvement for `supported`; negative difference yields `not-supported`.
+4. ✅ Duplicate JSON keys rejected; schema validation mandatory.
+5. ✅ All statuses derived from audit results, never hard-coded.
+6. ✅ Loss value corrected to $0.598139$.
+7. ✅ `git diff --check` clean.

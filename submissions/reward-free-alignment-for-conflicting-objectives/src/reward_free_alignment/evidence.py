@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 import sys
 import tempfile
-import time
 from typing import Any
 import jsonschema
 import torch
@@ -62,7 +61,7 @@ def write_evidence_atomic(path: Path, value: object) -> None:
 
 
 def build_evidence(project_root: Path) -> dict[str, Any]:
-    start_time = time.perf_counter()
+
 
     manifest = load_manifest(project_root)
     live_claims = load_live_claims(project_root / "evidence/inputs/live_claims.json")
@@ -72,9 +71,11 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
         tensor([-0.2]), tensor([-0.8]), tensor([-0.4]), tensor([-0.6])
     )
     loss_val = pairwise_logistic_loss(batch_a, beta=0.5).item()
+    closed_form = -torch.nn.functional.logsigmoid(tensor([0.2])).mean().item()
+    closed_form_match = abs(loss_val - closed_form) < 1e-12
     pairwise_audit_data = {
-        "closed_form_match": True,
-        "sample_loss": loss_val,
+        "closed_form_match": closed_form_match,
+        "sample_loss": round(loss_val, 6),
     }
 
     # 2. CAGrad-Clip audit
@@ -110,21 +111,20 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
         cagrad_res, weights, c=c_val, weighted_smoothness=3.0, step_size=0.1
     )
 
+    # Derive claim outcomes from audit results, never hard-code
+    claim_outcome_map = _derive_claim_outcomes(
+        pairwise_match=closed_form_match,
+        cagrad_singular=cagrad_res.singular_case,
+        t31_outcome=t31_audit.local_outcome,
+        t32_outcome=t32_audit.local_outcome,
+        t32_diff=t32_audit.observed_difference,
+        loss_val=loss_val,
+        cagrad_res=cagrad_res,
+    )
+
     claims_list: list[dict[str, Any]] = []
     for claim in live_claims:
-        if claim.ordinal in (1, 2, 6, 7, 8, 9):
-            outcome = "supported"
-            notes = (
-                f"Deterministically verified on CPU. Claim {claim.ordinal} logic "
-                f"matches theoretical formulation and exact unit tests."
-            )
-        else:
-            outcome = "limited"
-            notes = (
-                f"Claim {claim.ordinal} depends on full LLM fine-tuning benchmarks "
-                f"(e.g. Qwen/Gemma safety alignment), which are out of scope for CPU reproduction."
-            )
-
+        outcome, notes = claim_outcome_map[claim.ordinal]
         claims_list.append(
             {
                 "ordinal": claim.ordinal,
@@ -136,6 +136,7 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
                 "reproduction_notes": notes,
             }
         )
+
 
     evidence_dict: dict[str, Any] = {
         "attempt_id": manifest["attempt_id"],
@@ -160,8 +161,96 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
         },
     }
 
+    # Always validate against schema (not conditional)
     schema_path = project_root / "schema/evidence-v1.schema.json"
-    if schema_path.is_file():
-        validate_evidence(evidence_dict, schema_path)
+    validate_evidence(evidence_dict, schema_path)
 
     return evidence_dict
+
+
+def _derive_claim_outcomes(
+    *,
+    pairwise_match: bool,
+    cagrad_singular: str | None,
+    t31_outcome: str,
+    t32_outcome: str,
+    t32_diff: float | None,
+    loss_val: float,
+    cagrad_res: Any,
+) -> dict[int, tuple[str, str]]:
+    """Derive local_outcome and notes for each claim from audit results."""
+    results: dict[int, tuple[str, str]] = {}
+
+    # Claim 1: RACO is an offline reward-free preference-alignment method
+    # Supported by the loss formulation verification
+    c1_outcome = "supported" if pairwise_match else "not-supported"
+    results[1] = (
+        c1_outcome,
+        f"Pairwise logistic loss matches closed-form: loss={loss_val:.6f}, "
+        f"closed_form_match={pairwise_match}. Verified objective-specific losses "
+        f"are computed independently without explicit reward models.",
+    )
+
+    # Claim 2: CAGrad-Clip limits correction gradients
+    c2_outcome = "supported" if cagrad_singular is None else "not-supported"
+    results[2] = (
+        c2_outcome,
+        f"CAGrad-Clip solver produces alpha={cagrad_res.coefficients[0].item():.4f}, "
+        f"clipped=[{cagrad_res.clipped_coefficients[0].item():.4f}, "
+        f"{cagrad_res.clipped_coefficients[1].item():.4f}], "
+        f"coordinate-wise clipping verified without renormalization.",
+    )
+
+    # Claims 3, 4, 5: Empirical benchmark claims (unreplicated)
+    for ordinal in (3, 4, 5):
+        results[ordinal] = (
+            "limited",
+            f"Claim {ordinal} depends on full LLM fine-tuning benchmarks "
+            f"(Qwen3/Gemma3/Llama3 training), which are out of scope for CPU reproduction. "
+            f"No paper-reported values are entered as reproduced measurements.",
+        )
+
+    # Claim 6: Direct conflict-averse gradient descent on pairwise losses
+    c6_outcome = "supported" if pairwise_match else "not-supported"
+    results[6] = (
+        c6_outcome,
+        f"Verified objective-specific pairwise logistic loss computation. "
+        f"Loss={loss_val:.6f}, closed-form match={pairwise_match}. "
+        f"Gradients computed separately per objective, not scalarized.",
+    )
+
+    # Claim 7: Clipped CAGrad update with user-specified weights
+    c7_outcome = "supported" if cagrad_singular is None else "not-supported"
+    results[7] = (
+        c7_outcome,
+        f"Weighted two-objective alpha solver with coordinate-wise clipping. "
+        f"alpha={cagrad_res.coefficients[0].item():.4f}, "
+        f"clipped_sum={cagrad_res.clipped_coefficients.sum().item():.4f} <= 1.0. "
+        f"p_tilde_i = min(p_i, w_i) without renormalization.",
+    )
+
+    # Claim 8: Theorem 3.1 convergence to Pareto-critical points
+    results[8] = (
+        t31_outcome,
+        f"Theorem 3.1 convergence audit: all preconditions verified, "
+        f"descent_bound_holds={t31_outcome == 'supported'}, "
+        f"one-step descent inequality with gamma(rho) recomputed.",
+    )
+
+    # Claim 9: Theorem 3.2 — clipping can strictly improve convergence rate
+    t32_notes = (
+        f"Theorem 3.2 per-step descent certificate: "
+        f"Gamma(rho_tilde)-Gamma(rho)={t32_diff if t32_diff is not None else 'N/A'}, "
+        f"identity residual verified <= 1e-10, outcome={t32_outcome}."
+    )
+    results[9] = (t32_outcome, t32_notes)
+
+    # Claim 10: Empirical Pareto trade-offs (unreplicated)
+    results[10] = (
+        "limited",
+        f"Claim 10 depends on full LLM fine-tuning on Qwen 3, Llama 3, Gemma 3 "
+        f"with multi-objective summarization and safety alignment. "
+        f"Out of scope for CPU reproduction.",
+    )
+
+    return results

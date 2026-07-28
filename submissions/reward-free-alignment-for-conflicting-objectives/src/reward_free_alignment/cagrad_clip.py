@@ -48,6 +48,8 @@ def solve_two_objective_alpha(
     validate_weights(weights)
     if not isinstance(c, (int, float)) or not math.isfinite(c) or c < 0.0:
         raise ValueError(f"c must be non-negative and finite, got {c}")
+    if c >= 1.0:
+        raise ValueError(f"c must satisfy 0 <= c < 1 (Theorem 3.1 requirement), got {c}")
     if g1.shape != g2.shape or g1.ndim != 1:
         raise ValueError("g1 and g2 must be 1D tensors of the same shape")
 
@@ -58,6 +60,7 @@ def solve_two_objective_alpha(
     diff = g1 - g2
     norm_diff = torch.linalg.vector_norm(diff).item()
 
+    # Detect singular geometry
     singular_case: str | None = None
     if c <= atol:
         singular_case = "zero_radius"
@@ -75,25 +78,40 @@ def solve_two_objective_alpha(
             if 1.0 - cos_sim <= 1e-5:
                 singular_case = "colinear_gradients"
 
+    # Build h(alpha) evaluator — used for ALL cases, including singular
+    s = c * norm_g0
+
+    def h(a: float) -> float:
+        mix = a * g1 + (1.0 - a) * g2
+        return (torch.dot(mix, g0) + s * torch.linalg.vector_norm(mix)).item()
+
     if singular_case is not None:
-        alpha_val = min(1.0, max(0.0, w1))
-        coeffs = torch.tensor([alpha_val, 1.0 - alpha_val], dtype=g1.dtype, device=g1.device)
-        mix = coeffs[0] * g1 + coeffs[1] * g2
-        s = c * norm_g0
-        obj_val = (torch.dot(mix, g0) + s * torch.linalg.vector_norm(mix)).item()
+        # Minimize h over the two endpoints instead of blindly returning w1
+        h0 = h(0.0)
+        h1 = h(1.0)
+        if h0 < h1 - atol:
+            best_alpha = 0.0
+        elif h1 < h0 - atol:
+            best_alpha = 1.0
+        elif abs(0.0 - w1) <= abs(1.0 - w1):
+            best_alpha = 0.0
+        else:
+            best_alpha = 1.0
+        best_obj = h(best_alpha)
+        coeffs = torch.tensor([best_alpha, 1.0 - best_alpha], dtype=g1.dtype, device=g1.device)
         return AlphaSolution(
-            alpha=alpha_val,
+            alpha=best_alpha,
             coefficients=coeffs,
             weighted_anchor=g0,
-            objective_value=obj_val,
-            candidate_count=1,
+            objective_value=best_obj,
+            candidate_count=2,
             singular_case=singular_case,
         )
 
+    # General case: enumerate candidate alpha values
     b1 = torch.dot(g1, g0).item()
     b2 = torch.dot(g2, g0).item()
     delta_b = b1 - b2
-    s = c * norm_g0
 
     q2 = norm_diff ** 2
     q1 = 2.0 * (torch.dot(g1, g2).item() - torch.dot(g2, g2).item())
@@ -101,10 +119,6 @@ def solve_two_objective_alpha(
 
     def Q(a: float) -> float:
         return q2 * a * a + q1 * a + q0
-
-    def h(a: float) -> float:
-        mix = a * g1 + (1.0 - a) * g2
-        return (torch.dot(mix, g0) + s * torch.linalg.vector_norm(mix)).item()
 
     raw_candidates = [0.0, 1.0]
 
@@ -116,10 +130,11 @@ def solve_two_objective_alpha(
             raw_candidates.append((-q1 - sqrt_dq) / (2.0 * q2))
             raw_candidates.append((-q1 + sqrt_dq) / (2.0 * q2))
 
-    # Stationary points
+    # Stationary points of h(alpha)
+    # The stationarity condition leads to a quadratic in alpha
     A = delta_b * delta_b * q2 - s * s * q2 * q2
-    B = delta_b * delta_b * q1 - s * s * q2 * q1
-    C = delta_b * delta_b * q0 - s * s * (q1 * q1) / 4.0
+    B = delta_b * delta_b * q1 - s * s * 2.0 * q2 * q1
+    C = delta_b * delta_b * q0 - s * s * q1 * q1 / 4.0
 
     if abs(A) > 1e-14:
         disc_stat = B * B - 4.0 * A * C

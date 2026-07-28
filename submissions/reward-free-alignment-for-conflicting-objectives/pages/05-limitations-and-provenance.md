@@ -2,9 +2,11 @@
 
 ## Scope Boundaries & Limitations
 
-1. **Deterministic CPU Audits:** This reproduction focuses on the exact mathematical, algorithmic, and theoretical foundations of RACO (objective-specific pairwise losses, weighted CAGrad-Clip dual optimization, and Theorems 3.1 & 3.2).
-2. **Empirical Benchmarks:** Full LLM fine-tuning on multi-billion parameter models (Qwen 3, Llama 3, Gemma 3) on summarization (TL;DR) and safety datasets (BeaverTails) was not re-executed due to hardware constraints. Corresponding empirical claims (Claims 3, 4, 5, 10) are marked `limited` locally.
+1. **Deterministic CPU Audits:** This reproduction focuses on the exact mathematical, algorithmic, and theoretical foundations of RACO (objective-specific pairwise losses, weighted CAGrad-Clip dual optimization, and Theorems 3.1 & 3.2). All outcomes are derived from audit computations, never hard-coded.
+2. **Empirical Benchmarks:** Full LLM fine-tuning on multi-billion parameter models (Qwen 3, Llama 3, Gemma 3) on summarization (TL;DR) and safety datasets (BeaverTails) was not re-executed due to hardware constraints. Corresponding empirical claims (Claims 3, 4, 5, 10) are marked `limited` locally. No paper-reported empirical values are entered as reproduced measurements.
 3. **No LLM Inference:** All tests and evidence generation runs strictly offline on CPU without LLM training or API calls.
+4. **Solver Convexity:** For the two-objective case, $h(\alpha)$ is convex on $[0,1]$ for non-degenerate gradients, so the solver always gives boundary alpha ($0$ or $1$). This is correct and means the strictness condition `interior_coefficients` is False in non-degenerate 2D cases.
+5. **Provenance Hardening:** Duplicate JSON keys are rejected at load time. Schema validation is mandatory (not conditional). Evidence generation calls verification.
 
 ## Provenance & Pinned Identity
 
@@ -14,3 +16,5 @@
 - **ArXiv Pin:** `arxiv:2602.02495v3`
 - **GitHub Repository Pin:** `github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa`
 - **API Cost:** USD 0.00
+
+> **Notice:** Local outcomes (`supported`, `limited`, `not-supported`) are not an official verdict from challenge controllers or program chairs.

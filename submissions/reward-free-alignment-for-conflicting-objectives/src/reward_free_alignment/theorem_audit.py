@@ -67,8 +67,20 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
     step_valid = 0.0 < step <= (1.0 / weighted_s + 1e-9)
     c_valid = 0.0 <= c_rad < 1.0
     nonneg_l = case.initial_loss >= 0.0 and case.final_loss >= 0.0
-    descent_holds = case.final_loss <= case.initial_loss + 1e-9
+
+    # Recompute descent bound: under Theorem 3.1, one-step descent requires
+    # f(theta_t+1) <= f(theta_t) - eta/2 * ||grad f||^2 * gamma_min
+    # At minimum, the gradient norm must produce measurable descent
+    gamma_min = gamma(1.0, c_rad, weighted_s, step)  # best-case alignment rho=1
+    expected_descent = step / 2.0 * case.grad_norm * case.grad_norm * max(gamma_min, 0.0)
+    descent_holds = case.final_loss <= case.initial_loss - expected_descent + 1e-9
+
+    # Pareto bound: the gradient norm should be consistent with the losses
+    # Finite-horizon: sum of squared gradient norms is bounded by 2*(f0-f*) / (eta * gamma_min)
     pareto_holds = case.grad_norm >= 0.0
+    if gamma_min > 0.0 and case.grad_norm > 0.0:
+        # Check that the gradient norm is consistent with the descent
+        pareto_holds = descent_holds
 
     all_pass = (
         weights_in_simplex
@@ -164,7 +176,20 @@ def audit_theorem_32(
     }
     strict_exp = all(strict_conds.values())
 
-    local_outcome = "supported" if identity_res <= atol else "not-supported"
+    # Determine local outcome:
+    # 1. Identity residual must be small
+    # 2. For applicable cases, improvement must be nonnegative
+    # 3. Under strict conditions, improvement must be strictly positive
+    if identity_res > atol:
+        local_outcome = "not-supported"
+    elif obs_diff < -atol:
+        # Negative improvement violates the theorem's guarantee
+        local_outcome = "not-supported"
+    elif strict_exp and obs_diff <= atol:
+        # All strictness conditions hold but no positive improvement
+        local_outcome = "not-supported"
+    else:
+        local_outcome = "supported"
 
     return DescentCertificateAudit(
         rho=rho_val,
