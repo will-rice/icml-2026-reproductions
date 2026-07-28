@@ -159,7 +159,7 @@ def claim_next(
             attempt = attempts.read_attempt(paths, reclaim_attempt_id)
             if attempt["phase"] != "blocked":
                 raise ValueError("phase")
-            _assessment_for_paper(snapshot, attempt["paper_id"])
+            _current_assessed_candidate(snapshot, attempt["paper_id"])
             prior = _attempt_lease(paths, reclaim_attempt_id)
             expected = 0 if prior is None else prior.fencing_token
             writer = leases._claim_attempt_locked(
@@ -232,6 +232,19 @@ def _candidate_matches_assessment(snapshot: dict, candidate: dict) -> bool:
         candidate.get(field) == assessment[field]
         for field in assessment
     )
+
+
+def _current_assessed_candidate(snapshot: dict, paper_id: str) -> dict:
+    candidates = [
+        candidate
+        for candidate in snapshot["candidates"]
+        if candidate.get("paper_id") == paper_id
+    ]
+    if len(candidates) != 1 or not _candidate_matches_assessment(
+        snapshot, candidates[0]
+    ):
+        raise ValueError("paper_id")
+    return candidates[0]
 
 
 def read_fresh_snapshot(

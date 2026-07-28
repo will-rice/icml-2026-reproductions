@@ -188,9 +188,11 @@ def write_assessed_snapshot(
     now,
     candidates,
     *,
+    assessment_candidates=None,
     fetched_at=None,
 ):
     refresh = load_module("refresh")
+    assessed = candidates if assessment_candidates is None else assessment_candidates
     assessment_document = {
         "challenge_revision": "challenge-revision-1",
         "assessor": "scheduler-test",
@@ -200,7 +202,7 @@ def write_assessed_snapshot(
                 key: copy.deepcopy(candidate[key])
                 for key in refresh.SCORE_RATE_ASSESSMENT_KEYS
             }
-            for candidate in candidates
+            for candidate in assessed
         ],
     }
     assessment_path = paths.index.parent / "assessments.json"
@@ -227,7 +229,7 @@ def write_assessed_snapshot(
             "assessed_at": assessment_document["assessed_at"],
             "records": assessment_document["assessments"],
             "matched_paper_ids": sorted(
-                candidate["paper_id"] for candidate in candidates
+                {candidate["paper_id"] for candidate in assessed}
             ),
         },
         "candidates": candidates,
@@ -445,6 +447,97 @@ def test_claim_next_reclaims_same_released_blocked_attempt(
     for field in ("blocker", "next_action", "blocked_from"):
         assert after[field] == blocked[field]
     assert len(store.read_json(paths.index)["attempts"]) == 1
+
+
+def _released_blocked_attempt(paths, store, leases, now, scheduler):
+    original = paper("paper-a", 10)
+    snapshot_id = write_assessed_snapshot(store, paths, now, [original])
+    assignment = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    scheduler.attempts.transition_attempt(
+        paths,
+        assignment.attempt_id,
+        "blocked",
+        assignment.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    leases.release_lease(paths, assignment.writer_lease, now)
+    return assignment, original
+
+
+def test_claim_next_reclaim_requires_current_snapshot_candidate(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-b", 9)],
+        assessment_candidates=[original],
+    )
+
+    with pytest.raises(ValueError, match="paper_id"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
+
+
+def test_claim_next_reclaim_requires_current_candidate_assessment_match(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    changed = copy.deepcopy(original)
+    changed["score_rate"]["remaining_hours_p90"] = 99.0
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [changed],
+        assessment_candidates=[original],
+    )
+
+    with pytest.raises(ValueError, match="paper_id"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
+
+
+def test_claim_next_reclaim_rejects_duplicate_current_candidates(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [copy.deepcopy(original), copy.deepcopy(original)],
+        assessment_candidates=[original],
+    )
+
+    with pytest.raises(ValueError, match="candidates"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
 
 
 @pytest.mark.parametrize("phase", ["submitted", "judging"])
