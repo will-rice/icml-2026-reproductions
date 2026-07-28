@@ -1,0 +1,168 @@
+{
+  "alphaxiv": "2602.12996",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2602.12996",
+  "attempt_id": "eebefd15-4b75-430c-89ea-f94ea5efc18f",
+  "authors": [
+    "Hao Chen",
+    "Ye He",
+    "Yuchun Fan",
+    "Yukun Yan",
+    "Zhenghao Liu",
+    "Qingfu Zhu",
+    "Maosong Sun",
+    "Wanxiang Che"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "The paper proposes a meta-cognitive knowledge augmentation framework with Cognition-Guided Knowledge Expansion and Cognition-Driven Knowledge Calibration modules (Figure 2).",
+      "challenge_claim_sha256": "1bf9118ebcc515203ff8b8d7eb22a2740955679dbf5d745e1f30d1075dc10cd7",
+      "target_claim": "The paper proposes a meta-cognitive knowledge augmentation framework with Cognition-Guided Knowledge Expansion and Cognition-Driven Knowledge Calibration modules (Figure 2)."
+    },
+    {
+      "challenge_claim": "It reports a structural decay law linking higher answer accuracy to lower uncertainty across QA tasks and model families (Figure 1, Figure 7).",
+      "challenge_claim_sha256": "0f3871843311598bd9237b61b69efdcbe2d71faddae8308c1db8d86662c3c449",
+      "target_claim": "It reports a structural decay law linking higher answer accuracy to lower uncertainty across QA tasks and model families (Figure 1, Figure 7)."
+    },
+    {
+      "challenge_claim": "The full framework outperforms compared knowledge-augmentation and calibration baselines on diverse QA benchmarks (Table 1).",
+      "challenge_claim_sha256": "f48f84319fc330ed377cf6fd1595e475fea43d2f07a83bac6ed24a3963b94a01",
+      "target_claim": "The full framework outperforms compared knowledge-augmentation and calibration baselines on diverse QA benchmarks (Table 1)."
+    },
+    {
+      "challenge_claim": "Ablations attribute performance gains to the proposed meta-cognitive assessment, knowledge expansion, and calibration components (Table 2).",
+      "challenge_claim_sha256": "02dd7224bebc1c5e9ec07fa4048ecc427fb5cbd805ab078e33a269688f72fa15",
+      "target_claim": "Ablations attribute performance gains to the proposed meta-cognitive assessment, knowledge expansion, and calibration components (Table 2)."
+    },
+    {
+      "challenge_claim": "CDKC improves confidence calibration and aligns subjective certainty with objective correctness across evaluated datasets (Figure 5, Figure 6).",
+      "challenge_claim_sha256": "a77686d51191803a33b23338c5b84568496f4f6e1a5c2713e2b5d60bd40920b7",
+      "target_claim": "CDKC improves confidence calibration and aligns subjective certainty with objective correctness across evaluated datasets (Figure 5, Figure 6)."
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "know-more-know-clearer-author",
+    "path": "docs/superpowers/specs/2026-07-25-know-more-know-clearer-reproduction-design.md",
+    "recorded_at": "2026-07-28T23:13:36.533934+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-28T23:13:36.794730+00:00",
+    "reviewer": "reviewer-know-more-know-clearer"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2602.12996",
+  "i": 4134,
+  "insts": [
+    "Harbin Institute of Technology",
+    "Northeastern University",
+    "Tsinghua University"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "The paper proposes a meta-cognitive knowledge augmentation framework with Cognition-Guided Knowledge Expansion and Cognition-Driven Knowledge Calibration modules (Figure 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "It reports a structural decay law linking higher answer accuracy to lower uncertainty across QA tasks and model families (Figure 1, Figure 7)."
+    },
+    {
+      "status": "unverified",
+      "text": "The full framework outperforms compared knowledge-augmentation and calibration baselines on diverse QA benchmarks (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Ablations attribute performance gains to the proposed meta-cognitive assessment, knowledge expansion, and calibration components (Table 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "CDKC improves confidence calibration and aligns subjective certainty with objective correctness across evaluated datasets (Figure 5, Figure 6)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=ENuMNYCiV6",
+  "orid": "ENuMNYCiV6",
+  "paper_id": "ENuMNYCiV6",
+  "phase": "implementing",
+  "pid": "65361",
+  "safety_blocker": null,
+  "score": 20,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "1bf9118ebcc515203ff8b8d7eb22a2740955679dbf5d745e1f30d1075dc10cd7",
+        "p_falsified": 0.1,
+        "p_toy": 0.2,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "0f3871843311598bd9237b61b69efdcbe2d71faddae8308c1db8d86662c3c449",
+        "p_falsified": 0.1,
+        "p_toy": 0.2,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "f48f84319fc330ed377cf6fd1595e475fea43d2f07a83bac6ed24a3963b94a01",
+        "p_falsified": 0.1,
+        "p_toy": 0.2,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "02dd7224bebc1c5e9ec07fa4048ecc427fb5cbd805ab078e33a269688f72fa15",
+        "p_falsified": 0.1,
+        "p_toy": 0.2,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "a77686d51191803a33b23338c5b84568496f4f6e1a5c2713e2b5d60bd40920b7",
+        "p_falsified": 0.1,
+        "p_toy": 0.2,
+        "p_verified": 0.6
+      }
+    ],
+    "direct_artifact_score": 4,
+    "full_score_claim_paths": 4,
+    "judged_before_deadline_probability": 0.9,
+    "primary_risk": "Deterministic evaluation harness setup and baseline comparison validation.",
+    "remaining_hours_p90": 2.0,
+    "remaining_time_variance_hours2": 0.25,
+    "reusable_implementation": true
+  },
+  "slug": "know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models",
+  "snapshot_id": "e3a522565725ee68567f6c1d6c1211ea52eabf2afe38c2e5aa90f46468748ae8",
+  "spot": true,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "The paper proposes a meta-cognitive knowledge augmentation framework with Cognition-Guided Knowledge Expansion and Cognition-Driven Knowledge Calibration modules (Figure 2).",
+    "It reports a structural decay law linking higher answer accuracy to lower uncertainty across QA tasks and model families (Figure 1, Figure 7).",
+    "The full framework outperforms compared knowledge-augmentation and calibration baselines on diverse QA benchmarks (Table 1).",
+    "Ablations attribute performance gains to the proposed meta-cognitive assessment, knowledge expansion, and calibration components (Table 2).",
+    "CDKC improves confidence calibration and aligns subjective certainty with objective correctness across evaluated datasets (Figure 5, Figure 6)."
+  ],
+  "title": "Know More, Know Clearer: A Meta-Cognitive Framework for Knowledge Augmentation in Large Language Models",
+  "transitions": [
+    {
+      "at": "2026-07-28T23:13:36.262592+00:00",
+      "fencing_token": 1,
+      "from": "selected",
+      "owner": "agy-paper-owner-03",
+      "snapshot_id": "e3a522565725ee68567f6c1d6c1211ea52eabf2afe38c2e5aa90f46468748ae8",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-28T23:13:36.794730+00:00",
+      "fencing_token": 1,
+      "from": "design-pending",
+      "owner": "agy-paper-owner-03",
+      "snapshot_id": "e3a522565725ee68567f6c1d6c1211ea52eabf2afe38c2e5aa90f46468748ae8",
+      "to": "implementing"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-28T23:13:36.794730+00:00",
+  "upstream_revision": "arxiv:2602.12996+github:AI9Stars/Know-More-Know-Clearer@87038500889426a8264f5c7413e5e219fd47dc9d",
+  "vs": "https://icml.cc/virtual/2026/poster/65361"
+}

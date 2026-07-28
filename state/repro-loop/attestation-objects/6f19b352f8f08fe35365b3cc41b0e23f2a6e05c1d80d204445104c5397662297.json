@@ -1,0 +1,37 @@
+{
+  "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
+  "attempt_number": 3,
+  "attestation_id": "6f19b352f8f08fe35365b3cc41b0e23f2a6e05c1d80d204445104c5397662297",
+  "authority_attestation_id": "8ac1ee5b7679fa0b835c3878317abd47f8c39df9ec77c5ce11e51bececf31464",
+  "claims": [
+    {
+      "claim": "EEG-FM-Bench curates 14 public datasets spanning 10 canonical EEG paradigms with standardized preprocessing and evaluation (Figure 1).",
+      "evidence": "The logbook computed the dataset/paradigm census directly from the pinned released source and configuration, but the preprocessing audit was executed only on 'seeded synthetic EEG' via MNE, and no real EEG datasets were accessed or evaluated.",
+      "status": "toy",
+      "target_claim": "fourteen-dataset-ten-paradigm-curation"
+    },
+    {
+      "claim": "Frozen-backbone evaluation exposes a generalization gap, with many EEG foundation models performing only slightly above chance on several tasks (Table 1).",
+      "evidence": "The logbook explicitly states 'GPU performance and representation-analysis claims remain unavailable' and that 'no released baseline training or evaluation run was executed,' so no numerical evidence regarding frozen-backbone performance or generalization gaps exists.",
+      "status": "inconclusive",
+      "target_claim": "standardized-preprocessing-reproducibility"
+    },
+    {
+      "claim": "The benchmark evaluates frozen-backbone single-task fine-tuning, full-parameter single-task fine-tuning, and full-parameter multi-task fine-tuning strategies (Figure 1).",
+      "evidence": "The three-strategy harness was audited via 'released-source branch checks with deterministic CPU semantic smoke steps,' confirming code structure exists for the three strategies, but no actual training or evaluation run was executed on real data.",
+      "status": "toy",
+      "target_claim": "three-strategy-evaluation-harness"
+    }
+  ],
+  "judged_at": "2026-07-27T21:41:04+00:00",
+  "kind": "verdict",
+  "observed_at": "2026-07-28T23:12:39.040268+00:00",
+  "paper_id": "vGeNaFHdET",
+  "payload_sha256": "aceda0e4490e4a1b818f261836c2bf3c0991354861f9d340b83a5565d47e9e3e",
+  "snapshot_id": "fd5094db35006923469f6c1ffd5216afa3aa9d41027931473d5a5fb4f1226ed2",
+  "source_commit": "ba557640fa14c92ce775ede923601acb3ec95766",
+  "space_id": "wrice/repro-eeg-fm-bench",
+  "space_sha": "0c4079407f1f32796537820bf42c5bfe67ddb658",
+  "submission_attestation_id": "1685a41466885b9e42b28f02d759fd382837fa54d4152c007088e653ee764ff8",
+  "verdict_revision": "ffacb42fe9c30a11d01d79744b76926628a85a9e"
+}

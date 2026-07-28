@@ -33,7 +33,7 @@
     [
       "uv",
       "run",
-      "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+      "skills/icml-repro-loop/scripts/quick_validate.py",
       "skills/icml-repro-loop"
     ],
     [

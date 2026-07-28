@@ -1,0 +1,9 @@
+{
+  "acquired_at": "2026-07-28T23:13:11.958172+00:00",
+  "attempt_id": "eebefd15-4b75-430c-89ea-f94ea5efc18f",
+  "expires_at": "2026-07-28T23:18:11.958172+00:00",
+  "fencing_token": 1,
+  "owner": "agy-paper-owner-03",
+  "released_at": null,
+  "resource": "candidate:ENuMNYCiV6"
+}

@@ -1,9 +1,9 @@
 {
-  "acquired_at": "2026-07-28T00:49:29.167597+00:00",
+  "acquired_at": "2026-07-28T23:11:58.285240+00:00",
   "attempt_id": "e20658d7-250a-5b0c-a015-be453c43e9fc",
-  "expires_at": "2026-07-28T02:49:29.167597+00:00",
-  "fencing_token": 4,
-  "owner": "controller-verdict-sync-20260728",
-  "released_at": null,
+  "expires_at": "2026-07-29T01:11:58.285240+00:00",
+  "fencing_token": 5,
+  "owner": "agy-paper-owner-05",
+  "released_at": "2026-07-28T23:12:43.566770+00:00",
   "resource": "attempt:e20658d7-250a-5b0c-a015-be453c43e9fc"
 }

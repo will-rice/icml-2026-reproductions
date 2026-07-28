@@ -14,7 +14,7 @@
     "Tianyi Lin"
   ],
   "blocked_from": "judging",
-  "blocker": "Official verdict snapshot 1fdd83f03800de6cdfda5cfad952daf972f7311ffa97ab9d72714b56ea2e89e0 contains a RACO verdict judged_at 2026-07-28T14:06:57+00:00 for wrice/repro-raco, but it reports stale SHA 1c4fe0c154b0149ff0a65f737902774c6b90c35a. The authoritative deployment, submission, and watch bind SHA b0734d819ac4768a5e77496baf9bf86e0dd3c3ee. sync-verdict rejected the mismatch with ValueError sha, and the fresh snapshot no longer queues the submitted SHA. Exact RACO points therefore cannot be imported or claimed. Required external next action: the challenge service must requeue and rejudge exact SHA b0734d819ac4768a5e77496baf9bf86e0dd3c3ee or issue an authority-preserving correction; no additional source or Space mutation is warranted. Current overall official snapshot is 35/146 over 14 judged papers, but the stale-SHA verdict is not accepted as the exact attempt score.",
+  "blocker": "Live extracted claims for paper vSzRJyg6k0 drifted on the challenge Hub; attempt 97e213a5-7ca3-4a1b-a500-1ec52d94d87a claim_bindings match prior claim text rather than the new live official claims, causing sync-verdict to reject with ValueError claim.",
   "claim_bindings": [
     {
       "challenge_claim": "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3).",
@@ -102,6 +102,7 @@
       "text": "Experiments on multi-objective summarization and safety alignment across Qwen 3, Llama 3, and Gemma 3 report better Pareto trade-offs than reward-free baselines (Section 4)."
     }
   ],
+  "next_action": "Re-assess paper vSzRJyg6k0 against the new live challenge claims in candidate-assessments.json and re-claim via a fresh attempt if eligible.",
   "or": "https://openreview.net/forum?id=vSzRJyg6k0",
   "orid": "vSzRJyg6k0",
   "paper_id": "vSzRJyg6k0",
@@ -353,10 +354,27 @@
       "owner": "controller-raco-repair-20260728",
       "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
       "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T23:13:25.988917+00:00",
+      "attestation_id": "e9189f86b53ce1305250209cf34b16dc981163b0ce4ab03c5800ae0021de0a0c",
+      "fencing_token": 4,
+      "from": "blocked",
+      "owner": "agy-paper-owner-01",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "judging"
+    },
+    {
+      "at": "2026-07-28T23:13:49.628276+00:00",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "agy-paper-owner-01",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-28T14:09:14.400097+00:00",
+  "updated_at": "2026-07-28T23:13:49.628276+00:00",
   "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
   "vs": "https://icml.cc/virtual/2026/poster/60903"
 }

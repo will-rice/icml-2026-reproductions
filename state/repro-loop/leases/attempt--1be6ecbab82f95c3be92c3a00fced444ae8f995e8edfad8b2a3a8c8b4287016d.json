@@ -4,6 +4,6 @@
   "expires_at": "2026-07-28T02:49:29.408174+00:00",
   "fencing_token": 5,
   "owner": "controller-verdict-sync-20260728",
-  "released_at": null,
+  "released_at": "2026-07-28T23:11:39.237334+00:00",
   "resource": "attempt:8c21f2dc-a357-422e-9c1b-79a4d417e3dc"
 }

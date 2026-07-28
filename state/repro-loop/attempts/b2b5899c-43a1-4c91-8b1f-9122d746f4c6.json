@@ -7,8 +7,6 @@
   "authors": [
     "Daniel Russo"
   ],
-  "blocked_from": "implementing",
-  "blocker": "Real Codex preflight for the assigned Success Conditioning worktree denied the outside write but allowed the synthetic credential-file read; no Codex marker was created and Codex implementation is forbidden. A valid existing Antigravity marker proves both denials for this exact worktree, but no scoped Antigravity/Gemini authorization exists. Correction findings are pinned at controller-plan commit f4bfb9b5462d5676d2b3c1d689105641ffadecc3. Next action: obtain exact Antigravity/Gemini read/write authorization limited to this worktree and attempt, resume blocked_from=implementing, then launch the fenced correction worker. Validation, deployment, submission, Hub, watch, and verdict writes are unperformed.",
   "claim_bindings": [
     {
       "challenge_claim": "Success conditioning is proved to exactly solve a trust-region policy optimization problem with a chi-squared divergence constraint whose radius is determined by the data (Section 4.3).",
@@ -70,7 +68,7 @@
   "or": "https://openreview.net/forum?id=FEmXFeqYNZ",
   "orid": "FEmXFeqYNZ",
   "paper_id": "FEmXFeqYNZ",
-  "phase": "blocked",
+  "phase": "implementing",
   "pid": "65267",
   "safety_blocker": null,
   "score": 15,
@@ -144,10 +142,18 @@
       "owner": "controller-success-conditioning-owner-20260728",
       "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
       "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T23:11:48.590113+00:00",
+      "fencing_token": 4,
+      "from": "blocked",
+      "owner": "agy-paper-owner-02",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-28T18:04:05.699073+00:00",
+  "updated_at": "2026-07-28T23:11:48.590113+00:00",
   "upstream_revision": "arxiv:2601.18175v2",
   "vs": "https://icml.cc/virtual/2026/poster/65267"
 }

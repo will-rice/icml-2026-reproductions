@@ -1,9 +1,9 @@
 {
-  "acquired_at": "2026-07-28T16:35:31.419710+00:00",
+  "acquired_at": "2026-07-28T23:11:39.237334+00:00",
   "attempt_id": "b2b5899c-43a1-4c91-8b1f-9122d746f4c6",
-  "expires_at": "2026-07-28T20:00:38.439408+00:00",
-  "fencing_token": 3,
-  "owner": "controller-success-conditioning-owner-20260728",
+  "expires_at": "2026-07-29T01:11:39.237334+00:00",
+  "fencing_token": 4,
+  "owner": "agy-paper-owner-02",
   "released_at": null,
   "resource": "attempt:b2b5899c-43a1-4c91-8b1f-9122d746f4c6"
 }
