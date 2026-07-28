@@ -159,6 +159,8 @@ def transition_attempt(
     transition_updates = copy.deepcopy(updates)
 
     def transition(attempt: dict, timestamp: str) -> bool:
+        if attempt["phase"] == "judging" and phase == "improving":
+            raise ValueError("attestation")
         if attempt["phase"] == "validated" and phase == "improving":
             _require_no_deployment(paths, attempt, transition_updates)
         return _apply_transition(

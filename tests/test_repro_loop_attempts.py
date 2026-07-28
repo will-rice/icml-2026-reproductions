@@ -800,7 +800,7 @@ def test_consumed_correction_rejects_later_judgment_improvement(
             paths, attempt_id, phase, attestation_id, {}, lease, now
         )
 
-    with pytest.raises(ValueError, match="improvement_attempts"):
+    with pytest.raises(ValueError, match="attestation"):
         attempts.transition_attempt(
             paths,
             attempt_id,
@@ -814,26 +814,27 @@ def test_consumed_correction_rejects_later_judgment_improvement(
     assert attempts.read_attempt(paths, attempt_id)["phase"] == "judging"
 
 
-def test_unconsumed_judgment_allows_one_improvement(
+def test_generic_judgment_improvement_requires_verdict_attestation(
     paths, attempts_and_leases, attempts, attestations, now
 ):
     attempt_id, lease, _, _ = attempts_and_leases
     transition_attested_to(
         attempts, attestations, paths, attempt_id, "judging", lease, now
     )
+    expected = attempts.read_attempt(paths, attempt_id)
 
-    improving = attempts.transition_attempt(
-        paths,
-        attempt_id,
-        "improving",
-        lease,
-        now,
-        improvement_attempts=1,
-        improvement_reason="Official verdict requested stronger evidence",
-    )
+    with pytest.raises(ValueError, match="attestation"):
+        attempts.transition_attempt(
+            paths,
+            attempt_id,
+            "improving",
+            lease,
+            now,
+            improvement_attempts=1,
+            improvement_reason="Official verdict requested stronger evidence",
+        )
 
-    assert improving["phase"] == "improving"
-    assert improving["improvement_attempts"] == 1
+    assert attempts.read_attempt(paths, attempt_id) == expected
 
 
 def test_deployment_for_delimiter_prefixed_attempt_does_not_block_correction(
@@ -1120,6 +1121,11 @@ def test_attested_transition_transaction_recovers_attestation_attempt_and_index(
     ]
     assert len(planned) == 1
     assert {target["path"] for target in planned[0]["targets"]} == {
+        str(
+            attestations.object_path(paths, attestation_id).relative_to(
+                paths.index.parent
+            )
+        ),
         str(
             paths.attestation("validation", attempt_id).relative_to(
                 paths.index.parent

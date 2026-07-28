@@ -430,7 +430,13 @@ git commit -m "docs: dispatch autonomous paper owners directly"
 - Modify: `evals/icml-repro-loop/forward.md`
 - Modify if a pressure test exposes ambiguity: `skills/icml-repro-loop/SKILL.md`
 - Modify if a pressure test exposes ambiguity: `skills/icml-repro-loop/references/paper-owner-loop.md`
+- Modify: `skills/icml-repro-loop/scripts/controller.py`
+- Modify: `skills/icml-repro-loop/scripts/attempts.py`
+- Modify: `skills/icml-repro-loop/scripts/attestations.py`
+- Modify: `skills/icml-repro-loop/scripts/state.py`
 - Test: `tests/test_repro_loop_paper_owner_skill.py`
+- Test: `tests/test_repro_loop_attempts.py`
+- Test: `tests/test_repro_loop_official_verdict.py`
 
 **Interfaces:**
 - Consumes: four new scenarios and the revised skill package.
