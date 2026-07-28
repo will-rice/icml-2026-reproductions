@@ -64,7 +64,7 @@ def test_empty_artifact_list_rejected(tmp_path):
         "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
         "artifacts": [],
     }), encoding="utf-8")
-    with pytest.raises(IntegrityError, match="[Ee]mpty|[Nn]o artifacts"):
+    with pytest.raises(IntegrityError, match="[Ee]mpty|[Nn]o artifacts|[Ee]xpected"):
         load_verified_artifacts(tmp_path)
 
 
@@ -108,36 +108,20 @@ def test_extra_manifest_keys_rejected(tmp_path):
         load_manifest(path=manifest)
 
 
-def test_duplicate_artifact_ids_rejected(tmp_path):
+def test_duplicate_artifact_ids_rejected(project_root, tmp_path):
     """Duplicate artifact IDs must be rejected."""
-    # Create a manifest with duplicate artifact IDs
-    test_file = tmp_path / "test.txt"
-    test_file.write_text("hello")
-    file_hash = hashlib.sha256(b"hello").hexdigest()
+    manifest_data = _make_valid_manifest_dict(project_root)
+    manifest_data["artifacts"][1]["artifact_id"] = manifest_data["artifacts"][0]["artifact_id"]
 
-    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
-    manifest.parent.mkdir(parents=True)
-    manifest.write_text(json.dumps({
-        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
-        "paper_id": "vSzRJyg6k0",
-        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
-        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-        "artifacts": [
-            {"artifact_id": "dup", "relative_path": "test.txt",
-             "sha256": file_hash, "git_blob": "b6fc4c620b67d95f953a5c1c1230aaab5db5a1b0",
-             "size_bytes": 5,
-             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test.txt",
-             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-             "license": "Apache-2.0"},
-            {"artifact_id": "dup", "relative_path": "test2.txt",
-             "sha256": file_hash, "git_blob": "b6fc4c620b67d95f953a5c1c1230aaab5db5a1b0",
-             "size_bytes": 5,
-             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test2.txt",
-             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-             "license": "Apache-2.0"},
-        ],
-    }), encoding="utf-8")
-    with pytest.raises(IntegrityError, match="[Dd]uplicate"):
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Dd]uplicate|[Uu]nknown"):
         load_verified_artifacts(tmp_path)
 
 
@@ -156,28 +140,19 @@ def test_empty_artifact_entry_rejected(tmp_path):
         load_verified_artifacts(tmp_path)
 
 
-def test_git_blob_drift_rejected(tmp_path):
+def test_git_blob_drift_rejected(project_root, tmp_path):
     """Git blob ID must be recomputed and verified; drift is rejected."""
-    test_file = tmp_path / "test.txt"
-    test_file.write_text("hello")
-    file_hash = hashlib.sha256(b"hello").hexdigest()
+    manifest_data = _make_valid_manifest_dict(project_root)
+    manifest_data["artifacts"][0]["git_blob"] = "0000000000000000000000000000000000000000"
 
-    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
-    manifest.parent.mkdir(parents=True)
-    manifest.write_text(json.dumps({
-        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
-        "paper_id": "vSzRJyg6k0",
-        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
-        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-        "artifacts": [
-            {"artifact_id": "a1", "relative_path": "test.txt",
-             "sha256": file_hash, "size_bytes": 5,
-             "git_blob": "0000000000000000000000000000000000000000",
-             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test.txt",
-             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-             "license": "Apache-2.0"},
-        ],
-    }), encoding="utf-8")
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
     with pytest.raises(IntegrityError, match="[Gg]it blob"):
         load_verified_artifacts(tmp_path)
 
@@ -229,55 +204,159 @@ def test_live_claims_loader_binds_to_exact_admitted_claims(tmp_path):
         load_live_claims(claims_file)
 
 
-def test_generic_repo_url_or_clone_only_command_rejected(tmp_path):
+def test_generic_repo_url_or_clone_only_command_rejected(project_root, tmp_path):
     """Artifacts with generic repo URLs or clone-only commands must raise IntegrityError."""
-    test_file = tmp_path / "test.txt"
-    test_file.write_text("hello")
-    file_hash = hashlib.sha256(b"hello").hexdigest()
-    blob_id = _git_blob_id(b"hello")
+    manifest_data = _make_valid_manifest_dict(project_root)
+    manifest_data["artifacts"][0]["source_url"] = "https://github.com/PeterLauLukChen/RACO"
 
-    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
-    manifest.parent.mkdir(parents=True)
-    # Generic repo URL (missing commit hash)
-    manifest.write_text(json.dumps({
-        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
-        "paper_id": "vSzRJyg6k0",
-        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
-        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-        "artifacts": [
-            {"artifact_id": "a1", "relative_path": "test.txt",
-             "sha256": file_hash, "git_blob": blob_id, "size_bytes": 5,
-             "source_url": "https://github.com/PeterLauLukChen/RACO",
-             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-             "license": "Apache-2.0"},
-        ],
-    }), encoding="utf-8")
-    with pytest.raises(IntegrityError, match="[Cc]ommit|[Uu]rl|[Ss]ource"):
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Cc]ommit|[Uu]rl|[Ss]ource|[Mm]ismatch"):
         load_verified_artifacts(tmp_path)
 
 
-def test_blob_url_with_correct_commit_rejected(tmp_path):
+def test_blob_url_with_correct_commit_rejected(project_root, tmp_path):
     """Round-6 §2: /blob/ URLs must be rejected even when they contain the
     pinned commit hash. Only raw.githubusercontent.com URLs are valid."""
-    test_file = tmp_path / "test.txt"
-    test_file.write_text("hello")
-    file_hash = hashlib.sha256(b"hello").hexdigest()
-    blob_id = _git_blob_id(b"hello")
+    manifest_data = _make_valid_manifest_dict(project_root)
+    manifest_data["artifacts"][0]["source_url"] = (
+        "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/LICENSE"
+    )
 
-    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
-    manifest.parent.mkdir(parents=True)
-    manifest.write_text(json.dumps({
-        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
-        "paper_id": "vSzRJyg6k0",
-        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
-        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
-        "artifacts": [
-            {"artifact_id": "a1", "relative_path": "test.txt",
-             "sha256": file_hash, "git_blob": blob_id, "size_bytes": 5,
-             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test.txt",
-             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa && cat test.txt",
-             "license": "Apache-2.0"},
-        ],
-    }), encoding="utf-8")
-    with pytest.raises(IntegrityError, match="[Bb]lob|[Rr]aw"):
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Bb]lob|[Rr]aw|[Mm]ismatch|[Uu]rl"):
+        load_verified_artifacts(tmp_path)
+
+
+
+def _make_valid_manifest_dict(project_root: Path) -> dict:
+    manifest_path = project_root / "evidence/inputs/upstream_manifest.json"
+    return json.loads(manifest_path.read_text(encoding="utf-8"))
+
+
+def test_swapped_artifact_urls_rejected(project_root, tmp_path):
+    """Swapping source_url between artifacts must raise IntegrityError."""
+    manifest_data = _make_valid_manifest_dict(project_root)
+    url0 = manifest_data["artifacts"][0]["source_url"]
+    url1 = manifest_data["artifacts"][1]["source_url"]
+    manifest_data["artifacts"][0]["source_url"] = url1
+    manifest_data["artifacts"][1]["source_url"] = url0
+
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Uu]rl|[Mm]ismatch|[Ss]ource|[Iid]entity"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_swapped_relative_paths_rejected(project_root, tmp_path):
+    """Swapping relative_path between artifacts must raise IntegrityError."""
+    manifest_data = _make_valid_manifest_dict(project_root)
+    rel0 = manifest_data["artifacts"][0]["relative_path"]
+    rel1 = manifest_data["artifacts"][1]["relative_path"]
+    manifest_data["artifacts"][0]["relative_path"] = rel1
+    manifest_data["artifacts"][1]["relative_path"] = rel0
+
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art_id, rel in [("LICENSE", rel1), ("README.md", rel0)]:
+        src_bytes = (project_root / "evidence/inputs/upstream" / art_id).read_bytes()
+        (tmp_path / rel).write_bytes(src_bytes)
+    for art in manifest_data["artifacts"][2:]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Ppp]ath|[Mm]ismatch|[Iid]entity"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_unknown_fifth_artifact_rejected(project_root, tmp_path):
+    """Adding an unknown 5th artifact must raise IntegrityError."""
+    manifest_data = _make_valid_manifest_dict(project_root)
+    fifth_art = dict(manifest_data["artifacts"][0])
+    fifth_art["artifact_id"] = "extra.py"
+    fifth_art["relative_path"] = "evidence/inputs/upstream/extra.py"
+    fifth_art["source_url"] = "https://raw.githubusercontent.com/PeterLauLukChen/RACO/84a943c34f38520c7e0c9dd3066517c111b3c8fa/extra.py"
+    manifest_data["artifacts"].append(fifth_art)
+
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / "evidence/inputs/upstream/LICENSE").read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Uu]nknown|[Ee]xpected|[Cc]ount|[Ff]our"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_missing_artifact_identity_rejected(project_root, tmp_path):
+    """Omitting one of the 4 required artifacts must raise IntegrityError."""
+    manifest_data = _make_valid_manifest_dict(project_root)
+    manifest_data["artifacts"].pop()
+
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Mm]issing|[Ee]xpected|[Cc]ount|[Ff]our"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_artifact_url_query_param_rejected(project_root, tmp_path):
+    """Appending ?query to source_url must raise IntegrityError."""
+    manifest_data = _make_valid_manifest_dict(project_root)
+    manifest_data["artifacts"][0]["source_url"] += "?v=1"
+
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Uu]rl|[Qq]uery|[Mm]ismatch"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_artifact_url_fragment_rejected(project_root, tmp_path):
+    """Appending #fragment to source_url must raise IntegrityError."""
+    manifest_data = _make_valid_manifest_dict(project_root)
+    manifest_data["artifacts"][0]["source_url"] += "#L10"
+
+    (tmp_path / "evidence/inputs/upstream").mkdir(parents=True)
+    for art in manifest_data["artifacts"]:
+        rel = art["relative_path"]
+        (tmp_path / rel).write_bytes((project_root / rel).read_bytes())
+
+    manifest_file = tmp_path / "evidence/inputs/upstream_manifest.json"
+    manifest_file.write_text(json.dumps(manifest_data), encoding="utf-8")
+
+    with pytest.raises(IntegrityError, match="[Uu]rl|[Ff]ragment|[Mm]ismatch"):
         load_verified_artifacts(tmp_path)

@@ -141,6 +141,37 @@ _EXPECTED_SNAPSHOT_ID = "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785
 _EXPECTED_UPSTREAM_REV = "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa"
 _EXPECTED_COMMIT_HASH = "84a943c34f38520c7e0c9dd3066517c111b3c8fa"
 
+
+@dataclass(frozen=True)
+class AdmittedArtifactIdentity:
+    artifact_id: str
+    relative_path: str
+    raw_url: str
+
+
+_ADMITTED_ARTIFACT_IDENTITIES: dict[str, AdmittedArtifactIdentity] = {
+    "LICENSE": AdmittedArtifactIdentity(
+        artifact_id="LICENSE",
+        relative_path="evidence/inputs/upstream/LICENSE",
+        raw_url=f"https://raw.githubusercontent.com/PeterLauLukChen/RACO/{_EXPECTED_COMMIT_HASH}/LICENSE",
+    ),
+    "README.md": AdmittedArtifactIdentity(
+        artifact_id="README.md",
+        relative_path="evidence/inputs/upstream/README.md",
+        raw_url=f"https://raw.githubusercontent.com/PeterLauLukChen/RACO/{_EXPECTED_COMMIT_HASH}/README.md",
+    ),
+    "m=3-RACO-CAGrad-Algo.md": AdmittedArtifactIdentity(
+        artifact_id="m=3-RACO-CAGrad-Algo.md",
+        relative_path="evidence/inputs/upstream/m=3-RACO-CAGrad-Algo.md",
+        raw_url=f"https://raw.githubusercontent.com/PeterLauLukChen/RACO/{_EXPECTED_COMMIT_HASH}/m%3D3-RACO-CAGrad-Algo.md",
+    ),
+    "train_raco.py": AdmittedArtifactIdentity(
+        artifact_id="train_raco.py",
+        relative_path="evidence/inputs/upstream/train_raco.py",
+        raw_url=f"https://raw.githubusercontent.com/PeterLauLukChen/RACO/{_EXPECTED_COMMIT_HASH}/train_raco.py",
+    ),
+}
+
 _MANIFEST_REQUIRED_KEYS = {
     "attempt_id", "paper_id", "snapshot_id", "upstream_revision", "artifacts"
 }
@@ -198,8 +229,10 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
     if not isinstance(raw_artifacts, list):
         raise IntegrityError("artifacts must be a list")
 
-    if not raw_artifacts:
-        raise IntegrityError("Empty artifact list: manifest must contain pinned upstream artifacts")
+    if len(raw_artifacts) != len(_ADMITTED_ARTIFACT_IDENTITIES):
+        raise IntegrityError(
+            f"Expected exactly {len(_ADMITTED_ARTIFACT_IDENTITIES)} artifacts, got {len(raw_artifacts)}"
+        )
 
     # Pass 1: duplicate ID and path check across all entries
     seen_ids: set[str] = set()
@@ -243,10 +276,23 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
         acquisition_command = item["acquisition_command"]
         license_str = item["license"]
 
-        if not isinstance(artifact_id, str) or not artifact_id:
-            raise IntegrityError("artifact_id must be a non-empty string")
-        if not isinstance(rel_str, str):
-            raise IntegrityError("relative_path must be a string")
+        if artifact_id not in _ADMITTED_ARTIFACT_IDENTITIES:
+            raise IntegrityError(f"Unknown artifact_id: {artifact_id!r}")
+
+        expected_identity = _ADMITTED_ARTIFACT_IDENTITIES[artifact_id]
+
+        if rel_str != expected_identity.relative_path:
+            raise IntegrityError(
+                f"Relative path mismatch for artifact {artifact_id!r}: "
+                f"expected {expected_identity.relative_path!r}, got {rel_str!r}"
+            )
+
+        if source_url != expected_identity.raw_url:
+            raise IntegrityError(
+                f"source_url mismatch for artifact {artifact_id!r}: "
+                f"expected {expected_identity.raw_url!r}, got {source_url!r}"
+            )
+
         if not isinstance(sha256, str):
             raise IntegrityError("sha256 must be a string")
         if not isinstance(git_blob, str) or not git_blob:
@@ -274,10 +320,6 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
                 f"expected {git_blob}, got {computed_blob}"
             )
 
-        raw_prefix = f"https://raw.githubusercontent.com/PeterLauLukChen/RACO/{_EXPECTED_COMMIT_HASH}/"
-        if not isinstance(source_url, str) or not source_url.startswith(raw_prefix) or "/blob/" in source_url:
-            raise IntegrityError(f"source_url must be exact raw URL starting with {raw_prefix}: got {source_url}")
-
         if not isinstance(acquisition_command, str) or "git checkout" not in acquisition_command or _EXPECTED_COMMIT_HASH not in acquisition_command:
             raise IntegrityError(f"acquisition_command must contain git checkout {_EXPECTED_COMMIT_HASH}: got {acquisition_command}")
 
@@ -296,4 +338,8 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
                 license=license_str,
             )
         )
+
+    if len(seen_ids) != len(_ADMITTED_ARTIFACT_IDENTITIES):
+        raise IntegrityError("Missing admitted artifact identities in manifest")
+
     return tuple(verified)

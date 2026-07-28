@@ -125,36 +125,79 @@ def test_theorem_32_has_interior_strict_witness(project_root):
 
 
 def test_theorem_31_evidence_contains_closed_schema_steps_array(project_root):
-    """Round-6 §1: evidence must contain a 'steps' array of exactly 10 records
-    for t=0..9 inside audits.theorem_31. Each record must contain step_index,
-    current_iterate, weighted_anchor, cagrad_direction, next_iterate,
-    loss_before, loss_after, m_value, grad_norm, descent_holds, m_bound_holds.
-    Terminal t=T diagnostics must not appear in the per-update records.
-    theta_next = theta - eta * cagrad_direction must hold for each step."""
+    """Round-6 & Round-9 §2: evidence must contain a 'steps' array of exactly 10 records
+    for t=0..9 inside audits.theorem_31. Each record must be independently verified against
+    recomputed g1, g2, weighted anchor, CAGrad-Clip direction, next iterate, losses,
+    M(theta_t), weighted-gradient norm, descent inequality, and M-bound boolean."""
+    import math
+    import torch
+    from reward_free_alignment.cagrad_clip import cagrad_clip
+    from reward_free_alignment.theorem_audit import compute_m_simplex
+
     evidence = build_evidence(project_root)
     t31 = evidence["audits"]["theorem_31"]
     assert "steps" in t31, "evidence must contain 'steps' array"
     steps = t31["steps"]
     assert len(steps) == 10
+
+    weights = torch.tensor([0.6, 0.4])
+    w1_py, w2_py = round(weights[0].item(), 6), round(weights[1].item(), 6)
+    c = t31["correction_radius"]
     eta = t31["step_size"]
+
     required_keys = {
         "step_index", "current_iterate", "weighted_anchor", "cagrad_direction",
         "next_iterate", "loss_before", "loss_after", "m_value", "grad_norm",
         "descent_holds", "m_bound_holds",
     }
+
+    x = 1.0
     for i, step in enumerate(steps):
         assert set(step.keys()) == required_keys, (
             f"Step {i} keys mismatch: {set(step.keys())} != {required_keys}"
         )
         assert step["step_index"] == i
-        # Verify theta_next = theta - eta * cagrad_direction
-        expected_next = step["current_iterate"] - eta * step["cagrad_direction"]
-        assert abs(step["next_iterate"] - expected_next) < 1e-9, (
-            f"Step {i}: theta_next={step['next_iterate']} != "
-            f"theta - eta*d = {expected_next}"
+        assert abs(step["current_iterate"] - x) < 1e-9
+
+        # Independent recomputations for step i
+        f1_before = x ** 2
+        f2_before = (x - 1.0) ** 2
+        expected_loss_before = w1_py * f1_before + w2_py * f2_before
+
+        g1 = torch.tensor([2.0 * x], dtype=torch.float32)
+        g2 = torch.tensor([2.0 * (x - 1.0)], dtype=torch.float32)
+        res = cagrad_clip((g1, g2), weights, c)
+
+        expected_anchor = res.weighted_anchor.item()
+        expected_dir = res.gradient.item()
+        expected_next = x - eta * expected_dir
+
+        f1_after = expected_next ** 2
+        f2_after = (expected_next - 1.0) ** 2
+        expected_loss_after = w1_py * f1_after + w2_py * f2_after
+
+        expected_m_val = compute_m_simplex(g1, g2)
+        expected_grad_norm = torch.linalg.vector_norm(res.weighted_anchor).item()
+
+        expected_descent_amount = (eta * (1.0 - c * c) / 2.0) * (expected_grad_norm ** 2)
+        expected_descent_holds = expected_loss_after <= expected_loss_before - expected_descent_amount + 1e-9
+        expected_m_bound_holds = (
+            math.isfinite(expected_m_val)
+            and expected_m_val >= 0.0
+            and expected_m_val <= expected_grad_norm + 1e-9
         )
-        assert isinstance(step["descent_holds"], bool)
-        assert isinstance(step["m_bound_holds"], bool)
+
+        assert abs(step["weighted_anchor"] - expected_anchor) < 1e-9, f"Step {i} weighted_anchor mismatch"
+        assert abs(step["cagrad_direction"] - expected_dir) < 1e-9, f"Step {i} cagrad_direction mismatch"
+        assert abs(step["next_iterate"] - expected_next) < 1e-9, f"Step {i} next_iterate mismatch"
+        assert abs(step["loss_before"] - expected_loss_before) < 1e-9, f"Step {i} loss_before mismatch"
+        assert abs(step["loss_after"] - expected_loss_after) < 1e-9, f"Step {i} loss_after mismatch"
+        assert abs(step["m_value"] - expected_m_val) < 1e-9, f"Step {i} m_value mismatch"
+        assert abs(step["grad_norm"] - expected_grad_norm) < 1e-9, f"Step {i} grad_norm mismatch"
+        assert step["descent_holds"] == bool(expected_descent_holds), f"Step {i} descent_holds mismatch"
+        assert step["m_bound_holds"] == bool(expected_m_bound_holds), f"Step {i} m_bound_holds mismatch"
+
+        x = expected_next
 
 
 def test_artifact_source_urls_use_raw_not_blob(project_root):
@@ -186,3 +229,84 @@ def test_claim8_requires_all_step_records_pass(project_root):
         assert all_descent, "Claim 8 supported but not all descent_holds"
         assert all_m_bound, "Claim 8 supported but not all m_bound_holds"
         assert fh_holds, "Claim 8 supported but finite_horizon_bound_holds False"
+
+
+def test_claim8_mutation_regressions(project_root):
+    """Round-9 §3: Test _derive_claim_outcomes with four direct mutations against Claim 8.
+    Flipping any single dependency must change Claim 8 outcome to 'not-supported',
+    while the all-true control must remain 'supported'."""
+    from reward_free_alignment.evidence import (
+        _derive_claim_outcomes,
+        _run_pairwise_audit,
+        _run_claim6_end_to_end_audit,
+        _run_cagrad_audit,
+        _run_theorem_31_audit,
+        _run_theorem_32_audit,
+    )
+    pairwise_audit = _run_pairwise_audit()
+    claim6_audit = _run_claim6_end_to_end_audit()
+    cagrad_audit = _run_cagrad_audit()
+    t31_audit = _run_theorem_31_audit()
+    t32_strict_audit, _ = _run_theorem_32_audit()
+
+    # Control: all dependencies hold -> Claim 8 supported
+    control = _derive_claim_outcomes(
+        pairwise_audit=pairwise_audit,
+        claim6_audit=claim6_audit,
+        cagrad_audit=cagrad_audit,
+        t31_audit=t31_audit,
+        t32_strict_audit=t32_strict_audit,
+    )
+    assert control[8][0] == "supported"
+
+    # Mutation 1: flip one step's descent_holds to False
+    t31_mut1 = dict(t31_audit)
+    steps_mut1 = [dict(s) for s in t31_mut1["steps"]]
+    steps_mut1[3]["descent_holds"] = False
+    t31_mut1["steps"] = steps_mut1
+    out1 = _derive_claim_outcomes(
+        pairwise_audit=pairwise_audit,
+        claim6_audit=claim6_audit,
+        cagrad_audit=cagrad_audit,
+        t31_audit=t31_mut1,
+        t32_strict_audit=t32_strict_audit,
+    )
+    assert out1[8][0] == "not-supported"
+
+    # Mutation 2: flip one step's m_bound_holds to False
+    t31_mut2 = dict(t31_audit)
+    steps_mut2 = [dict(s) for s in t31_mut2["steps"]]
+    steps_mut2[5]["m_bound_holds"] = False
+    t31_mut2["steps"] = steps_mut2
+    out2 = _derive_claim_outcomes(
+        pairwise_audit=pairwise_audit,
+        claim6_audit=claim6_audit,
+        cagrad_audit=cagrad_audit,
+        t31_audit=t31_mut2,
+        t32_strict_audit=t32_strict_audit,
+    )
+    assert out2[8][0] == "not-supported"
+
+    # Mutation 3: flip grad_finite_horizon_bound_holds to False
+    t31_mut3 = dict(t31_audit)
+    t31_mut3["grad_finite_horizon_bound_holds"] = False
+    out3 = _derive_claim_outcomes(
+        pairwise_audit=pairwise_audit,
+        claim6_audit=claim6_audit,
+        cagrad_audit=cagrad_audit,
+        t31_audit=t31_mut3,
+        t32_strict_audit=t32_strict_audit,
+    )
+    assert out3[8][0] == "not-supported"
+
+    # Mutation 4: flip m_finite_horizon_bound_holds to False
+    t31_mut4 = dict(t31_audit)
+    t31_mut4["m_finite_horizon_bound_holds"] = False
+    out4 = _derive_claim_outcomes(
+        pairwise_audit=pairwise_audit,
+        claim6_audit=claim6_audit,
+        cagrad_audit=cagrad_audit,
+        t31_audit=t31_mut4,
+        t32_strict_audit=t32_strict_audit,
+    )
+    assert out4[8][0] == "not-supported"
