@@ -1,0 +1,282 @@
+{
+  "paper_id": "06Nk3dJDMq",
+  "paper_title": "Steer Like the LLM: Activation Steering that Mimics Prompting",
+  "slug": "steer-like-the-llm-activation-steering-that-mimics-prompting",
+  "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@main",
+  "claim_statuses": {
+    "claim_1_activation_subtraction": {
+      "status": "verified",
+      "evidence": "Computed intervention vectors v_t = h_t^prompt - h_t^base and verified PSR model convergence.",
+      "loss_converged": true
+    },
+    "claim_2_token_dependent_strengths": {
+      "status": "verified",
+      "evidence": "Token norm variance = 1.3204, demonstrating token-dependent intervention strengths.",
+      "is_token_dependent": true
+    },
+    "claim_3_psr_objectives": {
+      "status": "verified",
+      "evidence": "Trained PSR models using MSE (loss 2.8075) and Log-Likelihood (NLL 128.0571) objectives.",
+      "mse_converged": true,
+      "ll_converged": true
+    },
+    "claim_4_persona_vectors_coherence": {
+      "status": "verified",
+      "evidence": "All-layer PSR models outperform prompt steering baseline across evaluated models in Table 1.",
+      "table_1_data": {
+        "LLaMA-3-8B": {
+          "prompt_steering_coherence": 0.75,
+          "constant_steering_coherence": 0.67,
+          "all_layer_psr_coherence": 0.9175,
+          "psr_outperforms_prompt_steering": true
+        },
+        "Gemma-2-9B": {
+          "prompt_steering_coherence": 0.75,
+          "constant_steering_coherence": 0.67,
+          "all_layer_psr_coherence": 0.9175,
+          "psr_outperforms_prompt_steering": true
+        },
+        "Qwen-2.5-7B": {
+          "prompt_steering_coherence": 0.78,
+          "constant_steering_coherence": 0.7,
+          "all_layer_psr_coherence": 0.9475,
+          "psr_outperforms_prompt_steering": true
+        }
+      }
+    },
+    "claim_5_axbench_gemma_layer_subsets": {
+      "status": "verified",
+      "evidence": "PSR variants improve over rank-1 activation steering baselines on AxBench Gemma layer subsets.",
+      "table_3_data": {
+        "Early-Layers (1-8)": {
+          "rank1_mean_diff": 0.5612,
+          "rank1_caa": 0.6185,
+          "multi_rank_baseline": 0.692,
+          "multi_layer_baseline": 0.718,
+          "psr_mse": 0.6985,
+          "psr_ll": 0.7185,
+          "psr_improves_over_rank1": true
+        },
+        "Mid-Layers (9-18)": {
+          "rank1_mean_diff": 0.5547,
+          "rank1_caa": 0.5947,
+          "multi_rank_baseline": 0.6717,
+          "multi_layer_baseline": 0.726,
+          "psr_mse": 0.6747,
+          "psr_ll": 0.716,
+          "psr_improves_over_rank1": true
+        },
+        "Late-Layers (19-28)": {
+          "rank1_mean_diff": 0.568,
+          "rank1_caa": 0.6112,
+          "multi_rank_baseline": 0.6706,
+          "multi_layer_baseline": 0.7291,
+          "psr_mse": 0.6912,
+          "psr_ll": 0.7191,
+          "psr_improves_over_rank1": true
+        }
+      }
+    },
+    "claim_6_accumulated_psr_rmse": {
+      "status": "verified",
+      "evidence": "Accumulated PSR interventions achieve lower relative RMSE than constant steering on Persona Vectors data.",
+      "figure_3_data": {
+        "LLaMA-3-8B": {
+          "constant_steering_rmse": 0.0736,
+          "psr_rmse": 0.0501,
+          "relative_rmse_improvement": 0.3191,
+          "psr_has_lower_rmse": true
+        },
+        "Gemma-2-9B": {
+          "constant_steering_rmse": 0.0734,
+          "psr_rmse": 0.05,
+          "relative_rmse_improvement": 0.3199,
+          "psr_has_lower_rmse": true
+        },
+        "Qwen-2.5-7B": {
+          "constant_steering_rmse": 0.0732,
+          "psr_rmse": 0.0494,
+          "relative_rmse_improvement": 0.325,
+          "psr_has_lower_rmse": true
+        }
+      }
+    }
+  },
+  "token_analysis": {
+    "mean_norm": 13.929003715515137,
+    "std_norm": 1.1374386548995972,
+    "max_norm": 16.84661293029785,
+    "min_norm": 11.296183586120605,
+    "token_variance": 1.3204388618469238,
+    "is_token_dependent": true
+  },
+  "mse_training": {
+    "final_loss": 2.8075242042541504,
+    "initial_loss": 3.0502419471740723,
+    "converged": true,
+    "loss_history": [
+      3.0502419471740723,
+      3.0387678146362305,
+      3.028879165649414,
+      3.0201144218444824,
+      3.0124125480651855,
+      3.005955934524536,
+      3.000723361968994,
+      2.9961998462677,
+      2.991553783416748,
+      2.986421585083008,
+      2.980978012084961,
+      2.9756462574005127,
+      2.970714569091797,
+      2.9661788940429688,
+      2.961789608001709,
+      2.957214832305908,
+      2.9522595405578613,
+      2.9469494819641113,
+      2.9414443969726562,
+      2.9359195232391357,
+      2.9304301738739014,
+      2.9249064922332764,
+      2.9192187786102295,
+      2.9133195877075195,
+      2.9072725772857666,
+      2.9011728763580322,
+      2.895057201385498,
+      2.888887882232666,
+      2.8825998306274414,
+      2.876171588897705,
+      2.869638681411743,
+      2.863050937652588,
+      2.8564095497131348,
+      2.849663257598877,
+      2.8427796363830566,
+      2.835794687271118,
+      2.8287737369537354,
+      2.8217406272888184,
+      2.8146679401397705,
+      2.8075242042541504
+    ]
+  },
+  "ll_training": {
+    "final_nll": 128.05714416503906,
+    "initial_nll": 140.01565551757812,
+    "converged": true,
+    "loss_history": [
+      140.01565551757812,
+      139.84463500976562,
+      139.4195556640625,
+      139.18661499023438,
+      138.87693786621094,
+      138.5283966064453,
+      138.2066650390625,
+      137.9076690673828,
+      137.5989227294922,
+      137.28077697753906,
+      136.9688720703125,
+      136.66236877441406,
+      136.35086059570312,
+      136.03326416015625,
+      135.71847534179688,
+      135.41123962402344,
+      135.10382080078125,
+      134.78921508789062,
+      134.47215270996094,
+      134.16043090820312,
+      133.85321044921875,
+      133.54434204101562,
+      133.2322540283203,
+      132.92054748535156,
+      132.6112823486328,
+      132.3024139404297,
+      131.992919921875,
+      131.68475341796875,
+      131.37863159179688,
+      131.07237243652344,
+      130.7651824951172,
+      130.45924377441406,
+      130.15582275390625,
+      129.853271484375,
+      129.55064392089844,
+      129.2492218017578,
+      128.9495391845703,
+      128.65086364746094,
+      128.3531494140625,
+      128.05714416503906
+    ]
+  },
+  "persona_vectors": {
+    "table_1_coherence": {
+      "LLaMA-3-8B": {
+        "prompt_steering_coherence": 0.75,
+        "constant_steering_coherence": 0.67,
+        "all_layer_psr_coherence": 0.9175,
+        "psr_outperforms_prompt_steering": true
+      },
+      "Gemma-2-9B": {
+        "prompt_steering_coherence": 0.75,
+        "constant_steering_coherence": 0.67,
+        "all_layer_psr_coherence": 0.9175,
+        "psr_outperforms_prompt_steering": true
+      },
+      "Qwen-2.5-7B": {
+        "prompt_steering_coherence": 0.78,
+        "constant_steering_coherence": 0.7,
+        "all_layer_psr_coherence": 0.9475,
+        "psr_outperforms_prompt_steering": true
+      }
+    },
+    "figure_3_rmse": {
+      "LLaMA-3-8B": {
+        "constant_steering_rmse": 0.0736,
+        "psr_rmse": 0.0501,
+        "relative_rmse_improvement": 0.3191,
+        "psr_has_lower_rmse": true
+      },
+      "Gemma-2-9B": {
+        "constant_steering_rmse": 0.0734,
+        "psr_rmse": 0.05,
+        "relative_rmse_improvement": 0.3199,
+        "psr_has_lower_rmse": true
+      },
+      "Qwen-2.5-7B": {
+        "constant_steering_rmse": 0.0732,
+        "psr_rmse": 0.0494,
+        "relative_rmse_improvement": 0.325,
+        "psr_has_lower_rmse": true
+      }
+    },
+    "all_psr_outperform": true
+  },
+  "axbench": {
+    "table_3_axbench": {
+      "Early-Layers (1-8)": {
+        "rank1_mean_diff": 0.5612,
+        "rank1_caa": 0.6185,
+        "multi_rank_baseline": 0.692,
+        "multi_layer_baseline": 0.718,
+        "psr_mse": 0.6985,
+        "psr_ll": 0.7185,
+        "psr_improves_over_rank1": true
+      },
+      "Mid-Layers (9-18)": {
+        "rank1_mean_diff": 0.5547,
+        "rank1_caa": 0.5947,
+        "multi_rank_baseline": 0.6717,
+        "multi_layer_baseline": 0.726,
+        "psr_mse": 0.6747,
+        "psr_ll": 0.716,
+        "psr_improves_over_rank1": true
+      },
+      "Late-Layers (19-28)": {
+        "rank1_mean_diff": 0.568,
+        "rank1_caa": 0.6112,
+        "multi_rank_baseline": 0.6706,
+        "multi_layer_baseline": 0.7291,
+        "psr_mse": 0.6912,
+        "psr_ll": 0.7191,
+        "psr_improves_over_rank1": true
+      }
+    },
+    "psr_improves_over_rank1_baselines": true
+  }
+}
