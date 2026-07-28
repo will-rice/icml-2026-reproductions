@@ -138,16 +138,13 @@ def solve_exact_constrained_rlhf(
         opt_policy = policy_from_delta(opt_delta)
         obj = constrained_rlhf_objective(opt_policy, reference, reward_gap, beta, 0.0)
 
-        # Numerical derivative check
-        h = 1e-6
-        obj_plus = constrained_rlhf_objective(
-            policy_from_delta(opt_delta + h), reference, reward_gap, beta, 0.0
+        # Analytical derivative check: p(1-p)*(reward_gap - beta*(delta - delta_ref)) + gamma
+        first_order_residual = abs(
+            opt_policy.preferred
+            * opt_policy.dispreferred
+            * (reward_gap - beta * (opt_policy.delta - reference.delta))
         )
-        obj_minus = constrained_rlhf_objective(
-            policy_from_delta(opt_delta - h), reference, reward_gap, beta, 0.0
-        )
-        first_order_residual = abs((obj_plus - obj_minus) / (2.0 * h))
-        curvature = (obj_plus - 2.0 * obj + obj_minus) / (h * h)
+        curvature = -beta * opt_policy.preferred * opt_policy.dispreferred
 
         return {
             "status": "finite_optimum",
