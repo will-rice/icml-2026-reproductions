@@ -16,6 +16,21 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Publication-Metadata Gate — 2026-07-28, round 13
+
+The validated source passed every local check, but Hugging Face rejected the
+Space YAML before upload because README `short_description` exceeded its
+60-character maximum. No deployment was created.
+
+1. Shorten only `short_description` to at most 60 characters while retaining
+   the RACO and ICML 2026 identity.
+2. Add or strengthen a local metadata regression that parses README
+   frontmatter and asserts the field is present and no longer than 60
+   characters.
+3. Run project tests, root pytest, skill validation, pre-commit, and
+   `git diff --check`. Return one clean commit without changing evidence,
+   claims, runtime code, or other Space metadata.
+
 ## Controller Validation Correction Gate — 2026-07-28, round 10
 
 Controller scientific review accepted proposal
