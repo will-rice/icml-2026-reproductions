@@ -16,10 +16,10 @@ class SmoothObjectiveCase:
     initial_loss: float
     final_loss: float
     grad_norm: float
-    # Extended fields for T-step trajectory
     trajectory_losses: tuple[float, ...] | None = None
     trajectory_grad_norms: tuple[float, ...] | None = None
     trajectory_m_values: tuple[float, ...] | None = None
+    trajectory_m_bounds_holds: tuple[bool, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -33,12 +33,12 @@ class ConvergenceAudit:
     descent_bound_holds: bool
     pareto_bound_holds: bool
     local_outcome: str
-    # Extended T-step finite-horizon fields
     trajectory_steps: int | None = None
     min_m_value: float | None = None
     min_grad_norm: float | None = None
     finite_horizon_rhs: float | None = None
     finite_horizon_bound_holds: bool | None = None
+    per_step_m_bound_holds: bool | None = None
 
 
 @dataclass(frozen=True)
@@ -69,6 +69,18 @@ def _validate_positive_finite(name: str, value: float) -> float:
     return float(value)
 
 
+def compute_m_simplex(g1: Tensor, g2: Tensor) -> float:
+    """Compute M(theta) = min_{lambda in [0,1]} ||lambda g1 + (1-lambda) g2||."""
+    diff = g1 - g2
+    diff_norm_sq = torch.dot(diff, diff).item()
+    if diff_norm_sq < 1e-15:
+        return torch.linalg.vector_norm(g1).item()
+    opt_lambda = -torch.dot(diff, g2).item() / diff_norm_sq
+    clamped_lambda = max(0.0, min(1.0, opt_lambda))
+    mix = clamped_lambda * g1 + (1.0 - clamped_lambda) * g2
+    return torch.linalg.vector_norm(mix).item()
+
+
 def execute_raco_trajectory(
     *,
     x0: float,
@@ -89,32 +101,29 @@ def execute_raco_trajectory(
     losses: list[float] = []
     grad_norms: list[float] = []
     m_values: list[float] = []
+    m_bounds_holds: list[bool] = []
 
     x = x0
     for t in range(T + 1):
-        # Compute f1, f2, L_w at current x
         f1 = x ** 2
         f2 = (x - 1.0) ** 2
         L_w_val = w[0].item() * f1 + w[1].item() * f2
         losses.append(L_w_val)
 
-        # Compute gradients
         g1_val = 2.0 * x
         g2_val = 2.0 * (x - 1.0)
         g0_val = w[0].item() * g1_val + w[1].item() * g2_val
-        grad_norms.append(abs(g0_val))
+        g_norm = abs(g0_val)
+        grad_norms.append(g_norm)
 
-        # M(theta_t) = min_k (g_k · g_update / ||g_update||)
-        # For scalar 1D: g_update = g0 direction
-        # M(theta_t) = min(g1 * sign(g0), g2 * sign(g0)) * |g0| / |g0| = min(g1*sgn, g2*sgn)
-        if abs(g0_val) > 1e-15:
-            m_val = min(g1_val * (g0_val / abs(g0_val)), g2_val * (g0_val / abs(g0_val)))
-        else:
-            m_val = 0.0
+        # M(theta_t) = min_{lambda in simplex} ||lambda g1 + (1-lambda) g2||
+        g1_t = torch.tensor([g1_val], dtype=torch.float32)
+        g2_t = torch.tensor([g2_val], dtype=torch.float32)
+        m_val = compute_m_simplex(g1_t, g2_t)
         m_values.append(m_val)
+        m_bounds_holds.append(math.isfinite(m_val) and m_val >= 0.0 and m_val <= g_norm + 1e-9)
 
         if t < T:
-            # Step using the weighted gradient (conservative 1D CAGrad)
             x = x - eta * g0_val
 
     return SmoothObjectiveCase(
@@ -129,6 +138,7 @@ def execute_raco_trajectory(
         trajectory_losses=tuple(losses),
         trajectory_grad_norms=tuple(grad_norms),
         trajectory_m_values=tuple(m_values),
+        trajectory_m_bounds_holds=tuple(m_bounds_holds),
     )
 
 
@@ -148,38 +158,42 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
     c_valid = 0.0 <= c_rad < 1.0
     nonneg_l = case.initial_loss >= 0.0 and case.final_loss >= 0.0
 
-    # One-step descent bound using the paper's Theorem 3.1 formula:
-    # L_w(θ_{t+1}) ≤ L_w(θ_t) - η(1-c²)/2 ||∇L_w(θ_t)||²
-    # Note: we do NOT assume best-case ρ=1 (correction gate §2).
-    # The (1-c²) factor is the worst-case Gamma lower bound from Theorem 3.1.
     descent_factor = step * (1.0 - c_rad * c_rad) / 2.0
     expected_descent = descent_factor * case.grad_norm * case.grad_norm
     descent_holds = case.final_loss <= case.initial_loss - expected_descent + 1e-9
 
-    # Finite-horizon Pareto bound (Theorem 3.1):
-    # min_{t=0..T-1} ||∇L_w(θ_t)||² ≤ 2 L_w(θ_0) / (η(1-c²) T)
-    # Uses the correct formula WITHOUT the extra 1/2 from the rejected proposal.
     trajectory_steps = None
     min_m_value = None
     min_grad_norm = None
     finite_horizon_rhs = None
     finite_horizon_bound_holds = None
+    per_step_m_bound_holds = True
 
     if case.trajectory_losses is not None and case.trajectory_grad_norms is not None:
-        T = len(case.trajectory_losses) - 1  # number of steps
+        T = len(case.trajectory_losses) - 1
         if T > 0 and (1.0 - c_rad * c_rad) > 0.0:
             trajectory_steps = T
-            min_grad_norm = min(case.trajectory_grad_norms[:-1])  # min over t=0..T-1
-            # Finite-horizon bound: min ||∇L_w||² ≤ 2*L_w(θ_0) / (η*(1-c²)*T)
+            min_grad_norm = min(case.trajectory_grad_norms[:-1])
             finite_horizon_rhs = 2.0 * case.initial_loss / (step * (1.0 - c_rad * c_rad) * T)
-            finite_horizon_bound_holds = min_grad_norm ** 2 <= finite_horizon_rhs + 1e-9
 
             if case.trajectory_m_values is not None:
                 min_m_value = min(case.trajectory_m_values[:-1])
+                # Check both grad norm and M(theta) finite horizon bounds
+                finite_horizon_bound_holds = (
+                    min_grad_norm ** 2 <= finite_horizon_rhs + 1e-9
+                    and (min_m_value ** 2) <= finite_horizon_rhs + 1e-9
+                )
 
-    # Pareto bound: check finite-horizon if available, otherwise gradient consistency
+                # Check per-step M(theta_t) bounds
+                for m_val, g_norm in zip(case.trajectory_m_values[:-1], case.trajectory_grad_norms[:-1]):
+                    if not (math.isfinite(m_val) and m_val >= 0.0 and m_val <= g_norm + 1e-9):
+                        per_step_m_bound_holds = False
+                        break
+            else:
+                finite_horizon_bound_holds = min_grad_norm ** 2 <= finite_horizon_rhs + 1e-9
+
     if finite_horizon_bound_holds is not None:
-        pareto_holds = finite_horizon_bound_holds
+        pareto_holds = finite_horizon_bound_holds and per_step_m_bound_holds
     else:
         pareto_holds = case.grad_norm >= 0.0
 
@@ -191,6 +205,7 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
         and nonneg_l
         and descent_holds
         and pareto_holds
+        and per_step_m_bound_holds
     )
     local_outcome = "supported" if all_pass else "not-supported"
 
@@ -209,6 +224,7 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
         min_grad_norm=min_grad_norm,
         finite_horizon_rhs=finite_horizon_rhs,
         finite_horizon_bound_holds=finite_horizon_bound_holds,
+        per_step_m_bound_holds=per_step_m_bound_holds,
     )
 
 
@@ -220,40 +236,60 @@ def audit_theorem_32(
     step_size: float,
     atol: float = 1e-10,
 ) -> DescentCertificateAudit:
-    # Validate preconditions (correction gate §5)
+    # Validate preconditions (correction gate §4)
     if not isinstance(c, (int, float)) or not math.isfinite(c):
         return _inapplicable_audit(
-            weights, c, result,
+            weights, c, result, step_size, weighted_smoothness,
             reason="c must be finite",
         )
     if c <= 0.0:
         return _inapplicable_audit(
-            weights, c, result,
+            weights, c, result, step_size, weighted_smoothness,
             reason="c must be positive for Theorem 3.2",
         )
     if c >= 1.0:
         return _inapplicable_audit(
-            weights, c, result,
+            weights, c, result, step_size, weighted_smoothness,
             reason="c must satisfy c < 1 for admissibility",
         )
     if not isinstance(step_size, (int, float)) or not math.isfinite(step_size) or step_size <= 0.0:
         return _inapplicable_audit(
-            weights, c, result,
+            weights, c, result, step_size, weighted_smoothness,
             reason="step_size must be positive and finite",
         )
     if not isinstance(weighted_smoothness, (int, float)) or not math.isfinite(weighted_smoothness) or weighted_smoothness <= 0.0:
         return _inapplicable_audit(
-            weights, c, result,
+            weights, c, result, step_size, weighted_smoothness,
             reason="weighted_smoothness must be positive and finite",
+        )
+
+    # Check caller c matches result.c
+    if abs(result.c - c) > atol:
+        return _inapplicable_audit(
+            weights, c, result, step_size, weighted_smoothness,
+            reason=f"c mismatch: caller c={c} != result c={result.c}",
+        )
+
+    # Reject non-finite result tensors
+    if not (
+        torch.isfinite(result.gradient).all()
+        and torch.isfinite(result.weighted_anchor).all()
+        and torch.isfinite(result.coefficients).all()
+        and torch.isfinite(result.mixture).all()
+        and torch.isfinite(result.clipped_mixture).all()
+    ):
+        return _inapplicable_audit(
+            weights, c, result, step_size, weighted_smoothness,
+            reason="result contains non-finite tensors",
         )
 
     # Check finite simplex weights
     if weights.ndim != 1 or weights.shape[0] != 2:
-        return _inapplicable_audit(weights, c, result, reason="not two objectives")
+        return _inapplicable_audit(weights, c, result, step_size, weighted_smoothness, reason="not two objectives")
     if not torch.isfinite(weights).all() or (weights <= 0.0).any():
-        return _inapplicable_audit(weights, c, result, reason="weights not positive finite simplex")
+        return _inapplicable_audit(weights, c, result, step_size, weighted_smoothness, reason="weights not positive finite simplex")
     if abs(weights.sum().item() - 1.0) > 1e-5:
-        return _inapplicable_audit(weights, c, result, reason="weights not in simplex")
+        return _inapplicable_audit(weights, c, result, step_size, weighted_smoothness, reason="weights not in simplex")
 
     g0 = result.weighted_anchor
     g_mix = result.mixture
@@ -271,7 +307,7 @@ def audit_theorem_32(
     )
 
     if not is_applicable:
-        return _inapplicable_audit(weights, c, result, reason="degenerate geometry")
+        return _inapplicable_audit(weights, c, result, step_size, weighted_smoothness, reason="degenerate geometry")
 
     rho_val = torch.dot(g0, g_mix).item() / (norm_g0 * norm_g_mix)
     rho_tilde_val = torch.dot(g0, g_clip).item() / (norm_g0 * norm_g_clip)
@@ -286,19 +322,13 @@ def audit_theorem_32(
     strict_conds = _strict_conditions(weights, c, step_size, weighted_smoothness, result, atol)
     strict_exp = all(strict_conds.values())
 
-    # Determine local outcome:
-    # 1. Identity residual must be small
-    # 2. For applicable cases, improvement must be nonnegative
-    # 3. Under strict conditions, improvement must be strictly positive
-    # 4. Positive Gamma improvement required (correction gate §5)
     if identity_res > atol:
         local_outcome = "not-supported"
-    elif obs_diff < -atol:
-        # Negative improvement violates the theorem's guarantee
+    elif obs_diff <= atol:
+        # Require positive Gamma improvement
         local_outcome = "not-supported"
-    elif strict_exp and obs_diff <= atol:
-        # All strictness conditions hold but no positive improvement
-        local_outcome = "not-supported"
+    elif not strict_exp:
+        local_outcome = "limited"
     else:
         local_outcome = "supported"
 
@@ -326,16 +356,30 @@ def _strict_conditions(
     atol: float,
 ) -> dict[str, bool]:
     """Compute the 8 strictness booleans from the paper."""
-    norm_g0 = torch.linalg.vector_norm(result.weighted_anchor).item()
+    norm_g0 = torch.linalg.vector_norm(result.weighted_anchor).item() if torch.isfinite(result.weighted_anchor).all() else 0.0
     return {
-        "two_objectives": weights.shape[0] == 2,
-        "positive_weights": bool((weights > 0.0).all().item()),
-        "positive_c": c > 0.0,
-        "strict_step_size": step_size < (1.0 / weighted_smoothness),
+        "two_objectives": weights.ndim == 1 and weights.shape[0] == 2,
+        "positive_weights": bool((weights > 0.0).all().item()) if torch.isfinite(weights).all() else False,
+        "positive_c": isinstance(c, (int, float)) and math.isfinite(c) and c > 0.0,
+        "strict_step_size": (
+            isinstance(step_size, (int, float))
+            and math.isfinite(step_size)
+            and isinstance(weighted_smoothness, (int, float))
+            and math.isfinite(weighted_smoothness)
+            and weighted_smoothness > 0.0
+            and step_size < (1.0 / weighted_smoothness)
+        ),
         "nonzero_anchor": norm_g0 > atol,
         "noncolinear_gradients": result.singular_case is None,
-        "interior_coefficients": 0.0 < result.coefficients[0].item() < 1.0,
-        "coefficients_differ_from_weights": not torch.allclose(result.coefficients, weights, atol=1e-5),
+        "interior_coefficients": (
+            torch.isfinite(result.coefficients).all()
+            and 0.0 < result.coefficients[0].item() < 1.0
+        ),
+        "coefficients_differ_from_weights": (
+            torch.isfinite(result.coefficients).all()
+            and torch.isfinite(weights).all()
+            and not torch.allclose(result.coefficients, weights, atol=1e-5)
+        ),
     }
 
 
@@ -343,13 +387,14 @@ def _inapplicable_audit(
     weights: Tensor,
     c: float,
     result: CAGradResult,
+    step_size: float = 0.0,
+    weighted_smoothness: float = 1.0,
     *,
     reason: str = "",
 ) -> DescentCertificateAudit:
-    """Build a not-applicable audit with all strict conditions computed."""
-    # Provide best-effort strict conditions even for inapplicable cases
+    """Build a not-applicable audit with all strict conditions computed using actual arguments."""
     try:
-        strict_conds = _strict_conditions(weights, c, 0.0, 1.0, result, 1e-10)
+        strict_conds = _strict_conditions(weights, c, step_size, weighted_smoothness, result, 1e-10)
     except Exception:
         strict_conds = {
             "two_objectives": False,

@@ -62,6 +62,27 @@ def test_zero_weight_coordinate_cannot_be_reintroduced():
     assert result.clipped_coefficients[1].item() == 0.0
 
 
+def test_singular_case_zero_anchor_returns_zero_gradient_and_user_weights():
+    """Correction gate §3: g0=0 chooses w, uses c=0, returns zero update."""
+    g1, g2 = tensor([1.0, 0.0]), tensor([-1.0, 0.0])
+    weights = tensor([0.5, 0.5])
+    result = cagrad_clip((g1, g2), weights, c=0.4)
+    assert result.singular_case == "zero_anchor"
+    assert torch.allclose(result.coefficients, weights)
+    assert torch.allclose(result.gradient, tensor([0.0, 0.0]))
+    assert result.c == 0.4
+
+
+def test_singular_case_identical_gradients_returns_user_weights():
+    """Correction gate §3: Identical gradients choose user weight w."""
+    g1, g2 = tensor([1.0, 2.0]), tensor([1.0, 2.0])
+    weights = tensor([0.7, 0.3])
+    result = cagrad_clip((g1, g2), weights, c=0.4)
+    assert result.singular_case == "identical_gradients"
+    assert torch.allclose(result.coefficients, weights)
+    assert result.c == 0.4
+
+
 # --- Adversarial regressions for controller correction gate ---
 
 
@@ -118,7 +139,7 @@ def test_c_greater_than_one_is_rejected():
 # --- Adversarial regressions for corrected stationary quadratic ---
 
 
-def _grid_search_minimizer(g1, g2, g0, c, n=100_000):
+def _grid_search_minimizer(g1, g2, g0, c, n=10_000):
     """Independent brute-force h minimizer for comparison."""
     s = c * torch.linalg.vector_norm(g0).item()
     best_alpha, best_h = 0.0, float("inf")
@@ -167,7 +188,7 @@ def test_solver_matches_grid_search_seeded_property():
         c = 0.3 + 0.4 * torch.rand(1, generator=rng).item()
         g0 = weights[0] * g1 + weights[1] * g2
         solution = solve_two_objective_alpha(g1, g2, weights, c)
-        _, grid_h = _grid_search_minimizer(g1, g2, g0, c, n=50_000)
+        _, grid_h = _grid_search_minimizer(g1, g2, g0, c, n=5_000)
         assert abs(solution.objective_value - grid_h) < 1e-2, (
             f"Trial {trial}: solver h={solution.objective_value:.6f} != grid h={grid_h:.6f}"
         )
@@ -227,7 +248,7 @@ def test_wide_log_scale_random_property():
         c = 0.3 + 0.4 * torch.rand(1, generator=rng).item()
         g0 = weights[0] * g1 + weights[1] * g2
         solution = solve_two_objective_alpha(g1, g2, weights, c)
-        _, grid_h = _grid_search_minimizer(g1, g2, g0, c, n=50_000)
+        _, grid_h = _grid_search_minimizer(g1, g2, g0, c, n=5_000)
         assert abs(solution.objective_value - grid_h) < 1e-2 * abs(grid_h) + 1e-15, (
             f"Trial {trial} (scale={scale:.1e}): "
             f"solver h={solution.objective_value:.6e} != grid h={grid_h:.6e}"

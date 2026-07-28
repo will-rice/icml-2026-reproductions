@@ -1,7 +1,8 @@
+import math
 import pytest
 import torch
 from torch import tensor
-from reward_free_alignment.cagrad_clip import cagrad_clip
+from reward_free_alignment.cagrad_clip import cagrad_clip, CAGradResult
 from reward_free_alignment.theorem_audit import (
     gamma,
     audit_theorem_31,
@@ -349,3 +350,103 @@ def test_theorem_32_positive_gamma_improvement_required():
         f"Positive Gamma improvement required, got {audit.observed_difference}"
     )
     assert audit.local_outcome == "supported"
+
+
+def test_pareto_criticality_measure_is_nonnegative_norm():
+    """Correction gate §2: M(theta)=min_{lambda in simplex} ||sum_i lambda_i grad L_i(theta)||.
+
+    Hand-derived 1D scalar gradient cases:
+    - Same-sign: g1=2.0, g2=4.0 => M(theta) = min(|2|,|4|) = 2.0
+    - Opposite-sign: g1=2.0, g2=-1.0 => 0 in conv(g1,g2) => M(theta) = 0.0
+    - Zero gradient: g1=0.0, g2=2.0 => M(theta) = 0.0
+    The previous implementation stored negative directional derivatives (-1.0).
+    """
+    case_opposite = execute_raco_trajectory(
+        x0=1.0, T=1, eta=0.1, c=0.4,
+        weights=tensor([0.6, 0.4]),
+        smoothness_constants=(2.0, 2.0),
+    )
+    # At x0=1.0: g1 = 2*1 = 2.0, g2 = 2*(1-1) = 0.0 => M(x0) = 0.0
+    assert case_opposite.trajectory_m_values is not None
+    m_val = case_opposite.trajectory_m_values[0]
+    assert m_val >= 0.0, f"M(theta) must be nonnegative, got {m_val}"
+    assert abs(m_val - 0.0) < 1e-12, f"Expected M(theta)=0 for g2=0, got {m_val}"
+
+
+def test_m_values_and_bounds_per_step():
+    """Correction gate §2: Every persisted M(theta_t) must be finite, nonnegative,
+    and each step must separately check M(theta_t) <= ||grad L_w(theta_t)||.
+    """
+    case = execute_raco_trajectory(
+        x0=0.8, T=5, eta=0.1, c=0.4,
+        weights=tensor([0.6, 0.4]),
+        smoothness_constants=(2.0, 2.0),
+    )
+    assert case.trajectory_m_values is not None
+    assert case.trajectory_grad_norms is not None
+    for t in range(len(case.trajectory_m_values)):
+        m_val = case.trajectory_m_values[t]
+        g_norm = case.trajectory_grad_norms[t]
+        assert math.isfinite(m_val), f"Step {t}: M(theta) not finite: {m_val}"
+        assert m_val >= 0.0, f"Step {t}: M(theta) negative: {m_val}"
+        assert m_val <= g_norm + 1e-9, f"Step {t}: M(theta) {m_val} > ||grad L_w|| {g_norm}"
+
+    audit = audit_theorem_31(case)
+    assert audit.per_step_m_bound_holds is True
+
+
+def test_audit_theorem_32_rejects_c_mismatch():
+    """Correction gate §4: Reject/limit an audit whose caller c differs from the result's c."""
+    weights = tensor([0.2, 0.8])
+    c_result = 0.4
+    g1 = tensor([1.0, -4.0])
+    g2 = tensor([-1.0, 1.0])
+    result = cagrad_clip((g1, g2), weights, c=c_result)
+
+    # Pass caller c=0.5 != result.c (0.4)
+    audit = audit_theorem_32(
+        result, weights, c=0.5, weighted_smoothness=3.0, step_size=0.1
+    )
+    assert audit.applicable is False
+    assert audit.local_outcome == "limited"
+
+
+def test_audit_theorem_32_rejects_nonfinite_tensors():
+    """Correction gate §4: Reject nonfinite result tensors in CAGradResult."""
+    weights = tensor([0.2, 0.8])
+    c = 0.4
+    bad_result = CAGradResult(
+        gradient=tensor([float("nan"), 1.0]),
+        weighted_anchor=tensor([1.0, 0.0]),
+        coefficients=tensor([0.2, 0.8]),
+        clipped_coefficients=tensor([0.2, 0.8]),
+        mixture=tensor([1.0, 0.0]),
+        clipped_mixture=tensor([1.0, 0.0]),
+        clipped_coordinates=(),
+        singular_case=None,
+        c=c,
+    )
+    audit = audit_theorem_32(
+        bad_result, weights, c=c, weighted_smoothness=3.0, step_size=0.1
+    )
+    assert audit.applicable is False
+    assert audit.local_outcome == "limited"
+
+
+def test_audit_theorem_32_inapplicable_preserves_actual_inputs():
+    """Correction gate §4: Ensure every returned strict-condition boolean reflects
+    actual rejected/passed inputs rather than fake placeholder step-size/smoothness values.
+    """
+    weights = tensor([0.2, 0.8])
+    c = 0.4
+    g1 = tensor([1.0, -4.0])
+    g2 = tensor([-1.0, 1.0])
+    result = cagrad_clip((g1, g2), weights, c=c)
+
+    # Pass non-simplex weights (triggering inapplicable audit), but with valid step_size and weighted_smoothness
+    audit = audit_theorem_32(
+        result, tensor([0.3, 0.8]), c=c, weighted_smoothness=3.0, step_size=0.1
+    )
+    assert audit.applicable is False
+    assert audit.strict_conditions["strict_step_size"] is True  # 0.1 < 1.0/3.0
+    assert audit.strict_conditions["positive_c"] is True  # c=0.4 > 0

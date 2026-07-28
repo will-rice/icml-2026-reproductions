@@ -25,6 +25,7 @@ class CAGradResult:
     clipped_mixture: Tensor
     clipped_coordinates: tuple[int, ...]
     singular_case: str | None
+    c: float
 
 
 def validate_weights(weights: Tensor, atol: float = 1e-5) -> Tensor:
@@ -71,41 +72,68 @@ def solve_two_objective_alpha(
     diff = g1 - g2
     norm_diff = torch.linalg.vector_norm(diff).item()
 
-    # Scale-aware relative tolerance: use the max gradient norm as the
-    # reference scale so thresholds adapt to the data magnitude.
-    ref_scale = max(norm_g1, norm_g2, 1e-300)  # avoid zero
+    ref_scale = max(norm_g1, norm_g2, 1e-300)
     rel_tol = atol * ref_scale
 
-    # Detect singular geometry using scale-relative thresholds
-    singular_case: str | None = None
-    if c <= atol:
-        singular_case = "zero_radius"
-    elif norm_g0 <= rel_tol:
-        singular_case = "zero_anchor"
-    elif norm_diff <= rel_tol:
-        singular_case = "identical_gradients"
-    else:
-        if norm_g1 <= rel_tol or norm_g2 <= rel_tol:
-            singular_case = "colinear_gradients"
-        else:
-            cos_sim = abs(torch.dot(g1, g2).item()) / (norm_g1 * norm_g2)
-            if 1.0 - cos_sim <= 1e-5:
-                singular_case = "colinear_gradients"
+    if norm_g0 <= rel_tol:
+        return AlphaSolution(
+            alpha=w1,
+            coefficients=weights.clone(),
+            weighted_anchor=g0,
+            objective_value=0.0,
+            candidate_count=1,
+            singular_case="zero_anchor",
+        )
 
-    # Build h(alpha) evaluator — used for ALL cases, including singular
+    if norm_diff <= rel_tol:
+        return AlphaSolution(
+            alpha=w1,
+            coefficients=weights.clone(),
+            weighted_anchor=g0,
+            objective_value=torch.dot(g1, g0).item(),
+            candidate_count=1,
+            singular_case="identical_gradients",
+        )
+
+    if c <= atol:
+        b1 = torch.dot(g1, g0).item()
+        b2 = torch.dot(g2, g0).item()
+        delta_b = b1 - b2
+        if delta_b < -rel_tol:
+            best_alpha = 1.0
+        elif delta_b > rel_tol:
+            best_alpha = 0.0
+        else:
+            best_alpha = w1
+        best_obj = best_alpha * b1 + (1.0 - best_alpha) * b2
+        coeffs = torch.tensor([best_alpha, 1.0 - best_alpha], dtype=g1.dtype, device=g1.device)
+        return AlphaSolution(
+            alpha=best_alpha,
+            coefficients=coeffs,
+            weighted_anchor=g0,
+            objective_value=best_obj,
+            candidate_count=1,
+            singular_case="zero_radius",
+        )
+
     s = c * norm_g0
 
     def h(a: float) -> float:
         mix = a * g1 + (1.0 - a) * g2
         return (torch.dot(mix, g0) + s * torch.linalg.vector_norm(mix)).item()
 
-    if singular_case is not None:
-        # Minimize h over the two endpoints instead of blindly returning w1
+    if norm_g1 <= rel_tol or norm_g2 <= rel_tol:
+        singular_case = "colinear_gradients"
+    else:
+        cos_sim = abs(torch.dot(g1, g2).item()) / (norm_g1 * norm_g2)
+        singular_case = "colinear_gradients" if 1.0 - cos_sim <= 1e-5 else None
+
+    if singular_case == "colinear_gradients":
         h0 = h(0.0)
         h1 = h(1.0)
-        if h0 < h1 - atol * ref_scale * ref_scale:
+        if h0 < h1 - rel_tol:
             best_alpha = 0.0
-        elif h1 < h0 - atol * ref_scale * ref_scale:
+        elif h1 < h0 - rel_tol:
             best_alpha = 1.0
         elif abs(0.0 - w1) <= abs(1.0 - w1):
             best_alpha = 0.0
@@ -136,13 +164,9 @@ def solve_two_objective_alpha(
 
     raw_candidates = [0.0, 1.0]
 
-    # Scale-aware thresholds: use the max coefficient magnitude as the
-    # reference so degeneracy tests adapt to the data rather than
-    # depending on an absolute threshold.
     q_coeff_ref = max(abs(q2), abs(q1), abs(q0), 1e-300)
     q_tol = atol * q_coeff_ref
 
-    # Roots of Q(a) = 0
     if q2 > q_tol:
         disc_q = q1 * q1 - 4.0 * q2 * q0
         if disc_q >= 0:
@@ -150,19 +174,14 @@ def solve_two_objective_alpha(
             raw_candidates.append((-q1 - sqrt_dq) / (2.0 * q2))
             raw_candidates.append((-q1 + sqrt_dq) / (2.0 * q2))
 
-    # Stationary points of h(alpha)
-    # The stationarity condition leads to a quadratic in alpha
     A = delta_b * delta_b * q2 - s * s * q2 * q2
     B = delta_b * delta_b * q1 - s * s * q2 * q1
     C = delta_b * delta_b * q0 - s * s * q1 * q1 / 4.0
 
-    # Scale-aware: use the max among |A|,|B|,|C| as reference so that the
-    # degeneracy test works identically regardless of gradient magnitude.
     poly_coeff_ref = max(abs(A), abs(B), abs(C), 1e-300)
     poly_tol = atol * poly_coeff_ref
 
     def _stationarity_check(r: float) -> bool:
-        """Scale-relative verification of the stationarity condition."""
         q_val = Q(r)
         if q_val < -q_tol:
             return False
@@ -185,7 +204,6 @@ def solve_two_objective_alpha(
             if _stationarity_check(r):
                 raw_candidates.append(r)
 
-    # Deduplicate and filter valid candidates
     valid_candidates: list[float] = []
     for cand in raw_candidates:
         if not math.isfinite(cand):
@@ -239,7 +257,6 @@ def cagrad_clip(
 
     norm_clipped_mix = torch.linalg.vector_norm(clipped_mixture).item()
 
-    # Scale-aware zero test for clipped mixture
     ref_scale = max(
         torch.linalg.vector_norm(g1).item(),
         torch.linalg.vector_norm(g2).item(),
@@ -247,7 +264,9 @@ def cagrad_clip(
     )
     norm_g0 = torch.linalg.vector_norm(solution.weighted_anchor).item()
 
-    if norm_clipped_mix <= atol * ref_scale:
+    if solution.singular_case == "zero_anchor":
+        gradient = torch.zeros_like(solution.weighted_anchor)
+    elif norm_clipped_mix <= atol * ref_scale:
         gradient = solution.weighted_anchor
     else:
         gradient = solution.weighted_anchor + c * norm_g0 * (clipped_mixture / norm_clipped_mix)
@@ -261,4 +280,5 @@ def cagrad_clip(
         clipped_mixture=clipped_mixture,
         clipped_coordinates=tuple(clipped_coords),
         singular_case=solution.singular_case,
+        c=c,
     )

@@ -176,6 +176,7 @@ def _run_theorem_31_audit() -> dict[str, Any]:
     result["trajectory_losses"] = list(case.trajectory_losses) if case.trajectory_losses else None
     result["trajectory_grad_norms"] = list(case.trajectory_grad_norms) if case.trajectory_grad_norms else None
     result["trajectory_m_values"] = list(case.trajectory_m_values) if case.trajectory_m_values else None
+    result["trajectory_m_bounds_holds"] = list(case.trajectory_m_bounds_holds) if case.trajectory_m_bounds_holds else None
     # Remove tensor fields (not JSON-serializable)
     result.pop("smoothness_constants", None)
     result["smoothness_constants"] = list(case.smoothness_constants)
@@ -359,10 +360,11 @@ def _derive_claim_outcomes(
         t31_outcome,
         f"Theorem 3.1 convergence audit with executed deterministic T={t31_steps} step trajectory: "
         f"descent_bound_holds={t31_audit['descent_bound_holds']}, "
+        f"per_step_m_bound_holds={t31_audit.get('per_step_m_bound_holds')}, "
         f"finite_horizon_bound_holds={t31_audit.get('finite_horizon_bound_holds')}, "
         f"2*L_w(θ_0)/(η*(1-c²)*T)={t31_fh_rhs:.6f}. " if t31_fh_rhs is not None else
         f"Theorem 3.1 convergence audit: descent_bound_holds={t31_audit['descent_bound_holds']}. "
-        f"Pareto bound verified from T-step trajectory, not vacuously from f_final < f_init.",
+        f"Pareto-criticality measure M(θ_t) and finite-horizon bound verified from T-step trajectory.",
     )
 
     # Claim 9: Theorem 3.2 — clipping can strictly improve convergence rate

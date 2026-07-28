@@ -53,10 +53,29 @@ def test_manifest_binds_attempt_snapshot_and_upstream(project_root):
     )
 
 
-def test_verified_artifacts_accepts_empty_list(project_root):
-    """Empty artifacts list is valid (no upstream files pinned yet)."""
+def test_empty_artifact_list_rejected(tmp_path):
+    """Empty artifacts list must be rejected (fail-closed provenance)."""
+    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(json.dumps({
+        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+        "paper_id": "vSzRJyg6k0",
+        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+        "artifacts": [],
+    }), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Ee]mpty|[Nn]o artifacts"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_verified_artifacts_loads_real_upstream_manifest(project_root):
+    """Real upstream manifest must load and verify non-empty artifacts."""
     artifacts = load_verified_artifacts(project_root)
-    assert artifacts == ()
+    assert len(artifacts) == 4
+    for art in artifacts:
+        assert art.sha256
+        assert art.git_blob
+        assert art.size_bytes > 0
 
 
 # --- Adversarial regressions for fail-closed provenance ---
@@ -78,10 +97,10 @@ def test_extra_manifest_keys_rejected(tmp_path):
     """Extra keys in the manifest must be rejected (fail-closed)."""
     manifest = tmp_path / "manifest.json"
     manifest.write_text(json.dumps({
-        "attempt_id": "test",
-        "paper_id": "test",
-        "snapshot_id": "test",
-        "upstream_revision": "test",
+        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+        "paper_id": "vSzRJyg6k0",
+        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
         "artifacts": [],
         "sneaky_extra_key": "should be rejected",
     }), encoding="utf-8")
@@ -96,17 +115,20 @@ def test_duplicate_artifact_ids_rejected(tmp_path):
     test_file.write_text("hello")
     file_hash = hashlib.sha256(b"hello").hexdigest()
 
-    manifest = tmp_path / "manifest.json"
+    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
+    manifest.parent.mkdir(parents=True)
     manifest.write_text(json.dumps({
-        "attempt_id": "test",
-        "paper_id": "test",
-        "snapshot_id": "test",
-        "upstream_revision": "test",
+        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+        "paper_id": "vSzRJyg6k0",
+        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
         "artifacts": [
             {"artifact_id": "dup", "relative_path": "test.txt",
-             "sha256": file_hash, "size_bytes": 5},
+             "sha256": file_hash, "git_blob": "b6fc4c620b67d95f953a5c1c1230aaab5db5a1b0",
+             "size_bytes": 5, "source_url": "u", "acquisition_command": "c", "license": "l"},
             {"artifact_id": "dup", "relative_path": "test2.txt",
-             "sha256": file_hash, "size_bytes": 5},
+             "sha256": file_hash, "git_blob": "b6fc4c620b67d95f953a5c1c1230aaab5db5a1b0",
+             "size_bytes": 5, "source_url": "u", "acquisition_command": "c", "license": "l"},
         ],
     }), encoding="utf-8")
     with pytest.raises(IntegrityError, match="[Dd]uplicate"):
@@ -118,10 +140,10 @@ def test_empty_artifact_entry_rejected(tmp_path):
     manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
     manifest.parent.mkdir(parents=True)
     manifest.write_text(json.dumps({
-        "attempt_id": "test",
-        "paper_id": "test",
-        "snapshot_id": "test",
-        "upstream_revision": "test",
+        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+        "paper_id": "vSzRJyg6k0",
+        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
         "artifacts": [{}],
     }), encoding="utf-8")
     with pytest.raises(IntegrityError):
@@ -137,14 +159,15 @@ def test_git_blob_drift_rejected(tmp_path):
     manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
     manifest.parent.mkdir(parents=True)
     manifest.write_text(json.dumps({
-        "attempt_id": "test",
-        "paper_id": "test",
-        "snapshot_id": "test",
-        "upstream_revision": "test",
+        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+        "paper_id": "vSzRJyg6k0",
+        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
         "artifacts": [
             {"artifact_id": "a1", "relative_path": "test.txt",
              "sha256": file_hash, "size_bytes": 5,
-             "git_blob": "0000000000000000000000000000000000000000"},
+             "git_blob": "0000000000000000000000000000000000000000",
+             "source_url": "u", "acquisition_command": "c", "license": "l"},
         ],
     }), encoding="utf-8")
     with pytest.raises(IntegrityError, match="[Gg]it blob"):
