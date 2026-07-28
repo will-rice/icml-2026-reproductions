@@ -315,20 +315,43 @@ def test_claim8_mutation_regressions(project_root):
 # --- Round 10 validation correction gate tests ---
 
 
-def test_isolated_project_environment_runs_pytest(project_root, tmp_path):
-    """Round-10 §1: Verify that a fresh external UV_PROJECT_ENVIRONMENT
-    directory can run the exact controller paper-test command (uv run pytest -q)
-    without extra flags or inherited venv."""
+def test_isolated_project_environment_imports_packages_and_toml_deps(project_root, tmp_path):
+    """Round-11 §1: Verify TOML dependency definitions and that a fresh external
+    UV_PROJECT_ENVIRONMENT syncs and can import pytest, gradio, and the project package
+    without launching self-recursive pytest subprocesses."""
     import os
     import subprocess
+    import tomllib
 
-    env_dir = tmp_path / "ext_env_pytest"
+    # Direct TOML assertions
+    pyproject_path = project_root / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        toml_data = tomllib.load(f)
+
+    deps = toml_data.get("project", {}).get("dependencies", [])
+    assert any(d.startswith("gradio") for d in deps), "gradio must be a normal project runtime dependency"
+
+    dev_deps = toml_data.get("dependency-groups", {}).get("dev", [])
+    assert any(d.startswith("pytest") for d in dev_deps), "pytest must be in dependency-groups.dev"
+
+    # Isolated env sync & import test (non-recursive)
+    env_dir = tmp_path / "ext_env_import"
     env = dict(os.environ)
     env["UV_PROJECT_ENVIRONMENT"] = str(env_dir)
     env["UV_CACHE_DIR"] = "/tmp/raco-uv-cache"
     env.pop("VIRTUAL_ENV", None)
 
-    cmd = ["uv", "run", "pytest", "-q"]
+    res_sync = subprocess.run(
+        ["uv", "sync", "--locked"],
+        cwd=str(project_root),
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert res_sync.returncode == 0, f"uv sync --locked failed:\n{res_sync.stderr}"
+
+    cmd = ["uv", "run", "--locked", "python", "-c", "import pytest; import gradio; import reward_free_alignment"]
     res = subprocess.run(
         cmd,
         cwd=str(project_root),
@@ -338,8 +361,9 @@ def test_isolated_project_environment_runs_pytest(project_root, tmp_path):
         check=False,
     )
     assert res.returncode == 0, (
-        f"pytest failed in isolated external env:\nSTDOUT:\n{res.stdout}\nSTDERR:\n{res.stderr}"
+        f"Import failed in isolated env:\nSTDOUT:\n{res.stdout}\nSTDERR:\n{res.stderr}"
     )
+
 
 
 def test_isolated_evidence_generation_reproduces_identical_bytes(project_root, tmp_path):
