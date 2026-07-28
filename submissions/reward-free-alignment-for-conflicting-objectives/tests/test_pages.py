@@ -57,3 +57,29 @@ def test_app_loads_only_committed_pages_and_evidence(project_root, monkeypatch):
 
     assert app_mod.EVIDENCE["paper_id"] == "vSzRJyg6k0"
     assert tuple(path.name for path in app_mod.PAGE_PATHS) == EXPECTED_PAGES
+
+
+def test_readme_frontmatter_short_description(project_root):
+    readme_path = project_root / "README.md"
+    content = readme_path.read_text(encoding="utf-8")
+    assert content.startswith("---")
+    parts = content.split("---", 2)
+    assert len(parts) >= 3, "README must contain frontmatter enclosed in ---"
+    frontmatter = parts[1]
+
+    short_desc = None
+    for line in frontmatter.splitlines():
+        line = line.strip()
+        if line.startswith("short_description:"):
+            short_desc = line.split(":", 1)[1].strip()
+            if (short_desc.startswith('"') and short_desc.endswith('"')) or (
+                short_desc.startswith("'") and short_desc.endswith("'")
+            ):
+                short_desc = short_desc[1:-1]
+            break
+
+    assert short_desc is not None, "README frontmatter missing 'short_description'"
+    assert (
+        len(short_desc) <= 60
+    ), f"short_description length {len(short_desc)} exceeds 60 characters: '{short_desc}'"
+    assert "RACO" in short_desc and "ICML 2026" in short_desc
