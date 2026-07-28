@@ -38,6 +38,7 @@
     }
   ],
   "cpu_only": true,
+  "deployed_sha": "3a63680dd999df34e74722c5ed07bb1f0fec11e7",
   "design": {
     "author": "agy-demix-design-author-20260725",
     "path": "docs/superpowers/specs/2026-07-25-demix-reproduction-design.md",
@@ -78,8 +79,9 @@
   "or": "https://openreview.net/forum?id=uyRIOjFgOn",
   "orid": "uyRIOjFgOn",
   "paper_id": "uyRIOjFgOn",
-  "phase": "implementing",
+  "phase": "judging",
   "pid": "60972",
+  "project_path": "submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training",
   "safety_blocker": null,
   "score": 8,
   "score_rate": {
@@ -119,6 +121,7 @@
   },
   "slug": "decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training",
   "snapshot_id": "32ce537bd0861130e7144732b6692a117174a14060d359e5407efd62750d07e3",
+  "space_id": "wrice/repro-demix-data-mixing-model-merging",
   "spot": false,
   "sub": "Large Language Models",
   "target_claims": [
@@ -144,10 +147,46 @@
       "owner": "scheduler-600039b6-f327-40f1-be72-5b17fc91763b",
       "snapshot_id": "32ce537bd0861130e7144732b6692a117174a14060d359e5407efd62750d07e3",
       "to": "implementing"
+    },
+    {
+      "at": "2026-07-27T23:56:53.667662+00:00",
+      "attestation_id": "b989b33d5835bc0e2862ebe43b43ca100c196f25eaf39e520c2d02c64f302030",
+      "fencing_token": 2,
+      "from": "implementing",
+      "owner": "controller-demix-fix-20260727",
+      "snapshot_id": "32ce537bd0861130e7144732b6692a117174a14060d359e5407efd62750d07e3",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-27T23:59:28.420856+00:00",
+      "attestation_id": "3981cc65d44a6a3a958e4fc0157fc12c07260ff3d139ca6b43dd5760e75af6b4",
+      "fencing_token": 2,
+      "from": "validated",
+      "owner": "controller-demix-fix-20260727",
+      "snapshot_id": "32ce537bd0861130e7144732b6692a117174a14060d359e5407efd62750d07e3",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-27T23:59:58.827954+00:00",
+      "attestation_id": "bf9615718261443069b4f6898ec1954f9c986ffa6e851b7d6557a880af9159b3",
+      "fencing_token": 2,
+      "from": "deployed",
+      "owner": "controller-demix-fix-20260727",
+      "snapshot_id": "32ce537bd0861130e7144732b6692a117174a14060d359e5407efd62750d07e3",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-28T00:00:03.196396+00:00",
+      "attestation_id": "f6d225531ba3fa836265e6edc264a885e3fb41a4c5ee5a2a738742064de9b2bb",
+      "fencing_token": 2,
+      "from": "submitted",
+      "owner": "controller-demix-fix-20260727",
+      "snapshot_id": "32ce537bd0861130e7144732b6692a117174a14060d359e5407efd62750d07e3",
+      "to": "judging"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T23:43:31.444648+00:00",
+  "updated_at": "2026-07-28T00:00:03.196396+00:00",
   "upstream_revision": "arxiv:2602.00747v3+github:Lucius-lsr/DeMix@d0c945ca84d5632c6ed1bfe469337cf880757422+hf-dataset:lucius1022/DeMix_Corpora@82a2effc58eb79bec691280a4e4fc50be0968b1e",
   "vs": "https://icml.cc/virtual/2026/poster/60972"
 }

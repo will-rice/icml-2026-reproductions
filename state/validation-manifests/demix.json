@@ -1,6 +1,6 @@
 {
-  "base_sha": "64341f03331dedf265c8dc42ae3d2e6478ef74fe",
-  "branch": "validate/demix-controller-validation",
+  "base_sha": "fef6ef1ee7d215535ae575d9fcac6a8b0b840d02",
+  "branch": "validate/demix-controller-final",
   "commands": [
     [
       "uv",
@@ -44,5 +44,5 @@
   ],
   "design_path": "docs/superpowers/specs/2026-07-25-demix-reproduction-design.md",
   "project_path": "submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training",
-  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/demix-controller-validation"
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/demix-controller-final"
 }

@@ -1,0 +1,16 @@
+{
+  "attempt_id": "9a29d84c-ad32-4a12-a667-de948f0bb58e",
+  "attempt_number": 1,
+  "attestation_id": "bf9615718261443069b4f6898ec1954f9c986ffa6e851b7d6557a880af9159b3",
+  "deployment_attestation_id": "3981cc65d44a6a3a958e4fc0157fc12c07260ff3d139ca6b43dd5760e75af6b4",
+  "kind": "submission",
+  "observed_at": "2026-07-27T23:59:58.827954+00:00",
+  "paper_id": "uyRIOjFgOn",
+  "payload_sha256": "b272cf99be93415fef1aa93fe01e622aa285fab0dbe33ce93156ac329ac396a0",
+  "queue_status": "pending",
+  "snapshot_id": "9a53e33aa3bf646a66536d2daf84ccd217102761f14cc304368b73fec0432164",
+  "source_commit": "fef6ef1ee7d215535ae575d9fcac6a8b0b840d02",
+  "space_id": "wrice/repro-demix-data-mixing-model-merging",
+  "space_sha": "3a63680dd999df34e74722c5ed07bb1f0fec11e7",
+  "verdict_revision": "209b9a2f896fb6c2ca2131a1f1550ef2906b6266"
+}
