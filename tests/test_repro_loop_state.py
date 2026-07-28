@@ -2629,9 +2629,12 @@ def test_skill_preserves_worker_controller_authority_contract():
     combined = f"{skill}\n{checklist}"
 
     for required in (
-        "Worker Or Controller?",
+        "Roles And Authority",
+        "persistent paper-owner worker is the trusted controller",
+        "subordinate implementation subprocess",
+        "not the dispatched worker",
         "proposal, never authority",
-        "write only the assigned worktree",
+        "Write only the assigned worktree",
         "attest-validation",
         "publish-deployment",
         "attest-submission",
@@ -2664,7 +2667,9 @@ def test_worker_boundary_is_required_by_workspace_and_remote_setup():
         encoding="utf-8"
     )
 
-    assert "Paper workers are untrusted" in agents
+    assert "Directly dispatched persistent paper-owner workers are trusted controllers." in agents
+    assert "An optional subordinate implementation subprocess is not the dispatched" in agents
+    assert "It is an untrusted proposal producer" in agents
     assert "worker_guard.py" in agents
     assert "worker_guard.py" in remote
     assert "--dangerously-skip-permissions" in remote
