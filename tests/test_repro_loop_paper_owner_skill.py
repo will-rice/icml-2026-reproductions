@@ -10,7 +10,17 @@ OWNER_LOOP = (
     ROOT / "skills/icml-repro-loop/references/paper-owner-loop.md"
 )
 AGENT = ROOT / "skills/icml-repro-loop/agents/openai.yaml"
+CHECKLIST = ROOT / "skills/icml-repro-loop/references/submission-checklist.md"
 SCENARIOS = ROOT / "evals/icml-repro-loop/scenarios.json"
+
+EXPECTED_DEFAULT_PROMPT = (
+    "Use icml-repro-loop directly. Own one paper through selection, design, "
+    "guarded implementation, controller validation, Space publication, "
+    "submission, official-score watching, evidence-driven correction, and "
+    "exact verdict import. Do not return after an implementation worker exits; "
+    "publish, watch, and correct until the paper has an official score or a "
+    "genuine persisted blocker."
+)
 
 
 def text(path: Path) -> str:
@@ -68,12 +78,46 @@ def test_paper_owner_retains_lifecycle_authority_over_guarded_worker():
 
 def test_default_prompt_assigns_the_entire_lifecycle():
     value = text(AGENT)
-    assert "Use icml-repro-loop directly" in value
-    assert "one paper" in value
-    assert "publish" in value
-    assert "watch" in value
-    assert "correct" in value
-    assert "official score" in value
+    prompt_line = next(
+        line.strip() for line in value.splitlines()
+        if line.strip().startswith("default_prompt:")
+    )
+    assert prompt_line == f'default_prompt: "{EXPECTED_DEFAULT_PROMPT}"'
+
+
+def test_completion_gate_requires_all_paper_owner_outcomes():
+    value = text(CHECKLIST)
+    expected_bullets = (
+        "The directly dispatched top-level agent invoked `icml-repro-loop` and\n"
+        "  owns exactly one attempt.",
+        "An implementation-worker exit triggered immediate diff review and fresh\n"
+        "  controller validation without a user status prompt.",
+        "A rejected validation produced exact correction findings and a guarded\n"
+        "  relaunch on the same attempt.",
+        "The paper owner continued through `publish-deployment`,\n"
+        "  `attest-submission`, `watch-attempt`, and `sync-verdict`.",
+        "Pending queue state was watched rather than treated as evidence failure.",
+        "Judging/scored/blocked emitted a capacity-free event to the competition\n"
+        "  coordinator.",
+    )
+    assert "## Paper-Owner Completion Gate" in value
+    for bullet in expected_bullets:
+        assert f"- [ ] {bullet}" in value
+
+
+def test_completion_gate_preserves_ordered_event_handoff_without_status_waits():
+    value = text(CHECKLIST)
+    expected_handoff = """```text
+run-worker
+  -> inspect worker-exited telemetry
+  -> attest-validation OR correction run-worker
+  -> publish-deployment
+  -> refresh-live + attest-submission
+  -> watch-attempt + record-poll
+  -> improvement loop OR sync-verdict
+```"""
+    assert expected_handoff in value
+    assert "No arrow in this handoff is driven by a user status question." in value
 
 
 def test_pressure_scenarios_cover_early_return_and_correction():
