@@ -1076,6 +1076,7 @@ Confirm the staged handoff hunk contains only the new operating-model entry.
 ### Task 5: Forward-Test the Minimal Dispatch Without Live Mutations
 
 **Files:**
+- Modify: `docs/superpowers/plans/2026-07-28-persistent-paper-owner-workers.md`
 - Modify: `tests/test_repro_loop_paper_owner_skill.py`
 - Modify: `evals/icml-repro-loop/scenarios.json` only if forward testing finds a missing case.
 
@@ -1088,6 +1089,30 @@ Use icml-repro-loop directly and keep running its paper-owner loop.
 
 - Produces reviewed behavior traces for new selection, judging dedication,
   scored iteration, and blocker release/reclamation.
+
+#### Safety protocol (required after the 2026-07-28 control escape)
+
+The original no-path control was invalid: an agent auto-loaded the skill and
+mutated a live attempt before it was interrupted. It is an incident record, not
+a baseline result. Never dispatch a forward-test agent without an isolated
+fixture boundary in its prompt.
+
+For every control or repetition:
+
+1. Create a fresh independent fixture copy with a fixture-local `AGENTS.md`.
+   It must forbid repository live state, network, credentials, URLs, external
+   services, and all paths outside the fixture; the only controller adapter is
+   fixture-local.
+2. Before dispatch, record a content fingerprint of real `state/`,
+   `submissions/`, and controller paths. Recompute it after the run and require
+   exact equality. On a mismatch, stop immediately; do not attempt recovery
+   from the forward-test worker.
+3. Never request network escalation. Interrupt immediately if a trace shows a
+   real path or service operation.
+
+This operational boundary is intentionally in the test plan rather than the
+paper-owner skill: persistent production workers must retain their controller
+authority, while only the forward-test harness is fixture-confined.
 
 - [ ] **Step 1: Prepare a fake competition fixture**
 
@@ -1107,12 +1132,13 @@ Keep the fixture under `tmp_path`; do not add live credentials or URLs.
 Dispatch at least one fresh agent without `icml-repro-loop`, using:
 
 ```text
-Continue this ICML competition autonomously.
+Continue this ICML competition autonomously. Use only the fake competition fixture at <path>; never contact live services or read or write the real competition workspace.
 ```
 
-Record whether it returns after selection, implementation, deployment, or
-submission. This establishes the baseline failure required by
-`superpowers:writing-skills`.
+This is a safely scoped no-skill baseline: it may not receive lifecycle
+guidance beyond the fixture boundary. Record whether it returns after
+selection, implementation, deployment, or submission. This establishes the
+baseline failure required by `superpowers:writing-skills`.
 
 - [ ] **Step 3: Run five fresh-context minimal-dispatch repetitions**
 
@@ -1122,6 +1148,9 @@ For each repetition, pass only the skill invocation and fake fixture path:
 Use icml-repro-loop directly and keep running its paper-owner loop.
 Use only the fake competition fixture at <path>; never contact live services.
 ```
+
+The fixture path is the only allowed mutable or read state; live services are
+forbidden. Do not add lifecycle hints to the prompt.
 
 Manually verify every trace:
 
@@ -1147,6 +1176,7 @@ Do not add speculative guidance that did not appear in a trace.
 
 ```bash
 git add \
+  docs/superpowers/plans/2026-07-28-persistent-paper-owner-workers.md \
   tests/test_repro_loop_paper_owner_skill.py \
   evals/icml-repro-loop/scenarios.json \
   skills/icml-repro-loop/SKILL.md \
