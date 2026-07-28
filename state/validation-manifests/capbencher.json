@@ -1,0 +1,45 @@
+{
+  "worktree": "/home/will/projects/icml-2026-reproductions",
+  "branch": "main",
+  "base_sha": "6eb1126836b16d7ab0a5ce89a932430e1b42b4e2",
+  "project_path": "submissions/how-can-i-publish-my-llm-benchmark-without-giving-the-true-answers-away",
+  "design_path": "docs/superpowers/specs/2026-07-25-capbencher-design.md",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "python",
+      "submissions/how-can-i-publish-my-llm-benchmark-without-giving-the-true-answers-away/generate_evidence.py"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/how-can-i-publish-my-llm-benchmark-without-giving-the-true-answers-away",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/how-can-i-publish-my-llm-benchmark-without-giving-the-true-answers-away/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "skills/icml-repro-loop/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ]
+}
