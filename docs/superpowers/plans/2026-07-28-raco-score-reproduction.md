@@ -44,6 +44,13 @@ Correct the package boundary test first:
    project. Run the full submission suite, root pytest, skill validation,
    pre-commit, determinism check, and `git diff --check`; return a clean new
    commit.
+4. Isolated evidence generation selected Python 3.10.12 while the worker used
+   3.12.11, so the dynamic `environment.python_version` field dirtied the
+   committed bundle even though the scientific outputs matched. Add a project
+   `.python-version` pin for the repository-supported 3.12 interpreter and
+   verify two fresh external uv environments select the same interpreter and
+   reproduce identical evidence bytes. Keep the environment record truthful;
+   do not hard-code a version that was not used.
 
 ## Controller Correction Gate — 2026-07-28, round 9
 
