@@ -202,13 +202,24 @@ def test_direct_dispatch_claims_without_scheduler_pass_routing():
     assert "scheduler-pass" not in skill.split("## Required Persistent Paper-Owner Loop", 1)[1].split("## Authority Red Flags", 1)[0]
 
 
-def test_handoff_supersedes_historical_schema_v3_gate_for_schema_v6_loop():
+def test_current_instructions_remove_obsolete_schema_v3_and_one_shot_paths():
     handoff = " ".join(text(HANDOFF).split())
+    agents = " ".join(text(ROOT / "AGENTS.md").split())
     state = json.loads(text(STATE))
 
     assert state["version"] == 6
-    assert "Current Handoff schema-v3 migration-gate statement is historical and superseded" in handoff
-    assert "schema-v6 persistent paper-owner commands" in handoff
+    assert "authoritative coordinator state is schema-v6" in handoff
+    assert "persistent paper-owner commands" in handoff
+    assert "authoritative coordinator state is schema-v6" in agents
+    for obsolete in (
+        "return control instead",
+        "The state file uses schema version 3",
+        "Current Handoff schema-v3 migration-gate statement",
+        "Execute docs/superpowers/plans/2026-07-24-eeg-fm-bench.md",
+        "schema-v3 remains in place",
+    ):
+        assert obsolete not in handoff
+        assert obsolete not in agents
 
 
 def test_paper_owner_retains_lifecycle_authority_over_guarded_worker():
