@@ -16,6 +16,45 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Correction Gate — 2026-07-28, round 7
+
+Use `icml-repro-loop`, `superpowers:test-driven-development`,
+`superpowers:systematic-debugging`, and
+`superpowers:verification-before-completion`. Guarded round 6 exited at the
+unchanged base `0dc6d34a787283c65fd119f6872eb1d70c8be906` and left only two
+uncommitted RED test files; the controller preserved that test-only proposal
+as `40cfc73`. No production correction, regenerated evidence, or worker commit
+was produced. Start by running the preserved RED tests and then implement all
+items below.
+
+1. Implement the round-6 `steps` evidence, not merely its tests. Emit exactly
+   ten closed-schema records for `t=0,...,9`, each containing `step_index`,
+   `current_iterate`, `weighted_anchor`, `cagrad_direction`, `next_iterate`,
+   `loss_before`, `loss_after`, `m_value`, `grad_norm`, `descent_holds`, and
+   `m_bound_holds`. Strengthen the behavioral test to recompute every numeric
+   field independently from the two quadratic objectives and a fresh
+   `cagrad_clip` call, not just the iterate-update identity. Exclude terminal
+   `t=T` diagnostics from the per-update array.
+2. Expose the two finite-horizon squared checks separately as
+   `grad_finite_horizon_bound_holds` and
+   `m_finite_horizon_bound_holds`, while retaining their conjunction if useful.
+   Derive Claim 8 support only when every one of the ten step descent/M
+   booleans and both separately persisted finite-horizon booleans are true.
+   Mutating any one of those four conditions to false must make Claim 8
+   `not-supported`.
+3. Bind every artifact ID to its exact raw URL rather than accepting any URL
+   on the raw host:
+   `LICENSE`, `README.md`, `m=3-RACO-CAGrad-Algo.md`, and `train_raco.py` must
+   map to the corresponding
+   `https://raw.githubusercontent.com/PeterLauLukChen/RACO/84a943c34f38520c7e0c9dd3066517c111b3c8fa/<path>`
+   URL. Reject swapped paths, query/fragment suffixes, GitHub `/blob/` HTML
+   pages, and other raw-host URLs. Regenerate canonical evidence and the
+   provenance page from these exact identities.
+4. Update the closed evidence schema for every new field. Generate twice and
+   compare bytes; run the full submission suite, frozen-lock verification,
+   root pytest, skill validation, pre-commit, and `git diff --check`. Commit
+   the production correction and all generated outputs before returning.
+
 ## Controller Correction Gate — 2026-07-28, round 6
 
 Use `icml-repro-loop`, `superpowers:test-driven-development`,
