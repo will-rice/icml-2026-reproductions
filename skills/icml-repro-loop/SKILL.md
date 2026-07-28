@@ -77,6 +77,13 @@ Every external-phase transition must name its immutable controller attestation
 ID. If the attestation is absent, stop or block and state that the corresponding
 writes were unperformed.
 
+`validation-rejected` is an event, not a phase: before an official verdict,
+the attempt stays `implementing`, receives exact correction-contract defects,
+and relaunches through normal fenced `run-worker`. An official correctable
+deficiency is different: import it with `sync-verdict --improvement-reason
+REASON`, which preserves that exact verdict and enters `improving`; then
+`run-worker` derives correction telemetry from the phase.
+
 ## Mandatory Response/Action Contract
 
 Every response names each materially affected attempt ID, paper, phase, owner,

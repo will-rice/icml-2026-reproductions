@@ -24,9 +24,12 @@ phase, Space SHA, or verdict.
 Passing worker tests are not controller evidence. Reject hard-coded outcomes,
 paper values in measurement fields, missing/tamperable provenance, stale root
 pages, nondeterministic bundles, incorrect algorithms, authority claims,
-cross-paper edits, or a dirty source tree. Write exact findings into the
-paper's correction plan, reclaim an expired lease with its predecessor token,
-and relaunch through `run-worker`.
+cross-paper edits, or a dirty source tree. `validation-rejected` is an event,
+not a phase: before an official verdict the attempt remains `implementing`.
+Write exact defects into the correction contract, reclaim an expired lease
+with its predecessor token, and call normal fenced `run-worker`. There is no
+`--work-kind` flag; telemetry derives `implementation` or `correction` from
+the attempt phase.
 
 ## No-score diagnosis
 
@@ -34,8 +37,10 @@ Distinguish queue state from evidence failure:
 
 - no live submission: repair publication or submission observation;
 - exact healthy submission pending: keep watching within the deadline;
-- official inconclusive/rejected claim: enter improvement and correct its
-  stated evidence deficiency;
+- official correctable inconclusive/rejected claim: call
+  `sync-verdict --improvement-reason REASON` to preserve the exact official
+  verdict and enters `improving`, then correct its stated evidence deficiency
+  with `run-worker`; the improving phase derives correction telemetry;
 - official scored verdict: import it exactly, even when lower than expected.
 
 Never resubmit unchanged evidence merely to refresh queue position.

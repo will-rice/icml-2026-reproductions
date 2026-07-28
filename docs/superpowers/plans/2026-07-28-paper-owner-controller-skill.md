@@ -490,7 +490,8 @@ uv run pytest -q tests/test_repro_loop_paper_owner_skill.py
 uv run pytest -q \
   tests/test_repro_loop_worker_guard.py \
   tests/test_repro_loop_controller_validation.py \
-  tests/test_repro_loop_publication_policy.py \
+  tests/test_repro_loop_controller_hub.py \
+  tests/test_repro_loop_official_verdict.py \
   tests/test_repro_loop_state.py
 uv run "$CODEX_HOME/skills/.system/skill-creator/scripts/quick_validate.py" \
   skills/icml-repro-loop
@@ -501,6 +502,10 @@ env UV_CACHE_DIR=/tmp/icml-repro-uv-cache \
 
 Expected: all tests, skill validation, and pre-commit pass. The archival
 `submissions/nape/` snapshot is not run or formatted.
+
+`tests/test_repro_loop_publication_policy.py` does not exist in this checkout;
+the verification command intentionally replaces it with the existing
+controller-Hub and official-verdict suites.
 
 - [ ] **Step 6: Commit verified skill**
 

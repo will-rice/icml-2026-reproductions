@@ -177,19 +177,31 @@ def transition_attested(
     lease: leases.Lease,
     now: datetime,
     transaction_targets: list[tuple[Path, dict, store.Validator]] | None = None,
+    attestation_record: dict | None = None,
 ) -> dict:
     """Advance one authoritative phase using matching immutable evidence."""
-    expected_kind = ATTESTED_PHASE_KINDS.get(phase)
+    expected_kind = (
+        "verdict" if phase == "improving" else ATTESTED_PHASE_KINDS.get(phase)
+    )
     if expected_kind is None:
         raise ValueError("attestation")
     if type(updates) is not dict:
         raise ValueError("updates")
-    unsupported = set(updates) & (
+    protected = (
         IMMUTABLE_FIELDS | DESIGN_FIELDS | ATTESTED_PROTECTED_UPDATE_FIELDS
     )
+    if phase == "improving":
+        protected -= IMPROVEMENT_FIELDS
+    unsupported = set(updates) & protected
     if unsupported:
         raise ValueError(sorted(unsupported)[0])
-    record = attestations.read(paths, attestation_id)
+    if attestation_record is None:
+        record = attestations.read(paths, attestation_id)
+    else:
+        record = copy.deepcopy(attestation_record)
+        attestations.validate_record(record)
+        if record["attestation_id"] != attestation_id:
+            raise ValueError("attestation_id")
     transition_updates = copy.deepcopy(updates)
 
     def transition(attempt: dict, timestamp: str) -> bool:
@@ -601,10 +613,16 @@ def _commit(
 ) -> None:
     targets = []
     if attestation is not None:
+        object_path = attestations.object_path(
+            paths, attestation["attestation_id"]
+        )
         attestation_path = paths.attestation(
             attestation["kind"],
             attestation["attempt_id"],
             attestation["attempt_number"],
+        )
+        targets.append(
+            (object_path, attestation, attestations.validate_record)
         )
         targets.append(
             (
@@ -640,6 +658,8 @@ def _validator_for(paths: store.StatePaths, path: Path) -> store.Validator:
         and path.suffix == ".json"
     ):
         return lambda record: attestations.validate_target(paths, path, record)
+    if path.parent == paths.root / "attestation-objects" and path.suffix == ".json":
+        return attestations.validate_record
     if (
         path.parent == paths.root / "judgments"
         and path.suffix == ".json"

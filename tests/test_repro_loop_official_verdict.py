@@ -283,6 +283,7 @@ def test_public_caller_authored_verdict_interface_is_removed():
     assert "--raw-verdict" not in command.stdout
     assert "--normalized-verdict" not in command.stdout
     assert "--source-revision" not in command.stdout
+    assert "--improvement-reason" in command.stdout
 
 
 def test_watch_attempt_atomically_enters_judging_with_bounded_attestation(
@@ -358,6 +359,69 @@ def test_sync_verdict_copies_exact_official_claims_and_completes_atomically(
     assert verdict_attestation["paper_id"] == PAPER_ID
     assert verdict_attestation["judged_at"] == official_verdict()["judged_at"]
     assert verdict_attestation["claims"] == expected["claims"]
+
+
+def test_sync_verdict_with_reason_preserves_official_record_and_enters_improving_atomically(
+    submitted_case,
+):
+    enter_judging(submitted_case)
+    snapshot_id = persist_verdict_snapshot(submitted_case)
+
+    improving = controller.sync_verdict(
+        submitted_case["paths"],
+        "a1",
+        submitted_case["lease"],
+        snapshot_id,
+        NOW + timedelta(minutes=5),
+        improvement_reason="Official Claim A2 lacks its cited provenance artifact.",
+    )
+
+    expected = {
+        "claims": [
+            {
+                "target_claim": "claim-a-one",
+                "claim": "Claim A1",
+                "status": "toy",
+                "evidence": "bounded run",
+            },
+            {
+                "target_claim": "claim-a-two",
+                "claim": "Claim A2",
+                "status": "inconclusive",
+                "evidence": "missing artifact",
+            },
+        ]
+    }
+    index = store.read_json(submitted_case["paths"].index)
+    judgment = store.read_json(submitted_case["paths"].judgment("a1"))
+    verdict_attestation = attestations.read(
+        submitted_case["paths"], improving["transitions"][-1]["attestation_id"]
+    )
+
+    assert improving["phase"] == "improving"
+    assert "verdict" not in improving
+    assert improving["verdicts"] == [
+        {
+            **expected,
+            "improvement_attempt": 1,
+            "improvement_reason": (
+                "Official Claim A2 lacks its cited provenance artifact."
+            ),
+        }
+    ]
+    assert improving["improvement_attempts"] == 1
+    assert improving["improvement_reason"] == (
+        "Official Claim A2 lacks its cited provenance artifact."
+    )
+    assert index["attempts"]["a1"]["phase"] == "improving"
+    assert "a1" not in index["history"]
+    assert judgment["raw_verdict"] == official_verdict()
+    assert judgment["normalized_verdict"] == expected
+    assert judgment["source_revision"] == VERDICT_REVISION
+    assert verdict_attestation["kind"] == "verdict"
+    assert verdict_attestation["snapshot_id"] == snapshot_id
+    assert verdict_attestation["space_sha"] == SPACE_SHA
+    assert verdict_attestation["judged_at"] == official_verdict()["judged_at"]
 
 
 def test_state_observes_verdict_only_after_injected_success(submitted_case):
@@ -652,3 +716,50 @@ def test_sync_verdict_transaction_recovers_judgment_attempt_and_history(
     assert attempt["phase"] == "complete"
     assert index["history"]["a1"]["phase"] == "complete"
     assert judgment["normalized_verdict"]["claims"][0]["status"] == "toy"
+
+
+def test_sync_verdict_improvement_transaction_recovers_attestation_judgment_and_active_attempt(
+    submitted_case,
+    monkeypatch,
+):
+    enter_judging(submitted_case)
+    snapshot_id = persist_verdict_snapshot(submitted_case)
+    real_write = store._transaction_write
+    writes = 0
+
+    def interrupted(path, value, validator):
+        nonlocal writes
+        writes += 1
+        if writes == 4:
+            raise OSError("simulated interruption")
+        real_write(path, value, validator)
+
+    monkeypatch.setattr(store, "_transaction_write", interrupted)
+    with pytest.raises(OSError, match="simulated interruption"):
+        controller.sync_verdict(
+            submitted_case["paths"],
+            "a1",
+            submitted_case["lease"],
+            snapshot_id,
+            NOW + timedelta(minutes=5),
+            improvement_reason="Official provenance deficiency.",
+        )
+    monkeypatch.setattr(store, "_transaction_write", real_write)
+
+    attempts.recover_transactions(submitted_case["paths"])
+
+    attempt = attempts.read_attempt(submitted_case["paths"], "a1")
+    judgment = store.read_json(submitted_case["paths"].judgment("a1"))
+    attestation = attestations.read(
+        submitted_case["paths"], attempt["transitions"][-1]["attestation_id"]
+    )
+    assert attempt["phase"] == "improving"
+    assert attempt["improvement_attempts"] == 1
+    assert attempt["verdicts"] == [
+        {
+            **judgment["normalized_verdict"],
+            "improvement_attempt": 1,
+            "improvement_reason": "Official provenance deficiency.",
+        }
+    ]
+    assert attestation["kind"] == "verdict"

@@ -525,8 +525,9 @@ def sync_verdict(
     lease: leases.Lease,
     snapshot_id: str,
     now: datetime,
+    improvement_reason: str | None = None,
 ) -> dict:
-    """Import one exact official snapshot verdict and complete atomically."""
+    """Import one exact official verdict and complete or correct atomically."""
     attempt = attempts.read_attempt(paths, attempt_id)
     _assert_attempt_fence(paths, attempt_id, lease, now)
     if attempt.get("phase") != "judging":
@@ -592,7 +593,7 @@ def sync_verdict(
         "judged_at": official["judged_at"],
         "claims": normalized["claims"],
     }
-    record = {
+    record = attestations.prepare({
         "kind": "verdict",
         "attempt_id": attempt_id,
         "attempt_number": authority["attempt_number"],
@@ -600,8 +601,8 @@ def sync_verdict(
         "source_commit": submission["source_commit"],
         "payload_sha256": _sha256_json(payload),
         **payload,
-    }
-    attestation_id = attestations.persist(paths, record)
+    })
+    attestation_id = record["attestation_id"]
     finalized = copy.deepcopy(judgment)
     finalized["raw_verdict"] = copy.deepcopy(official)
     finalized["normalized_verdict"] = copy.deepcopy(normalized)
@@ -609,16 +610,36 @@ def sync_verdict(
     finalized["verdict_at"] = _aware_timestamp(now)
     finalized["updated_at"] = finalized["verdict_at"]
     scheduler.validate_judgment_record(finalized)
-    return attempts.transition_attested(
-        paths,
-        attempt_id,
-        "complete",
-        attestation_id,
-        {
+    if improvement_reason is None:
+        phase = "complete"
+        transition_updates = {
             "verdict": normalized,
             "verdict_source_revision": verdict_revision,
             "verdict_at": finalized["verdict_at"],
-        },
+        }
+    else:
+        if type(improvement_reason) is not str or not improvement_reason.strip():
+            raise ValueError("improvement_reason")
+        phase = "improving"
+        improvement_attempt = attempt.get("improvement_attempts", 0) + 1
+        transition_updates = {
+            "improvement_attempts": improvement_attempt,
+            "improvement_reason": improvement_reason,
+            "verdicts": [
+                *copy.deepcopy(attempt.get("verdicts", [])),
+                {
+                    **copy.deepcopy(normalized),
+                    "improvement_attempt": improvement_attempt,
+                    "improvement_reason": improvement_reason,
+                },
+            ],
+        }
+    return attempts.transition_attested(
+        paths,
+        attempt_id,
+        phase,
+        attestation_id,
+        transition_updates,
         lease,
         now,
         transaction_targets=[
@@ -628,6 +649,7 @@ def sync_verdict(
                 scheduler.validate_judgment_record,
             )
         ],
+        attestation_record=record,
     )
 
 

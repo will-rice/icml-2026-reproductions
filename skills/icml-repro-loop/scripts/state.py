@@ -262,6 +262,7 @@ def main() -> None:
     verdict_parser.add_argument("path", type=Path)
     _add_fence_arguments(verdict_parser)
     verdict_parser.add_argument("--snapshot-id", required=True)
+    verdict_parser.add_argument("--improvement-reason")
     verdict_parser.add_argument("--now")
     validation_parser = commands.add_parser(
         "attest-validation",
@@ -724,6 +725,7 @@ def _run_v6_command(
             lease,
             arguments.snapshot_id,
             now,
+            improvement_reason=getattr(arguments, "improvement_reason", None),
         )
     result = operation()
     try:

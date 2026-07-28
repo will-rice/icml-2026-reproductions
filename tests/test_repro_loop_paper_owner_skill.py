@@ -68,6 +68,23 @@ def test_paper_owner_reference_defines_event_reactions():
         )
 
 
+def test_paper_owner_contract_separates_validation_event_from_phase_and_verdict_improvement():
+    skill = text(SKILL)
+    reference = text(OWNER_LOOP)
+    flat_reference = " ".join(reference.split())
+
+    assert "`validation-rejected` is an event" in reference
+    assert "not a phase" in reference
+    assert "attempt remains `implementing`" in reference
+    assert "correction contract" in reference
+    assert "normal fenced `run-worker`" in reference
+    assert "There is no `--work-kind` flag" in flat_reference
+    assert "derives `implementation` or `correction` from the attempt phase" in flat_reference
+    assert "`sync-verdict --improvement-reason REASON`" in flat_reference
+    assert "enters `improving`" in flat_reference
+    assert "`validation-rejected` is an event, not a phase" in skill
+
+
 def test_paper_owner_retains_lifecycle_authority_over_guarded_worker():
     value = text(SKILL)
     assert "paper-owner controller" in value

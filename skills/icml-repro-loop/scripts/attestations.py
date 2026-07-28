@@ -101,14 +101,8 @@ RESULT_KEYS = {"argv", "returncode", "stdout_sha256", "stderr_sha256"}
 
 def persist(paths: store.StatePaths, record: dict) -> str:
     """Persist one canonical content-addressed attestation exactly once."""
-    payload = copy.deepcopy(record)
-    _validate_record(payload, persisted=False)
-    attestation_id = _canonical_id(payload)
-    supplied_id = payload.get("attestation_id")
-    if supplied_id is not None and supplied_id != attestation_id:
-        raise ValueError("attestation_id")
-    persisted = {"attestation_id": attestation_id, **payload}
-    _validate_record(persisted, persisted=True)
+    persisted = prepare(record)
+    attestation_id = persisted["attestation_id"]
     path = _object_path(paths, attestation_id)
     expected_bytes = _file_bytes(persisted)
     with store._exclusive_lock(path):
@@ -120,10 +114,23 @@ def persist(paths: store.StatePaths, record: dict) -> str:
     return attestation_id
 
 
+def prepare(record: dict) -> dict:
+    """Return a validated content-addressed record without persisting it."""
+    payload = copy.deepcopy(record)
+    _validate_record(payload, persisted=False)
+    attestation_id = _canonical_id(payload)
+    supplied_id = payload.get("attestation_id")
+    if supplied_id is not None and supplied_id != attestation_id:
+        raise ValueError("attestation_id")
+    persisted = {"attestation_id": attestation_id, **payload}
+    _validate_record(persisted, persisted=True)
+    return persisted
+
+
 def read(paths: store.StatePaths, attestation_id: str) -> dict:
     """Read and content-verify one immutable attestation by its canonical ID."""
     _sha256(attestation_id, "attestation_id")
-    path = _object_path(paths, attestation_id)
+    path = object_path(paths, attestation_id)
     if not path.exists():
         raise ValueError("attestation_id")
     record = store.read_json(path)
@@ -154,6 +161,12 @@ def validate_target(paths: store.StatePaths, path: Path, record: dict) -> None:
         raise ValueError("attestation")
     if path.exists() and path.read_bytes() != _file_bytes(record):
         raise ValueError("attestation")
+
+
+def object_path(paths: store.StatePaths, attestation_id: str) -> Path:
+    """Resolve the content-addressed immutable attestation object path."""
+    _sha256(attestation_id, "attestation_id")
+    return paths.root / "attestation-objects" / f"{attestation_id}.json"
 
 
 def _validate_record(record: object, *, persisted: bool) -> None:
@@ -342,7 +355,7 @@ def _canonical_json(value: dict) -> bytes:
 
 
 def _object_path(paths: store.StatePaths, attestation_id: str) -> Path:
-    return paths.root / "attestation-objects" / f"{attestation_id}.json"
+    return object_path(paths, attestation_id)
 
 
 def _file_bytes(value: dict) -> bytes:
