@@ -1900,8 +1900,10 @@ def test_cli_records_design_then_independent_review(tmp_path: Path):
 def test_claim_next_cli_returns_exact_assignment_identity(tmp_path: Path):
     scripts = str(STATE_MODULE_PATH.parent)
     sys.path.insert(0, scripts)
-    for name in ("store", "refresh"):
+    for name in ("store", "refresh", "leases", "attempts", "attestations"):
         sys.modules.pop(name, None)
+    import attempts
+    import leases
     import refresh
     import store
 
@@ -1979,14 +1981,50 @@ def test_claim_next_cli_returns_exact_assignment_identity(tmp_path: Path):
         "tagged_spaces": [],
         "verdicts": [],
     }
-    snapshot_id = refresh.canonical_snapshot_id(payload)
-    snapshot = {"snapshot_id": snapshot_id, **payload}
-    snapshot_path = paths.root / "snapshots" / f"{snapshot_id}.json"
-    store.atomic_json_write(snapshot_path, snapshot, store.validate_snapshot)
-    with store.locked_json(paths.index, store.validate_index) as index:
-        index["snapshots"][snapshot_id] = str(
-            snapshot_path.relative_to(paths.index.parent)
-        )
+    candidate = payload["candidates"][0]
+    assessment_document = {
+        "challenge_revision": "challenge-revision-1",
+        "assessor": "state-cli-test",
+        "assessed_at": now.isoformat(),
+        "assessments": [
+            {
+                key: candidate[key]
+                for key in refresh.SCORE_RATE_ASSESSMENT_KEYS
+            }
+        ],
+    }
+    assessment_path = tmp_path / "assessments.json"
+    assessment_path.write_text(json.dumps(assessment_document), encoding="utf-8")
+    assessment_input = refresh.load_assessments(assessment_path)
+    sources = {
+        "challenge": {
+            "repo_id": refresh.CHALLENGE_REPO,
+            "revision": assessment_document["challenge_revision"],
+        }
+    }
+    payload.update(
+        {
+            "source_revision": hashlib.sha256(
+                json.dumps(
+                    sources,
+                    allow_nan=False,
+                    separators=(",", ":"),
+                    sort_keys=True,
+                ).encode("utf-8")
+            ).hexdigest(),
+            "sources": sources,
+            "assessments": {
+                "content_sha256": assessment_input["content_sha256"],
+                "challenge_revision": assessment_document["challenge_revision"],
+                "assessor": assessment_document["assessor"],
+                "assessed_at": assessment_document["assessed_at"],
+                "records": assessment_document["assessments"],
+                "matched_paper_ids": [candidate["paper_id"]],
+            },
+            "spaces": [],
+        }
+    )
+    snapshot_id = refresh.persist_snapshot(paths, payload)
 
     assignment = json.loads(
         run_cli(
@@ -2008,6 +2046,43 @@ def test_claim_next_cli_returns_exact_assignment_identity(tmp_path: Path):
         "fencing_token": 1,
         "phase": "selected",
         "reclaimed": False,
+    }
+
+    writer = leases.Lease(
+        **store.read_json(paths.resource_lease(f"attempt:{assignment['attempt_id']}"))
+    )
+    attempts.transition_attempt(
+        paths,
+        assignment["attempt_id"],
+        "blocked",
+        writer,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    leases.release_lease(paths, writer, now)
+    reclaimed = json.loads(
+        run_cli(
+            "claim-next",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--owner",
+            "paper-owner-2",
+            "--reclaim-attempt-id",
+            assignment["attempt_id"],
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+
+    assert reclaimed == {
+        "attempt_id": assignment["attempt_id"],
+        "paper_id": "paper-a",
+        "owner": "paper-owner-2",
+        "fencing_token": 2,
+        "phase": "blocked",
+        "reclaimed": True,
     }
 
 

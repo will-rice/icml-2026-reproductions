@@ -155,6 +155,20 @@ def test_first_attempt_claim_requires_active_attempt_and_token_zero(
     assert claimed.expires_at == (now + WORK_TTL).isoformat()
 
 
+def test_attempt_claim_cannot_give_one_owner_two_live_attempt_leases(
+    leases, paths, now, store
+):
+    register_attempt(store, paths, "a1", now)
+    register_attempt(store, paths, "a2", now)
+    first = leases.claim_attempt(paths, "a1", "persistent-owner", 0, now)
+
+    with pytest.raises(leases.LeaseBusy):
+        leases.claim_attempt(paths, "a2", "persistent-owner", 0, now)
+
+    assert leases.assert_fence(paths, first, now) == first
+    assert not paths.resource_lease("attempt:a2").exists()
+
+
 def test_expired_attempt_reclaim_increments_expected_predecessor_token(
     leases, paths, now, store
 ):

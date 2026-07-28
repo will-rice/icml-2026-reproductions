@@ -149,30 +149,20 @@ def claim_next(
     """Atomically give one persistent owner one new or reclaimable attempt."""
     observed_at = _datetime(now)
     snapshot = read_fresh_snapshot(paths, snapshot_id, observed_at)
+    _require_assessed_snapshot(snapshot)
     leases.expire_stale_leases(paths, observed_at)
     attempts.recover_transactions(paths)
-    mutex = None
-    try:
-        mutex = leases.acquire_lease(
-            paths,
-            f"paper-owner-claim:{owner}",
-            owner,
-            f"claim-{uuid4()}",
-            observed_at,
-            ADMISSION_LEASE_TTL,
-        )
-    except leases.LeaseBusy as error:
-        raise OwnerBusy(owner) from error
-    try:
+    with leases.hold_owner_claim(paths, owner):
         _require_owner_available(paths, owner, observed_at)
 
         if reclaim_attempt_id is not None:
             attempt = attempts.read_attempt(paths, reclaim_attempt_id)
             if attempt["phase"] != "blocked":
                 raise ValueError("phase")
+            _assessment_for_paper(snapshot, attempt["paper_id"])
             prior = _attempt_lease(paths, reclaim_attempt_id)
             expected = 0 if prior is None else prior.fencing_token
-            writer = leases.claim_attempt(
+            writer = leases._claim_attempt_locked(
                 paths,
                 reclaim_attempt_id,
                 owner,
@@ -189,7 +179,11 @@ def claim_next(
         index = store.read_json(paths.index)
         store.validate_index(index)
         claimed = _claimed_paper_ids(paths, index, snapshot, observed_at)
-        candidates = rank_eligible_candidates(snapshot, claimed)
+        candidates = [
+            candidate
+            for candidate in rank_eligible_candidates(snapshot, claimed)
+            if _candidate_matches_assessment(snapshot, candidate)
+        ]
         report = _admit_up_to(
             paths,
             candidates,
@@ -207,8 +201,37 @@ def claim_next(
             assignment.writer_lease,
             False,
         )
-    finally:
-        _release_if_acquired(paths, mutex, observed_at)
+
+
+def _require_assessed_snapshot(snapshot: dict) -> None:
+    import refresh
+
+    assessments = snapshot.get("assessments")
+    if (
+        type(assessments) is not dict
+        or set(assessments) != refresh.PERSISTED_ASSESSMENT_KEYS
+        or type(assessments["matched_paper_ids"]) is not list
+    ):
+        raise ValueError("assessments")
+    for paper_id in assessments["matched_paper_ids"]:
+        _assessment_for_paper(snapshot, paper_id)
+
+
+def _assessment_for_paper(snapshot: dict, paper_id: str) -> dict:
+    import refresh
+
+    return refresh.assessment_record_for_snapshot(snapshot, paper_id)
+
+
+def _candidate_matches_assessment(snapshot: dict, candidate: dict) -> bool:
+    try:
+        assessment = _assessment_for_paper(snapshot, candidate["paper_id"])
+    except ValueError:
+        return False
+    return all(
+        candidate.get(field) == assessment[field]
+        for field in assessment
+    )
 
 
 def read_fresh_snapshot(

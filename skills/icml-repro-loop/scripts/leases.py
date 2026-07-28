@@ -141,6 +141,24 @@ def claim_attempt(
     ):
         raise ValueError("fencing_token")
     observed_at = _datetime(now)
+    with hold_owner_claim(paths, owner):
+        return _claim_attempt_locked(
+            paths,
+            attempt_id,
+            owner,
+            expected_fencing_token,
+            observed_at,
+        )
+
+
+def _claim_attempt_locked(
+    paths: store.StatePaths,
+    attempt_id: str,
+    owner: str,
+    expected_fencing_token: int,
+    observed_at: datetime,
+) -> Lease:
+    """Claim an attempt while the caller holds this owner's claim lock."""
     resource = f"attempt:{attempt_id}"
     path = paths.resource_lease(resource)
     with store._exclusive_lock(path):
@@ -164,6 +182,7 @@ def claim_attempt(
                     raise ValueError("now")
             elif observed_at < _parse(prior.expires_at):
                 raise LeaseBusy(resource)
+        _require_owner_available(paths, owner, attempt_id, observed_at)
         lease = Lease(
             resource=resource,
             owner=owner,
@@ -174,6 +193,15 @@ def claim_attempt(
         )
         _write(path, asdict(lease), validate_lease)
         return lease
+
+
+@contextmanager
+def hold_owner_claim(paths: store.StatePaths, owner: str) -> Iterator[None]:
+    """Serialize all public attempt acquisitions for one persistent owner."""
+    owner = _identity(owner, "owner")
+    path = paths.resource_lease(f"paper-owner-claim:{owner}")
+    with store._exclusive_lock(path):
+        yield
 
 
 def renew_lease(
@@ -428,6 +456,25 @@ def validate_reservation(value: dict) -> None:
         if _parse(reconciled) < reserved:
             raise ValueError("reconciled_at")
     _amount(value["cumulative_actual_usd"], "cumulative_actual_usd")
+
+
+def _require_owner_available(
+    paths: store.StatePaths,
+    owner: str,
+    excluded_attempt_id: str,
+    now: datetime,
+) -> None:
+    for path in (paths.root / "leases").glob("*.json"):
+        value = store.read_json(path)
+        validate_lease(value)
+        if (
+            value["resource"].startswith("attempt:")
+            and value["attempt_id"] != excluded_attempt_id
+            and value["owner"] == owner
+            and value["released_at"] is None
+            and _parse(value["expires_at"]) > now
+        ):
+            raise LeaseBusy(f"paper-owner:{owner}")
 
 
 def _require_current(path: Path, lease: Lease) -> Lease:
