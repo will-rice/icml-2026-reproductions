@@ -16,6 +16,39 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Correction Gate — 2026-07-28, round 9
+
+Controller review rejected proposal
+`c7ec98a9abb6316837c18c7734eded5a8aa4bcff` despite its green reported
+suites. Preserve it as the rejected proposal and correct only the residual
+items below, test first.
+
+1. `load_verified_artifacts` still checks only that `source_url` starts with
+   the pinned raw-host prefix. It therefore accepts swapped artifact paths,
+   arbitrary raw-host suffixes, and query/fragment variants. Define one exact
+   immutable identity table binding each admitted `artifact_id` to its exact
+   `relative_path` and raw URL:
+   `LICENSE`, `README.md`, `m=3-RACO-CAGrad-Algo.md`, and `train_raco.py`.
+   Require the manifest to contain exactly those four identities once each.
+   Add RED tests for swapped URLs, swapped relative paths, an unknown fifth
+   artifact, a missing artifact, `?query`, and `#fragment`.
+2. The preserved `test_theorem_31_evidence_contains_closed_schema_steps_array`
+   only checks keys, step index, the iterate-update equation, and boolean
+   types. Strengthen it to independently recompute, at each of ten steps,
+   `g1`, `g2`, the weighted anchor, a fresh `cagrad_clip` direction, the next
+   iterate, both weighted losses, `M(theta_t)`, weighted-gradient norm, the
+   descent inequality, and the M-bound boolean. Compare each persisted
+   numeric/boolean field to that independent calculation.
+3. The Claim 8 test checks only the already-supported canonical fixture.
+   Add four direct mutation regressions against `_derive_claim_outcomes`, each
+   flipping exactly one dependency: one step's `descent_holds`, one step's
+   `m_bound_holds`, `grad_finite_horizon_bound_holds`, and
+   `m_finite_horizon_bound_holds`. Each mutation must change Claim 8 to
+   `not-supported`; the all-true control must remain `supported`.
+4. Regenerate deterministic evidence/pages after the identity tightening.
+   Run the full submission suite, frozen-lock verification, root pytest, skill
+   validation, pre-commit, and `git diff --check`; return a clean new commit.
+
 ## Controller No-op Recovery Gate — 2026-07-28, round 8
 
 Guarded round 7 (`861f3d381e18494d9ea7f27211845562`) ran
