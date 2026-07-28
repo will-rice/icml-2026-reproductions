@@ -1,0 +1,153 @@
+{
+  "alphaxiv": "2601.18175",
+  "area": "Reinforcement Learning",
+  "artifact_access": true,
+  "arxiv": "2601.18175",
+  "attempt_id": "b2b5899c-43a1-4c91-8b1f-9122d746f4c6",
+  "authors": [
+    "Daniel Russo"
+  ],
+  "blocked_from": "implementing",
+  "blocker": "Real Codex preflight for the assigned Success Conditioning worktree denied the outside write but allowed the synthetic credential-file read; no Codex marker was created and Codex implementation is forbidden. A valid existing Antigravity marker proves both denials for this exact worktree, but no scoped Antigravity/Gemini authorization exists. Correction findings are pinned at controller-plan commit f4bfb9b5462d5676d2b3c1d689105641ffadecc3. Next action: obtain exact Antigravity/Gemini read/write authorization limited to this worktree and attempt, resume blocked_from=implementing, then launch the fenced correction worker. Validation, deployment, submission, Hub, watch, and verdict writes are unperformed.",
+  "claim_bindings": [
+    {
+      "challenge_claim": "Success conditioning is proved to exactly solve a trust-region policy optimization problem with a chi-squared divergence constraint whose radius is determined by the data (Section 4.3).",
+      "challenge_claim_sha256": "aec6dd70e68aa5af00d320cdfb51bc69d5490b4f0de2e79d2796366dc71d0b5a",
+      "target_claim": "Success conditioning is proved to exactly solve a trust-region policy optimization problem with a chi-squared divergence constraint whose radius is determined by the data (Section 4.3)."
+    },
+    {
+      "challenge_claim": "At the optimum, relative policy improvement, chi-squared policy-change magnitude, and action-influence are shown to be exactly equal at every state (Section 4.4).",
+      "challenge_claim_sha256": "7b9f91421c4d8d5bb2d744a1346fd80e3d1820ab7edac2b0a40b261b4316594b",
+      "target_claim": "At the optimum, relative policy improvement, chi-squared policy-change magnitude, and action-influence are shown to be exactly equal at every state (Section 4.4)."
+    },
+    {
+      "challenge_claim": "The analysis characterizes exact success conditioning as a conservative improvement operator that cannot degrade performance or induce dangerous distribution shift (Section 4.3).",
+      "challenge_claim_sha256": "44992bcb0dd536f837f284ff9ed37465729f87e27efe1f4679b390ee957b90e3",
+      "target_claim": "The analysis characterizes exact success conditioning as a conservative improvement operator that cannot degrade performance or induce dangerous distribution shift (Section 4.3)."
+    },
+    {
+      "challenge_claim": "The paper analyzes return thresholding as an extension that can amplify improvement but can misalign the learned policy with the true objective (Section 5).",
+      "challenge_claim_sha256": "2d4441bf79a66be5f94ce57efae3bcafc796367a3caed5496a72588773e7243a",
+      "target_claim": "The paper analyzes return thresholding as an extension that can amplify improvement but can misalign the learned policy with the true objective (Section 5)."
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "assess-knowmore-mechanistic-design-author",
+    "path": "docs/superpowers/specs/2026-07-28-success-conditioning-design.md",
+    "recorded_at": "2026-07-28T01:34:37.564927+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-28T01:46:58.476374+00:00",
+    "reviewer": "assess-terminal-mhc-rbench-independent-review"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "",
+  "i": 6034,
+  "insts": [
+    "Columbia University"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "Success conditioning is proved to exactly solve a trust-region policy optimization problem with a chi-squared divergence constraint whose radius is determined by the data (Section 4.3)."
+    },
+    {
+      "status": "unverified",
+      "text": "At the optimum, relative policy improvement, chi-squared policy-change magnitude, and action-influence are shown to be exactly equal at every state (Section 4.4)."
+    },
+    {
+      "status": "unverified",
+      "text": "The analysis characterizes exact success conditioning as a conservative improvement operator that cannot degrade performance or induce dangerous distribution shift (Section 4.3)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper analyzes return thresholding as an extension that can amplify improvement but can misalign the learned policy with the true objective (Section 5)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=FEmXFeqYNZ",
+  "orid": "FEmXFeqYNZ",
+  "paper_id": "FEmXFeqYNZ",
+  "phase": "blocked",
+  "pid": "65267",
+  "safety_blocker": null,
+  "score": 15,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "aec6dd70e68aa5af00d320cdfb51bc69d5490b4f0de2e79d2796366dc71d0b5a",
+        "p_falsified": 0.03,
+        "p_toy": 0.1,
+        "p_verified": 0.82
+      },
+      {
+        "challenge_claim_sha256": "7b9f91421c4d8d5bb2d744a1346fd80e3d1820ab7edac2b0a40b261b4316594b",
+        "p_falsified": 0.02,
+        "p_toy": 0.08,
+        "p_verified": 0.88
+      },
+      {
+        "challenge_claim_sha256": "44992bcb0dd536f837f284ff9ed37465729f87e27efe1f4679b390ee957b90e3",
+        "p_falsified": 0.04,
+        "p_toy": 0.12,
+        "p_verified": 0.78
+      },
+      {
+        "challenge_claim_sha256": "2d4441bf79a66be5f94ce57efae3bcafc796367a3caed5496a72588773e7243a",
+        "p_falsified": 0.05,
+        "p_toy": 0.15,
+        "p_verified": 0.75
+      }
+    ],
+    "direct_artifact_score": 1,
+    "full_score_claim_paths": 4,
+    "judged_before_deadline_probability": 0.85,
+    "primary_risk": "No author code or raw numerical artifacts are released, so every verification route must be independently implemented and must avoid circularly restating the paper proof.",
+    "remaining_hours_p90": 10.0,
+    "remaining_time_variance_hours2": 9.0,
+    "reusable_implementation": false
+  },
+  "slug": "success-conditioning-as-policy-improvement-the-optimization-problem-solved-by-imitating-success",
+  "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+  "spot": false,
+  "sub": "Policy Search",
+  "target_claims": [
+    "Success conditioning is proved to exactly solve a trust-region policy optimization problem with a chi-squared divergence constraint whose radius is determined by the data (Section 4.3).",
+    "At the optimum, relative policy improvement, chi-squared policy-change magnitude, and action-influence are shown to be exactly equal at every state (Section 4.4).",
+    "The analysis characterizes exact success conditioning as a conservative improvement operator that cannot degrade performance or induce dangerous distribution shift (Section 4.3).",
+    "The paper analyzes return thresholding as an extension that can amplify improvement but can misalign the learned policy with the true objective (Section 5)."
+  ],
+  "title": "Success-Conditioning as Policy Improvement: The Optimization Problem Solved by Imitating Success",
+  "transitions": [
+    {
+      "at": "2026-07-28T01:34:37.248539+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-success-conditioning-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-28T01:46:58.476374+00:00",
+      "fencing_token": 2,
+      "from": "design-pending",
+      "owner": "controller-success-conditioning-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T18:04:05.699073+00:00",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-success-conditioning-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-28T18:04:05.699073+00:00",
+  "upstream_revision": "arxiv:2601.18175v2",
+  "vs": "https://icml.cc/virtual/2026/poster/65267"
+}

@@ -1,0 +1,31 @@
+{
+  "attempt_id": "64bfe193-333b-4b37-9683-9ac25ca5ac27",
+  "attempt_number": 3,
+  "attestation_id": "c015f3b1974058aaa87307db4dd4eb6e88680d470c0dd6f3dc45b0be133eafd8",
+  "authority_attestation_id": "3d4cf4ca62a4e0362561ead454f8e45be152c3a114390a79475d7d0fdf8c2bd3",
+  "claims": [
+    {
+      "claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
+      "evidence": "The logbook's exact rational audit found the literal samplewise formulation double-counts symmetric pair interactions: the MWCP value is 1/1 while the literal samplewise value is 2/1, and the objective-equivalence check is classified as contradicted, indicating the formulation as stated does not correctly reduce to MWCP.",
+      "status": "falsified",
+      "target_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3)."
+    },
+    {
+      "claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F).",
+      "evidence": "The logbook provides a concrete witness where the marginal sequence is 1/1 then 3/1, directly violating the diminishing-returns property required for submodularity; the diminishing-returns and greedy-premise checks are both classified as contradicted under exact rational arithmetic.",
+      "status": "falsified",
+      "target_claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
+    }
+  ],
+  "judged_at": "2026-07-27T21:41:26+00:00",
+  "kind": "verdict",
+  "observed_at": "2026-07-28T00:50:22.972025+00:00",
+  "paper_id": "a3GdvuPItd",
+  "payload_sha256": "a6ade6b8e95dadd2da322a216a772166c8958c62b5eaef1bc30db89910c545e5",
+  "snapshot_id": "00d2add48d9a84bee753171b9fabc1e654aa6e97b04d849f0a2228ce76f35dc7",
+  "source_commit": "531dfb854fd534cb296be6e1e9e1627c0f71c97b",
+  "space_id": "wrice/repro-graph-pruning",
+  "space_sha": "8dbb59964438e1e335ceb5888de6e7f0e5687d40",
+  "submission_attestation_id": "ebbd2bb30afaf89c44d4390209fcbab395eb12d84b6be07fc54251ce8799c2d6",
+  "verdict_revision": "346012cf3240ef7ad752438d637faef2a487c538"
+}

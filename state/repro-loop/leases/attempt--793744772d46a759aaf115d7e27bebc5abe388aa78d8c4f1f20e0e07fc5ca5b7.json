@@ -1,9 +1,9 @@
 {
-  "acquired_at": "2026-07-27T19:42:07.182978+00:00",
+  "acquired_at": "2026-07-28T00:49:30.332569+00:00",
   "attempt_id": "2fc3b006-3307-4fc3-8df6-c000379298c4",
-  "expires_at": "2026-07-27T21:42:07.182978+00:00",
-  "fencing_token": 4,
-  "owner": "controller-scoring-format-20260727",
-  "released_at": "2026-07-27T23:43:17.688051+00:00",
+  "expires_at": "2026-07-28T02:49:30.332569+00:00",
+  "fencing_token": 5,
+  "owner": "controller-verdict-sync-20260728",
+  "released_at": null,
   "resource": "attempt:2fc3b006-3307-4fc3-8df6-c000379298c4"
 }

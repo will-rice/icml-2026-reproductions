@@ -85,7 +85,7 @@
   "or": "https://openreview.net/forum?id=XztRm216YS",
   "orid": "XztRm216YS",
   "paper_id": "XztRm216YS",
-  "phase": "judging",
+  "phase": "complete",
   "pid": "63337",
   "project_path": "submissions/timerewarder-learning-dense-reward-from-passive-videos-via-frame-wise-temporal-distance",
   "safety_blocker": null,
@@ -279,10 +279,49 @@
       "owner": "controller-scoring-format-20260727",
       "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-28T00:50:19.159639+00:00",
+      "attestation_id": "5fded1d30b5d5e227798375e7ac0d984dd11fc3f9237d270d4bc351edc601b64",
+      "fencing_token": 5,
+      "from": "judging",
+      "owner": "controller-verdict-sync-20260728",
+      "snapshot_id": "69a8e8d1057e48c7f5ab410261c6d5d7bdac03eaaf7c25870740ac419499f617",
+      "to": "complete"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T20:08:37.180286+00:00",
+  "updated_at": "2026-07-28T00:50:19.159639+00:00",
   "upstream_revision": "arxiv:2509.26627v3+github:CowAndSheep/TimeRewarder@f54234b67bd3f1fa190f62498d38513a2140f23f+hf-model:CowAndSheep/timerewarder@23eded140eb8c8d9f194243a115d218b5072d800+hf-dataset:CowAndSheep/timerewarder-demos@b966abcebc110dd97dd96018e395180e069756c4",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "TimeRewarder learns dense proxy rewards from action-free passive videos by predicting frame-wise temporal distances (Figure 2).",
+        "evidence": "The logbook tested released checkpoints on a fixed five-video-per-task temporal-distance protocol (106 cases across 10 tasks), but explicitly did not reproduce reward-model training; this is a sanity check of a pre-trained artifact on a small fixed video set, not a reproduction of the learning process.",
+        "status": "toy",
+        "target_claim": "TimeRewarder learns dense proxy rewards from action-free passive videos by predicting frame-wise temporal distances (Figure 2)."
+      },
+      {
+        "claim": "The method converts predicted progress differences between adjacent frames into step-wise rewards for downstream RL (Section 4.2).",
+        "evidence": "Three transition-formula cases were checked, verifying the conversion formula in isolation, but the logbook states Meta-World/DrQ-v2 training is unavailable, so the formula was never applied in actual downstream RL.",
+        "status": "toy",
+        "target_claim": "The method converts predicted progress differences between adjacent frames into step-wise rewards for downstream RL (Section 4.2)."
+      },
+      {
+        "claim": "The paper provides a theoretical justification connecting temporal distance to progress-based reward shaping (Section 4.3).",
+        "evidence": "All enumerated finite Bellman recurrences and the gamma-one temporal-distance identity pass under the paper's stated assumptions (full observability, deterministic transitions, optimal trajectory, terminal goal, unaliased observations), providing concrete mathematical verification of the theoretical justification.",
+        "status": "verified",
+        "target_claim": "The paper provides a theoretical justification connecting temporal distance to progress-based reward shaping (Section 4.3)."
+      },
+      {
+        "claim": "On held-out expert videos, TimeRewarder reports the highest Value-Order Correlation among evaluated progress-based reward baselines (Figure 3).",
+        "evidence": "VOC was computed for TimeRewarder's released model (mean 0.998 across 50 videos), but baseline predictions/checkpoints and the complete Figure 3 protocol were not released, making the comparative 'highest among baselines' claim untestable.",
+        "status": "inconclusive",
+        "target_claim": "On held-out expert videos, TimeRewarder reports the highest Value-Order Correlation among evaluated progress-based reward baselines (Figure 3)."
+      }
+    ]
+  },
+  "verdict_at": "2026-07-28T00:50:19.159639+00:00",
+  "verdict_source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
   "vs": "https://icml.cc/virtual/2026/poster/63337"
 }

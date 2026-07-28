@@ -431,18 +431,34 @@ def _validate_codex_command(argv: tuple[str, ...]) -> None:
     if len(argv) < 2 or argv[:2] != ("codex", "exec"):
         raise ValueError("runtime")
     if any(
-        value in {"-c", "--config", "-p", "--profile"}
-        or value.startswith("--config=")
+        value in {"-p", "--profile"}
         or value.startswith("--profile=")
+        or value.startswith("--config=")
         for value in argv
     ):
         raise ValueError("config")
-    sandbox = _option_value(argv, "-s", "--sandbox")
-    if sandbox not in {"workspace-write", "read-only"}:
-        raise ValueError("sandbox")
     root = _option_value(argv, "-C", "--cd")
     if root is None or not Path(root).is_absolute():
         raise ValueError("worktree")
+    sandbox = _option_value(argv, "-s", "--sandbox")
+    configs = tuple(
+        argv[index + 1]
+        for index, value in enumerate(argv)
+        if value in {"-c", "--config"} and index + 1 < len(argv)
+    )
+    if any(
+        value in {"-c", "--config"} and index + 1 >= len(argv)
+        for index, value in enumerate(argv)
+    ):
+        raise ValueError("config")
+    if sandbox == "read-only":
+        if configs:
+            raise ValueError("config")
+        return
+    if sandbox is not None:
+        raise ValueError("sandbox")
+    if configs != _codex_permission_config(Path(root)):
+        raise ValueError("config")
 
 
 def _validate_antigravity_command(argv: tuple[str, ...]) -> None:
@@ -485,13 +501,20 @@ def _command(
         values = [
             "codex",
             "exec",
-            "-s",
-            "workspace-write" if mode == "implementation" else "read-only",
-            "-C",
-            str(worktree),
-            "--ephemeral",
-            "--ignore-user-config",
         ]
+        if mode == "implementation":
+            for config in _codex_permission_config(worktree):
+                values.extend(("-c", config))
+        else:
+            values.extend(("-s", "read-only"))
+        values.extend(
+            (
+                "-C",
+                str(worktree),
+                "--ephemeral",
+                "--ignore-user-config",
+            )
+        )
         if model is not None:
             values.extend(("--model", model))
         values.append(prompt)
@@ -509,6 +532,19 @@ def _command(
         values.extend(("--model", model))
     values.extend(("--print", prompt))
     return tuple(values)
+
+
+def _codex_permission_config(worktree: Path) -> tuple[str, ...]:
+    """Build the one accepted least-privilege Codex implementation profile."""
+    return (
+        'default_permissions="paper-worker"',
+        'permissions.paper-worker.description="Assigned paper worktree only."',
+        "permissions.paper-worker.filesystem="
+        f'{{":minimal"="read","{worktree}"="write",'
+        '":tmpdir"="write",":slash_tmp"="write"}',
+        "permissions.paper-worker.network.enabled=true",
+        'permissions.paper-worker.network.domains={"*"="allow"}',
+    )
 
 
 def _contract(worktree: Path, contract: Path) -> tuple[Path, Path, dict]:

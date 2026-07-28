@@ -1,0 +1,43 @@
+{
+  "attempt_id": "9a29d84c-ad32-4a12-a667-de948f0bb58e",
+  "attempt_number": 1,
+  "attestation_id": "a499a199bf53212f96d47cdbd74fc28de50425ba3fbbcc1c507780d890c5aefd",
+  "authority_attestation_id": "f6d225531ba3fa836265e6edc264a885e3fb41a4c5ee5a2a738742064de9b2bb",
+  "claims": [
+    {
+      "claim": "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1).",
+      "evidence": "The logbook found a merge configuration and 17 mixture entries but explicitly states 'No checkpoint was merged and no model behavior was measured,' so the core claim that weighted merging evaluates mixtures was never functionally tested.",
+      "status": "inconclusive",
+      "target_claim": "DeMix trains component models once and uses weighted model merging to evaluate unlimited sampled data mixtures without training a proxy model for each mixture (Figure 1)."
+    },
+    {
+      "claim": "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2).",
+      "evidence": "The logbook reports that no per-mixture OpenCompass results were released and the pinned proxy_eval.py uses path placeholders and random.random(), so no Spearman accuracy was computed or verified.",
+      "status": "inconclusive",
+      "target_claim": "With 30B-token component models, DeMix reaches 0.81 macro Spearman proxy accuracy with a 211B/212B token budget, outperforming comparable training-based proxy budgets in the table (Table 2)."
+    },
+    {
+      "claim": "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3).",
+      "evidence": "The logbook states Table 3 outputs were not released and 'full evaluation was not run,' so no benchmark comparison against uniform, heuristic, RegMix, or CLIMB mixtures was executed.",
+      "status": "inconclusive",
+      "target_claim": "The optimal mixture selected by DeMix is compared against uniform, heuristic, RegMix, and CLIMB mixtures across general, code, and math benchmarks (Table 3)."
+    },
+    {
+      "claim": "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract).",
+      "evidence": "The logbook references the DeMix_Corpora repository but provides no evidence verifying the 22T-token size or that mixtures were validated; it only inspected checkpoint shards and mixture manifests.",
+      "status": "inconclusive",
+      "target_claim": "The paper releases DeMix Corpora, described as a 22T-token pre-training dataset with validated mixtures (Abstract)."
+    }
+  ],
+  "judged_at": "2026-07-28T00:33:33+00:00",
+  "kind": "verdict",
+  "observed_at": "2026-07-28T00:50:21.112073+00:00",
+  "paper_id": "uyRIOjFgOn",
+  "payload_sha256": "0d2c9d0e1ec0dc76db62dd45a75d6555a753120f9632ef0c903c14a57115280b",
+  "snapshot_id": "00d2add48d9a84bee753171b9fabc1e654aa6e97b04d849f0a2228ce76f35dc7",
+  "source_commit": "fef6ef1ee7d215535ae575d9fcac6a8b0b840d02",
+  "space_id": "wrice/repro-demix-data-mixing-model-merging",
+  "space_sha": "3a63680dd999df34e74722c5ed07bb1f0fec11e7",
+  "submission_attestation_id": "bf9615718261443069b4f6898ec1954f9c986ffa6e851b7d6557a880af9159b3",
+  "verdict_revision": "346012cf3240ef7ad752438d637faef2a487c538"
+}

@@ -157,17 +157,19 @@ def test_antigravity_command_requires_sandbox_and_rejects_unsafe_flags():
 def test_codex_command_requires_a_bounded_sandbox_and_rejects_expansion(
     tmp_path: Path,
 ):
-    worker_guard.validate_worker_command(
+    valid = ["codex", "exec"]
+    for config in worker_guard._codex_permission_config(tmp_path):
+        valid.extend(("-c", config))
+    valid.extend(
         (
-            "codex",
-            "exec",
-            "-s",
-            "workspace-write",
             "-C",
             str(tmp_path),
             "--ephemeral",
             "Follow the assigned worker contract.",
-        ),
+        )
+    )
+    worker_guard.validate_worker_command(
+        tuple(valid),
         "codex",
     )
 
@@ -282,8 +284,25 @@ def test_launch_spec_is_rooted_at_one_worktree_and_uses_empty_hf_cache(
     assert hf_home.is_dir()
     assert list(hf_home.iterdir()) == []
     if runtime == "codex":
-        assert ("-s", "workspace-write") == (
-            spec.argv[spec.argv.index("-s") : spec.argv.index("-s") + 2]
+        assert "-s" not in spec.argv
+        assert "--sandbox" not in spec.argv
+        assert (
+            'default_permissions="paper-worker"'
+            in spec.argv
+        )
+        assert (
+            "permissions.paper-worker.filesystem="
+            f'{{":minimal"="read","{worktree}"="write",'
+            '":tmpdir"="write",":slash_tmp"="write"}'
+            in spec.argv
+        )
+        assert (
+            "permissions.paper-worker.network.enabled=true"
+            in spec.argv
+        )
+        assert (
+            'permissions.paper-worker.network.domains={"*"="allow"}'
+            in spec.argv
         )
         assert spec.argv[spec.argv.index("-C") + 1] == str(worktree)
     else:

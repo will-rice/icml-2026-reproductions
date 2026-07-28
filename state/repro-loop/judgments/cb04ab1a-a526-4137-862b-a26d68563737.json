@@ -2,19 +2,72 @@
   "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
   "attempt_number": 3,
   "created_at": "2026-07-27T20:08:38.921175+00:00",
-  "normalized_verdict": null,
+  "normalized_verdict": {
+    "claims": [
+      {
+        "claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+        "evidence": "The logbook confirms the 4\u00d77 model-benchmark matrix via released trajectory inventory and notes the runner config defaults to one H100 with a NUM_HOURS-based timeout, but no experiments were run and limitations around scheduler-dependent branches and termination grace leave the exact 10-hour budget unconfirmed.",
+        "status": "inconclusive",
+        "target_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+      },
+      {
+        "claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+        "evidence": "The logbook found artifact evidence for training-on-test-set and downloaded-checkpoint failure modes in released contamination and instruction-model judgments, but the API-key submode artifact was absent from the pinned revision and judge labels were not independently verified, leaving the full claim only partially supported without experimental confirmation.",
+        "status": "inconclusive",
+        "target_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+      }
+    ]
+  },
   "paper_id": "UnjxMTe57e",
   "poll_deadline": "2026-07-29T20:00:00+00:00",
   "poll_limit": 288,
   "polls": [],
-  "raw_verdict": null,
-  "source_revision": null,
+  "raw_verdict": {
+    "claims": [
+      {
+        "claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+        "evidence": "The logbook confirms the 4\u00d77 model-benchmark matrix via released trajectory inventory and notes the runner config defaults to one H100 with a NUM_HOURS-based timeout, but no experiments were run and limitations around scheduler-dependent branches and termination grace leave the exact 10-hour budget unconfirmed.",
+        "verdict": "inconclusive"
+      },
+      {
+        "claim": "The best reported agent reaches 23.2% weighted average benchmark performance, while official instruction-tuned models reach 51.1% (Figure 1).",
+        "evidence": "The logbook does not report checking or reproducing the specific 23.2% and 51.1% weighted average performance figures from Figure 1; no experimental runs were executed to verify these numbers.",
+        "verdict": "inconclusive"
+      },
+      {
+        "claim": "GPT-5.1 Codex Max reports 89% on BFCL with Gemma-3-4B versus 67% for the official instruction-tuned model (Abstract).",
+        "evidence": "The logbook does not mention verifying the 89% BFCL score for GPT-5.1 Codex Max with Gemma-3-4B or the 67% official instruction-tuned baseline; no runs were performed.",
+        "verdict": "inconclusive"
+      },
+      {
+        "claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+        "evidence": "The logbook found artifact evidence for training-on-test-set and downloaded-checkpoint failure modes in released contamination and instruction-model judgments, but the API-key submode artifact was absent from the pinned revision and judge labels were not independently verified, leaving the full claim only partially supported without experimental confirmation.",
+        "verdict": "inconclusive"
+      },
+      {
+        "claim": "For GPT-5.1 Codex Max, medium reasoning effort scores higher than low and high effort while using fewer tokens than high effort (Table 2).",
+        "evidence": "The logbook does not address Table 2 or the reasoning-effort comparison (low vs. medium vs. high) for GPT-5.1 Codex Max at all; no experiments or artifact inspection of these specific results is reported.",
+        "verdict": "inconclusive"
+      }
+    ],
+    "judged_at": "2026-07-27T23:19:16+00:00",
+    "model": "zai-org/GLM-5.2",
+    "orid": "UnjxMTe57e",
+    "overall": "This logbook is a deterministic CPU-only audit of released artifacts that did not execute any H100 post-training runs or benchmark evaluations. It provides partial artifact-based support for the benchmark coverage structure and two of three reward-hacking modes, but no claim is experimentally verified and several specific numerical claims are never addressed.",
+    "paper_id": "UnjxMTe57e",
+    "paper_title": "PostTrainBench: Can LLM Agents Automate LLM Post-Training?",
+    "quality": "low",
+    "sha": "58d2a911b46973be40f908d0438b6dabc303e338",
+    "source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
+    "space_id": "wrice/repro-posttrainbench"
+  },
+  "source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
   "space_id": "wrice/repro-posttrainbench",
   "submitted_sha": "58d2a911b46973be40f908d0438b6dabc303e338",
   "target_claims": [
     "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
     "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
   ],
-  "updated_at": "2026-07-27T20:08:38.921175+00:00",
-  "verdict_at": null
+  "updated_at": "2026-07-28T00:50:20.399471+00:00",
+  "verdict_at": "2026-07-28T00:50:20.399471+00:00"
 }

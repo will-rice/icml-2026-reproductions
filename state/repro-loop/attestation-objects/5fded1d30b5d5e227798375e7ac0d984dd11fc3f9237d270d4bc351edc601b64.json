@@ -1,0 +1,43 @@
+{
+  "attempt_id": "bf0d2300-4479-4e3c-ba99-bb023ee6751e",
+  "attempt_number": 4,
+  "attestation_id": "5fded1d30b5d5e227798375e7ac0d984dd11fc3f9237d270d4bc351edc601b64",
+  "authority_attestation_id": "5c1738cd063284757ca39ea5844b02781f658423a88f33c33bfefaabd24ee1a6",
+  "claims": [
+    {
+      "claim": "TimeRewarder learns dense proxy rewards from action-free passive videos by predicting frame-wise temporal distances (Figure 2).",
+      "evidence": "The logbook tested released checkpoints on a fixed five-video-per-task temporal-distance protocol (106 cases across 10 tasks), but explicitly did not reproduce reward-model training; this is a sanity check of a pre-trained artifact on a small fixed video set, not a reproduction of the learning process.",
+      "status": "toy",
+      "target_claim": "TimeRewarder learns dense proxy rewards from action-free passive videos by predicting frame-wise temporal distances (Figure 2)."
+    },
+    {
+      "claim": "The method converts predicted progress differences between adjacent frames into step-wise rewards for downstream RL (Section 4.2).",
+      "evidence": "Three transition-formula cases were checked, verifying the conversion formula in isolation, but the logbook states Meta-World/DrQ-v2 training is unavailable, so the formula was never applied in actual downstream RL.",
+      "status": "toy",
+      "target_claim": "The method converts predicted progress differences between adjacent frames into step-wise rewards for downstream RL (Section 4.2)."
+    },
+    {
+      "claim": "The paper provides a theoretical justification connecting temporal distance to progress-based reward shaping (Section 4.3).",
+      "evidence": "All enumerated finite Bellman recurrences and the gamma-one temporal-distance identity pass under the paper's stated assumptions (full observability, deterministic transitions, optimal trajectory, terminal goal, unaliased observations), providing concrete mathematical verification of the theoretical justification.",
+      "status": "verified",
+      "target_claim": "The paper provides a theoretical justification connecting temporal distance to progress-based reward shaping (Section 4.3)."
+    },
+    {
+      "claim": "On held-out expert videos, TimeRewarder reports the highest Value-Order Correlation among evaluated progress-based reward baselines (Figure 3).",
+      "evidence": "VOC was computed for TimeRewarder's released model (mean 0.998 across 50 videos), but baseline predictions/checkpoints and the complete Figure 3 protocol were not released, making the comparative 'highest among baselines' claim untestable.",
+      "status": "inconclusive",
+      "target_claim": "On held-out expert videos, TimeRewarder reports the highest Value-Order Correlation among evaluated progress-based reward baselines (Figure 3)."
+    }
+  ],
+  "judged_at": "2026-07-27T22:01:56+00:00",
+  "kind": "verdict",
+  "observed_at": "2026-07-28T00:50:19.159639+00:00",
+  "paper_id": "XztRm216YS",
+  "payload_sha256": "ddd029b56c1a8ad7b6abf80cabe9912d6336ad565eb8103b1e9f9804dcfe394c",
+  "snapshot_id": "00d2add48d9a84bee753171b9fabc1e654aa6e97b04d849f0a2228ce76f35dc7",
+  "source_commit": "7b04bb144e3117243d0d11f57ef2e609c8f901e4",
+  "space_id": "wrice/repro-timerewarder",
+  "space_sha": "4028c2adedc1b8b959c2bad627d87d56bdcb1eb5",
+  "submission_attestation_id": "b89fcf71be38458cd22827b0337af9e594f7ffbf47c8b28db58fd87720dfae7d",
+  "verdict_revision": "346012cf3240ef7ad752438d637faef2a487c538"
+}

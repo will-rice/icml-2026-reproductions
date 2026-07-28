@@ -1,0 +1,49 @@
+{
+  "attempt_id": "eb10c79b-fc26-47c4-88c1-6f45cb592833",
+  "attempt_number": 1,
+  "attestation_id": "11a2143d9d8a562c195a6d0636d7f735bbfe5542b2cb26830ba600e2735a3479",
+  "authority_attestation_id": "735acbabfe0e4998755e859ab9ee3d2bd38b6e8577f8c3395c246d3be0bca3fb",
+  "claims": [
+    {
+      "claim": "The paper formalizes randomized self-reduction learning and provides sample-complexity analysis under correlated sampling (Section 4).",
+      "evidence": "The logbook verified Definitions 4.1/4.3/4.5 and Claims A.1/A.2 exist in the PDF via text extraction, but the experimental verification was only on a 4-element finite modular addition model (Z_4), which the logbook itself admits 'does not replace full general symbolic proof.' This is a simplified model checking structural mechanics, not a full reproduction of the sample-complexity analysis.",
+      "status": "toy",
+      "target_claim": "Audit Definitions 4.1, 4.3, and 4.5 and Claims A.1\u2013A.2 to verify the formal correlated-sampling RSR-learning framework and stated sample-complexity relationships."
+    },
+    {
+      "claim": "RSR-Bench contains 80 benchmark functions for evaluating randomized self-reduction discovery (Section 5).",
+      "evidence": "AST parsing of two evaluation scripts extracted exactly 40 base + 40 extended benchmark registrations (IDs 1-80), reconciled one-to-one with 80 primary CSV rows. Benchmark 33 confirmed as sigmoid. This is concrete computational evidence that RSR-Bench contains exactly 80 functions.",
+      "status": "verified",
+      "target_claim": "Recount the released benchmark definitions and immutable CSV rows to verify that RSR-Bench contains exactly 80 distinct functions."
+    },
+    {
+      "claim": "Vanilla Bitween discovers randomized self-reductions for 43 of 80 RSR-Bench functions, including the first known sigmoid reduction (Table 1).",
+      "evidence": "Recomputation from the released CSV confirmed 43/80 benchmarks with at least 1 verified RSR (87 total RSRs, mean runtime 4.791s). The sigmoid reduction identity was independently verified via SymPy symbolic simplification (diff=0). The 'first known' historical priority was not independently verified, but the core quantitative and mathematical claims are supported by concrete evidence.",
+      "status": "verified",
+      "target_claim": "Aggregate the released per-function results and symbolically check the sigmoid identity to verify Vanilla Bitween coverage of 43/80 and its sigmoid reduction."
+    },
+    {
+      "claim": "Agentic Bitween discovers randomized self-reductions for 64 of 80 RSR-Bench functions by letting LLM agents propose query functions beyond the fixed prior query set (Table 1).",
+      "evidence": "Recomputation from the released CSV confirmed 64/80 benchmarks with at least 1 verified RSR (793 total RSRs). Novel query function 'x+log(k)' was extracted from released agentic output columns, confirming that agents proposed queries beyond the fixed prior set {x+r, x-r, x\u00b7r, x, r}. No live LLM re-run was performed, but the quantitative claim and the 'beyond fixed prior' mechanism are both supported.",
+      "status": "verified",
+      "target_claim": "Aggregate the released Claude-Opus Agentic Bitween rows and inspect novel-query outputs to verify coverage of 64/80 using queries beyond the fixed prior set."
+    },
+    {
+      "claim": "On nonlinear invariant benchmarks, the regression backend outperforms the MILP backend in sample count and runtime (Table 2).",
+      "evidence": "Source audit with specific section references and numbers shows the LR vs MILP comparison (594 vs 1,095 samples; 130.53s vs 187.47s) is in Section 5.3.1 on RSR-Bench, not on nonlinear invariant benchmarks. NLA-DigBench (Section 5.3.2) compares Bitween against DIG/SymInfer, not MILP. Table 2 in both v1 and v5 does not contain this comparison. The claim's attribution to 'nonlinear invariant benchmarks' and 'Table 2' is contradicted by concrete evidence.",
+      "status": "falsified",
+      "target_claim": "Test the exact nonlinear-invariant LR-versus-MILP sample/runtime claim against pinned v1/v5 tables and released artifacts; the expected outcome is falsification of the claim as worded."
+    }
+  ],
+  "judged_at": "2026-07-28T18:11:10+00:00",
+  "kind": "verdict",
+  "observed_at": "2026-07-28T21:19:11.532372+00:00",
+  "paper_id": "hCAEcqig2C",
+  "payload_sha256": "6014ee0dcebe52aeed415f785ac5523eba2818d03c8c51c0bb43de424a3eb1bb",
+  "snapshot_id": "9ff8712964a0422b55156928b06ed3d6042f04ef19ac692fe154e6e865decbb3",
+  "source_commit": "5bfdbaedb4f5372315da882005ca99cda8e32c67",
+  "space_id": "wrice/repro-learning-randomized-reductions",
+  "space_sha": "85b8b706f351ed1fad5c9110b088d2c427fcc3e6",
+  "submission_attestation_id": "b49fe6600eb71736eb0b43258a71098259fa281d9f513108d709d535c7b9797b",
+  "verdict_revision": "8124165a9d5f9b38c855bd113b3d9d06361d3899"
+}

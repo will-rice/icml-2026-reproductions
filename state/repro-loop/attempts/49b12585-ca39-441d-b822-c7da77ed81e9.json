@@ -74,7 +74,7 @@
   "or": "https://openreview.net/forum?id=0bTEd4LpQr",
   "orid": "0bTEd4LpQr",
   "paper_id": "0bTEd4LpQr",
-  "phase": "judging",
+  "phase": "complete",
   "pid": "66755",
   "project_path": "submissions/numina-lean-agent",
   "safety_blocker": null,
@@ -202,10 +202,37 @@
       "owner": "controller-scoring-format-20260727",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-28T00:50:23.588035+00:00",
+      "attestation_id": "c6ab5eb99d522122f9ff26461b87fcb7d4e16654cd215c7b2b708e8a4ef960d3",
+      "fencing_token": 5,
+      "from": "judging",
+      "owner": "controller-verdict-sync-20260728",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "complete"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T20:08:37.672441+00:00",
+  "updated_at": "2026-07-28T00:50:23.588035+00:00",
   "upstream_revision": "github:project-numina/numina-lean-agent@1c9af8a52e715f22fede766425ba3d3b95526132+github:project-numina/Numina-Putnam2025@60d33c8ba19af905bd731e938ebde1c5b8c76519+github:project-numina/BrascampLieb@413f2bfd31100187eb6c2d632c9cbf12e3115494",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+        "evidence": "The logbook confirms all 12 released Putnam 2025 proofs kernel-check without sorryAx, but explicitly states this does not establish that the named agent generated them; no rerun of Claude Opus 4.5 or the agent was performed.",
+        "status": "inconclusive",
+        "target_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+      },
+      {
+        "claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+        "evidence": "The logbook confirms that a released BrascampLieb.upperBound declaration kernel-checks without sorryAx, but notes this is not the full analytic function-space theorem and does not verify the reported interaction with mathematicians.",
+        "status": "inconclusive",
+        "target_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+      }
+    ]
+  },
+  "verdict_at": "2026-07-28T00:50:23.588035+00:00",
+  "verdict_source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
   "vs": "https://icml.cc/virtual/2026/poster/66755"
 }

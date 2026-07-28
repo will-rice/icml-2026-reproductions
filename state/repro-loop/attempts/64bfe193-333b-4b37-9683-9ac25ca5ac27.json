@@ -76,7 +76,7 @@
   "or": "https://openreview.net/forum?id=a3GdvuPItd",
   "orid": "a3GdvuPItd",
   "paper_id": "a3GdvuPItd",
-  "phase": "judging",
+  "phase": "complete",
   "pid": "63109",
   "project_path": "submissions/selecting-samples-on-graphs-a-unified-dataset-pruning-framework-for-lossless-training-acceleration",
   "safety_blocker": null,
@@ -221,10 +221,37 @@
       "owner": "controller-scoring-format-20260727",
       "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-28T00:50:22.972025+00:00",
+      "attestation_id": "c015f3b1974058aaa87307db4dd4eb6e88680d470c0dd6f3dc45b0be133eafd8",
+      "fencing_token": 5,
+      "from": "judging",
+      "owner": "controller-verdict-sync-20260728",
+      "snapshot_id": "35d2104cb8462a652d933aa5a776f9b166e8c2724df12da7b35f54cbe19c883d",
+      "to": "complete"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T20:16:32.200496+00:00",
+  "updated_at": "2026-07-28T00:50:22.972025+00:00",
   "upstream_revision": "arxiv:2606.12913v2+pdf-sha256:26ce80e8d347340e0055f2bcf061b6b3e29489fc68a85b8d5711e12cc9da5090",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3).",
+        "evidence": "The logbook's exact rational audit found the literal samplewise formulation double-counts symmetric pair interactions: the MWCP value is 1/1 while the literal samplewise value is 2/1, and the objective-equivalence check is classified as contradicted, indicating the formulation as stated does not correctly reduce to MWCP.",
+        "status": "falsified",
+        "target_claim": "The paper casts dataset pruning as a graph problem with node weights for intrinsic importance and edge weights for extrinsic diversity/interaction, yielding a Maximum Weight Clique formulation (Section 3.3)."
+      },
+      {
+        "claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F).",
+        "evidence": "The logbook provides a concrete witness where the marginal sequence is 1/1 then 3/1, directly violating the diminishing-returns property required for submodularity; the diminishing-returns and greedy-premise checks are both classified as contradicted under exact rational arithmetic.",
+        "status": "falsified",
+        "target_claim": "Under mild conditions, the unified objective becomes submodular and admits a greedy approximation guarantee (Section 3.6; Appendix F)."
+      }
+    ]
+  },
+  "verdict_at": "2026-07-28T00:50:22.972025+00:00",
+  "verdict_source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
   "vs": "https://icml.cc/virtual/2026/poster/63109"
 }

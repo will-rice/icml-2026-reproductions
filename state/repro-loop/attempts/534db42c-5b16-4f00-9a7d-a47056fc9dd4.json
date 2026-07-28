@@ -70,7 +70,7 @@
   "or": "https://openreview.net/forum?id=h7WBYYJF1Q",
   "orid": "h7WBYYJF1Q",
   "paper_id": "h7WBYYJF1Q",
-  "phase": "judging",
+  "phase": "complete",
   "pid": "62383",
   "project_path": "submissions/efficient-parallel-samplers-for-recurrent-depth-models",
   "safety_blocker": null,
@@ -215,11 +215,38 @@
       "owner": "controller-pending-space-audit-20260727",
       "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-28T00:50:22.351912+00:00",
+      "attestation_id": "ffc79fd7548647b1a796649d7760fab4dbb9fb77245a329ecfb0b60329d5a8bb",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "controller-verdict-sync-20260728",
+      "snapshot_id": "44cf759e3c503f46d2e8bcdea78a2824a588a0f70bf5aacd07357ac980ca84d6",
+      "to": "complete"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T20:08:38.500299+00:00",
+  "updated_at": "2026-07-28T00:50:22.351912+00:00",
   "upstream_revision": "arxiv:2510.14961v1+github:seal-rg/recurrent-pretraining@1ea7220ec7eb42d13e89db0663df254d0bcdc28e+git-blob:recpre/raven_modeling_minimal.py@0e83a0766644df9113a8923f43350c6a1b5a182c",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1).",
+        "evidence": "AST analysis confirms parallel wavefront refinement for `inner_recurrence` steps followed by sampling `headway` positions, but the logbook itself flags that 'decoding occurs after the inner-recurrence loop, not after every single inner step,' creating ambiguity with the claim's 'every forward pass' wording, and no execution was performed.",
+        "status": "inconclusive",
+        "target_claim": "The sampler decodes new tokens every forward pass while refining latent states for those tokens in parallel through recurrent depth (Section 3.1)."
+      },
+      {
+        "claim": "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2).",
+        "evidence": "The logbook explicitly states 'No independent proof or hardware timing reproduction was completed' and notes a theorem-numbering discrepancy (Theorem 4.2 vs 4.4), so the expressiveness proof was never reproduced or independently verified.",
+        "status": "inconclusive",
+        "target_claim": "The paper proves the sampler is strictly more expressive than baseline autoregressive generation under the same time budget on modern hardware (Theorem 4.2)."
+      }
+    ]
+  },
+  "verdict_at": "2026-07-28T00:50:22.351912+00:00",
+  "verdict_source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
   "vs": "https://icml.cc/virtual/2026/poster/62383",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/recurrent-controller-validation"
 }

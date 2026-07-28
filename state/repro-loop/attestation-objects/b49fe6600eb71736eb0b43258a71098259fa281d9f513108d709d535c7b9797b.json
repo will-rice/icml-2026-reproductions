@@ -1,0 +1,16 @@
+{
+  "attempt_id": "eb10c79b-fc26-47c4-88c1-6f45cb592833",
+  "attempt_number": 1,
+  "attestation_id": "b49fe6600eb71736eb0b43258a71098259fa281d9f513108d709d535c7b9797b",
+  "deployment_attestation_id": "1135c45ff2afc97d0cdde73e548d38a708a4a747e4c7e5baead7b3cec4f1b8d9",
+  "kind": "submission",
+  "observed_at": "2026-07-28T17:14:14.003386+00:00",
+  "paper_id": "hCAEcqig2C",
+  "payload_sha256": "a4c3c7291c5955fd0ddb1b249fb06c606ff6beffd39ddc6a733a0bc8ea790006",
+  "queue_status": "pending",
+  "snapshot_id": "77b22db02021635fdc51519ebb88ba6d2f2212f8158a472ce2e2cfe5c3099f62",
+  "source_commit": "5bfdbaedb4f5372315da882005ca99cda8e32c67",
+  "space_id": "wrice/repro-learning-randomized-reductions",
+  "space_sha": "85b8b706f351ed1fad5c9110b088d2c427fcc3e6",
+  "verdict_revision": "f63f01adb90d466563390e090db8cc08c9aeb505"
+}

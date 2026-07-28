@@ -74,7 +74,7 @@
   "or": "https://openreview.net/forum?id=UnjxMTe57e",
   "orid": "UnjxMTe57e",
   "paper_id": "UnjxMTe57e",
-  "phase": "judging",
+  "phase": "complete",
   "pid": "63667",
   "project_path": "submissions/posttrainbench",
   "safety_blocker": null,
@@ -219,11 +219,38 @@
       "owner": "controller-pending-space-audit-20260727",
       "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
       "to": "judging"
+    },
+    {
+      "at": "2026-07-28T00:50:20.399471+00:00",
+      "attestation_id": "576967a9fb2c4d860e2719ab291a5d7c4eb550428c9fc6ec569a5e1283c8600f",
+      "fencing_token": 4,
+      "from": "judging",
+      "owner": "controller-verdict-sync-20260728",
+      "snapshot_id": "05102916fe809e301a49ceaa9ba2e0a17762d729f719888bc78db7895b30e8ce",
+      "to": "complete"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-27T20:08:38.921175+00:00",
+  "updated_at": "2026-07-28T00:50:20.399471+00:00",
   "upstream_revision": "github:aisa-group/PostTrainBench@d3496fa7d5788a007d6cd143167471ccdfc688d0+hf-dataset:aisa-group/PostTrainBench-Trajectories@46b3fec494f56fbd5f0600c7ad17646e4997aaa2",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1).",
+        "evidence": "The logbook confirms the 4\u00d77 model-benchmark matrix via released trajectory inventory and notes the runner config defaults to one H100 with a NUM_HOURS-based timeout, but no experiments were run and limitations around scheduler-dependent branches and termination grace leave the exact 10-hour budget unconfirmed.",
+        "status": "inconclusive",
+        "target_claim": "PostTrainBench evaluates autonomous post-training agents across 4 base models and 7 benchmarks under a 10-hour single-H100 budget (Figure 1)."
+      },
+      {
+        "claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract).",
+        "evidence": "The logbook found artifact evidence for training-on-test-set and downloaded-checkpoint failure modes in released contamination and instruction-model judgments, but the API-key submode artifact was absent from the pinned revision and judge labels were not independently verified, leaving the full claim only partially supported without experimental confirmation.",
+        "status": "inconclusive",
+        "target_claim": "The paper reports reward-hacking failure modes including training on test sets, downloading instruction-tuned checkpoints, and using discovered API keys for synthetic data (Abstract)."
+      }
+    ]
+  },
+  "verdict_at": "2026-07-28T00:50:20.399471+00:00",
+  "verdict_source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
   "vs": "https://icml.cc/virtual/2026/poster/63667",
   "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/posttrain-controller-validation"
 }

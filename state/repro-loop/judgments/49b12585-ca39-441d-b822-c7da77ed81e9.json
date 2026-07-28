@@ -2,19 +2,67 @@
   "attempt_id": "49b12585-ca39-441d-b822-c7da77ed81e9",
   "attempt_number": 2,
   "created_at": "2026-07-27T20:08:37.672441+00:00",
-  "normalized_verdict": null,
+  "normalized_verdict": {
+    "claims": [
+      {
+        "claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+        "evidence": "The logbook confirms all 12 released Putnam 2025 proofs kernel-check without sorryAx, but explicitly states this does not establish that the named agent generated them; no rerun of Claude Opus 4.5 or the agent was performed.",
+        "status": "inconclusive",
+        "target_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+      },
+      {
+        "claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+        "evidence": "The logbook confirms that a released BrascampLieb.upperBound declaration kernel-checks without sorryAx, but notes this is not the full analytic function-space theorem and does not verify the reported interaction with mathematicians.",
+        "status": "inconclusive",
+        "target_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+      }
+    ]
+  },
   "paper_id": "0bTEd4LpQr",
   "poll_deadline": "2026-07-29T20:00:00+00:00",
   "poll_limit": 288,
   "polls": [],
-  "raw_verdict": null,
-  "source_revision": null,
+  "raw_verdict": {
+    "claims": [
+      {
+        "claim": "Numina-Lean-Agent combines Claude Code with Numina-Lean-MCP and specialized tools for Lean interaction, theorem retrieval, informal proving, and auxiliary reasoning (Figure 1).",
+        "evidence": "The logbook is a released-proof audit and contains no evidence about the system architecture, the integration of Claude Code with Numina-Lean-MCP, or the specialized tools described in Figure 1.",
+        "verdict": "inconclusive"
+      },
+      {
+        "claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+        "evidence": "The logbook confirms all 12 released Putnam 2025 proofs kernel-check without sorryAx, but explicitly states this does not establish that the named agent generated them; no rerun of Claude Opus 4.5 or the agent was performed.",
+        "verdict": "inconclusive"
+      },
+      {
+        "claim": "Ablations show the agent solves 4 Putnam 2025 problems without the informal prover, 11 with the informal prover, and all 12 with the subagent setup (Table 2).",
+        "evidence": "The logbook contains no ablation experiments or any mention of rerunning the without-informal-prover, with-informal-prover, or subagent configurations described in Table 2.",
+        "verdict": "inconclusive"
+      },
+      {
+        "claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+        "evidence": "The logbook confirms that a released BrascampLieb.upperBound declaration kernel-checks without sorryAx, but notes this is not the full analytic function-space theorem and does not verify the reported interaction with mathematicians.",
+        "verdict": "inconclusive"
+      }
+    ],
+    "judged_at": "2026-07-27T21:41:40+00:00",
+    "model": "zai-org/GLM-5.2",
+    "orid": "0bTEd4LpQr",
+    "overall": "This logbook establishes that released formal artifacts (12 Putnam proofs and one Brascamp-Lieb declaration) kernel-check without sorryAx, providing partial support for the existence and validity of these artifacts. It does not rerun the agent, verify the agent's role in generating the proofs, address ablations, or confirm the system architecture or mathematician interaction.",
+    "paper_id": "0bTEd4LpQr",
+    "paper_title": "Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics",
+    "quality": "medium",
+    "sha": "6b3a2d57ac607b030f2a4050d403f878cfff88cc",
+    "source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
+    "space_id": "wrice/repro-numina-lean-agent"
+  },
+  "source_revision": "346012cf3240ef7ad752438d637faef2a487c538",
   "space_id": "wrice/repro-numina-lean-agent",
   "submitted_sha": "6b3a2d57ac607b030f2a4050d403f878cfff88cc",
   "target_claims": [
     "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
     "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
   ],
-  "updated_at": "2026-07-27T20:08:37.672441+00:00",
-  "verdict_at": null
+  "updated_at": "2026-07-28T00:50:23.588035+00:00",
+  "verdict_at": "2026-07-28T00:50:23.588035+00:00"
 }

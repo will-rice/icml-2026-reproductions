@@ -1,0 +1,31 @@
+{
+  "attempt_id": "49b12585-ca39-441d-b822-c7da77ed81e9",
+  "attempt_number": 2,
+  "attestation_id": "c6ab5eb99d522122f9ff26461b87fcb7d4e16654cd215c7b2b708e8a4ef960d3",
+  "authority_attestation_id": "09ef0929476e24e338746bd2feca85ee15b0582ac313be146b4196aab9d19b94",
+  "claims": [
+    {
+      "claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1).",
+      "evidence": "The logbook confirms all 12 released Putnam 2025 proofs kernel-check without sorryAx, but explicitly states this does not establish that the named agent generated them; no rerun of Claude Opus 4.5 or the agent was performed.",
+      "status": "inconclusive",
+      "target_claim": "Using Claude Opus 4.5, Numina-Lean-Agent solves all 12 Putnam 2025 problems, matching AXIOM's 12/12 in the comparison table (Table 1)."
+    },
+    {
+      "claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract).",
+      "evidence": "The logbook confirms that a released BrascampLieb.upperBound declaration kernel-checks without sorryAx, but notes this is not the full analytic function-space theorem and does not verify the reported interaction with mathematicians.",
+      "status": "inconclusive",
+      "target_claim": "The paper reports successful formalization of the Brascamp-Lieb theorem through interaction with mathematicians (Abstract)."
+    }
+  ],
+  "judged_at": "2026-07-27T21:41:40+00:00",
+  "kind": "verdict",
+  "observed_at": "2026-07-28T00:50:23.588035+00:00",
+  "paper_id": "0bTEd4LpQr",
+  "payload_sha256": "efbc69dfada02779a943fad9636089b1b102c0d61895b1dcdb92b3ed96b540e8",
+  "snapshot_id": "00d2add48d9a84bee753171b9fabc1e654aa6e97b04d849f0a2228ce76f35dc7",
+  "source_commit": "65206532c5b50a178cce5f484dac664d21acb822",
+  "space_id": "wrice/repro-numina-lean-agent",
+  "space_sha": "6b3a2d57ac607b030f2a4050d403f878cfff88cc",
+  "submission_attestation_id": "37a5217c15cdba53109e79e129e37b04b2faea7cbb05627d3b3fa6d9caeaca55",
+  "verdict_revision": "346012cf3240ef7ad752438d637faef2a487c538"
+}

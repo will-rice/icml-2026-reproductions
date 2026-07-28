@@ -1,0 +1,43 @@
+{
+  "attempt_id": "2fc3b006-3307-4fc3-8df6-c000379298c4",
+  "attempt_number": 5,
+  "attestation_id": "a90f4e0ce96a601fdf9f5cb286f7e5ff25a85f71b81b2f69db773b69e26b5f6f",
+  "authority_attestation_id": "816749104cf56c786bdd2f42a7ec04f5a554ea8669606577e700aec2a578d557",
+  "claims": [
+    {
+      "claim": "AGoQ combines layer-aware activation quantization and precision-preserved gradient quantization within Megatron-LM-style distributed training (Section 3).",
+      "evidence": "The logbook reports source-code inspection finding activation-quantization call sites and communication paths, but no distributed training run was executed and gradient quantization is not explicitly confirmed in the inspected code.",
+      "status": "inconclusive",
+      "target_claim": "AGoQ combines layer-aware activation quantization and precision-preserved gradient quantization within Megatron-LM-style distributed training (Section 3)."
+    },
+    {
+      "claim": "Layer-aware activation quantization reduces cached activation memory for a transformer layer from 28U in BF16 and 16.5U in COAT to 7.75U (Table 1).",
+      "evidence": "Exact arithmetic reproduction confirms Table 1 component sums yield BF16 28U, COAT 16.5U (33/2U), and AGoQ 7.75U (31/4U), directly matching the claimed memory accounting figures.",
+      "status": "verified",
+      "target_claim": "Layer-aware activation quantization reduces cached activation memory for a transformer layer from 28U in BF16 and 16.5U in COAT to 7.75U (Table 1)."
+    },
+    {
+      "claim": "Dynamic Bit-width Compensation for Pipeline Parallelism assigns higher activation bit-widths to underutilized pipeline stages while maintaining near-4-bit activation storage (Section 4.2).",
+      "evidence": "Arithmetic on the four-stage pipeline equation yields non-integer widths whose integer rounding (4,5,6,8) produces storage products (44,45,42,40) with stage two overshooting the 44-unit target by one, and no runtime experiment was conducted to confirm near-4-bit storage in practice.",
+      "status": "inconclusive",
+      "target_claim": "Dynamic Bit-width Compensation for Pipeline Parallelism assigns higher activation bit-widths to underutilized pipeline stages while maintaining near-4-bit activation storage (Section 4.2)."
+    },
+    {
+      "claim": "Kernel fusion combines quantization/dequantization with adjacent GEMM operations to reduce activation-quantization overhead (Figure 4).",
+      "evidence": "Source code contains quantize/dequantize call sites adjacent to GEMMs, but the logbook explicitly states the fused GPU-kernel body was not found and no overhead measurement was reproduced.",
+      "status": "inconclusive",
+      "target_claim": "Kernel fusion combines quantization/dequantization with adjacent GEMM operations to reduce activation-quantization overhead (Figure 4)."
+    }
+  ],
+  "judged_at": "2026-07-27T22:02:25+00:00",
+  "kind": "verdict",
+  "observed_at": "2026-07-28T00:50:21.735690+00:00",
+  "paper_id": "ymHDVBwmta",
+  "payload_sha256": "5fcb26d7c23dc84131a4f93d7d2dbae21b214c4c53c641374e76d5075be87a03",
+  "snapshot_id": "00d2add48d9a84bee753171b9fabc1e654aa6e97b04d849f0a2228ce76f35dc7",
+  "source_commit": "3a6d3ae5e403c7e5d83466553f2830d3f02d194a",
+  "space_id": "wrice/repro-agoq",
+  "space_sha": "ad63bdd25120add59ada427994563d1299ee63c0",
+  "submission_attestation_id": "aff577aefd21b5adc9f4e3933ec6cdeb892f155a30717196d9d31c47b6957018",
+  "verdict_revision": "346012cf3240ef7ad752438d637faef2a487c538"
+}

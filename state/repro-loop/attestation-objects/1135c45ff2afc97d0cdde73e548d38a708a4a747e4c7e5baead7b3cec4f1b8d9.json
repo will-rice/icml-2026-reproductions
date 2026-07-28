@@ -1,0 +1,21 @@
+{
+  "attempt_id": "eb10c79b-fc26-47c4-88c1-6f45cb592833",
+  "attempt_number": 1,
+  "attestation_id": "1135c45ff2afc97d0cdde73e548d38a708a4a747e4c7e5baead7b3cec4f1b8d9",
+  "kind": "deployment",
+  "observed_at": "2026-07-28T17:13:46.393850+00:00",
+  "owner": "wrice",
+  "payload_sha256": "eb469657087ff0025814c9977d787b73d26d64270955ec4d3a8e5f6651c90a19",
+  "runtime_stage": "RUNNING",
+  "source_commit": "5bfdbaedb4f5372315da882005ca99cda8e32c67",
+  "source_tree_sha256": "dbc09ebfa93ed0ba5d6af93342afda1a864793eeebacfbeb87606cff9d80c662",
+  "space_id": "wrice/repro-learning-randomized-reductions",
+  "space_sha": "85b8b706f351ed1fad5c9110b088d2c427fcc3e6",
+  "tags": [
+    "gradio",
+    "icml2026-repro",
+    "paper-hCAEcqig2C",
+    "region:us"
+  ],
+  "validation_attestation_id": "b520c2dac077ed08c480f0d8cc073871b202dc181998f732803a85306358481b"
+}
