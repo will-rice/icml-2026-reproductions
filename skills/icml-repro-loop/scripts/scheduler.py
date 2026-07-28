@@ -148,6 +148,7 @@ def claim_next(
 ) -> PaperOwnerAssignment:
     """Atomically give one persistent owner one new or reclaimable attempt."""
     observed_at = _datetime(now)
+    _identity(owner, "owner")
     snapshot = read_fresh_snapshot(paths, snapshot_id, observed_at)
     _require_assessed_snapshot(snapshot)
     reclaim_attempt = None
@@ -156,6 +157,9 @@ def claim_next(
         if reclaim_attempt["phase"] != "blocked":
             raise ValueError("phase")
         _current_assessed_candidate(snapshot, reclaim_attempt["paper_id"])
+    import paper_owner
+
+    paper_owner.recover_release_transactions(paths)
     leases.expire_stale_leases(paths, observed_at)
     attempts.recover_transactions(paths)
     with leases.hold_owner_claim(paths, owner):

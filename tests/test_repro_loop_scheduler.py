@@ -63,6 +63,11 @@ def scheduler():
 
 
 @pytest.fixture
+def paper_owner(scheduler):
+    return load_module("paper_owner")
+
+
+@pytest.fixture
 def paths(tmp_path, store):
     value = store.StatePaths(tmp_path / "repro-loop.json")
     store.atomic_json_write(value.index, store.new_index(), store.validate_index)
@@ -707,6 +712,138 @@ def test_claim_next_releases_owner_mutex_after_exception(
     assignment = scheduler.claim_next(paths, snapshot_id, "owner-2", now)
 
     assert assignment.paper_id == "paper-b"
+
+
+def test_valid_claim_next_recovers_prepared_release_before_new_selection(
+    paths,
+    store,
+    leases,
+    now,
+    scheduler,
+    paper_owner,
+    monkeypatch,
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    first = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    scheduler.attempts.transition_attempt(
+        paths,
+        first.attempt_id,
+        "blocked",
+        first.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            first.attempt_id,
+            first.writer_lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "claim-recovery",
+        )
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+
+    assignment = scheduler.claim_next(
+        paths, snapshot_id, "owner-2", now
+    )
+
+    assert assignment.paper_id == "paper-b"
+    assert store.read_json(
+        paths.resource_lease(
+            f"attempt:{first.attempt_id}"
+        )
+    )["released_at"] == now.isoformat()
+    assert store.read_json(
+        paths.paper_owner_release(
+            first.attempt_id,
+            first.writer_lease.fencing_token,
+        )
+    )["status"] == "complete"
+
+
+def test_invalid_claim_next_preflight_does_not_recover_prepared_release(
+    paths,
+    store,
+    leases,
+    now,
+    scheduler,
+    paper_owner,
+    monkeypatch,
+):
+    assessed_snapshot_id = write_assessed_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+    first = scheduler.claim_next(
+        paths, assessed_snapshot_id, "owner-1", now
+    )
+    scheduler.attempts.transition_attempt(
+        paths,
+        first.attempt_id,
+        "blocked",
+        first.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            first.attempt_id,
+            first.writer_lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "invalid-claim-recovery",
+        )
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+    raw_snapshot_id = write_snapshot(
+        store, paths, now, [paper("paper-b", 9)]
+    )
+    lease_before = paths.resource_lease(
+        f"attempt:{first.attempt_id}"
+    ).read_bytes()
+    journal_path = paths.paper_owner_release(
+        first.attempt_id, first.writer_lease.fencing_token
+    )
+    journal_before = journal_path.read_bytes()
+
+    with pytest.raises(ValueError, match="assessments"):
+        scheduler.claim_next(
+            paths, raw_snapshot_id, "owner-2", now
+        )
+
+    assert paths.resource_lease(
+        f"attempt:{first.attempt_id}"
+    ).read_bytes() == lease_before
+    assert journal_path.read_bytes() == journal_before
 
 
 def test_claim_next_and_direct_attempt_claim_share_owner_capacity_lock(

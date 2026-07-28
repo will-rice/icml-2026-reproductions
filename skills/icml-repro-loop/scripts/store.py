@@ -133,6 +133,22 @@ class StatePaths:
             / f"{sequence:04d}-{event}.json"
         )
 
+    def paper_owner_release(
+        self, attempt_id: str, fencing_token: int
+    ) -> Path:
+        """Resolve one durable paper-owner release transaction."""
+        validate_id(attempt_id)
+        if (
+            type(fencing_token) is not int
+            or fencing_token < 1
+        ):
+            raise ValueError("fencing_token")
+        return (
+            self.root
+            / "paper-owner-releases"
+            / f"{attempt_id}--{fencing_token}.json"
+        )
+
 
 def new_index() -> dict:
     """Return an empty schema-v6 coordinator index."""

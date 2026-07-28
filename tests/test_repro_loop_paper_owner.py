@@ -5,7 +5,6 @@ import importlib.util
 from pathlib import Path
 import sys
 import threading
-from contextlib import contextmanager
 
 import pytest
 
@@ -162,6 +161,7 @@ def test_release_blocked_paper_emits_reclaimable_event(
     assert result["blocker"] == "external outage"
     assert result["next_action"] == "retry after recovery"
     assert telemetry.read_session(paths, "release-session") == [result]
+    assert attempt_id in paper_owner.store.read_json(paths.index)["attempts"]
 
 
 def test_release_scored_paper_requires_exact_complete_phase(
@@ -183,6 +183,7 @@ def test_release_scored_paper_requires_exact_complete_phase(
     assert result["verdict"] == {
         "claims": [{"claim_id": "claim-1", "verdict": "verified"}]
     }
+    assert attempt_id in paper_owner.store.read_json(paths.index)["history"]
 
 
 def test_release_rejects_wrong_phase_or_outcome(
@@ -330,40 +331,21 @@ def test_stale_owner_cannot_emit_or_release(
 
     assert telemetry.read_session(paths, "stale-release") == []
     assert telemetry.read_session(paths, "stale-failure") == []
+    assert not (paths.root / "paper-owner-releases").exists()
     assert leases.assert_fence(paths, replacement, now + timedelta(hours=1)) == replacement
 
 
 def test_concurrent_release_emits_event_only_for_winning_fence(
-    paths, blocked_attempt, now, paper_owner, telemetry, monkeypatch
+    paths, blocked_attempt, now, paper_owner, telemetry
 ):
     attempt_id, lease = blocked_attempt
-    first_append_entered = threading.Event()
-    allow_first_append = threading.Event()
-    second_hold_attempted = threading.Event()
-    second_append_entered = threading.Event()
-    original_append_event = paper_owner.telemetry.append_event
-    original_hold_fence = paper_owner.leases.hold_fence
+    barrier = threading.Barrier(2)
     results = []
     errors = []
 
-    @contextmanager
-    def tracked_hold_fence(*args, **kwargs):
-        if threading.current_thread().name == "race-second":
-            second_hold_attempted.set()
-        with original_hold_fence(*args, **kwargs) as current:
-            yield current
-
-    def append_event(*args, **kwargs):
-        session_id, event = args[1], args[3]
-        if event == "paper-owner-released" and session_id == "race-release-0":
-            first_append_entered.set()
-            assert allow_first_append.wait(timeout=5)
-        if event == "paper-owner-released" and session_id == "race-release-1":
-            second_append_entered.set()
-        return original_append_event(*args, **kwargs)
-
     def release(session_id):
         try:
+            barrier.wait()
             results.append(
                 paper_owner.release_paper(
                     paths,
@@ -377,8 +359,6 @@ def test_concurrent_release_emits_event_only_for_winning_fence(
         except BaseException as error:  # pragma: no cover - asserted below
             errors.append(error)
 
-    monkeypatch.setattr(paper_owner.leases, "hold_fence", tracked_hold_fence)
-    monkeypatch.setattr(paper_owner.telemetry, "append_event", append_event)
     first = threading.Thread(
         target=release, args=("race-release-0",), name="race-first"
     )
@@ -386,11 +366,7 @@ def test_concurrent_release_emits_event_only_for_winning_fence(
         target=release, args=("race-release-1",), name="race-second"
     )
     first.start()
-    assert first_append_entered.wait(timeout=5)
     second.start()
-    assert second_hold_attempted.wait(timeout=5)
-    assert not second_append_entered.is_set()
-    allow_first_append.set()
     first.join(timeout=5)
     second.join(timeout=5)
 
@@ -398,8 +374,268 @@ def test_concurrent_release_emits_event_only_for_winning_fence(
         *telemetry.read_session(paths, "race-release-0"),
         *telemetry.read_session(paths, "race-release-1"),
     ]
-    assert len(results) == 1
-    assert len(errors) == 1
-    assert isinstance(errors[0], paper_owner.leases.StaleFence)
+    assert len(results) == 2
+    assert errors == []
+    assert results[0] == results[1]
     assert len(events) == 1
     assert events[0]["event"] == "paper-owner-released"
+
+
+def test_release_recovery_after_event_before_lease_is_direct_and_idempotent(
+    paths,
+    blocked_attempt,
+    now,
+    paper_owner,
+    telemetry,
+    leases,
+    monkeypatch,
+):
+    attempt_id, lease = blocked_attempt
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            attempt_id,
+            lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "recover-event-boundary",
+        )
+
+    journal_path = paths.paper_owner_release(
+        attempt_id, lease.fencing_token
+    )
+    assert paper_owner.store.read_json(journal_path)["status"] == "prepared"
+    assert leases.assert_fence(paths, lease, now) == lease
+    events = telemetry.read_session(paths, "recover-event-boundary")
+    assert len(events) == 1
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+    recovered = paper_owner.recover_release_transactions(paths)
+
+    assert recovered == [events[0]]
+    released = paper_owner.store.read_json(
+        paths.resource_lease(f"attempt:{attempt_id}")
+    )
+    assert released["released_at"] == now.isoformat()
+    assert paper_owner.store.read_json(journal_path)["status"] == "complete"
+    assert paper_owner.recover_release_transactions(paths) == []
+    assert (
+        paper_owner.release_paper(paths, attempt_id, lease, "blocked", now)
+        == events[0]
+    )
+    assert telemetry.read_session(paths, "recover-event-boundary") == events
+
+
+def test_release_retry_recovers_after_lease_before_transaction_completion(
+    paths,
+    blocked_attempt,
+    now,
+    paper_owner,
+    telemetry,
+    monkeypatch,
+):
+    attempt_id, lease = blocked_attempt
+    journal_path = paths.paper_owner_release(
+        attempt_id, lease.fencing_token
+    )
+    original_write = paper_owner.store._atomic_json_write
+
+    def fail_complete(path, value):
+        if path == journal_path and value.get("status") == "complete":
+            raise OSError("crash after lease release")
+        return original_write(path, value)
+
+    monkeypatch.setattr(
+        paper_owner.store, "_atomic_json_write", fail_complete
+    )
+    with pytest.raises(OSError, match="crash after lease release"):
+        paper_owner.release_paper(
+            paths,
+            attempt_id,
+            lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "recover-lease-boundary",
+        )
+
+    assert paper_owner.store.read_json(
+        paths.resource_lease(f"attempt:{attempt_id}")
+    )["released_at"] == now.isoformat()
+    assert paper_owner.store.read_json(journal_path)["status"] == "prepared"
+    event = telemetry.read_session(paths, "recover-lease-boundary")[0]
+
+    monkeypatch.setattr(
+        paper_owner.store, "_atomic_json_write", original_write
+    )
+    assert (
+        paper_owner.release_paper(paths, attempt_id, lease, "blocked", now)
+        == event
+    )
+    assert paper_owner.store.read_json(journal_path)["status"] == "complete"
+    assert telemetry.read_session(paths, "recover-lease-boundary") == [event]
+
+
+def test_release_rejects_conflicting_retry_without_duplicate_event(
+    paths, blocked_attempt, now, paper_owner, telemetry
+):
+    attempt_id, lease = blocked_attempt
+    event = paper_owner.release_paper(
+        paths,
+        attempt_id,
+        lease,
+        "blocked",
+        now,
+        session_id_factory=lambda: "release-conflict",
+    )
+    journal_path = paths.paper_owner_release(
+        attempt_id, lease.fencing_token
+    )
+    journal_before = journal_path.read_bytes()
+    lease_path = paths.resource_lease(f"attempt:{attempt_id}")
+    lease_before = lease_path.read_bytes()
+
+    with pytest.raises(ValueError, match="release transaction"):
+        paper_owner.release_paper(
+            paths, attempt_id, lease, "scored", now
+        )
+    conflicting_identity = type(lease)(
+        resource=lease.resource,
+        owner="different-owner",
+        attempt_id=lease.attempt_id,
+        acquired_at=lease.acquired_at,
+        expires_at=lease.expires_at,
+        fencing_token=lease.fencing_token,
+    )
+    with pytest.raises(ValueError, match="release transaction"):
+        paper_owner.release_paper(
+            paths,
+            attempt_id,
+            conflicting_identity,
+            "blocked",
+            now,
+        )
+
+    assert journal_path.read_bytes() == journal_before
+    assert lease_path.read_bytes() == lease_before
+    assert telemetry.read_session(paths, "release-conflict") == [event]
+
+
+def test_completed_release_journal_remains_valid_after_fenced_reclamation(
+    paths, blocked_attempt, now, paper_owner, leases
+):
+    attempt_id, lease = blocked_attempt
+    paper_owner.release_paper(
+        paths,
+        attempt_id,
+        lease,
+        "blocked",
+        now,
+        session_id_factory=lambda: "release-before-reclaim",
+    )
+    successor = leases.claim_attempt(
+        paths,
+        attempt_id,
+        "successor",
+        lease.fencing_token,
+        now,
+    )
+
+    assert paper_owner.recover_release_transactions(paths) == []
+    assert leases.assert_fence(paths, successor, now) == successor
+
+
+def test_valid_release_recovers_other_prepared_release_journals(
+    paths,
+    blocked_attempt,
+    store,
+    leases,
+    now,
+    paper_owner,
+    telemetry,
+    monkeypatch,
+):
+    first_id, first_lease = blocked_attempt
+    persist_attempt(
+        store,
+        paths,
+        "blocked-b",
+        "blocked",
+        now,
+        blocker="second outage",
+        next_action="retry second service",
+    )
+    second_lease = acquire_attempt_lease(
+        leases, paths, "blocked-b", now
+    )
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        if args[1] == "first-release":
+            original_append_event(*args, **kwargs)
+            raise OSError("first release crash")
+        return original_append_event(*args, **kwargs)
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="first release crash"):
+        paper_owner.release_paper(
+            paths,
+            first_id,
+            first_lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "first-release",
+        )
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+
+    second = paper_owner.release_paper(
+        paths,
+        "blocked-b",
+        second_lease,
+        "blocked",
+        now,
+        session_id_factory=lambda: "second-release",
+    )
+
+    assert second["attempt_id"] == "blocked-b"
+    for attempt_id, lease in (
+        (first_id, first_lease),
+        ("blocked-b", second_lease),
+    ):
+        persisted = store.read_json(
+            paths.resource_lease(f"attempt:{attempt_id}")
+        )
+        assert persisted["fencing_token"] == lease.fencing_token
+        assert persisted["released_at"] == now.isoformat()
+        assert store.read_json(
+            paths.paper_owner_release(
+                attempt_id, lease.fencing_token
+            )
+        )["status"] == "complete"
+    assert len(telemetry.read_session(paths, "first-release")) == 1
+    assert len(telemetry.read_session(paths, "second-release")) == 1
+
+
+@pytest.mark.parametrize(
+    ("attempt_id", "fencing_token"),
+    (("../escape", 1), ("safe", True), ("safe", 0)),
+)
+def test_release_journal_paths_reject_unsafe_identity(
+    paths, attempt_id, fencing_token
+):
+    with pytest.raises(ValueError):
+        paths.paper_owner_release(attempt_id, fencing_token)

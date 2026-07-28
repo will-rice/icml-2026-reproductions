@@ -199,7 +199,8 @@ def main() -> None:
     _add_fence_arguments(resume_parser)
     resume_parser.add_argument("--now")
     worker_parser = commands.add_parser(
-        "run-worker", help="run one fenced paper worker with telemetry"
+        "run-worker",
+        help="run one fenced subordinate implementation subprocess with telemetry",
     )
     worker_parser.add_argument("path", type=Path)
     _add_fence_arguments(worker_parser)
