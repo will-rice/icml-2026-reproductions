@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ConditionalDPOEvidence",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "paper_id",
+    "attempt_id",
+    "snapshot_id",
+    "upstream_revision",
+    "source",
+    "claims",
+    "limitations",
+    "commands"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "paper_id": { "type": "string", "const": "7UEBX1KU1y" },
+    "attempt_id": { "type": "string", "const": "933665ed-b7ed-4d73-9b07-35704660a184" },
+    "snapshot_id": { "type": "string", "const": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199" },
+    "upstream_revision": { "type": "string", "const": "arxiv:2605.20834v1" },
+    "source": { "type": "object" },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "challenge_claim",
+          "challenge_claim_sha256",
+          "target_claim",
+          "targeted",
+          "equations",
+          "outcome",
+          "summary",
+          "limitations",
+          "details"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "challenge_claim": { "type": "string" },
+          "challenge_claim_sha256": { "type": "string" },
+          "target_claim": { "type": ["string", "null"] },
+          "targeted": { "type": "boolean" },
+          "equations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "outcome": {
+            "type": "string",
+            "enum": ["consistent", "contradiction", "mixed", "not_reproduced"]
+          },
+          "summary": { "type": "string" },
+          "limitations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "details": { "type": "object" }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
