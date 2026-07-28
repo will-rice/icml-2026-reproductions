@@ -16,21 +16,6 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
-## Controller Space-Gradio Gate — 2026-07-28, round 15
-
-The Python-3.12 Space uploaded at
-`1c4fe0c154b0149ff0a65f737902774c6b90c35a`, then Gradio 4.44 failed startup
-because it imports the removed `huggingface_hub.HfFolder`. The current stable
-Gradio release was independently queried from PyPI as 6.20.0, and the local
-project's `gradio>=4.0.0` lock/tests already exercise a current compatible
-release.
-
-1. Change only README `sdk_version` from 4.44.0 to 6.20.0.
-2. Strengthen the frontmatter regression to require exactly 6.20.0.
-3. Change no evidence, claims, Python pin, runtime code, or dependency
-   specification. Run project tests, root pytest, skill validation,
-   pre-commit, and `git diff --check`; return one clean commit.
-
 ## Controller Validation Correction Gate — 2026-07-28, round 10
 
 Controller scientific review accepted proposal

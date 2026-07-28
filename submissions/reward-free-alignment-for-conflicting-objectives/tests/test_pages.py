@@ -129,4 +129,3 @@ def test_readme_frontmatter_sdk_version(project_root):
 
     assert sdk_ver is not None, "README frontmatter missing 'sdk_version'"
     assert sdk_ver == "6.20.0", f"sdk_version must be '6.20.0', got '{sdk_ver}'"
-
