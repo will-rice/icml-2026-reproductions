@@ -3,6 +3,20 @@
 A checked item needs an artifact, command result, controller attestation, or
 exact live observation. Intention and worker self-report are not evidence.
 
+## Paper-Owner Completion Gate
+
+- [ ] The directly dispatched top-level agent invoked `icml-repro-loop` and
+  owns exactly one attempt.
+- [ ] An implementation-worker exit triggered immediate diff review and fresh
+  controller validation without a user status prompt.
+- [ ] A rejected validation produced exact correction findings and a guarded
+  relaunch on the same attempt.
+- [ ] The paper owner continued through `publish-deployment`,
+  `attest-submission`, `watch-attempt`, and `sync-verdict`.
+- [ ] Pending queue state was watched rather than treated as evidence failure.
+- [ ] Judging/scored/blocked emitted a capacity-free event to the competition
+  coordinator.
+
 ## Worker Boundary
 
 - [ ] The controller contract names one attempt, paper, absolute worktree,
@@ -158,6 +172,18 @@ uv run python skills/icml-repro-loop/scripts/state.py sync-verdict state/repro-l
 uv run python skills/icml-repro-loop/scripts/state.py audit-authority state/repro-loop.json --snapshot-id SNAPSHOT
 uv run python skills/icml-repro-loop/scripts/state.py score-report state/repro-loop.json --snapshot-id SNAPSHOT --username wrice --rank-observation-json state/wrice-rank-observation.json
 ```
+
+```text
+run-worker
+  -> inspect worker-exited telemetry
+  -> attest-validation OR correction run-worker
+  -> publish-deployment
+  -> refresh-live + attest-submission
+  -> watch-attempt + record-poll
+  -> improvement loop OR sync-verdict
+```
+
+No arrow in this handoff is driven by a user status question.
 
 Read-only/reporting commands are `list-attempts`, `show-attempt`,
 `show-snapshot`, `candidate-census`, `score-report`, and `audit-authority`
