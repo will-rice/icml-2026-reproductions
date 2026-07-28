@@ -254,3 +254,30 @@ def test_generic_repo_url_or_clone_only_command_rejected(tmp_path):
     }), encoding="utf-8")
     with pytest.raises(IntegrityError, match="[Cc]ommit|[Uu]rl|[Ss]ource"):
         load_verified_artifacts(tmp_path)
+
+
+def test_blob_url_with_correct_commit_rejected(tmp_path):
+    """Round-6 §2: /blob/ URLs must be rejected even when they contain the
+    pinned commit hash. Only raw.githubusercontent.com URLs are valid."""
+    test_file = tmp_path / "test.txt"
+    test_file.write_text("hello")
+    file_hash = hashlib.sha256(b"hello").hexdigest()
+    blob_id = _git_blob_id(b"hello")
+
+    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(json.dumps({
+        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+        "paper_id": "vSzRJyg6k0",
+        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+        "artifacts": [
+            {"artifact_id": "a1", "relative_path": "test.txt",
+             "sha256": file_hash, "git_blob": blob_id, "size_bytes": 5,
+             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test.txt",
+             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa && cat test.txt",
+             "license": "Apache-2.0"},
+        ],
+    }), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Bb]lob|[Rr]aw"):
+        load_verified_artifacts(tmp_path)

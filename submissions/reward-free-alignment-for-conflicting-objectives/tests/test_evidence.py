@@ -119,3 +119,70 @@ def test_theorem_32_has_interior_strict_witness(project_root):
     notes = claim9["reproduction_notes"]
     assert "interior" in notes.lower()
     assert "3.68e-9" not in notes  # Must not be the old boundary artifact
+
+
+# --- Round 6 correction gate behavioral regressions ---
+
+
+def test_theorem_31_evidence_contains_closed_schema_steps_array(project_root):
+    """Round-6 §1: evidence must contain a 'steps' array of exactly 10 records
+    for t=0..9 inside audits.theorem_31. Each record must contain step_index,
+    current_iterate, weighted_anchor, cagrad_direction, next_iterate,
+    loss_before, loss_after, m_value, grad_norm, descent_holds, m_bound_holds.
+    Terminal t=T diagnostics must not appear in the per-update records.
+    theta_next = theta - eta * cagrad_direction must hold for each step."""
+    evidence = build_evidence(project_root)
+    t31 = evidence["audits"]["theorem_31"]
+    assert "steps" in t31, "evidence must contain 'steps' array"
+    steps = t31["steps"]
+    assert len(steps) == 10
+    eta = t31["step_size"]
+    required_keys = {
+        "step_index", "current_iterate", "weighted_anchor", "cagrad_direction",
+        "next_iterate", "loss_before", "loss_after", "m_value", "grad_norm",
+        "descent_holds", "m_bound_holds",
+    }
+    for i, step in enumerate(steps):
+        assert set(step.keys()) == required_keys, (
+            f"Step {i} keys mismatch: {set(step.keys())} != {required_keys}"
+        )
+        assert step["step_index"] == i
+        # Verify theta_next = theta - eta * cagrad_direction
+        expected_next = step["current_iterate"] - eta * step["cagrad_direction"]
+        assert abs(step["next_iterate"] - expected_next) < 1e-9, (
+            f"Step {i}: theta_next={step['next_iterate']} != "
+            f"theta - eta*d = {expected_next}"
+        )
+        assert isinstance(step["descent_holds"], bool)
+        assert isinstance(step["m_bound_holds"], bool)
+
+
+def test_artifact_source_urls_use_raw_not_blob(project_root):
+    """Round-6 §2: artifact source_url must use immutable raw URLs
+    (raw.githubusercontent.com), not GitHub HTML /blob/ pages."""
+    evidence = build_evidence(project_root)
+    for art in evidence["artifacts"]:
+        url = art["source_url"]
+        assert "/blob/" not in url, (
+            f"Artifact {art['artifact_id']} uses /blob/ URL: {url}"
+        )
+        assert "raw.githubusercontent.com" in url, (
+            f"Artifact {art['artifact_id']} does not use raw URL: {url}"
+        )
+
+
+def test_claim8_requires_all_step_records_pass(project_root):
+    """Round-6 §1: Claim 8 may be 'supported' only if all ten step records
+    pass both descent_holds and m_bound_holds booleans AND both finite-horizon
+    squared bounds pass."""
+    evidence = build_evidence(project_root)
+    t31 = evidence["audits"]["theorem_31"]
+    steps = t31["steps"]
+    all_descent = all(s["descent_holds"] for s in steps)
+    all_m_bound = all(s["m_bound_holds"] for s in steps)
+    fh_holds = t31.get("finite_horizon_bound_holds", False)
+    claim8 = [c for c in evidence["claims"] if c["ordinal"] == 8][0]
+    if claim8["local_outcome"] == "supported":
+        assert all_descent, "Claim 8 supported but not all descent_holds"
+        assert all_m_bound, "Claim 8 supported but not all m_bound_holds"
+        assert fh_holds, "Claim 8 supported but finite_horizon_bound_holds False"
