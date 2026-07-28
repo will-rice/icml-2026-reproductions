@@ -16,6 +16,50 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Correction Gate — 2026-07-28, round 5
+
+Use `icml-repro-loop`, `superpowers:test-driven-development`,
+`superpowers:systematic-debugging`, and
+`superpowers:verification-before-completion`. Controller review rejected
+proposal `fe6b6b63c80aca9ac802624bdce6c165ca16570a`. Preserve that commit as
+the rejected proposal. For every item below, add a behavioral regression,
+run it against `fe6b6b6`, and record the expected RED failure before changing
+production code.
+
+1. `load_live_claims` still accepts a caller-edited claim when its SHA is
+   recomputed to match the edited text. Bind the loader itself to the exact ten
+   admitted ordinals, texts, hashes, and target flags. A temporary copy with
+   one changed text and matching new SHA must raise `IntegrityError`.
+2. The four packaged upstream files are verified but their lineage disappears
+   from `evidence/results.json`: it has no artifacts/provenance field.
+   Extend `VerifiedArtifact` and the closed evidence schema so canonical
+   evidence and the provenance page expose every artifact's ID, path, SHA-256,
+   Git blob, byte size, immutable commit-qualified source URL, reproducible
+   acquisition command including checkout of
+   `84a943c34f38520c7e0c9dd3066517c111b3c8fa`, and Apache-2.0 license.
+   Reject generic repository URLs and clone-only acquisition commands.
+3. `execute_raco_trajectory` claims to execute RACO but advances with
+   `x = x - eta * g0`, never calling CAGrad-Clip and never using `c`.
+   Execute the actual audited CAGrad-Clip update at every step. Persist each
+   weighted anchor, CAGrad direction, next iterate, loss before/after,
+   `M(theta_t)`, weighted-gradient norm, and separate per-step descent and
+   `M <= ||grad L_w||` booleans for exactly `t=0,...,T-1`. Claim 8 may be
+   `supported` only when every step and both finite-horizon squared bounds
+   pass. A mutation replacing the CAGrad direction with `g0` must fail a
+   literal, hand-derived test.
+4. Make `compute_m_simplex` scale-aware: the opposing
+   `g1=[1e-8], g2=[-1e-8]` fixture must return zero, not treat the gradients as
+   identical because of an absolute squared-norm threshold.
+5. For a zero weighted anchor, persist the effective correction radius as
+   zero in `CAGradResult`; for identical gradients, report the exact original
+   subproblem objective including the `c*||g0||*||g||` term. Add literal
+   regressions for both diagnostics.
+6. Regenerate canonical evidence and every page. Compare two independent
+   evidence generations byte-for-byte; run the full submission suite,
+   frozen-lock verification, root pytest, skill validation, pre-commit, and
+   `git diff --check`. Commit only the assigned submission after this durable
+   controller-plan commit.
+
 ## Global Constraints
 
 - Work only in
