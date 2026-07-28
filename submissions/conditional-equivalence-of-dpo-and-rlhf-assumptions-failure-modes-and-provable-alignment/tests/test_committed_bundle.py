@@ -26,3 +26,4 @@ def test_validation_binds_evidence_hash(project_root):
     assert validation["evidence_sha256"] == hashlib.sha256(payload).hexdigest()
     assert validation["schema_valid"] is True
     assert validation["deterministic"] is True
+    assert validation["full_test_count"] == 44

@@ -27,6 +27,14 @@ def test_pages_dir_contains_substantive_judge_readable_evidence(project_root):
     assert total_chars >= 200
 
 
+def test_pages_index_cpo_gamma_grid_matches_code(project_root):
+    from conditional_dpo_repro.grids import CPO_GAMMAS
+
+    index_md = (project_root / "pages" / "index.md").read_text("utf-8")
+    expected_gammas = ", ".join(f"{g:g}" for g in CPO_GAMMAS)
+    assert f"\\gamma \\in \\{{{expected_gammas}\\}}" in index_md
+
+
 def test_pages_state_honest_limits(project_root):
     text = (
         (project_root / "index.html").read_text("utf-8")
