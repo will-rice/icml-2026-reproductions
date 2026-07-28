@@ -1,0 +1,47 @@
+{
+  "worktree": "/home/will/projects/icml-2026-reproductions",
+  "branch": "main",
+  "base_sha": "efd0d92ce29f455f4e9403d80bef80f9bc27672d",
+  "project_path": "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models",
+  "design_path": "docs/superpowers/specs/2026-07-25-know-more-know-clearer-reproduction-design.md",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models",
+      "python",
+      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/src/know_more_know_clearer/evidence.py"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "skills/icml-repro-loop/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "alphaxiv": "2505.18102",
+  "area": "General Machine Learning",
+  "artifact_access": true,
+  "arxiv": "2505.18102",
+  "attempt_id": "8a54a68a-d300-49c4-9221-6bdf2e409eeb",
+  "authors": [
+    "Takashi Ishida",
+    "Thanawat Lodkaew",
+    "Ikko Yamane"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "CapBencher caps Bayes accuracy by injecting randomness among logically correct answers, so above-cap performance can signal leakage or gaming (Figure 1).",
+      "challenge_claim_sha256": "e9e0404bc4b284a8622c9f386ba26cb2ab88eb7e94db712a54c3944ca995ce26",
+      "target_claim": "CapBencher caps Bayes accuracy by injecting randomness among logically correct answers, so above-cap performance can signal leakage or gaming (Figure 1)."
+    },
+    {
+      "challenge_claim": "Capped benchmark accuracy remains monotonically related to original benchmark accuracy for tracking and ranking LLM improvement (Figure 2).",
+      "challenge_claim_sha256": "5ec700d026600aca0be22d1e1c1d4cb3607ffb33e7337b9dc3710c4a1ffdf441",
+      "target_claim": "Capped benchmark accuracy remains monotonically related to original benchmark accuracy for tracking and ranking LLM improvement (Figure 2)."
+    },
+    {
+      "challenge_claim": "The paper uses exact binomial-test p-values rather than asymptotic approximations for contamination detection (Section 4).",
+      "challenge_claim_sha256": "a753a9ff78292c3fb953ca00a530e3e742a5e966b7a8b77dee6587ae87443efa",
+      "target_claim": "The paper uses exact binomial-test p-values rather than asymptotic approximations for contamination detection (Section 4)."
+    },
+    {
+      "challenge_claim": "In a model-merge hacking simulation, the merged model's 56.52% accuracy is flagged as contaminated at the 5% significance level (Table 1).",
+      "challenge_claim_sha256": "b9a5db6f56799b75ae78401976f8b4e694f3fab2a7ff65f78def58a20c71fe23",
+      "target_claim": "In a model-merge hacking simulation, the merged model's 56.52% accuracy is flagged as contaminated at the 5% significance level (Table 1)."
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "controller-capbencher-author",
+    "path": "docs/superpowers/specs/2026-07-25-capbencher-design.md",
+    "recorded_at": "2026-07-28T23:33:01.071806+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-28T23:33:02.816291+00:00",
+    "reviewer": "reviewer-capbencher-independent"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2505.18102",
+  "i": 2734,
+  "insts": [
+    "RIKEN / The University of Tokyo",
+    "The University of Tokyo",
+    "Ecole Nationale de la Statistique et de l'Analyse de l'information"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "CapBencher caps Bayes accuracy by injecting randomness among logically correct answers, so above-cap performance can signal leakage or gaming (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Capped benchmark accuracy remains monotonically related to original benchmark accuracy for tracking and ranking LLM improvement (Figure 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper uses exact binomial-test p-values rather than asymptotic approximations for contamination detection (Section 4)."
+    },
+    {
+      "status": "unverified",
+      "text": "In a model-merge hacking simulation, the merged model's 56.52% accuracy is flagged as contaminated at the 5% significance level (Table 1)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=oCNT5PcMSQ",
+  "orid": "oCNT5PcMSQ",
+  "paper_id": "oCNT5PcMSQ",
+  "phase": "implementing",
+  "pid": "61638",
+  "safety_blocker": null,
+  "score": 20,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "e9e0404bc4b284a8622c9f386ba26cb2ab88eb7e94db712a54c3944ca995ce26",
+        "p_falsified": 0.05,
+        "p_toy": 0.1,
+        "p_verified": 0.85
+      },
+      {
+        "challenge_claim_sha256": "5ec700d026600aca0be22d1e1c1d4cb3607ffb33e7337b9dc3710c4a1ffdf441",
+        "p_falsified": 0.05,
+        "p_toy": 0.1,
+        "p_verified": 0.85
+      },
+      {
+        "challenge_claim_sha256": "a753a9ff78292c3fb953ca00a530e3e742a5e966b7a8b77dee6587ae87443efa",
+        "p_falsified": 0.05,
+        "p_toy": 0.1,
+        "p_verified": 0.85
+      },
+      {
+        "challenge_claim_sha256": "b9a5db6f56799b75ae78401976f8b4e694f3fab2a7ff65f78def58a20c71fe23",
+        "p_falsified": 0.05,
+        "p_toy": 0.1,
+        "p_verified": 0.85
+      }
+    ],
+    "direct_artifact_score": 4,
+    "full_score_claim_paths": 4,
+    "judged_before_deadline_probability": 0.9,
+    "primary_risk": "Exact binomial test simulation and monotonicity verification.",
+    "remaining_hours_p90": 2.0,
+    "remaining_time_variance_hours2": 0.25,
+    "reusable_implementation": false
+  },
+  "slug": "how-can-i-publish-my-llm-benchmark-without-giving-the-true-answers-away",
+  "snapshot_id": "d93c0d7ba82d21531e596fbd307eaaffdf2a19bdf7b563c07fb1e80790672f9a",
+  "spot": false,
+  "sub": "Evaluation",
+  "target_claims": [
+    "CapBencher caps Bayes accuracy by injecting randomness among logically correct answers, so above-cap performance can signal leakage or gaming (Figure 1).",
+    "Capped benchmark accuracy remains monotonically related to original benchmark accuracy for tracking and ranking LLM improvement (Figure 2).",
+    "The paper uses exact binomial-test p-values rather than asymptotic approximations for contamination detection (Section 4).",
+    "In a model-merge hacking simulation, the merged model's 56.52% accuracy is flagged as contaminated at the 5% significance level (Table 1)."
+  ],
+  "title": "How Can I Publish My LLM Benchmark Without Giving the True Answers Away?",
+  "transitions": [
+    {
+      "at": "2026-07-28T23:32:59.394639+00:00",
+      "fencing_token": 1,
+      "from": "selected",
+      "owner": "agy-paper-owner-05",
+      "snapshot_id": "d93c0d7ba82d21531e596fbd307eaaffdf2a19bdf7b563c07fb1e80790672f9a",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-28T23:33:02.816291+00:00",
+      "fencing_token": 1,
+      "from": "design-pending",
+      "owner": "agy-paper-owner-05",
+      "snapshot_id": "d93c0d7ba82d21531e596fbd307eaaffdf2a19bdf7b563c07fb1e80790672f9a",
+      "to": "implementing"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-28T23:33:02.816291+00:00",
+  "upstream_revision": "arxiv:2505.18102v1",
+  "vs": "https://icml.cc/virtual/2026/poster/61638"
+}
