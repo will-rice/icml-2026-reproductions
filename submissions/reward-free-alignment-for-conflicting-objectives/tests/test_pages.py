@@ -83,3 +83,26 @@ def test_readme_frontmatter_short_description(project_root):
         len(short_desc) <= 60
     ), f"short_description length {len(short_desc)} exceeds 60 characters: '{short_desc}'"
     assert "RACO" in short_desc and "ICML 2026" in short_desc
+
+
+def test_readme_frontmatter_python_version(project_root):
+    readme_path = project_root / "README.md"
+    content = readme_path.read_text(encoding="utf-8")
+    assert content.startswith("---")
+    parts = content.split("---", 2)
+    assert len(parts) >= 3, "README must contain frontmatter enclosed in ---"
+    frontmatter = parts[1]
+
+    python_ver = None
+    for line in frontmatter.splitlines():
+        line = line.strip()
+        if line.startswith("python_version:"):
+            python_ver = line.split(":", 1)[1].strip()
+            if (python_ver.startswith('"') and python_ver.endswith('"')) or (
+                python_ver.startswith("'") and python_ver.endswith("'")
+            ):
+                python_ver = python_ver[1:-1]
+            break
+
+    assert python_ver is not None, "README frontmatter missing 'python_version'"
+    assert python_ver == "3.12", f"python_version must be '3.12', got '{python_ver}'"
