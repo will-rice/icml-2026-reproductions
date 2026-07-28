@@ -150,6 +150,12 @@ def claim_next(
     observed_at = _datetime(now)
     snapshot = read_fresh_snapshot(paths, snapshot_id, observed_at)
     _require_assessed_snapshot(snapshot)
+    reclaim_attempt = None
+    if reclaim_attempt_id is not None:
+        reclaim_attempt = _read_active_attempt(paths, reclaim_attempt_id)
+        if reclaim_attempt["phase"] != "blocked":
+            raise ValueError("phase")
+        _current_assessed_candidate(snapshot, reclaim_attempt["paper_id"])
     leases.expire_stale_leases(paths, observed_at)
     attempts.recover_transactions(paths)
     with leases.hold_owner_claim(paths, owner):
@@ -159,7 +165,6 @@ def claim_next(
             attempt = attempts.read_attempt(paths, reclaim_attempt_id)
             if attempt["phase"] != "blocked":
                 raise ValueError("phase")
-            _current_assessed_candidate(snapshot, attempt["paper_id"])
             prior = _attempt_lease(paths, reclaim_attempt_id)
             expected = 0 if prior is None else prior.fencing_token
             writer = leases._claim_attempt_locked(
@@ -245,6 +250,23 @@ def _current_assessed_candidate(snapshot: dict, paper_id: str) -> dict:
     ):
         raise ValueError("paper_id")
     return candidates[0]
+
+
+def _read_active_attempt(paths: store.StatePaths, attempt_id: str) -> dict:
+    store.validate_id(attempt_id)
+    index = store.read_json(paths.index)
+    store.validate_index(index)
+    reference = index["attempts"].get(attempt_id)
+    if reference is None:
+        raise ValueError("attempt_id")
+    attempt = store.read_json(paths.attempt(attempt_id))
+    store.validate_attempt(attempt)
+    if (
+        attempt["attempt_id"] != attempt_id
+        or attempt["paper_id"] != reference["paper_id"]
+    ):
+        raise ValueError("attempt_id")
+    return attempt
 
 
 def read_fresh_snapshot(

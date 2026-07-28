@@ -516,6 +516,47 @@ def test_claim_next_reclaim_requires_current_candidate_assessment_match(
         )
 
 
+def test_claim_next_invalid_reclaim_does_not_expire_unrelated_or_change_target_lease(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    changed = copy.deepcopy(original)
+    changed["score_rate"]["remaining_hours_p90"] = 99.0
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [changed],
+        assessment_candidates=[original],
+    )
+    unrelated = leases.acquire_lease(
+        paths,
+        "candidate:unrelated-paper",
+        "unrelated-owner",
+        "unrelated-attempt",
+        now - TTL * 2,
+        TTL,
+    )
+    unrelated_path = paths.resource_lease(unrelated.resource)
+    target_path = paths.resource_lease(f"attempt:{blocked.attempt_id}")
+    unrelated_before = unrelated_path.read_bytes()
+    target_before = target_path.read_bytes()
+
+    with pytest.raises(ValueError, match="paper_id"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
+
+    assert unrelated_path.read_bytes() == unrelated_before
+    assert target_path.read_bytes() == target_before
+
+
 def test_claim_next_reclaim_rejects_duplicate_current_candidates(
     paths, store, leases, now, scheduler
 ):
