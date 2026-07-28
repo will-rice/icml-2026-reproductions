@@ -403,7 +403,7 @@ def test_isolated_evidence_generation_reproduces_identical_bytes(project_root, t
     bytes_b = out_b.read_bytes()
     assert bytes_a == bytes_b, "Evidence bytes differ between isolated environments"
 
-    # Verify python version in evidence is 3.12.x
+    # Verify python version in evidence is exactly 3.12.11
     data_a = json.loads(bytes_a.decode("utf-8"))
     py_ver = data_a["environment"]["python_version"]
-    assert py_ver.startswith("3.12."), f"Expected Python 3.12.x, got {py_ver}"
+    assert py_ver == "3.12.11", f"Expected Python 3.12.11, got {py_ver}"
