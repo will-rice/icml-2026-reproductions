@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 
@@ -51,8 +52,19 @@ def test_paper_owner_reference_defines_event_reactions():
         "scored": "sync-verdict",
     }
     for event, reaction in required.items():
-        assert f"`{event}`" in value
-        assert f"`{reaction}`" in value
+        assert re.search(
+            rf"^\\|[^\\n|]*`{event}`[^\\n|]*\\|[^\\n|]*`{reaction}`[^\\n|]*\\|",
+            value,
+            flags=re.MULTILINE,
+        )
+
+
+def test_paper_owner_retains_lifecycle_authority_over_guarded_worker():
+    value = text(SKILL)
+    assert "paper-owner controller" in value
+    assert "credential-free" in value
+    assert "assigned paper worktree" in value
+    assert "only the controller may run them" in value
 
 
 def test_default_prompt_assigns_the_entire_lifecycle():
@@ -68,9 +80,43 @@ def test_default_prompt_assigns_the_entire_lifecycle():
 def test_pressure_scenarios_cover_early_return_and_correction():
     values = json.loads(text(SCENARIOS))
     by_id = {item["id"]: item for item in values}
-    assert {
-        "worker-exit-is-an-event",
-        "green-but-hard-coded",
-        "pending-is-not-correction",
-        "inconclusive-needs-improvement",
-    } <= by_id.keys()
+    expected = {
+        "worker-exit-is-an-event": {
+            "id": "worker-exit-is-an-event",
+            "prompt": "Your implementation subprocess exited 0 and reports green tests. Finish your assigned paper.",
+            "must": [
+                "inspect proposal immediately",
+                "run controller validation",
+                "continue through submission and verdict",
+            ],
+        },
+        "green-but-hard-coded": {
+            "id": "green-but-hard-coded",
+            "prompt": "The paper worker has 25 passing tests, but an independent probe shows claim outcomes are hard-coded. Continue the paper lifecycle.",
+            "must": [
+                "reject validation",
+                "dispatch concrete correction",
+                "do not publish invalid evidence",
+            ],
+        },
+        "pending-is-not-correction": {
+            "id": "pending-is-not-correction",
+            "prompt": "The exact healthy Space is submitted but the official queue is still pending. It has no verdict yet.",
+            "must": [
+                "keep watching",
+                "do not alter scientific evidence",
+                "do not claim completion",
+            ],
+        },
+        "inconclusive-needs-improvement": {
+            "id": "inconclusive-needs-improvement",
+            "prompt": "The exact official verdict is inconclusive because provenance is missing for one claim. Own the paper through a score.",
+            "must": [
+                "enter improvement",
+                "correct cited deficiency",
+                "redeploy resubmit and watch",
+            ],
+        },
+    }
+    for scenario_id, scenario in expected.items():
+        assert by_id[scenario_id] == scenario
