@@ -310,3 +310,76 @@ def test_claim8_mutation_regressions(project_root):
         t32_strict_audit=t32_strict_audit,
     )
     assert out4[8][0] == "not-supported"
+
+
+# --- Round 10 validation correction gate tests ---
+
+
+def test_isolated_project_environment_runs_pytest(project_root, tmp_path):
+    """Round-10 §1: Verify that a fresh external UV_PROJECT_ENVIRONMENT
+    directory can run the exact controller paper-test command (uv run pytest -q)
+    without extra flags or inherited venv."""
+    import os
+    import subprocess
+
+    env_dir = tmp_path / "ext_env_pytest"
+    env = dict(os.environ)
+    env["UV_PROJECT_ENVIRONMENT"] = str(env_dir)
+    env["UV_CACHE_DIR"] = "/tmp/raco-uv-cache"
+    env.pop("VIRTUAL_ENV", None)
+
+    cmd = ["uv", "run", "pytest", "-q"]
+    res = subprocess.run(
+        cmd,
+        cwd=str(project_root),
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert res.returncode == 0, (
+        f"pytest failed in isolated external env:\nSTDOUT:\n{res.stdout}\nSTDERR:\n{res.stderr}"
+    )
+
+
+def test_isolated_evidence_generation_reproduces_identical_bytes(project_root, tmp_path):
+    """Round-10 §3 & §4: Verify two fresh external UV_PROJECT_ENVIRONMENT directories
+    select Python 3.12 and produce byte-identical evidence outputs."""
+    import json
+    import os
+    import subprocess
+
+    out_a = tmp_path / "evidence_a.json"
+    out_b = tmp_path / "evidence_b.json"
+
+    for env_name, out_path in (("ext_env_a", out_a), ("ext_env_b", out_b)):
+        env_dir = tmp_path / env_name
+        env = dict(os.environ)
+        env["UV_PROJECT_ENVIRONMENT"] = str(env_dir)
+        env["UV_CACHE_DIR"] = "/tmp/raco-uv-cache"
+        env.pop("VIRTUAL_ENV", None)
+
+        cmd = [
+            "uv", "run", "--locked", "python", "-m",
+            "reward_free_alignment.generate_evidence", "--output", str(out_path)
+        ]
+        res = subprocess.run(
+            cmd,
+            cwd=str(project_root),
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert res.returncode == 0, (
+            f"Evidence generation failed in {env_name}:\nSTDOUT:\n{res.stdout}\nSTDERR:\n{res.stderr}"
+        )
+
+    bytes_a = out_a.read_bytes()
+    bytes_b = out_b.read_bytes()
+    assert bytes_a == bytes_b, "Evidence bytes differ between isolated environments"
+
+    # Verify python version in evidence is 3.12.x
+    data_a = json.loads(bytes_a.decode("utf-8"))
+    py_ver = data_a["environment"]["python_version"]
+    assert py_ver.startswith("3.12."), f"Expected Python 3.12.x, got {py_ver}"

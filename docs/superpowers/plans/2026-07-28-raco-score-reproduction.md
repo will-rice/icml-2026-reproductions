@@ -16,6 +16,34 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Recursive-Test Recovery Gate — 2026-07-28, round 11
+
+Guarded round 10 was interrupted after its new
+`test_isolated_project_environment_runs_pytest` recursively launched
+`uv run pytest -q` from the same project. Every child suite rediscovered that
+test and launched another child, so the apparent verification run was an
+unbounded process recursion. Treat the interrupted files as an unvalidated
+partial proposal.
+
+Preserve the useful dependency, lockfile, interpreter-pin, and determinism
+work, then correct the regression test first:
+
+1. Replace the self-recursive full-suite subprocess test. A test may create
+   one fresh external `UV_PROJECT_ENVIRONMENT`, run `uv sync --locked`, and
+   use that environment to import `pytest`, `gradio`, and the project package,
+   but it must not invoke a pytest command that can rediscover the invoking
+   test. Add direct TOML assertions that Gradio is a normal runtime dependency
+   and pytest is in the standard uv `dev` dependency group.
+2. Keep the two-environment evidence test bounded. It must generate explicit
+   temporary output files, compare their bytes, and verify the truthful 3.12
+   environment record without modifying committed evidence.
+3. Outside the pytest suite, run the controller's exact isolated project
+   evidence and full-suite commands in fresh external environments. Confirm
+   that both terminate, pass, and leave the project clean. Then run root
+   pytest, skill validation, pre-commit, determinism, and `git diff --check`.
+4. Return one new clean commit. Do not claim the interrupted round-10 process
+   as a passing verification or attestation.
+
 ## Controller Validation Correction Gate — 2026-07-28, round 10
 
 Controller scientific review accepted proposal
