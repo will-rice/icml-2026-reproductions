@@ -1,0 +1,21 @@
+{
+  "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+  "attempt_number": 4,
+  "attestation_id": "07827e39c15baba1c35586825ae223010f56e74be105b464eedb5407affb30c9",
+  "kind": "deployment",
+  "observed_at": "2026-07-28T14:00:27.330031+00:00",
+  "owner": "wrice",
+  "payload_sha256": "d4d1d2d24993c252711b134f43418941d02c19126897e63ccb3f62e2ca9a005a",
+  "runtime_stage": "RUNNING",
+  "source_commit": "780d7415a48eb297021540b4cf2523e76b9bf480",
+  "source_tree_sha256": "42ec481d8059b055b1cbe7e525555c9e367fc76453b02678f3d0a5c0674f9157",
+  "space_id": "wrice/repro-raco",
+  "space_sha": "b0734d819ac4768a5e77496baf9bf86e0dd3c3ee",
+  "tags": [
+    "gradio",
+    "icml2026-repro",
+    "paper-vSzRJyg6k0",
+    "region:us"
+  ],
+  "validation_attestation_id": "4800a4ba961c16bbe62ace93934694e0ec4758b06363a9d7f53d47f55175ec75"
+}

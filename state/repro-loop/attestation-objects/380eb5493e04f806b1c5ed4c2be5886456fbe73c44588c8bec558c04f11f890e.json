@@ -1,0 +1,234 @@
+{
+  "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+  "attempt_number": 3,
+  "attestation_id": "380eb5493e04f806b1c5ed4c2be5886456fbe73c44588c8bec558c04f11f890e",
+  "base_sha": "c3069c0fab4b040e9ebb2cb7ca120a993dd5defd",
+  "branch": "score/raco",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "--show-toplevel"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "f40a570b2c81b0473f57e0e60f00c368b3edd397e1df44e7872347b8fcd77d61"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/reward-free-alignment-for-conflicting-objectives"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "3935522e3ed6a5aa606c362c7fd6929bfecf9742086f40162d51701e80aa22fa"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "100f53f099c10200b664f8663396e43149b0fa833eaa8fb3661ff4e811f91d6c"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "c3069c0fab4b040e9ebb2cb7ca120a993dd5defd...HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "9ea650f0ff876286d85923b326c96ad75598a0281ad5f2867ed12ac390aa1bfd"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain",
+        "--ignored",
+        "--untracked-files=all",
+        "--",
+        "submissions/reward-free-alignment-for-conflicting-objectives"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "3935522e3ed6a5aa606c362c7fd6929bfecf9742086f40162d51701e80aa22fa"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "100f53f099c10200b664f8663396e43149b0fa833eaa8fb3661ff4e811f91d6c"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "46f545c9c2f1cf4f1642bad6f69f7e89ecdc810ae9115f8abdf75d7268a1ab7c"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--locked",
+        "--project",
+        "submissions/reward-free-alignment-for-conflicting-objectives",
+        "python",
+        "-m",
+        "reward_free_alignment.generate_evidence"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "5019735716af73d5a9d34764eee60b31787bf871046e8ff94ffc889294a93a08",
+      "stdout_sha256": "e44ec14b05044ee4e2ff22f927b6ce6f0e9ef013e0072355a06c4f79a0f44db1"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "--project",
+        "submissions/reward-free-alignment-for-conflicting-objectives",
+        "python",
+        "-m",
+        "pytest",
+        "submissions/reward-free-alignment-for-conflicting-objectives/tests",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "9abf2b3ad5e0b97d0e93600e9738952c6a8eeb1011e4355342cb3e1f2b1032a3",
+      "stdout_sha256": "11e7361452a3e137c55413cb58194fd89233c800e9052f05b7605cec9057329d"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "eb2c91d99fd071bc220b89881f0d01b9917d2dc9842786041536c8a878e3e2e8",
+      "stdout_sha256": "31cb1213340f2fdb0433ea40f1f75b310a0a008548076060b7f0863ce36313c2"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+        "skills/icml-repro-loop"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "0af6aa8f1fec944c3567c297ec1328891dda96a2a56be29d94ff8b63ed9cf662",
+      "stdout_sha256": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0"
+    },
+    {
+      "argv": [
+        "uv",
+        "run",
+        "pre-commit",
+        "run",
+        "-a"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "8af3d5a4093ae48e977ec289b6d1189f076a218492f14de947829b81ffb5b9cf",
+      "stdout_sha256": "4e514d10f6212ec379b308062c3139839bd23dea412a9ad021528e5406570012"
+    }
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-28-raco-score-reproduction-design.md",
+  "environment": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "30279da57eb04a496cb207bc2f7c7e04d9c94788be5bc68824e6727e283b264b"
+    },
+    {
+      "argv": [
+        "uv",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "88ed033aeff756adf725734fd5254f4ca5e554af1d1f89a37c0eb97c06bf1517"
+    },
+    {
+      "argv": [
+        "/home/will/projects/icml-2026-reproductions/.venv/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "435ee883212b189a41d79e835ac3e6755df994975bb40932ae1b81195317b9b6"
+    }
+  ],
+  "environment_sha256": "f053265ad33142b5dc7cb677cbe4368274d4afa5e44c9b38f831f7d7b3ad7b78",
+  "kind": "validation",
+  "observed_at": "2026-07-28T13:40:53.285795+00:00",
+  "payload_sha256": "1da004fbe881f4ffaddf501db19b6f55425c45c21ca1c531946a17f6a136c330",
+  "project_path": "submissions/reward-free-alignment-for-conflicting-objectives",
+  "source_commit": "d9a1468daa03f1a61455226f6235be3b5ad98e64",
+  "source_tree": "45f0cde874ddf9eb169bf52980d217be9bfb29e2",
+  "source_tree_sha256": "9737a980b7fe91087ebbc5fbeadc2627c01f9b51e3ed5cbb65667c5a8f3e8077",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/score-raco"
+}

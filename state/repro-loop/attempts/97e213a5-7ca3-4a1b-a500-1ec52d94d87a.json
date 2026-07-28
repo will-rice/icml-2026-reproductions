@@ -13,6 +13,8 @@
     "Xi Chen",
     "Tianyi Lin"
   ],
+  "blocked_from": "judging",
+  "blocker": "Official verdict snapshot 1fdd83f03800de6cdfda5cfad952daf972f7311ffa97ab9d72714b56ea2e89e0 contains a RACO verdict judged_at 2026-07-28T14:06:57+00:00 for wrice/repro-raco, but it reports stale SHA 1c4fe0c154b0149ff0a65f737902774c6b90c35a. The authoritative deployment, submission, and watch bind SHA b0734d819ac4768a5e77496baf9bf86e0dd3c3ee. sync-verdict rejected the mismatch with ValueError sha, and the fresh snapshot no longer queues the submitted SHA. Exact RACO points therefore cannot be imported or claimed. Required external next action: the challenge service must requeue and rejudge exact SHA b0734d819ac4768a5e77496baf9bf86e0dd3c3ee or issue an authority-preserving correction; no additional source or Space mutation is warranted. Current overall official snapshot is 35/146 over 14 judged papers, but the stale-SHA verdict is not accepted as the exact attempt score.",
   "claim_bindings": [
     {
       "challenge_claim": "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3).",
@@ -36,6 +38,7 @@
     }
   ],
   "cpu_only": true,
+  "deployed_sha": "b0734d819ac4768a5e77496baf9bf86e0dd3c3ee",
   "design": {
     "author": "controller-raco-design-author",
     "path": "docs/superpowers/specs/2026-07-28-raco-score-reproduction-design.md",
@@ -49,6 +52,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2602.02495",
   "i": 3538,
+  "improvement_attempts": 3,
+  "improvement_reason": "Hugging Face Space wrice/repro-raco at SHA 1c4fe0c154b0149ff0a65f737902774c6b90c35a used Python 3.12 but Gradio 4.44 failed startup by importing removed huggingface_hub.HfFolder; update Space sdk_version to current stable Gradio 6.20.0, regress, revalidate, and republish.",
   "insts": [
     "DAMO Academy, Alibaba Seattle // UC Berkeley",
     "The Chinese University of Hong Kong, Shenzhen",
@@ -100,8 +105,9 @@
   "or": "https://openreview.net/forum?id=vSzRJyg6k0",
   "orid": "vSzRJyg6k0",
   "paper_id": "vSzRJyg6k0",
-  "phase": "implementing",
+  "phase": "blocked",
   "pid": "60903",
+  "project_path": "submissions/reward-free-alignment-for-conflicting-objectives",
   "safety_blocker": null,
   "score": 23,
   "score_rate": {
@@ -177,6 +183,7 @@
   },
   "slug": "reward-free-alignment-for-conflicting-objectives",
   "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+  "space_id": "wrice/repro-raco",
   "spot": true,
   "sub": "Large Language Models",
   "target_claims": [
@@ -202,10 +209,154 @@
       "owner": "controller-raco-20260728",
       "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
       "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T12:09:18.608786+00:00",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T12:10:00.000529+00:00",
+      "fencing_token": 3,
+      "from": "blocked",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T12:10:40.615633+00:00",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T12:11:01.700830+00:00",
+      "fencing_token": 3,
+      "from": "blocked",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T13:14:56.276554+00:00",
+      "attestation_id": "55ea91e3bee7ea5953e646770a0d8ce0c3f2d44c9138c5b6dcb60af2caba3e2f",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-28T13:16:09.555416+00:00",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-28T13:26:03.556264+00:00",
+      "attestation_id": "b59503d7939faea5cae9fee4d83a84483574861971261f54e6f45b842f04f992",
+      "fencing_token": 3,
+      "from": "improving",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-28T13:30:16.762844+00:00",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T13:31:39.715441+00:00",
+      "attestation_id": "b59503d7939faea5cae9fee4d83a84483574861971261f54e6f45b842f04f992",
+      "fencing_token": 3,
+      "from": "blocked",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-28T13:31:45.444092+00:00",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-28T13:40:53.285795+00:00",
+      "attestation_id": "380eb5493e04f806b1c5ed4c2be5886456fbe73c44588c8bec558c04f11f890e",
+      "fencing_token": 3,
+      "from": "improving",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-28T13:44:56.092311+00:00",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "improving"
+    },
+    {
+      "at": "2026-07-28T13:57:57.166845+00:00",
+      "attestation_id": "4800a4ba961c16bbe62ace93934694e0ec4758b06363a9d7f53d47f55175ec75",
+      "fencing_token": 3,
+      "from": "improving",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-28T14:00:27.330031+00:00",
+      "attestation_id": "07827e39c15baba1c35586825ae223010f56e74be105b464eedb5407affb30c9",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-28T14:02:18.924707+00:00",
+      "attestation_id": "86cd164de6c6818a1d856a6c33e00cb68eb04ec8ca3cc504c0b486363339ad61",
+      "fencing_token": 3,
+      "from": "deployed",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-28T14:02:36.362935+00:00",
+      "attestation_id": "e9189f86b53ce1305250209cf34b16dc981163b0ce4ab03c5800ae0021de0a0c",
+      "fencing_token": 3,
+      "from": "submitted",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "judging"
+    },
+    {
+      "at": "2026-07-28T14:09:14.400097+00:00",
+      "fencing_token": 3,
+      "from": "judging",
+      "owner": "controller-raco-repair-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-28T01:46:15.592412+00:00",
+  "updated_at": "2026-07-28T14:09:14.400097+00:00",
   "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
   "vs": "https://icml.cc/virtual/2026/poster/60903"
 }

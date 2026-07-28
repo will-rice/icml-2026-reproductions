@@ -1,0 +1,49 @@
+{
+  "base_sha": "d9a1468daa03f1a61455226f6235be3b5ad98e64",
+  "branch": "score/raco",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "--locked",
+      "--project",
+      "submissions/reward-free-alignment-for-conflicting-objectives",
+      "python",
+      "-m",
+      "reward_free_alignment.generate_evidence"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/reward-free-alignment-for-conflicting-objectives",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/reward-free-alignment-for-conflicting-objectives/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "/home/will/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ],
+  "design_path": "docs/superpowers/specs/2026-07-28-raco-score-reproduction-design.md",
+  "project_path": "submissions/reward-free-alignment-for-conflicting-objectives",
+  "worktree": "/home/will/projects/icml-2026-reproductions/.worktrees/score-raco"
+}
