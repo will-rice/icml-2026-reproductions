@@ -5,36 +5,48 @@ exact live observation. Intention and worker self-report are not evidence.
 
 ## Paper-Owner Completion Gate
 
-- [ ] The directly dispatched top-level agent invoked `icml-repro-loop` and
-  owns exactly one attempt.
-- [ ] An implementation-worker exit triggered immediate diff review and fresh
+- [ ] The directly dispatched persistent paper-owner worker owns one current
+  paper at a time and repeats only after exact verdict import or a
+  genuine persisted blocker.
+- [ ] A subordinate implementation subprocess exit triggered immediate diff review and fresh
   controller validation without a user status prompt.
 - [ ] A rejected validation produced exact correction findings and a guarded
   relaunch on the same attempt.
 - [ ] The paper owner continued through `publish-deployment`,
   `attest-submission`, `watch-attempt`, and `sync-verdict`.
 - [ ] Pending queue state was watched rather than treated as evidence failure.
-- [ ] Judging/scored/blocked emitted a capacity-free event to the competition
-  coordinator.
+- [ ] `submitted` and `judging` remained dedicated to their paper and did not
+  free owner capacity; release occurred only after exact verdict import
+  or a genuine persisted blocker.
+- [ ] Each iteration began with `claim-next` using a fresh assessed immutable
+  snapshot and ended with `release-paper --outcome scored` or
+  `release-paper --outcome blocked`.
+- [ ] A `paper-owner-released` record names the attempt, owner, fence,
+  immutable snapshot, outcome, and exact verdict or persisted blocker.
+- [ ] A blocked attempt remains reclaimable; its later owner uses a fresh
+  assessed immutable snapshot and fresh fence without changing its history.
+- [ ] Before `release-paper --outcome blocked`, the paper owner used fenced
+  `transition-attempt` to enter `blocked` with nonempty `blocker` and
+  `next_action`, then notified the root coordinator and released reclaimably.
 
-## Worker Boundary
+## Subordinate Implementation Subprocess Boundary
 
 - [ ] The controller contract names one attempt, paper, absolute worktree,
   `submissions/<paper>/` project path, and `implementation` or `research` mode.
-- [ ] An implementation worker was launched only through fenced
+- [ ] An optional subordinate implementation subprocess was launched only through fenced
   `state.py run-worker` after its runtime preflight passed.
-- [ ] The worker environment contains no `HF_TOKEN`,
+- [ ] The subordinate environment contains no `HF_TOKEN`,
   `HUGGING_FACE_HUB_TOKEN`, `GH_TOKEN`, credential helper, inherited Hugging
   Face cache, or implicit-token loading.
-- [ ] The worker changed only its assigned worktree/project and returned a
+- [ ] The subordinate changed only its assigned worktree/project and returned a
   commit, commands, evidence paths, and concerns as a proposal, never
   authority.
 - [ ] A runtime that cannot enforce isolation received only a read-only
   research contract.
-- [ ] Worker queue time comes from queued/launched UTC observations; worker
+- [ ] Subprocess queue time comes from queued/launched UTC observations; subprocess
   process time comes from launched/exited monotonic counters. Git revisions
   identify inputs and outputs and are never runtime estimates.
-- [ ] A worker launched from `implementing` records
+- [ ] A subordinate launched from `implementing` records
   `work_kind="implementation"`; one launched from `improving` records
   `work_kind="correction"`. Validation and deployment are separate controller
   stage intervals.
@@ -65,7 +77,7 @@ exact live observation. Intention and worker self-report are not evidence.
 
 ## Controller Validation
 
-- [ ] Review the worker diff for cross-paper edits, coordinator paths,
+- [ ] Review the subordinate implementation subprocess diff for cross-paper edits, coordinator paths,
   credentials, mutable references, generated caches, and unrelated changes.
 - [ ] Use `attest-validation` with the approved manifest. The controller—not a
   worker string—checks clean Git identity/path scope, runs the evidence
@@ -106,9 +118,12 @@ exact live observation. Intention and worker self-report are not evidence.
 - [ ] Evidence is not the official verdict. Simulations cannot enter judgment
   state. Require exact live snapshot observation. Wait for and import the
   official record. Permissions do not grant authority.
-- [ ] Submitted, judging, and blocked attempts release runnable implementation
-  capacity; refill through a bounded `scheduler-pass` without waiting for
-  unrelated verdicts or blockers.
+- [ ] `submitted` and `judging` remain dedicated states: watch the current
+  paper and do not select another. A scored or genuinely blocked iteration
+  releases only through `release-paper` before the next `claim-next`.
+- [ ] A genuinely blocked iteration first uses fenced `transition-attempt` to
+  record nonempty `blocker` and `next_action`, then calls
+  `release-paper --outcome blocked` and remains reclaimable.
 
 ## Census And Score Report
 
@@ -163,12 +178,16 @@ Every fenced attempt command also takes `--attempt-id ATTEMPT --owner OWNER
 --fencing-token TOKEN`.
 
 ```bash
+uv run python skills/icml-repro-loop/scripts/state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT --owner OWNER
 uv run python skills/icml-repro-loop/scripts/state.py run-worker state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --runtime codex --model MODEL --worktree /ABSOLUTE/WORKTREE --contract /ABSOLUTE/WORKTREE/.superpowers/worker-contract.json
 uv run python skills/icml-repro-loop/scripts/state.py attest-validation state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --manifest validation-manifest.json
 uv run python skills/icml-repro-loop/scripts/state.py publish-deployment state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --space-id OWNER/SPACE --source-dir submissions/PAPER
 uv run python skills/icml-repro-loop/scripts/state.py attest-submission state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --snapshot-id SNAPSHOT
 uv run python skills/icml-repro-loop/scripts/state.py watch-attempt state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --poll-limit 12 --poll-deadline 2026-07-25T18:00:00+00:00
 uv run python skills/icml-repro-loop/scripts/state.py sync-verdict state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --snapshot-id SNAPSHOT
+uv run python skills/icml-repro-loop/scripts/state.py release-paper state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --outcome scored
+uv run python skills/icml-repro-loop/scripts/state.py transition-attempt state/repro-loop.json blocked --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --updates-json '{"blocker":"EXTERNAL_BLOCKER","next_action":"NEXT_ACTION"}'
+uv run python skills/icml-repro-loop/scripts/state.py release-paper state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --outcome blocked
 uv run python skills/icml-repro-loop/scripts/state.py audit-authority state/repro-loop.json --snapshot-id SNAPSHOT
 uv run python skills/icml-repro-loop/scripts/state.py score-report state/repro-loop.json --snapshot-id SNAPSHOT --username wrice --rank-observation-json state/wrice-rank-observation.json
 ```
@@ -185,9 +204,42 @@ run-worker
 
 No arrow in this handoff is driven by a user status question.
 
+The next `claim-next` occurs only after `sync-verdict` followed by scored
+release, or after fenced `transition-attempt` records nonempty `blocker` and
+`next_action` for a genuine blocker followed by reclaimable blocked release.
+It must not select while `submitted` or `judging`.
+
+## Resume-First Routing Example
+
+Inspect active attempts and each released blocked attempt before selecting new
+work:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py list-attempts state/repro-loop.json
+uv run python skills/icml-repro-loop/scripts/state.py show-attempt state/repro-loop.json --attempt-id BLOCKED_ATTEMPT
+```
+
+Run exactly one of the two `claim-next` commands. If the recorded blocker is
+resolved or `next_action` is actionable, reclaim the highest-priority eligible
+blocked attempt explicitly:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT --owner OWNER --reclaim-attempt-id BLOCKED_ATTEMPT
+```
+
+If every recorded blocker remains unresolved, leave those attempts
+reclaimable and select new work without a reclaim target:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT --owner OWNER
+```
+
+Ordinary `claim-next` must not auto-reclaim unresolved blocked attempts.
+
 Read-only/reporting commands are `list-attempts`, `show-attempt`,
 `show-snapshot`, `candidate-census`, `score-report`, and `audit-authority`
 without `--repair`. `refresh-live` writes immutable snapshots;
-`scheduler-pass`, `run-worker`, lease/design/transition commands, lifecycle
-attestations, `sync-verdict`, and `audit-authority --repair` mutate coordinator
-or external authority and are controller-only.
+`claim-next`, `scheduler-pass`, `run-worker`, lease/design/transition commands,
+lifecycle attestations, `sync-verdict`, `release-paper`, and
+`audit-authority --repair` mutate coordinator or external authority and are
+persistent-paper-owner-controller-only.

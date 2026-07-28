@@ -63,6 +63,11 @@ def scheduler():
 
 
 @pytest.fixture
+def paper_owner(scheduler):
+    return load_module("paper_owner")
+
+
+@pytest.fixture
 def paths(tmp_path, store):
     value = store.StatePaths(tmp_path / "repro-loop.json")
     store.atomic_json_write(value.index, store.new_index(), store.validate_index)
@@ -182,6 +187,65 @@ def write_snapshot(
     return snapshot_id
 
 
+def write_assessed_snapshot(
+    store,
+    paths,
+    now,
+    candidates,
+    *,
+    assessment_candidates=None,
+    fetched_at=None,
+):
+    refresh = load_module("refresh")
+    assessed = candidates if assessment_candidates is None else assessment_candidates
+    assessment_document = {
+        "challenge_revision": "challenge-revision-1",
+        "assessor": "scheduler-test",
+        "assessed_at": now.isoformat(),
+        "assessments": [
+            {
+                key: copy.deepcopy(candidate[key])
+                for key in refresh.SCORE_RATE_ASSESSMENT_KEYS
+            }
+            for candidate in assessed
+        ],
+    }
+    assessment_path = paths.index.parent / "assessments.json"
+    assessment_path.write_text(json.dumps(assessment_document), encoding="utf-8")
+    assessment_input = refresh.load_assessments(assessment_path)
+    sources = {
+        "challenge": {
+            "repo_id": refresh.CHALLENGE_REPO,
+            "revision": assessment_document["challenge_revision"],
+        }
+    }
+    payload = {
+        "fetched_at": (fetched_at or now).isoformat(),
+        "source_revision": hashlib.sha256(
+            json.dumps(
+                sources, allow_nan=False, separators=(",", ":"), sort_keys=True
+            ).encode("utf-8")
+        ).hexdigest(),
+        "sources": sources,
+        "assessments": {
+            "content_sha256": assessment_input["content_sha256"],
+            "challenge_revision": assessment_document["challenge_revision"],
+            "assessor": assessment_document["assessor"],
+            "assessed_at": assessment_document["assessed_at"],
+            "records": assessment_document["assessments"],
+            "matched_paper_ids": sorted(
+                {candidate["paper_id"] for candidate in assessed}
+            ),
+        },
+        "candidates": candidates,
+        "queued_submissions": [],
+        "tagged_spaces": [],
+        "verdicts": [],
+        "spaces": [],
+    }
+    return refresh.persist_snapshot(paths, payload)
+
+
 @pytest.fixture
 def snapshot_id(store, paths, now):
     return write_snapshot(
@@ -249,6 +313,596 @@ def resource_lock_is_held(paths, resource: str) -> bool:
             return True
         fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
     return False
+
+
+def test_claim_next_selects_exactly_one_highest_rate_paper(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-low", 100), paper("paper-high-rate", 1)],
+    )
+    candidates = scheduler.read_fresh_snapshot(paths, snapshot_id, now)["candidates"]
+    candidates[0]["score_rate"]["remaining_hours_p90"] = 20.0
+    candidates[1]["score_rate"]["remaining_hours_p90"] = 1.0
+    snapshot_id = write_assessed_snapshot(store, paths, now, candidates)
+
+    assignment = scheduler.claim_next(
+        paths, snapshot_id, "paper-owner-1", now
+    )
+
+    assert assignment.paper_id == "paper-high-rate"
+    assert assignment.writer_lease.owner == "paper-owner-1"
+    assert len(store.read_json(paths.index)["attempts"]) == 1
+
+
+def test_claim_next_uses_two_hour_writer_lease_and_five_minute_candidate_lock(
+    paths, store, leases, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+
+    assignment = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+
+    candidate = store.read_json(paths.resource_lease("candidate:paper-a"))
+    assert datetime.fromisoformat(candidate["expires_at"]) == (
+        now + scheduler.ADMISSION_LEASE_TTL
+    )
+    assert datetime.fromisoformat(assignment.writer_lease.expires_at) == (
+        now + leases.ATTEMPT_WORK_LEASE_TTL
+    )
+
+
+def test_concurrent_claim_next_never_assigns_one_paper_twice(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+    barrier = threading.Barrier(2)
+    assignments = []
+    expected_no_eligible = []
+    errors = []
+
+    def claim(owner):
+        barrier.wait()
+        try:
+            assignments.append(
+                scheduler.claim_next(paths, snapshot_id, owner, now)
+            )
+        except scheduler.NoEligiblePaper:
+            expected_no_eligible.append(owner)
+        except BaseException as error:  # pragma: no cover - asserted below
+            errors.append(error)
+
+    threads = [
+        threading.Thread(target=claim, args=(f"owner-{index}",))
+        for index in range(2)
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=5)
+
+    assert all(not thread.is_alive() for thread in threads)
+    assert errors == []
+    assert len(expected_no_eligible) == 1
+    assert [item.paper_id for item in assignments] == ["paper-a"]
+    assert len(store.read_json(paths.index)["attempts"]) == 1
+
+
+def test_concurrent_same_owner_claims_at_most_one_paper(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    barrier = threading.Barrier(2)
+    assignments = []
+    expected_owner_busy = []
+    errors = []
+
+    def claim():
+        barrier.wait()
+        try:
+            assignments.append(
+                scheduler.claim_next(
+                    paths, snapshot_id, "same-owner", now
+                )
+            )
+        except scheduler.OwnerBusy:
+            expected_owner_busy.append("same-owner")
+        except BaseException as error:  # pragma: no cover - asserted below
+            errors.append(error)
+
+    threads = [threading.Thread(target=claim) for _ in range(2)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=5)
+
+    assert all(not thread.is_alive() for thread in threads)
+    assert errors == []
+    assert expected_owner_busy == ["same-owner"]
+    assert len(assignments) == 1
+    assert assignments[0].writer_lease.owner == "same-owner"
+
+
+def test_claim_next_reclaims_same_released_blocked_attempt(
+    paths, store, leases, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+    first = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    scheduler.attempts.transition_attempt(
+        paths,
+        first.attempt_id,
+        "blocked",
+        first.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    leases.release_lease(paths, first.writer_lease, now)
+
+    blocked = scheduler.attempts.read_attempt(paths, first.attempt_id)
+    reclaimed = scheduler.claim_next(
+        paths,
+        snapshot_id,
+        "owner-2",
+        now,
+        reclaim_attempt_id=first.attempt_id,
+    )
+
+    assert reclaimed.attempt_id == first.attempt_id
+    assert reclaimed.paper_id == "paper-a"
+    assert reclaimed.writer_lease.owner == "owner-2"
+    assert reclaimed.writer_lease.fencing_token == 2
+    assert datetime.fromisoformat(reclaimed.writer_lease.expires_at) == (
+        now + leases.ATTEMPT_WORK_LEASE_TTL
+    )
+    after = scheduler.attempts.read_attempt(paths, first.attempt_id)
+    assert after["phase"] == "blocked"
+    for field in ("blocker", "next_action", "blocked_from"):
+        assert after[field] == blocked[field]
+    assert len(store.read_json(paths.index)["attempts"]) == 1
+
+
+def _released_blocked_attempt(paths, store, leases, now, scheduler):
+    original = paper("paper-a", 10)
+    snapshot_id = write_assessed_snapshot(store, paths, now, [original])
+    assignment = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    scheduler.attempts.transition_attempt(
+        paths,
+        assignment.attempt_id,
+        "blocked",
+        assignment.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    leases.release_lease(paths, assignment.writer_lease, now)
+    return assignment, original
+
+
+def test_claim_next_reclaim_requires_current_snapshot_candidate(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-b", 9)],
+        assessment_candidates=[original],
+    )
+
+    with pytest.raises(ValueError, match="paper_id"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
+
+
+def test_claim_next_reclaim_requires_current_candidate_assessment_match(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    changed = copy.deepcopy(original)
+    changed["score_rate"]["remaining_hours_p90"] = 99.0
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [changed],
+        assessment_candidates=[original],
+    )
+
+    with pytest.raises(ValueError, match="paper_id"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
+
+
+def test_claim_next_invalid_reclaim_does_not_expire_unrelated_or_change_target_lease(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    changed = copy.deepcopy(original)
+    changed["score_rate"]["remaining_hours_p90"] = 99.0
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [changed],
+        assessment_candidates=[original],
+    )
+    unrelated = leases.acquire_lease(
+        paths,
+        "candidate:unrelated-paper",
+        "unrelated-owner",
+        "unrelated-attempt",
+        now - TTL * 2,
+        TTL,
+    )
+    unrelated_path = paths.resource_lease(unrelated.resource)
+    target_path = paths.resource_lease(f"attempt:{blocked.attempt_id}")
+    unrelated_before = unrelated_path.read_bytes()
+    target_before = target_path.read_bytes()
+
+    with pytest.raises(ValueError, match="paper_id"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
+
+    assert unrelated_path.read_bytes() == unrelated_before
+    assert target_path.read_bytes() == target_before
+
+
+def test_claim_next_reclaim_rejects_duplicate_current_candidates(
+    paths, store, leases, now, scheduler
+):
+    blocked, original = _released_blocked_attempt(
+        paths, store, leases, now, scheduler
+    )
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [copy.deepcopy(original), copy.deepcopy(original)],
+        assessment_candidates=[original],
+    )
+
+    with pytest.raises(ValueError, match="candidates"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=blocked.attempt_id,
+        )
+
+
+@pytest.mark.parametrize("phase", ["submitted", "judging"])
+def test_claim_next_cannot_give_an_owner_a_second_paper(
+    paths, store, now, scheduler, phase
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    assignment = scheduler.claim_next(
+        paths, snapshot_id, "persistent-owner", now
+    )
+    transition_to_submitted(
+        scheduler.attempts, paths, assignment, now
+    )
+    if phase == "judging":
+        scheduler.watch_attempt(
+            paths,
+            assignment.attempt_id,
+            assignment.writer_lease,
+            2,
+            now + TTL * 2,
+            now,
+        )
+
+    with pytest.raises(scheduler.OwnerBusy):
+        scheduler.claim_next(paths, snapshot_id, "persistent-owner", now)
+
+
+def test_claim_next_rejects_raw_or_stale_assessed_snapshot(
+    paths, store, now, scheduler
+):
+    raw_snapshot_id = write_snapshot(store, paths, now, [paper("paper-a", 10)])
+    with pytest.raises(ValueError, match="assessments"):
+        scheduler.claim_next(paths, raw_snapshot_id, "owner-1", now)
+
+    stale_snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-b", 10)],
+        fetched_at=now - TTL - timedelta(microseconds=1),
+    )
+    with pytest.raises(ValueError, match="fetched_at"):
+        scheduler.claim_next(paths, stale_snapshot_id, "owner-1", now)
+
+
+def test_claim_next_rejects_nonblocked_or_live_reclaim_target(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+    first = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    with pytest.raises(ValueError, match="phase"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=first.attempt_id,
+        )
+
+    scheduler.attempts.transition_attempt(
+        paths,
+        first.attempt_id,
+        "blocked",
+        first.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    with pytest.raises(scheduler.leases.LeaseBusy):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=first.attempt_id,
+        )
+
+
+def test_claim_next_releases_owner_mutex_after_exception(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    first = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    with pytest.raises(ValueError, match="phase"):
+        scheduler.claim_next(
+            paths,
+            snapshot_id,
+            "owner-2",
+            now,
+            reclaim_attempt_id=first.attempt_id,
+        )
+
+    assignment = scheduler.claim_next(paths, snapshot_id, "owner-2", now)
+
+    assert assignment.paper_id == "paper-b"
+
+
+def test_valid_claim_next_recovers_prepared_release_before_new_selection(
+    paths,
+    store,
+    leases,
+    now,
+    scheduler,
+    paper_owner,
+    monkeypatch,
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    first = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    scheduler.attempts.transition_attempt(
+        paths,
+        first.attempt_id,
+        "blocked",
+        first.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            first.attempt_id,
+            first.writer_lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "claim-recovery",
+        )
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+
+    assignment = scheduler.claim_next(
+        paths, snapshot_id, "owner-2", now
+    )
+
+    assert assignment.paper_id == "paper-b"
+    assert store.read_json(
+        paths.resource_lease(
+            f"attempt:{first.attempt_id}"
+        )
+    )["released_at"] == now.isoformat()
+    assert store.read_json(
+        paths.paper_owner_release(
+            first.attempt_id,
+            first.writer_lease.fencing_token,
+        )
+    )["status"] == "complete"
+
+
+def test_invalid_claim_next_preflight_does_not_recover_prepared_release(
+    paths,
+    store,
+    leases,
+    now,
+    scheduler,
+    paper_owner,
+    monkeypatch,
+):
+    assessed_snapshot_id = write_assessed_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+    first = scheduler.claim_next(
+        paths, assessed_snapshot_id, "owner-1", now
+    )
+    scheduler.attempts.transition_attempt(
+        paths,
+        first.attempt_id,
+        "blocked",
+        first.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            first.attempt_id,
+            first.writer_lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "invalid-claim-recovery",
+        )
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+    raw_snapshot_id = write_snapshot(
+        store, paths, now, [paper("paper-b", 9)]
+    )
+    lease_before = paths.resource_lease(
+        f"attempt:{first.attempt_id}"
+    ).read_bytes()
+    journal_path = paths.paper_owner_release(
+        first.attempt_id, first.writer_lease.fencing_token
+    )
+    journal_before = journal_path.read_bytes()
+
+    with pytest.raises(ValueError, match="assessments"):
+        scheduler.claim_next(
+            paths, raw_snapshot_id, "owner-2", now
+        )
+
+    assert paths.resource_lease(
+        f"attempt:{first.attempt_id}"
+    ).read_bytes() == lease_before
+    assert journal_path.read_bytes() == journal_before
+
+
+def test_claim_next_and_direct_attempt_claim_share_owner_capacity_lock(
+    paths, store, leases, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    predecessor = scheduler.claim_next(paths, snapshot_id, "previous-owner", now)
+    leases.release_lease(paths, predecessor.writer_lease, now)
+    barrier = threading.Barrier(2)
+    assignments = []
+    expected_errors = []
+    errors = []
+
+    def claim_next():
+        try:
+            barrier.wait()
+            assignments.append(
+                scheduler.claim_next(paths, snapshot_id, "racing-owner", now)
+            )
+        except (scheduler.OwnerBusy, leases.LeaseBusy) as error:
+            expected_errors.append(error)
+        except BaseException as error:  # pragma: no cover - asserted below
+            errors.append(error)
+
+    def claim_directly():
+        try:
+            barrier.wait()
+            assignments.append(
+                leases.claim_attempt(
+                    paths,
+                    predecessor.attempt_id,
+                    "racing-owner",
+                    predecessor.writer_lease.fencing_token,
+                    now,
+                )
+            )
+        except (scheduler.OwnerBusy, leases.LeaseBusy) as error:
+            expected_errors.append(error)
+        except BaseException as error:  # pragma: no cover - asserted below
+            errors.append(error)
+
+    threads = [
+        threading.Thread(target=claim_next),
+        threading.Thread(target=claim_directly),
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=5)
+
+    assert all(not thread.is_alive() for thread in threads)
+    assert errors == []
+    assert len(assignments) == 1
+    assert len(expected_errors) == 1
 
 
 def test_scheduler_admits_exactly_twenty_runnable_attempts(
@@ -719,14 +1373,31 @@ def test_second_judgment_archives_superseded_first_round(
         finalized,
         scheduler.validate_judgment_record,
     )
-    scheduler.attempts.transition_attempt(
+    verdict_record = {
+        "kind": "verdict",
+        "attempt_id": assignment.attempt_id,
+        "attempt_number": 1,
+        "observed_at": (now + timedelta(minutes=2)).isoformat(),
+        "source_commit": "abc123",
+        "payload_sha256": "1" * 64,
+    }
+    add_attestation_fields(verdict_record)
+    verdict_attestation_id = scheduler.attempts.attestations.persist(
+        paths, verdict_record
+    )
+    scheduler.attempts.transition_attested(
         paths,
         assignment.attempt_id,
         "improving",
+        verdict_attestation_id,
+        {
+            "improvement_attempts": 1,
+            "improvement_reason": (
+                "official verdict requested stronger evidence"
+            ),
+        },
         assignment.writer_lease,
         now + timedelta(minutes=2),
-        improvement_attempts=1,
-        improvement_reason="official verdict requested stronger evidence",
     )
     scheduler.attempts.update_attempt(
         paths,

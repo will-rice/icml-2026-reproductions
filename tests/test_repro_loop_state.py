@@ -1897,6 +1897,195 @@ def test_cli_records_design_then_independent_review(tmp_path: Path):
     assert reviewed["design_review"]["reviewer"] == "reviewer-agent"
 
 
+def test_claim_next_cli_returns_exact_assignment_identity(tmp_path: Path):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh", "leases", "attempts", "attestations"):
+        sys.modules.pop(name, None)
+    import attempts
+    import leases
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    claim_one = "Challenge claim 1"
+    claim_two = "Challenge claim 2"
+    payload = {
+        "fetched_at": now.isoformat(),
+        "source_revision": "source-1",
+        "candidates": [
+            {
+                "paper_id": "paper-a",
+                "title": "Paper A",
+                "slug": "paper-a",
+                "upstream_revision": "revision-a",
+                "target_claims": ["claim-1", "claim-2"],
+                "claim_bindings": [
+                    {
+                        "target_claim": "claim-1",
+                        "challenge_claim": claim_one,
+                        "challenge_claim_sha256": hashlib.sha256(
+                            claim_one.encode()
+                        ).hexdigest(),
+                    },
+                    {
+                        "target_claim": "claim-2",
+                        "challenge_claim": claim_two,
+                        "challenge_claim_sha256": hashlib.sha256(
+                            claim_two.encode()
+                        ).hexdigest(),
+                    },
+                ],
+                "live_claims": [
+                    {"text": claim_one, "status": "extracted"},
+                    {"text": claim_two, "status": "extracted"},
+                ],
+                "score_rate": {
+                    "claim_expectations": [
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                claim_one.encode()
+                            ).hexdigest(),
+                            "p_verified": 0.5,
+                            "p_falsified": 0.25,
+                            "p_toy": 0.1,
+                        },
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                claim_two.encode()
+                            ).hexdigest(),
+                            "p_verified": 0.0,
+                            "p_falsified": 0.5,
+                            "p_toy": 0.25,
+                        },
+                    ],
+                    "judged_before_deadline_probability": 0.8,
+                    "remaining_hours_p90": 2.0,
+                    "reusable_implementation": False,
+                    "direct_artifact_score": 4,
+                    "full_score_claim_paths": 2,
+                    "remaining_time_variance_hours2": 0.25,
+                    "primary_risk": "Artifact schema may have drifted.",
+                },
+                "estimated_api_cost_usd": 0.0,
+                "score": 10,
+                "artifact_access": True,
+                "cpu_only": True,
+                "safety_blocker": None,
+                "licensing_blocker": None,
+            }
+        ],
+        "queued_submissions": [],
+        "tagged_spaces": [],
+        "verdicts": [],
+    }
+    candidate = payload["candidates"][0]
+    assessment_document = {
+        "challenge_revision": "challenge-revision-1",
+        "assessor": "state-cli-test",
+        "assessed_at": now.isoformat(),
+        "assessments": [
+            {
+                key: candidate[key]
+                for key in refresh.SCORE_RATE_ASSESSMENT_KEYS
+            }
+        ],
+    }
+    assessment_path = tmp_path / "assessments.json"
+    assessment_path.write_text(json.dumps(assessment_document), encoding="utf-8")
+    assessment_input = refresh.load_assessments(assessment_path)
+    sources = {
+        "challenge": {
+            "repo_id": refresh.CHALLENGE_REPO,
+            "revision": assessment_document["challenge_revision"],
+        }
+    }
+    payload.update(
+        {
+            "source_revision": hashlib.sha256(
+                json.dumps(
+                    sources,
+                    allow_nan=False,
+                    separators=(",", ":"),
+                    sort_keys=True,
+                ).encode("utf-8")
+            ).hexdigest(),
+            "sources": sources,
+            "assessments": {
+                "content_sha256": assessment_input["content_sha256"],
+                "challenge_revision": assessment_document["challenge_revision"],
+                "assessor": assessment_document["assessor"],
+                "assessed_at": assessment_document["assessed_at"],
+                "records": assessment_document["assessments"],
+                "matched_paper_ids": [candidate["paper_id"]],
+            },
+            "spaces": [],
+        }
+    )
+    snapshot_id = refresh.persist_snapshot(paths, payload)
+
+    assignment = json.loads(
+        run_cli(
+            "claim-next",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--owner",
+            "paper-owner-1",
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+
+    assert assignment == {
+        "attempt_id": assignment["attempt_id"],
+        "paper_id": "paper-a",
+        "owner": "paper-owner-1",
+        "fencing_token": 1,
+        "phase": "selected",
+        "reclaimed": False,
+    }
+
+    writer = leases.Lease(
+        **store.read_json(paths.resource_lease(f"attempt:{assignment['attempt_id']}"))
+    )
+    attempts.transition_attempt(
+        paths,
+        assignment["attempt_id"],
+        "blocked",
+        writer,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    leases.release_lease(paths, writer, now)
+    reclaimed = json.loads(
+        run_cli(
+            "claim-next",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--owner",
+            "paper-owner-2",
+            "--reclaim-attempt-id",
+            assignment["attempt_id"],
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+
+    assert reclaimed == {
+        "attempt_id": assignment["attempt_id"],
+        "paper_id": "paper-a",
+        "owner": "paper-owner-2",
+        "fencing_token": 2,
+        "phase": "blocked",
+        "reclaimed": True,
+    }
+
+
 def test_scheduler_assignment_drives_documented_cli_lifecycle(tmp_path: Path):
     scripts = str(STATE_MODULE_PATH.parent)
     sys.path.insert(0, scripts)
@@ -2440,9 +2629,12 @@ def test_skill_preserves_worker_controller_authority_contract():
     combined = f"{skill}\n{checklist}"
 
     for required in (
-        "Worker Or Controller?",
+        "Roles And Authority",
+        "persistent paper-owner worker is the trusted controller",
+        "subordinate implementation subprocess",
+        "not the dispatched worker",
         "proposal, never authority",
-        "write only the assigned worktree",
+        "Write only the assigned worktree",
         "attest-validation",
         "publish-deployment",
         "attest-submission",
@@ -2475,7 +2667,9 @@ def test_worker_boundary_is_required_by_workspace_and_remote_setup():
         encoding="utf-8"
     )
 
-    assert "Paper workers are untrusted" in agents
+    assert "Directly dispatched persistent paper-owner workers are trusted controllers." in agents
+    assert "An optional subordinate implementation subprocess is not the dispatched" in agents
+    assert "It is an untrusted proposal producer" in agents
     assert "worker_guard.py" in agents
     assert "worker_guard.py" in remote
     assert "--dangerously-skip-permissions" in remote
@@ -3059,6 +3253,289 @@ def schema_v6_attempts(tmp_path: Path, submitted: bool = False):
             deployed_sha="submitted-sha",
         )
     return paths, attempt_leases
+
+
+def persist_release_attempt(paths, store, attempt_id, phase, now, **updates):
+    attempt = {
+        "attempt_id": attempt_id,
+        "paper_id": f"paper-{attempt_id}",
+        "phase": phase,
+        "snapshot_id": "snapshot-1",
+        "updated_at": now.isoformat(),
+        **updates,
+    }
+    store.atomic_json_write(paths.attempt(attempt_id), attempt, store.validate_attempt)
+    section = "history" if phase == "complete" else "attempts"
+    with store.locked_json(paths.index, store.validate_index) as index:
+        index[section][attempt_id] = {
+            "path": f"repro-loop/attempts/{attempt_id}.json",
+            "paper_id": attempt["paper_id"],
+            "phase": phase,
+            "updated_at": attempt["updated_at"],
+        }
+
+
+def release_identity(attempt_id, lease):
+    return (
+        "--attempt-id",
+        attempt_id,
+        "--owner",
+        lease.owner,
+        "--fencing-token",
+        str(lease.fencing_token),
+    )
+
+
+def test_cli_release_paper_returns_reclaimable_blocked_event(tmp_path: Path):
+    paths, _ = schema_v6_attempts(tmp_path)
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases"):
+        sys.modules.pop(name, None)
+    import leases
+    import store
+
+    now = datetime(2026, 7, 28, 12, 0, tzinfo=timezone.utc)
+    persist_release_attempt(
+        paths,
+        store,
+        "blocked-release",
+        "blocked",
+        now,
+        blocker="external outage",
+        next_action="retry after recovery",
+    )
+    lease = leases.acquire_lease(
+        paths,
+        "attempt:blocked-release",
+        "paper-owner",
+        "blocked-release",
+        now,
+        timedelta(hours=1),
+    )
+
+    released = json.loads(
+        run_cli(
+            "release-paper",
+            str(paths.index),
+            *release_identity("blocked-release", lease),
+            "--outcome",
+            "blocked",
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+
+    assert released["event"] == "paper-owner-released"
+    assert released["reclaimable"] is True
+    assert released["blocker"] == "external outage"
+    assert store.read_json(
+        paths.resource_lease("attempt:blocked-release")
+    )["released_at"] == now.isoformat()
+
+
+def test_cli_release_paper_returns_nonreclaimable_scored_event(tmp_path: Path):
+    paths, _ = schema_v6_attempts(tmp_path)
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases"):
+        sys.modules.pop(name, None)
+    import leases
+    import store
+
+    now = datetime(2026, 7, 28, 12, 0, tzinfo=timezone.utc)
+    persist_release_attempt(
+        paths,
+        store,
+        "complete-release",
+        "complete",
+        now,
+        verdict={"claims": [{"claim_id": "claim-1", "verdict": "verified"}]},
+    )
+    lease = leases.acquire_lease(
+        paths,
+        "attempt:complete-release",
+        "paper-owner",
+        "complete-release",
+        now,
+        timedelta(hours=1),
+    )
+
+    released = json.loads(
+        run_cli(
+            "release-paper",
+            str(paths.index),
+            *release_identity("complete-release", lease),
+            "--outcome",
+            "scored",
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+
+    assert released["outcome"] == "scored"
+    assert released["reclaimable"] is False
+    assert released["verdict"] == {
+        "claims": [{"claim_id": "claim-1", "verdict": "verified"}]
+    }
+
+
+@pytest.mark.parametrize("phase", ["selected", "submitted", "judging"])
+def test_cli_cannot_release_unscored_paper_as_scored(tmp_path: Path, phase: str):
+    paths, _ = schema_v6_attempts(tmp_path)
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases"):
+        sys.modules.pop(name, None)
+    import leases
+    import store
+
+    now = datetime(2026, 7, 28, 12, 0, tzinfo=timezone.utc)
+    attempt_id = f"{phase}-release"
+    persist_release_attempt(paths, store, attempt_id, phase, now)
+    lease = leases.acquire_lease(
+        paths,
+        f"attempt:{attempt_id}",
+        "paper-owner",
+        attempt_id,
+        now,
+        timedelta(hours=1),
+    )
+
+    result = run_cli_unchecked(
+        "release-paper",
+        str(paths.index),
+        *release_identity(attempt_id, lease),
+        "--outcome",
+        "scored",
+        "--now",
+        now.isoformat(),
+    )
+
+    assert result.returncode != 0
+    assert "phase" in result.stderr
+    assert store.read_json(paths.resource_lease(f"attempt:{attempt_id}"))["released_at"] is None
+
+
+def test_cli_release_rejects_stale_owner_and_missing_blocker_metadata(
+    tmp_path: Path,
+):
+    paths, _ = schema_v6_attempts(tmp_path)
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "leases"):
+        sys.modules.pop(name, None)
+    import leases
+    import store
+
+    now = datetime(2026, 7, 28, 12, 0, tzinfo=timezone.utc)
+    persist_release_attempt(
+        paths,
+        store,
+        "blocked-stale",
+        "blocked",
+        now,
+        blocker="external outage",
+        next_action="retry after recovery",
+    )
+    stale = leases.acquire_lease(
+        paths,
+        "attempt:blocked-stale",
+        "paper-owner",
+        "blocked-stale",
+        now,
+        timedelta(hours=1),
+    )
+    successor = leases.acquire_lease(
+        paths,
+        "attempt:blocked-stale",
+        "successor",
+        "blocked-stale",
+        now + timedelta(hours=1),
+        timedelta(hours=1),
+    )
+    persist_release_attempt(
+        paths,
+        store,
+        "blocked-metadata",
+        "blocked",
+        now,
+        blocker="external outage",
+    )
+    metadata_lease = leases.acquire_lease(
+        paths,
+        "attempt:blocked-metadata",
+        "other-owner",
+        "blocked-metadata",
+        now,
+        timedelta(hours=1),
+    )
+
+    stale_result = run_cli_unchecked(
+        "release-paper",
+        str(paths.index),
+        *release_identity("blocked-stale", stale),
+        "--outcome",
+        "blocked",
+        "--now",
+        (now + timedelta(hours=1)).isoformat(),
+    )
+    metadata_result = run_cli_unchecked(
+        "release-paper",
+        str(paths.index),
+        *release_identity("blocked-metadata", metadata_lease),
+        "--outcome",
+        "blocked",
+        "--now",
+        now.isoformat(),
+    )
+
+    assert stale_result.returncode != 0
+    assert metadata_result.returncode != 0
+    assert "next_action" in metadata_result.stderr
+    assert store.read_json(paths.resource_lease("attempt:blocked-stale")) == {
+        "resource": successor.resource,
+        "owner": successor.owner,
+        "attempt_id": successor.attempt_id,
+        "acquired_at": successor.acquired_at,
+        "expires_at": successor.expires_at,
+        "fencing_token": successor.fencing_token,
+        "released_at": None,
+    }
+    assert store.read_json(paths.resource_lease("attempt:blocked-metadata"))["released_at"] is None
+
+
+def test_cli_record_paper_owner_failure_keeps_lease_live(tmp_path: Path):
+    paths, attempt_leases = schema_v6_attempts(tmp_path)
+    lease = attempt_leases["a1"]
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+
+    failed = json.loads(
+        run_cli(
+            "record-paper-owner-failure",
+            str(paths.index),
+            *release_identity("a1", lease),
+            "--error-type",
+            "RuntimeError",
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+
+    assert failed["event"] == "paper-owner-failed"
+    assert failed["lease_released"] is False
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    sys.modules.pop("leases", None)
+    import leases
+
+    current = leases.assert_fence(paths, lease, now)
+    assert (
+        current.owner,
+        current.attempt_id,
+        current.fencing_token,
+        current.released_at,
+    ) == (lease.owner, lease.attempt_id, lease.fencing_token, None)
 
 
 def worker_contract(

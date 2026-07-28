@@ -1,4 +1,4 @@
 interface:
   display_name: "ICML Reproduction Loop"
   short_description: "Run low-compute ICML paper reproductions end to end"
-  default_prompt: "Use icml-repro-loop directly. Own one paper through selection, design, guarded implementation, controller validation, Space publication, submission, official-score watching, evidence-driven correction, and exact verdict import. Do not return after an implementation worker exits; publish, watch, and correct until the paper has an official score or a genuine persisted blocker."
+  default_prompt: "Use icml-repro-loop directly and keep running its paper-owner loop."

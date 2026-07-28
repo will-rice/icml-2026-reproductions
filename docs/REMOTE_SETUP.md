@@ -88,28 +88,36 @@ test -L "$CODEX_HOME/skills/icml-repro-loop"
 test "$(readlink "$CODEX_HOME/skills/icml-repro-loop")" = "$PWD/skills/icml-repro-loop"
 ```
 
-## Verify The Worker Boundary
+## Verify Persistent Paper-Owner And Subordinate Runtime Preflights
 
-Paper implementation workers must be launched only from a controller-authored
-contract through
-`skills/icml-repro-loop/scripts/worker_guard.py`. Before the first
-implementation launch for each runtime/worktree pair, run its
-`preflight_runtime` probe. The probe must execute its inside-worktree control
-write while denying both the synthetic outside-worktree write and synthetic
-credential-file read. If it cannot prove both denials, issue only a read-only
-research contract.
+Before a directly dispatched persistent paper-owner worker begins its current
+fenced iteration, verify its controller runtime preflight: controller
+credentials are present and authenticated, the live network is available for
+the permitted Hub/challenge operations, and the state root is writable. The
+paper-owner worker may use those credentials only for the exact lifecycle of
+its current fenced attempt. Do not put credentials, tokens, cookies, or their
+values in Git, evidence, logs, or a subprocess environment.
 
-The constructed worker environment removes `HF_TOKEN`,
+An optional subordinate implementation subprocess is not the dispatched
+worker. Launch it only from a paper-owner-authored contract through
+`skills/icml-repro-loop/scripts/worker_guard.py`. Before the first subordinate
+launch for each runtime/worktree pair, run its `preflight_runtime` probe. The
+probe must execute its inside-worktree control write while denying both the
+synthetic outside-worktree write and synthetic credential-file read. If it
+cannot prove credential stripping and scoped write/read isolation, issue only a
+read-only research contract.
+
+The constructed subordinate environment removes `HF_TOKEN`,
 `HUGGING_FACE_HUB_TOKEN`, `GH_TOKEN`, Git credential helpers, and inherited
 Hugging Face caches; it sets `HF_HUB_DISABLE_IMPLICIT_TOKEN=1` and redirects
 the Hub cache to an empty ignored directory inside the assigned worktree.
-Antigravity launches require `--sandbox`; Codex implementation launches
+Antigravity subordinate launches require `--sandbox`; Codex subordinate launches
 require `-s workspace-write -C <assigned-worktree>`. Never launch a worker
 with `--dangerously-skip-permissions`,
 `--dangerously-bypass-approvals-and-sandbox`, danger-full-access, or
 `--add-dir`.
 
-Verify the deterministic boundary tests on every host:
+Verify the deterministic subordinate-boundary tests on every host:
 
 ```bash
 uv run pytest tests/test_repro_loop_worker_guard.py -q
@@ -135,10 +143,13 @@ Incomplete intervals report `null`.
 
 `candidate-census`, `score-report`, `show-*`, and `list-attempts` are read-only.
 `refresh-live` persists snapshots, while scheduling, worker launch, leases,
-design/lifecycle transitions, attestations, verdict sync, publication, and
-repair are controller mutations. Never run the latter commands from a paper
-worker. Submitted, judging, and blocked attempts release runnable
-implementation capacity.
+design/lifecycle transitions, attestations, verdict sync, publication, release,
+and repair are persistent paper-owner controller mutations. Never run the
+latter commands from a subordinate implementation subprocess. Submitted and
+judging attempts remain dedicated to their current paper-owner worker; exact
+scored or genuine blocked release precedes the next `claim-next`. Before a
+genuine blocked release, use fenced `transition-attempt` to record nonempty
+`blocker` and `next_action`; only then call `release-paper --outcome blocked`.
 
 ## Verify The Workspace
 

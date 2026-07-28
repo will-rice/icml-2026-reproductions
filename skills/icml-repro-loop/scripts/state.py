@@ -170,6 +170,15 @@ def main() -> None:
     scheduler_parser.add_argument("--snapshot-id", required=True)
     scheduler_parser.add_argument("--adopt-space-id")
     scheduler_parser.add_argument("--now")
+    claim_next_parser = commands.add_parser(
+        "claim-next",
+        help="atomically claim one paper for one persistent paper owner",
+    )
+    claim_next_parser.add_argument("path", type=Path)
+    claim_next_parser.add_argument("--snapshot-id", required=True)
+    claim_next_parser.add_argument("--owner", required=True)
+    claim_next_parser.add_argument("--reclaim-attempt-id")
+    claim_next_parser.add_argument("--now")
     claim_parser = commands.add_parser(
         "claim-attempt", help="claim an active attempt from an expected predecessor"
     )
@@ -190,7 +199,8 @@ def main() -> None:
     _add_fence_arguments(resume_parser)
     resume_parser.add_argument("--now")
     worker_parser = commands.add_parser(
-        "run-worker", help="run one fenced paper worker with telemetry"
+        "run-worker",
+        help="run one fenced subordinate implementation subprocess with telemetry",
     )
     worker_parser.add_argument("path", type=Path)
     _add_fence_arguments(worker_parser)
@@ -289,6 +299,22 @@ def main() -> None:
     _add_fence_arguments(submission_parser)
     submission_parser.add_argument("--snapshot-id", required=True)
     submission_parser.add_argument("--now")
+    release_parser = commands.add_parser(
+        "release-paper",
+        help="release one fenced scored or blocked paper-owner iteration",
+    )
+    release_parser.add_argument("path", type=Path)
+    _add_fence_arguments(release_parser)
+    release_parser.add_argument("--outcome", choices=("scored", "blocked"), required=True)
+    release_parser.add_argument("--now")
+    failure_parser = commands.add_parser(
+        "record-paper-owner-failure",
+        help="record one fenced paper-owner failure without releasing its lease",
+    )
+    failure_parser.add_argument("path", type=Path)
+    _add_fence_arguments(failure_parser)
+    failure_parser.add_argument("--error-type", required=True)
+    failure_parser.add_argument("--now")
     arguments = parser.parse_args()
 
     if arguments.command in {
@@ -300,6 +326,7 @@ def main() -> None:
         "candidate-census",
         "audit-authority",
         "scheduler-pass",
+        "claim-next",
         "claim-attempt",
         "renew-attempt",
         "resume-attempt",
@@ -314,6 +341,8 @@ def main() -> None:
         "attest-validation",
         "publish-deployment",
         "attest-submission",
+        "release-paper",
+        "record-paper-owner-failure",
     }:
         state = _run_v6_command(arguments)
     elif arguments.command == "migrate-v6":
@@ -496,6 +525,23 @@ def _run_v6_command(
                 for assignment in report.assignments
             ]
         }
+    if arguments.command == "claim-next":
+        assignment = scheduler.claim_next(
+            paths,
+            arguments.snapshot_id,
+            arguments.owner,
+            now,
+            reclaim_attempt_id=arguments.reclaim_attempt_id,
+        )
+        attempt = attempts.read_attempt(paths, assignment.attempt_id)
+        return {
+            "attempt_id": assignment.attempt_id,
+            "paper_id": assignment.paper_id,
+            "owner": assignment.writer_lease.owner,
+            "fencing_token": assignment.writer_lease.fencing_token,
+            "phase": attempt["phase"],
+            "reclaimed": assignment.reclaimed,
+        }
     if arguments.command == "claim-attempt":
         lease = leases.claim_attempt(
             paths,
@@ -513,6 +559,26 @@ def _run_v6_command(
         leases,
         store,
     )
+    if arguments.command == "release-paper":
+        import paper_owner
+
+        return paper_owner.release_paper(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.outcome,
+            now,
+        )
+    if arguments.command == "record-paper-owner-failure":
+        import paper_owner
+
+        return paper_owner.record_worker_failure(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.error_type,
+            now,
+        )
     if arguments.command == "run-worker":
         import worker_guard
 

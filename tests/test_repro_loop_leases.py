@@ -155,6 +155,20 @@ def test_first_attempt_claim_requires_active_attempt_and_token_zero(
     assert claimed.expires_at == (now + WORK_TTL).isoformat()
 
 
+def test_attempt_claim_cannot_give_one_owner_two_live_attempt_leases(
+    leases, paths, now, store
+):
+    register_attempt(store, paths, "a1", now)
+    register_attempt(store, paths, "a2", now)
+    first = leases.claim_attempt(paths, "a1", "persistent-owner", 0, now)
+
+    with pytest.raises(leases.LeaseBusy):
+        leases.claim_attempt(paths, "a2", "persistent-owner", 0, now)
+
+    assert leases.assert_fence(paths, first, now) == first
+    assert not paths.resource_lease("attempt:a2").exists()
+
+
 def test_expired_attempt_reclaim_increments_expected_predecessor_token(
     leases, paths, now, store
 ):
@@ -179,7 +193,7 @@ def test_expired_attempt_reclaim_increments_expected_predecessor_token(
     released_claim = leases.claim_attempt(
         paths,
         "a2",
-        "worker-2",
+        "released-reclaim-worker",
         released_predecessor.fencing_token,
         now + timedelta(minutes=1),
     )
@@ -276,7 +290,11 @@ def test_attempt_claim_enforces_predecessor_chronology_boundaries(
             released_at - timedelta(microseconds=1),
         )
     release_claim = leases.claim_attempt(
-        paths, "a2", "worker-2", releasing.fencing_token, released_at
+        paths,
+        "a2",
+        "release-boundary-worker",
+        releasing.fencing_token,
+        released_at,
     )
     assert release_claim.acquired_at == released_at.isoformat()
 
@@ -395,7 +413,9 @@ def test_attempt_renew_rejects_history_missing_and_cross_paper_references(
         leases.renew_attempt(paths, history_lease, now + timedelta(minutes=1))
 
     register_attempt(store, paths, "missing", now)
-    missing_lease = leases.claim_attempt(paths, "missing", "worker-1", 0, now)
+    missing_lease = leases.claim_attempt(
+        paths, "missing", "missing-owner", 0, now
+    )
     with store.locked_json(paths.index, store.validate_index) as index:
         del index["attempts"]["missing"]
     with pytest.raises(ValueError, match="attempt_id"):
@@ -403,7 +423,7 @@ def test_attempt_renew_rejects_history_missing_and_cross_paper_references(
 
     register_attempt(store, paths, "cross-paper", now)
     cross_paper_lease = leases.claim_attempt(
-        paths, "cross-paper", "worker-1", 0, now
+        paths, "cross-paper", "cross-paper-owner", 0, now
     )
     with store.locked_json(paths.index, store.validate_index) as index:
         index["attempts"]["cross-paper"]["paper_id"] = "other-paper"
