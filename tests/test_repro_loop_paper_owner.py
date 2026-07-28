@@ -5,6 +5,7 @@ import importlib.util
 from pathlib import Path
 import sys
 import threading
+from contextlib import contextmanager
 
 import pytest
 
@@ -336,15 +337,30 @@ def test_concurrent_release_emits_event_only_for_winning_fence(
     paths, blocked_attempt, now, paper_owner, telemetry, monkeypatch
 ):
     attempt_id, lease = blocked_attempt
-    barrier = threading.Barrier(2)
-    original_assert_fence = paper_owner.leases.assert_fence
+    first_append_entered = threading.Event()
+    allow_first_append = threading.Event()
+    second_hold_attempted = threading.Event()
+    second_append_entered = threading.Event()
+    original_append_event = paper_owner.telemetry.append_event
+    original_hold_fence = paper_owner.leases.hold_fence
     results = []
     errors = []
 
-    def synchronized_assert_fence(*args, **kwargs):
-        value = original_assert_fence(*args, **kwargs)
-        barrier.wait(timeout=5)
-        return value
+    @contextmanager
+    def tracked_hold_fence(*args, **kwargs):
+        if threading.current_thread().name == "race-second":
+            second_hold_attempted.set()
+        with original_hold_fence(*args, **kwargs) as current:
+            yield current
+
+    def append_event(*args, **kwargs):
+        session_id, event = args[1], args[3]
+        if event == "paper-owner-released" and session_id == "race-release-0":
+            first_append_entered.set()
+            assert allow_first_append.wait(timeout=5)
+        if event == "paper-owner-released" and session_id == "race-release-1":
+            second_append_entered.set()
+        return original_append_event(*args, **kwargs)
 
     def release(session_id):
         try:
@@ -361,17 +377,22 @@ def test_concurrent_release_emits_event_only_for_winning_fence(
         except BaseException as error:  # pragma: no cover - asserted below
             errors.append(error)
 
-    monkeypatch.setattr(
-        paper_owner.leases, "assert_fence", synchronized_assert_fence
+    monkeypatch.setattr(paper_owner.leases, "hold_fence", tracked_hold_fence)
+    monkeypatch.setattr(paper_owner.telemetry, "append_event", append_event)
+    first = threading.Thread(
+        target=release, args=("race-release-0",), name="race-first"
     )
-    workers = [
-        threading.Thread(target=release, args=(f"race-release-{number}",))
-        for number in range(2)
-    ]
-    for worker in workers:
-        worker.start()
-    for worker in workers:
-        worker.join()
+    second = threading.Thread(
+        target=release, args=("race-release-1",), name="race-second"
+    )
+    first.start()
+    assert first_append_entered.wait(timeout=5)
+    second.start()
+    assert second_hold_attempted.wait(timeout=5)
+    assert not second_append_entered.is_set()
+    allow_first_append.set()
+    first.join(timeout=5)
+    second.join(timeout=5)
 
     events = [
         *telemetry.read_session(paths, "race-release-0"),
@@ -379,5 +400,6 @@ def test_concurrent_release_emits_event_only_for_winning_fence(
     ]
     assert len(results) == 1
     assert len(errors) == 1
+    assert isinstance(errors[0], paper_owner.leases.StaleFence)
     assert len(events) == 1
     assert events[0]["event"] == "paper-owner-released"
