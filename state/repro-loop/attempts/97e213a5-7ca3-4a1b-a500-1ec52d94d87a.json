@@ -1,0 +1,211 @@
+{
+  "alias_paper_ids": [
+    "71122"
+  ],
+  "alphaxiv": "2602.02495",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2602.02495",
+  "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+  "authors": [
+    "Peter Chen",
+    "Xiaopeng Li",
+    "Xi Chen",
+    "Tianyi Lin"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3).",
+      "challenge_claim_sha256": "0d457572ea8a502fa8a489fef3e15da21b13cc39dd3a3730843d1cbe833059b0",
+      "target_claim": "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3)."
+    },
+    {
+      "challenge_claim": "The clipped CAGrad update is introduced to stabilize multi-objective LLM alignment while respecting user-specified objective weights (Section 3.2).",
+      "challenge_claim_sha256": "50719d645042a500f9c4d53fbdfedf719ee56429ddb73a231912f1eaeadb1b31",
+      "target_claim": "The clipped CAGrad update is introduced to stabilize multi-objective LLM alignment while respecting user-specified objective weights (Section 3.2)."
+    },
+    {
+      "challenge_claim": "The paper proves convergence of clipped CAGrad to Pareto-critical points that respect user-specified weights in nonconvex smooth settings (Theorem 3.1).",
+      "challenge_claim_sha256": "5ec835ce150ff60d1e2bbd4fbdf7d1ebacf91bb2b6b2d65f72c44c3b3ed65229",
+      "target_claim": "The paper proves convergence of clipped CAGrad to Pareto-critical points that respect user-specified weights in nonconvex smooth settings (Theorem 3.1)."
+    },
+    {
+      "challenge_claim": "For two objectives, the analysis shows clipping can strictly improve the convergence rate (Theorem 3.2).",
+      "challenge_claim_sha256": "b74a0ea75967144b210934fd40fd23449d3ef985df878d5a9e14c4b04025ba4b",
+      "target_claim": "For two objectives, the analysis shows clipping can strictly improve the convergence rate (Theorem 3.2)."
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "controller-raco-design-author",
+    "path": "docs/superpowers/specs/2026-07-28-raco-score-reproduction-design.md",
+    "recorded_at": "2026-07-28T01:34:38.205081+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-28T01:46:15.592412+00:00",
+    "reviewer": "assess-timerewarder-agoq-independent-review"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2602.02495",
+  "i": 3538,
+  "insts": [
+    "DAMO Academy, Alibaba Seattle // UC Berkeley",
+    "The Chinese University of Hong Kong, Shenzhen",
+    "NYU"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "RACO is an offline, reward-free preference-alignment method that accepts user-specified objective weights and explicitly handles conflicting objectives (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "The method uses CAGrad-Clip to limit correction gradients so updates better respect preferred objective trade-offs (Figure 1, Algorithm 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "On TL;DR summarization, RACO achieves better Pareto frontiers for conciseness-quality and faithfulness-quality trade-offs than AMoPO and weighted-loss DPO baselines (Figure 2, Figure 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "On BeaverTails safety alignment, RACO improves harmlessness-helpfulness Pareto trade-offs across Qwen3 and Gemma3 setups (Figure 4)."
+    },
+    {
+      "status": "unverified",
+      "text": "Ablations show clipping and the correction-radius constant affect validation margins and Pareto frontiers (Figure 5, Figure 6)."
+    },
+    {
+      "status": "unverified",
+      "text": "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "The clipped CAGrad update is introduced to stabilize multi-objective LLM alignment while respecting user-specified objective weights (Section 3.2)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper proves convergence of clipped CAGrad to Pareto-critical points that respect user-specified weights in nonconvex smooth settings (Theorem 3.1)."
+    },
+    {
+      "status": "unverified",
+      "text": "For two objectives, the analysis shows clipping can strictly improve the convergence rate (Theorem 3.2)."
+    },
+    {
+      "status": "unverified",
+      "text": "Experiments on multi-objective summarization and safety alignment across Qwen 3, Llama 3, and Gemma 3 report better Pareto trade-offs than reward-free baselines (Section 4)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=vSzRJyg6k0",
+  "orid": "vSzRJyg6k0",
+  "paper_id": "vSzRJyg6k0",
+  "phase": "implementing",
+  "pid": "60903",
+  "safety_blocker": null,
+  "score": 23,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "e9a35e34b57a7273bf84d3d5981ab19f8ff1088adef8363f4640dcf436183944",
+        "p_falsified": 0.05,
+        "p_toy": 0.4,
+        "p_verified": 0.35
+      },
+      {
+        "challenge_claim_sha256": "7c0aa54e034d03f2d0905417a024af4db41338cd9a803a0b42e441945c307cf9",
+        "p_falsified": 0.05,
+        "p_toy": 0.4,
+        "p_verified": 0.45
+      },
+      {
+        "challenge_claim_sha256": "85abbc8a21d5c4537409f6e9f2af6bffc7e4c15e2311dfa078bf816ea0cffc9e",
+        "p_falsified": 0.01,
+        "p_toy": 0.03,
+        "p_verified": 0.01
+      },
+      {
+        "challenge_claim_sha256": "dac93f364ac0469302894920781b034bfcd205816fbe16537c2f8e7c10d8995d",
+        "p_falsified": 0.01,
+        "p_toy": 0.02,
+        "p_verified": 0.01
+      },
+      {
+        "challenge_claim_sha256": "269d8a5053e224206036399bccb2435455565149086de6439a9046d89682772b",
+        "p_falsified": 0.02,
+        "p_toy": 0.25,
+        "p_verified": 0.05
+      },
+      {
+        "challenge_claim_sha256": "0d457572ea8a502fa8a489fef3e15da21b13cc39dd3a3730843d1cbe833059b0",
+        "p_falsified": 0.05,
+        "p_toy": 0.2,
+        "p_verified": 0.65
+      },
+      {
+        "challenge_claim_sha256": "50719d645042a500f9c4d53fbdfedf719ee56429ddb73a231912f1eaeadb1b31",
+        "p_falsified": 0.05,
+        "p_toy": 0.45,
+        "p_verified": 0.35
+      },
+      {
+        "challenge_claim_sha256": "5ec835ce150ff60d1e2bbd4fbdf7d1ebacf91bb2b6b2d65f72c44c3b3ed65229",
+        "p_falsified": 0.05,
+        "p_toy": 0.25,
+        "p_verified": 0.65
+      },
+      {
+        "challenge_claim_sha256": "b74a0ea75967144b210934fd40fd23449d3ef985df878d5a9e14c4b04025ba4b",
+        "p_falsified": 0.05,
+        "p_toy": 0.15,
+        "p_verified": 0.75
+      },
+      {
+        "challenge_claim_sha256": "58b31f527bb5e1bccb05c0dab775a74c2f2bdcd8e92ef2c0dd578733b5fb058e",
+        "p_falsified": 0.01,
+        "p_toy": 0.03,
+        "p_verified": 0.01
+      }
+    ],
+    "direct_artifact_score": 4,
+    "full_score_claim_paths": 3,
+    "judged_before_deadline_probability": 0.78,
+    "primary_risk": "The existing local implementation is not the upstream CAGrad-Clip algorithm and must be replaced; empirical TL;DR, BeaverTails, model-family, and ablation claims remain GPU-scale and out of scope.",
+    "remaining_hours_p90": 14.0,
+    "remaining_time_variance_hours2": 16.0,
+    "reusable_implementation": true
+  },
+  "slug": "reward-free-alignment-for-conflicting-objectives",
+  "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+  "spot": true,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3).",
+    "The clipped CAGrad update is introduced to stabilize multi-objective LLM alignment while respecting user-specified objective weights (Section 3.2).",
+    "The paper proves convergence of clipped CAGrad to Pareto-critical points that respect user-specified weights in nonconvex smooth settings (Theorem 3.1).",
+    "For two objectives, the analysis shows clipping can strictly improve the convergence rate (Theorem 3.2)."
+  ],
+  "title": "Reward-free Alignment for Conflicting Objectives",
+  "transitions": [
+    {
+      "at": "2026-07-28T01:34:37.888196+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-raco-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-28T01:46:15.592412+00:00",
+      "fencing_token": 2,
+      "from": "design-pending",
+      "owner": "controller-raco-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-28T01:46:15.592412+00:00",
+  "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+  "vs": "https://icml.cc/virtual/2026/poster/60903"
+}
