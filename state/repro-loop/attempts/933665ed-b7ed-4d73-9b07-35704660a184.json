@@ -1,0 +1,313 @@
+{
+  "alphaxiv": "2605.20834",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2605.20834",
+  "attempt_id": "933665ed-b7ed-4d73-9b07-35704660a184",
+  "authors": [
+    "Yonggang Zhang",
+    "Zhiqin Yang",
+    "Wei Xue",
+    "Dong Fang",
+    "Bo Han",
+    "Yike Guo"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal policy preferring human-preferred responses (Section 3).",
+      "challenge_claim_sha256": "588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a",
+      "target_claim": "Exhaustively verify on finite two-response instances that DPO-RLHF equivalence holds under the stated positive-preference condition."
+    },
+    {
+      "challenge_claim": "When the equivalence assumption fails, DPO optimizes relative advantage over the reference policy rather than absolute human-preference alignment (Section 3).",
+      "challenge_claim_sha256": "4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86",
+      "target_claim": "Verify algebraically and over a deterministic parameter grid that DPO rewards improvement relative to the reference policy rather than absolute preferred-response probability."
+    },
+    {
+      "challenge_claim": "The paper characterizes undesirable solution spaces in which policies reduce DPO loss while preferring dispreferred responses (Section 3).",
+      "challenge_claim_sha256": "6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc",
+      "target_claim": "Construct and enumerate witnesses with delta_ref < delta_policy < 0 where DPO loss improves while the policy still prefers the dispreferred response."
+    },
+    {
+      "challenge_claim": "Constrained Preference Optimization augments RLHF with constraints and derives a stationary DPO-like loss with an adaptive reference-based margin (Section 4.3).",
+      "challenge_claim_sha256": "a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1",
+      "target_claim": "Validate the constrained-RLHF stationarity equations and resulting adaptive reference-based CPO margin on finite response spaces."
+    },
+    {
+      "challenge_claim": "The paper gives a soft-margin ranking interpretation showing DPO can implement margin ranking with potentially negative targets (Section 5).",
+      "challenge_claim_sha256": "7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be",
+      "target_claim": "Verify the DPO soft-margin-ranking identity and exhibit reference policies producing negative target margins."
+    }
+  ],
+  "correction_contract_path": "docs/superpowers/plans/2026-07-28-conditional-dpo-controller-correction.md",
+  "cpu_only": true,
+  "deployed_sha": "0bdd9034309d3e89892ebd391b8b5c0fd5c066a8",
+  "design": {
+    "author": "assess-terminal-mhc-rbench-design-author",
+    "path": "docs/superpowers/specs/2026-07-28-conditional-dpo-rlhf-design.md",
+    "recorded_at": "2026-07-28T01:34:38.824436+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-28T01:48:36.175863+00:00",
+    "reviewer": "assess-terminal-mhc-rbench-independent-review"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2605.20834",
+  "i": 651,
+  "implementation_capacity_free": true,
+  "insts": [
+    "Hong Kong Baptist University",
+    "HKUST",
+    "Hong Kong University of Science and Technology"
+  ],
+  "last_worker_session_id": "90bc389ad8c74954b789c8dfc02272de",
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal policy preferring human-preferred responses (Section 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "When the equivalence assumption fails, DPO optimizes relative advantage over the reference policy rather than absolute human-preference alignment (Section 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper characterizes undesirable solution spaces in which policies reduce DPO loss while preferring dispreferred responses (Section 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "Constrained Preference Optimization augments RLHF with constraints and derives a stationary DPO-like loss with an adaptive reference-based margin (Section 4.3)."
+    },
+    {
+      "status": "unverified",
+      "text": "The paper gives a soft-margin ranking interpretation showing DPO can implement margin ranking with potentially negative targets (Section 5)."
+    },
+    {
+      "status": "unverified",
+      "text": "Experiments on standard benchmarks report state-of-the-art performance for CPO (Section 6)."
+    }
+  ],
+  "next_action": "From the root thread with direct user approval visible: resume attempt 933665ed-b7ed-4d73-9b07-35704660a184 under owner controller-conditional-dpo-owner-20260728 fence 3, then run the existing guarded Antigravity correction contract in /home/will/projects/icml-2026-reproductions/.worktrees/score-conditional-dpo. Notify this paper-owner after worker exit so it can review, validate, publish, submit, watch, correct, and sync the exact verdict. All lifecycle attestations and Hub/verdict writes remain unperformed.",
+  "or": "https://openreview.net/forum?id=7UEBX1KU1y",
+  "orid": "7UEBX1KU1y",
+  "paper_id": "7UEBX1KU1y",
+  "phase": "complete",
+  "pid": "66055",
+  "project_path": "submissions/conditional-equivalence-of-dpo-and-rlhf-assumptions-failure-modes-and-provable-alignment",
+  "rejected_proposal_sha": "c15c4709be2fe9fe77ff6646551995590757ddcd",
+  "safety_blocker": null,
+  "score": 16,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a",
+        "p_falsified": 0.08,
+        "p_toy": 0.28,
+        "p_verified": 0.55
+      },
+      {
+        "challenge_claim_sha256": "4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86",
+        "p_falsified": 0.08,
+        "p_toy": 0.28,
+        "p_verified": 0.55
+      },
+      {
+        "challenge_claim_sha256": "6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc",
+        "p_falsified": 0.1,
+        "p_toy": 0.22,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1",
+        "p_falsified": 0.1,
+        "p_toy": 0.35,
+        "p_verified": 0.45
+      },
+      {
+        "challenge_claim_sha256": "7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be",
+        "p_falsified": 0.08,
+        "p_toy": 0.22,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "8df1fece656f02adbdf85fb78bc8993591f1abc9ee78c957388ab4b4eac37dcd",
+        "p_falsified": 0.01,
+        "p_toy": 0.03,
+        "p_verified": 0.01
+      }
+    ],
+    "direct_artifact_score": 1,
+    "full_score_claim_paths": 4,
+    "judged_before_deadline_probability": 0.82,
+    "primary_risk": "The advertised GitHub repository currently returns 404, preventing code cross-checks; a judge may also classify finite-state theorem checks as toy evidence.",
+    "remaining_hours_p90": 14.0,
+    "remaining_time_variance_hours2": 16.0,
+    "reusable_implementation": false
+  },
+  "slug": "conditional-equivalence-of-dpo-and-rlhf-assumptions-failure-modes-and-provable-alignment",
+  "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+  "space_id": "wrice/repro-conditional-dpo-rlhf",
+  "spot": true,
+  "sub": "Foundation Models",
+  "target_claims": [
+    "Exhaustively verify on finite two-response instances that DPO-RLHF equivalence holds under the stated positive-preference condition.",
+    "Verify algebraically and over a deterministic parameter grid that DPO rewards improvement relative to the reference policy rather than absolute preferred-response probability.",
+    "Construct and enumerate witnesses with delta_ref < delta_policy < 0 where DPO loss improves while the policy still prefers the dispreferred response.",
+    "Validate the constrained-RLHF stationarity equations and resulting adaptive reference-based CPO margin on finite response spaces.",
+    "Verify the DPO soft-margin-ranking identity and exhibit reference policies producing negative target margins."
+  ],
+  "title": "Conditional Equivalence of DPO and RLHF: Assumptions, Failure Modes, and Provable Alignment",
+  "transitions": [
+    {
+      "at": "2026-07-28T01:34:38.524661+00:00",
+      "fencing_token": 2,
+      "from": "selected",
+      "owner": "controller-conditional-dpo-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-28T01:48:36.175863+00:00",
+      "fencing_token": 2,
+      "from": "design-pending",
+      "owner": "controller-conditional-dpo-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T11:56:36.068092+00:00",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T11:57:17.175777+00:00",
+      "fencing_token": 3,
+      "from": "blocked",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T11:59:02.143044+00:00",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T12:10:03.686016+00:00",
+      "fencing_token": 3,
+      "from": "blocked",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T12:10:35.321719+00:00",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "blocked"
+    },
+    {
+      "at": "2026-07-28T12:11:01.660775+00:00",
+      "fencing_token": 3,
+      "from": "blocked",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "implementing"
+    },
+    {
+      "at": "2026-07-28T12:25:17.535331+00:00",
+      "attestation_id": "ab6f9a74e1c94591d7cb430763dcb2bb08ef444bef2f98a1bfe0098581bb2a0f",
+      "fencing_token": 3,
+      "from": "implementing",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-28T12:26:10.161815+00:00",
+      "attestation_id": "79e4b96bf59b60123c766ba8d328164fd5f81aca12384f11f5669cd1565f22ba",
+      "fencing_token": 3,
+      "from": "validated",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "deployed"
+    },
+    {
+      "at": "2026-07-28T12:27:23.389934+00:00",
+      "attestation_id": "12e222b0fc956bc0860d60b33cc09b05f9dfd59251cb94e740e5cf69fa5a207d",
+      "fencing_token": 3,
+      "from": "deployed",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "submitted"
+    },
+    {
+      "at": "2026-07-28T12:27:39.203888+00:00",
+      "attestation_id": "b0da9fb1698d810b1f23cf41d29104895b73dd52edc08ca0aed40476c1c4415d",
+      "fencing_token": 3,
+      "from": "submitted",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "judging"
+    },
+    {
+      "at": "2026-07-28T12:44:46.702382+00:00",
+      "attestation_id": "a56bcac91f0b0cb9afb958cfc35ee6b5877934c57220978a0e81c22ed74853d8",
+      "fencing_token": 3,
+      "from": "judging",
+      "owner": "controller-conditional-dpo-owner-20260728",
+      "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+      "to": "complete"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-28T12:44:46.702382+00:00",
+  "upstream_revision": "arxiv:2605.20834v1",
+  "verdict": {
+    "claims": [
+      {
+        "claim": "The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal policy preferring human-preferred responses (Section 3).",
+        "evidence": "Audited 112 finite preference configurations confirming the population stationary point \u0394_rlhf = \u0394_ref + r/\u03b2 matches the finite RLHF optimum, supporting the conditional equivalence relationship. The sample-level loss having no finite minimizer is a separate observation that does not contradict the population-level proof claim.",
+        "status": "verified",
+        "target_claim": "Exhaustively verify on finite two-response instances that DPO-RLHF equivalence holds under the stated positive-preference condition."
+      },
+      {
+        "claim": "When the equivalence assumption fails, DPO optimizes relative advantage over the reference policy rather than absolute human-preference alignment (Section 3).",
+        "evidence": "Across 75 preference shift cases, the logbook confirmed DPO loss reduction monotonically improves relative log-likelihood advantage \u0394 > \u0394_ref without guaranteeing absolute alignment \u0394 > 0 when \u0394_ref < 0, directly supporting the claim.",
+        "status": "verified",
+        "target_claim": "Verify algebraically and over a deterministic parameter grid that DPO rewards improvement relative to the reference policy rather than absolute preferred-response probability."
+      },
+      {
+        "claim": "The paper characterizes undesirable solution spaces in which policies reduce DPO loss while preferring dispreferred responses (Section 3).",
+        "evidence": "Concrete witness pairs (\u0394_ref < \u0394 < 0) were emitted where DPO loss decreases while p(y_w|x) < 0.5, demonstrating policies that reduce DPO loss while preferring dispreferred responses.",
+        "status": "verified",
+        "target_claim": "Construct and enumerate witnesses with delta_ref < delta_policy < 0 where DPO loss improves while the policy still prefers the dispreferred response."
+      },
+      {
+        "claim": "Constrained Preference Optimization augments RLHF with constraints and derives a stationary DPO-like loss with an adaptive reference-based margin (Section 4.3).",
+        "evidence": "The logbook found that for all 135 positive-\u03b3 cases the exact constrained RLHF objective is unbounded as \u0394\u2192+\u221e, contradicting the claim of a well-formed constrained optimization, while the reference-margin approximation does yield a stationary DPO-like loss, producing both supporting and contradicting evidence.",
+        "status": "inconclusive",
+        "target_claim": "Validate the constrained-RLHF stationarity equations and resulting adaptive reference-based CPO margin on finite response spaces."
+      },
+      {
+        "claim": "The paper gives a soft-margin ranking interpretation showing DPO can implement margin ranking with potentially negative targets (Section 5).",
+        "evidence": "Across 150 cases, scaled DPO loss \u03b2\u207b\u00b9 softplus(\u2212\u03b2(\u0394\u2212\u0394_ref)) was shown to converge monotonically to hinge loss max(0, \u0394_ref\u2212\u0394) as \u03b2\u2192256, including with negative target margins, directly supporting the soft-margin ranking interpretation.",
+        "status": "verified",
+        "target_claim": "Verify the DPO soft-margin-ranking identity and exhibit reference policies producing negative target margins."
+      }
+    ]
+  },
+  "verdict_at": "2026-07-28T12:44:46.702382+00:00",
+  "verdict_source_revision": "1a64206d275a47162a3eb2ccea03f6a5a6f96d9f",
+  "vs": "https://icml.cc/virtual/2026/poster/66055"
+}
