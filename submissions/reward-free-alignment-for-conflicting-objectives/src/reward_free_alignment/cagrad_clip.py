@@ -86,11 +86,12 @@ def solve_two_objective_alpha(
         )
 
     if norm_diff <= rel_tol:
+        s = c * norm_g0
         return AlphaSolution(
             alpha=w1,
             coefficients=weights.clone(),
             weighted_anchor=g0,
-            objective_value=torch.dot(g1, g0).item(),
+            objective_value=torch.dot(g1, g0).item() + s * norm_g1,
             candidate_count=1,
             singular_case="identical_gradients",
         )
@@ -264,6 +265,7 @@ def cagrad_clip(
     )
     norm_g0 = torch.linalg.vector_norm(solution.weighted_anchor).item()
 
+    effective_c = 0.0 if solution.singular_case == "zero_anchor" else c
     if solution.singular_case == "zero_anchor":
         gradient = torch.zeros_like(solution.weighted_anchor)
     elif norm_clipped_mix <= atol * ref_scale:
@@ -280,5 +282,5 @@ def cagrad_clip(
         clipped_mixture=clipped_mixture,
         clipped_coordinates=tuple(clipped_coords),
         singular_case=solution.singular_case,
-        c=c,
+        c=effective_c,
     )

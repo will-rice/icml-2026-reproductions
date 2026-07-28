@@ -450,3 +450,50 @@ def test_audit_theorem_32_inapplicable_preserves_actual_inputs():
     assert audit.applicable is False
     assert audit.strict_conditions["strict_step_size"] is True  # 0.1 < 1.0/3.0
     assert audit.strict_conditions["positive_c"] is True  # c=0.4 > 0
+
+
+def test_compute_m_simplex_scale_aware():
+    """Correction gate §4: opposing g1=[1e-8], g2=[-1e-8] must return 0.0."""
+    from reward_free_alignment.theorem_audit import compute_m_simplex
+    g1 = tensor([1e-8])
+    g2 = tensor([-1e-8])
+    m_val = compute_m_simplex(g1, g2)
+    assert m_val == 0.0
+
+
+def test_execute_raco_trajectory_executes_cagrad_clip_update():
+    """Correction gate §3: trajectory must execute audited CAGrad-Clip update, not pure g0."""
+    case = execute_raco_trajectory(
+        x0=1.0, T=10, eta=0.1, c=0.4,
+        weights=tensor([0.6, 0.4]),
+        smoothness_constants=(2.0, 2.0),
+    )
+    assert case.trajectory_cagrad_directions is not None
+    assert len(case.trajectory_cagrad_directions) == 10
+    assert case.trajectory_weighted_anchors is not None
+    assert len(case.trajectory_weighted_anchors) == 10
+    assert case.trajectory_next_iterates is not None
+    assert len(case.trajectory_next_iterates) == 10
+    assert case.trajectory_descent_holds is not None
+    assert len(case.trajectory_descent_holds) == 10
+    assert all(case.trajectory_descent_holds)
+
+    # Verify that each step iterate was updated with cagrad_direction
+    x = 1.0
+    for t in range(10):
+        g1_t = tensor([2.0 * x])
+        g2_t = tensor([2.0 * (x - 1.0)])
+        res = cagrad_clip((g1_t, g2_t), tensor([0.6, 0.4]), c=0.4)
+        assert abs(case.trajectory_cagrad_directions[t] - res.gradient.item()) < 1e-9
+        x = x - 0.1 * res.gradient.item()
+        assert abs(case.trajectory_next_iterates[t] - x) < 1e-9
+
+    # Verify that a pure g0 trajectory produces different iterates from CAGrad-Clip
+    x_g0 = 1.0
+    g0_iterates = []
+    for t in range(10):
+        g0_val = 0.6 * (2.0 * x_g0) + 0.4 * (2.0 * (x_g0 - 1.0))
+        x_g0 = x_g0 - 0.1 * g0_val
+        g0_iterates.append(x_g0)
+
+    assert not all(abs(a - b) < 1e-9 for a, b in zip(case.trajectory_next_iterates, g0_iterates))

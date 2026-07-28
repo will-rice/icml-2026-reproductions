@@ -17,6 +17,20 @@ class LiveClaim:
     targeted: bool
 
 
+_EXPECTED_CLAIMS = (
+    LiveClaim(1, "RACO is an offline, reward-free preference-alignment method that accepts user-specified objective weights and explicitly handles conflicting objectives (Table 1).", "e9a35e34b57a7273bf84d3d5981ab19f8ff1088adef8363f4640dcf436183944", False),
+    LiveClaim(2, "The method uses CAGrad-Clip to limit correction gradients so updates better respect preferred objective trade-offs (Figure 1, Algorithm 1).", "7c0aa54e034d03f2d0905417a024af4db41338cd9a803a0b42e441945c307cf9", False),
+    LiveClaim(3, "On TL;DR summarization, RACO achieves better Pareto frontiers for conciseness-quality and faithfulness-quality trade-offs than AMoPO and weighted-loss DPO baselines (Figure 2, Figure 3).", "85abbc8a21d5c4537409f6e9f2af6bffc7e4c15e2311dfa078bf816ea0cffc9e", False),
+    LiveClaim(4, "On BeaverTails safety alignment, RACO improves harmlessness-helpfulness Pareto trade-offs across Qwen3 and Gemma3 setups (Figure 4).", "dac93f364ac0469302894920781b034bfcd205816fbe16537c2f8e7c10d8995d", False),
+    LiveClaim(5, "Ablations show clipping and the correction-radius constant affect validation margins and Pareto frontiers (Figure 5, Figure 6).", "269d8a5053e224206036399bccb2435455565149086de6439a9046d89682772b", False),
+    LiveClaim(6, "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3).", "0d457572ea8a502fa8a489fef3e15da21b13cc39dd3a3730843d1cbe833059b0", True),
+    LiveClaim(7, "The clipped CAGrad update is introduced to stabilize multi-objective LLM alignment while respecting user-specified objective weights (Section 3.2).", "50719d645042a500f9c4d53fbdfedf719ee56429ddb73a231912f1eaeadb1b31", True),
+    LiveClaim(8, "The paper proves convergence of clipped CAGrad to Pareto-critical points that respect user-specified weights in nonconvex smooth settings (Theorem 3.1).", "5ec835ce150ff60d1e2bbd4fbdf7d1ebacf91bb2b6b2d65f72c44c3b3ed65229", True),
+    LiveClaim(9, "For two objectives, the analysis shows clipping can strictly improve the convergence rate (Theorem 3.2).", "b74a0ea75967144b210934fd40fd23449d3ef985df878d5a9e14c4b04025ba4b", True),
+    LiveClaim(10, "Experiments on multi-objective summarization and safety alignment across Qwen 3, Llama 3, and Gemma 3 report better Pareto trade-offs than reward-free baselines (Section 4).", "58b31f527bb5e1bccb05c0dab775a74c2f2bdcd8e92ef2c0dd578733b5fb058e", False),
+)
+
+
 @dataclass(frozen=True)
 class VerifiedArtifact:
     artifact_id: str
@@ -24,6 +38,9 @@ class VerifiedArtifact:
     sha256: str
     git_blob: str | None
     size_bytes: int
+    source_url: str
+    acquisition_command: str
+    license: str
 
 
 def _safe_relative_path(value: str) -> Path:
@@ -106,6 +123,15 @@ def load_live_claims(path: Path) -> tuple[LiveClaim, ...]:
         seen_texts.add(text)
         claims.append(LiveClaim(ordinal=ordinal, text=text, sha256=sha256_hex, targeted=targeted))
 
+    if len(claims) != len(_EXPECTED_CLAIMS):
+        raise IntegrityError(f"Expected {len(_EXPECTED_CLAIMS)} live claims, got {len(claims)}")
+
+    for idx, (claim, expected) in enumerate(zip(claims, _EXPECTED_CLAIMS)):
+        if claim != expected:
+            raise IntegrityError(
+                f"Loaded claim at index {idx} does not match admitted claim identity"
+            )
+
     return tuple(claims)
 
 
@@ -113,6 +139,7 @@ _EXPECTED_ATTEMPT_ID = "97e213a5-7ca3-4a1b-a500-1ec52d94d87a"
 _EXPECTED_PAPER_ID = "vSzRJyg6k0"
 _EXPECTED_SNAPSHOT_ID = "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199"
 _EXPECTED_UPSTREAM_REV = "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa"
+_EXPECTED_COMMIT_HASH = "84a943c34f38520c7e0c9dd3066517c111b3c8fa"
 
 _MANIFEST_REQUIRED_KEYS = {
     "attempt_id", "paper_id", "snapshot_id", "upstream_revision", "artifacts"
@@ -198,6 +225,9 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
         sha256 = item["sha256"]
         git_blob = item["git_blob"]
         size_bytes = item["size_bytes"]
+        source_url = item["source_url"]
+        acquisition_command = item["acquisition_command"]
+        license_str = item["license"]
 
         if not isinstance(artifact_id, str) or not artifact_id:
             raise IntegrityError("artifact_id must be a non-empty string")
@@ -209,6 +239,15 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
             raise IntegrityError("git_blob must be a non-empty string")
         if not isinstance(size_bytes, int) or size_bytes <= 0:
             raise IntegrityError("size_bytes must be a positive integer (empty files forbidden)")
+
+        if not isinstance(source_url, str) or _EXPECTED_COMMIT_HASH not in source_url:
+            raise IntegrityError(f"source_url must contain commit hash {_EXPECTED_COMMIT_HASH}: got {source_url}")
+
+        if not isinstance(acquisition_command, str) or "git checkout" not in acquisition_command or _EXPECTED_COMMIT_HASH not in acquisition_command:
+            raise IntegrityError(f"acquisition_command must contain git checkout {_EXPECTED_COMMIT_HASH}: got {acquisition_command}")
+
+        if license_str != "Apache-2.0":
+            raise IntegrityError(f"license must be Apache-2.0: got {license_str}")
 
         if artifact_id in seen_ids:
             raise IntegrityError(f"Duplicate artifact_id: {artifact_id}")
@@ -245,6 +284,9 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
                 sha256=sha256,
                 git_blob=git_blob,
                 size_bytes=size_bytes,
+                source_url=source_url,
+                acquisition_command=acquisition_command,
+                license=license_str,
             )
         )
     return tuple(verified)

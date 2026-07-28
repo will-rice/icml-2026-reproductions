@@ -20,6 +20,12 @@ class SmoothObjectiveCase:
     trajectory_grad_norms: tuple[float, ...] | None = None
     trajectory_m_values: tuple[float, ...] | None = None
     trajectory_m_bounds_holds: tuple[bool, ...] | None = None
+    trajectory_cagrad_directions: tuple[float, ...] | None = None
+    trajectory_weighted_anchors: tuple[float, ...] | None = None
+    trajectory_next_iterates: tuple[float, ...] | None = None
+    trajectory_losses_before: tuple[float, ...] | None = None
+    trajectory_losses_after: tuple[float, ...] | None = None
+    trajectory_descent_holds: tuple[bool, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -73,7 +79,8 @@ def compute_m_simplex(g1: Tensor, g2: Tensor) -> float:
     """Compute M(theta) = min_{lambda in [0,1]} ||lambda g1 + (1-lambda) g2||."""
     diff = g1 - g2
     diff_norm_sq = torch.dot(diff, diff).item()
-    if diff_norm_sq < 1e-15:
+    scale = max(torch.dot(g1, g1).item(), torch.dot(g2, g2).item(), 1e-300)
+    if diff_norm_sq <= 1e-12 * scale:
         return torch.linalg.vector_norm(g1).item()
     opt_lambda = -torch.dot(diff, g2).item() / diff_norm_sq
     clamped_lambda = max(0.0, min(1.0, opt_lambda))
@@ -90,10 +97,10 @@ def execute_raco_trajectory(
     weights: Tensor,
     smoothness_constants: tuple[float, ...],
 ) -> SmoothObjectiveCase:
-    """Execute T RACO steps on two-objective nonneg quadratics.
+    """Execute T RACO steps using audited CAGrad-Clip on two-objective nonneg quadratics.
 
     f1(x) = x^2, f2(x) = (x-1)^2.
-    Returns a SmoothObjectiveCase with full trajectory data.
+    Returns a SmoothObjectiveCase with full per-step trajectory data.
     """
     w = weights
     L_w = sum(w[k].item() * smoothness_constants[k] for k in range(len(smoothness_constants)))
@@ -102,29 +109,63 @@ def execute_raco_trajectory(
     grad_norms: list[float] = []
     m_values: list[float] = []
     m_bounds_holds: list[bool] = []
+    cagrad_dirs: list[float] = []
+    anchors: list[float] = []
+    next_iterates: list[float] = []
+    losses_before: list[float] = []
+    losses_after: list[float] = []
+    descent_holds: list[bool] = []
 
     x = x0
-    for t in range(T + 1):
+    for t in range(T):
         f1 = x ** 2
         f2 = (x - 1.0) ** 2
-        L_w_val = w[0].item() * f1 + w[1].item() * f2
-        losses.append(L_w_val)
+        loss_before = w[0].item() * f1 + w[1].item() * f2
+        losses_before.append(loss_before)
+        if t == 0:
+            losses.append(loss_before)
 
         g1_val = 2.0 * x
         g2_val = 2.0 * (x - 1.0)
-        g0_val = w[0].item() * g1_val + w[1].item() * g2_val
-        g_norm = abs(g0_val)
-        grad_norms.append(g_norm)
-
-        # M(theta_t) = min_{lambda in simplex} ||lambda g1 + (1-lambda) g2||
         g1_t = torch.tensor([g1_val], dtype=torch.float32)
         g2_t = torch.tensor([g2_val], dtype=torch.float32)
+
+        res = cagrad_clip((g1_t, g2_t), w, c)
+        g0_val = res.weighted_anchor.item()
+        g_cagrad_val = res.gradient.item()
+        g_norm = torch.linalg.vector_norm(res.weighted_anchor).item()
+        grad_norms.append(g_norm)
+        anchors.append(g0_val)
+        cagrad_dirs.append(g_cagrad_val)
+
+        x_next = x - eta * g_cagrad_val
+        next_iterates.append(x_next)
+
+        f1_next = x_next ** 2
+        f2_next = (x_next - 1.0) ** 2
+        loss_after = w[0].item() * f1_next + w[1].item() * f2_next
+        losses_after.append(loss_after)
+        losses.append(loss_after)
+
         m_val = compute_m_simplex(g1_t, g2_t)
         m_values.append(m_val)
+
+        expected_descent = (eta * (1.0 - c * c) / 2.0) * (g_norm ** 2)
+        descent_holds.append(loss_after <= loss_before - expected_descent + 1e-9)
         m_bounds_holds.append(math.isfinite(m_val) and m_val >= 0.0 and m_val <= g_norm + 1e-9)
 
-        if t < T:
-            x = x - eta * g0_val
+        x = x_next
+
+    f1_T = x ** 2
+    f2_T = (x - 1.0) ** 2
+    g1_T = torch.tensor([2.0 * x], dtype=torch.float32)
+    g2_T = torch.tensor([2.0 * (x - 1.0)], dtype=torch.float32)
+    g0_T = w[0].item() * 2.0 * x + w[1].item() * 2.0 * (x - 1.0)
+    g_norm_T = abs(g0_T)
+    m_val_T = compute_m_simplex(g1_T, g2_T)
+    grad_norms.append(g_norm_T)
+    m_values.append(m_val_T)
+    m_bounds_holds.append(math.isfinite(m_val_T) and m_val_T >= 0.0 and m_val_T <= g_norm_T + 1e-9)
 
     return SmoothObjectiveCase(
         weights=w,
@@ -139,6 +180,12 @@ def execute_raco_trajectory(
         trajectory_grad_norms=tuple(grad_norms),
         trajectory_m_values=tuple(m_values),
         trajectory_m_bounds_holds=tuple(m_bounds_holds),
+        trajectory_cagrad_directions=tuple(cagrad_dirs),
+        trajectory_weighted_anchors=tuple(anchors),
+        trajectory_next_iterates=tuple(next_iterates),
+        trajectory_losses_before=tuple(losses_before),
+        trajectory_losses_after=tuple(losses_after),
+        trajectory_descent_holds=tuple(descent_holds),
     )
 
 
@@ -161,6 +208,8 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
     descent_factor = step * (1.0 - c_rad * c_rad) / 2.0
     expected_descent = descent_factor * case.grad_norm * case.grad_norm
     descent_holds = case.final_loss <= case.initial_loss - expected_descent + 1e-9
+    if case.trajectory_descent_holds is not None:
+        descent_holds = descent_holds and all(case.trajectory_descent_holds)
 
     trajectory_steps = None
     min_m_value = None

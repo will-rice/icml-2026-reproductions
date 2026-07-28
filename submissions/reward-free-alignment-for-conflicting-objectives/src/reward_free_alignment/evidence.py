@@ -217,7 +217,8 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
     # Provenance: load and verify all inputs
     manifest = load_manifest(project_root)
     live_claims = load_live_claims(project_root / "evidence/inputs/live_claims.json")
-    load_verified_artifacts(project_root)  # fail-closed verification
+    verified_artifacts = load_verified_artifacts(project_root)  # fail-closed verification
+    artifacts_list = [asdict(art) for art in verified_artifacts]
 
     # Execute all audits
     pairwise_audit = _run_pairwise_audit()
@@ -255,6 +256,7 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
         "paper_id": manifest["paper_id"],
         "snapshot_id": manifest["snapshot_id"],
         "upstream_revision": manifest["upstream_revision"],
+        "artifacts": artifacts_list,
         "claims": claims_list,
         "audits": {
             "theorem_31": t31_audit,

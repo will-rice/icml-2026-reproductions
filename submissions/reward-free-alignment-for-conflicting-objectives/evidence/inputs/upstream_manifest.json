@@ -10,8 +10,8 @@
       "sha256": "1d90ecbf7bb80ff27ef67b7785f621480b652b82e46c72d8a5730b0db65bf355",
       "git_blob": "a98c551ed4f7ba78782da3c4f4c47ca6443592b9",
       "size_bytes": 11355,
-      "source_url": "https://github.com/PeterLauLukChen/RACO",
-      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO",
+      "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/LICENSE",
+      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
       "license": "Apache-2.0"
     },
     {
@@ -20,8 +20,8 @@
       "sha256": "57c695233e2229194db9e0513c7523e306a1e4d6cd4ca85e56bd8e40f6fb7feb",
       "git_blob": "f4f1f923e87a95c091e68e3f6f19ba53f4a0ea5d",
       "size_bytes": 10047,
-      "source_url": "https://github.com/PeterLauLukChen/RACO",
-      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO",
+      "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/README.md",
+      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
       "license": "Apache-2.0"
     },
     {
@@ -30,8 +30,8 @@
       "sha256": "c8c8f210eb2d53f922cf1aacde68f4840355fa682a3055202c26a9590d20211b",
       "git_blob": "a54009de54971f1893d2d47c19a38bb2ad19fc2b",
       "size_bytes": 10923,
-      "source_url": "https://github.com/PeterLauLukChen/RACO",
-      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO",
+      "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/m%3D3-RACO-CAGrad-Algo.md",
+      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
       "license": "Apache-2.0"
     },
     {
@@ -40,8 +40,8 @@
       "sha256": "f47041b468784161bfebabfd6732478a0d0b7be5b57eb8a2321eea2de21469f4",
       "git_blob": "7f78c09b840d614d86032062350d43df2e7463bf",
       "size_bytes": 19536,
-      "source_url": "https://github.com/PeterLauLukChen/RACO",
-      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO",
+      "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/train_raco.py",
+      "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
       "license": "Apache-2.0"
     }
   ]

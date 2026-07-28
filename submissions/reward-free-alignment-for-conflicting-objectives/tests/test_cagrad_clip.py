@@ -63,14 +63,14 @@ def test_zero_weight_coordinate_cannot_be_reintroduced():
 
 
 def test_singular_case_zero_anchor_returns_zero_gradient_and_user_weights():
-    """Correction gate §3: g0=0 chooses w, uses c=0, returns zero update."""
+    """Correction gate §5: g0=0 chooses w, uses effective c=0, returns zero update."""
     g1, g2 = tensor([1.0, 0.0]), tensor([-1.0, 0.0])
     weights = tensor([0.5, 0.5])
     result = cagrad_clip((g1, g2), weights, c=0.4)
     assert result.singular_case == "zero_anchor"
     assert torch.allclose(result.coefficients, weights)
     assert torch.allclose(result.gradient, tensor([0.0, 0.0]))
-    assert result.c == 0.4
+    assert result.c == 0.0
 
 
 def test_singular_case_identical_gradients_returns_user_weights():
@@ -80,7 +80,20 @@ def test_singular_case_identical_gradients_returns_user_weights():
     result = cagrad_clip((g1, g2), weights, c=0.4)
     assert result.singular_case == "identical_gradients"
     assert torch.allclose(result.coefficients, weights)
-    assert result.c == 0.4
+
+
+def test_identical_gradients_subproblem_objective_includes_radius_term():
+    """Correction gate §5: identical gradients must include c*||g0||*||g|| in objective_value."""
+    g1, g2 = tensor([2.0, 3.0]), tensor([2.0, 3.0])
+    weights = tensor([0.7, 0.3])
+    c_val = 0.4
+    solution = solve_two_objective_alpha(g1, g2, weights, c=c_val)
+    g0 = weights[0] * g1 + weights[1] * g2
+    norm_g0 = torch.linalg.vector_norm(g0).item()
+    norm_g1 = torch.linalg.vector_norm(g1).item()
+    expected_obj = torch.dot(g1, g0).item() + c_val * norm_g0 * norm_g1
+    assert abs(solution.objective_value - expected_obj) < 1e-9
+
 
 
 # --- Adversarial regressions for controller correction gate ---

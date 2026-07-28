@@ -125,10 +125,16 @@ def test_duplicate_artifact_ids_rejected(tmp_path):
         "artifacts": [
             {"artifact_id": "dup", "relative_path": "test.txt",
              "sha256": file_hash, "git_blob": "b6fc4c620b67d95f953a5c1c1230aaab5db5a1b0",
-             "size_bytes": 5, "source_url": "u", "acquisition_command": "c", "license": "l"},
+             "size_bytes": 5,
+             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test.txt",
+             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+             "license": "Apache-2.0"},
             {"artifact_id": "dup", "relative_path": "test2.txt",
              "sha256": file_hash, "git_blob": "b6fc4c620b67d95f953a5c1c1230aaab5db5a1b0",
-             "size_bytes": 5, "source_url": "u", "acquisition_command": "c", "license": "l"},
+             "size_bytes": 5,
+             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test2.txt",
+             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+             "license": "Apache-2.0"},
         ],
     }), encoding="utf-8")
     with pytest.raises(IntegrityError, match="[Dd]uplicate"):
@@ -167,7 +173,9 @@ def test_git_blob_drift_rejected(tmp_path):
             {"artifact_id": "a1", "relative_path": "test.txt",
              "sha256": file_hash, "size_bytes": 5,
              "git_blob": "0000000000000000000000000000000000000000",
-             "source_url": "u", "acquisition_command": "c", "license": "l"},
+             "source_url": "https://github.com/PeterLauLukChen/RACO/blob/84a943c34f38520c7e0c9dd3066517c111b3c8fa/test.txt",
+             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+             "license": "Apache-2.0"},
         ],
     }), encoding="utf-8")
     with pytest.raises(IntegrityError, match="[Gg]it blob"):
@@ -205,3 +213,44 @@ def test_duplicate_manifest_json_keys_rejected(tmp_path):
     )
     with pytest.raises(IntegrityError, match="[Dd]uplicate"):
         load_manifest(path=manifest)
+
+
+def test_live_claims_loader_binds_to_exact_admitted_claims(tmp_path):
+    """A temporary copy with one changed text and matching new SHA must raise IntegrityError."""
+    claims_file = tmp_path / "edited_claims.json"
+    edited_text = "RACO is an edited claim text."
+    new_sha = hashlib.sha256(edited_text.encode("utf-8")).hexdigest()
+    genuine_path = Path(__file__).parent.parent / "evidence/inputs/live_claims.json"
+    genuine = json.loads(genuine_path.read_text(encoding="utf-8"))
+    genuine[0]["text"] = edited_text
+    genuine[0]["sha256"] = new_sha
+    claims_file.write_text(json.dumps(genuine), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Mm]ismatch|[Eee]xpected|[Aa]dmitted"):
+        load_live_claims(claims_file)
+
+
+def test_generic_repo_url_or_clone_only_command_rejected(tmp_path):
+    """Artifacts with generic repo URLs or clone-only commands must raise IntegrityError."""
+    test_file = tmp_path / "test.txt"
+    test_file.write_text("hello")
+    file_hash = hashlib.sha256(b"hello").hexdigest()
+    blob_id = _git_blob_id(b"hello")
+
+    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
+    manifest.parent.mkdir(parents=True)
+    # Generic repo URL (missing commit hash)
+    manifest.write_text(json.dumps({
+        "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
+        "paper_id": "vSzRJyg6k0",
+        "snapshot_id": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199",
+        "upstream_revision": "arxiv:2602.02495v3+github:PeterLauLukChen/RACO@84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+        "artifacts": [
+            {"artifact_id": "a1", "relative_path": "test.txt",
+             "sha256": file_hash, "git_blob": blob_id, "size_bytes": 5,
+             "source_url": "https://github.com/PeterLauLukChen/RACO",
+             "acquisition_command": "git clone https://github.com/PeterLauLukChen/RACO.git && cd RACO && git checkout 84a943c34f38520c7e0c9dd3066517c111b3c8fa",
+             "license": "Apache-2.0"},
+        ],
+    }), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Cc]ommit|[Uu]rl|[Ss]ource"):
+        load_verified_artifacts(tmp_path)
