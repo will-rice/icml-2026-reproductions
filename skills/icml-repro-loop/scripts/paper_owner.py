@@ -411,7 +411,8 @@ def _require_matching_transaction(
         or transaction["lease_acquired_at"] != lease.acquired_at
         or transaction["lease_expires_at"] != lease.expires_at
         or transaction["outcome"] != outcome
-        or transaction["released_at"] != observed_at.isoformat()
+        or observed_at
+        < _parse(transaction["released_at"], "release transaction")
         or lease.released_at not in {None, transaction["released_at"]}
     ):
         raise ValueError("release transaction")

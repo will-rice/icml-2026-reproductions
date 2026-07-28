@@ -437,6 +437,67 @@ def test_release_recovery_after_event_before_lease_is_direct_and_idempotent(
     assert telemetry.read_session(paths, "recover-event-boundary") == events
 
 
+def test_release_retry_uses_journal_time_when_caller_now_is_later(
+    paths,
+    blocked_attempt,
+    now,
+    paper_owner,
+    telemetry,
+    monkeypatch,
+):
+    attempt_id, lease = blocked_attempt
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            attempt_id,
+            lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "later-retry",
+        )
+    event = telemetry.read_session(paths, "later-retry")[0]
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+
+    recovered = paper_owner.release_paper(
+        paths,
+        attempt_id,
+        lease,
+        "blocked",
+        now + timedelta(minutes=1),
+    )
+    repeated = paper_owner.release_paper(
+        paths,
+        attempt_id,
+        lease,
+        "blocked",
+        now + timedelta(minutes=2),
+    )
+
+    assert recovered == event
+    assert repeated == event
+    assert event["released_at"] == now.isoformat()
+    assert paper_owner.store.read_json(
+        paths.resource_lease(f"attempt:{attempt_id}")
+    )["released_at"] == now.isoformat()
+    assert paper_owner.store.read_json(
+        paths.paper_owner_release(
+            attempt_id, lease.fencing_token
+        )
+    )["status"] == "complete"
+    assert telemetry.read_session(paths, "later-retry") == [event]
+
+
 def test_release_retry_recovers_after_lease_before_transaction_completion(
     paths,
     blocked_attempt,
@@ -553,6 +614,104 @@ def test_completed_release_journal_remains_valid_after_fenced_reclamation(
 
     assert paper_owner.recover_release_transactions(paths) == []
     assert leases.assert_fence(paths, successor, now) == successor
+
+
+def test_claim_attempt_recovers_prepared_release_before_successor_fence(
+    paths,
+    blocked_attempt,
+    now,
+    paper_owner,
+    leases,
+    monkeypatch,
+):
+    attempt_id, lease = blocked_attempt
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            attempt_id,
+            lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "claim-attempt-recovery",
+        )
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+    journal_path = paths.paper_owner_release(
+        attempt_id, lease.fencing_token
+    )
+
+    successor = leases.claim_attempt(
+        paths,
+        attempt_id,
+        "successor",
+        lease.fencing_token,
+        now + timedelta(hours=1),
+    )
+
+    assert successor.fencing_token == lease.fencing_token + 1
+    assert successor.owner == "successor"
+    assert paper_owner.store.read_json(journal_path)["status"] == "complete"
+    assert paper_owner.recover_release_transactions(paths) == []
+
+
+def test_invalid_claim_attempt_does_not_recover_prepared_release(
+    paths,
+    blocked_attempt,
+    now,
+    paper_owner,
+    leases,
+    monkeypatch,
+):
+    attempt_id, lease = blocked_attempt
+    original_append_event = paper_owner.telemetry.append_event
+
+    def append_then_fail(*args, **kwargs):
+        original_append_event(*args, **kwargs)
+        raise OSError("crash after release event")
+
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", append_then_fail
+    )
+    with pytest.raises(OSError, match="crash after release event"):
+        paper_owner.release_paper(
+            paths,
+            attempt_id,
+            lease,
+            "blocked",
+            now,
+            session_id_factory=lambda: "invalid-claim-attempt",
+        )
+    monkeypatch.setattr(
+        paper_owner.telemetry, "append_event", original_append_event
+    )
+    journal_path = paths.paper_owner_release(
+        attempt_id, lease.fencing_token
+    )
+    journal_before = journal_path.read_bytes()
+    lease_path = paths.resource_lease(f"attempt:{attempt_id}")
+    lease_before = lease_path.read_bytes()
+
+    with pytest.raises(leases.StaleFence):
+        leases.claim_attempt(
+            paths,
+            attempt_id,
+            "successor",
+            lease.fencing_token - 1,
+            now + timedelta(hours=1),
+        )
+
+    assert journal_path.read_bytes() == journal_before
+    assert lease_path.read_bytes() == lease_before
 
 
 def test_valid_release_recovers_other_prepared_release_journals(

@@ -142,6 +142,21 @@ def claim_attempt(
         raise ValueError("fencing_token")
     observed_at = _datetime(now)
     with hold_owner_claim(paths, owner):
+        resource = f"attempt:{attempt_id}"
+        path = paths.resource_lease(resource)
+        with store._exclusive_lock(path):
+            _preflight_claim_attempt_locked(
+                paths,
+                path,
+                resource,
+                attempt_id,
+                owner,
+                expected_fencing_token,
+                observed_at,
+            )
+        import paper_owner
+
+        paper_owner.recover_release_transactions(paths)
         return _claim_attempt_locked(
             paths,
             attempt_id,
@@ -162,27 +177,15 @@ def _claim_attempt_locked(
     resource = f"attempt:{attempt_id}"
     path = paths.resource_lease(resource)
     with store._exclusive_lock(path):
-        index = store.read_json(paths.index)
-        store.validate_index(index)
-        if attempt_id not in index["attempts"]:
-            raise ValueError("attempt_id")
-        prior = _read_lease(path)
-        if prior is None:
-            if expected_fencing_token != 0:
-                raise StaleFence(resource)
-        else:
-            if prior.resource != resource or prior.attempt_id != attempt_id:
-                raise StaleFence(resource)
-            if prior.fencing_token != expected_fencing_token:
-                raise StaleFence(resource)
-            if observed_at < _parse(prior.acquired_at):
-                raise ValueError("now")
-            if prior.released_at is not None:
-                if observed_at < _parse(prior.released_at):
-                    raise ValueError("now")
-            elif observed_at < _parse(prior.expires_at):
-                raise LeaseBusy(resource)
-        _require_owner_available(paths, owner, attempt_id, observed_at)
+        prior = _preflight_claim_attempt_locked(
+            paths,
+            path,
+            resource,
+            attempt_id,
+            owner,
+            expected_fencing_token,
+            observed_at,
+        )
         lease = Lease(
             resource=resource,
             owner=owner,
@@ -193,6 +196,40 @@ def _claim_attempt_locked(
         )
         _write(path, asdict(lease), validate_lease)
         return lease
+
+
+def _preflight_claim_attempt_locked(
+    paths: store.StatePaths,
+    path: Path,
+    resource: str,
+    attempt_id: str,
+    owner: str,
+    expected_fencing_token: int,
+    observed_at: datetime,
+) -> Lease | None:
+    """Validate one claim without mutation while its attempt lock is held."""
+    index = store.read_json(paths.index)
+    store.validate_index(index)
+    if attempt_id not in index["attempts"]:
+        raise ValueError("attempt_id")
+    prior = _read_lease(path)
+    if prior is None:
+        if expected_fencing_token != 0:
+            raise StaleFence(resource)
+    else:
+        if prior.resource != resource or prior.attempt_id != attempt_id:
+            raise StaleFence(resource)
+        if prior.fencing_token != expected_fencing_token:
+            raise StaleFence(resource)
+        if observed_at < _parse(prior.acquired_at):
+            raise ValueError("now")
+        if prior.released_at is not None:
+            if observed_at < _parse(prior.released_at):
+                raise ValueError("now")
+        elif observed_at < _parse(prior.expires_at):
+            raise LeaseBusy(resource)
+    _require_owner_available(paths, owner, attempt_id, observed_at)
+    return prior
 
 
 @contextmanager
