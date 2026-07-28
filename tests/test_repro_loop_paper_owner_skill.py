@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import re
 from pathlib import Path
 
 
@@ -51,11 +50,11 @@ def test_paper_owner_reference_defines_event_reactions():
         "judging": "release-implementation-capacity",
         "scored": "sync-verdict",
     }
+    rows = [line for line in value.splitlines() if line.startswith("|")]
     for event, reaction in required.items():
-        assert re.search(
-            rf"^\\|[^\\n|]*`{event}`[^\\n|]*\\|[^\\n|]*`{reaction}`[^\\n|]*\\|",
-            value,
-            flags=re.MULTILINE,
+        assert any(
+            f"`{event}`" in row and f"`{reaction}`" in row
+            for row in rows
         )
 
 
