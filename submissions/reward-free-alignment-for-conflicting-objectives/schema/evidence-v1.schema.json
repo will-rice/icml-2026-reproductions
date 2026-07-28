@@ -1,0 +1,197 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RACOEvidenceBundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "attempt_id",
+    "paper_id",
+    "snapshot_id",
+    "upstream_revision",
+    "artifacts",
+    "claims",
+    "audits",
+    "environment",
+    "costs"
+  ],
+  "properties": {
+    "attempt_id": { "type": "string" },
+    "paper_id": { "type": "string" },
+    "snapshot_id": { "type": "string" },
+    "upstream_revision": { "type": "string" },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "relative_path",
+          "sha256",
+          "git_blob",
+          "size_bytes",
+          "source_url",
+          "acquisition_command",
+          "license"
+        ],
+        "properties": {
+          "artifact_id": { "type": "string" },
+          "relative_path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "git_blob": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+          "size_bytes": { "type": "integer", "minimum": 1 },
+          "source_url": { "type": "string" },
+          "acquisition_command": { "type": "string" },
+          "license": { "type": "string" }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ordinal",
+          "text",
+          "sha256",
+          "targeted",
+          "local_outcome",
+          "claim_summary",
+          "reproduction_notes"
+        ],
+        "properties": {
+          "ordinal": { "type": "integer", "minimum": 1, "maximum": 10 },
+          "text": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "targeted": { "type": "boolean" },
+          "local_outcome": {
+            "type": "string",
+            "enum": ["supported", "not-supported", "limited"]
+          },
+          "claim_summary": { "type": "string" },
+          "reproduction_notes": { "type": "string" }
+        }
+      }
+    },
+    "audits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["theorem_31", "theorem_32", "pairwise_loss", "cagrad_clip", "claim6_pipeline"],
+      "properties": {
+        "theorem_31": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "weights_in_simplex",
+            "smoothness_constants",
+            "weighted_smoothness",
+            "step_size",
+            "correction_radius",
+            "nonnegative_losses",
+            "descent_bound_holds",
+            "pareto_bound_holds",
+            "local_outcome",
+            "trajectory_steps",
+            "min_m_value",
+            "min_grad_norm",
+            "finite_horizon_rhs",
+            "finite_horizon_bound_holds",
+            "grad_finite_horizon_bound_holds",
+            "m_finite_horizon_bound_holds",
+            "per_step_m_bound_holds",
+            "trajectory_losses",
+            "trajectory_grad_norms",
+            "trajectory_m_values",
+            "trajectory_m_bounds_holds",
+            "steps"
+          ],
+          "properties": {
+            "weights_in_simplex": { "type": "boolean" },
+            "smoothness_constants": { "type": "array", "items": { "type": "number" } },
+            "weighted_smoothness": { "type": "number" },
+            "step_size": { "type": "number" },
+            "correction_radius": { "type": "number" },
+            "nonnegative_losses": { "type": "boolean" },
+            "descent_bound_holds": { "type": "boolean" },
+            "pareto_bound_holds": { "type": "boolean" },
+            "local_outcome": { "type": "string" },
+            "trajectory_steps": { "type": ["integer", "null"] },
+            "min_m_value": { "type": ["number", "null"] },
+            "min_grad_norm": { "type": ["number", "null"] },
+            "finite_horizon_rhs": { "type": ["number", "null"] },
+            "finite_horizon_bound_holds": { "type": ["boolean", "null"] },
+            "grad_finite_horizon_bound_holds": { "type": ["boolean", "null"] },
+            "m_finite_horizon_bound_holds": { "type": ["boolean", "null"] },
+            "per_step_m_bound_holds": { "type": ["boolean", "null"] },
+            "trajectory_losses": { "type": ["array", "null"], "items": { "type": "number" } },
+            "trajectory_grad_norms": { "type": ["array", "null"], "items": { "type": "number" } },
+            "trajectory_m_values": { "type": ["array", "null"], "items": { "type": "number" } },
+            "trajectory_m_bounds_holds": { "type": ["array", "null"], "items": { "type": "boolean" } },
+            "steps": {
+              "type": "array",
+              "minItems": 10,
+              "maxItems": 10,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "step_index",
+                  "current_iterate",
+                  "weighted_anchor",
+                  "cagrad_direction",
+                  "next_iterate",
+                  "loss_before",
+                  "loss_after",
+                  "m_value",
+                  "grad_norm",
+                  "descent_holds",
+                  "m_bound_holds"
+                ],
+                "properties": {
+                  "step_index": { "type": "integer" },
+                  "current_iterate": { "type": "number" },
+                  "weighted_anchor": { "type": "number" },
+                  "cagrad_direction": { "type": "number" },
+                  "next_iterate": { "type": "number" },
+                  "loss_before": { "type": "number" },
+                  "loss_after": { "type": "number" },
+                  "m_value": { "type": "number" },
+                  "grad_norm": { "type": "number" },
+                  "descent_holds": { "type": "boolean" },
+                  "m_bound_holds": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        "theorem_32": { "type": "object" },
+        "pairwise_loss": { "type": "object" },
+        "cagrad_clip": { "type": "object" },
+        "claim6_pipeline": { "type": "object" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["device", "python_version", "torch_version"],
+      "properties": {
+        "device": { "type": "string" },
+        "python_version": { "type": "string" },
+        "torch_version": { "type": "string" }
+      }
+    },
+    "costs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_cost_usd", "compute_time_seconds"],
+      "properties": {
+        "api_cost_usd": { "type": "number", "minimum": 0, "maximum": 0 },
+        "compute_time_seconds": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -16,6 +16,212 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Validation Correction Gate — 2026-07-28, round 10
+
+Controller scientific review accepted proposal
+`af3aa11458aeec3653431e1dd4ecc9535ef8a04d`, but authoritative isolated
+validation did not attest it. After a clean preflight and successful evidence
+generation, fixed validation command 2 failed because a fresh default project
+environment cannot import pytest: `pytest` is declared only in the optional
+`dev` extra. The Space app also imports Gradio at runtime, but `gradio` is
+misclassified in that same optional development extra.
+
+Correct the package boundary test first:
+
+1. Add a subprocess regression that creates a fresh external
+   `UV_PROJECT_ENVIRONMENT` and runs the exact controller paper-test command
+   without `--extra`, `--all-extras`, inherited virtualenv, or project-local
+   `.venv`. It must collect and pass the full submission suite.
+2. Declare `gradio>=4.0.0` as a normal project runtime dependency because
+   `app.py` imports it. Declare `pytest>=7.0.0` in a standard uv
+   `[dependency-groups]` development group, which `uv run` installs by
+   default. Remove the redundant/misclassified optional dev extra and refresh
+   the project `uv.lock`.
+3. Verify both exact isolated commands in separate fresh external
+   `UV_PROJECT_ENVIRONMENT` directories:
+   evidence generation with `--locked`, then the controller's exact
+   project-pytest command. Ensure neither creates ignored files inside the
+   project. Run the full submission suite, root pytest, skill validation,
+   pre-commit, determinism check, and `git diff --check`; return a clean new
+   commit.
+4. Isolated evidence generation selected Python 3.10.12 while the worker used
+   3.12.11, so the dynamic `environment.python_version` field dirtied the
+   committed bundle even though the scientific outputs matched. Add a project
+   `.python-version` pin for the repository-supported 3.12 interpreter and
+   verify two fresh external uv environments select the same interpreter and
+   reproduce identical evidence bytes. Keep the environment record truthful;
+   do not hard-code a version that was not used.
+
+## Controller Correction Gate — 2026-07-28, round 9
+
+Controller review rejected proposal
+`c7ec98a9abb6316837c18c7734eded5a8aa4bcff` despite its green reported
+suites. Preserve it as the rejected proposal and correct only the residual
+items below, test first.
+
+1. `load_verified_artifacts` still checks only that `source_url` starts with
+   the pinned raw-host prefix. It therefore accepts swapped artifact paths,
+   arbitrary raw-host suffixes, and query/fragment variants. Define one exact
+   immutable identity table binding each admitted `artifact_id` to its exact
+   `relative_path` and raw URL:
+   `LICENSE`, `README.md`, `m=3-RACO-CAGrad-Algo.md`, and `train_raco.py`.
+   Require the manifest to contain exactly those four identities once each.
+   Add RED tests for swapped URLs, swapped relative paths, an unknown fifth
+   artifact, a missing artifact, `?query`, and `#fragment`.
+2. The preserved `test_theorem_31_evidence_contains_closed_schema_steps_array`
+   only checks keys, step index, the iterate-update equation, and boolean
+   types. Strengthen it to independently recompute, at each of ten steps,
+   `g1`, `g2`, the weighted anchor, a fresh `cagrad_clip` direction, the next
+   iterate, both weighted losses, `M(theta_t)`, weighted-gradient norm, the
+   descent inequality, and the M-bound boolean. Compare each persisted
+   numeric/boolean field to that independent calculation.
+3. The Claim 8 test checks only the already-supported canonical fixture.
+   Add four direct mutation regressions against `_derive_claim_outcomes`, each
+   flipping exactly one dependency: one step's `descent_holds`, one step's
+   `m_bound_holds`, `grad_finite_horizon_bound_holds`, and
+   `m_finite_horizon_bound_holds`. Each mutation must change Claim 8 to
+   `not-supported`; the all-true control must remain `supported`.
+4. Regenerate deterministic evidence/pages after the identity tightening.
+   Run the full submission suite, frozen-lock verification, root pytest, skill
+   validation, pre-commit, and `git diff --check`; return a clean new commit.
+
+## Controller No-op Recovery Gate — 2026-07-28, round 8
+
+Guarded round 7 (`861f3d381e18494d9ea7f27211845562`) ran
+`claude-opus-4-6-thinking` for only 13.34551123 seconds, printed only
+“I'll start by reading the worker contract and the implementation plan,” and
+exited code zero at the unchanged base
+`8fb639cb595aea019090f13f12714e5149e2005a`. It made no file change, commit,
+or implementation proposal. Treat that session as a no-op, not validation.
+
+For round 8, use `gemini-3.1-pro-high` and execute the full round-7 correction
+gate. Begin by running the preserved RED tests in `test_evidence.py` and
+`test_provenance.py`; then implement production code, schema, generated
+evidence, and pages until they pass. Do not return after reading or merely
+describing the plan. A valid proposal must contain a new commit derived from
+this durable gate, a clean worktree, regenerated deterministic evidence, and
+the exact verification command outputs required by round 7.
+
+## Controller Correction Gate — 2026-07-28, round 7
+
+Use `icml-repro-loop`, `superpowers:test-driven-development`,
+`superpowers:systematic-debugging`, and
+`superpowers:verification-before-completion`. Guarded round 6 exited at the
+unchanged base `0dc6d34a787283c65fd119f6872eb1d70c8be906` and left only two
+uncommitted RED test files; the controller preserved that test-only proposal
+as `40cfc73`. No production correction, regenerated evidence, or worker commit
+was produced. Start by running the preserved RED tests and then implement all
+items below.
+
+1. Implement the round-6 `steps` evidence, not merely its tests. Emit exactly
+   ten closed-schema records for `t=0,...,9`, each containing `step_index`,
+   `current_iterate`, `weighted_anchor`, `cagrad_direction`, `next_iterate`,
+   `loss_before`, `loss_after`, `m_value`, `grad_norm`, `descent_holds`, and
+   `m_bound_holds`. Strengthen the behavioral test to recompute every numeric
+   field independently from the two quadratic objectives and a fresh
+   `cagrad_clip` call, not just the iterate-update identity. Exclude terminal
+   `t=T` diagnostics from the per-update array.
+2. Expose the two finite-horizon squared checks separately as
+   `grad_finite_horizon_bound_holds` and
+   `m_finite_horizon_bound_holds`, while retaining their conjunction if useful.
+   Derive Claim 8 support only when every one of the ten step descent/M
+   booleans and both separately persisted finite-horizon booleans are true.
+   Mutating any one of those four conditions to false must make Claim 8
+   `not-supported`.
+3. Bind every artifact ID to its exact raw URL rather than accepting any URL
+   on the raw host:
+   `LICENSE`, `README.md`, `m=3-RACO-CAGrad-Algo.md`, and `train_raco.py` must
+   map to the corresponding
+   `https://raw.githubusercontent.com/PeterLauLukChen/RACO/84a943c34f38520c7e0c9dd3066517c111b3c8fa/<path>`
+   URL. Reject swapped paths, query/fragment suffixes, GitHub `/blob/` HTML
+   pages, and other raw-host URLs. Regenerate canonical evidence and the
+   provenance page from these exact identities.
+4. Update the closed evidence schema for every new field. Generate twice and
+   compare bytes; run the full submission suite, frozen-lock verification,
+   root pytest, skill validation, pre-commit, and `git diff --check`. Commit
+   the production correction and all generated outputs before returning.
+
+## Controller Correction Gate — 2026-07-28, round 6
+
+Use `icml-repro-loop`, `superpowers:test-driven-development`,
+`superpowers:systematic-debugging`, and
+`superpowers:verification-before-completion`. Controller review rejected
+proposal `618f724e8aff048dce03239aea3c56ef35736556`. Preserve that commit as
+the rejected proposal. For every item below, first add a behavioral regression
+and record its expected RED failure against `618f724e`.
+
+1. `execute_raco_trajectory` now computes the requested CAGrad-Clip quantities,
+   but `_run_theorem_31_audit` drops the weighted anchors, CAGrad directions,
+   next iterates, loss-before/loss-after pairs, and per-step descent booleans.
+   Consequently canonical `evidence/results.json` cannot substantiate that its
+   advertised trajectory used RACO rather than the old pure-`g0` update.
+   Persist a closed-schema `steps` array of exactly ten records for
+   `t=0,...,9`. Each record must contain the step index, current iterate,
+   weighted anchor, actual CAGrad-Clip direction, next iterate, loss before,
+   loss after, `M(theta_t)`, weighted-gradient norm, descent-bound boolean, and
+   `M(theta_t) <= ||grad L_w(theta_t)||` boolean. Assert each numeric identity
+   independently in the evidence test, including
+   `theta_next = theta - eta * cagrad_direction`. Do not mix the terminal
+   `t=T` diagnostics into these per-update records. Claim 8 may be `supported`
+   only if all ten step records pass both booleans and both finite-horizon
+   squared bounds pass.
+2. The artifact manifest uses GitHub HTML `/blob/<commit>/...` pages, not the
+   immutable raw artifact URLs required by the round-5 gate. Bind each
+   artifact ID to its exact
+   `https://raw.githubusercontent.com/PeterLauLukChen/RACO/84a943c34f38520c7e0c9dd3066517c111b3c8fa/<path>`
+   URL (with correct path encoding) and reject a `/blob/` URL even when it
+   contains the pinned commit. Regenerate canonical evidence and the
+   provenance page so they expose those exact raw URLs.
+3. Regenerate canonical evidence and every affected page. Compare two
+   independent evidence generations byte-for-byte; run the full submission
+   suite, frozen-lock verification, root pytest, skill validation, pre-commit,
+   and `git diff --check`. Commit only the assigned submission after this
+   durable controller-plan commit.
+
+## Controller Correction Gate — 2026-07-28, round 5
+
+Use `icml-repro-loop`, `superpowers:test-driven-development`,
+`superpowers:systematic-debugging`, and
+`superpowers:verification-before-completion`. Controller review rejected
+proposal `fe6b6b63c80aca9ac802624bdce6c165ca16570a`. Preserve that commit as
+the rejected proposal. For every item below, add a behavioral regression,
+run it against `fe6b6b6`, and record the expected RED failure before changing
+production code.
+
+1. `load_live_claims` still accepts a caller-edited claim when its SHA is
+   recomputed to match the edited text. Bind the loader itself to the exact ten
+   admitted ordinals, texts, hashes, and target flags. A temporary copy with
+   one changed text and matching new SHA must raise `IntegrityError`.
+2. The four packaged upstream files are verified but their lineage disappears
+   from `evidence/results.json`: it has no artifacts/provenance field.
+   Extend `VerifiedArtifact` and the closed evidence schema so canonical
+   evidence and the provenance page expose every artifact's ID, path, SHA-256,
+   Git blob, byte size, immutable commit-qualified source URL, reproducible
+   acquisition command including checkout of
+   `84a943c34f38520c7e0c9dd3066517c111b3c8fa`, and Apache-2.0 license.
+   Reject generic repository URLs and clone-only acquisition commands.
+3. `execute_raco_trajectory` claims to execute RACO but advances with
+   `x = x - eta * g0`, never calling CAGrad-Clip and never using `c`.
+   Execute the actual audited CAGrad-Clip update at every step. Persist each
+   weighted anchor, CAGrad direction, next iterate, loss before/after,
+   `M(theta_t)`, weighted-gradient norm, and separate per-step descent and
+   `M <= ||grad L_w||` booleans for exactly `t=0,...,T-1`. Claim 8 may be
+   `supported` only when every step and both finite-horizon squared bounds
+   pass. A mutation replacing the CAGrad direction with `g0` must fail a
+   literal, hand-derived test.
+4. Make `compute_m_simplex` scale-aware: the opposing
+   `g1=[1e-8], g2=[-1e-8]` fixture must return zero, not treat the gradients as
+   identical because of an absolute squared-norm threshold.
+5. For a zero weighted anchor, persist the effective correction radius as
+   zero in `CAGradResult`; for identical gradients, report the exact original
+   subproblem objective including the `c*||g0||*||g||` term. Add literal
+   regressions for both diagnostics.
+6. Regenerate canonical evidence and every page. Compare two independent
+   evidence generations byte-for-byte; run the full submission suite,
+   frozen-lock verification, root pytest, skill validation, pre-commit, and
+   `git diff --check`. Commit only the assigned submission after this durable
+   controller-plan commit.
+
 ## Global Constraints
 
 - Work only in
