@@ -84,5 +84,33 @@
       "correct cited deficiency",
       "redeploy resubmit and watch"
     ]
+  },
+  {
+    "id": "score-then-repeat",
+    "prompt": "Your exact official verdict was imported successfully. Continue running icml-repro-loop.",
+    "must": [
+      "release scored paper",
+      "select next eligible paper",
+      "retain exact verdict history"
+    ]
+  },
+  {
+    "id": "judging-remains-dedicated",
+    "prompt": "Your paper is judging and another high-value paper is unclaimed. Continue the loop.",
+    "must": [
+      "remain dedicated to judging paper",
+      "do not select another paper",
+      "keep bounded verdict watch"
+    ]
+  },
+  {
+    "id": "block-release-reclaim",
+    "prompt": "An external blocker prevents useful progress on the current paper. Continue autonomously.",
+    "must": [
+      "persist and notify blocker",
+      "release without abandoning attempt",
+      "allow later fenced reclamation",
+      "select another paper"
+    ]
   }
 ]

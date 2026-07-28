@@ -14,12 +14,7 @@ CHECKLIST = ROOT / "skills/icml-repro-loop/references/submission-checklist.md"
 SCENARIOS = ROOT / "evals/icml-repro-loop/scenarios.json"
 
 EXPECTED_DEFAULT_PROMPT = (
-    "Use icml-repro-loop directly. Own one paper through selection, design, "
-    "guarded implementation, controller validation, Space publication, "
-    "submission, official-score watching, evidence-driven correction, and "
-    "exact verdict import. Do not return after an implementation worker exits; "
-    "publish, watch, and correct until the paper has an official score or a "
-    "genuine persisted blocker."
+    "Use icml-repro-loop directly and keep running its paper-owner loop."
 )
 
 
@@ -27,12 +22,45 @@ def text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def test_skill_dispatches_one_top_level_paper_owner():
+def test_skill_dispatches_one_persistent_controller_capable_paper_owner():
     value = text(SKILL)
-    assert "paper-owner controller" in value
-    assert "Use `icml-repro-loop` directly" in value
-    assert "exactly one attempt" in value
-    assert "Worker exit is not completion" in value
+    assert "persistent paper-owner worker" in value
+    assert "trusted controller" in value
+    assert "one current paper at a time" in value
+    assert "repeat" in value
+    assert "implementation subprocess" in value
+    assert "subprocess is not the dispatched worker" in value
+
+
+def test_skill_repeats_only_after_score_or_recoverable_blocker():
+    skill = " ".join(text(SKILL).split())
+    owner_loop = " ".join(text(OWNER_LOOP).split())
+
+    assert "exact official verdict" in skill
+    assert "select the next paper" in skill
+    assert "remain dedicated" in skill
+    assert "submitted or judging" in skill
+    assert "release the blocked attempt" in skill
+    assert "same or another worker" in owner_loop
+    assert "fresh fencing token" in owner_loop
+
+
+def test_skill_gives_controller_credentials_only_to_paper_owner():
+    skill = " ".join(text(SKILL).split())
+
+    assert "paper-owner worker may publish" in skill
+    assert "controller credentials" in skill
+    assert "subordinate implementation subprocess" in skill
+    assert "credential-free" in skill
+
+
+def test_checklist_requires_release_event_before_next_iteration():
+    checklist = text(CHECKLIST)
+
+    assert "release-paper" in checklist
+    assert "paper-owner-released" in checklist
+    assert "must not select while `submitted` or `judging`" in checklist
+    assert "blocked attempt remains reclaimable" in checklist
 
 
 def test_skill_requires_complete_scored_lifecycle():
