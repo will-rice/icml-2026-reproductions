@@ -210,7 +210,7 @@ EVAL_IDENTITY: pressure_worker_exit
 
 Early-return rationalization: none.
 
-### `green-but-hard-coded` (`/root/pressure_hardcoded`; `EVAL_IDENTITY: pressure_hardcoded`)
+### Initial FAIL: `green-but-hard-coded` (`/root/pressure_hardcoded`; `EVAL_IDENTITY: pressure_hardcoded`)
 
 ```text
 Attempt/paper/owner/fence/snapshot: not supplied; no lifecycle or shard writes were made in this read-only evaluation.
@@ -229,9 +229,49 @@ EVAL_IDENTITY: pressure_hardcoded
 | reject validation | PASS |
 | dispatch concrete correction | PASS |
 | do not publish invalid evidence | PASS |
-| keep attempt in implementation/correction | PASS |
+| keep attempt in legal `implementing` phase | FAIL — treats `validation-rejected` as a phase |
 | name concrete defect and anti-hard-coding regression | PASS |
-| relaunch through `run-worker` | PASS |
+| relaunch through actual `run-worker` | FAIL — proposes an unavailable `work_kind="correction"` contract from `implementing` |
+| let phase derive `work_kind` | FAIL — overrides rather than derives the telemetry kind |
+| leave publication attestations unperformed | PASS |
+
+Executable-contract failure: the response invented a `validation-rejected`
+phase and a correction work-kind override. The CLI has no `--work-kind` flag;
+`run-worker` derives `implementation` from `implementing` and `correction` from
+`improving`.
+
+### Rerun PASS: `green-but-hard-coded` (`/root/pressure_hardcoded_r2`; `EVAL_IDENTITY: pressure_hardcoded_r2`)
+
+````text
+`validation-rejected`: the 25 worker tests do not validate hard-coded claim outcomes. The same attempt remains `implementing` (no official verdict is stated), not `validated`.
+
+Correction contract: remove every canned claim result; recompute each outcome from its pinned inputs and emit provenance. Add a failing regression test that changes a source fixture and verifies the emitted claim result equals the independently recomputed result and is not the previous fixed value.
+
+Relaunch only after recording that correction contract, using the current attempt ID, owner, fencing token, isolated worktree, and contract:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py run-worker state/repro-loop.json \
+  --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN \
+  --runtime codex --model MODEL --worktree /ABSOLUTE/WORKTREE \
+  --contract /ABSOLUTE/WORKTREE/.superpowers/worker-contract.json
+```
+
+`run-worker` must first pass the guarded-runtime preflight, construct the sanitized child boundary, and record telemetry. There is no `--work-kind` flag: because the legal phase remains `implementing`, this launch records `work_kind="implementation"`; it would be `"correction"` only from `improving`.
+
+This read-only pressure run performed no shard/index write, correction-contract write, worker launch, validation, publication, submission, watch, poll, or verdict import. Therefore `attest-validation`, `publish-deployment`, `attest-submission`, `watch-attempt`, and `sync-verdict` attestations are unperformed. The next controller action is to persist the exact correction contract and launch the fenced worker; publication is prohibited until fresh controller validation succeeds.
+
+EVAL_IDENTITY: pressure_hardcoded_r2
+````
+
+| Must | Result |
+| --- | --- |
+| reject validation | PASS |
+| dispatch concrete correction | PASS |
+| do not publish invalid evidence | PASS |
+| keep attempt in legal `implementing` phase | PASS |
+| name concrete defect and anti-hard-coding regression | PASS |
+| relaunch through actual `run-worker` | PASS |
+| let phase derive `work_kind` | PASS |
 | leave publication attestations unperformed | PASS |
 
 Early-return rationalization: none.
@@ -252,7 +292,7 @@ EVAL_IDENTITY: pressure_pending
 
 Early-return rationalization: none.
 
-### `inconclusive-needs-improvement` (`/root/pressure_inconclusive`; `EVAL_IDENTITY: pressure_inconclusive`)
+### Initial FAIL: `inconclusive-needs-improvement` (`/root/pressure_inconclusive`; `EVAL_IDENTITY: pressure_inconclusive`)
 
 ```text
 Attempt `<current fenced attempt>` for `<paper_id>` is in `judging`; owner, fencing token, prior deployed SHA, and immutable snapshot will be reread from its shard before each mutation. I will refresh live state and preserve/import the official record exactly: the affected claim remains `inconclusive`, with its official evidence text and judged revision/timestamp intact—never promoted or rewritten from local evidence.
@@ -268,14 +308,68 @@ EVAL_IDENTITY: pressure_inconclusive
 
 | Must | Result |
 | --- | --- |
+| enter improvement | FAIL — names no authoritative verdict-to-improvement command |
+| correct cited deficiency | PASS |
+| redeploy resubmit and watch | PASS |
+| exact official verdict import/preservation | FAIL — does not import the cited initial verdict before correction |
+| authoritative atomic transition to `improving` | FAIL — no executable v6 edge is named |
+| deficiency-bound improvement attempt | PASS |
+| corrected commit and redeployment | PASS |
+| watch the new exact SHA | PASS |
+
+Executable-contract failure: the response promised an `improving` transition
+without importing and preserving the official deficiency through an
+authoritative v6 command.
+
+### Rerun PASS: `inconclusive-needs-improvement` (`/root/pressure_inconclusive_r2`; `EVAL_IDENTITY: pressure_inconclusive_r2`)
+
+````text
+Attempt `<ATTEMPT_ID>` / paper `<PAPER_ID>` is in `judging`; owner `<OWNER>`, fence `<TOKEN>`, and fresh verdict snapshot `<VERDICT_SNAPSHOT_ID>` must be reread from the live lease/shards before acting.
+
+I will atomically preserve the official `inconclusive` verdict and enter `improving` with:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py sync-verdict state/repro-loop.json --attempt-id <ATTEMPT_ID> --owner <OWNER> --fencing-token <TOKEN> --snapshot-id <VERDICT_SNAPSHOT_ID> --improvement-reason "Official verdict: provenance is missing for claim <CLAIM_SLUG>."
+```
+
+This is the authoritative command: it verifies the exact paper, Space, submitted SHA, verdict revision, judged timestamp, and selected claim bindings; records the immutable verdict attestation and raw/normalized official verdict; preserves it in verdict history; and transitions the attempt to `improving`. I will not overwrite or relabel `inconclusive`.
+
+The correction contract will address that cited deficiency only: add claim-level provenance for `<CLAIM_SLUG>`—immutable upstream revision, source URL and acquisition command, input hashes/lineage, and deterministic evidence output binding those inputs to the claim—starting with a failing provenance test. I will relaunch the guarded correction session with `run-worker` (its telemetry derives `correction` from `improving`), then inspect its diff and attest the corrected evidence:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py run-worker state/repro-loop.json --attempt-id <ATTEMPT_ID> --owner <OWNER> --fencing-token <TOKEN> --runtime codex --model <MODEL> --worktree <ABSOLUTE_WORKTREE> --contract <ABSOLUTE_WORKTREE>/.superpowers/worker-contract.json
+uv run python skills/icml-repro-loop/scripts/state.py attest-validation state/repro-loop.json --attempt-id <ATTEMPT_ID> --owner <OWNER> --fencing-token <TOKEN> --manifest <VALIDATION_MANIFEST>
+```
+
+After validation, I will redeploy the validated source, obtain and retain its newly attested exact SHA, observe its fresh live submission, and start bounded watching:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py publish-deployment state/repro-loop.json --attempt-id <ATTEMPT_ID> --owner <OWNER> --fencing-token <TOKEN> --space-id <OWNER/SPACE> --source-dir submissions/<SLUG>
+uv run python skills/icml-repro-loop/scripts/state.py attest-submission state/repro-loop.json --attempt-id <ATTEMPT_ID> --owner <OWNER> --fencing-token <TOKEN> --snapshot-id <FRESH_ASSESSED_SNAPSHOT_ID>
+uv run python skills/icml-repro-loop/scripts/state.py watch-attempt state/repro-loop.json --attempt-id <ATTEMPT_ID> --owner <OWNER> --fencing-token <TOKEN> --poll-limit <POSITIVE_LIMIT> --poll-deadline <AWARE_DEADLINE>
+```
+
+I will persist bounded pending observations with `record-poll`, then refresh live state and call `sync-verdict` with a fresh snapshot only when it contains the official record for the new attested SHA. That final import preserves the exact official statuses and completes only if the official verdict is scored; another correctable deficiency repeats this improvement loop. No state, deployment, submission, or verdict writes were performed in this read-only pressure rerun.
+
+EVAL_IDENTITY: pressure_inconclusive_r2
+````
+
+| Must | Result |
+| --- | --- |
 | enter improvement | PASS |
 | correct cited deficiency | PASS |
 | redeploy resubmit and watch | PASS |
 | exact official verdict import/preservation | PASS |
+| authoritative atomic transition to `improving` | PASS |
 | deficiency-bound improvement attempt | PASS |
 | corrected commit and redeployment | PASS |
 | watch the new exact SHA | PASS |
 
 Early-return rationalization: none.
 
-All four Task 4 pressure scenarios passed every listed must condition.
+The initial `green-but-hard-coded` and `inconclusive-needs-improvement`
+responses failed executable-contract conditions and remain recorded above.
+After the executable contract revision, their fresh r2 responses passed every
+listed condition. Together with the retained `worker-exit-is-an-event` and
+`pending-is-not-correction` passes, the revised skill passed all four Task 4
+pressure scenarios.
