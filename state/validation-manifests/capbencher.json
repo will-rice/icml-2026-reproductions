@@ -1,7 +1,7 @@
 {
   "worktree": "/home/will/projects/icml-2026-reproductions",
   "branch": "main",
-  "base_sha": "6eb1126836b16d7ab0a5ce89a932430e1b42b4e2",
+  "base_sha": "8a7a175a5fb8e1658535f2c998fc826205b36772",
   "project_path": "submissions/how-can-i-publish-my-llm-benchmark-without-giving-the-true-answers-away",
   "design_path": "docs/superpowers/specs/2026-07-25-capbencher-design.md",
   "commands": [
