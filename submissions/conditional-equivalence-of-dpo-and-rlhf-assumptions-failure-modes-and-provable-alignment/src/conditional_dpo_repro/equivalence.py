@@ -17,9 +17,22 @@ def centered_derivative(function, point: float, step: float = 1e-6) -> float:
     return (function(point + step) - function(point - step)) / (2.0 * step)
 
 
+def derive_equivalence_outcome(
+    max_stationary_err: float,
+    max_loss_deriv: float,
+    one_sided_finite_optimum: bool,
+) -> str:
+    if max_stationary_err <= 1e-6 and not one_sided_finite_optimum and max_loss_deriv < 0.0:
+        return "mixed"
+    if max_stationary_err <= 1e-6:
+        return "consistent"
+    return "contradiction"
+
+
 def _summarize_equivalence(rows: list[dict[str, object]]) -> dict[str, object]:
     max_stationary_err = max(r["population_stationary_abs_error"] for r in rows)
     max_loss_deriv = max(r["positive_loss_derivative"] for r in rows)
+    outcome = derive_equivalence_outcome(max_stationary_err, max_loss_deriv, False)
 
     return {
         "case_count": len(rows),
@@ -28,7 +41,7 @@ def _summarize_equivalence(rows: list[dict[str, object]]) -> dict[str, object]:
         "one_sided_finite_optimum": False,
         "population_identity_requires_positive_delta": False,
         "cases": rows,
-        "outcome": "mixed",
+        "outcome": outcome,
     }
 
 

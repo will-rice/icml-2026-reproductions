@@ -20,7 +20,30 @@
     "attempt_id": { "type": "string", "const": "933665ed-b7ed-4d73-9b07-35704660a184" },
     "snapshot_id": { "type": "string", "const": "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199" },
     "upstream_revision": { "type": "string", "const": "arxiv:2605.20834v1" },
-    "source": { "type": "object" },
+    "source": {
+      "type": "object",
+      "required": [
+        "title",
+        "arxiv_id",
+        "abstract_url",
+        "pdf_url",
+        "eprint_url",
+        "html_url",
+        "license",
+        "repository_url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "arxiv_id": { "type": "string" },
+        "abstract_url": { "type": "string" },
+        "pdf_url": { "type": "string" },
+        "eprint_url": { "type": "string" },
+        "html_url": { "type": "string" },
+        "license": { "type": "string" },
+        "repository_url": { "type": "string" }
+      }
+    },
     "claims": {
       "type": "array",
       "items": {
@@ -55,7 +78,16 @@
             "type": "array",
             "items": { "type": "string" }
           },
-          "details": { "type": "object" }
+          "details": {
+            "oneOf": [
+              { "$ref": "#/$defs/EquivalenceDetails" },
+              { "$ref": "#/$defs/RelativeAdvantageDetails" },
+              { "$ref": "#/$defs/UndesirableSpaceDetails" },
+              { "$ref": "#/$defs/CPOMarginDetails" },
+              { "$ref": "#/$defs/SoftMarginDetails" },
+              { "$ref": "#/$defs/EmptyDetails" }
+            ]
+          }
         }
       }
     },
@@ -66,6 +98,366 @@
     "commands": {
       "type": "array",
       "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "EquivalenceCase": {
+      "type": "object",
+      "required": [
+        "p_ref_w",
+        "reward_gap",
+        "beta",
+        "delta_ref",
+        "delta_rlhf",
+        "condition_holds",
+        "population_stationary_abs_error",
+        "positive_loss_derivative"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "p_ref_w": { "type": "number" },
+        "reward_gap": { "type": "number" },
+        "beta": { "type": "number" },
+        "delta_ref": { "type": "number" },
+        "delta_rlhf": { "type": "number" },
+        "condition_holds": { "type": "boolean" },
+        "population_stationary_abs_error": { "type": "number" },
+        "positive_loss_derivative": { "type": "number" }
+      }
+    },
+    "EquivalenceDetails": {
+      "type": "object",
+      "required": [
+        "case_count",
+        "population_stationary_max_abs_error",
+        "positive_loss_derivative_max",
+        "one_sided_finite_optimum",
+        "population_identity_requires_positive_delta",
+        "cases",
+        "outcome"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "case_count": { "type": "integer" },
+        "population_stationary_max_abs_error": { "type": "number" },
+        "positive_loss_derivative_max": { "type": "number" },
+        "one_sided_finite_optimum": { "type": "boolean" },
+        "population_identity_requires_positive_delta": { "type": "boolean" },
+        "cases": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/EquivalenceCase" }
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["consistent", "contradiction", "mixed", "not_reproduced"]
+        }
+      }
+    },
+    "RelativeAdvantageCase": {
+      "type": "object",
+      "required": [
+        "delta_ref",
+        "offset",
+        "delta",
+        "beta",
+        "relative_improvement",
+        "absolute_preference",
+        "reference_loss",
+        "candidate_loss",
+        "preferred_probability"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "delta_ref": { "type": "number" },
+        "offset": { "type": "number" },
+        "delta": { "type": "number" },
+        "beta": { "type": "number" },
+        "relative_improvement": { "type": "boolean" },
+        "absolute_preference": { "type": "boolean" },
+        "reference_loss": { "type": "number" },
+        "candidate_loss": { "type": "number" },
+        "preferred_probability": { "type": "number" }
+      }
+    },
+    "RelativeAdvantageDetails": {
+      "type": "object",
+      "required": [
+        "case_count",
+        "relative_improvement_count",
+        "absolute_preference_count",
+        "relative_but_not_absolute_count",
+        "cases",
+        "outcome"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "case_count": { "type": "integer" },
+        "relative_improvement_count": { "type": "integer" },
+        "absolute_preference_count": { "type": "integer" },
+        "relative_but_not_absolute_count": { "type": "integer" },
+        "cases": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/RelativeAdvantageCase" }
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["consistent", "contradiction", "mixed", "not_reproduced"]
+        }
+      }
+    },
+    "UndesirableSpaceDetails": {
+      "type": "object",
+      "required": [
+        "witness_count",
+        "witnesses",
+        "outcome"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "witness_count": { "type": "integer" },
+        "witnesses": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/RelativeAdvantageCase" }
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["consistent", "contradiction", "mixed", "not_reproduced"]
+        }
+      }
+    },
+    "CPOCaseExactFinite": {
+      "type": "object",
+      "required": [
+        "status",
+        "policy",
+        "objective",
+        "first_order_residual",
+        "curvature"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "type": "string", "const": "finite_optimum" },
+        "policy": {
+          "type": "object",
+          "required": ["preferred", "dispreferred", "delta"],
+          "additionalProperties": false,
+          "properties": {
+            "preferred": { "type": "number" },
+            "dispreferred": { "type": "number" },
+            "delta": { "type": "number" }
+          }
+        },
+        "objective": { "type": "number" },
+        "first_order_residual": { "type": "number" },
+        "curvature": { "type": "number" }
+      }
+    },
+    "CPOCaseExactUnbounded": {
+      "type": "object",
+      "required": [
+        "status",
+        "approached_boundary",
+        "increasing_tail_values",
+        "analytic_reason"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "type": "string", "const": "unbounded" },
+        "approached_boundary": { "type": "string" },
+        "increasing_tail_values": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "analytic_reason": { "type": "string" }
+      }
+    },
+    "CPOCase": {
+      "type": "object",
+      "required": [
+        "p_ref_w",
+        "reward_gap",
+        "beta",
+        "gamma",
+        "exact_constrained_rlhf",
+        "equations_13_16_optimal_policy_margin",
+        "equation_17_reference_policy_approximation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "p_ref_w": { "type": "number" },
+        "reward_gap": { "type": "number" },
+        "beta": { "type": "number" },
+        "gamma": { "type": "number" },
+        "exact_constrained_rlhf": {
+          "oneOf": [
+            { "$ref": "#/$defs/CPOCaseExactFinite" },
+            { "$ref": "#/$defs/CPOCaseExactUnbounded" }
+          ]
+        },
+        "equations_13_16_optimal_policy_margin": {
+          "type": "object",
+          "required": ["defined", "margin", "residual"],
+          "additionalProperties": false,
+          "properties": {
+            "defined": { "type": "boolean" },
+            "margin": { "type": ["number", "null"] },
+            "residual": { "type": ["number", "null"] }
+          }
+        },
+        "equation_17_reference_policy_approximation": {
+          "type": "object",
+          "required": [
+            "reference_margin",
+            "approximate_cpo_delta",
+            "shift_identity_abs_error",
+            "stationary_derivative_abs_error"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "reference_margin": { "type": "number" },
+            "approximate_cpo_delta": { "type": "number" },
+            "shift_identity_abs_error": { "type": "number" },
+            "stationary_derivative_abs_error": { "type": "number" }
+          }
+        }
+      }
+    },
+    "CPOMarginDetails": {
+      "type": "object",
+      "required": [
+        "case_count",
+        "exact_constrained_rlhf",
+        "equations_13_16_optimal_policy_margin",
+        "equation_17_reference_policy_approximation",
+        "cases",
+        "outcome"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "case_count": { "type": "integer" },
+        "exact_constrained_rlhf": {
+          "type": "object",
+          "required": ["finite_optimum_count", "unbounded_count"],
+          "additionalProperties": false,
+          "properties": {
+            "finite_optimum_count": { "type": "integer" },
+            "unbounded_count": { "type": "integer" }
+          }
+        },
+        "equations_13_16_optimal_policy_margin": {
+          "type": "object",
+          "required": [
+            "evaluated_only_for_certified_optima",
+            "evaluated_count"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "evaluated_only_for_certified_optima": { "type": "boolean" },
+            "evaluated_count": { "type": "integer" }
+          }
+        },
+        "equation_17_reference_policy_approximation": {
+          "type": "object",
+          "required": [
+            "case_count",
+            "shift_identity_max_abs_error",
+            "stationary_derivative_max_abs_error",
+            "margin_parameter_derivative",
+            "labeled_approximation"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "case_count": { "type": "integer" },
+            "shift_identity_max_abs_error": { "type": "number" },
+            "stationary_derivative_max_abs_error": { "type": "number" },
+            "margin_parameter_derivative": { "type": "number" },
+            "labeled_approximation": { "type": "boolean" }
+          }
+        },
+        "cases": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/CPOCase" }
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["consistent", "contradiction", "mixed", "not_reproduced"]
+        }
+      }
+    },
+    "SoftMarginNegativeExample": {
+      "type": "object",
+      "required": ["delta_ref", "delta", "target_margin"],
+      "additionalProperties": false,
+      "properties": {
+        "delta_ref": { "type": "number" },
+        "delta": { "type": "number" },
+        "target_margin": { "type": "number" }
+      }
+    },
+    "SoftMarginCase": {
+      "type": "object",
+      "required": [
+        "delta_ref",
+        "delta",
+        "beta",
+        "scaled_dpo_loss",
+        "hinge",
+        "abs_error"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "delta_ref": { "type": "number" },
+        "delta": { "type": "number" },
+        "beta": { "type": "number" },
+        "scaled_dpo_loss": { "type": "number" },
+        "hinge": { "type": "number" },
+        "abs_error": { "type": "number" }
+      }
+    },
+    "SoftMarginDetails": {
+      "type": "object",
+      "required": [
+        "case_count",
+        "max_abs_error_by_beta",
+        "negative_target_examples",
+        "finite_beta_loss_is_literal_hinge",
+        "cases",
+        "outcome"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "case_count": { "type": "integer" },
+        "max_abs_error_by_beta": {
+          "type": "object",
+          "required": ["1", "4", "16", "64", "256"],
+          "additionalProperties": false,
+          "properties": {
+            "1": { "type": "number" },
+            "4": { "type": "number" },
+            "16": { "type": "number" },
+            "64": { "type": "number" },
+            "256": { "type": "number" }
+          }
+        },
+        "negative_target_examples": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/SoftMarginNegativeExample" }
+        },
+        "finite_beta_loss_is_literal_hinge": { "type": "boolean" },
+        "cases": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/SoftMarginCase" }
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["consistent", "contradiction", "mixed", "not_reproduced"]
+        }
+      }
+    },
+    "EmptyDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {}
     }
   }
 }

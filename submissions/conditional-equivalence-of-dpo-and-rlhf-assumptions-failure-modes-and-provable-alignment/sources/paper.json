@@ -2,12 +2,13 @@
   "paper_id": "7UEBX1KU1y",
   "upstream_revision": "arxiv:2605.20834v1",
   "paper": {
-    "title": "On the Conditional Equivalence of DPO and RLHF: Assumptions, Failure Modes, and Provable Alignment",
+    "title": "Conditional Equivalence of DPO and RLHF: Implicit Assumption, Failure Modes, and Provable Alignment",
     "arxiv_id": "2605.20834v1",
     "abstract_url": "https://arxiv.org/abs/2605.20834v1",
     "pdf_url": "https://arxiv.org/pdf/2605.20834v1.pdf",
     "eprint_url": "https://arxiv.org/e-print/2605.20834v1",
-    "license": "CC-BY-4.0",
+    "html_url": "https://arxiv.org/html/2605.20834v1",
+    "license": "arXiv.org perpetual non-exclusive license",
     "repository_url": "https://github.com/visitworld123/CPO"
   },
   "claims": [

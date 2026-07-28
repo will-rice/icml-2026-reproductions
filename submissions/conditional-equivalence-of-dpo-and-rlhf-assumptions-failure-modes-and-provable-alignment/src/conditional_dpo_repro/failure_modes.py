@@ -26,17 +26,36 @@ def _relative_rows():
         }
 
 
+def derive_relative_advantage_outcome(
+    case_count: int,
+    relative_improvement_count: int,
+    relative_but_not_absolute_count: int,
+) -> str:
+    if relative_improvement_count == case_count and relative_but_not_absolute_count > 0:
+        return "consistent"
+    if relative_improvement_count == 0:
+        return "contradiction"
+    return "mixed"
+
+
+def derive_undesirable_space_outcome(witness_count: int) -> str:
+    return "consistent" if witness_count > 0 else "contradiction"
+
+
 def run_relative_advantage_lane() -> dict[str, object]:
     rows = tuple(_relative_rows())
+    rel_improvement = sum(r["relative_improvement"] for r in rows)
+    rel_not_abs = sum(
+        r["relative_improvement"] and not r["absolute_preference"] for r in rows
+    )
+    outcome = derive_relative_advantage_outcome(len(rows), rel_improvement, rel_not_abs)
     return {
         "case_count": len(rows),
-        "relative_improvement_count": sum(r["relative_improvement"] for r in rows),
+        "relative_improvement_count": rel_improvement,
         "absolute_preference_count": sum(r["absolute_preference"] for r in rows),
-        "relative_but_not_absolute_count": sum(
-            r["relative_improvement"] and not r["absolute_preference"] for r in rows
-        ),
+        "relative_but_not_absolute_count": rel_not_abs,
         "cases": list(rows),
-        "outcome": "consistent",
+        "outcome": outcome,
     }
 
 
@@ -44,8 +63,9 @@ def run_undesirable_space_lane() -> dict[str, object]:
     witnesses = tuple(
         row for row in _relative_rows() if row["delta_ref"] < row["delta"] < 0.0
     )
+    outcome = derive_undesirable_space_outcome(len(witnesses))
     return {
         "witness_count": len(witnesses),
         "witnesses": list(witnesses),
-        "outcome": "consistent" if witnesses else "contradiction",
+        "outcome": outcome,
     }

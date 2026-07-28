@@ -43,6 +43,24 @@ def serialize_exact_result(exact: dict[str, object]) -> dict[str, object]:
     }
 
 
+def derive_cpo_outcome(
+    finite_optimum_count: int,
+    unbounded_count: int,
+    shift_identity_max_abs_error: float,
+    stationary_derivative_max_abs_error: float,
+) -> str:
+    if (
+        unbounded_count > 0
+        and finite_optimum_count > 0
+        and shift_identity_max_abs_error <= 1e-6
+        and stationary_derivative_max_abs_error <= 1e-6
+    ):
+        return "mixed"
+    if unbounded_count > 0:
+        return "contradiction"
+    return "consistent"
+
+
 def _summarize_cpo(rows: list[dict[str, object]]) -> dict[str, object]:
     finite_optimum_count = sum(
         1 for r in rows if r["exact_constrained_rlhf"]["status"] == "finite_optimum"
@@ -65,6 +83,13 @@ def _summarize_cpo(rows: list[dict[str, object]]) -> dict[str, object]:
         for r in rows
     )
 
+    outcome = derive_cpo_outcome(
+        finite_optimum_count,
+        unbounded_count,
+        max_shift_err,
+        max_stationary_err,
+    )
+
     return {
         "case_count": len(rows),
         "exact_constrained_rlhf": {
@@ -83,7 +108,7 @@ def _summarize_cpo(rows: list[dict[str, object]]) -> dict[str, object]:
             "labeled_approximation": True,
         },
         "cases": rows,
-        "outcome": "consistent",
+        "outcome": outcome,
     }
 
 

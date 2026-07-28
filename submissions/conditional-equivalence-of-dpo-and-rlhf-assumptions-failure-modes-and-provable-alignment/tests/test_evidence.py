@@ -56,3 +56,63 @@ def test_bundle_is_byte_deterministic(project_root):
     assert first == second
     assert first.endswith(b"\n")
     assert b"NaN" not in first and b"Infinity" not in first
+
+
+def test_paper_json_source_metadata(project_root):
+    from conditional_dpo_repro.claims import load_source_record
+    record = load_source_record(project_root / "sources/paper.json")
+    paper = record["paper"]
+    assert paper["title"] == (
+        "Conditional Equivalence of DPO and RLHF: "
+        "Implicit Assumption, Failure Modes, and Provable Alignment"
+    )
+    assert paper["license"] == "arXiv.org perpetual non-exclusive license"
+    assert paper["html_url"] == "https://arxiv.org/html/2605.20834v1"
+
+
+def test_validate_evidence_rejects_unknown_top_level_field(project_root):
+    value = build_evidence(project_root)
+    value["unknown_field"] = "invalid"
+    import pytest
+    with pytest.raises(ValueError, match="unknown|schema"):
+        validate_evidence(value, project_root / "schema/evidence-v1.schema.json")
+
+
+def test_validate_evidence_rejects_unknown_source_field(project_root):
+    value = build_evidence(project_root)
+    value["source"]["unknown_source_prop"] = "invalid"
+    import pytest
+    with pytest.raises(ValueError, match="unknown|schema"):
+        validate_evidence(value, project_root / "schema/evidence-v1.schema.json")
+
+
+def test_validate_evidence_rejects_unknown_claim_field(project_root):
+    value = build_evidence(project_root)
+    value["claims"][0]["unknown_claim_prop"] = "invalid"
+    import pytest
+    with pytest.raises(ValueError, match="unknown|schema"):
+        validate_evidence(value, project_root / "schema/evidence-v1.schema.json")
+
+
+def test_validate_evidence_rejects_unknown_lane_detail_field(project_root):
+    value = build_evidence(project_root)
+    value["claims"][0]["details"]["unknown_detail_prop"] = "invalid"
+    import pytest
+    with pytest.raises(ValueError, match="unknown|schema"):
+        validate_evidence(value, project_root / "schema/evidence-v1.schema.json")
+
+
+def test_validate_evidence_rejects_boolean_where_number_expected(project_root):
+    value = build_evidence(project_root)
+    value["claims"][0]["details"]["case_count"] = True
+    import pytest
+    with pytest.raises(ValueError, match="type|schema|boolean"):
+        validate_evidence(value, project_root / "schema/evidence-v1.schema.json")
+
+
+def test_validate_evidence_rejects_missing_required_field(project_root):
+    value = build_evidence(project_root)
+    del value["paper_id"]
+    import pytest
+    with pytest.raises(ValueError, match="required|schema|paper_id"):
+        validate_evidence(value, project_root / "schema/evidence-v1.schema.json")

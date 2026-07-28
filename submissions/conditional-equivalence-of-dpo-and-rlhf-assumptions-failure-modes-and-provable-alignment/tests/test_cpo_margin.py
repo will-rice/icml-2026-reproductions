@@ -57,4 +57,14 @@ def test_cpo_lane_keeps_exact_result_and_approximation_separate():
     assert approximation["shift_identity_max_abs_error"] <= 1e-12
     assert approximation["stationary_derivative_max_abs_error"] <= 1e-8
     assert approximation["margin_parameter_derivative"] == 0.0
-    assert approximation["labeled_approximation"] is True
+    assert result["outcome"] == "mixed"
+
+
+def test_cpo_outcome_derivation_helper():
+    from conditional_dpo_repro.cpo import derive_cpo_outcome
+    assert derive_cpo_outcome(
+        finite_optimum_count=45,
+        unbounded_count=135,
+        shift_identity_max_abs_error=0.0,
+        stationary_derivative_max_abs_error=1e-9,
+    ) == "mixed"

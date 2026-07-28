@@ -130,8 +130,118 @@ def build_evidence(project_root: Path) -> dict[str, object]:
     }
 
 
+def _resolve_schema(
+    schema: dict[str, object], root_schema: dict[str, object]
+) -> dict[str, object]:
+    if "$ref" in schema:
+        ref = str(schema["$ref"])
+        if ref.startswith("#/$defs/"):
+            def_key = ref[len("#/$defs/") :]
+            defs = root_schema.get("$defs", {})
+            if isinstance(defs, dict) and def_key in defs:
+                return defs[def_key]
+        raise ValueError(f"unresolved schema ref: {ref}")
+    return schema
+
+
+def _check_type(data: object, expected_type: str | list[str], path: str) -> None:
+    types = [expected_type] if isinstance(expected_type, str) else list(expected_type)
+    valid = False
+    for t in types:
+        if t == "null" and data is None:
+            valid = True
+        elif t == "boolean" and isinstance(data, bool):
+            valid = True
+        elif t == "integer" and isinstance(data, int) and not isinstance(data, bool):
+            valid = True
+        elif t == "number" and isinstance(data, (int, float)) and not isinstance(data, bool):
+            valid = True
+        elif t == "string" and isinstance(data, str):
+            valid = True
+        elif t == "array" and isinstance(data, list):
+            valid = True
+        elif t == "object" and isinstance(data, dict):
+            valid = True
+    if not valid:
+        raise ValueError(
+            f"{path}: expected type {expected_type}, got {type(data).__name__}"
+        )
+
+
+def validate_json_schema(
+    data: object,
+    schema: dict[str, object],
+    root_schema: dict[str, object] | None = None,
+    path: str = "$",
+) -> None:
+    if root_schema is None:
+        root_schema = schema
+
+    schema = _resolve_schema(schema, root_schema)
+
+    if "oneOf" in schema:
+        options = schema["oneOf"]
+        passed = 0
+        for opt in options:
+            try:
+                validate_json_schema(data, opt, root_schema, path)
+                passed += 1
+            except ValueError:
+                pass
+        if passed != 1:
+            raise ValueError(
+                f"{path}: expected exactly one matching schema in oneOf, matched {passed}"
+            )
+        return
+
+    if "type" in schema:
+        _check_type(data, schema["type"], path)
+
+    if "const" in schema:
+        if data != schema["const"]:
+            raise ValueError(
+                f"{path}: expected const {schema['const']!r}, got {data!r}"
+            )
+
+    if "enum" in schema:
+        if data not in schema["enum"]:
+            raise ValueError(f"{path}: value {data!r} not in enum {schema['enum']}")
+
+    if isinstance(data, dict):
+        required = schema.get("required", [])
+        for req in required:
+            if req not in data:
+                raise ValueError(f"{path}: missing required field '{req}'")
+
+        properties = schema.get("properties", {})
+        if schema.get("additionalProperties") is False:
+            allowed_keys = set(properties.keys())
+            for key in data:
+                if key not in allowed_keys:
+                    raise ValueError(f"{path}: unknown field '{key}'")
+
+        for key, value in data.items():
+            if key in properties:
+                validate_json_schema(
+                    value, properties[key], root_schema, f"{path}.{key}"
+                )
+
+    elif isinstance(data, list):
+        items_schema = schema.get("items")
+        if items_schema:
+            for index, item in enumerate(data):
+                validate_json_schema(
+                    item, items_schema, root_schema, f"{path}[{index}]"
+                )
+
+
 def validate_evidence(value: dict[str, object], schema_path: Path) -> None:
     _walk_finite(value)
+    if not schema_path.exists():
+        raise ValueError(f"schema file not found: {schema_path}")
+    schema = json.loads(schema_path.read_text("utf-8"))
+    validate_json_schema(value, schema)
+
     if value.get("schema_version") != 1:
         raise ValueError("schema_version must be 1")
     if value.get("paper_id") != PAPER_ID:

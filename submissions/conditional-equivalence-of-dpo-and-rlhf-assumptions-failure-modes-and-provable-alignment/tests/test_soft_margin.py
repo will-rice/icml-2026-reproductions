@@ -19,3 +19,12 @@ def test_negative_margin_examples_include_wrong_preference():
         and item["target_margin"] == item["delta_ref"]
         for item in examples
     )
+    assert run_soft_margin_lane()["outcome"] == "consistent"
+
+
+
+def test_soft_margin_outcome_derivation_helper():
+    from conditional_dpo_repro.soft_margin import derive_soft_margin_outcome
+    assert derive_soft_margin_outcome(1e-3, True) == "consistent"
+    assert derive_soft_margin_outcome(0.5, True) == "contradiction"
+    assert derive_soft_margin_outcome(1e-3, False) == "contradiction"
