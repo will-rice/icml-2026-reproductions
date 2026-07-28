@@ -30,12 +30,20 @@ class CAGradResult:
 def validate_weights(weights: Tensor, atol: float = 1e-5) -> Tensor:
     if weights.ndim != 1 or weights.shape[0] != 2:
         raise ValueError(f"weights must be a 1D tensor of length 2, got shape {weights.shape}")
+    if not torch.isfinite(weights).all():
+        raise ValueError(f"weights must be finite, got {weights}")
     if (weights < 0.0).any():
         raise ValueError(f"weights must be non-negative, got {weights}")
     w_sum = weights.sum().item()
     if abs(w_sum - 1.0) > atol:
         raise ValueError(f"weights must sum to 1.0, got sum {w_sum}")
     return weights
+
+
+def _validate_finite_gradient(name: str, g: Tensor) -> None:
+    """Reject non-finite gradient vectors."""
+    if not torch.isfinite(g).all():
+        raise ValueError(f"{name} must be finite, got non-finite values")
 
 
 def solve_two_objective_alpha(
@@ -46,6 +54,8 @@ def solve_two_objective_alpha(
     atol: float = 1e-12,
 ) -> AlphaSolution:
     validate_weights(weights)
+    _validate_finite_gradient("g1", g1)
+    _validate_finite_gradient("g2", g2)
     if not isinstance(c, (int, float)) or not math.isfinite(c) or c < 0.0:
         raise ValueError(f"c must be non-negative and finite, got {c}")
     if c >= 1.0:
@@ -54,24 +64,28 @@ def solve_two_objective_alpha(
         raise ValueError("g1 and g2 must be 1D tensors of the same shape")
 
     w1 = weights[0].item()
-    w2 = weights[1].item()
     g0 = weights[0] * g1 + weights[1] * g2
     norm_g0 = torch.linalg.vector_norm(g0).item()
+    norm_g1 = torch.linalg.vector_norm(g1).item()
+    norm_g2 = torch.linalg.vector_norm(g2).item()
     diff = g1 - g2
     norm_diff = torch.linalg.vector_norm(diff).item()
 
-    # Detect singular geometry
+    # Scale-aware relative tolerance: use the max gradient norm as the
+    # reference scale so thresholds adapt to the data magnitude.
+    ref_scale = max(norm_g1, norm_g2, 1e-300)  # avoid zero
+    rel_tol = atol * ref_scale
+
+    # Detect singular geometry using scale-relative thresholds
     singular_case: str | None = None
     if c <= atol:
         singular_case = "zero_radius"
-    elif norm_g0 <= atol:
+    elif norm_g0 <= rel_tol:
         singular_case = "zero_anchor"
-    elif norm_diff <= atol:
+    elif norm_diff <= rel_tol:
         singular_case = "identical_gradients"
     else:
-        norm_g1 = torch.linalg.vector_norm(g1).item()
-        norm_g2 = torch.linalg.vector_norm(g2).item()
-        if norm_g1 <= atol or norm_g2 <= atol:
+        if norm_g1 <= rel_tol or norm_g2 <= rel_tol:
             singular_case = "colinear_gradients"
         else:
             cos_sim = abs(torch.dot(g1, g2).item()) / (norm_g1 * norm_g2)
@@ -89,9 +103,9 @@ def solve_two_objective_alpha(
         # Minimize h over the two endpoints instead of blindly returning w1
         h0 = h(0.0)
         h1 = h(1.0)
-        if h0 < h1 - atol:
+        if h0 < h1 - atol * ref_scale * ref_scale:
             best_alpha = 0.0
-        elif h1 < h0 - atol:
+        elif h1 < h0 - atol * ref_scale * ref_scale:
             best_alpha = 1.0
         elif abs(0.0 - w1) <= abs(1.0 - w1):
             best_alpha = 0.0
@@ -122,8 +136,14 @@ def solve_two_objective_alpha(
 
     raw_candidates = [0.0, 1.0]
 
+    # Scale-aware thresholds: use the max coefficient magnitude as the
+    # reference so degeneracy tests adapt to the data rather than
+    # depending on an absolute threshold.
+    q_coeff_ref = max(abs(q2), abs(q1), abs(q0), 1e-300)
+    q_tol = atol * q_coeff_ref
+
     # Roots of Q(a) = 0
-    if q2 > atol:
+    if q2 > q_tol:
         disc_q = q1 * q1 - 4.0 * q2 * q0
         if disc_q >= 0:
             sqrt_dq = math.sqrt(max(0.0, disc_q))
@@ -136,30 +156,40 @@ def solve_two_objective_alpha(
     B = delta_b * delta_b * q1 - s * s * q2 * q1
     C = delta_b * delta_b * q0 - s * s * q1 * q1 / 4.0
 
-    if abs(A) > 1e-14:
+    # Scale-aware: use the max among |A|,|B|,|C| as reference so that the
+    # degeneracy test works identically regardless of gradient magnitude.
+    poly_coeff_ref = max(abs(A), abs(B), abs(C), 1e-300)
+    poly_tol = atol * poly_coeff_ref
+
+    def _stationarity_check(r: float) -> bool:
+        """Scale-relative verification of the stationarity condition."""
+        q_val = Q(r)
+        if q_val < -q_tol:
+            return False
+        lhs = delta_b * math.sqrt(max(0.0, q_val))
+        rhs = -s * (q2 * r + q1 / 2.0)
+        denom = max(abs(lhs), abs(rhs), 1e-300)
+        return abs(lhs - rhs) <= 1e-5 * denom
+
+    if abs(A) > poly_tol:
         disc_stat = B * B - 4.0 * A * C
         if disc_stat >= 0:
             sqrt_ds = math.sqrt(max(0.0, disc_stat))
             for r in [(-B - sqrt_ds) / (2.0 * A), (-B + sqrt_ds) / (2.0 * A)]:
                 if -atol <= r <= 1.0 + atol:
-                    q_val = Q(r)
-                    if q_val >= -atol:
-                        lhs = delta_b * math.sqrt(max(0.0, q_val))
-                        rhs = -s * (q2 * r + q1 / 2.0)
-                        if abs(lhs - rhs) <= 1e-5:
-                            raw_candidates.append(r)
-    elif abs(B) > 1e-14:
+                    if _stationarity_check(r):
+                        raw_candidates.append(r)
+    elif abs(B) > poly_tol:
         r = -C / B
         if -atol <= r <= 1.0 + atol:
-            q_val = Q(r)
-            if q_val >= -atol:
-                lhs = delta_b * math.sqrt(max(0.0, q_val))
-                rhs = -s * (q2 * r + q1 / 2.0)
-                if abs(lhs - rhs) <= 1e-5:
-                    raw_candidates.append(r)
+            if _stationarity_check(r):
+                raw_candidates.append(r)
 
+    # Deduplicate and filter valid candidates
     valid_candidates: list[float] = []
     for cand in raw_candidates:
+        if not math.isfinite(cand):
+            continue
         if -atol <= cand <= 1.0 + atol:
             clamped = max(0.0, min(1.0, float(cand)))
             if not any(abs(clamped - v) <= 1e-9 for v in valid_candidates):
@@ -192,6 +222,8 @@ def cagrad_clip(
         raise ValueError(f"cagrad_clip currently requires exactly 2 objective gradients, got {len(grad_list)}")
 
     g1, g2 = grad_list[0], grad_list[1]
+    _validate_finite_gradient("g1", g1)
+    _validate_finite_gradient("g2", g2)
     solution = solve_two_objective_alpha(g1, g2, weights, c, atol=atol)
 
     coeffs = solution.coefficients
@@ -206,9 +238,16 @@ def cagrad_clip(
     clipped_mixture = clipped_coeffs[0] * g1 + clipped_coeffs[1] * g2
 
     norm_clipped_mix = torch.linalg.vector_norm(clipped_mixture).item()
+
+    # Scale-aware zero test for clipped mixture
+    ref_scale = max(
+        torch.linalg.vector_norm(g1).item(),
+        torch.linalg.vector_norm(g2).item(),
+        1e-300,
+    )
     norm_g0 = torch.linalg.vector_norm(solution.weighted_anchor).item()
 
-    if norm_clipped_mix <= atol:
+    if norm_clipped_mix <= atol * ref_scale:
         gradient = solution.weighted_anchor
     else:
         gradient = solution.weighted_anchor + c * norm_g0 * (clipped_mixture / norm_clipped_mix)

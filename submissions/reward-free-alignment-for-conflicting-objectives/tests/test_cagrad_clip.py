@@ -184,3 +184,71 @@ def test_delta_b_zero_finds_interior_minimum():
     assert abs(solution.alpha - 0.8) < 1e-5, (
         f"Expected interior alpha=0.8, got {solution.alpha}"
     )
+
+
+# --- Scale-invariance regressions (controller correction gate §1) ---
+
+
+@pytest.mark.parametrize("scale", [1e-8, 1e-6, 1e-4, 1e-2, 1.0, 1e2, 1e4, 1e6, 1e8])
+def test_scale_invariance_plan_witness(scale):
+    """The plan witness must find alpha≈0.356145 at every scale from 1e-8 to 1e8.
+
+    Previous bug: absolute thresholds (1e-14, 1e-5) caused the solver to miss
+    interior solutions at small or large scales.
+    """
+    g1 = scale * tensor([1.0, -4.0])
+    g2 = scale * tensor([-1.0, 1.0])
+    weights = tensor([0.2, 0.8])
+    c = 0.5
+    g0 = weights[0] * g1 + weights[1] * g2
+    solution = solve_two_objective_alpha(g1, g2, weights, c)
+    _, grid_h = _grid_search_minimizer(g1, g2, g0, c, n=50_000)
+    assert abs(solution.objective_value - grid_h) < 1e-2 * abs(grid_h) + 1e-15, (
+        f"scale={scale}: solver h={solution.objective_value:.6e} != grid h={grid_h:.6e}"
+    )
+    assert abs(solution.alpha - 0.356145) < 1e-3, (
+        f"scale={scale}: expected alpha≈0.356145, got {solution.alpha}"
+    )
+    assert solution.singular_case is None
+
+
+def test_wide_log_scale_random_property():
+    """Property test: solver h must match grid-search h across wide-log-scale
+    random gradients as required by correction gate §1."""
+    rng = torch.Generator().manual_seed(2026)
+    for trial in range(30):
+        log_scale = -8.0 + 16.0 * torch.rand(1, generator=rng).item()
+        scale = 10.0 ** log_scale
+        g1 = scale * torch.randn(4, generator=rng)
+        g2 = scale * torch.randn(4, generator=rng)
+        w1 = torch.rand(1, generator=rng).item()
+        w1 = max(0.01, min(0.99, w1))
+        weights = tensor([w1, 1.0 - w1])
+        c = 0.3 + 0.4 * torch.rand(1, generator=rng).item()
+        g0 = weights[0] * g1 + weights[1] * g2
+        solution = solve_two_objective_alpha(g1, g2, weights, c)
+        _, grid_h = _grid_search_minimizer(g1, g2, g0, c, n=50_000)
+        assert abs(solution.objective_value - grid_h) < 1e-2 * abs(grid_h) + 1e-15, (
+            f"Trial {trial} (scale={scale:.1e}): "
+            f"solver h={solution.objective_value:.6e} != grid h={grid_h:.6e}"
+        )
+
+
+def test_nonfinite_gradients_rejected():
+    """Non-finite gradients must be rejected, not silently produce wrong answers."""
+    import math
+    for bad_val in [float("nan"), float("inf"), float("-inf")]:
+        g1 = tensor([bad_val, 1.0])
+        g2 = tensor([1.0, 0.0])
+        with pytest.raises(ValueError, match="finite"):
+            solve_two_objective_alpha(g1, g2, tensor([0.5, 0.5]), c=0.4)
+        with pytest.raises(ValueError, match="finite"):
+            cagrad_clip((g1, g2), tensor([0.5, 0.5]), c=0.4)
+
+
+def test_nonfinite_weights_rejected():
+    """Non-finite weights must be rejected."""
+    g1 = tensor([1.0, 0.0])
+    g2 = tensor([0.0, 1.0])
+    with pytest.raises(ValueError, match="finite"):
+        solve_two_objective_alpha(g1, g2, tensor([float("nan"), 0.5]), c=0.4)

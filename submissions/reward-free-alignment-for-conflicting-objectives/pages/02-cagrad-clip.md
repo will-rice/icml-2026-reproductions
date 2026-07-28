@@ -14,22 +14,24 @@ Crucially, $\tilde{p}$ is NOT renormalized back to sum to 1. The clipped update 
 
 $$g = g_0 + c \|g_0\| \frac{g_{\tilde{p}}}{\|g_{\tilde{p}}\|}$$
 
-## Corrected Solver (Stationary Quadratic)
+## Scale-Invariant Solver (Corrected Stationary Quadratic)
 
 The stationarity condition $h'(\alpha) = 0$ leads to a quadratic $A\alpha^2 + B\alpha + C = 0$ where the key coefficient is:
 
 $$B = \delta^2 q_1 - s^2 q_1 q_2$$
 
-The previous implementation had $B = \delta^2 q_1 - 2s^2 q_2 q_1$ (a spurious factor of 2), which caused incorrect alpha solutions. The derivation from squaring $\delta_b \sqrt{Q(\alpha)} = -s \cdot Q'(\alpha)/2$ gives the correct coefficient without the extra factor.
+The previous implementation had $B = \delta^2 q_1 - 2s^2 q_2 q_1$ (a spurious factor of 2), which caused incorrect alpha solutions. All degeneracy thresholds are now **scale-relative** using $\max(|A|, |B|, |C|)$ as reference, so the solver produces identical results regardless of gradient magnitude. Stationarity verification uses relative comparison: $|lhs - rhs| \le 10^{-5} \max(|lhs|, |rhs|)$. Every gradient and weight is validated finite before computation.
 
 ## Recomputed Observations & Verification
 
 - **Plan Witness:** For $g_1 = [1.0, -4.0], g_2 = [-1.0, 1.0]$, weights $w = [0.2, 0.8]$, $c = 0.5$:
   - Corrected Interior Dual Solution: $\alpha \approx 0.356145$ (interior, $0 < \alpha < 1$)
   - Previous Buggy Solution: $\alpha = 1.0$ (boundary, from incorrect quadratic)
-  - Independent grid-search (100k points) confirms: $\alpha \approx 0.356$, $h \approx 0.4222$
+  - Independent grid-search (50k points) confirms: $\alpha \approx 0.356$, $h \approx 0.4222$
   - Clipped Solution: $\tilde{p} = \min(p, w) = [0.2000, 0.6439]$ (Sum $= 0.8439 \le 1.0$)
-- **Independent Verification:** 20 seeded random trials (4D gradients) all match grid-search minimizer within tolerance $10^{-2}$.
+- **Scale Invariance:** Same witness regressed at 9 scales from $10^{-8}$ to $10^{8}$; all produce $\alpha \approx 0.356145$. Previous absolute thresholds caused failures at scales $\neq 1$.
+- **Wide-Log-Scale Random Property:** 30 seeded trials with log-scale $\in [-8, 8]$ (4D gradients) all match grid-search minimizer within relative tolerance.
+- **Non-Finite Rejection:** `NaN`, `±Inf` gradients and weights raise `ValueError`.
 - **Delta-b Zero Case:** When $\delta_b = 0$ (orthogonal gradients, symmetric anchor contribution), the corrected quadratic gives $\alpha = 0.8$ (interior minimizer of $\|mix\|$), not a boundary solution.
 - **Singular Cases Handled:** Exact zero-anchor, identical gradients, zero radius, and colinear gradients minimize $h(\alpha)$ at both endpoints deterministically. $c \ge 1$ is rejected.
 - **Claim 7 Local Outcome:** `supported` — derived from corrected solver audit, not hard-coded.

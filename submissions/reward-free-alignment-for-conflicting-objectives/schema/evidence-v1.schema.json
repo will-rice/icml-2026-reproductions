@@ -51,12 +51,13 @@
     "audits": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["theorem_31", "theorem_32", "pairwise_loss", "cagrad_clip"],
+      "required": ["theorem_31", "theorem_32", "pairwise_loss", "cagrad_clip", "claim6_pipeline"],
       "properties": {
         "theorem_31": { "type": "object" },
         "theorem_32": { "type": "object" },
         "pairwise_loss": { "type": "object" },
-        "cagrad_clip": { "type": "object" }
+        "cagrad_clip": { "type": "object" },
+        "claim6_pipeline": { "type": "object" }
       }
     },
     "environment": {

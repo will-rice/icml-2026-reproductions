@@ -14,9 +14,22 @@ $$\Gamma(\tilde{\rho}) - \Gamma(\rho) = c (1 - L_w \eta) (\tilde{\rho} - \rho)$$
 
 where $\tilde{\rho} = \frac{\langle g_0, g_{\tilde{p}} \rangle}{\|g_0\| \|g_{\tilde{p}}\|}$ is the alignment cosine of the clipped mixture.
 
+## Enforced Preconditions (Correction Gate §5)
+
+Before computing the certificate, **all** preconditions are checked:
+- Finite simplex weights ($w_k > 0$, $\sum w_k = 1$, finite)
+- Positive finite step size ($\eta > 0$, finite)
+- Admissible correction radius ($0 < c < 1$)
+- Positive finite weighted smoothness ($L_w > 0$, finite)
+- Finite gradients (non-NaN, non-Inf)
+- Interior coefficients ($0 < \alpha < 1$)
+- Positive Gamma improvement ($\Gamma(\tilde\rho) - \Gamma(\rho) > 0$)
+
+Violated preconditions yield `applicable = False`, `local_outcome = "limited"`.
+
 ## Interior Strict Witness
 
-With the corrected stationary quadratic (see `02-cagrad-clip.md`), the solver finds interior $\alpha \approx 0.356145$ for $g_1 = [1, -4], g_2 = [-1, 1], w = [0.2, 0.8], c = 0.5$. This produces a strict witness satisfying all 8 paper conditions:
+With the scale-invariant corrected stationary quadratic (see `02-cagrad-clip.md`), the solver finds interior $\alpha \approx 0.356145$ for $g_1 = [1, -4], g_2 = [-1, 1], w = [0.2, 0.8], c = 0.5$. This produces a strict witness satisfying all 8 paper conditions:
 
 | Condition | Value |
 |---|---|
@@ -43,6 +56,7 @@ With the corrected stationary quadratic (see `02-cagrad-clip.md`), the solver fi
   - Identity residual $\le 10^{-10}$, applicable = True
 - **Zero Anchor:** Handled without division-by-zero, returning `applicable = False` and `local_outcome = limited`.
 - **Negative Difference Regression:** Cases where $\Gamma(\tilde{\rho}) - \Gamma(\rho) < 0$ correctly produce `not-supported`.
+- **Precondition Regressions:** Non-simplex weights, negative/nonfinite step size, and $c \ge 1$ all produce `applicable = False`, `local_outcome = limited`.
 
 ## Verification Commands & Source Pins
 

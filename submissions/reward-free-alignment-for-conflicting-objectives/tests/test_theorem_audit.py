@@ -6,6 +6,7 @@ from reward_free_alignment.theorem_audit import (
     gamma,
     audit_theorem_31,
     audit_theorem_32,
+    execute_raco_trajectory,
     SmoothObjectiveCase,
     ConvergenceAudit,
     DescentCertificateAudit,
@@ -28,7 +29,6 @@ def smooth_nonnegative_quadratic_case() -> SmoothObjectiveCase:
       With c=0.4, compute CAGrad update direction, then step.
       x1 = x0 - eta * g_update
     """
-    import math
     x0 = 1.0
     eta = 0.1
     c_rad = 0.4
@@ -111,6 +111,56 @@ def test_theorem_31_uses_executed_trajectory():
     assert abs(case.initial_loss - 0.6) < 1e-10
     assert abs(case.final_loss - 0.4704) < 1e-10
     assert case.final_loss < case.initial_loss  # actual descent occurred
+
+
+def test_theorem_31_t_step_finite_horizon():
+    """Execute T RACO steps, record every M(θ_t) and ||∇L_w(θ_t)||, and verify
+    the finite-horizon bound from Theorem 3.1 (correction gate §2).
+
+    Finite-horizon: min_{t=0..T-1} ||∇L_w(θ_t)||² ≤ 2*L_w(θ_0) / (η*(1-c²)*T)
+    """
+    case = execute_raco_trajectory(
+        x0=1.0, T=10, eta=0.1, c=0.4,
+        weights=tensor([0.6, 0.4]),
+        smoothness_constants=(2.0, 2.0),
+    )
+    assert case.trajectory_losses is not None
+    assert len(case.trajectory_losses) == 11  # T+1 points
+    assert case.trajectory_grad_norms is not None
+    assert len(case.trajectory_grad_norms) == 11
+    assert case.trajectory_m_values is not None
+    assert len(case.trajectory_m_values) == 11
+
+    # Verify descent at every step
+    for t in range(10):
+        assert case.trajectory_losses[t + 1] < case.trajectory_losses[t], (
+            f"No descent at step {t}: L[{t}]={case.trajectory_losses[t]}, "
+            f"L[{t+1}]={case.trajectory_losses[t+1]}"
+        )
+
+    audit = audit_theorem_31(case)
+    assert audit.trajectory_steps == 10
+    assert audit.min_grad_norm is not None
+    assert audit.finite_horizon_rhs is not None
+    assert audit.finite_horizon_bound_holds is True
+    assert audit.local_outcome == "supported"
+
+    # Verify the exact formula: 2*L_w(θ_0) / (η*(1-c²)*T)
+    expected_rhs = 2.0 * case.initial_loss / (0.1 * (1.0 - 0.16) * 10)
+    assert abs(audit.finite_horizon_rhs - expected_rhs) < 1e-10
+
+
+def test_theorem_31_t_step_preserves_minima():
+    """Verify min_grad_norm and min_m_value are correctly computed over t=0..T-1."""
+    case = execute_raco_trajectory(
+        x0=1.0, T=5, eta=0.1, c=0.4,
+        weights=tensor([0.6, 0.4]),
+        smoothness_constants=(2.0, 2.0),
+    )
+    audit = audit_theorem_31(case)
+    # min_grad_norm should be over t=0..T-1 (first T entries)
+    expected_min = min(case.trajectory_grad_norms[:-1])
+    assert abs(audit.min_grad_norm - expected_min) < 1e-12
 
 
 def test_theorem_32_reproduces_per_step_certificate_identity():
@@ -227,3 +277,75 @@ def test_theorem_31_descent_bound_is_recomputed_not_vacuous():
     audit = audit_theorem_31(case)
     # With nonzero grad_norm and no descent, the bound should fail
     assert audit.descent_bound_holds is False or audit.local_outcome != "supported"
+
+
+# --- Adversarial regressions for Theorem 3.2 preconditions (correction gate §5) ---
+
+
+def test_theorem_32_nonsimplex_weights_inapplicable():
+    """Non-simplex weights must make the audit inapplicable."""
+    result = cagrad_clip(
+        (tensor([1.0, -4.0]), tensor([-1.0, 1.0])),
+        tensor([0.2, 0.8]), c=0.5,
+    )
+    # Pass non-simplex weights to the audit
+    audit = audit_theorem_32(
+        result, tensor([0.3, 0.8]), c=0.5,
+        weighted_smoothness=3.0, step_size=0.1,
+    )
+    assert audit.applicable is False
+    assert audit.local_outcome == "limited"
+
+
+def test_theorem_32_negative_step_size_inapplicable():
+    """Negative step size must make the audit inapplicable."""
+    result = cagrad_clip(
+        (tensor([1.0, -4.0]), tensor([-1.0, 1.0])),
+        tensor([0.2, 0.8]), c=0.5,
+    )
+    audit = audit_theorem_32(
+        result, tensor([0.2, 0.8]), c=0.5,
+        weighted_smoothness=3.0, step_size=-0.1,
+    )
+    assert audit.applicable is False
+    assert audit.local_outcome == "limited"
+
+
+def test_theorem_32_nonfinite_step_size_inapplicable():
+    """Non-finite step size must make the audit inapplicable."""
+    result = cagrad_clip(
+        (tensor([1.0, -4.0]), tensor([-1.0, 1.0])),
+        tensor([0.2, 0.8]), c=0.5,
+    )
+    audit = audit_theorem_32(
+        result, tensor([0.2, 0.8]), c=0.5,
+        weighted_smoothness=3.0, step_size=float("inf"),
+    )
+    assert audit.applicable is False
+    assert audit.local_outcome == "limited"
+
+
+def test_theorem_32_c_at_one_inapplicable():
+    """c=1 is inadmissible for Theorem 3.2; the audit must NOT be called via
+    cagrad_clip (which rejects c>=1), but if called directly it should be limited."""
+    # Construct a result manually since cagrad_clip rejects c>=1
+    result = cagrad_clip(
+        (tensor([1.0, -4.0]), tensor([-1.0, 1.0])),
+        tensor([0.2, 0.8]), c=0.5,
+    )
+    audit = audit_theorem_32(
+        result, tensor([0.2, 0.8]), c=1.0,
+        weighted_smoothness=3.0, step_size=0.1,
+    )
+    assert audit.applicable is False
+    assert audit.local_outcome == "limited"
+
+
+def test_theorem_32_positive_gamma_improvement_required():
+    """Correction gate §5: Theorem 3.2 support requires positive Gamma improvement."""
+    audit = interior_strict_witness_audit()
+    assert audit.applicable is True
+    assert audit.observed_difference > 0.0, (
+        f"Positive Gamma improvement required, got {audit.observed_difference}"
+    )
+    assert audit.local_outcome == "supported"

@@ -11,26 +11,36 @@ Required Preconditions:
 4. Correction radius constant $0 \le c < 1$.
 5. Losses are non-negative $f_k(\theta) \ge 0$.
 
-## Executed Deterministic Trajectory
+## Executed Deterministic T=10 Step Trajectory
 
-Unlike the rejected proposal which used hand-entered initial/final losses, this audit executes an actual trajectory:
+This audit executes $T = 10$ RACO steps and persists every $M(\theta_t)$, $\|\nabla L_w(\theta_t)\|$, and $L_w(\theta_t)$:
 
 - **Objectives:** $f_1(x) = x^2$, $f_2(x) = (x-1)^2$ (smooth, nonneg quadratics)
 - **Parameters:** $L_1 = L_2 = 2.0$, $w = [0.6, 0.4]$, $L_w = 2.0$, $\eta = 0.1$, $c = 0.4$
 - **Initial point:** $x_0 = 1.0$
-- **Computed gradient:** $g_0 = 0.6 \cdot 2.0 + 0.4 \cdot 0.0 = 1.2$
-- **Step:** $x_1 = x_0 - \eta \cdot g_0 = 1.0 - 0.12 = 0.88$
-- **Recomputed losses:**
-  - $L_w(x_0) = 0.6 \cdot 1.0^2 + 0.4 \cdot 0.0^2 = 0.6$
-  - $L_w(x_1) = 0.6 \cdot 0.88^2 + 0.4 \cdot 0.12^2 = 0.46464 + 0.00576 = 0.4704$
+- **Trajectory:**
+  - $L_w(x_0) = 0.6000$, $\|\nabla L_w(x_0)\| = 1.2000$
+  - $L_w(x_1) = 0.4704$, $\|\nabla L_w(x_1)\| = 0.9600$
+  - $L_w(x_2) = 0.3875$, $\|\nabla L_w(x_2)\| = 0.7680$
+  - ... (descent at every step) ...
+  - $L_w(x_{10}) = 0.2442$, $\|\nabla L_w(x_{10})\| = 0.1289$
+- **Observed minima over $t=0..9$:** $\min \|\nabla L_w(\theta_t)\| = 0.1611$
 
-## Recomputed Audit Observations
+## Finite-Horizon Bound (Paper Equation)
 
-- **Precondition Verification:** All 7 Booleans hold `True`.
-- **Descent bound recomputed:** $L_w(x_1) = 0.4704 \le L_w(x_0) - \frac{\eta}{2} \|g\|^2 \Gamma_{\min}$ verified from $\Gamma(\rho)$ at best-case alignment $\rho = 1$.
-- **Pareto criticality bound:** Gradient norm consistent with the one-step descent.
-- **Audit Outcome:** `supported` — derived from recomputed bound on executed trajectory, not vacuously from $f_{final} < f_{init}$ with hand-entered values.
-- **Adversarial Regression:** A case with $f_{init} = f_{final} = 1.0$ and $\|g\| = 1.0$ (no descent despite nonzero gradient) correctly produces `descent_bound_holds = False`.
+$$\min_{t=0}^{T-1} \|\nabla L_w(\theta_t)\|^2 \le \frac{2 L_w(\theta_0)}{\eta (1-c^2) T}$$
+
+- **LHS:** $\min_t \|\nabla L_w\|^2 = 0.0259$
+- **RHS:** $2 \times 0.6000 / (0.1 \times 0.84 \times 10) = 1.4286$
+- **Bound holds:** $0.0259 \le 1.4286$ ✅
+- **Note:** Formula uses $2 L_w(\theta_0)$, NOT $L_w(\theta_0) / 2$. Does NOT assume best-case $\rho = 1$. Pareto bound verified independently from descent bound.
+
+## One-Step Descent Bound
+
+$$L_w(\theta_{t+1}) \le L_w(\theta_t) - \frac{\eta (1-c^2)}{2} \|\nabla L_w(\theta_t)\|^2$$
+
+- $L_w(x_1) = 0.4704 \le 0.6000 - 0.042 \times 1.44 = 0.5395$ ✅
+- Adversarial regression: $f_{init} = f_{final} = 1.0$ with $\|g\| = 1.0$ correctly produces `descent_bound_holds = False`.
 
 ## Verification Commands & Source Pins
 
