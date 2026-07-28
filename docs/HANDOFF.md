@@ -156,3 +156,10 @@ with nonempty `blocker` and `next_action`, then call
 the loop with `claim-next`. The released attempt remains active and reclaimable
 with its history, a fresh assessed immutable snapshot, and a fresh fencing
 token.
+
+## 2026-07-28 Schema-v6 Operating-State Supersession
+
+The authoritative `state/repro-loop.json` is now schema-v6. The old Current
+Handoff schema-v3 migration-gate statement is historical and superseded.
+Operators must inspect the current version, then use schema-v6 persistent
+paper-owner commands.

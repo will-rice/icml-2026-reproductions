@@ -12,6 +12,8 @@ OWNER_LOOP = (
 AGENT = ROOT / "skills/icml-repro-loop/agents/openai.yaml"
 CHECKLIST = ROOT / "skills/icml-repro-loop/references/submission-checklist.md"
 SCENARIOS = ROOT / "evals/icml-repro-loop/scenarios.json"
+HANDOFF = ROOT / "docs/HANDOFF.md"
+STATE = ROOT / "state/repro-loop.json"
 
 EXPECTED_DEFAULT_PROMPT = (
     "Use icml-repro-loop directly and keep running its paper-owner loop."
@@ -153,6 +155,15 @@ def test_direct_dispatch_claims_without_scheduler_pass_routing():
     assert "passes the fresh assessed immutable snapshot ID to `claim-next`" in agents
     assert "bounded scheduler pass" not in agents
     assert "scheduler-pass" not in skill.split("## Required Persistent Paper-Owner Loop", 1)[1].split("## Authority Red Flags", 1)[0]
+
+
+def test_handoff_supersedes_historical_schema_v3_gate_for_schema_v6_loop():
+    handoff = " ".join(text(HANDOFF).split())
+    state = json.loads(text(STATE))
+
+    assert state["version"] == 6
+    assert "Current Handoff schema-v3 migration-gate statement is historical and superseded" in handoff
+    assert "schema-v6 persistent paper-owner commands" in handoff
 
 
 def test_paper_owner_retains_lifecycle_authority_over_guarded_worker():
