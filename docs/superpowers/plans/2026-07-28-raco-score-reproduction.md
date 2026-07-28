@@ -16,21 +16,6 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
-## Controller Space-Python Gate — 2026-07-28, round 14
-
-The corrected Space uploaded at
-`cd8a2033d3a7ca4253e19f5b85a3471008ea1557`, then failed startup because
-Hugging Face defaulted to Python 3.13. Gradio 4.44's pydub dependency could
-import neither the removed standard-library `audioop` module nor `pyaudioop`.
-
-1. Add `python_version: "3.12"` to README Space frontmatter, matching the
-   supported project interpreter family and Hugging Face Space configuration.
-2. Strengthen the frontmatter regression to require the parsed value is
-   exactly `"3.12"` (accepting YAML quoting only as syntax).
-3. Change no evidence, claim, runtime-code, or dependency content. Run project
-   tests, root pytest, skill validation, pre-commit, and `git diff --check`;
-   return one clean commit.
-
 ## Controller Validation Correction Gate — 2026-07-28, round 10
 
 Controller scientific review accepted proposal
