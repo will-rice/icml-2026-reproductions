@@ -43,6 +43,11 @@ def test_skill_repeats_only_after_score_or_recoverable_blocker():
     assert "release the blocked attempt" in skill
     assert "same or another worker" in owner_loop
     assert "fresh fencing token" in owner_loop
+    assert "next-paper selection uses a fresh assessed immutable snapshot" in owner_loop
+    assert (
+        "blocked-attempt reclamation uses a fresh assessed immutable snapshot"
+        in owner_loop
+    )
 
 
 def test_skill_gives_controller_credentials_only_to_paper_owner():
@@ -83,13 +88,14 @@ def test_skill_requires_complete_scored_lifecycle():
 
 def test_paper_owner_reference_defines_event_reactions():
     value = text(OWNER_LOOP)
+    flat_value = " ".join(value.split())
     required = {
         "worker-exited": "validate-or-correct",
         "validation-rejected": "correct-and-relaunch",
-        "submitted": "watch",
+        "submitted": "remain-dedicated",
         "pending": "keep-watching",
         "inconclusive": "improve-redeploy-resubmit",
-        "judging": "release-implementation-capacity",
+        "judging": "remain-dedicated",
         "scored": "sync-verdict",
     }
     rows = [line for line in value.splitlines() if line.startswith("|")]
@@ -98,6 +104,10 @@ def test_paper_owner_reference_defines_event_reactions():
             f"`{event}`" in row and f"`{reaction}`" in row
             for row in rows
         )
+    assert "submitted/judging are dedicated states and do not release" in flat_value
+    assert "watch; do not select another paper" in flat_value
+    assert "release after exact `sync-verdict`" in flat_value
+    assert "persist, release reclaimably, then `claim-next`" in flat_value
 
 
 def test_paper_owner_contract_separates_validation_event_from_phase_and_verdict_improvement():
