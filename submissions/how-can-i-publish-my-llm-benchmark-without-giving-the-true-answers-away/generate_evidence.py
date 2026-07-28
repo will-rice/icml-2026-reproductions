@@ -1,7 +1,10 @@
 """Generate evidence bundle JSON for CapBencher reproduction."""
 
-import json
+import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+
+import json
 from capbencher.simulation import generate_evidence_bundle
 
 if __name__ == "__main__":
