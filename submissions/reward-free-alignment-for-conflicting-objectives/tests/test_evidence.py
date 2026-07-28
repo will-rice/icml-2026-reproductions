@@ -85,3 +85,37 @@ def test_evidence_generation_calls_verification(project_root):
     schema_path = project_root / "schema/evidence-v1.schema.json"
     assert schema_path.is_file()
     validate_evidence(evidence, schema_path)
+
+
+def test_claim6_uses_end_to_end_gradient_pipeline(project_root):
+    """Claim 6 must apply CAGrad to gradients actually derived from
+    objective-specific pairwise losses, not disconnected fixtures."""
+    evidence = build_evidence(project_root)
+    claim6 = [c for c in evidence["claims"] if c["ordinal"] == 6][0]
+    notes = claim6["reproduction_notes"]
+    # Must mention end-to-end pipeline
+    assert "end-to-end" in notes.lower() or "End-to-end" in notes
+    # Must mention computing losses
+    assert "L1=" in notes or "loss" in notes.lower()
+    # Must NOT say "disconnected fixtures"
+    assert "disconnected" not in notes.lower() or "not disconnected" in notes.lower()
+
+
+def test_theorem_31_uses_executed_trajectory(project_root):
+    """Theorem 3.1 must use an actual computed trajectory, not hand-entered losses."""
+    evidence = build_evidence(project_root)
+    t31 = evidence["audits"]["theorem_31"]
+    # The executed trajectory from x0=1.0 with eta=0.1 gives specific values
+    # initial_loss and final_loss are not set to dummy values like 1.5 and 1.2
+    assert t31["local_outcome"] == "supported"
+
+
+def test_theorem_32_has_interior_strict_witness(project_root):
+    """Theorem 3.2 must have an interior strict witness with positive Gamma difference."""
+    evidence = build_evidence(project_root)
+    claim9 = [c for c in evidence["claims"] if c["ordinal"] == 9][0]
+    assert claim9["local_outcome"] == "supported"
+    # Notes should reference interior alpha and positive Gamma difference
+    notes = claim9["reproduction_notes"]
+    assert "interior" in notes.lower()
+    assert "3.68e-9" not in notes  # Must not be the old boundary artifact

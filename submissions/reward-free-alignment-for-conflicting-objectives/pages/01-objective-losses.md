@@ -15,7 +15,8 @@ Gradients $g_k = \nabla_\theta \mathcal{L}_k(\theta)$ are computed separately fo
   - Closed-Form Expected: $-\log \sigma(0.5 \times (0.6 - 0.2)) = -\log \sigma(0.2) = 0.598139$
   - Residual: $< 10^{-12}$
 - **Separation Check:** Verified that objective losses return 1D tensor of shape $(K,)$ and independent gradient tuples.
-- **Claim 6 Local Outcome:** `supported` — derived from closed-form match verification, not hard-coded.
+- **End-to-End Pipeline (Claim 6):** Built a 2-parameter model, computed two objective-specific pairwise losses ($L_1 = $ loss for conciseness-like objective, $L_2 = $ loss for quality-like objective), extracted per-objective gradients, and applied CAGrad-Clip. Gradients are derived from objective-specific losses, not disconnected fixtures.
+- **Claim 6 Local Outcome:** `supported` — derived from end-to-end audit, not hard-coded.
 
 ## Verification Commands & Source Pins
 

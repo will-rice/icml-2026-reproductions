@@ -1,4 +1,5 @@
 import hashlib
+import json
 from pathlib import Path
 import pytest
 from reward_free_alignment.provenance import (
@@ -6,6 +7,7 @@ from reward_free_alignment.provenance import (
     load_manifest,
     load_verified_artifacts,
     IntegrityError,
+    _git_blob_id,
 )
 
 EXPECTED_HASHES = (
@@ -51,7 +53,13 @@ def test_manifest_binds_attempt_snapshot_and_upstream(project_root):
     )
 
 
-# --- Adversarial regressions for controller correction gate ---
+def test_verified_artifacts_accepts_empty_list(project_root):
+    """Empty artifacts list is valid (no upstream files pinned yet)."""
+    artifacts = load_verified_artifacts(project_root)
+    assert artifacts == ()
+
+
+# --- Adversarial regressions for fail-closed provenance ---
 
 
 def test_duplicate_json_keys_rejected(project_root, tmp_path):
@@ -64,3 +72,113 @@ def test_duplicate_json_keys_rejected(project_root, tmp_path):
     )
     with pytest.raises(IntegrityError, match="[Dd]uplicate"):
         load_live_claims(dup_json)
+
+
+def test_extra_manifest_keys_rejected(tmp_path):
+    """Extra keys in the manifest must be rejected (fail-closed)."""
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({
+        "attempt_id": "test",
+        "paper_id": "test",
+        "snapshot_id": "test",
+        "upstream_revision": "test",
+        "artifacts": [],
+        "sneaky_extra_key": "should be rejected",
+    }), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Ee]xtra"):
+        load_manifest(path=manifest)
+
+
+def test_duplicate_artifact_ids_rejected(tmp_path):
+    """Duplicate artifact IDs must be rejected."""
+    # Create a manifest with duplicate artifact IDs
+    test_file = tmp_path / "test.txt"
+    test_file.write_text("hello")
+    file_hash = hashlib.sha256(b"hello").hexdigest()
+
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({
+        "attempt_id": "test",
+        "paper_id": "test",
+        "snapshot_id": "test",
+        "upstream_revision": "test",
+        "artifacts": [
+            {"artifact_id": "dup", "relative_path": "test.txt",
+             "sha256": file_hash, "size_bytes": 5},
+            {"artifact_id": "dup", "relative_path": "test2.txt",
+             "sha256": file_hash, "size_bytes": 5},
+        ],
+    }), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Dd]uplicate"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_empty_artifact_entry_rejected(tmp_path):
+    """Empty artifact entries must be rejected."""
+    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(json.dumps({
+        "attempt_id": "test",
+        "paper_id": "test",
+        "snapshot_id": "test",
+        "upstream_revision": "test",
+        "artifacts": [{}],
+    }), encoding="utf-8")
+    with pytest.raises(IntegrityError):
+        load_verified_artifacts(tmp_path)
+
+
+def test_git_blob_drift_rejected(tmp_path):
+    """Git blob ID must be recomputed and verified; drift is rejected."""
+    test_file = tmp_path / "test.txt"
+    test_file.write_text("hello")
+    file_hash = hashlib.sha256(b"hello").hexdigest()
+
+    manifest = tmp_path / "evidence" / "inputs" / "upstream_manifest.json"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(json.dumps({
+        "attempt_id": "test",
+        "paper_id": "test",
+        "snapshot_id": "test",
+        "upstream_revision": "test",
+        "artifacts": [
+            {"artifact_id": "a1", "relative_path": "test.txt",
+             "sha256": file_hash, "size_bytes": 5,
+             "git_blob": "0000000000000000000000000000000000000000"},
+        ],
+    }), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Gg]it blob"):
+        load_verified_artifacts(tmp_path)
+
+
+def test_git_blob_id_computation():
+    """Verify Git blob ID computation matches 'git hash-object'."""
+    payload = b"hello"
+    blob_id = _git_blob_id(payload)
+    # git hash-object computes: SHA1("blob 5\0hello")
+    expected = hashlib.sha1(b"blob 5\0hello").hexdigest()
+    assert blob_id == expected
+
+
+def test_extra_claim_keys_rejected(tmp_path):
+    """Extra keys in individual claim entries must be rejected."""
+    claims_file = tmp_path / "claims.json"
+    claims_file.write_text(json.dumps([
+        {"ordinal": 1, "text": "test", "sha256": hashlib.sha256(b"test").hexdigest(),
+         "targeted": False, "extra_field": "bad"},
+    ]), encoding="utf-8")
+    with pytest.raises(IntegrityError, match="[Ee]xtra"):
+        load_live_claims(claims_file)
+
+
+def test_duplicate_manifest_json_keys_rejected(tmp_path):
+    """Duplicate keys in the manifest JSON itself must be rejected."""
+    manifest = tmp_path / "manifest.json"
+    # Write raw JSON with duplicate keys
+    manifest.write_text(
+        '{"attempt_id": "a", "paper_id": "b", "snapshot_id": "c", '
+        '"upstream_revision": "d", "artifacts": [], "attempt_id": "e"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(IntegrityError, match="[Dd]uplicate"):
+        load_manifest(path=manifest)

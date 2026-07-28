@@ -113,3 +113,74 @@ def test_c_greater_than_one_is_rejected():
             tensor([1.0, 0.0]), tensor([0.0, 1.0]),
             tensor([0.5, 0.5]), c=1.5,
         )
+
+
+# --- Adversarial regressions for corrected stationary quadratic ---
+
+
+def _grid_search_minimizer(g1, g2, g0, c, n=100_000):
+    """Independent brute-force h minimizer for comparison."""
+    s = c * torch.linalg.vector_norm(g0).item()
+    best_alpha, best_h = 0.0, float("inf")
+    for i in range(n + 1):
+        a = i / n
+        mix = a * g1 + (1.0 - a) * g2
+        hv = (torch.dot(mix, g0) + s * torch.linalg.vector_norm(mix)).item()
+        if hv < best_h:
+            best_h = hv
+            best_alpha = a
+    return best_alpha, best_h
+
+
+def test_solver_matches_independent_minimizer_plan_witness():
+    """Regress the plan's exact witness: alpha≈0.356145, h≈0.422241.
+
+    Previous buggy formula (-2*s²*q2*q1) gave alpha=1.0, h=0.636932.
+    Corrected formula (-s²*q1*q2) gives alpha≈0.356145, h≈0.422241.
+    """
+    g1 = tensor([1.0, -4.0])
+    g2 = tensor([-1.0, 1.0])
+    weights = tensor([0.2, 0.8])
+    c = 0.5
+    g0 = weights[0] * g1 + weights[1] * g2
+
+    solution = solve_two_objective_alpha(g1, g2, weights, c)
+    grid_alpha, grid_h = _grid_search_minimizer(g1, g2, g0, c)
+
+    assert abs(solution.objective_value - grid_h) < 1e-3, (
+        f"Solver h={solution.objective_value:.6f} != grid h={grid_h:.6f}"
+    )
+    assert abs(solution.alpha - 0.356145) < 1e-3, (
+        f"Expected interior alpha≈0.356145, got {solution.alpha}"
+    )
+    assert solution.singular_case is None
+
+
+def test_solver_matches_grid_search_seeded_property():
+    """Property test: solver h must match grid-search h for seeded random cases."""
+    rng = torch.Generator().manual_seed(42)
+    for trial in range(20):
+        g1 = torch.randn(4, generator=rng)
+        g2 = torch.randn(4, generator=rng)
+        w1 = torch.rand(1, generator=rng).item()
+        weights = tensor([w1, 1.0 - w1])
+        c = 0.3 + 0.4 * torch.rand(1, generator=rng).item()
+        g0 = weights[0] * g1 + weights[1] * g2
+        solution = solve_two_objective_alpha(g1, g2, weights, c)
+        _, grid_h = _grid_search_minimizer(g1, g2, g0, c, n=50_000)
+        assert abs(solution.objective_value - grid_h) < 1e-2, (
+            f"Trial {trial}: solver h={solution.objective_value:.6f} != grid h={grid_h:.6f}"
+        )
+
+
+def test_delta_b_zero_finds_interior_minimum():
+    """When delta_b=0, h(alpha) = const + s*||mix||, minimized at
+    alpha = -q1/(2*q2), not at a boundary."""
+    g1 = tensor([1.0, 0.0])
+    g2 = tensor([0.0, 2.0])
+    weights = tensor([0.8, 0.2])
+    c = 0.4
+    solution = solve_two_objective_alpha(g1, g2, weights, c)
+    assert abs(solution.alpha - 0.8) < 1e-5, (
+        f"Expected interior alpha=0.8, got {solution.alpha}"
+    )

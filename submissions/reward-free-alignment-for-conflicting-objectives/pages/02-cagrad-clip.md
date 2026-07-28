@@ -14,20 +14,25 @@ Crucially, $\tilde{p}$ is NOT renormalized back to sum to 1. The clipped update 
 
 $$g = g_0 + c \|g_0\| \frac{g_{\tilde{p}}}{\|g_{\tilde{p}}\|}$$
 
-## Solver Behavior
+## Corrected Solver (Stationary Quadratic)
 
-For the two-objective case ($K=2$), the minimization of $h(\alpha) = \langle \alpha g_1 + (1-\alpha) g_2, g_0 \rangle + c \|g_0\| \|\alpha g_1 + (1-\alpha) g_2\|$ is convex on $[0,1]$ for non-degenerate gradients. The solver enumerates endpoints, roots of $Q(\alpha) = 0$, and stationary candidates, choosing the alpha that minimizes $h$. Singular cases (zero radius, zero anchor, identical/colinear gradients) are handled by evaluating $h$ at both endpoints and selecting the minimum, rather than defaulting to $\alpha = w_1$. The constraint $0 \le c < 1$ is enforced; $c \ge 1$ is rejected.
+The stationarity condition $h'(\alpha) = 0$ leads to a quadratic $A\alpha^2 + B\alpha + C = 0$ where the key coefficient is:
+
+$$B = \delta^2 q_1 - s^2 q_1 q_2$$
+
+The previous implementation had $B = \delta^2 q_1 - 2s^2 q_2 q_1$ (a spurious factor of 2), which caused incorrect alpha solutions. The derivation from squaring $\delta_b \sqrt{Q(\alpha)} = -s \cdot Q'(\alpha)/2$ gives the correct coefficient without the extra factor.
 
 ## Recomputed Observations & Verification
 
-- **Solver Verification:** For $g_1 = [1.0, -4.0], g_2 = [-1.0, 1.0]$, weights $w = [0.2, 0.8]$, $c = 0.5$:
-  - Unclipped Dual Solution: $p = [1.0, 0.0]$ (boundary, $h$ is convex in 2D non-degenerate case)
-  - Clipped Solution: $\tilde{p} = \min(p, w) = [0.2000, 0.0]$ (Sum $= 0.2 \le 1.0$)
-  - Clipped Coordinates: index 0 ($p_0 = 1.0 > w_0 = 0.2$)
-  - Output Gradient Norm: $\|g\| = 0.6022$
-- **Singular Cases Handled:** Checked exact zero-anchor $\|g_0\| \le 10^{-12}$, identical gradients $g_1 = g_2$, zero radius $c=0$, and colinear gradients deterministically. All singular cases minimize $h(\alpha)$ at both endpoints.
-- **Degenerate Regression:** $c=0$ and colinear cases no longer shortcut to $\alpha = w_1$; they evaluate $h(0)$ and $h(1)$ and select the minimum.
-- **Claim 7 Local Outcome:** `supported` — derived from solver audit, not hard-coded.
+- **Plan Witness:** For $g_1 = [1.0, -4.0], g_2 = [-1.0, 1.0]$, weights $w = [0.2, 0.8]$, $c = 0.5$:
+  - Corrected Interior Dual Solution: $\alpha \approx 0.356145$ (interior, $0 < \alpha < 1$)
+  - Previous Buggy Solution: $\alpha = 1.0$ (boundary, from incorrect quadratic)
+  - Independent grid-search (100k points) confirms: $\alpha \approx 0.356$, $h \approx 0.4222$
+  - Clipped Solution: $\tilde{p} = \min(p, w) = [0.2000, 0.6439]$ (Sum $= 0.8439 \le 1.0$)
+- **Independent Verification:** 20 seeded random trials (4D gradients) all match grid-search minimizer within tolerance $10^{-2}$.
+- **Delta-b Zero Case:** When $\delta_b = 0$ (orthogonal gradients, symmetric anchor contribution), the corrected quadratic gives $\alpha = 0.8$ (interior minimizer of $\|mix\|$), not a boundary solution.
+- **Singular Cases Handled:** Exact zero-anchor, identical gradients, zero radius, and colinear gradients minimize $h(\alpha)$ at both endpoints deterministically. $c \ge 1$ is rejected.
+- **Claim 7 Local Outcome:** `supported` — derived from corrected solver audit, not hard-coded.
 
 ## Verification Commands & Source Pins
 

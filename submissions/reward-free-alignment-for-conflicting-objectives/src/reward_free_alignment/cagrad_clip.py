@@ -133,7 +133,7 @@ def solve_two_objective_alpha(
     # Stationary points of h(alpha)
     # The stationarity condition leads to a quadratic in alpha
     A = delta_b * delta_b * q2 - s * s * q2 * q2
-    B = delta_b * delta_b * q1 - s * s * 2.0 * q2 * q1
+    B = delta_b * delta_b * q1 - s * s * q2 * q1
     C = delta_b * delta_b * q0 - s * s * q1 * q1 / 4.0
 
     if abs(A) > 1e-14:
