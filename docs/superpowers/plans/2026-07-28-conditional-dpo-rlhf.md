@@ -81,6 +81,21 @@ HTML/CSS/JavaScript with no external assets.
   `load_claim_bindings(path: Path) -> tuple[ClaimBinding, ...]`, and constants
   `PAPER_ID`, `ATTEMPT_ID`, `SNAPSHOT_ID`, `UPSTREAM_REVISION`.
 
+Use these admitted `(challenge_claim, SHA-256)` pairs in exactly this order:
+
+1. `The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal policy preferring human-preferred responses (Section 3).`
+   — `588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a`
+2. `When the equivalence assumption fails, DPO optimizes relative advantage over the reference policy rather than absolute human-preference alignment (Section 3).`
+   — `4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86`
+3. `The paper characterizes undesirable solution spaces in which policies reduce DPO loss while preferring dispreferred responses (Section 3).`
+   — `6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc`
+4. `Constrained Preference Optimization augments RLHF with constraints and derives a stationary DPO-like loss with an adaptive reference-based margin (Section 4.3).`
+   — `a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1`
+5. `The paper gives a soft-margin ranking interpretation showing DPO can implement margin ranking with potentially negative targets (Section 5).`
+   — `7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be`
+6. `Experiments on standard benchmarks report state-of-the-art performance for CPO (Section 6).`
+   — `8df1fece656f02adbdf85fb78bc8993591f1abc9ee78c957388ab4b4eac37dcd`
+
 - [ ] **Step 1: Write failing identity tests**
 
 ```python
@@ -88,10 +103,37 @@ from hashlib import sha256
 
 from conditional_dpo_repro.claims import (
     ATTEMPT_ID,
+    LIVE_CLAIM_HASHES,
+    LIVE_CLAIMS,
     PAPER_ID,
     SNAPSHOT_ID,
     UPSTREAM_REVISION,
     load_claim_bindings,
+)
+
+EXPECTED_LIVE_CLAIMS = (
+    "The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal "
+    "policy preferring human-preferred responses (Section 3).",
+    "When the equivalence assumption fails, DPO optimizes relative advantage "
+    "over the reference policy rather than absolute human-preference alignment "
+    "(Section 3).",
+    "The paper characterizes undesirable solution spaces in which policies "
+    "reduce DPO loss while preferring dispreferred responses (Section 3).",
+    "Constrained Preference Optimization augments RLHF with constraints and "
+    "derives a stationary DPO-like loss with an adaptive reference-based margin "
+    "(Section 4.3).",
+    "The paper gives a soft-margin ranking interpretation showing DPO can "
+    "implement margin ranking with potentially negative targets (Section 5).",
+    "Experiments on standard benchmarks report state-of-the-art performance "
+    "for CPO (Section 6).",
+)
+EXPECTED_LIVE_CLAIM_HASHES = (
+    "588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a",
+    "4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86",
+    "6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc",
+    "a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1",
+    "7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be",
+    "8df1fece656f02adbdf85fb78bc8993591f1abc9ee78c957388ab4b4eac37dcd",
 )
 
 
@@ -104,16 +146,24 @@ def test_identity_is_bound_to_admitted_attempt():
     assert UPSTREAM_REVISION == "arxiv:2605.20834v1"
 
 
-def test_all_six_live_claim_hashes_match(project_root):
+def test_all_six_live_claims_equal_admitted_constants(project_root):
     claims = load_claim_bindings(project_root / "sources/paper.json")
-    assert len(claims) == 6
+    assert LIVE_CLAIMS == EXPECTED_LIVE_CLAIMS
+    assert LIVE_CLAIM_HASHES == EXPECTED_LIVE_CLAIM_HASHES
+    assert tuple(item.challenge_claim for item in claims) == EXPECTED_LIVE_CLAIMS
+    assert tuple(
+        item.challenge_claim_sha256 for item in claims
+    ) == EXPECTED_LIVE_CLAIM_HASHES
     assert sum(item.targeted for item in claims) == 5
-    for item in claims:
-        assert sha256(item.challenge_claim.encode("utf-8")).hexdigest() == (
-            item.challenge_claim_sha256
-        )
+    assert tuple(
+        sha256(text.encode("utf-8")).hexdigest() for text in EXPECTED_LIVE_CLAIMS
+    ) == EXPECTED_LIVE_CLAIM_HASHES
     assert claims[-1].targeted is False
 ```
+
+The expected tuples above are deliberately duplicated in the test. Do not
+derive either tuple from `sources/paper.json`, `ClaimBinding` objects, or the
+other tuple under test.
 
 - [ ] **Step 2: Run the identity tests and verify RED**
 
@@ -166,6 +216,30 @@ SNAPSHOT_ID = (
     "09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199"
 )
 UPSTREAM_REVISION = "arxiv:2605.20834v1"
+LIVE_CLAIMS = (
+    "The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal "
+    "policy preferring human-preferred responses (Section 3).",
+    "When the equivalence assumption fails, DPO optimizes relative advantage "
+    "over the reference policy rather than absolute human-preference alignment "
+    "(Section 3).",
+    "The paper characterizes undesirable solution spaces in which policies "
+    "reduce DPO loss while preferring dispreferred responses (Section 3).",
+    "Constrained Preference Optimization augments RLHF with constraints and "
+    "derives a stationary DPO-like loss with an adaptive reference-based margin "
+    "(Section 4.3).",
+    "The paper gives a soft-margin ranking interpretation showing DPO can "
+    "implement margin ranking with potentially negative targets (Section 5).",
+    "Experiments on standard benchmarks report state-of-the-art performance "
+    "for CPO (Section 6).",
+)
+LIVE_CLAIM_HASHES = (
+    "588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a",
+    "4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86",
+    "6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc",
+    "a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1",
+    "7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be",
+    "8df1fece656f02adbdf85fb78bc8993591f1abc9ee78c957388ab4b4eac37dcd",
+)
 
 
 @dataclass(frozen=True)
@@ -244,8 +318,10 @@ git commit -m "evidence: bind conditional DPO paper identity"
 - Consumes: finite floats.
 - Produces: `TwoResponsePolicy`, `policy_from_delta`, `softplus`,
   `sigmoid`, `logit`, `rlhf_optimal_delta`, `dpo_loss`,
-  `dpo_loss_derivative`, `bt_population_loss`, `cpo_reference_margin`,
-  `cpo_loss`, `cpo_loss_derivative`, and `scaled_dpo_soft_margin`.
+  `dpo_loss_derivative`, `bt_population_loss`,
+  `constrained_rlhf_objective`, `solve_exact_constrained_rlhf`,
+  `cpo_optimal_policy_margin`, `cpo_reference_margin`, `cpo_loss`,
+  `cpo_loss_derivative`, and `scaled_dpo_soft_margin`.
 
 - [ ] **Step 1: Write failing primitive tests**
 
@@ -272,6 +348,23 @@ def test_dpo_derivative_is_strictly_negative():
 def test_invalid_dpo_inputs_fail_closed(arguments, message):
     with pytest.raises(ValueError, match=message):
         dpo_loss(*arguments)
+
+
+def test_exact_constrained_rlhf_solver_recovers_unconstrained_case():
+    reference = TwoResponsePolicy(0.25, 0.75)
+    exact = solve_exact_constrained_rlhf(reference, 0.5, 1.0, gamma=0.0)
+    assert exact["status"] == "finite_optimum"
+    assert abs(
+        exact["policy"].delta
+        - rlhf_optimal_delta(reference.delta, 0.5, 1.0)
+    ) <= 1e-12
+
+
+def test_exact_constrained_rlhf_solver_certifies_positive_gamma_boundary():
+    reference = TwoResponsePolicy(0.25, 0.75)
+    exact = solve_exact_constrained_rlhf(reference, 0.5, 1.0, gamma=0.10)
+    assert exact["status"] == "unbounded"
+    assert exact["approached_boundary"] == "preferred"
 ```
 
 - [ ] **Step 2: Run mathematical tests and verify RED**
@@ -361,6 +454,27 @@ def cpo_reference_margin(reference: TwoResponsePolicy, gamma: float) -> float:
         raise ValueError("gamma must be non-negative")
     return gamma * (1.0 / reference.preferred + 1.0 / reference.dispreferred)
 ```
+
+Implement `constrained_rlhf_objective` directly from the exact constrained
+RLHF objective before implementing either margin. In the two-response,
+single-preference-pair reduction, use the preferred reward gap with a zero
+dispreferred baseline, exact Bernoulli KL to the reference, and
+`gamma * policy.delta`. `solve_exact_constrained_rlhf` must return a closed
+status enum and certificates:
+
+```text
+finite_optimum: policy, objective, first_order_residual, curvature
+boundary_supremum: approached_boundary, monotone_tail_values
+unbounded: approached_boundary, increasing_tail_values, analytic_reason
+```
+
+For `gamma == 0`, independently recover the vanilla finite RLHF optimum. For
+`gamma > 0`, check the objective on a declared increasing delta sequence and
+apply the analytic boundary limit; never relabel an interior stationary point
+as a global optimum. `cpo_optimal_policy_margin(policy, gamma)` evaluates the
+Equations 13–16 expression with the certified optimal policy. Only
+`cpo_reference_margin(reference, gamma)` performs the Equation 17
+reference-policy substitution.
 
 - [ ] **Step 4: Run GREEN and commit**
 
@@ -543,7 +657,7 @@ undesirable witness has a decreasing DPO loss while preferring `l`.
 
 ---
 
-### Task 4: Stationary CPO reference-margin lane
+### Task 4: Exact constrained-RLHF and approximate CPO-margin lane
 
 **Files:**
 
@@ -554,29 +668,65 @@ undesirable witness has a decreasing DPO loss while preferring `l`.
 
 **Interfaces:**
 
-- Consumes: `TwoResponsePolicy`, CPO primitives, and the design's 180-case
-  CPO grid.
-- Produces: `run_cpo_margin_lane() -> dict[str, object]`.
+- Consumes: `TwoResponsePolicy`, the exact constrained-RLHF objective and
+  solver, both margin functions, and the design's 180-case CPO grid.
+- Produces: `run_cpo_margin_lane() -> dict[str, object]`, with separate
+  `exact_constrained_rlhf`, `equations_13_16_optimal_policy_margin`, and
+  `equation_17_reference_policy_approximation` objects.
 
-- [ ] **Step 1: Write failing CPO identity tests**
+- [ ] **Step 1: Write failing exact-versus-approximate CPO tests**
 
 ```python
-def test_reference_margin_and_stationary_shift():
+from itertools import pairwise
+
+
+def test_exact_constrained_rlhf_gamma_zero_recovers_rlhf_optimum():
     reference = TwoResponsePolicy(0.25, 0.75)
-    margin = cpo_reference_margin(reference, gamma=0.10)
-    assert abs(margin - (0.10 * (4.0 + 4.0 / 3.0))) <= 1e-12
-    dpo_delta = rlhf_optimal_delta(reference.delta, 0.5, 1.0)
-    cpo_delta = dpo_delta + margin
-    assert abs((cpo_delta - dpo_delta) - margin) <= 1e-12
+    exact = solve_exact_constrained_rlhf(reference, 0.5, 1.0, gamma=0.0)
+    assert exact["status"] == "finite_optimum"
+    assert abs(
+        exact["policy"].delta
+        - rlhf_optimal_delta(reference.delta, 0.5, 1.0)
+    ) <= 1e-12
+    assert exact["first_order_residual"] <= 1e-12
 
 
-def test_cpo_lane_holds_reference_margin_fixed():
+def test_positive_gamma_exact_objective_is_not_replaced_by_equation_17():
+    reference = TwoResponsePolicy(0.25, 0.75)
+    exact = solve_exact_constrained_rlhf(reference, 0.5, 1.0, gamma=0.10)
+    assert exact["status"] == "unbounded"
+    assert exact["approached_boundary"] == "preferred"
+    assert all(
+        right > left
+        for left, right in pairwise(exact["increasing_tail_values"])
+    )
+    approximation = cpo_reference_margin(reference, gamma=0.10)
+    assert abs(approximation - (0.10 * (4.0 + 4.0 / 3.0))) <= 1e-12
+
+
+def test_equations_13_16_margin_uses_certified_optimal_policy():
+    optimal_policy = TwoResponsePolicy(0.80, 0.20)
+    reference = TwoResponsePolicy(0.25, 0.75)
+    exact_margin = cpo_optimal_policy_margin(optimal_policy, gamma=0.10)
+    approximate_margin = cpo_reference_margin(reference, gamma=0.10)
+    assert abs(exact_margin - 0.10 * (1.25 + 5.00)) <= 1e-12
+    assert exact_margin != approximate_margin
+
+
+def test_cpo_lane_keeps_exact_result_and_approximation_separate():
     result = run_cpo_margin_lane()
     assert result["case_count"] == 180
-    assert result["shift_identity_max_abs_error"] <= 1e-12
-    assert result["stationary_derivative_max_abs_error"] <= 1e-8
-    assert result["margin_parameter_derivative"] == 0.0
-    assert result["reference_substitution_labeled_approximation"] is True
+    assert result["exact_constrained_rlhf"]["finite_optimum_count"] == 45
+    assert result["exact_constrained_rlhf"]["unbounded_count"] == 135
+    assert result[
+        "equations_13_16_optimal_policy_margin"
+    ]["evaluated_only_for_certified_optima"] is True
+    approximation = result["equation_17_reference_policy_approximation"]
+    assert approximation["case_count"] == 180
+    assert approximation["shift_identity_max_abs_error"] <= 1e-12
+    assert approximation["stationary_derivative_max_abs_error"] <= 1e-8
+    assert approximation["margin_parameter_derivative"] == 0.0
+    assert approximation["labeled_approximation"] is True
 ```
 
 - [ ] **Step 2: Run the CPO tests and verify RED**
@@ -589,7 +739,7 @@ env UV_CACHE_DIR=/tmp/conditional-dpo-uv-cache uv run pytest -q tests/test_cpo_m
 
 Expected: collection fails because `conditional_dpo_repro.cpo` does not exist.
 
-- [ ] **Step 3: Implement the CPO grid**
+- [ ] **Step 3: Implement the ordered three-stage CPO audit**
 
 ```python
 CPO_P_REF_W = (0.10, 0.25, 0.50, 0.75, 0.90)
@@ -604,16 +754,39 @@ def run_cpo_margin_lane() -> dict[str, object]:
         CPO_P_REF_W, CPO_REWARD_GAPS, CPO_BETAS, CPO_GAMMAS
     ):
         reference = TwoResponsePolicy(p_ref, 1.0 - p_ref)
-        margin = cpo_reference_margin(reference, gamma)
+
+        # Stage 1: solve or classify the exact constrained-RLHF objective.
+        exact = solve_exact_constrained_rlhf(
+            reference, reward_gap, beta, gamma
+        )
+
+        # Stage 2: audit Equations 13–16 only for a certified global optimum.
+        exact_margin = None
+        exact_margin_residual = None
+        if exact["status"] == "finite_optimum":
+            exact_margin = cpo_optimal_policy_margin(exact["policy"], gamma)
+            exact_margin_residual = equations_13_16_residual(
+                exact["policy"],
+                reference,
+                reward_gap,
+                beta,
+                exact_margin,
+            )
+
+        # Stage 3: audit Equation 17 as a reference-policy approximation.
+        reference_margin = cpo_reference_margin(reference, gamma)
         dpo_delta = rlhf_optimal_delta(reference.delta, reward_gap, beta)
-        cpo_delta = dpo_delta + margin / beta
+        approximate_cpo_delta = dpo_delta + reference_margin / beta
         derivative = centered_derivative(
             lambda delta: (
-                sigmoid(reward_gap) * cpo_loss(delta, reference.delta, beta, margin)
+                sigmoid(reward_gap)
+                * cpo_loss(delta, reference.delta, beta, reference_margin)
                 + (1.0 - sigmoid(reward_gap))
-                * softplus(beta * (delta - reference.delta) - margin)
+                * softplus(
+                    beta * (delta - reference.delta) - reference_margin
+                )
             ),
-            cpo_delta,
+            approximate_cpo_delta,
         )
         rows.append(
             {
@@ -621,19 +794,47 @@ def run_cpo_margin_lane() -> dict[str, object]:
                 "reward_gap": reward_gap,
                 "beta": beta,
                 "gamma": gamma,
-                "reference_margin": margin,
-                "dpo_delta": dpo_delta,
-                "cpo_delta": cpo_delta,
-                "shift_abs_error": abs((cpo_delta - dpo_delta) - margin / beta),
-                "stationary_derivative_abs_error": abs(derivative),
+                "exact_constrained_rlhf": serialize_exact_result(exact),
+                "equations_13_16_optimal_policy_margin": {
+                    "defined": exact_margin is not None,
+                    "margin": exact_margin,
+                    "implicit_equation_abs_residual": exact_margin_residual,
+                },
+                "equation_17_reference_policy_approximation": {
+                    "labeled_approximation": True,
+                    "reference_margin": reference_margin,
+                    "approximate_cpo_delta": approximate_cpo_delta,
+                    "shift_abs_error": abs(
+                        (approximate_cpo_delta - dpo_delta)
+                        - reference_margin / beta
+                    ),
+                    "stationary_derivative_abs_error": abs(derivative),
+                    "margin_abs_error_vs_exact": (
+                        None
+                        if exact_margin is None
+                        else abs(reference_margin - exact_margin)
+                    ),
+                },
             }
         )
     return _summarize_cpo(rows)
 ```
 
-`_summarize_cpo` records Equation 17 as an approximation and the substituted
-reference margin as parameter-independent. It must not claim that the
-reference margin equals the exact optimal-policy margin.
+`solve_exact_constrained_rlhf` evaluates the exact objective, not a CPO loss
+with the reference margin substituted. For this declared single-pair
+two-response reduction it must independently establish the `gamma == 0`
+finite optimum and the `gamma > 0` boundary behavior from both analytic limits
+and the fixed, representable delta tail sequence `(8.0, 16.0, 24.0, 32.0)`.
+Interior first-order roots, if any, are recorded as stationary points and
+never called global optima without the global certificate.
+
+`_summarize_cpo` keeps the three stage names above and never fills undefined
+exact fields with approximation values. It reports Equation 17 as an
+approximation, the substituted reference margin as parameter-independent, and
+approximation error only for rows with a certified exact optimal-policy
+margin. The lane outcome is derived from all three stages; a passing
+Equation 17 stationary-loss identity cannot override a failed or undefined
+exact-optimum claim.
 
 - [ ] **Step 4: Run GREEN and commit**
 
@@ -644,8 +845,11 @@ git add src/conditional_dpo_repro/cpo.py tests/test_cpo_margin.py
 git commit -m "feat: audit stationary CPO margin identities"
 ```
 
-Expected: all 180 cases satisfy the declared shift and stationary-loss
-identities within their recorded tolerances.
+Expected: all 180 cases have explicit exact-objective classifications; the 45
+`gamma == 0` rows recover the finite RLHF optimum, the 135 positive-`gamma`
+rows retain their boundary certificates, Equations 13–16 are evaluated only
+where an exact optimum exists, and every Equation 17 approximation row
+satisfies its separately declared stationary-loss checks.
 
 ---
 
@@ -780,6 +984,10 @@ the hinge bound, and negative target examples are explicit.
 
 - [ ] **Step 1: Write failing evidence and CLI tests**
 
+Repeat `EXPECTED_LIVE_CLAIMS` and `EXPECTED_LIVE_CLAIM_HASHES` from Task 1
+verbatim at module scope in `test_evidence.py`; do not import them from
+production code or construct one from the other.
+
 ```python
 def test_bundle_has_all_live_claims_in_order(project_root):
     value = build_evidence(project_root)
@@ -790,6 +998,12 @@ def test_bundle_has_all_live_claims_in_order(project_root):
     assert [claim["targeted"] for claim in value["claims"]] == [
         True, True, True, True, True, False
     ]
+    assert tuple(
+        claim["challenge_claim"] for claim in value["claims"]
+    ) == EXPECTED_LIVE_CLAIMS
+    assert tuple(
+        claim["challenge_claim_sha256"] for claim in value["claims"]
+    ) == EXPECTED_LIVE_CLAIM_HASHES
     assert value["claims"][-1]["outcome"] == "not_reproduced"
 
 

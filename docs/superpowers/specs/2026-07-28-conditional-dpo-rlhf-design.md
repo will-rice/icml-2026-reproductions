@@ -136,19 +136,27 @@ The project path is:
 submissions/conditional-equivalence-of-dpo-and-rlhf-assumptions-failure-modes-and-provable-alignment/
 ```
 
-The evidence must bind these five target claims to the exact challenge text
-and SHA-256 values already admitted on the attempt:
+The evidence must bind all six live claims to these immutable, ordered
+constants from the admitted attempt and snapshot. The first five are targeted;
+the sixth is retained as `not_reproduced`.
 
-| Lane | Challenge claim SHA-256 | Target |
-|---|---|---|
-| 1 | `588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a` | finite conditional-equivalence audit |
-| 2 | `4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86` | relative-versus-absolute grid |
-| 3 | `6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc` | undesirable-space witnesses |
-| 4 | `a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1` | CPO stationarity and adaptive margin |
-| 5 | `7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be` | soft-margin identity and negative target |
+1. `The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal policy preferring human-preferred responses (Section 3).`
+   — `588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a`
+2. `When the equivalence assumption fails, DPO optimizes relative advantage over the reference policy rather than absolute human-preference alignment (Section 3).`
+   — `4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86`
+3. `The paper characterizes undesirable solution spaces in which policies reduce DPO loss while preferring dispreferred responses (Section 3).`
+   — `6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc`
+4. `Constrained Preference Optimization augments RLHF with constraints and derives a stationary DPO-like loss with an adaptive reference-based margin (Section 4.3).`
+   — `a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1`
+5. `The paper gives a soft-margin ranking interpretation showing DPO can implement margin ranking with potentially negative targets (Section 5).`
+   — `7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be`
+6. `Experiments on standard benchmarks report state-of-the-art performance for CPO (Section 6).`
+   — `8df1fece656f02adbdf85fb78bc8993591f1abc9ee78c957388ab4b4eac37dcd`
 
-The untargeted SOTA claim remains present with SHA-256
-`8df1fece656f02adbdf85fb78bc8993591f1abc9ee78c957388ab4b4eac37dcd`.
+Tests must embed the same six strings and hashes as immutable expected
+constants. A test that merely hashes strings loaded from `sources/paper.json`
+and compares them with hashes from that same file is self-consistent but does
+not protect the admitted binding; it is insufficient.
 
 `sources/paper.json` will record:
 
@@ -222,6 +230,20 @@ def dpo_loss_derivative(delta: float, delta_ref: float, beta: float) -> float: .
 def bt_population_loss(
     delta: float, delta_ref: float, reward_gap: float, beta: float
 ) -> float: ...
+def constrained_rlhf_objective(
+    policy: TwoResponsePolicy,
+    reference: TwoResponsePolicy,
+    reward_gap: float,
+    beta: float,
+    gamma: float,
+) -> float: ...
+def solve_exact_constrained_rlhf(
+    reference: TwoResponsePolicy,
+    reward_gap: float,
+    beta: float,
+    gamma: float,
+) -> dict[str, object]: ...
+def cpo_optimal_policy_margin(policy: TwoResponsePolicy, gamma: float) -> float: ...
 def cpo_reference_margin(reference: TwoResponsePolicy, gamma: float) -> float: ...
 def cpo_loss(
     delta: float, delta_ref: float, beta: float, margin: float
@@ -291,13 +313,29 @@ beta       = [0.50, 1.00, 2.00]
 gamma      = [0.00, 0.01, 0.05, 0.10]
 ```
 
-For each case, compute the reference margin
-`gamma * (1/p_ref_w + 1/p_ref_l)`, the stationary CPO logit, the predicted
-shift `margin / beta`, and the loss derivative. Numerically perturb the
-policy delta while holding the precomputed reference margin fixed to verify
-that the margin contributes zero parameter derivative. Keep the exact
-constrained-RLHF margin based on the optimal policy distinct from the
-reference-policy approximation used by the stationary CPO loss.
+For each case, lane 4 is a three-stage audit whose stages may not be collapsed:
+
+1. Solve or classify the exact finite two-response constrained-RLHF objective.
+   Report whether a finite global optimum exists, its policy and objective
+   value when it does, and independent first-order, curvature, and boundary
+   certificates. If the objective is boundary-seeking or unbounded for a
+   parameter choice, record that result rather than manufacturing an
+   `optimal_policy`.
+2. Only for a certified finite optimum, evaluate the Equations 13–16
+   optimal-policy margin
+   `gamma * (1/p_star_w + 1/p_star_l)` and its implicit optimality residual.
+   This is the exact-result record and must use `p_star`, never `p_ref`.
+3. Separately audit the Equation 17 reference-policy approximation
+   `gamma * (1/p_ref_w + 1/p_ref_l)`, its stationary CPO logit, predicted
+   shift `reference_margin / beta`, and held-fixed loss derivative. The output
+   must call this an approximation and report its error against the exact
+   optimal-policy margin only when the latter exists.
+
+Numerically perturb the policy delta while holding the precomputed reference
+margin fixed to verify that the approximation contributes zero parameter
+derivative. The exact constrained-RLHF result, Equations 13–16
+optimal-policy-margin result, and Equation 17 reference-policy approximation
+must occupy separate named objects in every row and in the aggregate summary.
 
 ### Soft-margin grid
 
@@ -336,9 +374,11 @@ answer. In particular:
   condition.
 - Lane 2 must separately count relative improvement and absolute preference.
 - Lane 3 must list concrete policy witnesses, not only count them.
-- Lane 4 must label Equation 17's reference substitution as an approximation,
-  while testing the stationary loss identity exactly for the substituted
-  margin.
+- Lane 4 must first solve or classify the exact constrained-RLHF problem and,
+  where a finite optimum exists, test the Equations 13–16 optimal-policy
+  margin. It must then audit Equation 17's reference substitution as a
+  separately named approximation. A passing stationary-loss identity for the
+  substituted margin cannot stand in for either preceding exact check.
 - Lane 5 must test the scaled high-beta limit and retain finite-beta errors.
 
 ## 8. Evidence bundle
@@ -411,7 +451,8 @@ The pages must state prominently:
 - no paper benchmark was reproduced;
 - the author repository was unavailable during assessment;
 - paper equations are context, while grid results are recomputed evidence;
-- the CPO reference margin is an approximation to the optimal-policy margin;
+- the exact constrained-RLHF result and Equations 13–16 optimal-policy margin
+  are distinct from the Equation 17 reference-policy approximation;
   and
 - only the challenge can issue official verdict labels.
 
@@ -425,7 +466,10 @@ Every production behavior starts with a failing pytest. Focused tests cover:
 - negative derivatives for the one-sided DPO loss;
 - relative/absolute criterion separation;
 - exact undesirable-space membership and witnesses;
-- CPO reference margin, predicted shift, and derivative;
+- exact constrained-RLHF optimum classification and certificates;
+- Equations 13–16 optimal-policy margin and residual, when defined;
+- Equation 17 reference-policy approximation, predicted shift, derivative,
+  and approximation error when comparable;
 - soft-margin convergence and negative targets;
 - closed evidence schema and deterministic bytes;
 - atomic CLI writes and sanitized errors; and
@@ -459,8 +503,8 @@ The implementation proposal is ready for controller review when:
 1. all five selected lanes execute from explicit finite grids;
 2. lane 1 preserves the distinction between one-sided and population DPO;
 3. every reported number is recomputed rather than copied from the paper;
-4. all six live claims are bound in order and the SOTA claim is explicitly
-   not reproduced;
+4. all six live claim strings and hashes equal immutable expected constants in
+   admitted order, and the SOTA claim is explicitly not reproduced;
 5. the evidence schema rejects missing identity, non-finite values, unknown
    fields, and invalid outcomes;
 6. two generation runs are byte-identical;
