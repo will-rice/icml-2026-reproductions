@@ -4,13 +4,22 @@ import json
 from pathlib import Path
 import numpy as np
 
-from .framework import (
-    MetaCognitiveFramework,
-    KnowledgeRegion,
-    CognitionGuidedKnowledgeExpansion,
-    CognitionDrivenKnowledgeCalibration,
-)
-from .decay_law import StructuralDecayLaw
+try:
+    from .framework import (
+        MetaCognitiveFramework,
+        KnowledgeRegion,
+        CognitionGuidedKnowledgeExpansion,
+        CognitionDrivenKnowledgeCalibration,
+    )
+    from .decay_law import StructuralDecayLaw
+except ImportError:
+    from know_more_know_clearer.framework import (
+        MetaCognitiveFramework,
+        KnowledgeRegion,
+        CognitionGuidedKnowledgeExpansion,
+        CognitionDrivenKnowledgeCalibration,
+    )
+    from know_more_know_clearer.decay_law import StructuralDecayLaw
 
 
 def generate_evidence(output_dir: Path) -> Path:
@@ -73,3 +82,8 @@ def generate_evidence(output_dir: Path) -> Path:
         }, f, indent=2)
 
     return results_path
+
+
+if __name__ == "__main__":
+    out_dir = Path(__file__).resolve().parents[2] / "evidence"
+    generate_evidence(out_dir)
