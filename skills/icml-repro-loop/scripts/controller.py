@@ -42,6 +42,7 @@ ENVIRONMENT_ALLOWLIST = {
     "LANG",
     "LC_ALL",
     "PATH",
+    "PRE_COMMIT_HOME",
     "SSL_CERT_DIR",
     "SSL_CERT_FILE",
     "UV_CACHE_DIR",

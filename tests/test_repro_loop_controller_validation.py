@@ -675,6 +675,8 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
     attacker_tmp = tmp_path / "attacker-tmp"
     attacker_tmp.mkdir()
     monkeypatch.setenv("TMPDIR", str(attacker_tmp))
+    pre_commit_home = tmp_path / "pre-commit-home"
+    monkeypatch.setenv("PRE_COMMIT_HOME", str(pre_commit_home))
     monkeypatch.setattr(controller.tempfile, "tempdir", None)
     monkeypatch.setattr(controller.subprocess, "run", fake_run)
 
@@ -705,6 +707,7 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
     )
     assert captured["env"]["PYTHONDONTWRITEBYTECODE"] == "1"
     assert captured["env"]["PYTEST_ADDOPTS"] == "-p no:cacheprovider"
+    assert captured["env"]["PRE_COMMIT_HOME"] == str(pre_commit_home)
     assert Path(captured["env"]["HF_HOME"]).parent == Path(
         captured["env"]["HOME"]
     ).parent
