@@ -1,0 +1,62 @@
+[
+  {
+    "ordinal": 1,
+    "text": "RACO is an offline, reward-free preference-alignment method that accepts user-specified objective weights and explicitly handles conflicting objectives (Table 1).",
+    "sha256": "e9a35e34b57a7273bf84d3d5981ab19f8ff1088adef8363f4640dcf436183944",
+    "targeted": false
+  },
+  {
+    "ordinal": 2,
+    "text": "The method uses CAGrad-Clip to limit correction gradients so updates better respect preferred objective trade-offs (Figure 1, Algorithm 1).",
+    "sha256": "7c0aa54e034d03f2d0905417a024af4db41338cd9a803a0b42e441945c307cf9",
+    "targeted": false
+  },
+  {
+    "ordinal": 3,
+    "text": "On TL;DR summarization, RACO achieves better Pareto frontiers for conciseness-quality and faithfulness-quality trade-offs than AMoPO and weighted-loss DPO baselines (Figure 2, Figure 3).",
+    "sha256": "85abbc8a21d5c4537409f6e9f2af6bffc7e4c15e2311dfa078bf816ea0cffc9e",
+    "targeted": false
+  },
+  {
+    "ordinal": 4,
+    "text": "On BeaverTails safety alignment, RACO improves harmlessness-helpfulness Pareto trade-offs across Qwen3 and Gemma3 setups (Figure 4).",
+    "sha256": "dac93f364ac0469302894920781b034bfcd205816fbe16537c2f8e7c10d8995d",
+    "targeted": false
+  },
+  {
+    "ordinal": 5,
+    "text": "Ablations show clipping and the correction-radius constant affect validation margins and Pareto frontiers (Figure 5, Figure 6).",
+    "sha256": "269d8a5053e224206036399bccb2435455565149086de6439a9046d89682772b",
+    "targeted": false
+  },
+  {
+    "ordinal": 6,
+    "text": "RACO directly applies conflict-averse gradient descent to objective-specific pairwise preference losses instead of relying on explicit reward models (Section 3).",
+    "sha256": "0d457572ea8a502fa8a489fef3e15da21b13cc39dd3a3730843d1cbe833059b0",
+    "targeted": true
+  },
+  {
+    "ordinal": 7,
+    "text": "The clipped CAGrad update is introduced to stabilize multi-objective LLM alignment while respecting user-specified objective weights (Section 3.2).",
+    "sha256": "50719d645042a500f9c4d53fbdfedf719ee56429ddb73a231912f1eaeadb1b31",
+    "targeted": true
+  },
+  {
+    "ordinal": 8,
+    "text": "The paper proves convergence of clipped CAGrad to Pareto-critical points that respect user-specified weights in nonconvex smooth settings (Theorem 3.1).",
+    "sha256": "5ec835ce150ff60d1e2bbd4fbdf7d1ebacf91bb2b6b2d65f72c44c3b3ed65229",
+    "targeted": true
+  },
+  {
+    "ordinal": 9,
+    "text": "For two objectives, the analysis shows clipping can strictly improve the convergence rate (Theorem 3.2).",
+    "sha256": "b74a0ea75967144b210934fd40fd23449d3ef985df878d5a9e14c4b04025ba4b",
+    "targeted": true
+  },
+  {
+    "ordinal": 10,
+    "text": "Experiments on multi-objective summarization and safety alignment across Qwen 3, Llama 3, and Gemma 3 report better Pareto trade-offs than reward-free baselines (Section 4).",
+    "sha256": "58b31f527bb5e1bccb05c0dab775a74c2f2bdcd8e92ef2c0dd578733b5fb058e",
+    "targeted": false
+  }
+]

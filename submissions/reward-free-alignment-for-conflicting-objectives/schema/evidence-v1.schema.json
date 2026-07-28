@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RACOEvidenceBundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "attempt_id",
+    "paper_id",
+    "snapshot_id",
+    "upstream_revision",
+    "claims",
+    "audits",
+    "environment",
+    "costs"
+  ],
+  "properties": {
+    "attempt_id": { "type": "string" },
+    "paper_id": { "type": "string" },
+    "snapshot_id": { "type": "string" },
+    "upstream_revision": { "type": "string" },
+    "claims": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ordinal",
+          "text",
+          "sha256",
+          "targeted",
+          "local_outcome",
+          "claim_summary",
+          "reproduction_notes"
+        ],
+        "properties": {
+          "ordinal": { "type": "integer", "minimum": 1, "maximum": 10 },
+          "text": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "targeted": { "type": "boolean" },
+          "local_outcome": {
+            "type": "string",
+            "enum": ["supported", "not-supported", "limited"]
+          },
+          "claim_summary": { "type": "string" },
+          "reproduction_notes": { "type": "string" }
+        }
+      }
+    },
+    "audits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["theorem_31", "theorem_32", "pairwise_loss", "cagrad_clip"],
+      "properties": {
+        "theorem_31": { "type": "object" },
+        "theorem_32": { "type": "object" },
+        "pairwise_loss": { "type": "object" },
+        "cagrad_clip": { "type": "object" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["device", "python_version", "torch_version"],
+      "properties": {
+        "device": { "type": "string" },
+        "python_version": { "type": "string" },
+        "torch_version": { "type": "string" }
+      }
+    },
+    "costs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_cost_usd", "compute_time_seconds"],
+      "properties": {
+        "api_cost_usd": { "type": "number", "minimum": 0, "maximum": 0 },
+        "compute_time_seconds": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

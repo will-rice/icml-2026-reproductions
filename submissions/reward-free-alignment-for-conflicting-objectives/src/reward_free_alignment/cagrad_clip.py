@@ -1,0 +1,210 @@
+from dataclasses import dataclass
+import math
+from typing import Sequence
+import torch
+from torch import Tensor
+
+
+@dataclass(frozen=True)
+class AlphaSolution:
+    alpha: float
+    coefficients: Tensor
+    weighted_anchor: Tensor
+    objective_value: float
+    candidate_count: int
+    singular_case: str | None
+
+
+@dataclass(frozen=True)
+class CAGradResult:
+    gradient: Tensor
+    weighted_anchor: Tensor
+    coefficients: Tensor
+    clipped_coefficients: Tensor
+    mixture: Tensor
+    clipped_mixture: Tensor
+    clipped_coordinates: tuple[int, ...]
+    singular_case: str | None
+
+
+def validate_weights(weights: Tensor, atol: float = 1e-5) -> Tensor:
+    if weights.ndim != 1 or weights.shape[0] != 2:
+        raise ValueError(f"weights must be a 1D tensor of length 2, got shape {weights.shape}")
+    if (weights < 0.0).any():
+        raise ValueError(f"weights must be non-negative, got {weights}")
+    w_sum = weights.sum().item()
+    if abs(w_sum - 1.0) > atol:
+        raise ValueError(f"weights must sum to 1.0, got sum {w_sum}")
+    return weights
+
+
+def solve_two_objective_alpha(
+    g1: Tensor,
+    g2: Tensor,
+    weights: Tensor,
+    c: float,
+    atol: float = 1e-12,
+) -> AlphaSolution:
+    validate_weights(weights)
+    if not isinstance(c, (int, float)) or not math.isfinite(c) or c < 0.0:
+        raise ValueError(f"c must be non-negative and finite, got {c}")
+    if g1.shape != g2.shape or g1.ndim != 1:
+        raise ValueError("g1 and g2 must be 1D tensors of the same shape")
+
+    w1 = weights[0].item()
+    w2 = weights[1].item()
+    g0 = weights[0] * g1 + weights[1] * g2
+    norm_g0 = torch.linalg.vector_norm(g0).item()
+    diff = g1 - g2
+    norm_diff = torch.linalg.vector_norm(diff).item()
+
+    singular_case: str | None = None
+    if c <= atol:
+        singular_case = "zero_radius"
+    elif norm_g0 <= atol:
+        singular_case = "zero_anchor"
+    elif norm_diff <= atol:
+        singular_case = "identical_gradients"
+    else:
+        norm_g1 = torch.linalg.vector_norm(g1).item()
+        norm_g2 = torch.linalg.vector_norm(g2).item()
+        if norm_g1 <= atol or norm_g2 <= atol:
+            singular_case = "colinear_gradients"
+        else:
+            cos_sim = abs(torch.dot(g1, g2).item()) / (norm_g1 * norm_g2)
+            if 1.0 - cos_sim <= 1e-5:
+                singular_case = "colinear_gradients"
+
+    if singular_case is not None:
+        alpha_val = min(1.0, max(0.0, w1))
+        coeffs = torch.tensor([alpha_val, 1.0 - alpha_val], dtype=g1.dtype, device=g1.device)
+        mix = coeffs[0] * g1 + coeffs[1] * g2
+        s = c * norm_g0
+        obj_val = (torch.dot(mix, g0) + s * torch.linalg.vector_norm(mix)).item()
+        return AlphaSolution(
+            alpha=alpha_val,
+            coefficients=coeffs,
+            weighted_anchor=g0,
+            objective_value=obj_val,
+            candidate_count=1,
+            singular_case=singular_case,
+        )
+
+    b1 = torch.dot(g1, g0).item()
+    b2 = torch.dot(g2, g0).item()
+    delta_b = b1 - b2
+    s = c * norm_g0
+
+    q2 = norm_diff ** 2
+    q1 = 2.0 * (torch.dot(g1, g2).item() - torch.dot(g2, g2).item())
+    q0 = torch.dot(g2, g2).item()
+
+    def Q(a: float) -> float:
+        return q2 * a * a + q1 * a + q0
+
+    def h(a: float) -> float:
+        mix = a * g1 + (1.0 - a) * g2
+        return (torch.dot(mix, g0) + s * torch.linalg.vector_norm(mix)).item()
+
+    raw_candidates = [0.0, 1.0]
+
+    # Roots of Q(a) = 0
+    if q2 > atol:
+        disc_q = q1 * q1 - 4.0 * q2 * q0
+        if disc_q >= 0:
+            sqrt_dq = math.sqrt(max(0.0, disc_q))
+            raw_candidates.append((-q1 - sqrt_dq) / (2.0 * q2))
+            raw_candidates.append((-q1 + sqrt_dq) / (2.0 * q2))
+
+    # Stationary points
+    A = delta_b * delta_b * q2 - s * s * q2 * q2
+    B = delta_b * delta_b * q1 - s * s * q2 * q1
+    C = delta_b * delta_b * q0 - s * s * (q1 * q1) / 4.0
+
+    if abs(A) > 1e-14:
+        disc_stat = B * B - 4.0 * A * C
+        if disc_stat >= 0:
+            sqrt_ds = math.sqrt(max(0.0, disc_stat))
+            for r in [(-B - sqrt_ds) / (2.0 * A), (-B + sqrt_ds) / (2.0 * A)]:
+                if -atol <= r <= 1.0 + atol:
+                    q_val = Q(r)
+                    if q_val >= -atol:
+                        lhs = delta_b * math.sqrt(max(0.0, q_val))
+                        rhs = -s * (q2 * r + q1 / 2.0)
+                        if abs(lhs - rhs) <= 1e-5:
+                            raw_candidates.append(r)
+    elif abs(B) > 1e-14:
+        r = -C / B
+        if -atol <= r <= 1.0 + atol:
+            q_val = Q(r)
+            if q_val >= -atol:
+                lhs = delta_b * math.sqrt(max(0.0, q_val))
+                rhs = -s * (q2 * r + q1 / 2.0)
+                if abs(lhs - rhs) <= 1e-5:
+                    raw_candidates.append(r)
+
+    valid_candidates: list[float] = []
+    for cand in raw_candidates:
+        if -atol <= cand <= 1.0 + atol:
+            clamped = max(0.0, min(1.0, float(cand)))
+            if not any(abs(clamped - v) <= 1e-9 for v in valid_candidates):
+                valid_candidates.append(clamped)
+
+    evaluated = [(h(a), abs(a - w1), a) for a in valid_candidates]
+    evaluated.sort(key=lambda x: (x[0], x[1], x[2]))
+    best_alpha = evaluated[0][2]
+    best_obj = evaluated[0][0]
+
+    coeffs = torch.tensor([best_alpha, 1.0 - best_alpha], dtype=g1.dtype, device=g1.device)
+    return AlphaSolution(
+        alpha=best_alpha,
+        coefficients=coeffs,
+        weighted_anchor=g0,
+        objective_value=best_obj,
+        candidate_count=len(valid_candidates),
+        singular_case=None,
+    )
+
+
+def cagrad_clip(
+    gradients: Sequence[Tensor],
+    weights: Tensor,
+    c: float,
+    atol: float = 1e-12,
+) -> CAGradResult:
+    grad_list = list(gradients)
+    if len(grad_list) != 2:
+        raise ValueError(f"cagrad_clip currently requires exactly 2 objective gradients, got {len(grad_list)}")
+
+    g1, g2 = grad_list[0], grad_list[1]
+    solution = solve_two_objective_alpha(g1, g2, weights, c, atol=atol)
+
+    coeffs = solution.coefficients
+    clipped_coeffs = torch.minimum(coeffs, weights)
+
+    clipped_coords: list[int] = []
+    for i in range(2):
+        if (coeffs[i] - clipped_coeffs[i]).item() > 1e-7:
+            clipped_coords.append(i)
+
+    mixture = coeffs[0] * g1 + coeffs[1] * g2
+    clipped_mixture = clipped_coeffs[0] * g1 + clipped_coeffs[1] * g2
+
+    norm_clipped_mix = torch.linalg.vector_norm(clipped_mixture).item()
+    norm_g0 = torch.linalg.vector_norm(solution.weighted_anchor).item()
+
+    if norm_clipped_mix <= atol:
+        gradient = solution.weighted_anchor
+    else:
+        gradient = solution.weighted_anchor + c * norm_g0 * (clipped_mixture / norm_clipped_mix)
+
+    return CAGradResult(
+        gradient=gradient,
+        weighted_anchor=solution.weighted_anchor,
+        coefficients=coeffs,
+        clipped_coefficients=clipped_coeffs,
+        mixture=mixture,
+        clipped_mixture=clipped_mixture,
+        clipped_coordinates=tuple(clipped_coords),
+        singular_case=solution.singular_case,
+    )
