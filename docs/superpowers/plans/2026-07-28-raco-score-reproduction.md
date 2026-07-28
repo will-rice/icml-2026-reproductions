@@ -16,28 +16,6 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
-## Controller Exact-Patch Recovery Gate — 2026-07-28, round 12
-
-Round 11 removed the recursive test and passed independent project review, but
-authoritative validation exposed that `.python-version` containing only
-`3.12` is not a deterministic interpreter pin. The worker environment selected
-3.12.11, while the attestor's fresh environment selected 3.12.13 and changed
-only `environment.python_version` in committed evidence. Validation therefore
-correctly refused a clean attestation.
-
-1. Change `.python-version` to the exact interpreter patch `3.12.11`, matching
-   the committed canonical evidence and the independently reviewed worker
-   environment.
-2. Strengthen the isolated evidence regression to require
-   `environment.python_version == "3.12.11"` rather than accepting any 3.12
-   patch. Keep both fresh environments and their byte comparison.
-3. Run evidence generation and the project test command from fresh external
-   environments and confirm that evidence remains byte-identical to the
-   committed bundle. Run root pytest, skill validation, pre-commit, and
-   `git diff --check`.
-4. Return one clean commit. Do not weaken or hard-code the generated evidence
-   record; it must continue to come from the interpreter that actually ran.
-
 ## Controller Validation Correction Gate — 2026-07-28, round 10
 
 Controller scientific review accepted proposal
