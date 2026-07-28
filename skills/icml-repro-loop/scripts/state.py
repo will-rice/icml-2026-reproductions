@@ -298,6 +298,22 @@ def main() -> None:
     _add_fence_arguments(submission_parser)
     submission_parser.add_argument("--snapshot-id", required=True)
     submission_parser.add_argument("--now")
+    release_parser = commands.add_parser(
+        "release-paper",
+        help="release one fenced scored or blocked paper-owner iteration",
+    )
+    release_parser.add_argument("path", type=Path)
+    _add_fence_arguments(release_parser)
+    release_parser.add_argument("--outcome", choices=("scored", "blocked"), required=True)
+    release_parser.add_argument("--now")
+    failure_parser = commands.add_parser(
+        "record-paper-owner-failure",
+        help="record one fenced paper-owner failure without releasing its lease",
+    )
+    failure_parser.add_argument("path", type=Path)
+    _add_fence_arguments(failure_parser)
+    failure_parser.add_argument("--error-type", required=True)
+    failure_parser.add_argument("--now")
     arguments = parser.parse_args()
 
     if arguments.command in {
@@ -324,6 +340,8 @@ def main() -> None:
         "attest-validation",
         "publish-deployment",
         "attest-submission",
+        "release-paper",
+        "record-paper-owner-failure",
     }:
         state = _run_v6_command(arguments)
     elif arguments.command == "migrate-v6":
@@ -540,6 +558,26 @@ def _run_v6_command(
         leases,
         store,
     )
+    if arguments.command == "release-paper":
+        import paper_owner
+
+        return paper_owner.release_paper(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.outcome,
+            now,
+        )
+    if arguments.command == "record-paper-owner-failure":
+        import paper_owner
+
+        return paper_owner.record_worker_failure(
+            paths,
+            arguments.attempt_id,
+            lease,
+            arguments.error_type,
+            now,
+        )
     if arguments.command == "run-worker":
         import worker_guard
 

@@ -259,17 +259,27 @@ def release_lease(
 ) -> Lease:
     """Release the current fence while retaining its monotonic token."""
     observed_at = _datetime(now)
-    released_at = _timestamp(observed_at)
     path = paths.resource_lease(lease.resource)
     with store._exclusive_lock(path):
-        current = _require_current(path, lease)
-        if _parse(current.expires_at) <= observed_at:
-            raise StaleFence(lease.resource)
-        if _parse(released_at) < _parse(current.acquired_at):
-            raise ValueError("now")
-        released = replace(current, released_at=released_at)
-        _write(path, asdict(released), validate_lease)
-        return released
+        return _release_held_fence(paths, lease, observed_at)
+
+
+def _release_held_fence(
+    paths: store.StatePaths,
+    lease: Lease,
+    observed_at: datetime,
+) -> Lease:
+    """Release a current lease while its resource lock is already held."""
+    released_at = _timestamp(observed_at)
+    path = paths.resource_lease(lease.resource)
+    current = _require_current(path, lease)
+    if _parse(current.expires_at) <= observed_at:
+        raise StaleFence(lease.resource)
+    if _parse(released_at) < _parse(current.acquired_at):
+        raise ValueError("now")
+    released = replace(current, released_at=released_at)
+    _write(path, asdict(released), validate_lease)
+    return released
 
 
 def assert_fence(
