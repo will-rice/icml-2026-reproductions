@@ -2,17 +2,23 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a deterministic CPU reproduction that independently checks all four admitted Success Conditioning claims on exact finite MDPs and analytic Beta-bandit instances.
+**Goal:** Build a deterministic CPU reproduction that independently checks all four admitted Success Conditioning claims with universal symbolic certificates, exact finite MDPs, and analytic Beta-bandit instances, while preserving source-locator discrepancies.
 
-**Architecture:** A paper-scoped Python project pins and verifies arXiv v2, computes finite-MDP truth with exact rational arithmetic, cross-checks success conditioning through an independent constrained optimizer and exhaustive controls, then emits schema-validated evidence and generated root pages. The five lanes are provenance, MDP semantics, trust-region optimality, identity/conservative improvement, and thresholding/evidence presentation.
+**Architecture:** A paper-scoped Python project pins and verifies arXiv v2, verifies a universal symbolic proof certificate for claims 1–3, computes finite-MDP truth with exact rational arithmetic, cross-checks success conditioning through an independent constrained optimizer and exhaustive controls, then emits schema-validated evidence and generated root pages. The symbolic certificate is independent of all bounded enumeration and SLSQP results.
 
-**Tech Stack:** Python 3.11+, `fractions.Fraction`, NumPy, SciPy, JSON Schema, pytest, Gradio, and uv.
+**Tech Stack:** Python 3.11+, `fractions.Fraction`, SymPy, NumPy, SciPy, JSON Schema, pytest, Gradio, and uv.
 
 ## Global Constraints
 
 - Attempt ID is `b2b5899c-43a1-4c91-8b1f-9122d746f4c6`; paper ID is `FEmXFeqYNZ`; assessed snapshot is `09017559ff2c5746f1a37458ba9a330bd4e18654ae9c3f873bb0785c76626199`.
 - The project path is exactly `submissions/success-conditioning-as-policy-improvement-the-optimization-problem-solved-by-imitating-success`.
 - Preserve the four ordered target claims and hashes from the design verbatim.
+- Do not repair the fourth claim string: it says Section 5, while pinned v2
+  places return thresholding in Section 7, Proposition 7.1, and Section 7.3.
+  Record both locators, expose the mismatch on every root page, and combine it
+  with the derived substantive status: `supported + mismatch -> mixed`,
+  `not_supported + mismatch -> not_supported`, and
+  `inconclusive + mismatch -> inconclusive`.
 - Pin `arxiv:2601.18175v2` PDF bytes: byte count `652921`, SHA-256 `f9194e48cadf5c13307eb6a523ed20e4fb787856b1fc8b19e4f628a8ac3ad672`, CC BY 4.0.
 - Never use paper prose, printed values, Figure 2 pixels, or another contributor's outputs as reproduced measurements.
 - Use exact `Fraction` truth decisions. Floating point is restricted to the independent optimizer, Beta special functions, tolerances, and rendering.
@@ -90,7 +96,7 @@ Use:
 name = "success-conditioning-formal-evidence"
 version = "0.1.0"
 requires-python = ">=3.11"
-dependencies = ["gradio>=5.0", "jsonschema>=4.25", "numpy>=2.0", "scipy>=1.14"]
+dependencies = ["gradio>=5.0", "jsonschema>=4.25", "numpy>=2.0", "scipy>=1.14", "sympy>=1.13"]
 
 [project.scripts]
 success-conditioning-repro = "success_conditioning_repro.cli:main"
@@ -116,7 +122,10 @@ TRANSCRIPTION_KEYS = {
 
 Required records cover Definition 3.1, Proposition 4.1, Definition 4.2,
 Propositions 4.3 and 4.4, Corollary 4.5, Proposition 7.1, and the Section 7.3
-Beta construction.
+Beta construction. The manifest also contains a closed locator-reconciliation
+record with the immutable challenge locator `Section 5`, pinned-v2 content
+locator `Section 7`, identity locator `Proposition 7.1`, example locator
+`Section 7.3`, and `locator_status: mismatch`.
 
 Define shared file-backed fixtures in `tests/conftest.py`:
 
@@ -258,17 +267,80 @@ git add "$PROJECT"
 git commit -m "feat(success-conditioning): add exact finite MDP semantics"
 ```
 
-### Task 3: Independent trust-region optimization
+### Task 3: Universal symbolic certificate and independent trust-region optimization
 
 **Files:**
+- Create: `submissions/success-conditioning-as-policy-improvement-the-optimization-problem-solved-by-imitating-success/src/success_conditioning_repro/proofs.py`
 - Create: `submissions/success-conditioning-as-policy-improvement-the-optimization-problem-solved-by-imitating-success/src/success_conditioning_repro/trust_region.py`
+- Test: `submissions/success-conditioning-as-policy-improvement-the-optimization-problem-solved-by-imitating-success/tests/test_proofs.py`
 - Test: `submissions/success-conditioning-as-policy-improvement-the-optimization-problem-solved-by-imitating-success/tests/test_trust_region.py`
 
 **Interfaces:**
-- Produces: `TrustRegionProblem`, `SolverResult`, `build_trust_region_problem`, `solve_trust_region`, `relative_objective_gap`, `kkt_residuals`, and `exhaustive_bandit_bound`.
+- Produces: `UniversalCertificate`, `build_universal_certificate`,
+  `verify_universal_certificate`, `TrustRegionProblem`, `SolverResult`,
+  `build_trust_region_problem`, `solve_trust_region`,
+  `relative_objective_gap`, `kkt_residuals`, and
+  `exhaustive_bandit_bound`.
 - Consumes: `FiniteMDP`, `Evaluation`, `Policy`, and exact occupancy functions from Task 2.
 
-- [ ] **Step 1: Write the failing blind-optimizer test**
+- [ ] **Step 1: Write failing universal-certificate tests**
+
+```python
+def test_claims_one_through_three_have_universal_certificates():
+    certificate = build_universal_certificate()
+    verify_universal_certificate(certificate)
+    assert certificate.claim_ids == (1, 2, 3)
+    assert certificate.fixture_values == ()
+    assert certificate.numerical_tolerances == ()
+    assert certificate.rules_used >= {
+        "weighted_cauchy_schwarz",
+        "kkt",
+        "sum_of_squares",
+        "policy_improvement",
+    }
+
+def test_symbolic_certificate_rejects_changed_radius():
+    certificate = dataclasses.replace(
+        build_universal_certificate(), trust_region_radius="wrong_radius"
+    )
+    with pytest.raises(ValueError, match="radius"):
+        verify_universal_certificate(certificate)
+```
+
+Run:
+
+```bash
+uv run --project "$PROJECT" python -m pytest tests/test_proofs.py -q
+```
+
+Expected: import failure for `success_conditioning_repro.proofs`.
+
+- [ ] **Step 2: Implement and verify the universal proof certificate**
+
+Use formal indexed finite sums over arbitrary finite states and each state's
+active behavior support, with premises `d_s >= 0`, `p_{s,i} > 0`,
+`sum_i p_{s,i} = 1`, `0 <= q_{s,i} <= 1`, and
+`v_s = sum_i p_{s,i} q_{s,i} > 0`. The certificate verifier must independently
+reduce and check:
+
+1. `pi_plus_{s,i} = p_{s,i} q_{s,i} / v_s`, normalization, and support
+   inclusion.
+2. The aggregate state/action weighted Cauchy–Schwarz trust-region upper bound
+   and equality case, plus generic-coordinate KKT primal feasibility, dual
+   feasibility, stationarity, and complementary slackness at `pi_plus`.
+3. Independent normal forms for relative improvement,
+   `chi2(pi_plus || p)`, and action influence, all equal to
+   `sum_i p_{s,i} (q_{s,i}-v_s)^2 / v_s^2` at each state.
+4. Nonnegative advantage as an explicit weighted sum of squares and the
+   finite-MDP policy-improvement implication used by claim 3.
+
+SymPy may canonicalize exact symbolic expressions, but the project-owned
+certificate verifier must check the premises and every inference rule. It must
+reject missing premises, reversed divergence arguments, changed exponents,
+changed radius, or an unsigned inequality. No fixture, seed, SLSQP result,
+paper conclusion, or tolerance may enter this certificate.
+
+- [ ] **Step 3: Write the failing blind-optimizer test**
 
 ```python
 def test_blind_solver_recovers_success_conditioned_optimum():
@@ -282,7 +354,7 @@ def test_blind_solver_recovers_success_conditioned_optimum():
     assert relative_objective_gap(problem, result.policy, expected) <= 1e-8
 ```
 
-- [ ] **Step 2: Run the red test and record it**
+- [ ] **Step 4: Run the red optimizer test and record it**
 
 Run:
 
@@ -292,22 +364,26 @@ uv run --project "$PROJECT" python -m pytest tests/test_trust_region.py -q
 
 Expected: import failure for `trust_region`.
 
-- [ ] **Step 3: Implement problem construction without importing conditioning**
+- [ ] **Step 5: Implement problem construction without importing conditioning or proofs**
 
 `trust_region.py` may import evaluation and occupancy interfaces, but must not
-import or call `condition_on_success`. Flatten state-action variables in
+import or call `condition_on_success`, `proofs`, or the symbolic certificate.
+Flatten state-action variables in
 canonical order, add one simplex equality per state, nonnegative bounds, and
 the aggregate chi-squared inequality.
 
-- [ ] **Step 4: Implement eight-start SLSQP and KKT diagnostics**
+- [ ] **Step 6: Implement eight-start SLSQP and KKT diagnostics**
 
 Use deterministic starts: behavior policy, uniform-on-support, and six seeded
 Dirichlet vectors. Record raw status, iterations, objective, constraint value,
 simplex residual, projected stationarity residual, and policy. Any failed
-start remains visible; canonical acceptance requires at least one successful
-solution and no successful solution exceeding the expected optimum tolerance.
+start remains visible. At least one feasible converged solution within the
+expected optimum tolerance supplies positive numerical corroboration; complete
+solver failure yields `inconclusive`, while a feasible converged solution that
+exceeds the expected optimum supplies a potential `not_supported`
+counterexample. Neither scientific outcome aborts serialization.
 
-- [ ] **Step 5: Add exhaustive rational-grid bandit controls**
+- [ ] **Step 7: Add exhaustive rational-grid bandit controls**
 
 For two- and three-arm bandits, enumerate probability vectors on denominator
 `200`, retain feasible points, and assert none beats the analytical objective
@@ -315,19 +391,20 @@ beyond the grid upper-bound allowance. Add mutations for half radius, wrong
 occupancy, and reverse chi-squared arguments; each must change or invalidate
 the claimed optimizer.
 
-- [ ] **Step 6: Run the focused suite**
+- [ ] **Step 8: Run the independent proof and numerical suites**
 
 ```bash
-uv run --project "$PROJECT" python -m pytest tests/test_trust_region.py -q
+uv run --project "$PROJECT" python -m pytest tests/test_proofs.py tests/test_trust_region.py -q
 ```
 
-Expected: PASS across 64 solver fixtures and 128 exhaustive bandits.
+Expected: the universal certificate passes without fixture inputs or
+tolerances, independently of 64 SLSQP fixtures and 128 exhaustive bandits.
 
-- [ ] **Step 7: Commit the trust-region lane**
+- [ ] **Step 9: Commit the symbolic and numerical trust-region lanes**
 
 ```bash
 git add "$PROJECT"
-git commit -m "feat(success-conditioning): verify trust-region optimum"
+git commit -m "feat(success-conditioning): certify trust-region optimum"
 ```
 
 ### Task 4: Triple identity and conservative-improvement certificates
@@ -426,6 +503,14 @@ def test_threshold_sweep_contains_amplification_and_harm():
     assert result.maximum_proxy_gain > result.faithful_gain
     assert result.minimum_proxy_gain < 0
     assert result.maximum_proxy_identity_residual <= 1e-10
+
+def test_pinned_v2_locator_mismatch_is_preserved():
+    result = beta_threshold_sweep(31, tuple(i / 1000 for i in range(1, 1000)))
+    assert result.challenge_locator == "Section 5"
+    assert result.source_locator == "Section 7"
+    assert result.identity_locator == "Proposition 7.1"
+    assert result.example_locator == "Section 7.3"
+    assert result.locator_status == "mismatch"
 ```
 
 - [ ] **Step 2: Run the red test and record it**
@@ -446,13 +531,18 @@ policies and the action-influence/alignment terms independently.
 
 - [ ] **Step 4: Verify Proposition 7.1 and population robustness**
 
-Run seeds `0..63` and thresholds `0.001..0.999`. Require finite values, identity
-residual at most `1e-10`, and both regimes in at least 60 seeds. Persist every
-arm parameter and threshold row. Do not use Figure 2 coordinates.
+Run seeds `0..63` and thresholds `0.001..0.999`. Require finite values for a
+well-formed record and persist every arm parameter and threshold row. Derive
+substantive `supported` only when the identity residual is at most `1e-10` and
+both regimes occur in at least 60 seeds; a complete null or counterexample is
+`not_supported`, while an incomplete valid domain is `inconclusive`. Do not use
+Figure 2 coordinates.
 
 - [ ] **Step 5: Add negative controls and run focused tests**
 
-Swap the Beta tail for its CDF and assert the identity/regime acceptance fails.
+Swap the Beta tail for its CDF and assert that the resulting valid negative
+control is serialized with a derived non-supporting status rather than
+discarded or treated as an integrity failure.
 Run:
 
 ```bash
@@ -477,9 +567,10 @@ git commit -m "feat(success-conditioning): reproduce threshold tradeoff"
 - Test: `submissions/success-conditioning-as-policy-improvement-the-optimization-problem-solved-by-imitating-success/tests/test_evidence.py`
 
 **Interfaces:**
-- Produces: `build_evidence`, `validate_evidence`, CLI commands `recompute`,
-  `validate`, and `render`.
-- Consumes: all five scientific lanes and file-backed provenance.
+- Produces: `derive_claim_status`, `combine_threshold_status`,
+  `assemble_evidence`, `build_evidence`, `validate_evidence`, and CLI commands
+  `recompute`, `validate`, and `render`.
+- Consumes: all six lanes and file-backed provenance.
 
 - [ ] **Step 1: Write failing schema and tamper tests**
 
@@ -489,7 +580,56 @@ def test_complete_evidence_is_file_backed_and_semantically_valid(
 ):
     evidence = build_evidence(tmp_path, pinned_pdf)
     validate_evidence(tmp_path / "evidence.json", schema_path, tmp_path)
-    assert [c["local_status"] for c in evidence["claims"]] == ["supported"] * 4
+    assert all(
+        claim["local_status"]
+        in {"supported", "mixed", "not_supported", "inconclusive"}
+        for claim in evidence["claims"]
+    )
+    threshold_claim = evidence["claims"][3]
+    assert threshold_claim["locator_status"] == "mismatch"
+    assert threshold_claim["local_status"] == combine_threshold_status(
+        threshold_claim["substantive_status"],
+        threshold_claim["locator_status"],
+    )
+    assert "Section 5" in threshold_claim["limitations"][0]
+    assert "Section 7" in threshold_claim["limitations"][0]
+
+def test_exact_counterexample_is_serialized_not_supported(
+    tmp_path, schema_path, valid_provenance
+):
+    lanes = complete_lane_fixture()
+    lanes["claim_2"]["exact_violations"] = [statewise_counterexample()]
+    evidence = assemble_evidence(lanes, valid_provenance, tmp_path)
+    validate_evidence(tmp_path / "evidence.json", schema_path, tmp_path)
+    assert evidence["claims"][1]["local_status"] == "not_supported"
+    assert evidence["claims"][1]["counterexamples"]
+
+def test_solver_failure_is_serialized_inconclusive(
+    tmp_path, schema_path, valid_provenance
+):
+    lanes = complete_lane_fixture()
+    lanes["claim_1"]["solver_starts"] = all_failed_solver_starts()
+    lanes["claim_1"]["exact_counterexamples"] = []
+    evidence = assemble_evidence(lanes, valid_provenance, tmp_path)
+    validate_evidence(tmp_path / "evidence.json", schema_path, tmp_path)
+    assert evidence["claims"][0]["local_status"] == "inconclusive"
+    assert evidence["claims"][0]["solver_starts"]
+
+def test_complete_threshold_null_is_not_supported_not_forced_mixed(
+    tmp_path, schema_path, valid_provenance
+):
+    lanes = complete_lane_fixture()
+    lanes["claim_4"].update(
+        complete=True,
+        amplification_seed_count=0,
+        harmful_seed_count=0,
+        substantive_status="not_supported",
+    )
+    evidence = assemble_evidence(lanes, valid_provenance, tmp_path)
+    validate_evidence(tmp_path / "evidence.json", schema_path, tmp_path)
+    claim = evidence["claims"][3]
+    assert claim["locator_status"] == "mismatch"
+    assert claim["local_status"] == "not_supported"
 
 def test_case_tampering_is_rejected(tmp_path, pinned_pdf, schema_path):
     build_evidence(tmp_path, pinned_pdf)
@@ -520,8 +660,15 @@ Top-level evidence keys are exactly:
 
 Each claim binds exact text and hash, names its independent computation,
 records `local_status`, expected observation, actual summary, case pointers,
-and limitations. Reject reduced counts, reordered claims, missing negative
-controls, and unaccepted scientific-lane results.
+and limitations. Claims 1–3 additionally point to the validated universal
+certificate and its inference records. Claim 4 records separate substantive
+and locator statuses and combines them with the fixed status table; the
+renderer never chooses a status. Accept and serialize complete scientific
+counterexamples, null effects, and solver failures as `not_supported` or
+`inconclusive`. Reject only malformed/integrity-invalid evidence: reduced
+counts, reordered claims, missing required records or negative controls,
+nonfinite values, invalid schemas, bad hashes, or malformed/tampered proof
+certificates.
 
 - [ ] **Step 4: Implement stable serialization and deterministic archive**
 
@@ -590,7 +737,12 @@ Validate evidence before rendering. Root pages show source pin, exact commands,
 four claim cards, domain counts, tolerances, negative controls, limitations,
 and per-value JSON pointers. The safety wording must say the computation
 checks the finite-MDP chi-squared movement bound and does not establish general
-deployment safety.
+deployment safety. The fourth card must show the immutable challenge wording
+unchanged, render the serialized substantive, locator, and aggregate statuses
+without overriding them, and state prominently that “Section 5” is the
+challenge locator while pinned v2 places the content in Section 7,
+Proposition 7.1, and Section 7.3. Rendering tests cover `mixed`,
+`not_supported`, and `inconclusive` claim-4 fixtures.
 
 - [ ] **Step 4: Implement the bounded CPU app**
 
