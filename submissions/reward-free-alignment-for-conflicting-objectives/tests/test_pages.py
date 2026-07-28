@@ -106,3 +106,27 @@ def test_readme_frontmatter_python_version(project_root):
 
     assert python_ver is not None, "README frontmatter missing 'python_version'"
     assert python_ver == "3.12", f"python_version must be '3.12', got '{python_ver}'"
+
+
+def test_readme_frontmatter_sdk_version(project_root):
+    readme_path = project_root / "README.md"
+    content = readme_path.read_text(encoding="utf-8")
+    assert content.startswith("---")
+    parts = content.split("---", 2)
+    assert len(parts) >= 3, "README must contain frontmatter enclosed in ---"
+    frontmatter = parts[1]
+
+    sdk_ver = None
+    for line in frontmatter.splitlines():
+        line = line.strip()
+        if line.startswith("sdk_version:"):
+            sdk_ver = line.split(":", 1)[1].strip()
+            if (sdk_ver.startswith('"') and sdk_ver.endswith('"')) or (
+                sdk_ver.startswith("'") and sdk_ver.endswith("'")
+            ):
+                sdk_ver = sdk_ver[1:-1]
+            break
+
+    assert sdk_ver is not None, "README frontmatter missing 'sdk_version'"
+    assert sdk_ver == "6.20.0", f"sdk_version must be '6.20.0', got '{sdk_ver}'"
+
