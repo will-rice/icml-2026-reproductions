@@ -1,0 +1,57 @@
+{
+  "paper_id": "7UEBX1KU1y",
+  "upstream_revision": "arxiv:2605.20834v1",
+  "paper": {
+    "title": "On the Conditional Equivalence of DPO and RLHF: Assumptions, Failure Modes, and Provable Alignment",
+    "arxiv_id": "2605.20834v1",
+    "abstract_url": "https://arxiv.org/abs/2605.20834v1",
+    "pdf_url": "https://arxiv.org/pdf/2605.20834v1.pdf",
+    "eprint_url": "https://arxiv.org/e-print/2605.20834v1",
+    "license": "CC-BY-4.0",
+    "repository_url": "https://github.com/visitworld123/CPO"
+  },
+  "claims": [
+    {
+      "challenge_claim": "The paper proves DPO-RLHF equivalence is conditional on the RLHF-optimal policy preferring human-preferred responses (Section 3).",
+      "challenge_claim_sha256": "588c9334124771dc2ff7fc51494f4328329ab13dc21d4522a0e91b6f6417240a",
+      "target_claim": "conditional-equivalence-derivation",
+      "targeted": true,
+      "equations": ["3", "5", "8", "33-43"]
+    },
+    {
+      "challenge_claim": "When the equivalence assumption fails, DPO optimizes relative advantage over the reference policy rather than absolute human-preference alignment (Section 3).",
+      "challenge_claim_sha256": "4820743d0eac6cc30b4a75d2be41f49193b0ea4ad4168bea2200a9f16cc77a86",
+      "target_claim": "relative-advantage-optimization",
+      "targeted": true,
+      "equations": ["5", "8", "35"]
+    },
+    {
+      "challenge_claim": "The paper characterizes undesirable solution spaces in which policies reduce DPO loss while preferring dispreferred responses (Section 3).",
+      "challenge_claim_sha256": "6c26fe711e2f10b44cb933b89b12982fef3cf3bcc760668a0b0fa9d15e1965dc",
+      "target_claim": "undesirable-solution-space",
+      "targeted": true,
+      "equations": ["8", "35"]
+    },
+    {
+      "challenge_claim": "Constrained Preference Optimization augments RLHF with constraints and derives a stationary DPO-like loss with an adaptive reference-based margin (Section 4.3).",
+      "challenge_claim_sha256": "a80267886061211c131041549df22264e0c713a9759a76f0ab37bac69a436af1",
+      "target_claim": "cpo-stationary-margin-derivation",
+      "targeted": true,
+      "equations": ["10-19", "21", "59-74"]
+    },
+    {
+      "challenge_claim": "The paper gives a soft-margin ranking interpretation showing DPO can implement margin ranking with potentially negative targets (Section 5).",
+      "challenge_claim_sha256": "7d797875f18478f305a8dc08d860a29ba4f15c3b97fb4c9d41e55363975553be",
+      "target_claim": "soft-margin-ranking-interpretation",
+      "targeted": true,
+      "equations": ["27-28", "120-131"]
+    },
+    {
+      "challenge_claim": "Experiments on standard benchmarks report state-of-the-art performance for CPO (Section 6).",
+      "challenge_claim_sha256": "8df1fece656f02adbdf85fb78bc8993591f1abc9ee78c957388ab4b4eac37dcd",
+      "target_claim": null,
+      "targeted": false,
+      "equations": []
+    }
+  ]
+}
