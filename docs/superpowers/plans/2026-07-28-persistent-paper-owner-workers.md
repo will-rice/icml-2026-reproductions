@@ -39,6 +39,83 @@
 
 ---
 
+### Task 0: Remove the Stale Unattested Improvement Test Path
+
+**Files:**
+- Modify: `tests/test_repro_loop_scheduler.py`
+
+**Interfaces:**
+- Consumes: `attempts.transition_attested(..., phase="improving")` with a
+  persisted `kind="verdict"` attestation.
+- Produces: a clean baseline that no longer models the removed generic
+  `judging -> improving` path.
+
+- [ ] **Step 1: Confirm the two stale tests fail for the intended reason**
+
+```bash
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache uv run pytest -q \
+  'tests/test_repro_loop_scheduler.py::test_second_judgment_archives_superseded_first_round'
+```
+
+Expected: both parameterizations fail with `ValueError: attestation` because
+the test calls generic `transition_attempt(..., "improving")`.
+
+- [ ] **Step 2: Replace the obsolete transition with exact verdict authority**
+
+In `test_second_judgment_archives_superseded_first_round`, replace the generic
+transition with:
+
+```python
+    verdict_record = {
+        "kind": "verdict",
+        "attempt_id": assignment.attempt_id,
+        "attempt_number": 1,
+        "observed_at": (now + timedelta(minutes=2)).isoformat(),
+        "source_commit": "abc123",
+        "payload_sha256": "1" * 64,
+    }
+    add_attestation_fields(verdict_record)
+    verdict_attestation_id = scheduler.attempts.attestations.persist(
+        paths, verdict_record
+    )
+    scheduler.attempts.transition_attested(
+        paths,
+        assignment.attempt_id,
+        "improving",
+        verdict_attestation_id,
+        {
+            "improvement_attempts": 1,
+            "improvement_reason": (
+                "official verdict requested stronger evidence"
+            ),
+        },
+        assignment.writer_lease,
+        now + timedelta(minutes=2),
+    )
+```
+
+Do not add a compatibility route to production code. The removed unattested
+transition must remain rejected.
+
+- [ ] **Step 3: Run the focused test and full baseline**
+
+```bash
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache uv run pytest -q \
+  'tests/test_repro_loop_scheduler.py::test_second_judgment_archives_superseded_first_round'
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache uv run pytest -q \
+  --ignore=submissions/nape
+```
+
+Expected: focused test passes both parameterizations; full baseline passes all
+878 tests.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add tests/test_repro_loop_scheduler.py
+git commit -m "test: require verdict authority for improvement"
+```
+
 ### Task 1: Lock the Persistent Skill Contract With Failing Tests
 
 **Files:**
