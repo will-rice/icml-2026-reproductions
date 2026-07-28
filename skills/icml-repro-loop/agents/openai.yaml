@@ -1,4 +1,4 @@
 interface:
   display_name: "ICML Reproduction Loop"
   short_description: "Run low-compute ICML paper reproductions end to end"
-  default_prompt: "Select and execute the next evidence-first ICML 2026 reproduction."
+  default_prompt: "Use icml-repro-loop directly to own one paper through guarded implementation, validation, publish, submission, watch, correction, and official score."

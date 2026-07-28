@@ -8,9 +8,26 @@ description: Use when selecting, reproducing, submitting, improving, or continuo
 Maintain up to 20 independent paper attempts. Only recomputed outputs support
 claims, and only controller attestations support external lifecycle phases.
 
+## Direct Dispatch Contract
+
+When a top-level agent is dispatched with “use `icml-repro-loop`,” that agent
+is a **paper-owner controller** for exactly one attempt. Use `icml-repro-loop` directly and own the paper through selection, design,
+guarded implementation, controller validation, Space publication, submission,
+official-verdict watching, evidence-driven correction, and `sync-verdict`.
+
+Worker exit is not completion. Space deployment is not completion. Submission
+is not completion. A direct invocation returns success only after importing
+the exact official verdict, or returns blocked only after persisting a genuine
+deadline/authority/feasibility blocker.
+
+Follow [paper-owner-loop.md](references/paper-owner-loop.md) for mandatory
+event reactions. Do not wait for a user status request between phases.
+
 ## Worker Or Controller?
 
-Decide before any tool call.
+The directly dispatched agent is the paper-owner controller. It may launch a
+separate guarded paper worker for code generation. “Paper worker” below means
+only that credential-free subprocess, never the top-level paper owner.
 
 - A **paper worker** is an untrusted proposal producer. It may inspect public
   sources and edit one assigned paper worktree after the controller guard
@@ -37,6 +54,11 @@ boundary. An unenforceable runtime may receive only a read-only research
 contract.
 
 ### Controller recipe
+
+The paper-owner controller remains active after `run-worker`. It must inspect
+the exit event, validate or issue a concrete correction, publish, submit,
+watch, and improve the same attempt until the direct-dispatch termination
+condition is met.
 
 The controller must use the dedicated command that owns each assertion:
 
@@ -99,18 +121,24 @@ success.
    Hub/GitHub credentials, disable Hugging Face implicit-token loading, run the
    guard preflight, and launch only with fenced `state.py run-worker`.
    `implementing` launches are implementation sessions; `improving` launches
-   are correction sessions.
+   are correction sessions. `run-worker` → inspect exit telemetry immediately →
+   controller validation or concrete correction relaunch → publish → fresh live
+   submission observation → watch → improve on an official deficiency or sync
+   the exact verdict.
 5. Treat the worker result as a proposal. Review its diff and use
    `attest-validation`; worker-reported tests or local JSON cannot advance the
-   phase.
+   phase. Run `score-report` and emit the capacity event after worker exit and
+   controller validation.
 6. Use `publish-deployment`. Require the allowlisted owner, dedicated Space,
    exact paper and challenge tags, exact attested SHA, and `RUNNING` runtime.
    `CONFIG_ERROR`, wrong SHA, missing tag, or a healthy-looking UI is not a
-   deployment attestation.
+   deployment attestation. Run `score-report` and emit the capacity event after
+   the deployment outcome.
 7. Fetch a new assessed snapshot and use `attest-submission`. Space existence
    does not prove submission. Another contributor's reproduction does not
    block our distinct Space. Reject a duplicate local attempt or a second
-   canonical Space for the paper under the allowlisted publishing owner.
+   canonical Space for the paper under the allowlisted publishing owner. Run
+   `score-report` and emit the capacity event after submission.
 8. Use `watch-attempt` with a finite positive poll limit and aware deadline.
    Persist observations through `record-poll`. Submitted, judging, and blocked
    attempts do not consume runnable implementation capacity: refill their
@@ -119,7 +147,8 @@ success.
 9. Use `sync-verdict` with only a fresh immutable snapshot ID. It verifies exact
    paper, Space, deployed SHA, verdict dataset revision, judged timestamp, and
    claim bindings. Preserve official `verified`, `falsified`, `toy`, and
-   `inconclusive` exactly.
+   `inconclusive` exactly. Run `score-report` and emit the capacity event after
+   verdict import.
 10. Before trusting pre-hardening history, run `audit-authority` read-only,
     inspect every decision, then use `--repair` to quarantine unsupported
     completions. Repair never modifies external Spaces.
