@@ -719,14 +719,31 @@ def test_second_judgment_archives_superseded_first_round(
         finalized,
         scheduler.validate_judgment_record,
     )
-    scheduler.attempts.transition_attempt(
+    verdict_record = {
+        "kind": "verdict",
+        "attempt_id": assignment.attempt_id,
+        "attempt_number": 1,
+        "observed_at": (now + timedelta(minutes=2)).isoformat(),
+        "source_commit": "abc123",
+        "payload_sha256": "1" * 64,
+    }
+    add_attestation_fields(verdict_record)
+    verdict_attestation_id = scheduler.attempts.attestations.persist(
+        paths, verdict_record
+    )
+    scheduler.attempts.transition_attested(
         paths,
         assignment.attempt_id,
         "improving",
+        verdict_attestation_id,
+        {
+            "improvement_attempts": 1,
+            "improvement_reason": (
+                "official verdict requested stronger evidence"
+            ),
+        },
         assignment.writer_lease,
         now + timedelta(minutes=2),
-        improvement_attempts=1,
-        improvement_reason="official verdict requested stronger evidence",
     )
     scheduler.attempts.update_attempt(
         paths,
