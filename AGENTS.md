@@ -21,19 +21,27 @@ paper-reported values as reproduced measurements.
 - `docs/REMOTE_SETUP.md`: host prerequisites, authentication checks, skill
   installation, and verification commands.
 
-## Trust Boundary
+## Persistent Paper-Owner Authority
 
-Paper workers are untrusted proposal producers. They may write only the
-controller-assigned paper worktree/project after
-`skills/icml-repro-loop/scripts/worker_guard.py` has constructed the launch and
-its runtime preflight has passed. They never receive Hub credentials or write
-the coordinator state, skill source, another submission, or controller
-documents. They do not deploy, submit, poll, import verdicts, merge, or claim
-external phases.
+Directly dispatched persistent paper-owner workers are trusted controllers.
+Each owns one current fenced paper at a time, uses `claim-next` for each
+iteration, and may use controller credentials only for the exact lifecycle of
+its current fenced attempt. That includes validation, external service
+mutations, live observations, Hub publication, submission, bounded verdict
+watching, correction, exact official-verdict import, authority repair, and
+`release-paper`. Submitted and judging attempts remain dedicated; only an
+exactly scored or genuinely blocked release allows the next `claim-next`.
 
-The controller alone validates proposals, mutates external services, records
-live observations, imports official verdicts, repairs authority, and integrates
-branches. Full host permissions do not transfer that authority to a worker.
+## Subordinate Implementation Subprocess Boundary
+
+An optional subordinate implementation subprocess is not the dispatched
+worker. It is an untrusted proposal producer that may write only the
+paper-owner-assigned worktree/project after
+`skills/icml-repro-loop/scripts/worker_guard.py` constructs the launch and its
+runtime preflight passes. It never receives Hub or controller credentials and
+cannot write coordinator state, skill source, another submission, or controller
+documents. It does not deploy, submit, poll, import verdicts, merge, release,
+or claim external phases. Full host permissions do not transfer this authority.
 
 ## Workflow
 
@@ -55,10 +63,13 @@ branches. Full host permissions do not transfer that authority to a worker.
    drift, discard it and restart from a new raw snapshot.
 4. Pass the assessed immutable snapshot ID to one bounded scheduler pass; no
    state command other than `refresh-live` uses the network.
-5. Maintain up to 20 runnable paper attempts. A complete or blocked attempt
-   frees capacity; a blocker remains attached only to its attempt and is never
-   auto-abandoned.
-6. Give each implementation agent one current two-hour writer lease. Renew it
+5. A persistent paper-owner worker owns one current paper at a time. It does
+   not select another paper while submitted or judging; scored or blocked
+   release ends its iteration. A blocker remains attached to a reclaimable
+   attempt and is never auto-abandoned.
+6. Give each persistent paper-owner worker one current two-hour writer lease.
+   Any optional subordinate implementation subprocess works only under the
+   guarded contract and never owns lifecycle authority. Renew the lease
    before expiry with `renew-attempt`; after expiry or release, only a successor
    may use `claim-attempt` with the exact predecessor token. Every reclaim
    increments the fence, so the stale owner can never write again.
@@ -80,8 +91,9 @@ branches. Full host permissions do not transfer that authority to a worker.
    Antigravity subscription use records USD 0.00.
 16. Persist every material milestone, next action, and blocker in the affected
    attempt shard; snapshots and judgment shards retain live provenance.
-17. Treat every worker result as a proposal. Require immutable controller
-    attestations from `attest-validation`, `publish-deployment`,
+17. Treat every subordinate implementation subprocess result as a proposal.
+    Require immutable persistent-paper-owner-controller attestations from
+    `attest-validation`, `publish-deployment`,
     `attest-submission`, `watch-attempt`, and `sync-verdict` for the
     corresponding phases.
 

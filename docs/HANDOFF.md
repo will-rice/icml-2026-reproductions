@@ -130,3 +130,18 @@ uv run pytest -q
 uv run "$CODEX_HOME/skills/.system/skill-creator/scripts/quick_validate.py" skills/icml-repro-loop
 uv run pre-commit run -a
 ```
+
+## 2026-07-28 Persistent Paper-Owner Operating Model
+
+Direct dispatch creates a trusted persistent paper-owner worker. The owner uses
+`claim-next` for one current fenced paper, completes its full lifecycle with
+controller credentials, and remains dedicated through submission and judging.
+It imports the exact official verdict then calls
+`release-paper --outcome scored`, or persists and notifies a genuine external
+blocker then calls `release-paper --outcome blocked`; either release permits
+the next iteration. A blocked release remains
+active and reclaimable with its history, fresh assessed immutable snapshot, and
+fresh fencing token. An optional subordinate implementation subprocess is not
+the dispatched worker: it is credential-free, worktree-scoped, and
+proposal-only. Historical evidence and exact attestation/verdict requirements
+remain unchanged.
