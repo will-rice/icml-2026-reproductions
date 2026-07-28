@@ -20,44 +20,14 @@ def smooth_nonnegative_quadratic_case() -> SmoothObjectiveCase:
     Two-objective nonneg quadratic:
       f1(x) = x^2, f2(x) = (x-1)^2
       L1 = 2, L2 = 2, w = [0.6, 0.4], L_w = 2.0
-      grad f1 = 2x, grad f2 = 2(x-1)
-      L_w(x) = 0.6*x^2 + 0.4*(x-1)^2
-
-    Starting at x0=1.0:
-      L_w(1.0) = 0.6*1 + 0.4*0 = 0.6
-      g1 = 2.0, g2 = 0.0
-      g0 = 0.6*2.0 + 0.4*0.0 = 1.2
-      With c=0.4, compute CAGrad update direction, then step.
-      x1 = x0 - eta * g_update
     """
-    x0 = 1.0
-    eta = 0.1
-    c_rad = 0.4
-    w = tensor([0.6, 0.4])
-
-    # Execute one step
-    g1_val = 2.0 * x0  # grad f1 at x0
-    g2_val = 2.0 * (x0 - 1.0)  # grad f2 at x0
-    g0_val = 0.6 * g1_val + 0.4 * g2_val  # weighted anchor
-    # For 1D: CAGrad with c=0.4 just gives g = g0 + c*|g0|*sign(p_mix)
-    # The update is g0 direction (scalar), so gradient = g0 * (1 + c) or similar
-    # Simplify: use g0 directly for the step (conservative)
-    g_update = g0_val  # In 1D with single dominant gradient, CAGrad ~ g0
-    x1 = x0 - eta * g_update
-
-    L_w_x0 = 0.6 * x0**2 + 0.4 * (x0 - 1.0)**2
-    L_w_x1 = 0.6 * x1**2 + 0.4 * (x1 - 1.0)**2
-    grad_norm = abs(g0_val)
-
-    return SmoothObjectiveCase(
-        weights=w,
+    return execute_raco_trajectory(
+        x0=1.0,
+        T=1,
+        eta=0.1,
+        c=0.4,
+        weights=tensor([0.6, 0.4]),
         smoothness_constants=(2.0, 2.0),
-        weighted_smoothness=2.0,
-        step_size=eta,
-        correction_radius=c_rad,
-        initial_loss=L_w_x0,
-        final_loss=L_w_x1,
-        grad_norm=grad_norm,
     )
 
 

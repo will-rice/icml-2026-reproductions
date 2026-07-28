@@ -201,9 +201,23 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
     if not raw_artifacts:
         raise IntegrityError("Empty artifact list: manifest must contain pinned upstream artifacts")
 
-    verified: list[VerifiedArtifact] = []
+    # Pass 1: duplicate ID and path check across all entries
     seen_ids: set[str] = set()
     seen_paths: set[str] = set()
+    for item in raw_artifacts:
+        if isinstance(item, dict):
+            art_id = item.get("artifact_id")
+            rel_p = item.get("relative_path")
+            if isinstance(art_id, str) and art_id in seen_ids:
+                raise IntegrityError(f"Duplicate artifact_id: {art_id}")
+            if isinstance(rel_p, str) and rel_p in seen_paths:
+                raise IntegrityError(f"Duplicate artifact path: {rel_p}")
+            if isinstance(art_id, str):
+                seen_ids.add(art_id)
+            if isinstance(rel_p, str):
+                seen_paths.add(rel_p)
+
+    verified: list[VerifiedArtifact] = []
 
     for item in raw_artifacts:
         if not isinstance(item, dict):
@@ -240,23 +254,6 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
         if not isinstance(size_bytes, int) or size_bytes <= 0:
             raise IntegrityError("size_bytes must be a positive integer (empty files forbidden)")
 
-        if not isinstance(source_url, str) or _EXPECTED_COMMIT_HASH not in source_url:
-            raise IntegrityError(f"source_url must contain commit hash {_EXPECTED_COMMIT_HASH}: got {source_url}")
-
-        if not isinstance(acquisition_command, str) or "git checkout" not in acquisition_command or _EXPECTED_COMMIT_HASH not in acquisition_command:
-            raise IntegrityError(f"acquisition_command must contain git checkout {_EXPECTED_COMMIT_HASH}: got {acquisition_command}")
-
-        if license_str != "Apache-2.0":
-            raise IntegrityError(f"license must be Apache-2.0: got {license_str}")
-
-        if artifact_id in seen_ids:
-            raise IntegrityError(f"Duplicate artifact_id: {artifact_id}")
-        if rel_str in seen_paths:
-            raise IntegrityError(f"Duplicate artifact path: {rel_str}")
-
-        seen_ids.add(artifact_id)
-        seen_paths.add(rel_str)
-
         safe_rel = _safe_relative_path(rel_str)
         abs_path = project_root / safe_rel
         if abs_path.is_symlink():
@@ -276,6 +273,16 @@ def load_verified_artifacts(project_root: Path) -> tuple[VerifiedArtifact, ...]:
                 f"Git blob mismatch for {rel_str}: "
                 f"expected {git_blob}, got {computed_blob}"
             )
+
+        raw_prefix = f"https://raw.githubusercontent.com/PeterLauLukChen/RACO/{_EXPECTED_COMMIT_HASH}/"
+        if not isinstance(source_url, str) or not source_url.startswith(raw_prefix) or "/blob/" in source_url:
+            raise IntegrityError(f"source_url must be exact raw URL starting with {raw_prefix}: got {source_url}")
+
+        if not isinstance(acquisition_command, str) or "git checkout" not in acquisition_command or _EXPECTED_COMMIT_HASH not in acquisition_command:
+            raise IntegrityError(f"acquisition_command must contain git checkout {_EXPECTED_COMMIT_HASH}: got {acquisition_command}")
+
+        if license_str != "Apache-2.0":
+            raise IntegrityError(f"license must be Apache-2.0: got {license_str}")
 
         verified.append(
             VerifiedArtifact(

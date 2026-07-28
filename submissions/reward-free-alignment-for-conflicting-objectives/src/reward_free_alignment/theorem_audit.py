@@ -26,6 +26,7 @@ class SmoothObjectiveCase:
     trajectory_losses_before: tuple[float, ...] | None = None
     trajectory_losses_after: tuple[float, ...] | None = None
     trajectory_descent_holds: tuple[bool, ...] | None = None
+    steps: tuple[dict[str, object], ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -44,7 +45,10 @@ class ConvergenceAudit:
     min_grad_norm: float | None = None
     finite_horizon_rhs: float | None = None
     finite_horizon_bound_holds: bool | None = None
+    grad_finite_horizon_bound_holds: bool | None = None
+    m_finite_horizon_bound_holds: bool | None = None
     per_step_m_bound_holds: bool | None = None
+    steps: tuple[dict[str, object], ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -115,12 +119,16 @@ def execute_raco_trajectory(
     losses_before: list[float] = []
     losses_after: list[float] = []
     descent_holds: list[bool] = []
+    steps_list: list[dict[str, object]] = []
+
+    w1_py = round(w[0].item(), 6)
+    w2_py = round(w[1].item(), 6)
 
     x = x0
     for t in range(T):
         f1 = x ** 2
         f2 = (x - 1.0) ** 2
-        loss_before = w[0].item() * f1 + w[1].item() * f2
+        loss_before = w1_py * f1 + w2_py * f2
         losses_before.append(loss_before)
         if t == 0:
             losses.append(loss_before)
@@ -143,7 +151,7 @@ def execute_raco_trajectory(
 
         f1_next = x_next ** 2
         f2_next = (x_next - 1.0) ** 2
-        loss_after = w[0].item() * f1_next + w[1].item() * f2_next
+        loss_after = w1_py * f1_next + w2_py * f2_next
         losses_after.append(loss_after)
         losses.append(loss_after)
 
@@ -151,8 +159,25 @@ def execute_raco_trajectory(
         m_values.append(m_val)
 
         expected_descent = (eta * (1.0 - c * c) / 2.0) * (g_norm ** 2)
-        descent_holds.append(loss_after <= loss_before - expected_descent + 1e-9)
-        m_bounds_holds.append(math.isfinite(m_val) and m_val >= 0.0 and m_val <= g_norm + 1e-9)
+        d_step = loss_after <= loss_before - expected_descent + 1e-9
+        m_step = math.isfinite(m_val) and m_val >= 0.0 and m_val <= g_norm + 1e-9
+
+        descent_holds.append(d_step)
+        m_bounds_holds.append(m_step)
+
+        steps_list.append({
+            "step_index": t,
+            "current_iterate": float(x),
+            "weighted_anchor": float(g0_val),
+            "cagrad_direction": float(g_cagrad_val),
+            "next_iterate": float(x_next),
+            "loss_before": float(loss_before),
+            "loss_after": float(loss_after),
+            "m_value": float(m_val),
+            "grad_norm": float(g_norm),
+            "descent_holds": bool(d_step),
+            "m_bound_holds": bool(m_step),
+        })
 
         x = x_next
 
@@ -173,8 +198,8 @@ def execute_raco_trajectory(
         weighted_smoothness=L_w,
         step_size=eta,
         correction_radius=c,
-        initial_loss=losses[0],
-        final_loss=losses[-1],
+        initial_loss=round(losses[0], 6),
+        final_loss=round(losses[-1], 6),
         grad_norm=grad_norms[0],
         trajectory_losses=tuple(losses),
         trajectory_grad_norms=tuple(grad_norms),
@@ -186,6 +211,7 @@ def execute_raco_trajectory(
         trajectory_losses_before=tuple(losses_before),
         trajectory_losses_after=tuple(losses_after),
         trajectory_descent_holds=tuple(descent_holds),
+        steps=tuple(steps_list),
     )
 
 
@@ -216,6 +242,8 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
     min_grad_norm = None
     finite_horizon_rhs = None
     finite_horizon_bound_holds = None
+    grad_finite_horizon_bound_holds = None
+    m_finite_horizon_bound_holds = None
     per_step_m_bound_holds = True
 
     if case.trajectory_losses is not None and case.trajectory_grad_norms is not None:
@@ -225,21 +253,21 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
             min_grad_norm = min(case.trajectory_grad_norms[:-1])
             finite_horizon_rhs = 2.0 * case.initial_loss / (step * (1.0 - c_rad * c_rad) * T)
 
+            grad_finite_horizon_bound_holds = min_grad_norm ** 2 <= finite_horizon_rhs + 1e-9
+
             if case.trajectory_m_values is not None:
                 min_m_value = min(case.trajectory_m_values[:-1])
-                # Check both grad norm and M(theta) finite horizon bounds
+                m_finite_horizon_bound_holds = (min_m_value ** 2) <= finite_horizon_rhs + 1e-9
                 finite_horizon_bound_holds = (
-                    min_grad_norm ** 2 <= finite_horizon_rhs + 1e-9
-                    and (min_m_value ** 2) <= finite_horizon_rhs + 1e-9
+                    grad_finite_horizon_bound_holds and m_finite_horizon_bound_holds
                 )
 
-                # Check per-step M(theta_t) bounds
                 for m_val, g_norm in zip(case.trajectory_m_values[:-1], case.trajectory_grad_norms[:-1]):
                     if not (math.isfinite(m_val) and m_val >= 0.0 and m_val <= g_norm + 1e-9):
                         per_step_m_bound_holds = False
                         break
             else:
-                finite_horizon_bound_holds = min_grad_norm ** 2 <= finite_horizon_rhs + 1e-9
+                finite_horizon_bound_holds = grad_finite_horizon_bound_holds
 
     if finite_horizon_bound_holds is not None:
         pareto_holds = finite_horizon_bound_holds and per_step_m_bound_holds
@@ -255,6 +283,8 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
         and descent_holds
         and pareto_holds
         and per_step_m_bound_holds
+        and (grad_finite_horizon_bound_holds is True)
+        and (m_finite_horizon_bound_holds is True)
     )
     local_outcome = "supported" if all_pass else "not-supported"
 
@@ -273,7 +303,10 @@ def audit_theorem_31(case: SmoothObjectiveCase) -> ConvergenceAudit:
         min_grad_norm=min_grad_norm,
         finite_horizon_rhs=finite_horizon_rhs,
         finite_horizon_bound_holds=finite_horizon_bound_holds,
+        grad_finite_horizon_bound_holds=grad_finite_horizon_bound_holds,
+        m_finite_horizon_bound_holds=m_finite_horizon_bound_holds,
         per_step_m_bound_holds=per_step_m_bound_holds,
+        steps=case.steps,
     )
 
 

@@ -177,6 +177,7 @@ def _run_theorem_31_audit() -> dict[str, Any]:
     result["trajectory_grad_norms"] = list(case.trajectory_grad_norms) if case.trajectory_grad_norms else None
     result["trajectory_m_values"] = list(case.trajectory_m_values) if case.trajectory_m_values else None
     result["trajectory_m_bounds_holds"] = list(case.trajectory_m_bounds_holds) if case.trajectory_m_bounds_holds else None
+    result["steps"] = list(case.steps) if case.steps else []
     # Remove tensor fields (not JSON-serializable)
     result.pop("smoothness_constants", None)
     result["smoothness_constants"] = list(case.smoothness_constants)
@@ -355,7 +356,20 @@ def _derive_claim_outcomes(
     )
 
     # Claim 8: Theorem 3.1 convergence to Pareto-critical points
-    t31_outcome = t31_audit["local_outcome"]
+    steps = t31_audit.get("steps", [])
+    all_step_descent = len(steps) == 10 and all(s.get("descent_holds", False) for s in steps)
+    all_step_m_bound = len(steps) == 10 and all(s.get("m_bound_holds", False) for s in steps)
+    grad_fh_holds = bool(t31_audit.get("grad_finite_horizon_bound_holds", False))
+    m_fh_holds = bool(t31_audit.get("m_finite_horizon_bound_holds", False))
+
+    claim8_supported = (
+        t31_audit["local_outcome"] == "supported"
+        and all_step_descent
+        and all_step_m_bound
+        and grad_fh_holds
+        and m_fh_holds
+    )
+    t31_outcome = "supported" if claim8_supported else "not-supported"
     t31_steps = t31_audit.get("trajectory_steps", "N/A")
     t31_fh_rhs = t31_audit.get("finite_horizon_rhs")
     results[8] = (
@@ -363,7 +377,8 @@ def _derive_claim_outcomes(
         f"Theorem 3.1 convergence audit with executed deterministic T={t31_steps} step trajectory: "
         f"descent_bound_holds={t31_audit['descent_bound_holds']}, "
         f"per_step_m_bound_holds={t31_audit.get('per_step_m_bound_holds')}, "
-        f"finite_horizon_bound_holds={t31_audit.get('finite_horizon_bound_holds')}, "
+        f"grad_finite_horizon_bound_holds={grad_fh_holds}, "
+        f"m_finite_horizon_bound_holds={m_fh_holds}, "
         f"2*L_w(θ_0)/(η*(1-c²)*T)={t31_fh_rhs:.6f}. " if t31_fh_rhs is not None else
         f"Theorem 3.1 convergence audit: descent_bound_holds={t31_audit['descent_bound_holds']}. "
         f"Pareto-criticality measure M(θ_t) and finite-horizon bound verified from T-step trajectory.",
