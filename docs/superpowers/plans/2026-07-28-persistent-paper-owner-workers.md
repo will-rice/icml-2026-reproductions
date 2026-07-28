@@ -1114,6 +1114,18 @@ This operational boundary is intentionally in the test plan rather than the
 paper-owner skill: persistent production workers must retain their controller
 authority, while only the forward-test harness is fixture-confined.
 
+#### Forward-test scope limitation
+
+The fixture may expose lifecycle-shaped aliases for controller operations, but
+it is not evidence of production command signatures, controller attestations,
+or independent design-reviewer identity. Tasks 1–4 unit/integration tests cover
+production APIs, fencing, and independent approval; this forward test covers
+only persistent agent sequencing, dedication, and repeat behavior through an
+available fake interface. Its `--help` may list commands but must not prescribe
+their lifecycle order, so it is not an unaided command-discovery evaluation.
+Record accepted trace events exactly; generic fake-adapter errors are not
+necessarily trace events.
+
 - [ ] **Step 1: Prepare a fake competition fixture**
 
 Create a temporary copy of a minimal schema-v6 state with:
