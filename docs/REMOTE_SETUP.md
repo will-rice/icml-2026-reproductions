@@ -147,7 +147,9 @@ design/lifecycle transitions, attestations, verdict sync, publication, release,
 and repair are persistent paper-owner controller mutations. Never run the
 latter commands from a subordinate implementation subprocess. Submitted and
 judging attempts remain dedicated to their current paper-owner worker; exact
-scored or genuine blocked release precedes the next `claim-next`.
+scored or genuine blocked release precedes the next `claim-next`. Before a
+genuine blocked release, use fenced `transition-attempt` to record nonempty
+`blocker` and `next_action`; only then call `release-paper --outcome blocked`.
 
 ## Verify The Workspace
 

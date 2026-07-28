@@ -145,3 +145,14 @@ fresh fencing token. An optional subordinate implementation subprocess is not
 the dispatched worker: it is credential-free, worktree-scoped, and
 proposal-only. Historical evidence and exact attestation/verdict requirements
 remain unchanged.
+
+## 2026-07-28 Blocked-Iteration Supersession
+
+The earlier Autonomous mode instruction to return control on a blocked attempt
+is superseded for persistent paper-owner dispatch. Before a blocked release,
+the owner must use fenced `transition-attempt` to persist the `blocked` phase
+with nonempty `blocker` and `next_action`, then call
+`release-paper --outcome blocked`, notify the root coordinator, and continue
+the loop with `claim-next`. The released attempt remains active and reclaimable
+with its history, a fresh assessed immutable snapshot, and a fresh fencing
+token.

@@ -8,7 +8,7 @@ exact live observation. Intention and worker self-report are not evidence.
 - [ ] The directly dispatched persistent paper-owner worker owns one current
   paper at a time and repeats only after exact verdict import or a
   genuine persisted blocker.
-- [ ] An implementation-worker exit triggered immediate diff review and fresh
+- [ ] A subordinate implementation subprocess exit triggered immediate diff review and fresh
   controller validation without a user status prompt.
 - [ ] A rejected validation produced exact correction findings and a guarded
   relaunch on the same attempt.
@@ -25,6 +25,9 @@ exact live observation. Intention and worker self-report are not evidence.
   immutable snapshot, outcome, and exact verdict or persisted blocker.
 - [ ] A blocked attempt remains reclaimable; its later owner uses a fresh
   assessed immutable snapshot and fresh fence without changing its history.
+- [ ] Before `release-paper --outcome blocked`, the paper owner used fenced
+  `transition-attempt` to enter `blocked` with nonempty `blocker` and
+  `next_action`, then notified the root coordinator and released reclaimably.
 
 ## Subordinate Implementation Subprocess Boundary
 
@@ -40,7 +43,7 @@ exact live observation. Intention and worker self-report are not evidence.
   authority.
 - [ ] A runtime that cannot enforce isolation received only a read-only
   research contract.
-- [ ] Worker queue time comes from queued/launched UTC observations; worker
+- [ ] Subprocess queue time comes from queued/launched UTC observations; subprocess
   process time comes from launched/exited monotonic counters. Git revisions
   identify inputs and outputs and are never runtime estimates.
 - [ ] A subordinate launched from `implementing` records
@@ -118,6 +121,9 @@ exact live observation. Intention and worker self-report are not evidence.
 - [ ] `submitted` and `judging` remain dedicated states: watch the current
   paper and do not select another. A scored or genuinely blocked iteration
   releases only through `release-paper` before the next `claim-next`.
+- [ ] A genuinely blocked iteration first uses fenced `transition-attempt` to
+  record nonempty `blocker` and `next_action`, then calls
+  `release-paper --outcome blocked` and remains reclaimable.
 
 ## Census And Score Report
 
@@ -172,6 +178,7 @@ Every fenced attempt command also takes `--attempt-id ATTEMPT --owner OWNER
 --fencing-token TOKEN`.
 
 ```bash
+uv run python skills/icml-repro-loop/scripts/state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT --owner OWNER
 uv run python skills/icml-repro-loop/scripts/state.py run-worker state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --runtime codex --model MODEL --worktree /ABSOLUTE/WORKTREE --contract /ABSOLUTE/WORKTREE/.superpowers/worker-contract.json
 uv run python skills/icml-repro-loop/scripts/state.py attest-validation state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --manifest validation-manifest.json
 uv run python skills/icml-repro-loop/scripts/state.py publish-deployment state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --space-id OWNER/SPACE --source-dir submissions/PAPER
@@ -179,6 +186,8 @@ uv run python skills/icml-repro-loop/scripts/state.py attest-submission state/re
 uv run python skills/icml-repro-loop/scripts/state.py watch-attempt state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --poll-limit 12 --poll-deadline 2026-07-25T18:00:00+00:00
 uv run python skills/icml-repro-loop/scripts/state.py sync-verdict state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --snapshot-id SNAPSHOT
 uv run python skills/icml-repro-loop/scripts/state.py release-paper state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --outcome scored
+uv run python skills/icml-repro-loop/scripts/state.py transition-attempt state/repro-loop.json blocked --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --updates-json '{"blocker":"EXTERNAL_BLOCKER","next_action":"NEXT_ACTION"}'
+uv run python skills/icml-repro-loop/scripts/state.py release-paper state/repro-loop.json --attempt-id ATTEMPT --owner OWNER --fencing-token TOKEN --outcome blocked
 uv run python skills/icml-repro-loop/scripts/state.py audit-authority state/repro-loop.json --snapshot-id SNAPSHOT
 uv run python skills/icml-repro-loop/scripts/state.py score-report state/repro-loop.json --snapshot-id SNAPSHOT --username wrice --rank-observation-json state/wrice-rank-observation.json
 ```
@@ -196,8 +205,9 @@ run-worker
 No arrow in this handoff is driven by a user status question.
 
 The next `claim-next` occurs only after `sync-verdict` followed by scored
-release, or after a persisted genuine blocker followed by reclaimable blocked
-release. It must not select while `submitted` or `judging`.
+release, or after fenced `transition-attempt` records nonempty `blocker` and
+`next_action` for a genuine blocker followed by reclaimable blocked release.
+It must not select while `submitted` or `judging`.
 
 Read-only/reporting commands are `list-attempts`, `show-attempt`,
 `show-snapshot`, `candidate-census`, `score-report`, and `audit-authority`

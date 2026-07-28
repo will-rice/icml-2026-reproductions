@@ -43,9 +43,8 @@ def test_skill_repeats_only_after_score_or_recoverable_blocker():
     assert "release the blocked attempt" in skill
     assert "same or another worker" in owner_loop
     assert "fresh fencing token" in owner_loop
-    assert "next-paper selection uses a fresh assessed immutable snapshot" in owner_loop
     assert (
-        "blocked-attempt reclamation uses a fresh assessed immutable snapshot"
+        "uses one fresh assessed immutable snapshot for selection or reclamation"
         in owner_loop
     )
 
@@ -96,7 +95,7 @@ def test_paper_owner_reference_defines_event_reactions():
         "pending": "keep-watching",
         "inconclusive": "improve-redeploy-resubmit",
         "judging": "remain-dedicated",
-        "scored": "sync-verdict",
+        "scored": "release-scored-and-repeat",
     }
     rows = [line for line in value.splitlines() if line.startswith("|")]
     for event, reaction in required.items():
@@ -123,8 +122,37 @@ def test_paper_owner_contract_separates_validation_event_from_phase_and_verdict_
     assert "There is no `--work-kind` flag" in flat_reference
     assert "derives `implementation` or `correction` from the attempt phase" in flat_reference
     assert "`sync-verdict --improvement-reason REASON`" in flat_reference
-    assert "enters `improving`" in flat_reference
+    assert "transition to `improving`" in flat_reference
     assert "`validation-rejected` is an event, not a phase" in skill
+
+
+def test_blocked_iteration_transitions_before_reclaimable_release():
+    skill = text(SKILL)
+    owner_loop = text(OWNER_LOOP)
+    checklist = text(CHECKLIST)
+
+    for value in (skill, owner_loop, checklist):
+        assert "transition-attempt" in value
+        assert "`blocked`" in value
+        assert "`blocker`" in value
+        assert "`next_action`" in value
+        assert "release-paper --outcome blocked" in value
+    assert "--updates-json" in checklist
+    assert "claim-next state/repro-loop.json --snapshot-id SNAPSHOT --owner OWNER" in checklist
+    assert (
+        "transition-attempt state/repro-loop.json blocked --attempt-id ATTEMPT "
+        "--owner OWNER --fencing-token TOKEN --updates-json "
+        "'{\"blocker\":\"EXTERNAL_BLOCKER\",\"next_action\":\"NEXT_ACTION\"}'"
+    ) in checklist
+
+
+def test_direct_dispatch_claims_without_scheduler_pass_routing():
+    agents = " ".join(text(ROOT / "AGENTS.md").split())
+    skill = text(SKILL)
+
+    assert "passes the fresh assessed immutable snapshot ID to `claim-next`" in agents
+    assert "bounded scheduler pass" not in agents
+    assert "scheduler-pass" not in skill.split("## Required Persistent Paper-Owner Loop", 1)[1].split("## Authority Red Flags", 1)[0]
 
 
 def test_paper_owner_retains_lifecycle_authority_over_guarded_worker():
@@ -150,7 +178,7 @@ def test_completion_gate_requires_all_paper_owner_outcomes():
         "The directly dispatched persistent paper-owner worker owns one current\n"
         "  paper at a time and repeats only after exact verdict import or a\n"
         "  genuine persisted blocker.",
-        "An implementation-worker exit triggered immediate diff review and fresh\n"
+        "A subordinate implementation subprocess exit triggered immediate diff review and fresh\n"
         "  controller validation without a user status prompt.",
         "A rejected validation produced exact correction findings and a guarded\n"
         "  relaunch on the same attempt.",
@@ -196,7 +224,7 @@ def test_pressure_scenarios_cover_early_return_and_correction():
         },
         "green-but-hard-coded": {
             "id": "green-but-hard-coded",
-            "prompt": "The paper worker has 25 passing tests, but an independent probe shows claim outcomes are hard-coded. Continue the paper lifecycle.",
+            "prompt": "The subordinate implementation subprocess has 25 passing tests, but an independent probe shows claim outcomes are hard-coded. Continue the paper lifecycle.",
             "must": [
                 "reject validation",
                 "dispatch concrete correction",

@@ -16,7 +16,10 @@ The paper-owner worker must:
 1. use `claim-next` to select or reclaim exactly one paper;
 2. remain dedicated through implementation, publication, submission, and judging;
 3. import the exact official verdict, call `release-paper --outcome scored`, and select the next paper; or
-4. persist a genuine external blocker, call `release-paper --outcome blocked`, notify the root coordinator, and select the next paper.
+4. persist a genuine external blocker by fenced `transition-attempt` to
+   `blocked` with nonempty `blocker` and `next_action`, call
+   `release-paper --outcome blocked`, notify the root coordinator, and select
+   the next paper.
 
 An optional subordinate implementation subprocess is not the dispatched worker. It remains credential-free, worktree-scoped, and proposal-only.
 
@@ -58,7 +61,7 @@ Use the dedicated command that owns each assertion:
 
 Every external-phase transition must name its immutable controller attestation ID. If the attestation is absent, stop or block and state that the corresponding writes were unperformed.
 
-`validation-rejected` is an event, not a phase: before an official verdict, the attempt stays `implementing`, receives exact correction-contract defects, and relaunches through normal fenced `run-worker`. An official correctable deficiency is different: import it with `sync-verdict --improvement-reason REASON`, which preserves that exact verdict and enters `improving`; then `run-worker` derives correction telemetry from the phase.
+`validation-rejected` is an event, not a phase: before an official verdict, the attempt stays `implementing`, receives exact correction-contract defects, and relaunches through normal fenced `run-worker`. An official correctable deficiency is different: import it with `sync-verdict --improvement-reason REASON`, which preserves that exact verdict and transitions the attempt to `improving`; then `run-worker` derives correction telemetry from the phase.
 
 ## Mandatory Response/Action Contract
 
@@ -80,7 +83,12 @@ For every iteration:
 6. Use `publish-deployment` for the dedicated Space. Require the allowlisted owner, exact paper and challenge tags, exact attested SHA, and `RUNNING` runtime. Then take a fresh assessed snapshot and use `attest-submission`. Space existence does not prove submission.
 7. Use `watch-attempt` with a finite positive poll limit and aware deadline, recording pending observations through `record-poll`. Submitted and judging states remain dedicated to this attempt. On an official correctable deficiency, preserve it with `sync-verdict --improvement-reason REASON`, correct, redeploy, resubmit, and watch the same attempt.
 8. Use `sync-verdict` only with a fresh immutable snapshot. It verifies exact paper, Space, deployed SHA, verdict dataset revision, judged timestamp, and claim bindings. Preserve `verified`, `falsified`, `toy`, and `inconclusive` exactly. Then call `release-paper --outcome scored` and return to step 2.
-9. If a genuine deadline, authority, feasibility, or other external blocker prevents progress, persist the exact phase, observation, next action, and unperformed writes; release the blocked attempt with `release-paper --outcome blocked`, notify the root coordinator, and return to step 2. Never abandon automatically.
+9. If a genuine deadline, authority, feasibility, or other external blocker
+   prevents progress, use fenced `transition-attempt ... blocked` with
+   nonempty `blocker` and `next_action` to persist the exact phase,
+   observation, next action, and unperformed writes. Then release the blocked
+   attempt with `release-paper --outcome blocked`, notify the root coordinator,
+   and return to step 2. Never abandon automatically.
 
 Run read-only `score-report` after each subordinate exit, validation or deployment outcome, and official verdict refresh. Keep official verdict points, pending estimates, rank observations, runnable capacity, and actual telemetry separate. Follow [submission-checklist.md](references/submission-checklist.md) for the exact evidence and report contracts.
 
@@ -109,7 +117,9 @@ Use these counters verbatim:
 - Autonomous GPU work is ineligible.
 - Estimated or actual metered API cost above USD 10 per paper is ineligible. Codex and Antigravity subscriptions record USD 0.00.
 - Missing controller credentials, paid infrastructure approval, unsafe execution, or unenforceable subordinate isolation blocks the current iteration.
-- Persist the blocker and next action, release it reclaimably, and never autonomously abandon; only an explicit user `abandon=true` may archive it.
+- Use fenced `transition-attempt` to persist nonempty `blocker` and
+  `next_action`, release the blocked attempt reclaimably, and never
+  autonomously abandon; only an explicit user `abandon=true` may archive it.
 
 Inspect the authoritative CLI rather than relying on remembered signatures:
 
@@ -117,4 +127,4 @@ Inspect the authoritative CLI rather than relying on remembered signatures:
 uv run python skills/icml-repro-loop/scripts/state.py --help
 ```
 
-`show-*`, `list-attempts`, `candidate-census`, `score-report`, and `audit-authority` without `--repair` are read-only. `refresh-live`, `claim-next`, `scheduler-pass`, `run-worker`, lease/design/lifecycle commands, controller attestations, `sync-verdict`, `release-paper`, and `audit-authority --repair` mutate local or external authority; only the controller may run them for its current fenced attempt. Here, the controller is the persistent paper-owner worker.
+`show-*`, `list-attempts`, `candidate-census`, `score-report`, and `audit-authority` without `--repair` are read-only. `refresh-live`, `claim-next`, `scheduler-pass` (an available general scheduling command, not direct-dispatch routing), `run-worker`, lease/design/lifecycle commands, controller attestations, `sync-verdict`, `release-paper`, and `audit-authority --repair` mutate local or external authority; only the controller may run them for its current fenced attempt. Here, the controller is the persistent paper-owner worker.

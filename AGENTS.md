@@ -61,12 +61,16 @@ or claim external phases. Full host permissions do not transfer this authority.
    timestamp, scores, selected live claims, upstream pins, feasibility
    decisions, and costs. Run `refresh-live --assessments-json PATH`; on revision
    drift, discard it and restart from a new raw snapshot.
-4. Pass the assessed immutable snapshot ID to one bounded scheduler pass; no
-   state command other than `refresh-live` uses the network.
+4. Each persistent paper-owner worker passes the fresh assessed immutable
+   snapshot ID to `claim-next` for one current paper or reclaim. Networked live
+   lifecycle operations require current controller authority for that fenced
+   attempt; read-only local state operations do not create that authority.
 5. A persistent paper-owner worker owns one current paper at a time. It does
    not select another paper while submitted or judging; scored or blocked
-   release ends its iteration. A blocker remains attached to a reclaimable
-   attempt and is never auto-abandoned.
+   release ends its iteration. Before blocked release, use fenced
+   `transition-attempt` to record nonempty `blocker` and `next_action`; the
+   blocker remains attached to a reclaimable attempt and is never
+   auto-abandoned.
 6. Give each persistent paper-owner worker one current two-hour writer lease.
    Any optional subordinate implementation subprocess works only under the
    guarded contract and never owns lifecycle authority. Renew the lease

@@ -13,12 +13,21 @@ One persistent paper-owner worker owns one fenced attempt per iteration. After e
 | `pending` | `keep-watching`: verify exact healthy visibility; do not alter evidence solely for queue age | continue same attempt |
 | `inconclusive` | `improve-redeploy-resubmit`: correct the cited evidence deficiency and watch the new SHA | continue same attempt |
 | `judging` | `remain-dedicated` | watch; do not select another paper |
-| `scored` | `sync-verdict` | release after exact `sync-verdict`, then `claim-next` |
+| `scored` | `release-scored-and-repeat` | release after exact `sync-verdict`, then `claim-next` |
 | `genuine-external-blocker` | `notify-release-and-repeat` | persist, release reclaimably, then `claim-next` |
 
 submitted/judging are dedicated states and do not release. Keep bounded verdict watching on the current attempt and do not select another paper.
 
-After `sync-verdict` imports the exact official claim statuses, use `release-paper --outcome scored` and start the next iteration with `claim-next`. A genuine external blocker requires the same durable record plus `release-paper --outcome blocked`, root-coordinator notification, and then `claim-next`. Release never abandons the blocked attempt: later reclamation by the same or another worker preserves its attempt ID and history, uses a fresh fencing token, and next-paper selection uses a fresh assessed immutable snapshot. For clarity, blocked-attempt reclamation uses a fresh assessed immutable snapshot.
+After `sync-verdict` imports the exact official claim statuses,
+`release-scored-and-repeat` uses `release-paper --outcome scored` and starts the
+next iteration with `claim-next`. A genuine external blocker first requires a
+fenced `transition-attempt` to `blocked` with nonempty `blocker` and
+`next_action`; only then does `notify-release-and-repeat` call
+`release-paper --outcome blocked`, notify the root coordinator, and use
+`claim-next`. Release never abandons the blocked attempt: later reclamation by
+the same or another worker preserves its attempt ID and history, uses a fresh
+fencing token, and uses one fresh assessed immutable snapshot for selection or
+reclamation.
 
 ## Validation rejection
 
@@ -30,7 +39,11 @@ Distinguish queue state from evidence failure:
 
 - no live submission: repair publication or submission observation;
 - exact healthy submission pending: keep watching within the deadline;
-- official correctable inconclusive/rejected claim: call `sync-verdict --improvement-reason REASON` to preserve the exact official verdict and enters `improving`, then correct its stated evidence deficiency with `run-worker`; the improving phase derives correction telemetry;
+- official correctable inconclusive/rejected claim: call
+  `sync-verdict --improvement-reason REASON` to preserve the exact official
+  verdict and transition to `improving`, then correct its stated evidence
+  deficiency with `run-worker`; the improving phase derives correction
+  telemetry;
 - official scored verdict: import it exactly, even when lower than expected.
 
 Never resubmit unchanged evidence merely to refresh queue position.
