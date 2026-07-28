@@ -23,7 +23,7 @@
   </div>
   <h1>Conditional DPO/RLHF Reproduction</h1>
   <p>Independent finite-response evidence auditing mathematical claims from <code>arxiv:2605.20834v1</code>.</p>
-  
+
   <h2>Evidence Summary</h2>
   <table>
     <thead>
@@ -60,14 +60,14 @@
       const body = document.querySelector("#claims");
       for (const claim of evidence.claims) {
         const row = document.createElement("tr");
-        
+
         const claimCell = cell(claim.challenge_claim);
         const outcomeCell = document.createElement("td");
         const badge = document.createElement("span");
         badge.className = "badge " + claim.outcome;
         badge.textContent = claim.outcome;
         outcomeCell.appendChild(badge);
-        
+
         const summaryCell = cell(claim.summary);
         const limitCell = cell((claim.limitations || []).join("; "));
 

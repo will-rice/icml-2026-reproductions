@@ -114,7 +114,7 @@ def run_cpo_margin_lane() -> dict[str, object]:
         reference_margin = cpo_reference_margin(reference, gamma)
         dpo_delta = rlhf_optimal_delta(reference.delta, reward_gap, beta)
         approximate_cpo_delta = dpo_delta + reference_margin / beta
-        
+
         expected_shifted_delta = reference.delta + (reward_gap + reference_margin) / beta
         shift_identity_abs_error = abs(approximate_cpo_delta - expected_shifted_delta)
 

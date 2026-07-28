@@ -1,0 +1,6 @@
+{
+  "implementation": "CPython",
+  "platform": "linux",
+  "python": "3.12.11",
+  "uv_lock_sha256": "6dd0024189dba351bd8365b5cdbf0ca5958988f5f7c0af656ff3e01809d8ed1c"
+}

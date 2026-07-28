@@ -1,0 +1,6 @@
+[
+  "env UV_CACHE_DIR=/tmp/conditional-dpo-uv-cache uv sync --frozen",
+  "env UV_CACHE_DIR=/tmp/conditional-dpo-uv-cache uv run conditional-dpo-repro generate --project-root . --output evidence.json",
+  "env UV_CACHE_DIR=/tmp/conditional-dpo-uv-cache uv run conditional-dpo-repro validate --project-root . --evidence evidence.json",
+  "env UV_CACHE_DIR=/tmp/conditional-dpo-uv-cache uv run pytest -q"
+]
