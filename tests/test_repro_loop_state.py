@@ -1897,6 +1897,120 @@ def test_cli_records_design_then_independent_review(tmp_path: Path):
     assert reviewed["design_review"]["reviewer"] == "reviewer-agent"
 
 
+def test_claim_next_cli_returns_exact_assignment_identity(tmp_path: Path):
+    scripts = str(STATE_MODULE_PATH.parent)
+    sys.path.insert(0, scripts)
+    for name in ("store", "refresh"):
+        sys.modules.pop(name, None)
+    import refresh
+    import store
+
+    paths = store.StatePaths(tmp_path / "repro-loop.json")
+    store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
+    now = datetime(2026, 7, 24, 18, 0, tzinfo=timezone.utc)
+    claim_one = "Challenge claim 1"
+    claim_two = "Challenge claim 2"
+    payload = {
+        "fetched_at": now.isoformat(),
+        "source_revision": "source-1",
+        "candidates": [
+            {
+                "paper_id": "paper-a",
+                "title": "Paper A",
+                "slug": "paper-a",
+                "upstream_revision": "revision-a",
+                "target_claims": ["claim-1", "claim-2"],
+                "claim_bindings": [
+                    {
+                        "target_claim": "claim-1",
+                        "challenge_claim": claim_one,
+                        "challenge_claim_sha256": hashlib.sha256(
+                            claim_one.encode()
+                        ).hexdigest(),
+                    },
+                    {
+                        "target_claim": "claim-2",
+                        "challenge_claim": claim_two,
+                        "challenge_claim_sha256": hashlib.sha256(
+                            claim_two.encode()
+                        ).hexdigest(),
+                    },
+                ],
+                "live_claims": [
+                    {"text": claim_one, "status": "extracted"},
+                    {"text": claim_two, "status": "extracted"},
+                ],
+                "score_rate": {
+                    "claim_expectations": [
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                claim_one.encode()
+                            ).hexdigest(),
+                            "p_verified": 0.5,
+                            "p_falsified": 0.25,
+                            "p_toy": 0.1,
+                        },
+                        {
+                            "challenge_claim_sha256": hashlib.sha256(
+                                claim_two.encode()
+                            ).hexdigest(),
+                            "p_verified": 0.0,
+                            "p_falsified": 0.5,
+                            "p_toy": 0.25,
+                        },
+                    ],
+                    "judged_before_deadline_probability": 0.8,
+                    "remaining_hours_p90": 2.0,
+                    "reusable_implementation": False,
+                    "direct_artifact_score": 4,
+                    "full_score_claim_paths": 2,
+                    "remaining_time_variance_hours2": 0.25,
+                    "primary_risk": "Artifact schema may have drifted.",
+                },
+                "estimated_api_cost_usd": 0.0,
+                "score": 10,
+                "artifact_access": True,
+                "cpu_only": True,
+                "safety_blocker": None,
+                "licensing_blocker": None,
+            }
+        ],
+        "queued_submissions": [],
+        "tagged_spaces": [],
+        "verdicts": [],
+    }
+    snapshot_id = refresh.canonical_snapshot_id(payload)
+    snapshot = {"snapshot_id": snapshot_id, **payload}
+    snapshot_path = paths.root / "snapshots" / f"{snapshot_id}.json"
+    store.atomic_json_write(snapshot_path, snapshot, store.validate_snapshot)
+    with store.locked_json(paths.index, store.validate_index) as index:
+        index["snapshots"][snapshot_id] = str(
+            snapshot_path.relative_to(paths.index.parent)
+        )
+
+    assignment = json.loads(
+        run_cli(
+            "claim-next",
+            str(paths.index),
+            "--snapshot-id",
+            snapshot_id,
+            "--owner",
+            "paper-owner-1",
+            "--now",
+            now.isoformat(),
+        ).stdout
+    )
+
+    assert assignment == {
+        "attempt_id": assignment["attempt_id"],
+        "paper_id": "paper-a",
+        "owner": "paper-owner-1",
+        "fencing_token": 1,
+        "phase": "selected",
+        "reclaimed": False,
+    }
+
+
 def test_scheduler_assignment_drives_documented_cli_lifecycle(tmp_path: Path):
     scripts = str(STATE_MODULE_PATH.parent)
     sys.path.insert(0, scripts)

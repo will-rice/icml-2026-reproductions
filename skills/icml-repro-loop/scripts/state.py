@@ -170,6 +170,15 @@ def main() -> None:
     scheduler_parser.add_argument("--snapshot-id", required=True)
     scheduler_parser.add_argument("--adopt-space-id")
     scheduler_parser.add_argument("--now")
+    claim_next_parser = commands.add_parser(
+        "claim-next",
+        help="atomically claim one paper for one persistent paper owner",
+    )
+    claim_next_parser.add_argument("path", type=Path)
+    claim_next_parser.add_argument("--snapshot-id", required=True)
+    claim_next_parser.add_argument("--owner", required=True)
+    claim_next_parser.add_argument("--reclaim-attempt-id")
+    claim_next_parser.add_argument("--now")
     claim_parser = commands.add_parser(
         "claim-attempt", help="claim an active attempt from an expected predecessor"
     )
@@ -300,6 +309,7 @@ def main() -> None:
         "candidate-census",
         "audit-authority",
         "scheduler-pass",
+        "claim-next",
         "claim-attempt",
         "renew-attempt",
         "resume-attempt",
@@ -495,6 +505,23 @@ def _run_v6_command(
                 }
                 for assignment in report.assignments
             ]
+        }
+    if arguments.command == "claim-next":
+        assignment = scheduler.claim_next(
+            paths,
+            arguments.snapshot_id,
+            arguments.owner,
+            now,
+            reclaim_attempt_id=arguments.reclaim_attempt_id,
+        )
+        attempt = attempts.read_attempt(paths, assignment.attempt_id)
+        return {
+            "attempt_id": assignment.attempt_id,
+            "paper_id": assignment.paper_id,
+            "owner": assignment.writer_lease.owner,
+            "fencing_token": assignment.writer_lease.fencing_token,
+            "phase": attempt["phase"],
+            "reclaimed": assignment.reclaimed,
         }
     if arguments.command == "claim-attempt":
         lease = leases.claim_attempt(

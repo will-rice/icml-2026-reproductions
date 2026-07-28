@@ -251,6 +251,159 @@ def resource_lock_is_held(paths, resource: str) -> bool:
     return False
 
 
+def test_claim_next_selects_exactly_one_highest_rate_paper(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-low", 100), paper("paper-high-rate", 1)],
+    )
+    candidates = scheduler.read_fresh_snapshot(paths, snapshot_id, now)["candidates"]
+    candidates[0]["score_rate"]["remaining_hours_p90"] = 20.0
+    candidates[1]["score_rate"]["remaining_hours_p90"] = 1.0
+    snapshot_id = write_snapshot(store, paths, now, candidates)
+
+    assignment = scheduler.claim_next(
+        paths, snapshot_id, "paper-owner-1", now
+    )
+
+    assert assignment.paper_id == "paper-high-rate"
+    assert assignment.writer_lease.owner == "paper-owner-1"
+    assert len(store.read_json(paths.index)["attempts"]) == 1
+
+
+def test_concurrent_claim_next_never_assigns_one_paper_twice(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+    barrier = threading.Barrier(2)
+    assignments = []
+
+    def claim(owner):
+        barrier.wait()
+        try:
+            assignments.append(
+                scheduler.claim_next(paths, snapshot_id, owner, now)
+            )
+        except scheduler.NoEligiblePaper:
+            pass
+
+    threads = [
+        threading.Thread(target=claim, args=(f"owner-{index}",))
+        for index in range(2)
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=5)
+
+    assert [item.paper_id for item in assignments] == ["paper-a"]
+    assert len(store.read_json(paths.index)["attempts"]) == 1
+
+
+def test_concurrent_same_owner_claims_at_most_one_paper(
+    paths, store, now, scheduler
+):
+    snapshot_id = write_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    barrier = threading.Barrier(2)
+    assignments = []
+
+    def claim():
+        barrier.wait()
+        try:
+            assignments.append(
+                scheduler.claim_next(
+                    paths, snapshot_id, "same-owner", now
+                )
+            )
+        except scheduler.OwnerBusy:
+            pass
+
+    threads = [threading.Thread(target=claim) for _ in range(2)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=5)
+
+    assert len(assignments) == 1
+    assert assignments[0].writer_lease.owner == "same-owner"
+
+
+def test_claim_next_reclaims_same_released_blocked_attempt(
+    paths, store, leases, now, scheduler
+):
+    snapshot_id = write_snapshot(
+        store, paths, now, [paper("paper-a", 10)]
+    )
+    first = scheduler.claim_next(paths, snapshot_id, "owner-1", now)
+    scheduler.attempts.transition_attempt(
+        paths,
+        first.attempt_id,
+        "blocked",
+        first.writer_lease,
+        now,
+        blocker="external outage",
+        next_action="retry after service recovery",
+    )
+    leases.release_lease(paths, first.writer_lease, now)
+
+    reclaimed = scheduler.claim_next(
+        paths,
+        snapshot_id,
+        "owner-2",
+        now,
+        reclaim_attempt_id=first.attempt_id,
+    )
+
+    assert reclaimed.attempt_id == first.attempt_id
+    assert reclaimed.paper_id == "paper-a"
+    assert reclaimed.writer_lease.owner == "owner-2"
+    assert reclaimed.writer_lease.fencing_token == 2
+    assert scheduler.attempts.read_attempt(
+        paths, first.attempt_id
+    )["phase"] == "blocked"
+    assert len(store.read_json(paths.index)["attempts"]) == 1
+
+
+@pytest.mark.parametrize("phase", ["submitted", "judging"])
+def test_claim_next_cannot_give_an_owner_a_second_paper(
+    paths, store, now, scheduler, phase
+):
+    snapshot_id = write_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10), paper("paper-b", 9)],
+    )
+    assignment = scheduler.claim_next(
+        paths, snapshot_id, "persistent-owner", now
+    )
+    transition_to_submitted(
+        scheduler.attempts, paths, assignment, now
+    )
+    if phase == "judging":
+        scheduler.watch_attempt(
+            paths,
+            assignment.attempt_id,
+            assignment.writer_lease,
+            2,
+            now + TTL * 2,
+            now,
+        )
+
+    with pytest.raises(scheduler.OwnerBusy):
+        scheduler.claim_next(paths, snapshot_id, "persistent-owner", now)
+
+
 def test_scheduler_admits_exactly_twenty_runnable_attempts(
     paths, snapshot_id, now, scheduler, attempts
 ):

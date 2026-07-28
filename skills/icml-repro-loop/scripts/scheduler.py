@@ -90,6 +90,24 @@ class SchedulerReport:
         return tuple(assignment.paper_id for assignment in self.assignments)
 
 
+class NoEligiblePaper(RuntimeError):
+    """Raised when one persistent owner has no paper it can claim."""
+
+
+class OwnerBusy(RuntimeError):
+    """Raised when one persistent owner already has a live paper lease."""
+
+
+@dataclass(frozen=True, slots=True)
+class PaperOwnerAssignment:
+    """One fenced assignment to a persistent paper owner."""
+
+    attempt_id: str
+    paper_id: str
+    writer_lease: leases.Lease
+    reclaimed: bool
+
+
 def scheduler_pass(
     paths: store.StatePaths,
     snapshot_id: str,
@@ -119,6 +137,78 @@ def scheduler_pass(
         snapshot_id,
         observed_at,
     )
+
+
+def claim_next(
+    paths: store.StatePaths,
+    snapshot_id: str,
+    owner: str,
+    now: datetime,
+    reclaim_attempt_id: str | None = None,
+) -> PaperOwnerAssignment:
+    """Atomically give one persistent owner one new or reclaimable attempt."""
+    observed_at = _datetime(now)
+    snapshot = read_fresh_snapshot(paths, snapshot_id, observed_at)
+    leases.expire_stale_leases(paths, observed_at)
+    attempts.recover_transactions(paths)
+    mutex = None
+    try:
+        mutex = leases.acquire_lease(
+            paths,
+            f"paper-owner-claim:{owner}",
+            owner,
+            f"claim-{uuid4()}",
+            observed_at,
+            ADMISSION_LEASE_TTL,
+        )
+    except leases.LeaseBusy as error:
+        raise OwnerBusy(owner) from error
+    try:
+        _require_owner_available(paths, owner, observed_at)
+
+        if reclaim_attempt_id is not None:
+            attempt = attempts.read_attempt(paths, reclaim_attempt_id)
+            if attempt["phase"] != "blocked":
+                raise ValueError("phase")
+            prior = _attempt_lease(paths, reclaim_attempt_id)
+            expected = 0 if prior is None else prior.fencing_token
+            writer = leases.claim_attempt(
+                paths,
+                reclaim_attempt_id,
+                owner,
+                expected,
+                observed_at,
+            )
+            return PaperOwnerAssignment(
+                reclaim_attempt_id,
+                attempt["paper_id"],
+                writer,
+                True,
+            )
+
+        index = store.read_json(paths.index)
+        store.validate_index(index)
+        claimed = _claimed_paper_ids(paths, index, snapshot, observed_at)
+        candidates = rank_eligible_candidates(snapshot, claimed)
+        report = _admit_up_to(
+            paths,
+            candidates,
+            1,
+            snapshot_id,
+            observed_at,
+            owner=owner,
+        )
+        if not report.assignments:
+            raise NoEligiblePaper("no eligible paper")
+        assignment = report.assignments[0]
+        return PaperOwnerAssignment(
+            assignment.attempt_id,
+            assignment.paper_id,
+            assignment.writer_lease,
+            False,
+        )
+    finally:
+        _release_if_acquired(paths, mutex, observed_at)
 
 
 def read_fresh_snapshot(
@@ -491,20 +581,21 @@ def _admit_up_to(
     vacancies: int,
     snapshot_id: str,
     now: datetime,
+    owner: str | None = None,
 ) -> SchedulerReport:
     assignments = []
     for candidate in candidates:
         if len(assignments) >= vacancies:
             break
         attempt_id = str(uuid4())
-        owner = f"scheduler-{uuid4()}"
+        assignment_owner = owner if owner is not None else f"scheduler-{uuid4()}"
         candidate_lease = None
         writer_lease = None
         try:
             candidate_lease = leases.acquire_lease(
                 paths,
                 f"candidate:{candidate['paper_id']}",
-                owner,
+                assignment_owner,
                 attempt_id,
                 now,
                 ADMISSION_LEASE_TTL,
@@ -512,7 +603,7 @@ def _admit_up_to(
             writer_lease = leases.acquire_lease(
                 paths,
                 f"attempt:{attempt_id}",
-                owner,
+                assignment_owner,
                 attempt_id,
                 now,
                 ADMISSION_LEASE_TTL,
@@ -619,6 +710,33 @@ def _claimed_paper_ids(
         ):
             claimed.add(value["resource"].removeprefix("candidate:"))
     return claimed
+
+
+def _attempt_lease(
+    paths: store.StatePaths, attempt_id: str
+) -> leases.Lease | None:
+    path = paths.resource_lease(f"attempt:{attempt_id}")
+    if not path.exists():
+        return None
+    value = store.read_json(path)
+    leases.validate_lease(value)
+    return leases.Lease(**value)
+
+
+def _require_owner_available(
+    paths: store.StatePaths, owner: str, now: datetime
+) -> None:
+    owner = _identity(owner, "owner")
+    for path in (paths.root / "leases").glob("*.json"):
+        value = store.read_json(path)
+        leases.validate_lease(value)
+        if (
+            value["resource"].startswith("attempt:")
+            and value["owner"] == owner
+            and value["released_at"] is None
+            and _parse(value["expires_at"], "expires_at") > now
+        ):
+            raise OwnerBusy(owner)
 
 
 def _external_claimed_paper_ids(snapshot: dict) -> set[str]:
