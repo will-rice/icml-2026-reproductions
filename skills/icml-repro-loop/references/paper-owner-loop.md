@@ -2,6 +2,14 @@
 
 One persistent paper-owner worker owns one fenced attempt per iteration. After every mutation, reread its attempt shard and live lease. Never infer owner, fence, phase, Space SHA, or verdict. A submitted or judging attempt remains the worker's current paper; the worker may not claim another paper until the iteration is released.
 
+Before selecting new work, inspect every active released blocked attempt
+against the fresh assessed immutable snapshot. If its recorded blocker is
+resolved or its `next_action` is actionable, explicitly reclaim the
+highest-priority eligible attempt with `claim-next --reclaim-attempt-id` and a
+fresh fencing token. Otherwise leave unresolved blockers reclaimable and
+select new work. This routing is mandatory: ordinary `claim-next` must not
+auto-reclaim unresolved blocked attempts.
+
 | Event | Required reaction | Terminal behavior |
 | --- | --- | --- |
 | `worker-exited` | `validate-or-correct`: inspect proposal commit/diff and run fresh controller validation | continue same attempt |

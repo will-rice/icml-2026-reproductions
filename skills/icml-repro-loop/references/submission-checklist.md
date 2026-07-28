@@ -209,6 +209,33 @@ release, or after fenced `transition-attempt` records nonempty `blocker` and
 `next_action` for a genuine blocker followed by reclaimable blocked release.
 It must not select while `submitted` or `judging`.
 
+## Resume-First Routing Example
+
+Inspect active attempts and each released blocked attempt before selecting new
+work:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py list-attempts state/repro-loop.json
+uv run python skills/icml-repro-loop/scripts/state.py show-attempt state/repro-loop.json --attempt-id BLOCKED_ATTEMPT
+```
+
+Run exactly one of the two `claim-next` commands. If the recorded blocker is
+resolved or `next_action` is actionable, reclaim the highest-priority eligible
+blocked attempt explicitly:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT --owner OWNER --reclaim-attempt-id BLOCKED_ATTEMPT
+```
+
+If every recorded blocker remains unresolved, leave those attempts
+reclaimable and select new work without a reclaim target:
+
+```bash
+uv run python skills/icml-repro-loop/scripts/state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT --owner OWNER
+```
+
+Ordinary `claim-next` must not auto-reclaim unresolved blocked attempts.
+
 Read-only/reporting commands are `list-attempts`, `show-attempt`,
 `show-snapshot`, `candidate-census`, `score-report`, and `audit-authority`
 without `--repair`. `refresh-live` writes immutable snapshots;

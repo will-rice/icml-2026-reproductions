@@ -73,6 +73,51 @@ def test_checklist_requires_release_event_before_next_iteration():
     assert "blocked attempt remains reclaimable" in checklist
 
 
+def test_skill_routes_resolved_blockers_before_new_selection_without_looping():
+    skill = " ".join(text(SKILL).split())
+    owner_loop = " ".join(text(OWNER_LOOP).split())
+
+    for value in (skill, owner_loop):
+        assert "inspect every active released blocked attempt" in value
+        assert "highest-priority eligible" in value
+        assert "recorded blocker is resolved" in value
+        assert "`next_action` is actionable" in value
+        assert "fresh assessed immutable snapshot" in value
+        assert "fresh fencing token" in value
+        assert "leave unresolved blockers reclaimable" in value
+        assert "select new work" in value
+        assert (
+            "ordinary `claim-next` must not auto-reclaim unresolved blocked attempts"
+            in value
+        )
+
+
+def test_checklist_has_executable_resume_first_routing_example():
+    checklist = text(CHECKLIST)
+
+    assert "## Resume-First Routing Example" in checklist
+    assert (
+        "state.py list-attempts state/repro-loop.json"
+        in checklist
+    )
+    assert (
+        "state.py show-attempt state/repro-loop.json "
+        "--attempt-id BLOCKED_ATTEMPT"
+        in checklist
+    )
+    assert (
+        "state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT "
+        "--owner OWNER --reclaim-attempt-id BLOCKED_ATTEMPT"
+        in checklist
+    )
+    assert (
+        "state.py claim-next state/repro-loop.json --snapshot-id SNAPSHOT "
+        "--owner OWNER"
+        in checklist
+    )
+    assert "Run exactly one of the two `claim-next` commands" in checklist
+
+
 def test_skill_requires_complete_scored_lifecycle():
     value = text(SKILL)
     for phrase in (

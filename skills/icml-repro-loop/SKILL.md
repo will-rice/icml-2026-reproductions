@@ -77,7 +77,18 @@ For every iteration:
 
 1. Inspect `state/repro-loop.json`. For schema-v3, run only `migrate-v6 --dry-run` and stop until the controller explicitly authorizes the real migration; no schema-v6 lifecycle command is valid before it. After migration, resume the schema-v6 index and every named shard.
 2. Run raw `refresh-live`, inspect its immutable result through `show-snapshot`, and assess pinned `challenge.json` candidates from primary artifacts. Bare challenge metadata never supplies feasibility, score, cost, targets, or an upstream pin. Write assessment JSON following [selection-rubric.md](references/selection-rubric.md), bind each target to exact challenge text and SHA-256, then run `refresh-live --assessments-json PATH`. Revision drift requires a new raw refresh and assessment.
-3. Use `claim-next` with the fresh assessed immutable snapshot to select or reclaim one paper. A blocked reclamation or migrated legacy attempt retains its history but must receive a fresh fence; a migrated schema-v3 attempt also requires `reconcile-legacy-attempt` with the fresh snapshot, distinct design author/reviewer identities, tracked design, and approval reference.
+3. Before selecting new work, inspect every active released blocked attempt.
+   If its recorded blocker is resolved or its `next_action` is actionable,
+   explicitly reclaim the highest-priority eligible attempt with
+   `claim-next --reclaim-attempt-id ATTEMPT`, the fresh assessed immutable
+   snapshot, and a fresh fencing token. If none is ready, leave unresolved
+   blockers reclaimable and use ordinary `claim-next` to select new work. This
+   routing is mandatory: ordinary `claim-next` must not auto-reclaim unresolved
+   blocked attempts. A
+   blocked reclamation or migrated legacy attempt retains its history; a
+   migrated schema-v3 attempt also requires `reconcile-legacy-attempt` with
+   the fresh snapshot, distinct design author/reviewer identities, tracked
+   design, and approval reference.
 4. Persist the paper-specific design through `record-design` and require a different reviewer through `review-design`. Pin every upstream revision. Create the guarded subordinate contract only if implementation assistance is needed; otherwise implement directly as the trusted paper owner.
 5. Treat a subordinate result as a proposal. Inspect its diff, use `attest-validation`, and issue exact correction findings on rejection. Validation or local JSON alone never advances the lifecycle.
 6. Use `publish-deployment` for the dedicated Space. Require the allowlisted owner, exact paper and challenge tags, exact attested SHA, and `RUNNING` runtime. Then take a fresh assessed snapshot and use `attest-submission`. Space existence does not prove submission.
