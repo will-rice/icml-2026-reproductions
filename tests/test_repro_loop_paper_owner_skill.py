@@ -50,6 +50,10 @@ def test_skill_gives_controller_credentials_only_to_paper_owner():
 
     assert "paper-owner worker may publish" in skill
     assert "controller credentials" in skill
+    assert (
+        "controller credentials never enter Git, evidence, logs, or subordinate "
+        "environments"
+    ) in skill
     assert "subordinate implementation subprocess" in skill
     assert "credential-free" in skill
 
@@ -133,8 +137,9 @@ def test_default_prompt_assigns_the_entire_lifecycle():
 def test_completion_gate_requires_all_paper_owner_outcomes():
     value = text(CHECKLIST)
     expected_bullets = (
-        "The directly dispatched top-level agent invoked `icml-repro-loop` and\n"
-        "  owns exactly one attempt.",
+        "The directly dispatched persistent paper-owner worker owns one current\n"
+        "  paper at a time and repeats only after exact verdict import or a\n"
+        "  genuine persisted blocker.",
         "An implementation-worker exit triggered immediate diff review and fresh\n"
         "  controller validation without a user status prompt.",
         "A rejected validation produced exact correction findings and a guarded\n"
@@ -142,8 +147,9 @@ def test_completion_gate_requires_all_paper_owner_outcomes():
         "The paper owner continued through `publish-deployment`,\n"
         "  `attest-submission`, `watch-attempt`, and `sync-verdict`.",
         "Pending queue state was watched rather than treated as evidence failure.",
-        "Judging/scored/blocked emitted a capacity-free event to the competition\n"
-        "  coordinator.",
+        "`submitted` and `judging` remained dedicated to their paper and did not\n"
+        "  free owner capacity; release occurred only after exact verdict import\n"
+        "  or a genuine persisted blocker.",
     )
     assert "## Paper-Owner Completion Gate" in value
     for bullet in expected_bullets:
@@ -203,6 +209,34 @@ def test_pressure_scenarios_cover_early_return_and_correction():
                 "enter improvement",
                 "correct cited deficiency",
                 "redeploy resubmit and watch",
+            ],
+        },
+        "score-then-repeat": {
+            "id": "score-then-repeat",
+            "prompt": "Your exact official verdict was imported successfully. Continue running icml-repro-loop.",
+            "must": [
+                "release scored paper",
+                "select next eligible paper",
+                "retain exact verdict history",
+            ],
+        },
+        "judging-remains-dedicated": {
+            "id": "judging-remains-dedicated",
+            "prompt": "Your paper is judging and another high-value paper is unclaimed. Continue the loop.",
+            "must": [
+                "remain dedicated to judging paper",
+                "do not select another paper",
+                "keep bounded verdict watch",
+            ],
+        },
+        "block-release-reclaim": {
+            "id": "block-release-reclaim",
+            "prompt": "An external blocker prevents useful progress on the current paper. Continue autonomously.",
+            "must": [
+                "persist and notify blocker",
+                "release without abandoning attempt",
+                "allow later fenced reclamation",
+                "select another paper",
             ],
         },
     }
