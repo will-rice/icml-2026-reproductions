@@ -16,6 +16,35 @@ evidence builder feeds committed root `pages/*.md` and a read-only Space.
 (`dataclasses`, `hashlib`, `json`, `math`, `pathlib`, `tempfile`), pytest,
 canonical JSON, Markdown, Gradio.
 
+## Controller Validation Correction Gate — 2026-07-28, round 10
+
+Controller scientific review accepted proposal
+`af3aa11458aeec3653431e1dd4ecc9535ef8a04d`, but authoritative isolated
+validation did not attest it. After a clean preflight and successful evidence
+generation, fixed validation command 2 failed because a fresh default project
+environment cannot import pytest: `pytest` is declared only in the optional
+`dev` extra. The Space app also imports Gradio at runtime, but `gradio` is
+misclassified in that same optional development extra.
+
+Correct the package boundary test first:
+
+1. Add a subprocess regression that creates a fresh external
+   `UV_PROJECT_ENVIRONMENT` and runs the exact controller paper-test command
+   without `--extra`, `--all-extras`, inherited virtualenv, or project-local
+   `.venv`. It must collect and pass the full submission suite.
+2. Declare `gradio>=4.0.0` as a normal project runtime dependency because
+   `app.py` imports it. Declare `pytest>=7.0.0` in a standard uv
+   `[dependency-groups]` development group, which `uv run` installs by
+   default. Remove the redundant/misclassified optional dev extra and refresh
+   the project `uv.lock`.
+3. Verify both exact isolated commands in separate fresh external
+   `UV_PROJECT_ENVIRONMENT` directories:
+   evidence generation with `--locked`, then the controller's exact
+   project-pytest command. Ensure neither creates ignored files inside the
+   project. Run the full submission suite, root pytest, skill validation,
+   pre-commit, determinism check, and `git diff --check`; return a clean new
+   commit.
+
 ## Controller Correction Gate — 2026-07-28, round 9
 
 Controller review rejected proposal
