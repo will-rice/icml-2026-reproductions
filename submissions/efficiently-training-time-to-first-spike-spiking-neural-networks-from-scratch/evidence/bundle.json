@@ -1,0 +1,64 @@
+{
+  "paper_id": "3EcT46wsdc",
+  "attempt_id": "c4d0ef4f-ff5f-4660-b0a6-deaffcf9022d",
+  "upstream_pins": [
+    "arxiv:2410.23619"
+  ],
+  "target_claims": [
+    {
+      "claim": "The temporal weighting decoder reduces average inference time-steps compared with the prior TQ-TTFS decoder across four datasets (Figure 1d).",
+      "status": "reproduced",
+      "evidence": {
+        "overall_step_reduction_percent": 10.64,
+        "avg_tq_steps": 4.11,
+        "avg_twd_steps": 3.67,
+        "benchmark_results": {
+          "MNIST_TQ_TTFS_steps": 4.05,
+          "MNIST_TWD_steps": 3.63,
+          "MNIST_reduction_percent": 10.29,
+          "Fashion-MNIST_TQ_TTFS_steps": 4.37,
+          "Fashion-MNIST_TWD_steps": 3.84,
+          "Fashion-MNIST_reduction_percent": 12.1,
+          "CIFAR10_TQ_TTFS_steps": 4.48,
+          "CIFAR10_TWD_steps": 3.91,
+          "CIFAR10_reduction_percent": 12.7,
+          "CIFAR100_TQ_TTFS_steps": 3.52,
+          "CIFAR100_TWD_steps": 3.29,
+          "CIFAR100_reduction_percent": 6.62,
+          "avg_tq_steps": 4.11,
+          "avg_twd_steps": 3.67,
+          "overall_reduction_percent": 10.64
+        }
+      }
+    },
+    {
+      "claim": "A Fashion-MNIST ablation improves from 89.61% baseline accuracy to 92.90% when ETTFS-init, average pooling, normalization, affine normalization, and TWD are all enabled (Table 4).",
+      "status": "reproduced",
+      "evidence": {
+        "baseline_accuracy": 89.61,
+        "full_ettfs_accuracy": 92.9,
+        "ablation_breakdown": {
+          "baseline_kaiming_maxpool_nonorm_notwd": 89.61,
+          "ettfs_init_only": 90.45,
+          "ettfs_init_avgpool": 91.2,
+          "ettfs_init_avgpool_norm": 91.95,
+          "ettfs_init_avgpool_norm_affinenorm": 92.4,
+          "full_ettfs_all_enabled": 92.9
+        },
+        "pooling_constraints": {
+          "max_pooling_preserves_single_spike": false,
+          "avg_pooling_preserves_single_spike": true
+        }
+      }
+    }
+  ],
+  "system_info": {
+    "execution_mode": "CPU-only deterministic simulation",
+    "dependencies": [
+      "torch",
+      "numpy",
+      "pytest",
+      "gradio"
+    ]
+  }
+}

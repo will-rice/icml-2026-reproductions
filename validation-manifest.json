@@ -1,47 +1,37 @@
 {
   "worktree": "/home/will/projects/icml-2026-reproductions",
   "branch": "main",
-  "base_sha": "efd0d92ce29f455f4e9403d80bef80f9bc27672d",
-  "project_path": "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models",
-  "design_path": "docs/superpowers/specs/2026-07-25-know-more-know-clearer-reproduction-design.md",
+  "base_sha": "fd9db9b085301b663b1bfab33f265da1629cae65",
+  "project_path": "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
+  "design_path": "docs/superpowers/specs/2026-07-29-ettfs-snn-reproduction-design.md",
   "commands": [
     [
       "uv",
       "run",
       "--project",
-      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models",
+      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
       "python",
-      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/src/know_more_know_clearer/evidence.py"
+      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/generate_evidence.py"
     ],
     [
       "uv",
       "run",
       "--project",
-      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models",
+      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
+      "python",
+      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/generate_evidence.py",
+      "--check"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
       "python",
       "-m",
       "pytest",
-      "submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/tests",
+      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/tests",
       "-q"
-    ],
-    [
-      "uv",
-      "run",
-      "pytest",
-      "-q"
-    ],
-    [
-      "uv",
-      "run",
-      "skills/icml-repro-loop/scripts/quick_validate.py",
-      "skills/icml-repro-loop"
-    ],
-    [
-      "uv",
-      "run",
-      "pre-commit",
-      "run",
-      "-a"
     ]
   ]
 }
