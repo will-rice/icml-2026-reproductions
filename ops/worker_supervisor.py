@@ -391,8 +391,9 @@ def _ordinary_retry_at(lane: LaneState, worker_id: str, now: datetime) -> dateti
     return now + timedelta(seconds=delay + jitter)
 
 
-def _failure_digest(output: str) -> str:
-    return hashlib.sha256(output.encode()).hexdigest()
+def _quota_event_digest(match: re.Match[str]) -> str:
+    record = " ".join(match.group(0).split())
+    return hashlib.sha256(record.encode()).hexdigest()
 
 
 def _classified_error(output: str) -> str:
@@ -443,8 +444,16 @@ def reconcile(
         health = host.session_health(spec)
         profile = _profile_for(spec, lane)
         if is_healthy(spec, health):
-            if lane.ordinary_failures and not dry_run:
-                lane = replace(lane, ordinary_failures=0, next_retry_at=None)
+            if (
+                (lane.ordinary_failures or lane.processed_failure_digest)
+                and not dry_run
+            ):
+                lane = replace(
+                    lane,
+                    ordinary_failures=0,
+                    next_retry_at=None,
+                    processed_failure_digest="",
+                )
                 lanes[spec.worker_id] = lane
             workers.append(_status_entry(spec, "healthy", profile, lane))
             continue
@@ -452,7 +461,8 @@ def reconcile(
             workers.append(_status_entry(spec, "backed_off", profile, lane))
             continue
         quota_reset = parse_quota_reset(health.recent_output, now)
-        quota_digest = _failure_digest(health.recent_output)
+        quota_match = QUOTA_RE.search(health.recent_output)
+        quota_digest = _quota_event_digest(quota_match) if quota_match else ""
         new_quota_event = (
             spec.agent == "agy"
             and quota_reset is not None

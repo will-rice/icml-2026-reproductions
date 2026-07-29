@@ -447,6 +447,63 @@ def test_stale_quota_output_is_consumed_only_once(fake_host, fixed_now):
     assert set(lane.profile_backoff) == {"gemini-3.1-pro-high"}
 
 
+def test_stale_quota_record_with_new_terminal_output_is_not_reprocessed(
+    fake_host, fixed_now
+):
+    spec = supervisor.desired_workers()[0]
+    quota_output = "Individual quota reached. Resets in 46m20s."
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True, False, "bash", quota_output
+    )
+    first = supervisor.reconcile(
+        fake_host,
+        supervisor.RuntimeState.with_lane(spec.worker_id, profile_index=0),
+        fixed_now,
+        Path("/repo"),
+    )
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True, False, "bash", f"{quota_output}\nordinary terminal output"
+    )
+    second = supervisor.reconcile(
+        fake_host, first.state, fixed_now + timedelta(seconds=30), Path("/repo")
+    )
+    lane = second.state.lanes[spec.worker_id]
+    assert lane.profile_index == 1
+    assert lane.profile_backoff == {
+        "gemini-3.1-pro-high": fixed_now + timedelta(minutes=46, seconds=20)
+    }
+
+
+def test_healthy_observation_allows_later_identical_quota_event(fake_host, fixed_now):
+    spec = supervisor.desired_workers()[0]
+    quota_output = "Individual quota reached. Resets in 46m20s."
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True, False, "bash", quota_output
+    )
+    first = supervisor.reconcile(
+        fake_host,
+        supervisor.RuntimeState.with_lane(spec.worker_id, profile_index=0),
+        fixed_now,
+        Path("/repo"),
+    )
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(True, False, "agy", "")
+    healthy = supervisor.reconcile(
+        fake_host, first.state, fixed_now + timedelta(seconds=30), Path("/repo")
+    )
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True, False, "bash", quota_output
+    )
+    result = supervisor.reconcile(
+        fake_host, healthy.state, fixed_now + timedelta(seconds=60), Path("/repo")
+    )
+    lane = result.state.lanes[spec.worker_id]
+    assert lane.profile_index == 2
+    assert set(lane.profile_backoff) == {
+        "gemini-3.1-pro-high",
+        "gemini-3.6-flash-high",
+    }
+
+
 def test_dry_run_keeps_healthy_lane_failure_state_unchanged(fake_host, fixed_now):
     spec = supervisor.desired_workers()[10]
     fake_host.health[spec.session_name] = supervisor.SessionHealth(
