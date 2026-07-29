@@ -1168,11 +1168,11 @@ def test_persisted_blocked_state_validates_recovery_fields(
 @pytest.mark.parametrize(
     ("poll_limit", "poll_deadline", "field"),
     [
-        (0, "2026-07-22T18:00:00Z", "poll_limit"),
-        (-1, "2026-07-22T18:00:00Z", "poll_limit"),
-        (1.5, "2026-07-22T18:00:00Z", "poll_limit"),
-        (True, "2026-07-22T18:00:00Z", "poll_limit"),
-        (2, "2026-07-22T18:00:00", "poll_deadline"),
+        (0, "2026-12-22T18:00:00Z", "poll_limit"),
+        (-1, "2026-12-22T18:00:00Z", "poll_limit"),
+        (1.5, "2026-12-22T18:00:00Z", "poll_limit"),
+        (True, "2026-12-22T18:00:00Z", "poll_limit"),
+        (2, "2026-12-22T18:00:00", "poll_deadline"),
         (2, "not-a-date", "poll_deadline"),
     ],
 )
@@ -1195,7 +1195,7 @@ def test_entering_judging_requires_both_poll_fields(field: str):
     module = state_module()
     updates = {
         "poll_limit": 2,
-        "poll_deadline": "2026-07-22T18:00:00Z",
+        "poll_deadline": "2026-12-22T18:00:00Z",
     }
     updates.pop(field)
 
@@ -1228,12 +1228,12 @@ def test_judging_polls_append_through_limit_and_deadline():
 
     first = module.update_current(
         judging,
-        last_poll_at="2026-07-22T17:00:00Z",
+        last_poll_at="2026-12-22T17:00:00Z",
         last_poll_status="pending",
     )
     second = module.update_current(
         first,
-        last_poll_at="2026-07-22T18:00:00Z",
+        last_poll_at="2026-12-22T18:00:00Z",
         last_poll_status="pending",
     )
 
@@ -1241,13 +1241,13 @@ def test_judging_polls_append_through_limit_and_deadline():
     with pytest.raises(ValueError, match="poll_limit"):
         module.update_current(
             second,
-            last_poll_at="2026-07-22T18:00:00Z",
+            last_poll_at="2026-12-22T18:00:00Z",
             last_poll_status="pending",
         )
     with pytest.raises(ValueError, match="poll_deadline"):
         module.update_current(
             first,
-            last_poll_at="2026-07-22T18:00:01Z",
+            last_poll_at="2026-12-22T18:00:01Z",
             last_poll_status="pending",
         )
 
@@ -1258,7 +1258,7 @@ def test_judging_poll_timestamp_must_be_timezone_aware():
     with pytest.raises(ValueError, match="last_poll_at"):
         module.update_current(
             valid_judging_state(module),
-            last_poll_at="2026-07-22T17:00:00",
+            last_poll_at="2026-12-22T17:00:00",
             last_poll_status="pending",
         )
 
@@ -1268,7 +1268,7 @@ def test_judging_poll_timestamp_must_be_timezone_aware():
     [
         ("poll_limit", 0),
         ("poll_limit", 1.5),
-        ("poll_deadline", "2026-07-22T18:00:00"),
+        ("poll_deadline", "2026-12-22T18:00:00"),
         ("poll_deadline", "invalid"),
     ],
 )
@@ -2991,12 +2991,12 @@ def test_poll_limits_are_scoped_to_each_judging_round():
     judging = valid_judging_state(module)
     first = module.update_current(
         judging,
-        last_poll_at="2026-07-22T17:00:00Z",
+        last_poll_at="2026-12-22T17:00:00Z",
         last_poll_status="pending",
     )
     second = module.update_current(
         first,
-        last_poll_at="2026-07-22T18:00:00Z",
+        last_poll_at="2026-12-22T18:00:00Z",
         last_poll_status="partial",
     )
     improving = module.transition(
@@ -3049,7 +3049,7 @@ def valid_judging_state(module) -> dict:
         state_in_phase(module, "submitted"),
         "judging",
         poll_limit=2,
-        poll_deadline="2026-07-22T18:00:00Z",
+        poll_deadline="2026-12-22T18:00:00Z",
     )
 
 
@@ -3119,7 +3119,7 @@ def state_in_phase(module, phase: str) -> dict:
             state,
             "judging",
             poll_limit=2,
-            poll_deadline="2026-07-22T18:00:00Z",
+            poll_deadline="2026-12-22T18:00:00Z",
         )
         return module.transition(state, "complete", verdict=verdict())
     if phase == "selected":
@@ -3147,7 +3147,7 @@ def updates_for(phase: str) -> dict:
         "submitted": {"space_id": "org/reproduction"},
         "judging": {
             "poll_limit": 2,
-            "poll_deadline": "2026-07-22T18:00:00Z",
+            "poll_deadline": "2026-12-22T18:00:00Z",
         },
         "improving": {
             "verdict": verdict("partial"),
