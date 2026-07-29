@@ -16,3 +16,4 @@ dev = ["pre-commit>=4.2.0", "pytest>=8.4.0"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+addopts = "--ignore=submissions"
