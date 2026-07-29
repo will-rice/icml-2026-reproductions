@@ -27,6 +27,9 @@ submissions/*
 !submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/
 !submissions/unifying-masked-diffusion-models-with-various-generation-orders-and-beyond/
 !submissions/h1-bootstrapping-llms-to-reason-over-longer-horizons-via-reinforcement-learning/
+!submissions/pipesd-an-efficient-cloud-edge-collaborative-pipeline-inference-framework-with-speculative-decoding/
+!docs/superpowers/plans/2026-07-29-pipesd-reproduction-plan.md
 
 !docs/reproductions/f81471f1-69f8-439c-a653-20c178f9616c-design.md
 !docs/designs/2026-07-29-qsched-reproduction-plan.md
+
