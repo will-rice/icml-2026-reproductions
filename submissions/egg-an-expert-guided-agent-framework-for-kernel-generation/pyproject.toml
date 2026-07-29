@@ -1,0 +1,15 @@
+[project]
+name = "egg-kernel"
+version = "0.1.0"
+description = "Reproduction for EGG: An Expert-Guided Agent Framework for Kernel Generation"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch",
+    "gradio",
+    "pytest",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,0 +1,14 @@
+{
+  "paper_id": "8nti23Zqkt",
+  "paper_title": "EGG: An Expert-Guided Agent Framework for Kernel Generation",
+  "upstream_revision": "arxiv:2606.26758",
+  "target_claims": [
+    "EGG decomposes kernel generation into algorithmic structure design and hardware-specific tuning with stage-aware multi-agent collaboration (Figure 1).",
+    "On KernelBench, EGG reports 100% success at Levels 1, 2, and 3 with speedups of 1.83x, 2.73x, and 1.52x over PyTorch Eager (Table 1).",
+    "The overall EGG system reports 87.6% Fast1 and 2.13x speedup, while ablations without multi-seed search, algorithmic refinement, hardware tuning, or multi-agent collaboration reduce speedup (Table 2)."
+  ],
+  "verification_plan": {
+    "execution_path": "Implement deterministic synthetic benchmark tests and standalone PyTorch/CPU kernel generation evaluation pipelines for EGG multi-agent stage decomposition and KernelBench speedup metrics.",
+    "subordinate_subprocess_required": false
+  }
+}
