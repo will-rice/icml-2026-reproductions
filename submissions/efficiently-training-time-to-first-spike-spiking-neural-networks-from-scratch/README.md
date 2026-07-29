@@ -31,4 +31,3 @@ python generate_evidence.py
 python generate_evidence.py --check
 ```
 
-
