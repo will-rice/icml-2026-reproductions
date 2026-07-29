@@ -34,7 +34,29 @@ QUOTA_RE = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 EXIT_RE = re.compile(r"process exited with code \d+", re.IGNORECASE)
-FAILURE_CLASSES = frozenset({"quota-reached", "ordinary-exit", "unhealthy-session"})
+HEALTH_CLASSES = frozenset(
+    {"healthy", "started", "backed_off", "proposed", "error", "stopped"}
+)
+ERROR_CLASSES = frozenset(
+    {
+        "",
+        "quota-reached",
+        "ordinary-exit",
+        "unhealthy-session",
+        "host-command-failure",
+    }
+)
+FAILURE_CLASSES = ERROR_CLASSES - {""}
+SUPERVISOR_ERROR_CLASSES = frozenset(
+    {
+        "smoke-request-invalid",
+        "smoke-request-stale",
+        "smoke-recovery-failed",
+    }
+)
+EVENT_HISTORY_LIMIT = 20
+STATUS_STALE_AFTER = timedelta(seconds=90)
+SMOKE_REQUEST_STALE_AFTER = 120.0
 TMUX_MISSING_TARGET_PREFIXES = (
     "can't find session:",
     "can't find window:",
@@ -43,6 +65,11 @@ TMUX_MISSING_TARGET_PREFIXES = (
 SMOKE_SESSION = "icml-supervisor-smoke-test"
 SMOKE_COMMAND = "/usr/bin/sleep 300"
 SMOKE_RESTORE_COMMAND = "exec /usr/bin/sleep 300"
+LAUNCH_MARKER_PREFIX = "__ICML_WORKER_LAUNCH__:"
+LAUNCH_MARKER_RE = re.compile(
+    re.escape(LAUNCH_MARKER_PREFIX) + r"(?P<marker>[A-Za-z0-9_-]{1,128})"
+)
+TMUX_FALLBACK_SHELL = "/bin/bash"
 PROMPT = (
     "Use the shared icml-repro-loop skill directly and keep running its "
     "paper-owner loop. Read and follow "
@@ -70,6 +97,14 @@ class SessionHealth:
     pane_dead: bool
     foreground_command: str
     recent_output: str
+    launch_marker: str = ""
+
+
+@dataclass(frozen=True)
+class LaneEvent:
+    observed_at: datetime
+    health: str
+    error_class: str
 
 
 @dataclass(frozen=True)
@@ -81,6 +116,8 @@ class LaneState:
     next_retry_at: datetime | None = None
     last_error: str = ""
     processed_failure_digest: str = ""
+    launch_marker: str = ""
+    events: tuple[LaneEvent, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -112,9 +149,10 @@ class RuntimeState:
 @dataclass(frozen=True)
 class ReconcileResult:
     state: RuntimeState
-    status: dict[str, list[dict[str, str | int | None]]]
+    status: dict[str, Any]
     started: tuple[str, ...]
     proposed: tuple[str, ...]
+    failures: tuple[str, ...] = ()
 
 
 class AlreadyRunning(RuntimeError):
@@ -126,6 +164,14 @@ class HostCommandError(RuntimeError):
 
     def __init__(self, stderr: str):
         super().__init__(f"host command failed: {sanitize_text(stderr).strip()}")
+
+
+class SmokeRequestStale(ValueError):
+    """Raised when an abandoned smoke request is too old to execute."""
+
+
+class SmokeRecoveryError(RuntimeError):
+    """Raised when a valid smoke request cannot restore its disposable lane."""
 
 
 class HostAdapter:
@@ -147,7 +193,10 @@ class HostAdapter:
             "-t",
             spec.session_name,
             "-F",
-            "#{pane_dead}\t#{pane_current_command}\t#{pane_pid}",
+            (
+                "#{pane_dead}\t#{pane_current_command}\t#{pane_pid}"
+                "\t#{pane_start_command}"
+            ),
         ]
         pane_result = self._run_tmux(pane_argv)
         if pane_result.returncode:
@@ -158,9 +207,12 @@ class HostAdapter:
             raise HostCommandError(pane_result.stderr)
 
         try:
-            pane_dead, foreground_command, _pane_pid = pane_result.stdout.splitlines()[
-                0
-            ].split("\t", maxsplit=2)
+            (
+                pane_dead,
+                foreground_command,
+                _pane_pid,
+                pane_start_command,
+            ) = pane_result.stdout.splitlines()[0].split("\t", maxsplit=3)
         except (IndexError, ValueError) as error:
             raise HostCommandError("tmux returned malformed pane metadata") from error
 
@@ -180,11 +232,17 @@ class HostAdapter:
             pane_dead == "1",
             foreground_command,
             sanitize_text(output_result.stdout),
+            _launch_marker_from_text(pane_start_command),
         )
 
-    def ensure_session(self, spec: WorkerSpec, command: str) -> None:
-        if not self.session_health(spec).exists:
-            create_argv = [
+    def ensure_session(self, spec: WorkerSpec, command: str) -> bool:
+        health = self.session_health(spec)
+        if is_healthy(spec, health):
+            return False
+
+        persistent_command = f"{command}; exec {TMUX_FALLBACK_SHELL}"
+        if not health.exists:
+            mutation_argv = [
                 "tmux",
                 "new-session",
                 "-d",
@@ -192,19 +250,30 @@ class HostAdapter:
                 spec.session_name,
                 "-c",
                 str(self.repo_root),
+                persistent_command,
             ]
-            create_result = self._run_tmux(create_argv)
-            if create_result.returncode:
-                raise HostCommandError(create_result.stderr)
-
-        send_argv = ["tmux", "send-keys", "-t", spec.session_name, command, "C-m"]
-        send_result = self._run_tmux(send_argv)
-        if send_result.returncode:
-            raise HostCommandError(send_result.stderr)
+        else:
+            mutation_argv = [
+                "tmux",
+                "respawn-pane",
+                "-k",
+                "-t",
+                spec.session_name,
+                "-c",
+                str(self.repo_root),
+                persistent_command,
+            ]
+        mutation_result = self._run_tmux(mutation_argv)
+        if mutation_result.returncode:
+            raise HostCommandError(mutation_result.stderr)
+        return True
 
     def stop_session(self, session_name: str) -> None:
         result = self._run_tmux(["tmux", "kill-session", "-t", session_name])
-        if result.returncode and "can't find session" not in result.stderr.lower():
+        stderr = result.stderr.strip().lower()
+        if result.returncode and not stderr.startswith(
+            TMUX_MISSING_TARGET_PREFIXES
+        ):
             raise HostCommandError(result.stderr)
 
     def systemctl_user(self, *arguments: str) -> None:
@@ -535,6 +604,27 @@ def _quota_event_digest(match: re.Match[str]) -> str:
     return hashlib.sha256(record.encode()).hexdigest()
 
 
+def _marked_launch_command(command: str, marker: str) -> str:
+    marker_line = f"{LAUNCH_MARKER_PREFIX}{marker}"
+    return f"printf '%s\\n' {shlex.quote(marker_line)}; {command}"
+
+
+def _launch_marker_from_text(text: str) -> str:
+    match = LAUNCH_MARKER_RE.search(text)
+    return "" if match is None else match.group("marker")
+
+
+def _current_launch_output(lane: LaneState, health: SessionHealth) -> str:
+    output = health.recent_output
+    if not lane.launch_marker:
+        return output
+    if health.launch_marker != lane.launch_marker:
+        return ""
+    marker_line = f"{LAUNCH_MARKER_PREFIX}{lane.launch_marker}"
+    _before, found, current = output.rpartition(marker_line)
+    return current if found else output
+
+
 def _classified_error(output: str) -> str:
     if not output:
         return ""
@@ -553,9 +643,30 @@ def _iso_timestamp(value: datetime | None) -> str | None:
     return value.astimezone(timezone.utc).isoformat()
 
 
+def _append_lane_event(
+    lane: LaneState,
+    now: datetime,
+    health: str,
+    error_class: str,
+) -> LaneState:
+    if health not in HEALTH_CLASSES:
+        raise ValueError("invalid lane health class")
+    if error_class not in ERROR_CLASSES:
+        raise ValueError("invalid lane error class")
+    events = (
+        *lane.events,
+        LaneEvent(
+            observed_at=now.astimezone(timezone.utc),
+            health=health,
+            error_class=error_class,
+        ),
+    )
+    return replace(lane, events=events[-EVENT_HISTORY_LIMIT:])
+
+
 def _status_entry(
     spec: WorkerSpec, health: str, profile: ModelProfile, lane: LaneState
-) -> dict[str, str | int | None]:
+) -> dict[str, Any]:
     return {
         "worker_id": spec.worker_id,
         "agent": spec.agent,
@@ -564,6 +675,14 @@ def _status_entry(
         "restart_count": lane.restart_count,
         "next_retry_at": _iso_timestamp(lane.next_retry_at),
         "last_error": _classified_error(lane.last_error),
+        "events": [
+            {
+                "observed_at": _iso_timestamp(event.observed_at),
+                "health": event.health,
+                "error_class": event.error_class,
+            }
+            for event in lane.events
+        ],
     }
 
 
@@ -577,30 +696,53 @@ def reconcile(
     lanes = dict(state.lanes)
     started: list[str] = []
     proposed: list[str] = []
-    workers: list[dict[str, str | int | None]] = []
+    failures: list[str] = []
+    workers: list[dict[str, Any]] = []
     for spec in desired_workers():
         lane = lanes.get(spec.worker_id, LaneState())
-        health = host.session_health(spec)
         profile = _profile_for(spec, lane)
+        try:
+            health = host.session_health(spec)
+        except HostCommandError:
+            failures.append(spec.worker_id)
+            if not dry_run:
+                lane = replace(
+                    lane,
+                    next_retry_at=now + timedelta(seconds=15),
+                    last_error="host-command-failure",
+                )
+                lane = _append_lane_event(
+                    lane, now, "error", "host-command-failure"
+                )
+                lanes[spec.worker_id] = lane
+            workers.append(_status_entry(spec, "error", profile, lane))
+            continue
+        diagnostic_output = _current_launch_output(lane, health)
         if is_healthy(spec, health):
-            if (
-                (lane.ordinary_failures or lane.processed_failure_digest)
-                and not dry_run
-            ):
+            if not dry_run:
                 lane = replace(
                     lane,
                     ordinary_failures=0,
                     next_retry_at=None,
                     processed_failure_digest="",
                 )
+                lane = _append_lane_event(lane, now, "healthy", "")
                 lanes[spec.worker_id] = lane
             workers.append(_status_entry(spec, "healthy", profile, lane))
             continue
         if lane.next_retry_at is not None and now < lane.next_retry_at:
+            if not dry_run:
+                lane = _append_lane_event(
+                    lane,
+                    now,
+                    "backed_off",
+                    _classified_error(lane.last_error),
+                )
+                lanes[spec.worker_id] = lane
             workers.append(_status_entry(spec, "backed_off", profile, lane))
             continue
-        quota_reset = parse_quota_reset(health.recent_output, now)
-        quota_match = QUOTA_RE.search(health.recent_output)
+        quota_reset = parse_quota_reset(diagnostic_output, now)
+        quota_match = QUOTA_RE.search(diagnostic_output)
         quota_digest = _quota_event_digest(quota_match) if quota_match else ""
         new_quota_event = (
             spec.agent == "agy"
@@ -614,7 +756,7 @@ def reconcile(
                 lane,
                 profile_backoff=profile_backoff,
                 next_retry_at=None,
-                last_error=_classified_error(health.recent_output),
+                last_error=_classified_error(diagnostic_output),
                 processed_failure_digest=quota_digest,
             )
         selected_profile, profile_index = next_profile(
@@ -630,7 +772,13 @@ def reconcile(
             lane = replace(
                 lane,
                 next_retry_at=earliest_reset,
-                last_error=_classified_error(health.recent_output),
+                last_error=_classified_error(diagnostic_output),
+            )
+            lane = _append_lane_event(
+                lane,
+                now,
+                "backed_off",
+                _classified_error(lane.last_error),
             )
             lanes[spec.worker_id] = lane
             workers.append(_status_entry(spec, "backed_off", profile, lane))
@@ -642,7 +790,35 @@ def reconcile(
             proposed.append(spec.worker_id)
             workers.append(_status_entry(spec, "proposed", profile, lane))
             continue
-        host.ensure_session(spec, command)
+        launch_marker = secrets.token_hex(16)
+        try:
+            started_now = host.ensure_session(
+                spec, _marked_launch_command(command, launch_marker)
+            )
+        except HostCommandError:
+            failures.append(spec.worker_id)
+            lane = replace(
+                lane,
+                next_retry_at=now + timedelta(seconds=15),
+                last_error="host-command-failure",
+            )
+            lane = _append_lane_event(
+                lane, now, "error", "host-command-failure"
+            )
+            lanes[spec.worker_id] = lane
+            workers.append(_status_entry(spec, "error", profile, lane))
+            continue
+        if not started_now:
+            lane = replace(
+                lane,
+                ordinary_failures=0,
+                next_retry_at=None,
+                processed_failure_digest="",
+            )
+            lane = _append_lane_event(lane, now, "healthy", "")
+            lanes[spec.worker_id] = lane
+            workers.append(_status_entry(spec, "healthy", profile, lane))
+            continue
         ordinary_failures = lane.ordinary_failures
         if health.exists and quota_reset is None:
             ordinary_failures += 1
@@ -656,12 +832,32 @@ def reconcile(
             restart_count=lane.restart_count + 1,
             ordinary_failures=ordinary_failures,
             next_retry_at=next_retry_at,
-            last_error=_classified_error(health.recent_output),
+            last_error=_classified_error(diagnostic_output),
+            processed_failure_digest="",
+            launch_marker=launch_marker,
+        )
+        lane = _append_lane_event(
+            lane,
+            now,
+            "started",
+            _classified_error(lane.last_error),
         )
         lanes[spec.worker_id] = lane
         started.append(spec.worker_id)
         workers.append(_status_entry(spec, "started", profile, lane))
-    return ReconcileResult(RuntimeState(lanes), {"workers": workers}, tuple(started), tuple(proposed))
+    status = {
+        "observed_at": _iso_timestamp(now),
+        "state": "partial" if failures else "running",
+        "supervisor_errors": [],
+        "workers": workers,
+    }
+    return ReconcileResult(
+        RuntimeState(lanes),
+        status,
+        tuple(started),
+        tuple(proposed),
+        tuple(failures),
+    )
 
 
 def sanitize_text(text: str) -> str:
@@ -698,6 +894,15 @@ def _runtime_to_json(state: RuntimeState) -> dict[str, dict[str, dict[str, Any]]
                 "next_retry_at": _iso_timestamp(lane.next_retry_at),
                 "last_error": lane.last_error,
                 "processed_failure_digest": lane.processed_failure_digest,
+                "launch_marker": lane.launch_marker,
+                "events": [
+                    {
+                        "observed_at": _iso_timestamp(event.observed_at),
+                        "health": event.health,
+                        "error_class": event.error_class,
+                    }
+                    for event in lane.events
+                ],
             }
             for worker_id, lane in state.lanes.items()
         }
@@ -725,6 +930,29 @@ def _runtime_from_json(value: object) -> RuntimeState:
         raw_backoff = raw_lane.get("profile_backoff", {})
         if not isinstance(raw_backoff, dict):
             raise ValueError("profile_backoff must be an object")
+        raw_events = raw_lane.get("events", [])
+        if not isinstance(raw_events, list):
+            raise ValueError("lane events must be a list")
+        events: list[LaneEvent] = []
+        for raw_event in raw_events[-EVENT_HISTORY_LIMIT:]:
+            if not isinstance(raw_event, dict):
+                raise ValueError("lane events must be objects")
+            observed_at = _parse_timestamp(raw_event.get("observed_at"))
+            health = raw_event.get("health")
+            error_class = raw_event.get("error_class")
+            if observed_at is None:
+                raise ValueError("lane event observed_at is required")
+            if health not in HEALTH_CLASSES:
+                raise ValueError("lane event health class is invalid")
+            if error_class not in ERROR_CLASSES:
+                raise ValueError("lane event error class is invalid")
+            events.append(
+                LaneEvent(
+                    observed_at=observed_at,
+                    health=str(health),
+                    error_class=str(error_class),
+                )
+            )
         lanes[worker_id] = LaneState(
             profile_index=int(raw_lane.get("profile_index", 0)),
             profile_backoff={
@@ -735,10 +963,14 @@ def _runtime_from_json(value: object) -> RuntimeState:
             restart_count=int(raw_lane.get("restart_count", 0)),
             ordinary_failures=int(raw_lane.get("ordinary_failures", 0)),
             next_retry_at=_parse_timestamp(raw_lane.get("next_retry_at")),
-            last_error=str(raw_lane.get("last_error", "")),
+            last_error=_classified_error(
+                str(raw_lane.get("last_error", ""))
+            ),
             processed_failure_digest=str(
                 raw_lane.get("processed_failure_digest", "")
             ),
+            launch_marker=str(raw_lane.get("launch_marker", "")),
+            events=tuple(events),
         )
     return RuntimeState(lanes)
 
@@ -766,13 +998,30 @@ def _load_smoke_request(path: Path) -> dict[str, str] | None:
     return {"nonce": nonce, "stage": stage}
 
 
+def _quarantine_smoke_request(path: Path) -> None:
+    if path.exists():
+        os.replace(
+            path,
+            path.with_name("smoke-request.quarantined.json"),
+        )
+
+
 def _restore_pending_smoke_request(host: HostAdapter, path: Path) -> None:
+    if (
+        path.exists()
+        and time.time() - path.stat().st_mtime
+        > SMOKE_REQUEST_STALE_AFTER
+    ):
+        raise SmokeRequestStale("smoke request is stale")
     request = _load_smoke_request(path)
     if request is None or request["stage"] == "restored":
         return
-    host.restore_disposable_session(SMOKE_SESSION, SMOKE_RESTORE_COMMAND)
-    if host.session_foreground_command(SMOKE_SESSION) != "sleep":
-        return
+    try:
+        host.restore_disposable_session(SMOKE_SESSION, SMOKE_RESTORE_COMMAND)
+        if host.session_foreground_command(SMOKE_SESSION) != "sleep":
+            raise SmokeRecoveryError("smoke command did not recover")
+    except HostCommandError as error:
+        raise SmokeRecoveryError("smoke host recovery failed") from error
     atomic_write_json(
         path, {"nonce": request["nonce"], "stage": "restored"}
     )
@@ -788,24 +1037,87 @@ def _run_reconcile(
 ) -> ReconcileResult:
     status_path, runtime_path, lock_path = _runtime_paths(home)
     with exclusive_lock(lock_path):
+        smoke_errors: list[str] = []
         if not dry_run:
-            _restore_pending_smoke_request(host, _smoke_request_path(home))
+            smoke_path = _smoke_request_path(home)
+            try:
+                _restore_pending_smoke_request(host, smoke_path)
+            except SmokeRequestStale:
+                smoke_errors.append("smoke-request-stale")
+            except (json.JSONDecodeError, ValueError):
+                smoke_errors.append("smoke-request-invalid")
+            except (HostCommandError, OSError, SmokeRecoveryError):
+                smoke_errors.append("smoke-recovery-failed")
+            if smoke_errors:
+                try:
+                    _quarantine_smoke_request(smoke_path)
+                except OSError:
+                    smoke_errors[:] = ["smoke-recovery-failed"]
         state = _load_runtime(runtime_path)
         result = reconcile(host, state, now, repo_root, dry_run=dry_run)
         if not dry_run:
+            if smoke_errors:
+                status = dict(result.status)
+                status["state"] = "partial"
+                status["supervisor_errors"] = smoke_errors
+                result = replace(
+                    result,
+                    status=status,
+                    failures=(*result.failures, *smoke_errors),
+                )
             atomic_write_json(runtime_path, _runtime_to_json(result.state))
             atomic_write_json(status_path, result.status)
     return result
 
 
-def _print_status(path: Path) -> int:
+def _print_zero_counts() -> None:
+    print("agy 0/10")
+    print("codex 0/5")
+
+
+def _print_status(path: Path, now: datetime) -> int:
     try:
         status = json.loads(path.read_text(encoding="utf-8"))
         workers = status["workers"]
         if not isinstance(workers, list):
             raise TypeError("workers must be a list")
-    except (FileNotFoundError, json.JSONDecodeError, KeyError, TypeError) as error:
-        print(f"status unavailable: {sanitize_text(str(error))}", file=sys.stderr)
+        observed_at = _parse_timestamp(status.get("observed_at"))
+        if observed_at is None:
+            raise TypeError("observed_at is required")
+        state = status.get("state")
+        if state not in {"running", "partial", "stopped"}:
+            raise TypeError("state is invalid")
+        supervisor_errors = status.get("supervisor_errors", [])
+        if (
+            not isinstance(supervisor_errors, list)
+            or any(
+                error not in SUPERVISOR_ERROR_CLASSES
+                for error in supervisor_errors
+            )
+        ):
+            raise TypeError("supervisor_errors is invalid")
+    except (
+        FileNotFoundError,
+        json.JSONDecodeError,
+        KeyError,
+        TypeError,
+        ValueError,
+    ):
+        print("status snapshot is unavailable", file=sys.stderr)
+        _print_zero_counts()
+        return 1
+
+    if state == "stopped":
+        _print_zero_counts()
+        print(f"supervisor stopped at {_iso_timestamp(observed_at)}")
+        return 0
+
+    if now.astimezone(timezone.utc) - observed_at > STATUS_STALE_AFTER:
+        print(
+            f"status snapshot is stale: observed at {_iso_timestamp(observed_at)}",
+            file=sys.stderr,
+        )
+        _print_zero_counts()
         return 1
 
     for agent, desired in (("agy", 10), ("codex", 5)):
@@ -827,7 +1139,24 @@ def _print_status(path: Path) -> int:
                 )
             ).rstrip()
         )
-    return 0
+    for error_class in supervisor_errors:
+        print(f"supervisor partial {error_class}")
+    return 1 if state == "partial" or supervisor_errors else 0
+
+
+def _stopped_status(now: datetime) -> dict[str, Any]:
+    workers: list[dict[str, Any]] = []
+    for spec in desired_workers():
+        lane = _append_lane_event(LaneState(), now, "stopped", "")
+        workers.append(
+            _status_entry(spec, "stopped", _profile_for(spec, lane), lane)
+        )
+    return {
+        "observed_at": _iso_timestamp(now),
+        "state": "stopped",
+        "supervisor_errors": [],
+        "workers": workers,
+    }
 
 
 def _render_systemd_units(repo_root: Path, python: Path) -> dict[str, str]:
@@ -858,11 +1187,11 @@ def _install(
     unit_dir = home / ".config/systemd/user"
     for filename, content in _render_systemd_units(repo_root, python).items():
         atomic_write_text(unit_dir / filename, content)
-    _run_reconcile(host, home, now, repo_root)
+    result = _run_reconcile(host, home, now, repo_root)
     host.systemctl_user("daemon-reload")
     host.systemctl_user("enable", "--now", "icml-worker-supervisor.timer")
     host.systemctl_user("start", "icml-worker-supervisor.service")
-    return 0
+    return 1 if result.failures else 0
 
 
 def _production_pids(host: HostAdapter) -> dict[str, int]:
@@ -961,10 +1290,10 @@ def main(
             if args.dry_run:
                 for worker_id in result.proposed:
                     print(f"proposed {worker_id}")
-            return 0
+            return 1 if result.failures else 0
         if args.command == "status":
             status_path, _, _ = _runtime_paths(selected_home)
-            return _print_status(status_path)
+            return _print_status(status_path, selected_now)
         if args.command == "install":
             return _install(
                 selected_host,
@@ -983,11 +1312,19 @@ def main(
             selected_host.systemctl_user(
                 "stop", "icml-worker-supervisor.service"
             )
-            _, _, lock_path = _runtime_paths(selected_home)
+            status_path, _, lock_path = _runtime_paths(selected_home)
             with exclusive_lock(lock_path, wait=True):
+                stop_failed = False
                 for spec in desired_workers():
-                    selected_host.stop_session(spec.session_name)
-            return 0
+                    try:
+                        selected_host.stop_session(spec.session_name)
+                    except HostCommandError:
+                        stop_failed = True
+                if not stop_failed:
+                    atomic_write_json(
+                        status_path, _stopped_status(selected_now)
+                    )
+            return 1 if stop_failed else 0
         if args.command == "smoke-test":
             return _smoke_test(
                 selected_host,

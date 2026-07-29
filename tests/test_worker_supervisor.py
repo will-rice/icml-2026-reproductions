@@ -1,8 +1,10 @@
 import json
 from datetime import datetime, timedelta, timezone
+import os
 from pathlib import Path
 import subprocess
 import threading
+import time
 
 import pytest
 
@@ -38,20 +40,40 @@ class FakeHost:
         self.service_quiesced = threading.Event()
         self.stop_lock_path = None
         self.inflight_reconcile = False
+        self.health_errors = set()
+        self.ensure_errors = set()
+        self.restore_error = False
 
     def session_health(self, spec):
         if "reconcile" not in self.events:
             self.events.append("reconcile")
+        if spec.session_name in self.health_errors:
+            raise supervisor.HostCommandError("tmux health lookup failed")
         return self.health.get(
             spec.session_name, supervisor.SessionHealth(False, False, "", "")
         )
 
     def ensure_session(self, spec, command):
-        if not self.session_health(spec).exists:
+        health = self.session_health(spec)
+        if supervisor.is_healthy(spec, health):
+            return False
+        if spec.session_name in self.ensure_errors:
+            raise supervisor.HostCommandError("tmux launch failed")
+        if not health.exists:
             self.created.append(spec.session_name)
         self.sent.append((spec.session_name, command))
+        launch_marker = ""
+        if supervisor.LAUNCH_MARKER_PREFIX in command:
+            marker_suffix = command.split(
+                supervisor.LAUNCH_MARKER_PREFIX, maxsplit=1
+            )[1]
+            launch_marker = marker_suffix.split(";", maxsplit=1)[0]
+        self.health[spec.session_name] = supervisor.SessionHealth(
+            True, False, spec.agent, "", launch_marker
+        )
         if self.inflight_reconcile:
             self.events.append(f"recreate {spec.session_name}")
+        return True
 
     def mark_started(self, worker_ids):
         by_worker_id = {spec.worker_id: spec for spec in supervisor.desired_workers()}
@@ -96,6 +118,8 @@ class FakeHost:
     def restore_disposable_session(self, session_name, command):
         assert session_name == "icml-supervisor-smoke-test"
         assert command == "exec /usr/bin/sleep 300"
+        if self.restore_error:
+            raise supervisor.HostCommandError("missing disposable smoke session")
         self.restored.append(session_name)
         if self.restore_succeeds:
             self.disposable_foreground[session_name] = "sleep"
@@ -203,7 +227,7 @@ def test_host_adapter_reads_tmux_health_with_argument_arrays(monkeypatch):
         assert capture_output is True
         calls.append(argv)
         if argv[1] == "list-panes":
-            return subprocess.CompletedProcess(argv, 0, "0\tagy\t123\n", "")
+            return subprocess.CompletedProcess(argv, 0, "0\tagy\t123\t\n", "")
         return subprocess.CompletedProcess(argv, 0, "recent output\n", "")
 
     monkeypatch.setattr(supervisor.subprocess, "run", run)
@@ -220,10 +244,45 @@ def test_host_adapter_reads_tmux_health_with_argument_arrays(monkeypatch):
             "-t",
             "agy-paper-owner-01",
             "-F",
-            "#{pane_dead}\t#{pane_current_command}\t#{pane_pid}",
+            (
+                "#{pane_dead}\t#{pane_current_command}\t#{pane_pid}"
+                "\t#{pane_start_command}"
+            ),
         ],
         ["tmux", "capture-pane", "-pt", "agy-paper-owner-01", "-S", "-80"],
     ]
+
+
+def test_host_adapter_extracts_launch_generation_without_retaining_start_command(
+    monkeypatch,
+):
+    marker = "0123456789abcdef"
+    raw_start_command = (
+        f"printf '%s' {supervisor.LAUNCH_MARKER_PREFIX}{marker}; "
+        "HF_TOKEN=hf_secret agy secret prompt"
+    )
+
+    def run(argv, *, check, text, capture_output):
+        if argv[1] == "list-panes":
+            return subprocess.CompletedProcess(
+                argv,
+                0,
+                f"0\tbash\t123\t{raw_start_command}\n",
+                "",
+            )
+        return subprocess.CompletedProcess(
+            argv, 0, "process exited with code 1\n", ""
+        )
+
+    monkeypatch.setattr(supervisor.subprocess, "run", run)
+
+    health = supervisor.HostAdapter(Path("/repo")).session_health(
+        supervisor.desired_workers()[0]
+    )
+
+    assert health.launch_marker == marker
+    assert not hasattr(health, "start_command")
+    assert raw_start_command not in repr(health)
 
 
 @pytest.mark.parametrize(
@@ -262,7 +321,7 @@ def test_host_adapter_unrelated_failure_is_sanitized(monkeypatch):
     assert "<redacted>" in str(exc_info.value)
 
 
-def test_host_adapter_creates_only_missing_session_then_sends_command(monkeypatch):
+def test_host_adapter_starts_missing_session_directly_in_repo(monkeypatch):
     calls = []
 
     def run(argv, *, check, text, capture_output):
@@ -275,8 +334,11 @@ def test_host_adapter_creates_only_missing_session_then_sends_command(monkeypatc
     monkeypatch.setattr(supervisor.subprocess, "run", run)
     spec = supervisor.desired_workers()[0]
 
-    supervisor.HostAdapter(Path("/repo")).ensure_session(spec, "exec agy")
+    started = supervisor.HostAdapter(Path("/repo")).ensure_session(
+        spec, "exec agy"
+    )
 
+    assert started is True
     assert calls == [
         [
             "tmux",
@@ -284,7 +346,10 @@ def test_host_adapter_creates_only_missing_session_then_sends_command(monkeypatc
             "-t",
             "agy-paper-owner-01",
             "-F",
-            "#{pane_dead}\t#{pane_current_command}\t#{pane_pid}",
+            (
+                "#{pane_dead}\t#{pane_current_command}\t#{pane_pid}"
+                "\t#{pane_start_command}"
+            ),
         ],
         [
             "tmux",
@@ -294,12 +359,97 @@ def test_host_adapter_creates_only_missing_session_then_sends_command(monkeypatc
             "agy-paper-owner-01",
             "-c",
             "/repo",
+            "exec agy; exec /bin/bash",
         ],
-        ["tmux", "send-keys", "-t", "agy-paper-owner-01", "exec agy", "C-m"],
     ]
 
 
-def test_ensure_session_adopts_live_process_and_reuses_idle_shell():
+@pytest.mark.parametrize(
+    ("pane_dead", "foreground"),
+    [
+        ("1", "bash"),
+        ("0", "python"),
+    ],
+)
+def test_host_adapter_respawns_dead_or_non_shell_pane_in_repo(
+    monkeypatch, pane_dead, foreground
+):
+    calls = []
+
+    def run(argv, *, check, text, capture_output):
+        calls.append(argv)
+        if argv[1] == "list-panes":
+            return subprocess.CompletedProcess(
+                argv, 0, f"{pane_dead}\t{foreground}\t123\t\n", ""
+            )
+        if argv[1] == "capture-pane":
+            return subprocess.CompletedProcess(argv, 0, "old history\n", "")
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(supervisor.subprocess, "run", run)
+    spec = supervisor.desired_workers()[0]
+
+    started = supervisor.HostAdapter(Path("/repo")).ensure_session(
+        spec, "exec agy"
+    )
+
+    assert started is True
+    assert calls[-1] == [
+        "tmux",
+        "respawn-pane",
+        "-k",
+        "-t",
+        spec.session_name,
+        "-c",
+        "/repo",
+        "exec agy; exec /bin/bash",
+    ]
+    assert not any(call[1] == "send-keys" for call in calls)
+
+
+def test_host_adapter_adopts_lane_that_becomes_healthy_before_mutation(
+    monkeypatch,
+):
+    calls = []
+    observations = iter(("bash", "agy"))
+
+    def run(argv, *, check, text, capture_output):
+        calls.append(argv)
+        if argv[1] == "list-panes":
+            foreground = next(observations)
+            return subprocess.CompletedProcess(
+                argv, 0, f"0\t{foreground}\t123\t\n", ""
+            )
+        if argv[1] == "capture-pane":
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        raise AssertionError(f"unexpected mutation: {argv}")
+
+    monkeypatch.setattr(supervisor.subprocess, "run", run)
+    host = supervisor.HostAdapter(Path("/repo"))
+    spec = supervisor.desired_workers()[0]
+
+    assert not supervisor.is_healthy(spec, host.session_health(spec))
+    started = host.ensure_session(spec, "exec agy")
+
+    assert started is False
+    assert not any(
+        call[1] in {"new-session", "respawn-pane", "send-keys"}
+        for call in calls
+    )
+
+
+def test_stop_session_treats_no_tmux_server_as_idempotent_success(monkeypatch):
+    def run(argv, *, check, text, capture_output):
+        return subprocess.CompletedProcess(
+            argv, 1, "", "no server running on /tmp/tmux-1000/default"
+        )
+
+    monkeypatch.setattr(supervisor.subprocess, "run", run)
+
+    supervisor.HostAdapter(Path("/repo")).stop_session("agy-paper-owner-01")
+
+
+def test_fake_host_contract_adopts_live_and_starts_idle_or_missing():
     fake_host = FakeHost()
     live, idle, missing = supervisor.desired_workers()[:3]
     fake_host.health[live.session_name] = supervisor.SessionHealth(
@@ -571,6 +721,96 @@ def test_stale_quota_record_with_new_terminal_output_is_not_reprocessed(
     }
 
 
+def test_identical_quota_failures_are_attributed_to_successive_profile_launches(
+    fake_host, fixed_now
+):
+    spec = supervisor.desired_workers()[0]
+    for other_spec in supervisor.desired_workers()[1:]:
+        fake_host.health[other_spec.session_name] = supervisor.SessionHealth(
+            True, False, other_spec.agent, ""
+        )
+    quota_output = "Individual quota reached. Resets in 46m20s."
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True, False, "bash", quota_output
+    )
+
+    first = supervisor.reconcile(
+        fake_host,
+        supervisor.RuntimeState.with_lane(spec.worker_id, profile_index=0),
+        fixed_now,
+        Path("/repo"),
+    )
+    first_marker = first.state.lanes[spec.worker_id].launch_marker
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True,
+        False,
+        "bash",
+        "\n".join(
+            (
+                quota_output,
+                f"{supervisor.LAUNCH_MARKER_PREFIX}{first_marker}",
+                quota_output,
+            )
+        ),
+        first_marker,
+    )
+
+    second = supervisor.reconcile(
+        fake_host, first.state, fixed_now + timedelta(seconds=30), Path("/repo")
+    )
+
+    lane = second.state.lanes[spec.worker_id]
+    assert lane.profile_index == 2
+    assert set(lane.profile_backoff) == {
+        "gemini-3.1-pro-high",
+        "gemini-3.6-flash-high",
+    }
+
+
+def test_stale_quota_before_current_launch_marker_does_not_poison_ordinary_exit(
+    fake_host, fixed_now
+):
+    spec = supervisor.desired_workers()[0]
+    for other_spec in supervisor.desired_workers()[1:]:
+        fake_host.health[other_spec.session_name] = supervisor.SessionHealth(
+            True, False, other_spec.agent, ""
+        )
+    marker = "profile-b-launch"
+    old_reset = fixed_now + timedelta(minutes=46, seconds=20)
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True,
+        False,
+        "bash",
+        "\n".join(
+            (
+                "Individual quota reached. Resets in 46m20s.",
+                f"{supervisor.LAUNCH_MARKER_PREFIX}{marker}",
+                "process exited with code 1",
+            )
+        ),
+        marker,
+    )
+    state = supervisor.RuntimeState(
+        {
+            spec.worker_id: supervisor.LaneState(
+                profile_index=1,
+                profile_backoff={"gemini-3.1-pro-high": old_reset},
+                launch_marker=marker,
+            )
+        }
+    )
+
+    result = supervisor.reconcile(
+        fake_host, state, fixed_now, Path("/repo")
+    )
+
+    lane = result.state.lanes[spec.worker_id]
+    assert lane.profile_index == 1
+    assert lane.profile_backoff == {"gemini-3.1-pro-high": old_reset}
+    assert lane.ordinary_failures == 1
+    assert lane.last_error == "ordinary-exit"
+
+
 def test_healthy_observation_allows_later_identical_quota_event(fake_host, fixed_now):
     spec = supervisor.desired_workers()[0]
     quota_output = "Individual quota reached. Resets in 46m20s."
@@ -587,8 +827,13 @@ def test_healthy_observation_allows_later_identical_quota_event(fake_host, fixed
     healthy = supervisor.reconcile(
         fake_host, first.state, fixed_now + timedelta(seconds=30), Path("/repo")
     )
+    launch_marker = healthy.state.lanes[spec.worker_id].launch_marker
     fake_host.health[spec.session_name] = supervisor.SessionHealth(
-        True, False, "bash", quota_output
+        True,
+        False,
+        "bash",
+        f"{supervisor.LAUNCH_MARKER_PREFIX}{launch_marker}\n{quota_output}",
+        launch_marker,
     )
     result = supervisor.reconcile(
         fake_host, healthy.state, fixed_now + timedelta(seconds=60), Path("/repo")
@@ -656,6 +901,9 @@ def test_status_prints_compact_worker_counts(capsys, fake_host, tmp_path):
     status_path.write_text(
         json.dumps(
             {
+                "observed_at": FIXED_NOW.isoformat(),
+                "state": "running",
+                "supervisor_errors": [],
                 "workers": [
                     {
                         "worker_id": spec.worker_id,
@@ -785,7 +1033,7 @@ def test_reconcile_restores_strict_pending_smoke_request(fake_host, tmp_path):
     }
 
 
-def test_reconcile_rejects_smoke_request_with_arbitrary_keys(
+def test_reconcile_quarantines_smoke_request_with_arbitrary_keys(
     fake_host, tmp_path
 ):
     marker = tmp_path / "smoke-request-command-was-used"
@@ -812,7 +1060,112 @@ def test_reconcile_rejects_smoke_request_with_arbitrary_keys(
 
     assert code == 1
     assert fake_host.restored == []
+    assert len(fake_host.sent) == 15
     assert not marker.exists()
+    assert not request_path.exists()
+    assert (
+        request_path.with_name("smoke-request.quarantined.json").exists()
+    )
+    status = json.loads(
+        (
+            tmp_path
+            / ".local/state/icml-worker-supervisor/status.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert status["state"] == "partial"
+    assert status["supervisor_errors"] == ["smoke-request-invalid"]
+
+
+def test_stale_smoke_request_is_quarantined_without_blocking_production(
+    fake_host, tmp_path
+):
+    request_path = (
+        tmp_path
+        / ".local/state/icml-worker-supervisor"
+        / "smoke-request.json"
+    )
+    request_path.parent.mkdir(parents=True)
+    request_path.write_text(
+        json.dumps({"nonce": "0123456789abcdef", "stage": "interrupted"}),
+        encoding="utf-8",
+    )
+    stale_time = time.time() - supervisor.SMOKE_REQUEST_STALE_AFTER - 1
+    os.utime(request_path, (stale_time, stale_time))
+
+    code = supervisor.main(
+        ["reconcile"], host=fake_host, home=tmp_path, now=FIXED_NOW
+    )
+
+    assert code == 1
+    assert fake_host.restored == []
+    assert len(fake_host.sent) == 15
+    assert not request_path.exists()
+    status = json.loads(
+        (
+            tmp_path
+            / ".local/state/icml-worker-supervisor/status.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert status["state"] == "partial"
+    assert status["supervisor_errors"] == ["smoke-request-stale"]
+
+
+def test_smoke_restore_host_error_does_not_block_production_or_status(
+    fake_host, tmp_path
+):
+    fake_host.restore_error = True
+    request_path = (
+        tmp_path
+        / ".local/state/icml-worker-supervisor"
+        / "smoke-request.json"
+    )
+    request_path.parent.mkdir(parents=True)
+    request_path.write_text(
+        json.dumps({"nonce": "0123456789abcdef", "stage": "interrupted"}),
+        encoding="utf-8",
+    )
+
+    code = supervisor.main(
+        ["reconcile"], host=fake_host, home=tmp_path, now=FIXED_NOW
+    )
+
+    assert code == 1
+    assert len(fake_host.sent) == 15
+    status = json.loads(
+        (
+            tmp_path
+            / ".local/state/icml-worker-supervisor/status.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert status["state"] == "partial"
+    assert status["supervisor_errors"] == ["smoke-recovery-failed"]
+
+
+def test_lane_host_error_does_not_block_later_lanes_or_status(
+    fake_host, tmp_path
+):
+    first, *later = supervisor.desired_workers()
+    fake_host.health_errors.add(first.session_name)
+
+    code = supervisor.main(
+        ["reconcile"], host=fake_host, home=tmp_path, now=FIXED_NOW
+    )
+
+    assert code == 1
+    assert [session for session, _command in fake_host.sent] == [
+        spec.session_name for spec in later
+    ]
+    status = json.loads(
+        (
+            tmp_path
+            / ".local/state/icml-worker-supervisor/status.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert status["observed_at"] == FIXED_NOW.isoformat()
+    assert status["state"] == "partial"
+    assert status["workers"][0]["health"] == "error"
+    assert status["workers"][0]["last_error"] == "host-command-failure"
+    assert status["workers"][-1]["health"] == "started"
 
 
 def test_smoke_timeout_is_nonzero_and_cleans_only_disposable_session(
@@ -881,7 +1234,10 @@ def test_confirmed_stop_targets_only_desired_worker_sessions(fake_host, tmp_path
     )
 
     code = supervisor.main(
-        ["stop", "--confirm"], host=fake_host, home=tmp_path
+        ["stop", "--confirm"],
+        host=fake_host,
+        home=tmp_path,
+        now=FIXED_NOW,
     )
 
     assert code == 0
@@ -892,6 +1248,23 @@ def test_confirmed_stop_targets_only_desired_worker_sessions(fake_host, tmp_path
         spec.session_name for spec in supervisor.desired_workers()
     ]
     assert "unrelated-session" not in fake_host.stopped
+    status_path = (
+        tmp_path / ".local/state/icml-worker-supervisor/status.json"
+    )
+    status = json.loads(status_path.read_text(encoding="utf-8"))
+    assert status["observed_at"] == FIXED_NOW.isoformat()
+    assert status["state"] == "stopped"
+    assert {
+        worker["health"] for worker in status["workers"]
+    } == {"stopped"}
+
+    status_code = supervisor.main(
+        ["status"],
+        host=fake_host,
+        home=tmp_path,
+        now=FIXED_NOW + timedelta(hours=1),
+    )
+    assert status_code == 0
 
 
 def test_stop_quiesces_service_and_waits_for_inflight_reconcile(
@@ -951,6 +1324,9 @@ def test_status_prints_one_line_for_each_degraded_lane(
     status_path.write_text(
         json.dumps(
             {
+                "observed_at": FIXED_NOW.isoformat(),
+                "state": "running",
+                "supervisor_errors": [],
                 "workers": [
                     {
                         "worker_id": "agy-paper-owner-01",
@@ -1066,6 +1442,131 @@ def test_cli_reconcile_returns_zero_when_provider_is_backed_off(
     status = json.loads(status_path.read_text(encoding="utf-8"))
     assert code == 0
     assert status["workers"][0]["health"] == "backed_off"
+
+
+def test_reconcile_status_has_utc_time_and_bounded_safe_lane_events(
+    fake_host, fixed_now
+):
+    for spec in supervisor.desired_workers():
+        fake_host.health[spec.session_name] = supervisor.SessionHealth(
+            True,
+            False,
+            spec.agent,
+            "HF_TOKEN=hf_secret Use the shared paper-owner prompt",
+        )
+    state = supervisor.RuntimeState.empty()
+    result = None
+    for index in range(supervisor.EVENT_HISTORY_LIMIT + 5):
+        result = supervisor.reconcile(
+            fake_host,
+            state,
+            fixed_now + timedelta(seconds=30 * index),
+            Path("/repo"),
+        )
+        state = result.state
+
+    assert result is not None
+    assert result.status["observed_at"] == (
+        fixed_now
+        + timedelta(seconds=30 * (supervisor.EVENT_HISTORY_LIMIT + 4))
+    ).isoformat()
+    events = result.status["workers"][0]["events"]
+    assert len(events) == supervisor.EVENT_HISTORY_LIMIT
+    assert all(
+        set(event) == {"observed_at", "health", "error_class"}
+        for event in events
+    )
+    assert all(event["health"] in supervisor.HEALTH_CLASSES for event in events)
+    assert all(
+        event["error_class"] in supervisor.ERROR_CLASSES
+        for event in events
+    )
+    encoded = json.dumps(result.status)
+    assert "HF_TOKEN" not in encoded
+    assert "hf_secret" not in encoded
+    assert "Use the shared" not in encoded
+
+
+def test_legacy_runtime_error_text_is_normalized_before_rewrite():
+    spec = supervisor.desired_workers()[0]
+    state = supervisor._runtime_from_json(
+        {
+            "lanes": {
+                spec.worker_id: {
+                    "last_error": (
+                        "HF_TOKEN=hf_secret "
+                        "Use the shared paper-owner prompt"
+                    )
+                }
+            }
+        }
+    )
+
+    encoded = json.dumps(supervisor._runtime_to_json(state))
+
+    assert "HF_TOKEN" not in encoded
+    assert "hf_secret" not in encoded
+    assert "Use the shared" not in encoded
+    assert (
+        supervisor._runtime_to_json(state)["lanes"][spec.worker_id][
+            "last_error"
+        ]
+        == "unhealthy-session"
+    )
+
+
+def test_status_fails_closed_when_green_snapshot_is_stale(
+    capsys, fake_host, tmp_path
+):
+    status_path = (
+        tmp_path / ".local/state/icml-worker-supervisor/status.json"
+    )
+    status_path.parent.mkdir(parents=True)
+    observed_at = FIXED_NOW - supervisor.STATUS_STALE_AFTER - timedelta(seconds=1)
+    status_path.write_text(
+        json.dumps(
+            {
+                "observed_at": observed_at.isoformat(),
+                "state": "running",
+                "supervisor_errors": [],
+                "workers": [
+                    {
+                        "worker_id": spec.worker_id,
+                        "agent": spec.agent,
+                        "health": "healthy",
+                        "last_error": "",
+                    }
+                    for spec in supervisor.desired_workers()
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    code = supervisor.main(
+        ["status"], host=fake_host, home=tmp_path, now=FIXED_NOW
+    )
+
+    captured = capsys.readouterr()
+    assert code == 1
+    assert "status snapshot is stale" in captured.err
+    assert "agy 0/10" in captured.out
+    assert "codex 0/5" in captured.out
+    assert "agy 10/10" not in captured.out
+
+
+def test_status_before_install_reports_zero_counts_and_absence(
+    capsys, fake_host, tmp_path
+):
+    code = supervisor.main(
+        ["status"], host=fake_host, home=tmp_path, now=FIXED_NOW
+    )
+
+    captured = capsys.readouterr()
+    assert code == 1
+    assert "status snapshot is unavailable" in captured.err
+    assert "agy 0/10" in captured.out
+    assert "codex 0/5" in captured.out
 
 
 def test_host_adapter_smoke_operations_use_fixed_argument_arrays(monkeypatch):

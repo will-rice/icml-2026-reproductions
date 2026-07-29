@@ -171,6 +171,37 @@ UV_CACHE_DIR=/tmp/icml-repro-uv-cache \
 systemctl --user status icml-worker-supervisor.timer
 ```
 
+Installation records the absolute repository path in the user service. After
+moving the checkout or rebinding supervision from a feature worktree to the
+canonical main checkout, rerun `install` from the new repository root. Healthy
+lanes are adopted in place; their next required restart enters the newly
+installed repository path.
+
+Prove timer-driven recovery with the fixed disposable lane:
+
+```bash
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache \
+  uv run python ops/worker_supervisor.py smoke-test --timeout 45
+```
+
+The expected result is exit status 0 within 45 seconds: a timer reconciliation
+restores only `icml-supervisor-smoke-test`, verifies its `sleep` foreground
+process, confirms all 15 production pane PIDs are unchanged, and cleans up the
+disposable session. A timeout, changed production PID, or unhealthy disposable
+command returns nonzero and still cleans up only the disposable lane.
+
+An abandoned, malformed, or older-than-two-minutes smoke request is moved to
+`~/.local/state/icml-worker-supervisor/smoke-request.quarantined.json`.
+Production lane reconciliation still completes, the persisted snapshot is
+marked `partial`, and that reconciliation returns nonzero. Once no foreground
+smoke-test command is running, simply rerun the smoke-test command; the
+quarantined file does not block a new request.
+
+`status` fails closed when the last running snapshot is more than 90 seconds
+old: it warns that the snapshot is stale and reports zero trusted healthy
+counts. Before installation it similarly reports zero counts plus the absence
+of a snapshot. A confirmed stop writes an explicit `stopped` snapshot.
+
 The destructive boundary is separate: stopping the supervisor and its managed
 lanes requires an explicit confirmation.
 
