@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flexrank-repro"
+version = "0.1.0"
+description = "FlexRank: Nested Low-Rank Knowledge Decomposition Reproduction"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.20.0",
+    "pytest>=7.0.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["flexrank_repro*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

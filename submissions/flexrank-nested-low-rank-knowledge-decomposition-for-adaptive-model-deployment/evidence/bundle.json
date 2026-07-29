@@ -1,0 +1,36 @@
+{
+  "paper_id": "DK0kvnNelx",
+  "slug": "flexrank-nested-low-rank-knowledge-decomposition-for-adaptive-model-deployment",
+  "claims_verdict": {
+    "claim_0_factorization_and_dp": {
+      "verified": true,
+      "reconstruction_error_rank_8": 31.807711458895927,
+      "dp_allocated_ranks": [
+        3,
+        0,
+        3
+      ]
+    },
+    "claim_1_theorem_4_1": {
+      "theorem": "4.1",
+      "verified": true,
+      "loss_optimal_rank_1": 507.4471694932283,
+      "loss_truncated_rank_1": 537.9625856979623,
+      "suboptimality_gap": 30.51541620473398
+    },
+    "claim_2_theorem_4_3": {
+      "theorem": "4.3",
+      "verified": true,
+      "max_minimizer_error_diff": 3.552713678800501e-15,
+      "ranks_tested": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    }
+  }
+}
