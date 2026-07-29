@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 import fcntl
 import hashlib
@@ -28,6 +28,8 @@ QUOTA_RE = re.compile(
     r"(?:(?P<hours>\d+)h)?(?:(?P<minutes>\d+)m)?(?:(?P<seconds>\d+)s)?",
     re.IGNORECASE | re.DOTALL,
 )
+EXIT_RE = re.compile(r"process exited with code \d+", re.IGNORECASE)
+FAILURE_CLASSES = frozenset({"quota-reached", "ordinary-exit", "unhealthy-session"})
 PROMPT = (
     "Use the shared icml-repro-loop skill directly and keep running its "
     "paper-owner loop. Read and follow "
@@ -65,6 +67,7 @@ class LaneState:
     ordinary_failures: int = 0
     next_retry_at: datetime | None = None
     last_error: str = ""
+    processed_failure_digest: str = ""
 
 
 @dataclass(frozen=True)
@@ -362,10 +365,14 @@ def parse_quota_reset(message: str, now: datetime) -> datetime | None:
 
 
 def next_profile(
-    spec: WorkerSpec, lane: LaneState, now: datetime
+    spec: WorkerSpec, lane: LaneState, now: datetime, *, rotate: bool = False
 ) -> tuple[ModelProfile | None, int | None]:
     if spec.agent == "codex":
         return codex_profile(), 0
+    active_profile = _profile_for(spec, lane)
+    active_reset = lane.profile_backoff.get(active_profile.name)
+    if not rotate and (active_reset is None or active_reset <= now):
+        return active_profile, lane.profile_index
     for index, profile in enumerate(agy_profiles()):
         reset_at = lane.profile_backoff.get(profile.name)
         if reset_at is None or reset_at <= now:
@@ -384,6 +391,22 @@ def _ordinary_retry_at(lane: LaneState, worker_id: str, now: datetime) -> dateti
     return now + timedelta(seconds=delay + jitter)
 
 
+def _failure_digest(output: str) -> str:
+    return hashlib.sha256(output.encode()).hexdigest()
+
+
+def _classified_error(output: str) -> str:
+    if not output:
+        return ""
+    if output in FAILURE_CLASSES:
+        return output
+    if QUOTA_RE.search(output):
+        return "quota-reached"
+    if EXIT_RE.search(output):
+        return "ordinary-exit"
+    return "unhealthy-session"
+
+
 def _iso_timestamp(value: datetime | None) -> str | None:
     if value is None:
         return None
@@ -400,7 +423,7 @@ def _status_entry(
         "model": profile.name,
         "restart_count": lane.restart_count,
         "next_retry_at": _iso_timestamp(lane.next_retry_at),
-        "last_error": sanitize_text(lane.last_error),
+        "last_error": _classified_error(lane.last_error),
     }
 
 
@@ -420,14 +443,8 @@ def reconcile(
         health = host.session_health(spec)
         profile = _profile_for(spec, lane)
         if is_healthy(spec, health):
-            if lane.ordinary_failures:
-                lane = LaneState(
-                    profile_index=lane.profile_index,
-                    profile_backoff=dict(lane.profile_backoff),
-                    restart_count=lane.restart_count,
-                    next_retry_at=None,
-                    last_error=lane.last_error,
-                )
+            if lane.ordinary_failures and not dry_run:
+                lane = replace(lane, ordinary_failures=0, next_retry_at=None)
                 lanes[spec.worker_id] = lane
             workers.append(_status_entry(spec, "healthy", profile, lane))
             continue
@@ -435,18 +452,25 @@ def reconcile(
             workers.append(_status_entry(spec, "backed_off", profile, lane))
             continue
         quota_reset = parse_quota_reset(health.recent_output, now)
-        if spec.agent == "agy" and quota_reset is not None:
+        quota_digest = _failure_digest(health.recent_output)
+        new_quota_event = (
+            spec.agent == "agy"
+            and quota_reset is not None
+            and quota_digest != lane.processed_failure_digest
+        )
+        if new_quota_event:
             profile_backoff = dict(lane.profile_backoff)
             profile_backoff[profile.name] = quota_reset
-            lane = LaneState(
-                profile_index=lane.profile_index,
+            lane = replace(
+                lane,
                 profile_backoff=profile_backoff,
-                restart_count=lane.restart_count,
-                ordinary_failures=lane.ordinary_failures,
                 next_retry_at=None,
-                last_error=sanitize_text(health.recent_output),
+                last_error=_classified_error(health.recent_output),
+                processed_failure_digest=quota_digest,
             )
-        selected_profile, profile_index = next_profile(spec, lane, now)
+        selected_profile, profile_index = next_profile(
+            spec, lane, now, rotate=new_quota_event
+        )
         if selected_profile is None:
             earliest_reset = _earliest_profile_reset(lane)
             assert earliest_reset is not None
@@ -454,13 +478,10 @@ def reconcile(
                 proposed.append(spec.worker_id)
                 workers.append(_status_entry(spec, "proposed", profile, lane))
                 continue
-            lane = LaneState(
-                profile_index=lane.profile_index,
-                profile_backoff=dict(lane.profile_backoff),
-                restart_count=lane.restart_count,
-                ordinary_failures=lane.ordinary_failures,
+            lane = replace(
+                lane,
                 next_retry_at=earliest_reset,
-                last_error=sanitize_text(health.recent_output),
+                last_error=_classified_error(health.recent_output),
             )
             lanes[spec.worker_id] = lane
             workers.append(_status_entry(spec, "backed_off", profile, lane))
@@ -479,13 +500,14 @@ def reconcile(
             next_retry_at = _ordinary_retry_at(lane, spec.worker_id, now)
         else:
             next_retry_at = now + timedelta(seconds=15)
-        lane = LaneState(
+        lane = replace(
+            lane,
             profile_index=profile_index,
             profile_backoff=dict(lane.profile_backoff),
             restart_count=lane.restart_count + 1,
             ordinary_failures=ordinary_failures,
             next_retry_at=next_retry_at,
-            last_error=sanitize_text(health.recent_output),
+            last_error=_classified_error(health.recent_output),
         )
         lanes[spec.worker_id] = lane
         started.append(spec.worker_id)
