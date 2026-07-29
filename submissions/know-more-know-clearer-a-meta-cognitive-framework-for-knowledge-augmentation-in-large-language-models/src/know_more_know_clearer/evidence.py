@@ -1,5 +1,7 @@
 """Deterministic evidence generation pipeline."""
 
+import sys
+sys.dont_write_bytecode = True
 import json
 from pathlib import Path
 import numpy as np
