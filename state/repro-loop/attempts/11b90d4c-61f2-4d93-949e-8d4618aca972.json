@@ -47,6 +47,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2502.08834",
   "i": 1847,
+  "improvement_attempts": 1,
+  "improvement_reason": "Add Hugging Face Space README metadata with required challenge tags and requirements.txt before first deployment.",
   "insts": [
     "AITHYRA",
     "Clarkson University"
@@ -97,8 +99,9 @@
   "or": "https://openreview.net/forum?id=7pQIzVNctu",
   "orid": "7pQIzVNctu",
   "paper_id": "7pQIzVNctu",
-  "phase": "implementing",
+  "phase": "improving",
   "pid": "66025",
+  "project_path": "submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers",
   "safety_blocker": null,
   "score": 20,
   "score_rate": {
@@ -199,10 +202,27 @@
       "owner": "codex-paper-owner-02",
       "snapshot_id": "38427a3596a3ab91e5e2a3e94a0e7b110f6497ad1b2c40dfb611ff48c585d83f",
       "to": "implementing"
+    },
+    {
+      "at": "2026-07-29T01:11:10.751884+00:00",
+      "attestation_id": "e00b1a48d3dc189a4f7dde66b8c82c897b9aeee3853fca0e10b56bb76d0a318d",
+      "fencing_token": 1,
+      "from": "implementing",
+      "owner": "codex-paper-owner-02",
+      "snapshot_id": "38427a3596a3ab91e5e2a3e94a0e7b110f6497ad1b2c40dfb611ff48c585d83f",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-29T01:14:27.709992+00:00",
+      "fencing_token": 1,
+      "from": "validated",
+      "owner": "codex-paper-owner-02",
+      "snapshot_id": "38427a3596a3ab91e5e2a3e94a0e7b110f6497ad1b2c40dfb611ff48c585d83f",
+      "to": "improving"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-29T00:40:01.933845+00:00",
+  "updated_at": "2026-07-29T01:14:27.709992+00:00",
   "upstream_revision": "arxiv:2502.08834+github:zblasingame/Rex-solver@e39b57415d5608b18d7c5631595f1d38f06813b8",
   "vs": "https://icml.cc/virtual/2026/poster/66025"
 }

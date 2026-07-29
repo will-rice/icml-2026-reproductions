@@ -3,14 +3,14 @@
     "0e2ab2dc-b3cf-4f02-abb2-e0eb1ce057d5": {
       "paper_id": "trn64znfNx",
       "path": "repro-loop/attempts/0e2ab2dc-b3cf-4f02-abb2-e0eb1ce057d5.json",
-      "phase": "implementing",
-      "updated_at": "2026-07-29T00:53:44.938591+00:00"
+      "phase": "improving",
+      "updated_at": "2026-07-29T01:15:36.785559+00:00"
     },
     "11b90d4c-61f2-4d93-949e-8d4618aca972": {
       "paper_id": "7pQIzVNctu",
       "path": "repro-loop/attempts/11b90d4c-61f2-4d93-949e-8d4618aca972.json",
-      "phase": "implementing",
-      "updated_at": "2026-07-29T00:40:01.933845+00:00"
+      "phase": "improving",
+      "updated_at": "2026-07-29T01:14:27.709992+00:00"
     },
     "3a44d506-d7a0-4bb8-abf7-d51a55c0018c": {
       "paper_id": "PQaxfoEcRc",
@@ -210,6 +210,7 @@
     "3610e2aec2e5b229a2fc94e4a6cd1aa0326e6a62d8a14be6a137d071618b476b": "repro-loop/snapshots/3610e2aec2e5b229a2fc94e4a6cd1aa0326e6a62d8a14be6a137d071618b476b.json",
     "37b26f8e9468a9ed8dddb265eaeec700ce5d6b001fc9d2db9ccf06e09cc4a82a": "repro-loop/snapshots/37b26f8e9468a9ed8dddb265eaeec700ce5d6b001fc9d2db9ccf06e09cc4a82a.json",
     "37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd": "repro-loop/snapshots/37f1fe1ef11ca8f339515c07abc1a0911d099b4165de38a922a564e3201ff5dd.json",
+    "38427a3596a3ab91e5e2a3e94a0e7b110f6497ad1b2c40dfb611ff48c585d83f": "repro-loop/snapshots/38427a3596a3ab91e5e2a3e94a0e7b110f6497ad1b2c40dfb611ff48c585d83f.json",
     "39d83d93399dd022e5d822733b3ecae2568171b4dd5628f87aadb6e49252439b": "repro-loop/snapshots/39d83d93399dd022e5d822733b3ecae2568171b4dd5628f87aadb6e49252439b.json",
     "3bbfda6c9def2e9042b80e63f1362442afff4188410d78db1ec2c6309799a785": "repro-loop/snapshots/3bbfda6c9def2e9042b80e63f1362442afff4188410d78db1ec2c6309799a785.json",
     "3df17f1639c41cd4b171ce9c1c9e6a98ea01f1bf071fe9099508355dcf0c4376": "repro-loop/snapshots/3df17f1639c41cd4b171ce9c1c9e6a98ea01f1bf071fe9099508355dcf0c4376.json",

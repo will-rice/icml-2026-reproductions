@@ -10,8 +10,8 @@ def test_run_evidence_pipeline(tmp_path):
     assert os.path.exists(os.path.join(output_dir, "results.json"))
     assert bundle["paper_id"] == "06Nk3dJDMq"
     assert "claim_statuses" in bundle
-    assert bundle["attempt_id"] == "743b6200-fd16-4f38-8c0d-98c60b81b340"
-    assert bundle["snapshot_id"] == "4f1fb0ce1cb180d5d28cb1875e5f5dfd5a2d60bc80afddbfefcfcfce25fdf3c7"
+    assert bundle["attempt_id"] == "4e292a9a-9ba5-44ac-a309-f3fe685a0643"
+    assert bundle["snapshot_id"] == "d84e8174f494825bf70b4d9201754ddbb3e065bbea0b46d1f90da85949bb882b"
     assert bundle["upstream_revision"] == (
         "arxiv:2605.03907+github:Nokia-Bell-Labs/"
         "steer-like-the-llm@3d916c618d146c5d657f055e432a432b0fa493c6"

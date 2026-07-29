@@ -72,8 +72,8 @@ def run_evidence_pipeline(output_dir: str = "results") -> Dict[str, Any]:
     }
 
     bundle = {
-        "attempt_id": "743b6200-fd16-4f38-8c0d-98c60b81b340",
-        "snapshot_id": "4f1fb0ce1cb180d5d28cb1875e5f5dfd5a2d60bc80afddbfefcfcfce25fdf3c7",
+        "attempt_id": "4e292a9a-9ba5-44ac-a309-f3fe685a0643",
+        "snapshot_id": "d84e8174f494825bf70b4d9201754ddbb3e065bbea0b46d1f90da85949bb882b",
         "paper_id": "06Nk3dJDMq",
         "paper_title": "Steer Like the LLM: Activation Steering that Mimics Prompting",
         "slug": "steer-like-the-llm-activation-steering-that-mimics-prompting",

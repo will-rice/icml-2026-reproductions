@@ -52,6 +52,8 @@
   "estimated_api_cost_usd": 0.0,
   "hf": "2509.22259",
   "i": 1174,
+  "improvement_attempts": 1,
+  "improvement_reason": "Pre-deployment validation found the WIRE source lacks judge-facing pages and a Space-ready app.py; add scoring pages and a local src-based Gradio app, then revalidate before publish-deployment.",
   "insts": [
     "University of Cambridge",
     "Kensho Technologies/S&P Global",
@@ -83,7 +85,7 @@
   "or": "https://openreview.net/forum?id=trn64znfNx",
   "orid": "trn64znfNx",
   "paper_id": "trn64znfNx",
-  "phase": "implementing",
+  "phase": "improving",
   "pid": "61077",
   "safety_blocker": null,
   "score": 18,
@@ -155,10 +157,27 @@
       "owner": "codex-paper-owner-05",
       "snapshot_id": "ffc9e5510739e188640e9162c2918c8a81db4730f767963cc02be6f6b9000e43",
       "to": "implementing"
+    },
+    {
+      "at": "2026-07-29T01:14:52.631021+00:00",
+      "attestation_id": "827c59834a90290ec2884b5ed444a042e40c62606904832984ec4ff250b5ff56",
+      "fencing_token": 1,
+      "from": "implementing",
+      "owner": "codex-paper-owner-05",
+      "snapshot_id": "ffc9e5510739e188640e9162c2918c8a81db4730f767963cc02be6f6b9000e43",
+      "to": "validated"
+    },
+    {
+      "at": "2026-07-29T01:15:36.785559+00:00",
+      "fencing_token": 1,
+      "from": "validated",
+      "owner": "codex-paper-owner-05",
+      "snapshot_id": "ffc9e5510739e188640e9162c2918c8a81db4730f767963cc02be6f6b9000e43",
+      "to": "improving"
     }
   ],
   "type": "Poster",
-  "updated_at": "2026-07-29T00:53:44.938591+00:00",
+  "updated_at": "2026-07-29T01:15:36.785559+00:00",
   "upstream_revision": "arxiv:2509.22259v4+arxiv-source-sha256:3eb6899ac0da995483dfba1eafe1ed625a1673d638d498882bcf741709f3415f",
   "vs": "https://icml.cc/virtual/2026/poster/61077"
 }
