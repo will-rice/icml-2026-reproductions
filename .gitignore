@@ -14,7 +14,13 @@ state/
 scratch/
 results/
 .hf_cache/
+docs/designs/
+docs/reproductions/
 docs/superpowers/plans/
+docs/superpowers/specs/*
+!docs/superpowers/specs/2026-07-29-ettfs-snn-reproduction-design.md
 evidence/
 submissions/*
 !submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/
+!docs/designs/2026-07-29-qsched-reproduction-plan.md
