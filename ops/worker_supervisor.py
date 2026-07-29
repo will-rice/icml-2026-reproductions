@@ -539,10 +539,14 @@ def launch_shell_command(
     spec: WorkerSpec, profile: ModelProfile, repo_root: Path
 ) -> str:
     prompt = PROMPT.format(worker_id=spec.worker_id)
+    user_cli_path = (
+        'export PATH="$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH";'
+    )
     credentials = 'HF_TOKEN="$(hf auth token)" GH_TOKEN="$(gh auth token)"'
     if spec.agent == "agy":
         return " ".join(
             (
+                user_cli_path,
                 credentials,
                 'HF_HOME="/tmp/icml-agy-hf-XX"',
                 'UV_CACHE_DIR="/tmp/icml-repro-uv-cache"',
@@ -551,6 +555,7 @@ def launch_shell_command(
         )
     return " ".join(
         (
+            user_cli_path,
             credentials,
             shlex.join((*profile.argv, "-C", str(repo_root), prompt)),
         )
