@@ -46,7 +46,9 @@ ENVIRONMENT_ALLOWLIST = {
     "SSL_CERT_DIR",
     "SSL_CERT_FILE",
     "UV_CACHE_DIR",
+    "UV_OFFLINE",
 }
+
 
 
 @dataclass(frozen=True, slots=True)
