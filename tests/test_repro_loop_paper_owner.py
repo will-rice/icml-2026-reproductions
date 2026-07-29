@@ -616,6 +616,45 @@ def test_completed_release_journal_remains_valid_after_fenced_reclamation(
     assert leases.assert_fence(paths, successor, now) == successor
 
 
+def test_completed_release_recovery_restores_lost_successor_lease(
+    paths, blocked_attempt, now, paper_owner, leases, store
+):
+    attempt_id, first = blocked_attempt
+    paper_owner.release_paper(
+        paths,
+        attempt_id,
+        first,
+        "blocked",
+        now,
+        session_id_factory=lambda: "first-lost-successor",
+    )
+    first_lease_path = paths.resource_lease(f"attempt:{attempt_id}")
+    first_lease_bytes = first_lease_path.read_bytes()
+    second = leases.claim_attempt(
+        paths,
+        attempt_id,
+        "successor",
+        first.fencing_token,
+        now + timedelta(minutes=1),
+    )
+    paper_owner.release_paper(
+        paths,
+        attempt_id,
+        second,
+        "blocked",
+        now + timedelta(minutes=2),
+        session_id_factory=lambda: "second-lost-successor",
+    )
+    first_lease_path.write_bytes(first_lease_bytes)
+
+    assert paper_owner.recover_release_transactions(paths) == []
+    restored = store.read_json(first_lease_path)
+
+    assert restored["owner"] == "successor"
+    assert restored["fencing_token"] == second.fencing_token
+    assert restored["released_at"] == (now + timedelta(minutes=2)).isoformat()
+
+
 def test_claim_attempt_recovers_prepared_release_before_successor_fence(
     paths,
     blocked_attempt,
