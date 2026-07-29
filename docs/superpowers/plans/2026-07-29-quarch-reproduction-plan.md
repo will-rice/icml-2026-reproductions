@@ -1,8 +1,8 @@
 # Reproduction Plan: QuArch (yU6X1XZl8t)
 
-**Paper**: QuArch: A Benchmark for Evaluating LLM Reasoning in Computer Architecture  
-**Upstream Revision**: `arxiv:2510.22087`  
-**Attempt ID**: `1e25b452-1f61-4a1e-b699-4f5b16e04079`  
+**Paper**: QuArch: A Benchmark for Evaluating LLM Reasoning in Computer Architecture
+**Upstream Revision**: `arxiv:2510.22087`
+**Attempt ID**: `1e25b452-1f61-4a1e-b699-4f5b16e04079`
 
 ## Target Claims
 
