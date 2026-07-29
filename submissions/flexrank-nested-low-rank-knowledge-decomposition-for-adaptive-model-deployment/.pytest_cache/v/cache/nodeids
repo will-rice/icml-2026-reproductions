@@ -1,8 +1,0 @@
-[
-  "tests/test_flexrank_evidence.py::test_dp_component_ordering",
-  "tests/test_flexrank_evidence.py::test_evidence_bundle_generation",
-  "tests/test_flexrank_evidence.py::test_linear_layer_factorization",
-  "tests/test_flexrank_evidence.py::test_pages_precondition_substantive_length",
-  "tests/test_flexrank_evidence.py::test_theorem_4_1_svd_truncation_failure",
-  "tests/test_flexrank_evidence.py::test_theorem_4_3_nested_minimizer_preservation"
-]
