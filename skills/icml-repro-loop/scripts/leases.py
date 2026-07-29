@@ -511,11 +511,14 @@ def _require_owner_available(
     excluded_attempt_id: str,
     now: datetime,
 ) -> None:
+    index = store.read_json(paths.index)
+    store.validate_index(index)
     for path in (paths.root / "leases").glob("*.json"):
         value = store.read_json(path)
         validate_lease(value)
         if (
             value["resource"].startswith("attempt:")
+            and value["attempt_id"] in index["attempts"]
             and value["attempt_id"] != excluded_attempt_id
             and value["owner"] == owner
             and value["released_at"] is None
