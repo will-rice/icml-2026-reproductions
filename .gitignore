@@ -10,7 +10,11 @@ __pycache__/
 .worktrees/
 *.lock
 !uv.lock
-state/validation-manifests/
-state/candidate-assessments-*.json
+state/
 scratch/
 results/
+.hf_cache/
+docs/superpowers/plans/
+evidence/
+submissions/*
+!submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/
