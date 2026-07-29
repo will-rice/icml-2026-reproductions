@@ -23,4 +23,6 @@ evidence/
 submissions/*
 !submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/
 !submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/
+!submissions/unifying-masked-diffusion-models-with-various-generation-orders-and-beyond/
+!docs/reproductions/f81471f1-69f8-439c-a653-20c178f9616c-design.md
 !docs/designs/2026-07-29-qsched-reproduction-plan.md
