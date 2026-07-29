@@ -1,8 +1,10 @@
 {
+  "attempt_id": "4e292a9a-9ba5-44ac-a309-f3fe685a0643",
+  "snapshot_id": "d84e8174f494825bf70b4d9201754ddbb3e065bbea0b46d1f90da85949bb882b",
   "paper_id": "06Nk3dJDMq",
   "paper_title": "Steer Like the LLM: Activation Steering that Mimics Prompting",
   "slug": "steer-like-the-llm-activation-steering-that-mimics-prompting",
-  "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@main",
+  "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@3d916c618d146c5d657f055e432a432b0fa493c6",
   "claim_statuses": {
     "claim_1_activation_subtraction": {
       "status": "verified",
@@ -19,10 +21,12 @@
       "evidence": "Trained PSR models using MSE (loss 2.8075) and Log-Likelihood (NLL 128.0571) objectives.",
       "mse_converged": true,
       "ll_converged": true
-    },
-    "claim_4_persona_vectors_coherence": {
-      "status": "verified",
-      "evidence": "All-layer PSR models outperform prompt steering baseline across evaluated models in Table 1.",
+    }
+  },
+  "non_target_claim_statuses": {
+    "persona_vectors_table_1": {
+      "status": "unreplicated",
+      "evidence": "Reduced-scale Persona Vectors sanity data were generated, but the model-scale Table 1 claim is not a bound target claim for this attempt.",
       "table_1_data": {
         "LLaMA-3-8B": {
           "prompt_steering_coherence": 0.75,
@@ -44,9 +48,9 @@
         }
       }
     },
-    "claim_5_axbench_gemma_layer_subsets": {
-      "status": "verified",
-      "evidence": "PSR variants improve over rank-1 activation steering baselines on AxBench Gemma layer subsets.",
+    "axbench_table_3": {
+      "status": "unreplicated",
+      "evidence": "Reduced-scale AxBench-style sanity data were generated, but the Gemma layer-subset Table 3 claim is not a bound target claim for this attempt.",
       "table_3_data": {
         "Early-Layers (1-8)": {
           "rank1_mean_diff": 0.5612,
@@ -77,9 +81,9 @@
         }
       }
     },
-    "claim_6_accumulated_psr_rmse": {
-      "status": "verified",
-      "evidence": "Accumulated PSR interventions achieve lower relative RMSE than constant steering on Persona Vectors data.",
+    "accumulated_psr_rmse_figure_3": {
+      "status": "unreplicated",
+      "evidence": "Reduced-scale RMSE sanity data were generated, but the full Persona Vectors Figure 3 claim is not a bound target claim for this attempt.",
       "figure_3_data": {
         "LLaMA-3-8B": {
           "constant_steering_rmse": 0.0736,

@@ -29,13 +29,12 @@ def run_evidence_pipeline(output_dir: str = "results") -> Dict[str, Any]:
     mse_res = train_psr_mse(psr_model, base_h, interventions, epochs=40, lr=0.01)
     ll_res = train_psr_log_likelihood(psr_model, base_h, interventions, epochs=40, lr=0.01)
 
-    # 3. Persona Vectors Benchmark Evaluation (Claim 4 & Claim 6)
+    # 3. Reduced-scale benchmark sanity checks. These are recorded as
+    # unreplicated for the current attempt because the live target claims bind
+    # only the first three methodological claims.
     pv_res = evaluate_persona_vectors(seed=42)
-
-    # 4. AxBench Gemma Layer Subsets Evaluation (Claim 5)
     axbench_res = evaluate_axbench_gemma(seed=42)
 
-    # Claim Status Summary
     claim_statuses = {
         "claim_1_activation_subtraction": {
             "status": "verified",
@@ -53,29 +52,34 @@ def run_evidence_pipeline(output_dir: str = "results") -> Dict[str, Any]:
             "mse_converged": mse_res["converged"],
             "ll_converged": ll_res["converged"],
         },
-        "claim_4_persona_vectors_coherence": {
-            "status": "verified" if pv_res["all_psr_outperform"] else "falsified",
-            "evidence": "All-layer PSR models outperform prompt steering baseline across evaluated models in Table 1.",
+    }
+    non_target_claim_statuses = {
+        "persona_vectors_table_1": {
+            "status": "unreplicated",
+            "evidence": "Reduced-scale Persona Vectors sanity data were generated, but the model-scale Table 1 claim is not a bound target claim for this attempt.",
             "table_1_data": pv_res["table_1_coherence"],
         },
-        "claim_5_axbench_gemma_layer_subsets": {
-            "status": "verified" if axbench_res["psr_improves_over_rank1_baselines"] else "falsified",
-            "evidence": "PSR variants improve over rank-1 activation steering baselines on AxBench Gemma layer subsets.",
+        "axbench_table_3": {
+            "status": "unreplicated",
+            "evidence": "Reduced-scale AxBench-style sanity data were generated, but the Gemma layer-subset Table 3 claim is not a bound target claim for this attempt.",
             "table_3_data": axbench_res["table_3_axbench"],
         },
-        "claim_6_accumulated_psr_rmse": {
-            "status": "verified",
-            "evidence": "Accumulated PSR interventions achieve lower relative RMSE than constant steering on Persona Vectors data.",
+        "accumulated_psr_rmse_figure_3": {
+            "status": "unreplicated",
+            "evidence": "Reduced-scale RMSE sanity data were generated, but the full Persona Vectors Figure 3 claim is not a bound target claim for this attempt.",
             "figure_3_data": pv_res["figure_3_rmse"],
         },
     }
 
     bundle = {
+        "attempt_id": "743b6200-fd16-4f38-8c0d-98c60b81b340",
+        "snapshot_id": "4f1fb0ce1cb180d5d28cb1875e5f5dfd5a2d60bc80afddbfefcfcfce25fdf3c7",
         "paper_id": "06Nk3dJDMq",
         "paper_title": "Steer Like the LLM: Activation Steering that Mimics Prompting",
         "slug": "steer-like-the-llm-activation-steering-that-mimics-prompting",
-        "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@main",
+        "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@3d916c618d146c5d657f055e432a432b0fa493c6",
         "claim_statuses": claim_statuses,
+        "non_target_claim_statuses": non_target_claim_statuses,
         "token_analysis": token_analysis,
         "mse_training": mse_res,
         "ll_training": ll_res,
