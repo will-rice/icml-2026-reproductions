@@ -637,6 +637,32 @@ def test_claim_next_cannot_give_an_owner_a_second_paper(
         scheduler.claim_next(paths, snapshot_id, "persistent-owner", now)
 
 
+def test_claim_next_ignores_orphan_attempt_lease_for_owner(
+    paths, store, leases, now, scheduler
+):
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper("paper-a", 10)],
+    )
+    leases.acquire_lease(
+        paths,
+        "attempt:orphan-attempt",
+        "persistent-owner",
+        "orphan-attempt",
+        now,
+        TTL,
+    )
+
+    assignment = scheduler.claim_next(
+        paths, snapshot_id, "persistent-owner", now
+    )
+
+    assert assignment.paper_id == "paper-a"
+    assert assignment.writer_lease.owner == "persistent-owner"
+
+
 def test_claim_next_rejects_raw_or_stale_assessed_snapshot(
     paths, store, now, scheduler
 ):
