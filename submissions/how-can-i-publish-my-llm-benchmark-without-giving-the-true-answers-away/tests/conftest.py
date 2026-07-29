@@ -1,4 +1,5 @@
 import sys
+sys.dont_write_bytecode = True
 from pathlib import Path
 
 cap_dir = Path(__file__).parent.parent
