@@ -1,7 +1,7 @@
 {
   "worktree": "/home/will/projects/icml-2026-reproductions",
   "branch": "main",
-  "base_sha": "1e74d0a1912a6e869596d76ea2838746d566ca8f",
+  "base_sha": "1a7155723f5a201ae2d1a6da8f1b6c79a847b06c",
   "project_path": "submissions/h1-bootstrapping-llms-to-reason-over-longer-horizons-via-reinforcement-learning",
   "design_path": "submissions/h1-bootstrapping-llms-to-reason-over-longer-horizons-via-reinforcement-learning/docs/superpowers/plans/2026-07-29-h1-reproduction-plan.md",
   "commands": [

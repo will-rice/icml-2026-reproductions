@@ -4,7 +4,7 @@
   "claims_verdict": {
     "claim_0_factorization_and_dp": {
       "verified": true,
-      "reconstruction_error_rank_8": 31.807711458895927,
+      "reconstruction_error_rank_8": 31.79698671543449,
       "dp_allocated_ranks": [
         3,
         0,
@@ -15,13 +15,13 @@
       "theorem": "4.1",
       "verified": true,
       "loss_optimal_rank_1": 507.4471694932283,
-      "loss_truncated_rank_1": 537.9625856979623,
-      "suboptimality_gap": 30.51541620473398
+      "loss_truncated_rank_1": 537.9625856979624,
+      "suboptimality_gap": 30.515416204734095
     },
     "claim_2_theorem_4_3": {
       "theorem": "4.3",
       "verified": true,
-      "max_minimizer_error_diff": 3.552713678800501e-15,
+      "max_minimizer_error_diff": 1.7763568394002505e-15,
       "ranks_tested": [
         1,
         2,
