@@ -1,0 +1,164 @@
+{
+  "alphaxiv": "2509.22259",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2509.22259",
+  "attempt_id": "0e2ab2dc-b3cf-4f02-abb2-e0eb1ce057d5",
+  "authors": [
+    "Isaac Reid",
+    "Arijit Sehanobish",
+    "Cederik H\u00f6fs",
+    "Bruno Mlodozeniec",
+    "Leonhard Vulpius",
+    "Federico Barbero",
+    "Adrian Weller",
+    "Krzysztof Choromanski",
+    "Richard E Turner",
+    "Petar Veli\u010dkovi\u0107"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "WIRE applies rotary position encodings to graphs by using Laplacian spectral coordinates to define graph-dependent rotation angles (Figure 1, Section 3).",
+      "challenge_claim_sha256": "93cba11d965ebf4c88b3d92822ea553f5cc9999b0e55623186312d4f1b735a3a",
+      "target_claim": "WIRE applies rotary position encodings to graphs by using Laplacian spectral coordinates to define graph-dependent rotation angles (Figure 1, Section 3)."
+    },
+    {
+      "challenge_claim": "The WIRE transformation is equivariant to node-order permutations up to sign flips and rotations in degenerate eigenspaces (Lemma 1).",
+      "challenge_claim_sha256": "69494fef0193eee52a1925524878e01ca00513d4d4b8d365e6c1ca0b1623788a",
+      "target_claim": "The WIRE transformation is equivariant to node-order permutations up to sign flips and rotations in degenerate eigenspaces (Lemma 1)."
+    },
+    {
+      "challenge_claim": "Regular RoPE is recovered as a special case of WIRE on grid graphs with appropriate learnable frequencies (Theorem 2, Figure 2).",
+      "challenge_claim_sha256": "0f8376675c180960c5fb6e4263b5c8e502aeccfc6d7f886915ce25624b5f4a8b",
+      "target_claim": "Regular RoPE is recovered as a special case of WIRE on grid graphs with appropriate learnable frequencies (Theorem 2, Figure 2)."
+    },
+    {
+      "challenge_claim": "WIRE asymptotically depends on graph effective resistance under the paper's spectral-feature assumptions (Theorem 3).",
+      "challenge_claim_sha256": "c43cfcaf65b3e394c72771326fe762502c8bc79030a59cd06a96a4342631ec55",
+      "target_claim": "WIRE asymptotically depends on graph effective resistance under the paper's spectral-feature assumptions (Theorem 3)."
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "codex-paper-owner-05-design-author",
+    "path": "docs/superpowers/specs/2026-07-29-wire-graph-rope-reproduction-design.md",
+    "recorded_at": "2026-07-29T00:53:39.946795+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-29T00:53:44.938591+00:00",
+    "reviewer": "wire-design-independent-reviewer-20260729"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2509.22259",
+  "i": 1174,
+  "insts": [
+    "University of Cambridge",
+    "Kensho Technologies/S&P Global",
+    "Attention Engineering"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "WIRE applies rotary position encodings to graphs by using Laplacian spectral coordinates to define graph-dependent rotation angles (Figure 1, Section 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "The WIRE transformation is equivariant to node-order permutations up to sign flips and rotations in degenerate eigenspaces (Lemma 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Regular RoPE is recovered as a special case of WIRE on grid graphs with appropriate learnable frequencies (Theorem 2, Figure 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "WIRE asymptotically depends on graph effective resistance under the paper's spectral-feature assumptions (Theorem 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "Experiments report WIRE improvements on synthetic monochromatic-subgraph and shortest-path tasks, point-cloud transformers, and efficient graph transformer benchmarks (Table 1, Table 2, Table 3, Table 4)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=trn64znfNx",
+  "orid": "trn64znfNx",
+  "paper_id": "trn64znfNx",
+  "phase": "implementing",
+  "pid": "61077",
+  "safety_blocker": null,
+  "score": 18,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "93cba11d965ebf4c88b3d92822ea553f5cc9999b0e55623186312d4f1b735a3a",
+        "p_falsified": 0.05,
+        "p_toy": 0.2,
+        "p_verified": 0.65
+      },
+      {
+        "challenge_claim_sha256": "69494fef0193eee52a1925524878e01ca00513d4d4b8d365e6c1ca0b1623788a",
+        "p_falsified": 0.05,
+        "p_toy": 0.25,
+        "p_verified": 0.6
+      },
+      {
+        "challenge_claim_sha256": "0f8376675c180960c5fb6e4263b5c8e502aeccfc6d7f886915ce25624b5f4a8b",
+        "p_falsified": 0.05,
+        "p_toy": 0.35,
+        "p_verified": 0.45
+      },
+      {
+        "challenge_claim_sha256": "c43cfcaf65b3e394c72771326fe762502c8bc79030a59cd06a96a4342631ec55",
+        "p_falsified": 0.05,
+        "p_toy": 0.4,
+        "p_verified": 0.35
+      },
+      {
+        "challenge_claim_sha256": "9c4c50ebff1a6126ebc9e1af6ecd0e8ee7bd9d54479d5809126550da228878e9",
+        "p_falsified": 0.02,
+        "p_toy": 0.04,
+        "p_verified": 0.02
+      }
+    ],
+    "direct_artifact_score": 1,
+    "full_score_claim_paths": 4,
+    "judged_before_deadline_probability": 0.82,
+    "primary_risk": "No official code repository was found from primary paper artifacts; evidence must independently implement WIRE spectral rotations and theorem-condition checks from arXiv v4 rather than reproduce benchmark training.",
+    "remaining_hours_p90": 4.0,
+    "remaining_time_variance_hours2": 1.5,
+    "reusable_implementation": false
+  },
+  "slug": "rotary-position-encodings-for-graphs",
+  "snapshot_id": "ffc9e5510739e188640e9162c2918c8a81db4730f767963cc02be6f6b9000e43",
+  "spot": true,
+  "sub": "Graph Neural Networks",
+  "target_claims": [
+    "WIRE applies rotary position encodings to graphs by using Laplacian spectral coordinates to define graph-dependent rotation angles (Figure 1, Section 3).",
+    "The WIRE transformation is equivariant to node-order permutations up to sign flips and rotations in degenerate eigenspaces (Lemma 1).",
+    "Regular RoPE is recovered as a special case of WIRE on grid graphs with appropriate learnable frequencies (Theorem 2, Figure 2).",
+    "WIRE asymptotically depends on graph effective resistance under the paper's spectral-feature assumptions (Theorem 3)."
+  ],
+  "title": "Rotary Position Encodings for Graphs",
+  "transitions": [
+    {
+      "at": "2026-07-29T00:53:31.661905+00:00",
+      "fencing_token": 1,
+      "from": "selected",
+      "owner": "codex-paper-owner-05",
+      "snapshot_id": "ffc9e5510739e188640e9162c2918c8a81db4730f767963cc02be6f6b9000e43",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-29T00:53:44.938591+00:00",
+      "fencing_token": 1,
+      "from": "design-pending",
+      "owner": "codex-paper-owner-05",
+      "snapshot_id": "ffc9e5510739e188640e9162c2918c8a81db4730f767963cc02be6f6b9000e43",
+      "to": "implementing"
+    }
+  ],
+  "type": "Poster",
+  "updated_at": "2026-07-29T00:53:44.938591+00:00",
+  "upstream_revision": "arxiv:2509.22259v4+arxiv-source-sha256:3eb6899ac0da995483dfba1eafe1ed625a1673d638d498882bcf741709f3415f",
+  "vs": "https://icml.cc/virtual/2026/poster/61077"
+}
