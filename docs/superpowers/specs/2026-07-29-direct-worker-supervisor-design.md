@@ -1,6 +1,6 @@
 # Direct Paper-Owner Worker Supervisor
 
-**Date:** 2026-07-29  
+**Date:** 2026-07-29
 **Status:** Approved for implementation planning
 
 ## Goal
@@ -142,4 +142,3 @@ An installation smoke test must show:
 
 The smoke test must not claim, release, publish, submit, or otherwise mutate a
 paper attempt.
-
