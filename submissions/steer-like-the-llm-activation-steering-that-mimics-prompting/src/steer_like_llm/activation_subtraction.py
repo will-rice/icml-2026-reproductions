@@ -11,11 +11,11 @@ def compute_intervention_vectors(
 ) -> torch.Tensor:
     """
     Compute prompt steering intervention vectors: v_t = h_t^prompt - h_t^base.
-    
+
     Args:
         prompt_activations: Tensor of shape (batch_size, seq_len, hidden_dim)
         base_activations: Tensor of shape (batch_size, seq_len, hidden_dim)
-        
+
     Returns:
         Intervention vectors v_t of shape (batch_size, seq_len, hidden_dim)
     """
@@ -30,7 +30,7 @@ def analyze_token_dependent_strengths(
 ) -> Dict[str, Any]:
     """
     Analyze token-dependent intervention strengths (norms) across sequence positions (Figure 2).
-    
+
     Returns metrics demonstrating token-dependent variation.
     """
     norms = torch.norm(interventions, dim=-1)  # (batch_size, seq_len)
@@ -39,7 +39,7 @@ def analyze_token_dependent_strengths(
     max_norm = torch.max(norms).item()
     min_norm = torch.min(norms).item()
     token_variance = torch.var(norms, dim=-1).mean().item()
-    
+
     return {
         "mean_norm": mean_norm,
         "std_norm": std_norm,

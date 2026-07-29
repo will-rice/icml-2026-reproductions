@@ -15,17 +15,17 @@ class PSRModel(nn.Module):
         super().__init__()
         self.hidden_dim = hidden_dim
         self.direction_dim = direction_dim
-        
+
         # Token-specific coefficient estimator network
         self.net = nn.Sequential(
             nn.Linear(hidden_dim, hidden_layer_size),
             nn.ReLU(),
             nn.Linear(hidden_layer_size, 1),
         )
-        
+
         # Trainable/fixed steering direction vector u
         self.steering_direction = nn.Parameter(torch.randn(direction_dim))
-        
+
     def forward(self, h_t: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Forward pass.
@@ -35,10 +35,10 @@ class PSRModel(nn.Module):
             predicted_v_t: (batch, seq_len, direction_dim) predicted interventions
         """
         alpha_t = self.net(h_t)  # (batch, seq_len, 1)
-        
+
         # Normalize steering direction vector
         u_norm = F.normalize(self.steering_direction, p=2, dim=-1)
-        
+
         # Predicted intervention v_t = alpha_t * u
         predicted_v_t = alpha_t * u_norm.unsqueeze(0).unsqueeze(0)
         return alpha_t, predicted_v_t
@@ -53,7 +53,7 @@ def train_psr_mse(
     """Train PSR model using Mean Squared Error (MSE) loss objective."""
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     losses = []
-    
+
     for epoch in range(epochs):
         optimizer.zero_grad()
         alpha_t, pred_v_t = model(h_base)
@@ -61,7 +61,7 @@ def train_psr_mse(
         loss.backward()
         optimizer.step()
         losses.append(loss.item())
-        
+
     return {
         "final_loss": losses[-1],
         "initial_loss": losses[0],
@@ -80,7 +80,7 @@ def train_psr_log_likelihood(
     """Train PSR model using Log-Likelihood loss objective (Section 3.5)."""
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     losses = []
-    
+
     for epoch in range(epochs):
         optimizer.zero_grad()
         alpha_t, pred_v_t = model(h_base)
@@ -90,7 +90,7 @@ def train_psr_log_likelihood(
         nll.backward()
         optimizer.step()
         losses.append(nll.item())
-        
+
     return {
         "final_nll": losses[-1],
         "initial_nll": losses[0],

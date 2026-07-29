@@ -14,27 +14,27 @@ from .axbench_evaluation import evaluate_axbench_gemma
 def run_evidence_pipeline(output_dir: str = "results") -> Dict[str, Any]:
     """Execute complete reproduction evidence pipeline and return bundle summary."""
     os.makedirs(output_dir, exist_ok=True)
-    
+
     # 1. Activation Subtraction & Token Dependence Analysis (Claims 1 & 2)
     torch.manual_seed(42)
     batch_size, seq_len, hidden_dim = 8, 20, 64
     prompt_h = torch.randn(batch_size, seq_len, hidden_dim) + 1.0
     base_h = torch.randn(batch_size, seq_len, hidden_dim)
-    
+
     interventions = compute_intervention_vectors(prompt_h, base_h)
     token_analysis = analyze_token_dependent_strengths(interventions)
-    
+
     # 2. PSR Model Training Objective Verification (Claim 3)
     psr_model = PSRModel(hidden_dim=hidden_dim, direction_dim=hidden_dim)
     mse_res = train_psr_mse(psr_model, base_h, interventions, epochs=40, lr=0.01)
     ll_res = train_psr_log_likelihood(psr_model, base_h, interventions, epochs=40, lr=0.01)
-    
+
     # 3. Persona Vectors Benchmark Evaluation (Claim 4 & Claim 6)
     pv_res = evaluate_persona_vectors(seed=42)
-    
+
     # 4. AxBench Gemma Layer Subsets Evaluation (Claim 5)
     axbench_res = evaluate_axbench_gemma(seed=42)
-    
+
     # Claim Status Summary
     claim_statuses = {
         "claim_1_activation_subtraction": {
@@ -69,7 +69,7 @@ def run_evidence_pipeline(output_dir: str = "results") -> Dict[str, Any]:
             "figure_3_data": pv_res["figure_3_rmse"],
         },
     }
-    
+
     bundle = {
         "paper_id": "06Nk3dJDMq",
         "paper_title": "Steer Like the LLM: Activation Steering that Mimics Prompting",
@@ -82,10 +82,10 @@ def run_evidence_pipeline(output_dir: str = "results") -> Dict[str, Any]:
         "persona_vectors": pv_res,
         "axbench": axbench_res,
     }
-    
+
     with open(os.path.join(output_dir, "results.json"), "w") as f:
         json.dump(bundle, f, indent=2)
-        
+
     return bundle
 
 if __name__ == "__main__":

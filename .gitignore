@@ -11,4 +11,3 @@ __pycache__/
 !uv.lock
 state/validation-manifests/
 scratch/
-
