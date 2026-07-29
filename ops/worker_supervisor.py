@@ -186,6 +186,25 @@ class HostAdapter:
         if result.returncode:
             raise HostCommandError(result.stderr)
 
+    def _has_expected_child(self, spec: WorkerSpec, pane_pid: int) -> bool:
+        children_path = Path(
+            f"/proc/{pane_pid}/task/{pane_pid}/children"
+        )
+        try:
+            child_pids = children_path.read_text(encoding="utf-8").split()
+        except OSError:
+            return False
+        for child_pid in child_pids:
+            try:
+                command = Path(f"/proc/{child_pid}/comm").read_text(
+                    encoding="utf-8"
+                )
+            except OSError:
+                continue
+            if command.strip() == spec.agent:
+                return True
+        return False
+
     def session_health(self, spec: WorkerSpec) -> SessionHealth:
         pane_argv = [
             "tmux",
@@ -210,11 +229,16 @@ class HostAdapter:
             (
                 pane_dead,
                 foreground_command,
-                _pane_pid,
+                pane_pid_text,
                 pane_start_command,
             ) = pane_result.stdout.splitlines()[0].split("\t", maxsplit=3)
+            pane_pid = int(pane_pid_text)
         except (IndexError, ValueError) as error:
             raise HostCommandError("tmux returned malformed pane metadata") from error
+
+        launch_marker = _launch_marker_from_text(pane_start_command)
+        if launch_marker and self._has_expected_child(spec, pane_pid):
+            foreground_command = spec.agent
 
         output_argv = [
             "tmux",
@@ -232,7 +256,7 @@ class HostAdapter:
             pane_dead == "1",
             foreground_command,
             sanitize_text(output_result.stdout),
-            _launch_marker_from_text(pane_start_command),
+            launch_marker,
         )
 
     def ensure_session(self, spec: WorkerSpec, command: str) -> bool:

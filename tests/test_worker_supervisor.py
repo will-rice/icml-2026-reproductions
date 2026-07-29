@@ -363,6 +363,40 @@ def test_host_adapter_extracts_launch_generation_without_retaining_start_command
     assert raw_start_command not in repr(health)
 
 
+def test_host_adapter_adopts_marked_legacy_wrapper_with_agent_child(
+    monkeypatch,
+):
+    spec = supervisor.desired_workers()[10]
+    marker = "legacy-wrapper-marker"
+    start_command = (
+        f"printf marker {supervisor.LAUNCH_MARKER_PREFIX}{marker}; "
+        "codex exec"
+    )
+
+    def run(argv, *, check, text, capture_output):
+        if argv[1] == "list-panes":
+            return subprocess.CompletedProcess(
+                argv,
+                0,
+                f"0\tbash\t123\t{start_command}\n",
+                "",
+            )
+        return subprocess.CompletedProcess(argv, 0, "active output\n", "")
+
+    monkeypatch.setattr(supervisor.subprocess, "run", run)
+    monkeypatch.setattr(
+        supervisor.HostAdapter,
+        "_has_expected_child",
+        lambda self, worker, pane_pid: worker == spec and pane_pid == 123,
+        raising=False,
+    )
+
+    health = supervisor.HostAdapter(Path("/repo")).session_health(spec)
+
+    assert health.foreground_command == "codex"
+    assert supervisor.is_healthy(spec, health)
+
+
 @pytest.mark.parametrize(
     "stderr",
     [
