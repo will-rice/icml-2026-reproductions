@@ -518,6 +518,67 @@
         "remaining_time_variance_hours2": 9.0,
         "primary_risk": "The reusable worktree currently supports only Claim 1 at toy scale; Claims 2 and 3 still need a non-circular pattern test and actual tiny-model retraining, while the branch is behind main and all project changes remain uncommitted."
       }
+    },
+    {
+      "paper_id": "06Nk3dJDMq",
+      "score": 18,
+      "target_claims": [
+        "The paper derives prompt steering interventions by subtracting unsteered activations from prompt-steered activations and trains PSR models to approximate successful prompt interventions (Figure 1).",
+        "Prompt steering applies highly token-dependent intervention strengths, motivating token-specific activation steering rather than constant coefficients (Figure 2).",
+        "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5)."
+      ],
+      "claim_bindings": [
+        {
+          "target_claim": "The paper derives prompt steering interventions by subtracting unsteered activations from prompt-steered activations and trains PSR models to approximate successful prompt interventions (Figure 1).",
+          "challenge_claim": "The paper derives prompt steering interventions by subtracting unsteered activations from prompt-steered activations and trains PSR models to approximate successful prompt interventions (Figure 1).",
+          "challenge_claim_sha256": "1459411ef8e5a1dd63af5d3d97551c8c2aa585132804d6f34bd36cf6d82be8f5"
+        },
+        {
+          "target_claim": "Prompt steering applies highly token-dependent intervention strengths, motivating token-specific activation steering rather than constant coefficients (Figure 2).",
+          "challenge_claim": "Prompt steering applies highly token-dependent intervention strengths, motivating token-specific activation steering rather than constant coefficients (Figure 2).",
+          "challenge_claim_sha256": "149c4bac68b58475207982877ceeee00b67f8fe6ddde89150bf0db5266b6fb7e"
+        },
+        {
+          "target_claim": "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5).",
+          "challenge_claim": "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5).",
+          "challenge_claim_sha256": "908dd7c6a856b5e8c5d8434741b0205165690280c2439982936aaadbf49ab5e0"
+        }
+      ],
+      "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@3d916c618d146c5d657f055e432a432b0fa493c6",
+      "artifact_access": true,
+      "cpu_only": true,
+      "safety_blocker": null,
+      "licensing_blocker": null,
+      "estimated_api_cost_usd": 0.0,
+      "score_rate": {
+        "claim_expectations": [
+          {
+            "challenge_claim_sha256": "1459411ef8e5a1dd63af5d3d97551c8c2aa585132804d6f34bd36cf6d82be8f5",
+            "p_verified": 0.55,
+            "p_falsified": 0.05,
+            "p_toy": 0.3
+          },
+          {
+            "challenge_claim_sha256": "149c4bac68b58475207982877ceeee00b67f8fe6ddde89150bf0db5266b6fb7e",
+            "p_verified": 0.45,
+            "p_falsified": 0.05,
+            "p_toy": 0.35
+          },
+          {
+            "challenge_claim_sha256": "908dd7c6a856b5e8c5d8434741b0205165690280c2439982936aaadbf49ab5e0",
+            "p_verified": 0.5,
+            "p_falsified": 0.05,
+            "p_toy": 0.3
+          }
+        ],
+        "judged_before_deadline_probability": 0.82,
+        "remaining_hours_p90": 5.0,
+        "reusable_implementation": true,
+        "direct_artifact_score": 4,
+        "full_score_claim_paths": 3,
+        "remaining_time_variance_hours2": 2.25,
+        "primary_risk": "The released repository focuses on evaluated JSONL and notebooks; full Persona Vectors and AxBench model-scale comparisons are GPU-heavy, so the reproduction should prioritize deterministic artifact/schema checks and small CPU PSR sanity tests."
+      }
     }
   ]
 }
