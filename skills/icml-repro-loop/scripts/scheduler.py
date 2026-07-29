@@ -791,11 +791,14 @@ def _require_owner_available(
     paths: store.StatePaths, owner: str, now: datetime
 ) -> None:
     owner = _identity(owner, "owner")
+    index = store.read_json(paths.index)
+    store.validate_index(index)
     for path in (paths.root / "leases").glob("*.json"):
         value = store.read_json(path)
         leases.validate_lease(value)
         if (
             value["resource"].startswith("attempt:")
+            and value["attempt_id"] in index["attempts"]
             and value["owner"] == owner
             and value["released_at"] is None
             and _parse(value["expires_at"], "expires_at") > now

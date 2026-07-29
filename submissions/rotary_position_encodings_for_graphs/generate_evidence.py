@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""CLI script to generate evidence for Rotary Position Encodings for Graphs (WIRE)."""
+"""Generate the WIRE reproduction evidence bundle."""
 
-import json
-import sys
 from pathlib import Path
+import sys
 
-# Add project root to sys.path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from submissions.rotary_position_encodings_for_graphs.wire import generate_evidence
+PROJECT_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-def main():
-    output_path = Path(__file__).resolve().parent / "evidence.json"
-    print(f"Generating evidence to {output_path}...")
-    data = generate_evidence(str(output_path))
-    print("Evidence Generation Complete:")
-    print(json.dumps(data, indent=2))
+from wire_graph_rope.claims import write_evidence_bundle  # noqa: E402
+
+
+def main() -> None:
+    output = PROJECT_ROOT / "evidence" / "bundle.json"
+    write_evidence_bundle(output)
+    print(output)
+
 
 if __name__ == "__main__":
     main()

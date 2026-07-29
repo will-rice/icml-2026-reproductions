@@ -333,9 +333,46 @@ def _verify_completed_release(
             >= _parse(transaction["released_at"], "release transaction")
         ):
             return
+        if _can_restore_lost_successor_release(transaction, current):
+            restored = {
+                "resource": transaction["resource"],
+                "owner": transaction["owner"],
+                "attempt_id": transaction["attempt_id"],
+                "acquired_at": transaction["lease_acquired_at"],
+                "expires_at": transaction["lease_expires_at"],
+                "fencing_token": transaction["fencing_token"],
+                "released_at": transaction["released_at"],
+            }
+            leases.validate_lease(restored)
+            store._atomic_json_write(lease_path, restored)
+            return
         _require_transaction_lease(transaction, current)
         if current.released_at != transaction["released_at"]:
             raise ValueError("release transaction")
+
+
+def _can_restore_lost_successor_release(
+    transaction: dict, current: leases.Lease | None
+) -> bool:
+    if current is None or current.released_at is None:
+        return False
+    if (
+        current.resource != transaction["resource"]
+        or current.attempt_id != transaction["attempt_id"]
+        or current.fencing_token >= transaction["fencing_token"]
+    ):
+        return False
+    current_released = _parse(current.released_at, "release transaction")
+    transaction_acquired = _parse(
+        transaction["lease_acquired_at"], "release transaction"
+    )
+    transaction_released = _parse(
+        transaction["released_at"], "release transaction"
+    )
+    return (
+        transaction_acquired >= current_released
+        and transaction_released >= transaction_acquired
+    )
 
 
 def _validate_release_transaction(
