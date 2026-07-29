@@ -1,7 +1,7 @@
 {
   "worktree": "/home/will/projects/icml-2026-reproductions",
   "branch": "main",
-  "base_sha": "3221a27dd3478a92e3b23ce31819aa9599a3855f",
+  "base_sha": "ca846cc57e42c19520913422dfad724f581032d3",
   "project_path": "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
   "design_path": "docs/superpowers/specs/2026-07-29-ettfs-snn-reproduction-design.md",
   "commands": [
