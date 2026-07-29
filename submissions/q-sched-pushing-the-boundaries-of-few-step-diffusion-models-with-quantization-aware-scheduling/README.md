@@ -25,4 +25,3 @@ This Hugging Face Space contains independently executable reproduction evidence 
 ## Usage
 
 Run `python main.py` locally to reproduce all evaluation metrics and generate `evidence.json`.
-
