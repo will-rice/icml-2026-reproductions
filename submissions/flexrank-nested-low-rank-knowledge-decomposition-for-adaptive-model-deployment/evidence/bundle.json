@@ -4,7 +4,7 @@
   "claims_verdict": {
     "claim_0_factorization_and_dp": {
       "verified": true,
-      "reconstruction_error_rank_8": 32.07100313618622,
+      "reconstruction_error_rank_8": 32.0345955213229,
       "dp_allocated_ranks": [
         3,
         0,
