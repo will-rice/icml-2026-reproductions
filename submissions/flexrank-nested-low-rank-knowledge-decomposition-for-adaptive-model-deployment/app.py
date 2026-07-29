@@ -15,8 +15,8 @@ def load_evidence():
 with gr.Blocks(title="FlexRank Reproduction") as demo:
     gr.Markdown("# FlexRank Reproduction Demonstration")
     gr.Markdown("Paper ID: `DK0kvnNelx` | ArXiv: `2602.02680` | ICML 2026")
-    
+
     with gr.Row():
         evidence_output = gr.Code(label="Verified Evidence Bundle", value=load_evidence, language="json")
-        
+
 demo.launch()

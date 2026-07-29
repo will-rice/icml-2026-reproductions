@@ -11,7 +11,7 @@ def demo_fn(code_input):
     decomp = run_stage_decomposition(code_input)
     kb = evaluate_kernelbench()
     sys_m = evaluate_egg_system()
-    
+
     summary = f"""
 ### EGG Stage Decomposition
 - Algorithmic Structure: {decomp["algorithmic_structure"]}

@@ -10,12 +10,12 @@ def test_evidence_generation():
     generate_evidence()
     assert os.path.exists("evidence/claim_1.json")
     assert os.path.exists("evidence/claim_2.json")
-    
+
     with open("evidence/claim_1.json") as f:
         d1 = json.load(f)
     assert d1["total_questions"] == 2671
     assert d1["status"] == "verified"
-    
+
     with open("evidence/claim_2.json") as f:
         d2 = json.load(f)
     assert d2["total_skills"] == 4

@@ -1,9 +1,9 @@
 # Reproduction of "Efficiently Training Time-to-First-Spike Spiking Neural Networks from Scratch"
 
-Paper: ICML 2026 Candidate Paper (arXiv:2410.23619)  
-Attempt ID: `c4d0ef4f-ff5f-4660-b0a6-deaffcf9022d`  
-Paper ID: `3EcT46wsdc`  
-Owner: `agy-paper-owner-06`  
+Paper: ICML 2026 Candidate Paper (arXiv:2410.23619)
+Attempt ID: `c4d0ef4f-ff5f-4660-b0a6-deaffcf9022d`
+Paper ID: `3EcT46wsdc`
+Owner: `agy-paper-owner-06`
 
 ## Verified Target Claims
 

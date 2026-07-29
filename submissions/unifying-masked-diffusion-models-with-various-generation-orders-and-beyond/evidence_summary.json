@@ -1,0 +1,67 @@
+{
+  "paper_id": "ATpOQt9VVd",
+  "title": "Unifying Masked Diffusion Models with Various Generation Orders and Beyond",
+  "slug": "unifying-masked-diffusion-models-with-various-generation-orders-and-beyond",
+  "target_claims": [
+    {
+      "claim": "OeMDM defines a generalized masked-diffusion NELBO that decomposes into a reconstruction term and a velocity-mismatch term for order-aware generation processes (Proposition 3.2).",
+      "challenge_claim_sha256": "98356bc779599c03c080ec74ce1543ca9a0ed388bf469b0629eb0e51dd950695",
+      "status": "verified",
+      "evidence_details": {
+        "total_nelbo": 7.321252346038818,
+        "reconstruction_loss": 5.056608200073242,
+        "velocity_mismatch_loss": 2.264644145965576,
+        "exact_decomposition_verified": true
+      }
+    },
+    {
+      "claim": "OeMDM recovers autoregressive left-to-right modeling as a special case under a suitable scheduler (Proposition 3.3).",
+      "challenge_claim_sha256": "ed409d196fa9c57d6af9f09020f2079d1ca28addf07e9269ddda41aa2a02bdee",
+      "status": "verified",
+      "evidence_details": {
+        "proposition": "3.3",
+        "verified": true,
+        "all_masked_at_start": true,
+        "none_masked_at_end": true,
+        "exact_l2r_step_unmasking": true,
+        "causal_order": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ]
+      }
+    },
+    {
+      "claim": "LoMDM jointly trains the diffusion backbone and learnable order schedulers from scratch with a single objective rather than post-training an unmasking sampler (Section 4.1).",
+      "challenge_claim_sha256": "e62be550293edc6385be1bad9c6d73b0366ceb7193f8abacf2c3b6c371836505",
+      "status": "verified",
+      "evidence_details": {
+        "verified": true,
+        "initial_joint_loss": 4.644472122192383,
+        "final_joint_loss": 4.5709404945373535,
+        "loss_history": [
+          4.644472122192383,
+          4.625848770141602,
+          4.607476711273193,
+          4.589228630065918,
+          4.5709404945373535
+        ],
+        "single_objective_unified": true
+      }
+    }
+  ],
+  "all_target_claims_verified": true
+}
