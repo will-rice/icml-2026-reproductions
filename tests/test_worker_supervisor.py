@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import subprocess
 
@@ -22,6 +23,24 @@ class FakeHost:
         if not self.session_health(spec).exists:
             self.created.append(spec.session_name)
         self.sent.append((spec.session_name, command))
+
+    def mark_started(self, worker_ids):
+        by_worker_id = {spec.worker_id: spec for spec in supervisor.desired_workers()}
+        for worker_id in worker_ids:
+            spec = by_worker_id[worker_id]
+            self.health[spec.session_name] = supervisor.SessionHealth(
+                True, False, spec.agent, ""
+            )
+
+
+@pytest.fixture
+def fake_host():
+    return FakeHost()
+
+
+@pytest.fixture
+def fixed_now():
+    return datetime(2026, 7, 29, 12, 0, tzinfo=timezone.utc)
 
 
 def test_desired_workers_are_stable_ten_agy_and_five_codex():
@@ -228,3 +247,144 @@ def test_runtime_directory_uses_xdg_state_home(tmp_path, monkeypatch):
 
     assert runtime_path == tmp_path / "icml-worker-supervisor"
     assert runtime_path.is_dir()
+
+
+def test_reconcile_does_not_restart_healthy_workers(fake_host, fixed_now):
+    for spec in supervisor.desired_workers():
+        fake_host.health[spec.session_name] = supervisor.SessionHealth(
+            True, False, spec.agent, ""
+        )
+    result = supervisor.reconcile(
+        fake_host, supervisor.RuntimeState.empty(), fixed_now, Path("/repo")
+    )
+    assert result.started == ()
+    assert fake_host.sent == []
+    assert len(result.status["workers"]) == 15
+
+
+def test_two_reconciliations_do_not_duplicate_started_lane(fake_host, fixed_now):
+    state = supervisor.RuntimeState.empty()
+    first = supervisor.reconcile(fake_host, state, fixed_now, Path("/repo"))
+    fake_host.mark_started(first.started)
+    second = supervisor.reconcile(
+        fake_host, first.state, fixed_now + timedelta(seconds=30), Path("/repo")
+    )
+    assert len(first.started) == 15
+    assert second.started == ()
+
+
+def test_quota_error_rotates_profile_and_honors_reported_reset(fake_host, fixed_now):
+    spec = supervisor.desired_workers()[0]
+    for other_spec in supervisor.desired_workers()[1:]:
+        fake_host.health[other_spec.session_name] = supervisor.SessionHealth(
+            True, False, other_spec.agent, ""
+        )
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True,
+        False,
+        "bash",
+        "Individual quota reached. Resets in 46m20s.",
+    )
+    state = supervisor.RuntimeState.with_lane(spec.worker_id, profile_index=0)
+    result = supervisor.reconcile(fake_host, state, fixed_now, Path("/repo"))
+    lane = result.state.lanes[spec.worker_id]
+    assert lane.profile_index == 1
+    assert lane.profile_backoff["gemini-3.1-pro-high"] == (
+        fixed_now + timedelta(minutes=46, seconds=20)
+    )
+    assert result.started == (spec.worker_id,)
+
+
+def test_all_agy_profiles_exhausted_waits_for_earliest_reset(fake_host, fixed_now):
+    spec = supervisor.desired_workers()[0]
+    resets = {
+        profile.name: fixed_now + timedelta(minutes=minutes)
+        for profile, minutes in zip(supervisor.agy_profiles(), (12, 8, 20))
+    }
+    state = supervisor.RuntimeState.with_lane(
+        spec.worker_id, profile_index=0, profile_backoff=resets
+    )
+    result = supervisor.reconcile(fake_host, state, fixed_now, Path("/repo"))
+    lane = result.state.lanes[spec.worker_id]
+    assert spec.worker_id not in result.started
+    assert lane.next_retry_at == fixed_now + timedelta(minutes=8)
+
+
+@pytest.mark.parametrize(
+    ("message", "expected"),
+    [
+        (
+            "Individual quota reached. Resets in 50m33s.",
+            timedelta(minutes=50, seconds=33),
+        ),
+        ("Individual quota reached. Resets in 2h3m.", timedelta(hours=2, minutes=3)),
+        ("process exited with code 1", None),
+    ],
+)
+def test_parse_quota_reset_formats(message, expected, fixed_now):
+    parsed = supervisor.parse_quota_reset(message, fixed_now)
+    assert parsed == (None if expected is None else fixed_now + expected)
+
+
+def test_ordinary_crash_uses_bounded_worker_specific_backoff(fake_host, fixed_now):
+    spec = supervisor.desired_workers()[10]
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True, False, "bash", "process exited with code 1"
+    )
+    state = supervisor.RuntimeState.with_lane(spec.worker_id)
+    result = supervisor.reconcile(fake_host, state, fixed_now, Path("/repo"))
+    lane = result.state.lanes[spec.worker_id]
+    assert lane.ordinary_failures == 1
+    assert fixed_now + timedelta(seconds=15) <= lane.next_retry_at
+    assert lane.next_retry_at <= fixed_now + timedelta(seconds=25)
+
+
+def test_healthy_worker_resets_ordinary_failure_backoff(fake_host, fixed_now):
+    spec = supervisor.desired_workers()[10]
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True, False, "codex", ""
+    )
+    retry_at = fixed_now + timedelta(minutes=1)
+    initial = supervisor.RuntimeState(
+        {
+            spec.worker_id: supervisor.LaneState(
+                ordinary_failures=2, next_retry_at=retry_at
+            )
+        }
+    )
+    result = supervisor.reconcile(fake_host, initial, fixed_now, Path("/repo"))
+    lane = result.state.lanes[spec.worker_id]
+    assert lane.ordinary_failures == 0
+    assert lane.next_retry_at is None
+
+
+def test_dry_run_reports_without_host_mutation_or_state_change(
+    fake_host, fixed_now
+):
+    initial = supervisor.RuntimeState.empty()
+    result = supervisor.reconcile(
+        fake_host, initial, fixed_now, Path("/repo"), dry_run=True
+    )
+    assert len(result.proposed) == 15
+    assert result.started == ()
+    assert result.state == initial
+    assert fake_host.created == []
+    assert fake_host.sent == []
+
+
+def test_status_contains_no_prompt_token_or_environment_dump(fake_host, fixed_now):
+    spec = supervisor.desired_workers()[0]
+    fake_host.health[spec.session_name] = supervisor.SessionHealth(
+        True,
+        False,
+        "bash",
+        "HF_TOKEN=hf_secret GH_TOKEN=github_pat_secret",
+    )
+    result = supervisor.reconcile(
+        fake_host, supervisor.RuntimeState.empty(), fixed_now, Path("/repo")
+    )
+    encoded = json.dumps(result.status)
+    assert "Use the shared" not in encoded
+    assert "HF_TOKEN" not in encoded
+    assert "hf_secret" not in encoded
+    assert "github_pat_" not in encoded

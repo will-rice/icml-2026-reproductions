@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -18,6 +20,14 @@ GITHUB_TOKEN_PATTERN = re.compile(
     r"\b(?:gh[pousr]_[A-Za-z0-9]+|github_pat_[A-Za-z0-9_]+)\b"
 )
 BEARER_TOKEN_PATTERN = re.compile(r"(Authorization:\s*Bearer\s+)\S+", re.IGNORECASE)
+SECRET_ENV_ASSIGNMENT_PATTERN = re.compile(
+    r"\b(?:HF_TOKEN|HUGGING_FACE_HUB_TOKEN|GH_TOKEN)\s*=\s*\S+", re.IGNORECASE
+)
+QUOTA_RE = re.compile(
+    r"quota reached.*?Resets in "
+    r"(?:(?P<hours>\d+)h)?(?:(?P<minutes>\d+)m)?(?:(?P<seconds>\d+)s)?",
+    re.IGNORECASE | re.DOTALL,
+)
 PROMPT = (
     "Use the shared icml-repro-loop skill directly and keep running its "
     "paper-owner loop. Read and follow "
@@ -45,6 +55,50 @@ class SessionHealth:
     pane_dead: bool
     foreground_command: str
     recent_output: str
+
+
+@dataclass(frozen=True)
+class LaneState:
+    profile_index: int = 0
+    profile_backoff: dict[str, datetime] = field(default_factory=dict)
+    restart_count: int = 0
+    ordinary_failures: int = 0
+    next_retry_at: datetime | None = None
+    last_error: str = ""
+
+
+@dataclass(frozen=True)
+class RuntimeState:
+    lanes: dict[str, LaneState] = field(default_factory=dict)
+
+    @classmethod
+    def empty(cls) -> RuntimeState:
+        return cls()
+
+    @classmethod
+    def with_lane(
+        cls,
+        worker_id: str,
+        *,
+        profile_index: int = 0,
+        profile_backoff: dict[str, datetime] | None = None,
+    ) -> RuntimeState:
+        return cls(
+            {
+                worker_id: LaneState(
+                    profile_index=profile_index,
+                    profile_backoff=dict(profile_backoff or {}),
+                )
+            }
+        )
+
+
+@dataclass(frozen=True)
+class ReconcileResult:
+    state: RuntimeState
+    status: dict[str, list[dict[str, str | int | None]]]
+    started: tuple[str, ...]
+    proposed: tuple[str, ...]
 
 
 class AlreadyRunning(RuntimeError):
@@ -292,7 +346,155 @@ def launch_shell_command(
     )
 
 
+def _profile_for(spec: WorkerSpec, lane: LaneState) -> ModelProfile:
+    if spec.agent == "codex":
+        return codex_profile()
+    profiles = agy_profiles()
+    return profiles[lane.profile_index % len(profiles)]
+
+
+def parse_quota_reset(message: str, now: datetime) -> datetime | None:
+    match = QUOTA_RE.search(message)
+    if match is None:
+        return None
+    parts = {name: int(value or 0) for name, value in match.groupdict().items()}
+    return now + timedelta(**parts)
+
+
+def next_profile(
+    spec: WorkerSpec, lane: LaneState, now: datetime
+) -> tuple[ModelProfile | None, int | None]:
+    if spec.agent == "codex":
+        return codex_profile(), 0
+    for index, profile in enumerate(agy_profiles()):
+        reset_at = lane.profile_backoff.get(profile.name)
+        if reset_at is None or reset_at <= now:
+            return profile, index
+    return None, None
+
+
+def _earliest_profile_reset(lane: LaneState) -> datetime | None:
+    resets = tuple(lane.profile_backoff.values())
+    return min(resets) if resets else None
+
+
+def _ordinary_retry_at(lane: LaneState, worker_id: str, now: datetime) -> datetime:
+    delay = min(15 * 2**lane.ordinary_failures, 900)
+    jitter = int.from_bytes(hashlib.sha256(worker_id.encode()).digest()[:2], "big") % 11
+    return now + timedelta(seconds=delay + jitter)
+
+
+def _iso_timestamp(value: datetime | None) -> str | None:
+    if value is None:
+        return None
+    return value.astimezone(timezone.utc).isoformat()
+
+
+def _status_entry(
+    spec: WorkerSpec, health: str, profile: ModelProfile, lane: LaneState
+) -> dict[str, str | int | None]:
+    return {
+        "worker_id": spec.worker_id,
+        "agent": spec.agent,
+        "health": health,
+        "model": profile.name,
+        "restart_count": lane.restart_count,
+        "next_retry_at": _iso_timestamp(lane.next_retry_at),
+        "last_error": sanitize_text(lane.last_error),
+    }
+
+
+def reconcile(
+    host: HostAdapter,
+    state: RuntimeState,
+    now: datetime,
+    repo_root: Path,
+    dry_run: bool = False,
+) -> ReconcileResult:
+    lanes = dict(state.lanes)
+    started: list[str] = []
+    proposed: list[str] = []
+    workers: list[dict[str, str | int | None]] = []
+    for spec in desired_workers():
+        lane = lanes.get(spec.worker_id, LaneState())
+        health = host.session_health(spec)
+        profile = _profile_for(spec, lane)
+        if is_healthy(spec, health):
+            if lane.ordinary_failures:
+                lane = LaneState(
+                    profile_index=lane.profile_index,
+                    profile_backoff=dict(lane.profile_backoff),
+                    restart_count=lane.restart_count,
+                    next_retry_at=None,
+                    last_error=lane.last_error,
+                )
+                lanes[spec.worker_id] = lane
+            workers.append(_status_entry(spec, "healthy", profile, lane))
+            continue
+        if lane.next_retry_at is not None and now < lane.next_retry_at:
+            workers.append(_status_entry(spec, "backed_off", profile, lane))
+            continue
+        quota_reset = parse_quota_reset(health.recent_output, now)
+        if spec.agent == "agy" and quota_reset is not None:
+            profile_backoff = dict(lane.profile_backoff)
+            profile_backoff[profile.name] = quota_reset
+            lane = LaneState(
+                profile_index=lane.profile_index,
+                profile_backoff=profile_backoff,
+                restart_count=lane.restart_count,
+                ordinary_failures=lane.ordinary_failures,
+                next_retry_at=None,
+                last_error=sanitize_text(health.recent_output),
+            )
+        selected_profile, profile_index = next_profile(spec, lane, now)
+        if selected_profile is None:
+            earliest_reset = _earliest_profile_reset(lane)
+            assert earliest_reset is not None
+            if dry_run:
+                proposed.append(spec.worker_id)
+                workers.append(_status_entry(spec, "proposed", profile, lane))
+                continue
+            lane = LaneState(
+                profile_index=lane.profile_index,
+                profile_backoff=dict(lane.profile_backoff),
+                restart_count=lane.restart_count,
+                ordinary_failures=lane.ordinary_failures,
+                next_retry_at=earliest_reset,
+                last_error=sanitize_text(health.recent_output),
+            )
+            lanes[spec.worker_id] = lane
+            workers.append(_status_entry(spec, "backed_off", profile, lane))
+            continue
+        profile = selected_profile
+        assert profile_index is not None
+        command = launch_shell_command(spec, profile, repo_root)
+        if dry_run:
+            proposed.append(spec.worker_id)
+            workers.append(_status_entry(spec, "proposed", profile, lane))
+            continue
+        host.ensure_session(spec, command)
+        ordinary_failures = lane.ordinary_failures
+        if health.exists and quota_reset is None:
+            ordinary_failures += 1
+            next_retry_at = _ordinary_retry_at(lane, spec.worker_id, now)
+        else:
+            next_retry_at = now + timedelta(seconds=15)
+        lane = LaneState(
+            profile_index=profile_index,
+            profile_backoff=dict(lane.profile_backoff),
+            restart_count=lane.restart_count + 1,
+            ordinary_failures=ordinary_failures,
+            next_retry_at=next_retry_at,
+            last_error=sanitize_text(health.recent_output),
+        )
+        lanes[spec.worker_id] = lane
+        started.append(spec.worker_id)
+        workers.append(_status_entry(spec, "started", profile, lane))
+    return ReconcileResult(RuntimeState(lanes), {"workers": workers}, tuple(started), tuple(proposed))
+
+
 def sanitize_text(text: str) -> str:
-    clean = HUGGING_FACE_TOKEN_PATTERN.sub("<redacted>", text)
+    clean = SECRET_ENV_ASSIGNMENT_PATTERN.sub("<redacted>", text)
+    clean = HUGGING_FACE_TOKEN_PATTERN.sub("<redacted>", clean)
     clean = GITHUB_TOKEN_PATTERN.sub("<redacted>", clean)
     return BEARER_TOKEN_PATTERN.sub(r"\1<redacted>", clean)
