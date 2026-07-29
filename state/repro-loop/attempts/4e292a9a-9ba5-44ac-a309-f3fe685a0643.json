@@ -1,0 +1,131 @@
+{
+  "alphaxiv": "2605.03907",
+  "area": "Deep Learning",
+  "artifact_access": true,
+  "arxiv": "2605.03907",
+  "attempt_id": "4e292a9a-9ba5-44ac-a309-f3fe685a0643",
+  "authors": [
+    "Geert Heyman",
+    "Frederik Vandeputte"
+  ],
+  "claim_bindings": [
+    {
+      "challenge_claim": "The paper derives prompt steering interventions by subtracting unsteered activations from prompt-steered activations and trains PSR models to approximate successful prompt interventions (Figure 1).",
+      "challenge_claim_sha256": "1459411ef8e5a1dd63af5d3d97551c8c2aa585132804d6f34bd36cf6d82be8f5",
+      "target_claim": "The paper derives prompt steering interventions by subtracting unsteered activations from prompt-steered activations and trains PSR models to approximate successful prompt interventions (Figure 1)."
+    },
+    {
+      "challenge_claim": "Prompt steering applies highly token-dependent intervention strengths, motivating token-specific activation steering rather than constant coefficients (Figure 2).",
+      "challenge_claim_sha256": "149c4bac68b58475207982877ceeee00b67f8fe6ddde89150bf0db5266b6fb7e",
+      "target_claim": "Prompt steering applies highly token-dependent intervention strengths, motivating token-specific activation steering rather than constant coefficients (Figure 2)."
+    },
+    {
+      "challenge_claim": "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5).",
+      "challenge_claim_sha256": "908dd7c6a856b5e8c5d8434741b0205165690280c2439982936aaadbf49ab5e0",
+      "target_claim": "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5)."
+    }
+  ],
+  "cpu_only": true,
+  "estimated_api_cost_usd": 0.0,
+  "hf": "2605.03907",
+  "i": 6072,
+  "insts": [
+    "Nokia Bell Labs"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "The paper derives prompt steering interventions by subtracting unsteered activations from prompt-steered activations and trains PSR models to approximate successful prompt interventions (Figure 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "Prompt steering applies highly token-dependent intervention strengths, motivating token-specific activation steering rather than constant coefficients (Figure 2)."
+    },
+    {
+      "status": "unverified",
+      "text": "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5)."
+    },
+    {
+      "status": "unverified",
+      "text": "On Persona Vectors, all-layer PSR models outperform prompt steering at prompt-steering coherence for all three reported language models (Table 1)."
+    },
+    {
+      "status": "unverified",
+      "text": "On AxBench Gemma layer subsets, PSR variants improve over several rank-1 activation steering baselines and compare with multi-rank or multi-layer methods (Table 3)."
+    },
+    {
+      "status": "unverified",
+      "text": "Accumulated PSR interventions have lower relative RMSE to prompt-steering interventions than constant steering on the analyzed Persona Vectors data (Figure 3)."
+    }
+  ],
+  "or": "https://openreview.net/forum?id=06Nk3dJDMq",
+  "orid": "06Nk3dJDMq",
+  "paper_id": "06Nk3dJDMq",
+  "phase": "selected",
+  "pid": "66813",
+  "safety_blocker": null,
+  "score": 18,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "1459411ef8e5a1dd63af5d3d97551c8c2aa585132804d6f34bd36cf6d82be8f5",
+        "p_falsified": 0.05,
+        "p_toy": 0.3,
+        "p_verified": 0.55
+      },
+      {
+        "challenge_claim_sha256": "149c4bac68b58475207982877ceeee00b67f8fe6ddde89150bf0db5266b6fb7e",
+        "p_falsified": 0.05,
+        "p_toy": 0.35,
+        "p_verified": 0.45
+      },
+      {
+        "challenge_claim_sha256": "908dd7c6a856b5e8c5d8434741b0205165690280c2439982936aaadbf49ab5e0",
+        "p_falsified": 0.05,
+        "p_toy": 0.3,
+        "p_verified": 0.5
+      },
+      {
+        "challenge_claim_sha256": "ba330c6788615e99723db028039065415fd87a8ac1929aeeb5e3585d2b6abfc8",
+        "p_falsified": 0.05,
+        "p_toy": 0.35,
+        "p_verified": 0.08
+      },
+      {
+        "challenge_claim_sha256": "c333c2b1983367a011b00f236ec51ce851c2ddc8fe8eb3c91f8fec63ba51f36a",
+        "p_falsified": 0.05,
+        "p_toy": 0.3,
+        "p_verified": 0.08
+      },
+      {
+        "challenge_claim_sha256": "d008e6323e99a155cc9825a37f7644bdefefe68b394a82d34d896992b428811e",
+        "p_falsified": 0.05,
+        "p_toy": 0.35,
+        "p_verified": 0.12
+      }
+    ],
+    "direct_artifact_score": 4,
+    "full_score_claim_paths": 3,
+    "judged_before_deadline_probability": 0.82,
+    "primary_risk": "The released repository focuses on evaluated JSONL and notebooks; full Persona Vectors and AxBench model-scale comparisons are GPU-heavy, so the reproduction should prioritize deterministic artifact/schema checks and small CPU PSR sanity tests.",
+    "remaining_hours_p90": 5.0,
+    "remaining_time_variance_hours2": 2.25,
+    "reusable_implementation": true
+  },
+  "slug": "steer-like-the-llm-activation-steering-that-mimics-prompting",
+  "snapshot_id": "d84e8174f494825bf70b4d9201754ddbb3e065bbea0b46d1f90da85949bb882b",
+  "spot": true,
+  "sub": "Large Language Models",
+  "target_claims": [
+    "The paper derives prompt steering interventions by subtracting unsteered activations from prompt-steered activations and trains PSR models to approximate successful prompt interventions (Figure 1).",
+    "Prompt steering applies highly token-dependent intervention strengths, motivating token-specific activation steering rather than constant coefficients (Figure 2).",
+    "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5)."
+  ],
+  "title": "Steer Like the LLM: Activation Steering that Mimics Prompting",
+  "transitions": [],
+  "type": "Poster",
+  "updated_at": "2026-07-29T01:07:23.744883+00:00",
+  "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@3d916c618d146c5d657f055e432a432b0fa493c6",
+  "vs": "https://icml.cc/virtual/2026/poster/66813"
+}
