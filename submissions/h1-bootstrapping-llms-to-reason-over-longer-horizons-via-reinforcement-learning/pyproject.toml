@@ -1,0 +1,13 @@
+[project]
+name = "h1-reproduction"
+version = "0.1.0"
+description = "Reproduction of h1: Bootstrapping LLMs to Reason over Longer Horizons via Reinforcement Learning"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=4.0.0",
+    "pytest>=7.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
