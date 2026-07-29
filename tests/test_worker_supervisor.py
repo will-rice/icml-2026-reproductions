@@ -1124,6 +1124,15 @@ def test_host_adapter_smoke_operations_use_fixed_argument_arrays(monkeypatch):
         ],
         [
             "tmux",
+            "set-option",
+            "-w",
+            "-t",
+            "icml-supervisor-smoke-test",
+            "remain-on-exit",
+            "on",
+        ],
+        [
+            "tmux",
             "send-keys",
             "-t",
             "icml-supervisor-smoke-test",
@@ -1158,4 +1167,110 @@ def test_host_adapter_smoke_operations_use_fixed_argument_arrays(monkeypatch):
             "--now",
             "icml-worker-supervisor.timer",
         ],
+    ]
+
+
+def test_disposable_target_survives_interrupt_and_accepts_respawn(monkeypatch):
+    session_name = "icml-supervisor-smoke-test"
+    state = {
+        "exists": False,
+        "foreground": "",
+        "remain_on_exit": False,
+    }
+
+    def run(argv, *, check, text, capture_output):
+        assert check is False
+        assert text is True
+        assert capture_output is True
+        if argv[:4] == ["tmux", "new-session", "-d", "-s"]:
+            assert argv == [
+                "tmux",
+                "new-session",
+                "-d",
+                "-s",
+                session_name,
+                "-c",
+                "/repo",
+                "exec /usr/bin/sleep 300",
+            ]
+            state["exists"] = True
+            state["foreground"] = "sleep"
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[:3] == ["tmux", "set-option", "-w"]:
+            assert argv == [
+                "tmux",
+                "set-option",
+                "-w",
+                "-t",
+                session_name,
+                "remain-on-exit",
+                "on",
+            ]
+            state["remain_on_exit"] = True
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[:3] == ["tmux", "send-keys", "-t"]:
+            if not state["exists"]:
+                return subprocess.CompletedProcess(
+                    argv, 1, "", f"can't find session: {session_name}"
+                )
+            if state["remain_on_exit"]:
+                state["foreground"] = ""
+            else:
+                state["exists"] = False
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[:3] == ["tmux", "respawn-pane", "-k"]:
+            if not state["exists"]:
+                return subprocess.CompletedProcess(
+                    argv, 1, "", f"can't find pane: {session_name}"
+                )
+            state["foreground"] = "sleep"
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[-1] == "#{pane_current_command}":
+            if not state["exists"]:
+                return subprocess.CompletedProcess(
+                    argv, 1, "", f"can't find session: {session_name}"
+                )
+            return subprocess.CompletedProcess(
+                argv, 0, f"{state['foreground']}\n", ""
+            )
+        raise AssertionError(f"unexpected argv: {argv}")
+
+    monkeypatch.setattr(supervisor.subprocess, "run", run)
+    host = supervisor.HostAdapter(Path("/repo"))
+
+    host.create_disposable_session(session_name, "/usr/bin/sleep 300")
+    host.interrupt_session(session_name)
+    host.restore_disposable_session(
+        session_name, "exec /usr/bin/sleep 300"
+    )
+
+    assert host.session_foreground_command(session_name) == "sleep"
+
+
+def test_disposable_creation_cleans_up_if_remain_on_exit_cannot_be_set(
+    monkeypatch
+):
+    session_name = "icml-supervisor-smoke-test"
+    calls = []
+
+    def run(argv, *, check, text, capture_output):
+        calls.append(argv)
+        if argv[:3] == ["tmux", "set-option", "-w"]:
+            return subprocess.CompletedProcess(
+                argv, 1, "", "invalid option: remain-on-exit"
+            )
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(supervisor.subprocess, "run", run)
+
+    with pytest.raises(supervisor.HostCommandError):
+        supervisor.HostAdapter(Path("/repo")).create_disposable_session(
+            session_name, "/usr/bin/sleep 300"
+        )
+
+    assert calls[-1] == [
+        "tmux",
+        "kill-session",
+        "-t",
+        session_name,
     ]

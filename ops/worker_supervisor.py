@@ -234,6 +234,21 @@ class HostAdapter:
                 f"exec {command}",
             ]
         )
+        try:
+            self._checked_command(
+                [
+                    "tmux",
+                    "set-option",
+                    "-w",
+                    "-t",
+                    session_name,
+                    "remain-on-exit",
+                    "on",
+                ]
+            )
+        except HostCommandError:
+            self.stop_session(session_name)
+            raise
 
     def interrupt_session(self, session_name: str) -> None:
         self._checked_command(["tmux", "send-keys", "-t", session_name, "C-c"])
