@@ -8,4 +8,5 @@ __pycache__/
 .superpowers/
 .worktrees/
 *.lock
+!uv.lock
 state/validation-manifests/
