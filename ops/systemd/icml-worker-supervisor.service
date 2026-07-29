@@ -1,0 +1,9 @@
+[Unit]
+Description=Reconcile ICML direct paper-owner workers
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO_ROOT@
+ExecStart=@PYTHON@ @REPO_ROOT@/ops/worker_supervisor.py reconcile

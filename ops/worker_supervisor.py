@@ -1,17 +1,22 @@
 from __future__ import annotations
 
+import argparse
 from contextlib import contextmanager
 from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 import fcntl
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
 import shlex
+import secrets
 import subprocess
+import sys
 import tempfile
+import time
 from typing import Any, Iterator, Literal
 
 AgentName = Literal["agy", "codex"]
@@ -30,6 +35,9 @@ QUOTA_RE = re.compile(
 )
 EXIT_RE = re.compile(r"process exited with code \d+", re.IGNORECASE)
 FAILURE_CLASSES = frozenset({"quota-reached", "ordinary-exit", "unhealthy-session"})
+SMOKE_SESSION = "icml-supervisor-smoke-test"
+SMOKE_COMMAND = "/usr/bin/sleep 300"
+SMOKE_RESTORE_COMMAND = "exec /usr/bin/sleep 300"
 PROMPT = (
     "Use the shared icml-repro-loop skill directly and keep running its "
     "paper-owner loop. Read and follow "
@@ -109,10 +117,10 @@ class AlreadyRunning(RuntimeError):
 
 
 class HostCommandError(RuntimeError):
-    """Raised when tmux cannot complete a host operation."""
+    """Raised when a host command cannot complete an operation."""
 
     def __init__(self, stderr: str):
-        super().__init__(f"tmux command failed: {sanitize_text(stderr).strip()}")
+        super().__init__(f"host command failed: {sanitize_text(stderr).strip()}")
 
 
 class HostAdapter:
@@ -121,6 +129,11 @@ class HostAdapter:
 
     def _run_tmux(self, argv: list[str]) -> subprocess.CompletedProcess[str]:
         return subprocess.run(argv, check=False, text=True, capture_output=True)
+
+    def _checked_command(self, argv: list[str]) -> None:
+        result = subprocess.run(argv, check=False, text=True, capture_output=True)
+        if result.returncode:
+            raise HostCommandError(result.stderr)
 
     def session_health(self, spec: WorkerSpec) -> SessionHealth:
         pane_argv = [
@@ -181,6 +194,84 @@ class HostAdapter:
         send_result = self._run_tmux(send_argv)
         if send_result.returncode:
             raise HostCommandError(send_result.stderr)
+
+    def stop_session(self, session_name: str) -> None:
+        result = self._run_tmux(["tmux", "kill-session", "-t", session_name])
+        if result.returncode and "can't find session" not in result.stderr.lower():
+            raise HostCommandError(result.stderr)
+
+    def systemctl_user(self, *arguments: str) -> None:
+        self._checked_command(["systemctl", "--user", *arguments])
+
+    def pane_pid(self, session_name: str) -> int:
+        result = self._run_tmux(
+            ["tmux", "list-panes", "-t", session_name, "-F", "#{pane_pid}"]
+        )
+        if result.returncode:
+            raise HostCommandError(result.stderr)
+        try:
+            return int(result.stdout.splitlines()[0])
+        except (IndexError, ValueError) as error:
+            raise HostCommandError("tmux returned malformed pane PID") from error
+
+    def create_disposable_session(self, session_name: str, command: str) -> None:
+        self._checked_command(
+            [
+                "tmux",
+                "new-session",
+                "-d",
+                "-s",
+                session_name,
+                "-c",
+                str(self.repo_root),
+                f"exec {command}",
+            ]
+        )
+
+    def interrupt_session(self, session_name: str) -> None:
+        self._checked_command(["tmux", "send-keys", "-t", session_name, "C-c"])
+
+    def restore_disposable_session(
+        self, session_name: str, command: str
+    ) -> None:
+        self._checked_command(
+            ["tmux", "respawn-pane", "-k", "-t", session_name, command]
+        )
+
+    def session_foreground_command(self, session_name: str) -> str:
+        result = self._run_tmux(
+            [
+                "tmux",
+                "list-panes",
+                "-t",
+                session_name,
+                "-F",
+                "#{pane_current_command}",
+            ]
+        )
+        if result.returncode:
+            raise HostCommandError(result.stderr)
+        try:
+            return result.stdout.splitlines()[0]
+        except IndexError as error:
+            raise HostCommandError(
+                "tmux returned malformed foreground command"
+            ) from error
+
+    def wait_for_smoke_restore(
+        self, request_path: Path, nonce: str, timeout: float
+    ) -> bool:
+        deadline = time.monotonic() + timeout
+        while True:
+            request = _load_smoke_request(request_path)
+            if request is None or request["nonce"] != nonce:
+                raise ValueError("smoke request ownership changed")
+            if request["stage"] == "restored":
+                return True
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return False
+            time.sleep(min(0.05, remaining))
 
 
 def desired_workers() -> tuple[WorkerSpec, ...]:
@@ -246,6 +337,29 @@ def atomic_write_json(path: Path, value: Any) -> None:
             temporary.write("\n")
             temporary.flush()
             os.fsync(temporary.fileno())
+        os.replace(temporary_path, path)
+    finally:
+        if temporary_path is not None and temporary_path.exists():
+            temporary_path.unlink()
+
+
+def atomic_write_text(path: Path, value: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary:
+            temporary_path = Path(temporary.name)
+            temporary.write(value)
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        os.chmod(temporary_path, 0o644)
         os.replace(temporary_path, path)
     finally:
         if temporary_path is not None and temporary_path.exists():
@@ -530,3 +644,321 @@ def sanitize_text(text: str) -> str:
     clean = HUGGING_FACE_TOKEN_PATTERN.sub("<redacted>", clean)
     clean = GITHUB_TOKEN_PATTERN.sub("<redacted>", clean)
     return BEARER_TOKEN_PATTERN.sub(r"\1<redacted>", clean)
+
+
+def _runtime_paths(home: Path) -> tuple[Path, Path, Path]:
+    state_dir = home / ".local/state/icml-worker-supervisor"
+    return (
+        state_dir / "status.json",
+        state_dir / "runtime.json",
+        state_dir / "supervisor.lock",
+    )
+
+
+def _smoke_request_path(home: Path) -> Path:
+    return home / ".local/state/icml-worker-supervisor/smoke-request.json"
+
+
+def _runtime_to_json(state: RuntimeState) -> dict[str, dict[str, dict[str, Any]]]:
+    return {
+        "lanes": {
+            worker_id: {
+                "profile_index": lane.profile_index,
+                "profile_backoff": {
+                    name: reset.astimezone(timezone.utc).isoformat()
+                    for name, reset in lane.profile_backoff.items()
+                },
+                "restart_count": lane.restart_count,
+                "ordinary_failures": lane.ordinary_failures,
+                "next_retry_at": _iso_timestamp(lane.next_retry_at),
+                "last_error": lane.last_error,
+                "processed_failure_digest": lane.processed_failure_digest,
+            }
+            for worker_id, lane in state.lanes.items()
+        }
+    }
+
+
+def _parse_timestamp(value: object) -> datetime | None:
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ValueError("runtime timestamp must be a string or null")
+    parsed = datetime.fromisoformat(value)
+    if parsed.tzinfo is None:
+        raise ValueError("runtime timestamp must include a timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def _runtime_from_json(value: object) -> RuntimeState:
+    if not isinstance(value, dict) or not isinstance(value.get("lanes"), dict):
+        raise ValueError("runtime state must contain a lanes object")
+    lanes: dict[str, LaneState] = {}
+    for worker_id, raw_lane in value["lanes"].items():
+        if not isinstance(worker_id, str) or not isinstance(raw_lane, dict):
+            raise ValueError("runtime lanes must be objects keyed by worker ID")
+        raw_backoff = raw_lane.get("profile_backoff", {})
+        if not isinstance(raw_backoff, dict):
+            raise ValueError("profile_backoff must be an object")
+        lanes[worker_id] = LaneState(
+            profile_index=int(raw_lane.get("profile_index", 0)),
+            profile_backoff={
+                str(name): timestamp
+                for name, reset in raw_backoff.items()
+                if (timestamp := _parse_timestamp(reset)) is not None
+            },
+            restart_count=int(raw_lane.get("restart_count", 0)),
+            ordinary_failures=int(raw_lane.get("ordinary_failures", 0)),
+            next_retry_at=_parse_timestamp(raw_lane.get("next_retry_at")),
+            last_error=str(raw_lane.get("last_error", "")),
+            processed_failure_digest=str(
+                raw_lane.get("processed_failure_digest", "")
+            ),
+        )
+    return RuntimeState(lanes)
+
+
+def _load_runtime(path: Path) -> RuntimeState:
+    if not path.exists():
+        return RuntimeState.empty()
+    return _runtime_from_json(json.loads(path.read_text(encoding="utf-8")))
+
+
+def _load_smoke_request(path: Path) -> dict[str, str] | None:
+    if not path.exists():
+        return None
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict) or set(value) != {"nonce", "stage"}:
+        raise ValueError(
+            "smoke request must contain only nonce and stage"
+        )
+    nonce = value["nonce"]
+    stage = value["stage"]
+    if not isinstance(nonce, str) or not nonce or len(nonce) > 128:
+        raise ValueError("smoke request nonce must be a nonempty string")
+    if stage not in {"interrupted", "restored"}:
+        raise ValueError("smoke request stage is invalid")
+    return {"nonce": nonce, "stage": stage}
+
+
+def _restore_pending_smoke_request(host: HostAdapter, path: Path) -> None:
+    request = _load_smoke_request(path)
+    if request is None or request["stage"] == "restored":
+        return
+    host.restore_disposable_session(SMOKE_SESSION, SMOKE_RESTORE_COMMAND)
+    if host.session_foreground_command(SMOKE_SESSION) != "sleep":
+        return
+    atomic_write_json(
+        path, {"nonce": request["nonce"], "stage": "restored"}
+    )
+
+
+def _run_reconcile(
+    host: HostAdapter, home: Path, now: datetime, repo_root: Path
+) -> ReconcileResult:
+    status_path, runtime_path, lock_path = _runtime_paths(home)
+    with exclusive_lock(lock_path):
+        _restore_pending_smoke_request(host, _smoke_request_path(home))
+        state = _load_runtime(runtime_path)
+        result = reconcile(host, state, now, repo_root)
+        atomic_write_json(runtime_path, _runtime_to_json(result.state))
+        atomic_write_json(status_path, result.status)
+    return result
+
+
+def _print_status(path: Path) -> int:
+    try:
+        status = json.loads(path.read_text(encoding="utf-8"))
+        workers = status["workers"]
+        if not isinstance(workers, list):
+            raise TypeError("workers must be a list")
+    except (FileNotFoundError, json.JSONDecodeError, KeyError, TypeError) as error:
+        print(f"status unavailable: {sanitize_text(str(error))}", file=sys.stderr)
+        return 1
+
+    for agent, desired in (("agy", 10), ("codex", 5)):
+        healthy = sum(
+            worker.get("agent") == agent and worker.get("health") == "healthy"
+            for worker in workers
+            if isinstance(worker, dict)
+        )
+        print(f"{agent} {healthy}/{desired}")
+    for worker in workers:
+        if not isinstance(worker, dict) or worker.get("health") == "healthy":
+            continue
+        print(
+            " ".join(
+                (
+                    str(worker.get("worker_id", "unknown")),
+                    str(worker.get("health", "unknown")),
+                    str(worker.get("last_error") or ""),
+                )
+            ).rstrip()
+        )
+    return 0
+
+
+def _render_systemd_units(repo_root: Path, python: Path) -> dict[str, str]:
+    template_dir = repo_root / "ops" / "systemd"
+    replacements = {
+        "@REPO_ROOT@": str(repo_root),
+        "@PYTHON@": str(python),
+    }
+    rendered: dict[str, str] = {}
+    for filename in (
+        "icml-worker-supervisor.service",
+        "icml-worker-supervisor.timer",
+    ):
+        content = (template_dir / filename).read_text(encoding="utf-8")
+        for placeholder, replacement in replacements.items():
+            content = content.replace(placeholder, replacement)
+        rendered[filename] = content
+    return rendered
+
+
+def _install(
+    host: HostAdapter,
+    home: Path,
+    now: datetime,
+    repo_root: Path,
+    python: Path,
+) -> int:
+    unit_dir = home / ".config/systemd/user"
+    for filename, content in _render_systemd_units(repo_root, python).items():
+        atomic_write_text(unit_dir / filename, content)
+    _run_reconcile(host, home, now, repo_root)
+    host.systemctl_user("daemon-reload")
+    host.systemctl_user("enable", "--now", "icml-worker-supervisor.timer")
+    host.systemctl_user("start", "icml-worker-supervisor.service")
+    return 0
+
+
+def _production_pids(host: HostAdapter) -> dict[str, int]:
+    return {
+        spec.session_name: host.pane_pid(spec.session_name)
+        for spec in desired_workers()
+    }
+
+
+def _remove_owned_smoke_request(path: Path, nonce: str) -> None:
+    try:
+        request = _load_smoke_request(path)
+    except (json.JSONDecodeError, ValueError):
+        return
+    if request is not None and request["nonce"] == nonce:
+        path.unlink(missing_ok=True)
+
+
+def _smoke_test(
+    host: HostAdapter,
+    home: Path,
+    timeout: float,
+) -> int:
+    if not math.isfinite(timeout) or timeout < 0:
+        print("smoke timeout must be finite and nonnegative", file=sys.stderr)
+        return 2
+    request_path = _smoke_request_path(home)
+    if request_path.exists():
+        print("smoke request already exists", file=sys.stderr)
+        return 1
+
+    nonce = secrets.token_hex(16)
+    before = _production_pids(host)
+    created = False
+    try:
+        host.create_disposable_session(SMOKE_SESSION, SMOKE_COMMAND)
+        created = True
+        host.interrupt_session(SMOKE_SESSION)
+        atomic_write_json(
+            request_path, {"nonce": nonce, "stage": "interrupted"}
+        )
+
+        if not host.wait_for_smoke_restore(request_path, nonce, timeout):
+            print("smoke restoration timed out", file=sys.stderr)
+            return 1
+
+        if host.session_foreground_command(SMOKE_SESSION) != "sleep":
+            print("smoke command was not restored", file=sys.stderr)
+            return 1
+        if _production_pids(host) != before:
+            print("production worker pane PIDs changed", file=sys.stderr)
+            return 1
+        return 0
+    finally:
+        if created:
+            host.stop_session(SMOKE_SESSION)
+        _remove_owned_smoke_request(request_path, nonce)
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Maintain direct paper-owner workers")
+    commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("reconcile")
+    commands.add_parser("status")
+    commands.add_parser("install")
+    smoke = commands.add_parser("smoke-test")
+    smoke.add_argument("--timeout", type=float, default=45)
+    stop = commands.add_parser("stop")
+    stop.add_argument("--confirm", action="store_true")
+    return parser
+
+
+def main(
+    argv: list[str] | None = None,
+    *,
+    host: HostAdapter | None = None,
+    home: Path | None = None,
+    now: datetime | None = None,
+) -> int:
+    args = _build_parser().parse_args(argv)
+    repo_root = Path(__file__).resolve().parents[1]
+    selected_home = Path.home() if home is None else home
+    selected_now = datetime.now(timezone.utc) if now is None else now
+    selected_host = HostAdapter(repo_root) if host is None else host
+
+    try:
+        if args.command == "reconcile":
+            _run_reconcile(selected_host, selected_home, selected_now, repo_root)
+            return 0
+        if args.command == "status":
+            status_path, _, _ = _runtime_paths(selected_home)
+            return _print_status(status_path)
+        if args.command == "install":
+            return _install(
+                selected_host,
+                selected_home,
+                selected_now,
+                repo_root,
+                Path(sys.executable).resolve(),
+            )
+        if args.command == "stop":
+            if not args.confirm:
+                print("stop requires --confirm", file=sys.stderr)
+                return 2
+            selected_host.systemctl_user(
+                "disable", "--now", "icml-worker-supervisor.timer"
+            )
+            for spec in desired_workers():
+                selected_host.stop_session(spec.session_name)
+            return 0
+        if args.command == "smoke-test":
+            return _smoke_test(
+                selected_host,
+                selected_home,
+                args.timeout,
+            )
+    except (
+        AlreadyRunning,
+        HostCommandError,
+        KeyError,
+        OSError,
+        TypeError,
+        ValueError,
+    ) as error:
+        print(f"supervisor failed: {sanitize_text(str(error))}", file=sys.stderr)
+        return 1
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

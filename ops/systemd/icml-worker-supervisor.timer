@@ -1,0 +1,12 @@
+[Unit]
+Description=Continuously maintain ICML direct paper-owner workers
+
+[Timer]
+OnBootSec=10s
+OnUnitActiveSec=30s
+AccuracySec=2s
+Persistent=true
+Unit=icml-worker-supervisor.service
+
+[Install]
+WantedBy=timers.target
