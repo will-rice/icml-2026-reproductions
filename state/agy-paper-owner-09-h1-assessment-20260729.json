@@ -1,0 +1,74 @@
+{
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "assessor": "agy-paper-owner-09",
+  "assessed_at": "2026-07-29T19:51:00+00:00",
+  "assessments": [
+    {
+      "paper_id": "3BW15kSPfN",
+      "score": 17,
+      "target_claims": [
+        "h1 synthesizes long-horizon reasoning examples by chaining existing short-horizon GSM8K-style problems without new human or teacher-model annotations (Section 3).",
+        "The training recipe uses outcome-only RL with a curriculum that automatically increases composed problem horizon length (Section 3)."
+      ],
+      "claim_bindings": [
+        {
+          "target_claim": "h1 synthesizes long-horizon reasoning examples by chaining existing short-horizon GSM8K-style problems without new human or teacher-model annotations (Section 3).",
+          "challenge_claim": "h1 synthesizes long-horizon reasoning examples by chaining existing short-horizon GSM8K-style problems without new human or teacher-model annotations (Section 3).",
+          "challenge_claim_sha256": "0b4e2eb0becdc8f5fc9d015fb227ba80edb4741227de2c86cdb2ac56fd36f4bb"
+        },
+        {
+          "target_claim": "The training recipe uses outcome-only RL with a curriculum that automatically increases composed problem horizon length (Section 3).",
+          "challenge_claim": "The training recipe uses outcome-only RL with a curriculum that automatically increases composed problem horizon length (Section 3).",
+          "challenge_claim_sha256": "c2d5b4a7196383d40be1eccb00bd172a21329e16dc5c339958dd9420ee8a938f"
+        }
+      ],
+      "upstream_revision": "arxiv:2510.07312v1+github:Oxford-AI-Safety-Lab/h1@871e89d078202c7d9d18d0924bd76cf161cd6606",
+      "artifact_access": true,
+      "cpu_only": true,
+      "safety_blocker": null,
+      "licensing_blocker": null,
+      "estimated_api_cost_usd": 0.0,
+      "score_rate": {
+        "claim_expectations": [
+          {
+            "challenge_claim_sha256": "0b4e2eb0becdc8f5fc9d015fb227ba80edb4741227de2c86cdb2ac56fd36f4bb",
+            "p_verified": 0.70,
+            "p_falsified": 0.05,
+            "p_toy": 0.15
+          },
+          {
+            "challenge_claim_sha256": "c2d5b4a7196383d40be1eccb00bd172a21329e16dc5c339958dd9420ee8a938f",
+            "p_verified": 0.65,
+            "p_falsified": 0.05,
+            "p_toy": 0.20
+          },
+          {
+            "challenge_claim_sha256": "05c7127a911eaaca43f9369603dace2f42db651a94eb8c3699a2199ca8907504",
+            "p_verified": 0.10,
+            "p_falsified": 0.05,
+            "p_toy": 0.25
+          },
+          {
+            "challenge_claim_sha256": "1ce47f41a810232824f4ef4c7016d944b4a1d8b310bb5f89e94b4e62b62c7a8c",
+            "p_verified": 0.05,
+            "p_falsified": 0.05,
+            "p_toy": 0.20
+          },
+          {
+            "challenge_claim_sha256": "9d6115d528b7449f6dbf3a50de5a1e030a07f304ebe58511284763c6ce7851eb",
+            "p_verified": 0.15,
+            "p_falsified": 0.05,
+            "p_toy": 0.30
+          }
+        ],
+        "judged_before_deadline_probability": 0.80,
+        "remaining_hours_p90": 2.0,
+        "reusable_implementation": false,
+        "direct_artifact_score": 4,
+        "full_score_claim_paths": 2,
+        "remaining_time_variance_hours2": 0.5,
+        "primary_risk": "The repository exposes long-horizon GSM problem chaining synthesis logic, outcome-only RL reward metrics, and curriculum progression functions. CPU-only evidence can verify synthetic chaining generation determinism, reward calculation, and curriculum state transitions without running full GPU RL fine-tuning."
+      }
+    }
+  ]
+}
