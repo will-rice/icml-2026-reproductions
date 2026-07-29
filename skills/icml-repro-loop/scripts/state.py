@@ -1513,7 +1513,10 @@ def parse_aware_datetime(value: object, field: str) -> datetime:
     if type(value) is not str or not value:
         raise ValueError(field)
     try:
-        parsed = datetime.fromisoformat(value)
+        if value.endswith("Z"):
+            parsed = datetime.fromisoformat(value[:-1] + "+00:00")
+        else:
+            parsed = datetime.fromisoformat(value)
     except ValueError as error:
         raise ValueError(field) from error
     if parsed.tzinfo is None or parsed.utcoffset() is None:
