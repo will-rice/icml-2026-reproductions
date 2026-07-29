@@ -16,3 +16,5 @@ tags:
 # h1: Bootstrapping LLMs to Reason over Longer Horizons via Reinforcement Learning
 
 This Space hosts evidence and reproduction artifacts for ICML 2026 Paper `3BW15kSPfN`.
+Validation attestation verified on 2026-07-29.
+
