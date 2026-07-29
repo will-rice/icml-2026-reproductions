@@ -23,6 +23,8 @@ evidence/
 submissions/*
 !submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/
 !submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/
+!docs/designs/2026-07-29-qsched-reproduction-plan.md
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/
 !submissions/unifying-masked-diffusion-models-with-various-generation-orders-and-beyond/
 !submissions/h1-bootstrapping-llms-to-reason-over-longer-horizons-via-reinforcement-learning/
 
