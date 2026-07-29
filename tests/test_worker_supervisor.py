@@ -226,17 +226,29 @@ def test_host_adapter_reads_tmux_health_with_argument_arrays(monkeypatch):
     ]
 
 
-def test_host_adapter_missing_session_and_sanitized_failures(monkeypatch):
+@pytest.mark.parametrize(
+    "stderr",
+    [
+        "can't find session: agy-paper-owner-01",
+        "can't find window: agy-paper-owner-01",
+        "no server running on /tmp/tmux-1000/default",
+    ],
+)
+def test_host_adapter_maps_known_missing_targets_to_absent(monkeypatch, stderr):
     spec = supervisor.desired_workers()[0]
 
     def missing_run(argv, *, check, text, capture_output):
         assert isinstance(argv, list)
-        return subprocess.CompletedProcess(argv, 1, "", "can't find session: missing")
+        return subprocess.CompletedProcess(argv, 1, "", stderr)
 
     monkeypatch.setattr(supervisor.subprocess, "run", missing_run)
     assert supervisor.HostAdapter(Path("/repo")).session_health(spec) == supervisor.SessionHealth(
         False, False, "", ""
     )
+
+
+def test_host_adapter_unrelated_failure_is_sanitized(monkeypatch):
+    spec = supervisor.desired_workers()[0]
 
     def failed_run(argv, *, check, text, capture_output):
         return subprocess.CompletedProcess(

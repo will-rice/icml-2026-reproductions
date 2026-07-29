@@ -35,6 +35,11 @@ QUOTA_RE = re.compile(
 )
 EXIT_RE = re.compile(r"process exited with code \d+", re.IGNORECASE)
 FAILURE_CLASSES = frozenset({"quota-reached", "ordinary-exit", "unhealthy-session"})
+TMUX_MISSING_TARGET_PREFIXES = (
+    "can't find session:",
+    "can't find window:",
+    "no server running on ",
+)
 SMOKE_SESSION = "icml-supervisor-smoke-test"
 SMOKE_COMMAND = "/usr/bin/sleep 300"
 SMOKE_RESTORE_COMMAND = "exec /usr/bin/sleep 300"
@@ -146,7 +151,9 @@ class HostAdapter:
         ]
         pane_result = self._run_tmux(pane_argv)
         if pane_result.returncode:
-            if "can't find session" in pane_result.stderr.lower():
+            if pane_result.stderr.strip().lower().startswith(
+                TMUX_MISSING_TARGET_PREFIXES
+            ):
                 return SessionHealth(False, False, "", "")
             raise HostCommandError(pane_result.stderr)
 
