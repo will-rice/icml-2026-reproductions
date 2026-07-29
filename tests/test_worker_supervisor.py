@@ -597,6 +597,35 @@ def test_dry_run_keeps_healthy_lane_failure_state_unchanged(fake_host, fixed_now
     assert result.state == initial
 
 
+def test_cli_reconcile_dry_run_reports_without_host_or_state_mutation(
+    capsys, fake_host, tmp_path
+):
+    state_dir = tmp_path / ".local/state/icml-worker-supervisor"
+    request_path = state_dir / "smoke-request.json"
+    request_path.parent.mkdir(parents=True)
+    request = {"nonce": "0123456789abcdef", "stage": "interrupted"}
+    request_path.write_text(json.dumps(request), encoding="utf-8")
+
+    code = supervisor.main(
+        ["reconcile", "--dry-run"],
+        host=fake_host,
+        home=tmp_path,
+        now=FIXED_NOW,
+    )
+
+    output = capsys.readouterr().out.splitlines()
+    assert code == 0
+    assert len(output) == 15
+    assert "proposed agy-paper-owner-01" in output
+    assert "proposed codex-paper-owner-05" in output
+    assert fake_host.created == []
+    assert fake_host.sent == []
+    assert fake_host.restored == []
+    assert json.loads(request_path.read_text(encoding="utf-8")) == request
+    assert not (state_dir / "runtime.json").exists()
+    assert not (state_dir / "status.json").exists()
+
+
 def test_status_prints_compact_worker_counts(capsys, fake_host, tmp_path):
     status_path = (
         tmp_path / ".local/state/icml-worker-supervisor" / "status.json"

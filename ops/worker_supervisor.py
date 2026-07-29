@@ -757,15 +757,22 @@ def _restore_pending_smoke_request(host: HostAdapter, path: Path) -> None:
 
 
 def _run_reconcile(
-    host: HostAdapter, home: Path, now: datetime, repo_root: Path
+    host: HostAdapter,
+    home: Path,
+    now: datetime,
+    repo_root: Path,
+    *,
+    dry_run: bool = False,
 ) -> ReconcileResult:
     status_path, runtime_path, lock_path = _runtime_paths(home)
     with exclusive_lock(lock_path):
-        _restore_pending_smoke_request(host, _smoke_request_path(home))
+        if not dry_run:
+            _restore_pending_smoke_request(host, _smoke_request_path(home))
         state = _load_runtime(runtime_path)
-        result = reconcile(host, state, now, repo_root)
-        atomic_write_json(runtime_path, _runtime_to_json(result.state))
-        atomic_write_json(status_path, result.status)
+        result = reconcile(host, state, now, repo_root, dry_run=dry_run)
+        if not dry_run:
+            atomic_write_json(runtime_path, _runtime_to_json(result.state))
+            atomic_write_json(status_path, result.status)
     return result
 
 
@@ -896,7 +903,8 @@ def _smoke_test(
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Maintain direct paper-owner workers")
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("reconcile")
+    reconcile_command = commands.add_parser("reconcile")
+    reconcile_command.add_argument("--dry-run", action="store_true")
     commands.add_parser("status")
     commands.add_parser("install")
     smoke = commands.add_parser("smoke-test")
@@ -921,7 +929,16 @@ def main(
 
     try:
         if args.command == "reconcile":
-            _run_reconcile(selected_host, selected_home, selected_now, repo_root)
+            result = _run_reconcile(
+                selected_host,
+                selected_home,
+                selected_now,
+                repo_root,
+                dry_run=args.dry_run,
+            )
+            if args.dry_run:
+                for worker_id in result.proposed:
+                    print(f"proposed {worker_id}")
             return 0
         if args.command == "status":
             status_path, _, _ = _runtime_paths(selected_home)
