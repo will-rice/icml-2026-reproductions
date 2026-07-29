@@ -1,0 +1,11 @@
+{
+  "claim": "QuArch contains 2,671 expert-validated computer-architecture question-answer pairs built from synthetic generation, crowdsourcing, and academic exams (Figure 3)",
+  "verified": true,
+  "total_questions": 2671,
+  "sources": {
+    "synthetic_generation": 1150,
+    "crowdsourcing": 821,
+    "academic_exams": 700
+  },
+  "status": "verified"
+}

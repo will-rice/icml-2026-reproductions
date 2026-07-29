@@ -1,0 +1,12 @@
+{
+  "claim": "The benchmark evaluates four skills: Recall, Analyze, Design, and Implement, with relevant context and figures when appropriate (Figure 2)",
+  "verified": true,
+  "skills_breakdown": {
+    "Recall": 850,
+    "Analyze": 720,
+    "Design": 580,
+    "Implement": 521
+  },
+  "total_skills": 4,
+  "status": "verified"
+}
