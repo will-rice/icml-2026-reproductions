@@ -151,6 +151,34 @@ scored or genuine blocked release precedes the next `claim-next`. Before a
 genuine blocked release, use fenced `transition-attempt` to record nonempty
 `blocker` and `next_action`; only then call `release-paper --outcome blocked`.
 
+## Direct Worker Supervisor
+
+The direct worker supervisor launches the direct Agy and Codex CLIs for 10 Agy
+and 5 Codex persistent paper-owner lanes. It does not use OpenCode, does not
+mutate coordinator state, and preserves healthy lanes while reconciling missing
+or unhealthy ones.
+
+From the repository root, first inspect the non-mutating reconciliation plan,
+then install the user service and verify its status:
+
+```bash
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache \
+  uv run python ops/worker_supervisor.py reconcile --dry-run
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache \
+  uv run python ops/worker_supervisor.py install
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache \
+  uv run python ops/worker_supervisor.py status
+systemctl --user status icml-worker-supervisor.timer
+```
+
+The destructive boundary is separate: stopping the supervisor and its managed
+lanes requires an explicit confirmation.
+
+```bash
+UV_CACHE_DIR=/tmp/icml-repro-uv-cache \
+  uv run python ops/worker_supervisor.py stop --confirm
+```
+
 ## Verify The Workspace
 
 ```bash

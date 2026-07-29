@@ -12,6 +12,16 @@ from ops import worker_supervisor as supervisor
 FIXED_NOW = datetime(2026, 7, 29, 12, 0, tzinfo=timezone.utc)
 
 
+def test_remote_setup_documents_direct_supervisor_operations():
+    text = Path("docs/REMOTE_SETUP.md").read_text()
+    assert "ops/worker_supervisor.py install" in text
+    assert "ops/worker_supervisor.py status" in text
+    assert "ops/worker_supervisor.py reconcile --dry-run" in text
+    assert "10 Agy" in text
+    assert "5 Codex" in text
+    assert "OpenCode" in text
+
+
 class FakeHost:
     def __init__(self):
         self.health = {}
