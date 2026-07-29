@@ -223,6 +223,49 @@ def test_launch_resolves_user_clis_with_restricted_service_path(tmp_path):
     )
 
 
+def test_launch_replaces_wrapper_shell_with_worker_process(tmp_path):
+    bin_dir = tmp_path / ".local" / "bin"
+    bin_dir.mkdir(parents=True)
+    scripts = {
+        "hf": "#!/bin/sh\nprintf 'hf-token\\n'\n",
+        "gh": "#!/bin/sh\nprintf 'gh-token\\n'\n",
+        "worker-probe": (
+            "#!/bin/sh\n"
+            ': > "$HOME/ready"\n'
+            "exec /bin/sleep 30\n"
+        ),
+    }
+    for name, script in scripts.items():
+        path = bin_dir / name
+        path.write_text(script, encoding="utf-8")
+        path.chmod(0o755)
+
+    command = supervisor.launch_shell_command(
+        supervisor.WorkerSpec("probe", "codex", "probe"),
+        supervisor.ModelProfile("probe", ("worker-probe",)),
+        Path("/repo"),
+    )
+    process = subprocess.Popen(
+        ["/bin/bash", "-c", f"{command}; exec /bin/bash"],
+        env={"HOME": str(tmp_path), "PATH": "/usr/bin:/bin"},
+    )
+    try:
+        deadline = time.monotonic() + 2
+        while not (tmp_path / "ready").exists() and time.monotonic() < deadline:
+            time.sleep(0.01)
+        assert (tmp_path / "ready").exists()
+        observed = subprocess.run(
+            ["ps", "-o", "comm=", "-p", str(process.pid)],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        assert observed.stdout.strip() == "sleep"
+    finally:
+        process.terminate()
+        process.wait(timeout=2)
+
+
 def test_sanitize_text_redacts_tokens_and_environment_assignments():
     raw = (
         "HF_TOKEN=hf_abcdefghijklmnopqrstuvwxyz "

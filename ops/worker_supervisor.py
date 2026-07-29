@@ -542,7 +542,10 @@ def launch_shell_command(
     user_cli_path = (
         'export PATH="$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH";'
     )
-    credentials = 'HF_TOKEN="$(hf auth token)" GH_TOKEN="$(gh auth token)"'
+    credentials = (
+        'exec /usr/bin/env HF_TOKEN="$(hf auth token)" '
+        'GH_TOKEN="$(gh auth token)"'
+    )
     if spec.agent == "agy":
         return " ".join(
             (
