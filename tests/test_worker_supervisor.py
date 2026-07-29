@@ -2,6 +2,7 @@ import json
 from datetime import datetime, timedelta, timezone
 import os
 from pathlib import Path
+import shlex
 import subprocess
 import threading
 import time
@@ -169,11 +170,14 @@ def test_agy_launch_is_direct_full_approval_and_credential_safe():
     command = supervisor.launch_shell_command(spec, profile, Path("/repo"))
     assert " opencode " not in f" {command} "
     assert " agy " in f" {command} "
+    assert " --print " in f" {command} "
     assert "--dangerously-skip-permissions" in command
     assert "$(hf auth token)" in command
     assert "$(gh auth token)" in command
     assert "Use the shared icml-repro-loop skill directly" in command
     assert spec.worker_id in command
+    prompt = supervisor.PROMPT.format(worker_id=spec.worker_id)
+    assert command.endswith(shlex.join(("--print", prompt)))
 
 
 def test_codex_launch_has_workspace_network_and_direct_prompt():
@@ -221,6 +225,15 @@ def test_launch_resolves_user_clis_with_restricted_service_path(tmp_path):
     assert (tmp_path / "result").read_text(encoding="utf-8") == (
         "hf-token|gh-token\n"
     )
+
+
+def test_launch_exposes_user_uv_to_workers():
+    command = supervisor.launch_shell_command(
+        supervisor.desired_workers()[0],
+        supervisor.agy_profiles()[0],
+        Path("/repo"),
+    )
+    assert '$HOME/.cargo/bin' in command
 
 
 def test_launch_replaces_wrapper_shell_with_worker_process(tmp_path):
@@ -293,6 +306,21 @@ def test_only_expected_live_foreground_agent_is_healthy():
     assert not supervisor.is_healthy(
         agy, supervisor.SessionHealth(False, False, "", "")
     )
+
+
+@pytest.mark.parametrize(
+    "recent_output",
+    (
+        "Do you trust the contents of this project?\n> Yes, I trust this folder",
+        "Accept-edits mode: file edits auto-approved\n? for shortcuts",
+    ),
+)
+def test_agy_project_prompts_are_not_healthy(recent_output):
+    spec = supervisor.desired_workers()[0]
+    health = supervisor.SessionHealth(
+        True, False, "agy", recent_output
+    )
+    assert not supervisor.is_healthy(spec, health)
 
 
 def test_host_adapter_reads_tmux_health_with_argument_arrays(monkeypatch):

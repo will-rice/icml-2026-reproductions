@@ -76,6 +76,11 @@ PROMPT = (
     "/home/will/.agents/skills/icml-repro-loop/SKILL.md. "
     "Persistent worker ID: {worker_id}."
 )
+AGY_IDLE_PROMPT_RE = re.compile(
+    r"Do you trust the contents of this project\?"
+    r"|Accept-edits mode: file edits auto-approved[\s\S]*\? for shortcuts",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -408,6 +413,10 @@ def is_healthy(spec: WorkerSpec, health: SessionHealth) -> bool:
         health.exists
         and not health.pane_dead
         and health.foreground_command == spec.agent
+        and not (
+            spec.agent == "agy"
+            and AGY_IDLE_PROMPT_RE.search(health.recent_output)
+        )
     )
 
 
@@ -564,7 +573,8 @@ def launch_shell_command(
 ) -> str:
     prompt = PROMPT.format(worker_id=spec.worker_id)
     user_cli_path = (
-        'export PATH="$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH";'
+        'export PATH="$HOME/.local/bin:$HOME/.cargo/bin:'
+        '/usr/local/bin:/usr/bin:/bin:$PATH";'
     )
     credentials = (
         'exec /usr/bin/env HF_TOKEN="$(hf auth token)" '
@@ -577,7 +587,7 @@ def launch_shell_command(
                 credentials,
                 'HF_HOME="/tmp/icml-agy-hf-XX"',
                 'UV_CACHE_DIR="/tmp/icml-repro-uv-cache"',
-                shlex.join((*profile.argv, prompt)),
+                shlex.join((*profile.argv, "--print", prompt)),
             )
         )
     return " ".join(
