@@ -306,12 +306,15 @@ def runtime_directory() -> Path:
 
 
 @contextmanager
-def exclusive_lock(path: Path) -> Iterator[None]:
+def exclusive_lock(path: Path, *, wait: bool = False) -> Iterator[None]:
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     lock_file = path.open("a+")
     try:
         try:
-            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            operation = fcntl.LOCK_EX
+            if not wait:
+                operation |= fcntl.LOCK_NB
+            fcntl.flock(lock_file.fileno(), operation)
         except BlockingIOError as error:
             raise AlreadyRunning("worker supervisor is already running") from error
         yield
@@ -938,8 +941,13 @@ def main(
             selected_host.systemctl_user(
                 "disable", "--now", "icml-worker-supervisor.timer"
             )
-            for spec in desired_workers():
-                selected_host.stop_session(spec.session_name)
+            selected_host.systemctl_user(
+                "stop", "icml-worker-supervisor.service"
+            )
+            _, _, lock_path = _runtime_paths(selected_home)
+            with exclusive_lock(lock_path, wait=True):
+                for spec in desired_workers():
+                    selected_host.stop_session(spec.session_name)
             return 0
         if args.command == "smoke-test":
             return _smoke_test(

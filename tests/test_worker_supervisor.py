@@ -2,6 +2,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import subprocess
+import threading
 
 import pytest
 
@@ -24,6 +25,9 @@ class FakeHost:
         self.restore_succeeds = True
         self.mutate_production_pid_on_restore = False
         self.smoke_requests_seen = []
+        self.service_quiesced = threading.Event()
+        self.stop_lock_path = None
+        self.inflight_reconcile = False
 
     def session_health(self, spec):
         if "reconcile" not in self.events:
@@ -36,6 +40,8 @@ class FakeHost:
         if not self.session_health(spec).exists:
             self.created.append(spec.session_name)
         self.sent.append((spec.session_name, command))
+        if self.inflight_reconcile:
+            self.events.append(f"recreate {spec.session_name}")
 
     def mark_started(self, worker_ids):
         by_worker_id = {spec.worker_id: spec for spec in supervisor.desired_workers()}
@@ -47,8 +53,18 @@ class FakeHost:
 
     def systemctl_user(self, *arguments):
         self.events.append(f"systemctl --user {' '.join(arguments)}")
+        if arguments == ("stop", "icml-worker-supervisor.service"):
+            self.service_quiesced.set()
 
     def stop_session(self, session_name):
+        if self.stop_lock_path is not None:
+            try:
+                with supervisor.exclusive_lock(self.stop_lock_path):
+                    lock_held = False
+            except supervisor.AlreadyRunning:
+                lock_held = True
+            self.events.append("lock-held" if lock_held else "lock-not-held")
+        self.events.append(f"stop {session_name}")
         self.stopped.append(session_name)
 
     def pane_pid(self, session_name):
@@ -825,6 +841,53 @@ def test_confirmed_stop_targets_only_desired_worker_sessions(fake_host, tmp_path
         spec.session_name for spec in supervisor.desired_workers()
     ]
     assert "unrelated-session" not in fake_host.stopped
+
+
+def test_stop_quiesces_service_and_waits_for_inflight_reconcile(
+    fake_host, tmp_path
+):
+    lock_path = (
+        tmp_path
+        / ".local/state/icml-worker-supervisor"
+        / "supervisor.lock"
+    )
+    fake_host.stop_lock_path = lock_path
+    result = []
+
+    with supervisor.exclusive_lock(lock_path):
+        stop_thread = threading.Thread(
+            target=lambda: result.append(
+                supervisor.main(
+                    ["stop", "--confirm"], host=fake_host, home=tmp_path
+                )
+            )
+        )
+        stop_thread.start()
+        service_was_quiesced = fake_host.service_quiesced.wait(timeout=5)
+        stopped_while_reconcile_held_lock = list(fake_host.stopped)
+        fake_host.inflight_reconcile = True
+        fake_host.ensure_session(
+            supervisor.desired_workers()[0], "exec agy"
+        )
+        fake_host.inflight_reconcile = False
+
+    stop_thread.join(timeout=5)
+
+    assert service_was_quiesced
+    assert stopped_while_reconcile_held_lock == []
+    assert not stop_thread.is_alive()
+    assert result == [0]
+    assert fake_host.events[:2] == [
+        "systemctl --user disable --now icml-worker-supervisor.timer",
+        "systemctl --user stop icml-worker-supervisor.service",
+    ]
+    first_stop = fake_host.events.index("stop agy-paper-owner-01")
+    assert fake_host.events.index("recreate agy-paper-owner-01") < first_stop
+    assert fake_host.events[first_stop - 1] == "lock-held"
+    assert all(
+        not event.startswith("recreate ")
+        for event in fake_host.events[first_stop:]
+    )
 
 
 def test_status_prints_one_line_for_each_degraded_lane(
