@@ -19,19 +19,29 @@
       "--project",
       "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
       "python",
-      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/generate_evidence.py",
-      "--check"
-    ],
-    [
-      "uv",
-      "run",
-      "--project",
-      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
-      "python",
       "-m",
       "pytest",
       "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/tests",
       "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "skills/icml-repro-loop/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
     ]
   ]
 }
