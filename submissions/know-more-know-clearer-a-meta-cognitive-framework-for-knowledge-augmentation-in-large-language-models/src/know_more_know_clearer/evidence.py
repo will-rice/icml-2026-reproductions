@@ -73,6 +73,7 @@ def generate_evidence(output_dir: Path) -> Path:
     results_path = output_dir / "results.json"
     with open(results_path, "w", encoding="utf-8") as f:
         json.dump(evidence_data, f, indent=2)
+        f.write("\n")
 
     provenance_path = output_dir / "provenance.json"
     with open(provenance_path, "w", encoding="utf-8") as f:
@@ -82,6 +83,7 @@ def generate_evidence(output_dir: Path) -> Path:
             "execution_environment": "CPU",
             "actual_api_cost_usd": 0.0
         }, f, indent=2)
+        f.write("\n")
 
     return results_path
 
