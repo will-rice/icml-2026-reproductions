@@ -36,7 +36,7 @@ def generate_synthetic_samples(num_samples: int, seq_len: int = 16, seed: int = 
 def main(args=None):
     parser = argparse.ArgumentParser(description="Run Mechanistic Data Attribution Reproduction")
     parser.add_argument("--output-dir", type=str, default="evidence", help="Output directory for evidence")
-    parser.add_argument("--num-samples", type=int, default=50, help="Number of evaluation samples")
+    parser.add_argument("--num-samples", type=int, default=100, help="Number of evaluation samples")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
 
     parsed_args = parser.parse_args(args)
@@ -93,6 +93,7 @@ def main(args=None):
     results_path = output_dir / "results.json"
     with open(results_path, "w") as f:
         json.dump(results_data, f, indent=2)
+        f.write("\n")
 
     # Save measurements.csv
     csv_path = output_dir / "measurements.csv"
@@ -117,16 +118,29 @@ def main(args=None):
     provenance_path = output_dir / "provenance.json"
     with open(provenance_path, "w") as f:
         json.dump(provenance_data, f, indent=2)
+        f.write("\n")
 
-    # Generate repro-bundle.tar.gz
+
+    import gzip
+    import io
+
     bundle_path = output_dir / "repro-bundle.tar.gz"
-    with tarfile.open(bundle_path, "w:gz") as tar:
-        tar.add(results_path, arcname="results.json")
-        tar.add(csv_path, arcname="measurements.csv")
-        tar.add(provenance_path, arcname="provenance.json")
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w") as tar:
+        for p, arcname in [(results_path, "results.json"), (csv_path, "measurements.csv"), (provenance_path, "provenance.json")]:
+            ti = tar.gettarinfo(p, arcname=arcname)
+            ti.mtime = 0
+            with open(p, "rb") as f:
+                tar.addfile(ti, f)
+
+    with open(bundle_path, "wb") as f_out:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=f_out, mtime=0) as gz:
+            gz.write(buf.getvalue())
 
     print(f"Evidence bundle successfully generated at {output_dir}")
     return 0
 
+
 if __name__ == "__main__":
     main()
+
