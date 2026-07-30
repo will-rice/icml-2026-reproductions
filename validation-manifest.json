@@ -1,27 +1,27 @@
 {
   "worktree": "/home/will/projects/icml-2026-reproductions",
   "branch": "main",
-  "base_sha": "24de512db3793e8b67ae9decc28b4c5736c03241",
-  "project_path": "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
-  "design_path": "docs/superpowers/specs/2026-07-29-ettfs-snn-reproduction-design.md",
+  "base_sha": "57e59e55807fb2a2d0f2f116e636702efcb03cf6",
+  "project_path": "submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization",
+  "design_path": "docs/superpowers/specs/2026-07-30-dmpo-diffusion-llm-reasoning-design.md",
   "commands": [
     [
       "uv",
       "run",
       "--project",
-      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
+      "submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization",
       "python",
-      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/generate_evidence.py"
+      "submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/generate_evidence.py"
     ],
     [
       "uv",
       "run",
       "--project",
-      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch",
+      "submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization",
       "python",
       "-m",
       "pytest",
-      "submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/tests",
+      "submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/tests",
       "-q"
     ],
     [
