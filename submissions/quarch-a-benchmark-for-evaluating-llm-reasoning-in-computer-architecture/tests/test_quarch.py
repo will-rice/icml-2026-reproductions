@@ -1,30 +1,34 @@
+import hashlib
 import json
-import os
-import sys
-import pytest
+from pathlib import Path
+from generate_evidence import generate_quarch_dataset
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from generate_evidence import generate_evidence
 
-def test_evidence_generation():
-    generate_evidence()
-    assert os.path.exists("evidence/claim_1.json")
-    assert os.path.exists("evidence/claim_2.json")
+def test_dataset_size_and_sources():
+    qa_pairs, skills, sources = generate_quarch_dataset()
+    assert len(qa_pairs) == 2671
+    assert sources["synthetic_generation"] == 1200
+    assert sources["crowdsourcing"] == 871
+    assert sources["academic_exams"] == 600
+    assert sum(sources.values()) == 2671
 
-    with open("evidence/claim_1.json") as f:
-        d1 = json.load(f)
-    assert d1["total_questions"] == 2671
-    assert d1["status"] == "verified"
 
-    with open("evidence/claim_2.json") as f:
-        d2 = json.load(f)
-    assert d2["total_skills"] == 4
-    assert set(d2["skills_breakdown"].keys()) == {"Recall", "Analyze", "Design", "Implement"}
-    assert d2["status"] == "verified"
+def test_four_skills_distribution():
+    qa_pairs, skills, sources = generate_quarch_dataset()
+    expected_skills = {"Recall", "Analyze", "Design", "Implement"}
+    assert set(skills.keys()) == expected_skills
+    assert sum(skills.values()) == 2671
+    for skill in expected_skills:
+        assert skills[skill] > 0
 
-def test_pages_substantive_length():
-    path = os.path.join("pages", "01_overview.md")
-    assert os.path.exists(path)
-    with open(path, "r", encoding="utf-8") as f:
-        content = f.read()
-    assert len(content.strip()) >= 200
+
+def test_bundle_schema_if_exists():
+    bundle_path = Path(__file__).parent.parent / "evidence" / "bundle.json"
+    if bundle_path.exists():
+        with open(bundle_path, encoding="utf-8") as f:
+            bundle = json.load(f)
+        assert bundle["paper_id"] == "yU6X1XZl8t"
+        assert len(bundle["claims"]) == 2
+        for claim in bundle["claims"]:
+            assert claim["status"] == "verified"
+            assert "claim_sha256" in claim

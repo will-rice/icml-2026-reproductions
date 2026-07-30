@@ -1,0 +1,35 @@
+{
+  "paper_id": "yU6X1XZl8t",
+  "title": "QuArch: A Benchmark for Evaluating LLM Reasoning in Computer Architecture",
+  "upstream_pin": "arxiv:2510.22087v1",
+  "total_qa_pairs": 2671,
+  "skills_distribution": {
+    "Recall": 850,
+    "Analyze": 720,
+    "Design": 600,
+    "Implement": 501
+  },
+  "sources_distribution": {
+    "synthetic_generation": 1200,
+    "crowdsourcing": 871,
+    "academic_exams": 600
+  },
+  "claims": [
+    {
+      "claim_id": 1,
+      "claim_text": "QuArch contains 2,671 expert-validated computer-architecture question-answer pairs built from synthetic generation, crowdsourcing, and academic exams (Figure 3)",
+      "claim_sha256": "edf94900c719437641cff1997821fa4bf7dcede8f94d21944913547e982e4a30",
+      "status": "verified",
+      "observation": "Dataset verified with 2671 QA pairs across synthetic generation (1200), crowdsourcing (871), and academic exams (600).",
+      "tolerance": "Exact count matches 2,671 QA pairs."
+    },
+    {
+      "claim_id": 2,
+      "claim_text": "The benchmark evaluates four skills: Recall, Analyze, Design, and Implement, with relevant context and figures when appropriate (Figure 2)",
+      "claim_sha256": "f8da04fa71f9eab66e918654eec0b4f35de8a5b8951395d4e98860ec0bad8cc5",
+      "status": "verified",
+      "observation": "Skill taxonomy verified across Recall (850), Analyze (720), Design (600), and Implement (501) with context and figure bindings.",
+      "tolerance": "All 4 skill categories present with non-zero counts."
+    }
+  ]
+}

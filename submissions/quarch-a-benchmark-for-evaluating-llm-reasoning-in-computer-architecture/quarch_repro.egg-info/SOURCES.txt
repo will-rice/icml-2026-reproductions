@@ -1,0 +1,10 @@
+README.md
+app.py
+generate_evidence.py
+pyproject.toml
+quarch_repro.egg-info/PKG-INFO
+quarch_repro.egg-info/SOURCES.txt
+quarch_repro.egg-info/dependency_links.txt
+quarch_repro.egg-info/requires.txt
+quarch_repro.egg-info/top_level.txt
+tests/test_quarch.py

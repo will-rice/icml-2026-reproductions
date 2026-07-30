@@ -1,0 +1,4 @@
+[
+  "tests/test_quarch.py::test_evidence_generation_records_provenance_and_bindings",
+  "tests/test_quarch.py::test_pages_substantive_length"
+]

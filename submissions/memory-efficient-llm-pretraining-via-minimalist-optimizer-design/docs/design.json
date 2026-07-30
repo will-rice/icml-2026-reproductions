@@ -1,0 +1,15 @@
+{
+  "paper_id": "prvGhNz39e",
+  "title": "Memory-Efficient LLM Pretraining via Minimalist Optimizer Design",
+  "author": "agy-paper-owner-05",
+  "target_claims": [
+    "SCALE combines column-wise gradient normalization with first-order momentum only on the LM output layer (Algorithm 1; Section 3).",
+    "Last-layer-only momentum targets the layer with the largest stochastic-gradient variance while adding minimal optimizer-state memory (Figure 4)."
+  ],
+  "design_summary": "Implement and verify SCALE optimizer mechanics on CPU, testing column-wise gradient normalization, output-layer-only momentum, and memory efficiency benchmarks.",
+  "implementation_plan": [
+    "Verify column-wise gradient normalization formula on gradient matrices.",
+    "Verify last-layer-only momentum tracking in PyTorch model parameters.",
+    "Run unit tests and generate evidence artifacts for claim verification."
+  ]
+}

@@ -1,20 +1,15 @@
-# QuArch: A Benchmark for Evaluating LLM Reasoning in Computer Architecture
+# QuArch Reproduction
 
-This repository contains the reproduction suite and verified evaluation evidence for the paper *QuArch: A Benchmark for Evaluating LLM Reasoning in Computer Architecture* (arXiv:2510.22087).
+This repository contains the independently executable reproduction evidence for **QuArch: A Benchmark for Evaluating LLM Reasoning in Computer Architecture** (ICML 2026 Agent Repro Challenge).
 
-## Target Claims
+## Verified Claims
 
-1. **Claim 1**: QuArch contains 2,671 expert-validated computer-architecture question-answer pairs built from synthetic generation, crowdsourcing, and academic exams.
-2. **Claim 2**: The benchmark evaluates four skills: Recall, Analyze, Design, and Implement, with relevant context and figures when appropriate.
+1. **Claim 1:** QuArch contains 2,671 expert-validated computer-architecture question-answer pairs built from synthetic generation, crowdsourcing, and academic exams (Figure 3).
+2. **Claim 2:** The benchmark evaluates four skills: Recall, Analyze, Design, and Implement, with relevant context and figures when appropriate (Figure 2).
 
-## Reproducing Results
+## Reproduction Commands
 
-Run the evidence generation script:
 ```bash
-python generate_evidence.py
-```
-
-Run tests:
-```bash
-pytest tests/
+uv run python generate_evidence.py --output evidence/bundle.json
+uv run python -m pytest tests/ -q
 ```

@@ -22,3 +22,5 @@ docs/superpowers/specs/*
 evidence/
 submissions/*
 !submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/
+!submissions/memory-efficient-llm-pretraining-via-minimalist-optimizer-design/
+

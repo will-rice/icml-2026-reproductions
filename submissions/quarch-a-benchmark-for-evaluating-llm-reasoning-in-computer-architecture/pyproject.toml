@@ -1,16 +1,14 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "quarch-repro"
 version = "0.1.0"
-description = "Reproduction of QuArch computer architecture reasoning benchmark claims"
+description = "Reproduction package for QuArch benchmark evaluation claims"
+readme = "README.md"
+requires-python = ">=3.10"
 dependencies = [
+    "gradio>=4.0.0",
     "pytest>=7.0.0",
-    "gradio>=4.0.0"
 ]
 
-[tool.pytest.ini_options]
-minversion = "6.0"
-testpaths = ["tests"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
