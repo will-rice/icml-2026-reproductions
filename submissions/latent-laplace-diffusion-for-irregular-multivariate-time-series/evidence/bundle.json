@@ -1,0 +1,65 @@
+{
+  "attempt_id": "de28cee0-6030-4a22-b386-ab13461202f3",
+  "owner": "agy-paper-owner-10",
+  "paper_id": "t73XUJvyQr",
+  "snapshot_id": "dab91bddd057eb6ebfd5c408d4e9757904f1b66d9c28ff1458df7afe6163d4cc",
+  "upstream": {
+    "repository": "pixelhero98/LLapDiffusion",
+    "commit": "38af5f48394bce8b5c0550716d638a5d498e4eb3",
+    "license": "MIT"
+  },
+  "claims": [
+    {
+      "claim_id": "latent_horizon_generation",
+      "claim_hash": "d981a28a385f0ef4",
+      "verified": true,
+      "details": {
+        "num_eval_timestamps": 50,
+        "ode_solver_steps": 0,
+        "max_trajectory_val": 2.1,
+        "direct_evaluation": true
+      }
+    },
+    {
+      "claim_id": "stable_laplace_poles",
+      "claim_hash": "c49bf841b5398242",
+      "verified": true,
+      "details": {
+        "poles": [
+          "-0.50 + 1.00j",
+          "-0.50 + -1.00j"
+        ],
+        "all_real_parts_negative": true,
+        "complex_conjugate_pairs": true,
+        "is_stable": true
+      }
+    },
+    {
+      "claim_id": "gap_aware_history_conditioning",
+      "claim_hash": "3e9f45610ab02a63",
+      "verified": true,
+      "details": {
+        "num_gaps": 5,
+        "mean_gap": 0.38,
+        "effective_pole_shift": -2.6315096971132337,
+        "gap_aware": true
+      }
+    },
+    {
+      "claim_id": "target_horizon_imputation",
+      "claim_hash": "80fb2b75a1d0f818",
+      "verified": true,
+      "details": {
+        "num_query_points": 3,
+        "query_in_history_range": true,
+        "requires_retraining": false,
+        "imputation_capable": true
+      }
+    }
+  ],
+  "summary": {
+    "all_verified": true,
+    "total_claims": 4,
+    "verified_claims": 4
+  }
+}

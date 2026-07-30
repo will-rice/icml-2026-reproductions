@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llapdiffusion_repro"
+version = "0.1.0"
+description = "Reproduction of Latent Laplace Diffusion for Irregular Multivariate Time Series"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.20.0",
+    "pytest>=7.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
