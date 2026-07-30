@@ -24,5 +24,7 @@ submissions/*
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/**
 !submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/
 !submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/**
+!submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/evidence/**
+
 !docs/reproductions/55b598c6-dda8-441d-93b6-b0284034a8e6-design.md
 
