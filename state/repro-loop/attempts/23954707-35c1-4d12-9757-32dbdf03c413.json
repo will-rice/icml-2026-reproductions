@@ -1,0 +1,151 @@
+{
+  "alphaxiv": "2602.01338",
+  "area": "Uncategorized",
+  "artifact_access": true,
+  "arxiv": "2602.01338",
+  "attempt_id": "23954707-35c1-4d12-9757-32dbdf03c413",
+  "authors": [
+    "Fan Chen",
+    "Sinho Chewi",
+    "Constantinos Daskalakis",
+    "Alexander Rakhlin"
+  ],
+  "award": "Outstanding Paper Award",
+  "claim_bindings": [
+    {
+      "challenge_claim": "The diffusion sampler attains delta-error in polylog(1/delta) steps given sufficiently accurate score estimates, improving the dependence on accuracy over prior high-accuracy samplers (Theorem 4.3)",
+      "challenge_claim_sha256": "f179c0624356a3c1b698f003501722f741f7cc04a8aeea80a02a2e627d71cd53",
+      "target_claim": "The diffusion sampler attains delta-error in polylog(1/delta) steps given sufficiently accurate score estimates, improving the dependence on accuracy over prior high-accuracy samplers (Theorem 4.3)"
+    },
+    {
+      "challenge_claim": "When the data distribution has intrinsic dimension d*, the complexity reduces to \u00d5(d* polylog(1/delta)) (Corollary 4.4)",
+      "challenge_claim_sha256": "929bb6ac240261d00a239646d2f3e3ce5be1f7944166203abeec3d8a61f84404",
+      "target_claim": "When the data distribution has intrinsic dimension d*, the complexity reduces to \u00d5(d* polylog(1/delta)) (Corollary 4.4)"
+    },
+    {
+      "challenge_claim": "The same framework yields a polylog(1/delta)-accuracy sampler for log-concave and more general isoperimetric distributions using first-order gradient queries (Section 5)",
+      "challenge_claim_sha256": "263116f47e206aa36d2364894f147c557ba1ddf0a25c093c3ab461f4d37f5ad2",
+      "target_claim": "The same framework yields a polylog(1/delta)-accuracy sampler for log-concave and more general isoperimetric distributions using first-order gradient queries (Section 5)"
+    }
+  ],
+  "cpu_only": true,
+  "design": {
+    "author": "agy-paper-owner-01",
+    "path": "docs/reproductions/23954707-35c1-4d12-9757-32dbdf03c413-design.md",
+    "recorded_at": "2026-07-30T00:53:32.884110+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-30T00:53:38.064395+00:00",
+    "reviewer": "independent-reviewer-01"
+  },
+  "estimated_api_cost_usd": 0,
+  "i": 4146,
+  "insts": [
+    "Massachusetts Institute of Technology",
+    "MIT"
+  ],
+  "licensing_blocker": null,
+  "live_claims": [
+    {
+      "status": "unverified",
+      "text": "The diffusion sampler attains delta-error in polylog(1/delta) steps given sufficiently accurate score estimates, improving the dependence on accuracy over prior high-accuracy samplers (Theorem 4.3)"
+    },
+    {
+      "status": "unverified",
+      "text": "Under minimal data assumptions, the diffusion sampling complexity is stated as \u00d5(d polylog(1/delta)), where d is the data dimension (Theorem 4.3)"
+    },
+    {
+      "status": "unverified",
+      "text": "When the data distribution has intrinsic dimension d*, the complexity reduces to \u00d5(d* polylog(1/delta)) (Corollary 4.4)"
+    },
+    {
+      "status": "unverified",
+      "text": "Under a non-uniform Lipschitz condition, the diffusion sampling complexity is refined to \u00d5(sqrt(dL) polylog(1/delta)) (Theorem 4.9)"
+    },
+    {
+      "status": "unverified",
+      "text": "The same framework yields a polylog(1/delta)-accuracy sampler for log-concave and more general isoperimetric distributions using first-order gradient queries (Section 5)"
+    }
+  ],
+  "or": "",
+  "orid": "71132",
+  "paper_id": "71132",
+  "phase": "implementing",
+  "pid": "71132",
+  "safety_blocker": null,
+  "score": 15,
+  "score_rate": {
+    "claim_expectations": [
+      {
+        "challenge_claim_sha256": "f179c0624356a3c1b698f003501722f741f7cc04a8aeea80a02a2e627d71cd53",
+        "p_falsified": 0.1,
+        "p_toy": 0.65,
+        "p_verified": 0.05
+      },
+      {
+        "challenge_claim_sha256": "d788b0f65749253a1035e913fe2251b545a6dcb968c5c1b2e1955a22e484d832",
+        "p_falsified": 0.15,
+        "p_toy": 0.45,
+        "p_verified": 0.02
+      },
+      {
+        "challenge_claim_sha256": "929bb6ac240261d00a239646d2f3e3ce5be1f7944166203abeec3d8a61f84404",
+        "p_falsified": 0.1,
+        "p_toy": 0.55,
+        "p_verified": 0.05
+      },
+      {
+        "challenge_claim_sha256": "4613cca5229a9978f3d68598c182a7c294523f099c3a68a493e68582261bad1e",
+        "p_falsified": 0.08,
+        "p_toy": 0.25,
+        "p_verified": 0.02
+      },
+      {
+        "challenge_claim_sha256": "263116f47e206aa36d2364894f147c557ba1ddf0a25c093c3ab461f4d37f5ad2",
+        "p_falsified": 0.1,
+        "p_toy": 0.55,
+        "p_verified": 0.05
+      }
+    ],
+    "direct_artifact_score": 2,
+    "full_score_claim_paths": 0,
+    "judged_before_deadline_probability": 0.8,
+    "primary_risk": "Theory-heavy evidence can only produce source-pinned theorem checks and independent toy CPU sampler experiments, so most accepted outcomes are likely toy rather than verified.",
+    "remaining_hours_p90": 5.0,
+    "remaining_time_variance_hours2": 1.0,
+    "reusable_implementation": false
+  },
+  "slug": "high-accuracy-sampling-for-diffusion-models-and-log-concave-distributions",
+  "snapshot_id": "647c396ada6e95caa7f8711e63dad91456f19e97bd63ec6e9e9303898fe4495b",
+  "spot": true,
+  "sub": "",
+  "target_claims": [
+    "The diffusion sampler attains delta-error in polylog(1/delta) steps given sufficiently accurate score estimates, improving the dependence on accuracy over prior high-accuracy samplers (Theorem 4.3)",
+    "When the data distribution has intrinsic dimension d*, the complexity reduces to \u00d5(d* polylog(1/delta)) (Corollary 4.4)",
+    "The same framework yields a polylog(1/delta)-accuracy sampler for log-concave and more general isoperimetric distributions using first-order gradient queries (Section 5)"
+  ],
+  "title": "High-accuracy sampling for diffusion models and log-concave distributions",
+  "transitions": [
+    {
+      "at": "2026-07-30T00:53:24.065181+00:00",
+      "fencing_token": 1,
+      "from": "selected",
+      "owner": "agy-paper-owner-01",
+      "snapshot_id": "647c396ada6e95caa7f8711e63dad91456f19e97bd63ec6e9e9303898fe4495b",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-30T00:53:38.064395+00:00",
+      "fencing_token": 1,
+      "from": "design-pending",
+      "owner": "agy-paper-owner-01",
+      "snapshot_id": "647c396ada6e95caa7f8711e63dad91456f19e97bd63ec6e9e9303898fe4495b",
+      "to": "implementing"
+    }
+  ],
+  "type": "Oral",
+  "updated_at": "2026-07-30T00:53:38.064395+00:00",
+  "upstream_revision": "arxiv:2602.01338v2+arxiv-source:2602.01338v2",
+  "vs": "https://icml.cc/virtual/2026/oral/71132"
+}
