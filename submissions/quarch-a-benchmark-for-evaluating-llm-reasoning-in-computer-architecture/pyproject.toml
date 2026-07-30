@@ -4,10 +4,7 @@ version = "0.1.0"
 description = "Reproduction package for QuArch benchmark evaluation claims"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "gradio>=4.0.0",
-    "pytest>=7.0.0",
-]
+dependencies = []
 
 [build-system]
 requires = ["hatchling"]
