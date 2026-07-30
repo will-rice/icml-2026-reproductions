@@ -1,0 +1,6 @@
+[
+  "tests/test_dmpo_evidence.py::test_bundle_verifies_target_claims_from_pinned_upstream",
+  "tests/test_dmpo_evidence.py::test_centered_advantages_subtract_negative_baseline",
+  "tests/test_dmpo_evidence.py::test_reward_tilted_weights_match_softmax_formula",
+  "tests/test_dmpo_evidence.py::test_weighted_denoising_ce_matches_upstream_loss_shape"
+]
