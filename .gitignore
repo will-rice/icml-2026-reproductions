@@ -16,11 +16,14 @@ results/
 .hf_cache/
 docs/designs/
 docs/reproductions/
+!docs/reproductions/55b598c6-dda8-441d-93b6-b0284034a8e6-design.md/
 docs/superpowers/plans/
 docs/superpowers/specs/*
 !docs/superpowers/specs/2026-07-29-ettfs-snn-reproduction-design.md
+!docs/superpowers/specs/2026-07-30-c98bf99d-2a6f-4922-a046-7c068f1e5e2e-design.md
 evidence/
 submissions/*
 !submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/
 !submissions/memory-efficient-llm-pretraining-via-minimalist-optimizer-design/
-
+!submissions/protein-autoregressive-modeling-via-multiscale-structure-generation/
+!submissions/protein-autoregressive-modeling-via-multiscale-structure-generation/**
