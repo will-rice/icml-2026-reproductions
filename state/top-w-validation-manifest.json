@@ -1,7 +1,7 @@
 {
   "worktree": "/home/will/projects/icml-2026-reproductions",
   "branch": "main",
-  "base_sha": "46674cf81c643c0f7598485ddb3ba8cc4ce8ae46",
+  "base_sha": "3d0d9d3ec122fc6908ad9076a7f58bbe0891f07a",
   "project_path": "submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models",
   "design_path": "docs/designs/572f7d7b-f6a5-4004-9389-22ac5af0d0f6.md",
   "commands": [
