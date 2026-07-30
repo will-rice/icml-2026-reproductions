@@ -1,0 +1,274 @@
+{
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "assessor": "agy-paper-owner-01",
+  "assessed_at": "2026-07-30T01:01:00+00:00",
+  "assessments": [
+    {
+      "paper_id": "08tW615mgI",
+      "score": 22,
+      "target_claims": [
+        "PAR is a multi-scale autoregressive framework for protein backbone generation that performs coarse-to-fine next-scale prediction (Figure 1).",
+        "PAR combines multi-scale downsampling, an autoregressive transformer for conditional embeddings, and a flow-based backbone decoder (Figure 1).",
+        "PAR addresses autoregressive exposure bias with noisy context learning and scheduled sampling (Section 3)."
+      ],
+      "claim_bindings": [
+        {
+          "target_claim": "PAR is a multi-scale autoregressive framework for protein backbone generation that performs coarse-to-fine next-scale prediction (Figure 1).",
+          "challenge_claim": "PAR is a multi-scale autoregressive framework for protein backbone generation that performs coarse-to-fine next-scale prediction (Figure 1).",
+          "challenge_claim_sha256": "060863e00726b121b84178deca41a4146cd5229adf8dfa337662cad9c7391d2a"
+        },
+        {
+          "target_claim": "PAR combines multi-scale downsampling, an autoregressive transformer for conditional embeddings, and a flow-based backbone decoder (Figure 1).",
+          "challenge_claim": "PAR combines multi-scale downsampling, an autoregressive transformer for conditional embeddings, and a flow-based backbone decoder (Figure 1).",
+          "challenge_claim_sha256": "65e746f22b82e42f01457d89553852b1ae4a0ea08c7b530fa064e02831da3562"
+        },
+        {
+          "target_claim": "PAR addresses autoregressive exposure bias with noisy context learning and scheduled sampling (Section 3).",
+          "challenge_claim": "PAR addresses autoregressive exposure bias with noisy context learning and scheduled sampling (Section 3).",
+          "challenge_claim_sha256": "292dc3e03f8a52a09602704d8cb6fd73573b63d122a68a3057de954f6fb346e2"
+        }
+      ],
+      "upstream_revision": "arxiv:2602.04883+github:bytedance-Seed/par-protein@92d1c3ecc9822f897b66d53b3852059e6750aee2",
+      "artifact_access": true,
+      "cpu_only": true,
+      "safety_blocker": null,
+      "licensing_blocker": null,
+      "estimated_api_cost_usd": 0.0,
+      "score_rate": {
+        "claim_expectations": [
+          {
+            "challenge_claim_sha256": "060863e00726b121b84178deca41a4146cd5229adf8dfa337662cad9c7391d2a",
+            "p_verified": 0.72,
+            "p_falsified": 0.04,
+            "p_toy": 0.14
+          },
+          {
+            "challenge_claim_sha256": "65e746f22b82e42f01457d89553852b1ae4a0ea08c7b530fa064e02831da3562",
+            "p_verified": 0.74,
+            "p_falsified": 0.04,
+            "p_toy": 0.14
+          },
+          {
+            "challenge_claim_sha256": "292dc3e03f8a52a09602704d8cb6fd73573b63d122a68a3057de954f6fb346e2",
+            "p_verified": 0.66,
+            "p_falsified": 0.05,
+            "p_toy": 0.18
+          },
+          {
+            "challenge_claim_sha256": "2b29628189221efc9a751534b6d95123115af972340d3e15f12344ffb68a1e5d",
+            "p_verified": 0.18,
+            "p_falsified": 0.05,
+            "p_toy": 0.22
+          },
+          {
+            "challenge_claim_sha256": "c35274445e671285b8ac1013b61a6453fd49d6850434efa89836e0d782ed39f6",
+            "p_verified": 0.3,
+            "p_falsified": 0.05,
+            "p_toy": 0.25
+          },
+          {
+            "challenge_claim_sha256": "903902b671b72c3df5ce5ec25cf3a84724c13e0f3d8f90387600fada73701a79",
+            "p_verified": 0.12,
+            "p_falsified": 0.05,
+            "p_toy": 0.18
+          }
+        ],
+        "judged_before_deadline_probability": 0.78,
+        "remaining_hours_p90": 3.0,
+        "reusable_implementation": false,
+        "direct_artifact_score": 4,
+        "full_score_claim_paths": 3,
+        "remaining_time_variance_hours2": 0.75,
+        "primary_risk": "Official Apache-2.0 code and project materials expose the PAR multi-scale decomposition, autoregressive transformer conditioning, flow decoder, and training flags for noisy context learning and scheduled sampling. Full designability, FPSD/fS, zero-shot, and speedup claims require GPU-heavy generation/evaluation and are not selected as primary targets."
+      }
+    },
+    {
+      "paper_id": "3ExTD9F0u1",
+      "score": 21,
+      "target_claims": [
+        "TFRBench introduces a reasoning-aware forecasting benchmark that evaluates cross-channel dependencies, trends, and external-event reasoning alongside numerical forecasts (Figure 1; Table 1).",
+        "TFRBench constructs reference reasoning with a multi-agent generate-verify-refine loop that filters traces by verifier score and MASE improvement over a naive baseline (Figure 2; Algorithm 1).",
+        "The benchmark spans ten datasets across Energy, Sales, Web/CloudOps, Transportation, and Finance domains (Table 2)."
+      ],
+      "claim_bindings": [
+        {
+          "target_claim": "TFRBench introduces a reasoning-aware forecasting benchmark that evaluates cross-channel dependencies, trends, and external-event reasoning alongside numerical forecasts (Figure 1; Table 1).",
+          "challenge_claim": "TFRBench introduces a reasoning-aware forecasting benchmark that evaluates cross-channel dependencies, trends, and external-event reasoning alongside numerical forecasts (Figure 1; Table 1).",
+          "challenge_claim_sha256": "94f7b4c33bfd404cd7dfc1874eece89ff97b6b028ac2acfdf1fa3487720fde1f"
+        },
+        {
+          "target_claim": "TFRBench constructs reference reasoning with a multi-agent generate-verify-refine loop that filters traces by verifier score and MASE improvement over a naive baseline (Figure 2; Algorithm 1).",
+          "challenge_claim": "TFRBench constructs reference reasoning with a multi-agent generate-verify-refine loop that filters traces by verifier score and MASE improvement over a naive baseline (Figure 2; Algorithm 1).",
+          "challenge_claim_sha256": "9a3ec271185b25c8946824cebff5d26a0a57a27921d9ad4fcd8b5b41144bfaaf"
+        },
+        {
+          "target_claim": "The benchmark spans ten datasets across Energy, Sales, Web/CloudOps, Transportation, and Finance domains (Table 2).",
+          "challenge_claim": "The benchmark spans ten datasets across Energy, Sales, Web/CloudOps, Transportation, and Finance domains (Table 2).",
+          "challenge_claim_sha256": "b410bb5f5dda62419b2754277a1361f9ba094edeb8909fa13fa49479debc0513"
+        }
+      ],
+      "upstream_revision": "arxiv:2604.05364+hf-dataset:AtikAhamed/TFRBench@1e432f7945334897b437f3862f20b2116fa58a9e+project:https://tfrbench.github.io/",
+      "artifact_access": true,
+      "cpu_only": true,
+      "safety_blocker": null,
+      "licensing_blocker": null,
+      "estimated_api_cost_usd": 0.0,
+      "score_rate": {
+        "claim_expectations": [
+          {
+            "challenge_claim_sha256": "94f7b4c33bfd404cd7dfc1874eece89ff97b6b028ac2acfdf1fa3487720fde1f",
+            "p_verified": 0.62,
+            "p_falsified": 0.04,
+            "p_toy": 0.22
+          },
+          {
+            "challenge_claim_sha256": "9a3ec271185b25c8946824cebff5d26a0a57a27921d9ad4fcd8b5b41144bfaaf",
+            "p_verified": 0.52,
+            "p_falsified": 0.05,
+            "p_toy": 0.28
+          },
+          {
+            "challenge_claim_sha256": "b410bb5f5dda62419b2754277a1361f9ba094edeb8909fa13fa49479debc0513",
+            "p_verified": 0.82,
+            "p_falsified": 0.03,
+            "p_toy": 0.1
+          },
+          {
+            "challenge_claim_sha256": "663f7b3495cdb20a72c563fbba5dcef305f42d3709ee0b545fe751c484924409",
+            "p_verified": 0.08,
+            "p_falsified": 0.06,
+            "p_toy": 0.25
+          },
+          {
+            "challenge_claim_sha256": "d6405d9a6e961a8bab03e0a1414a58b915f0daaea48e7d042d13d382f8561f3c",
+            "p_verified": 0.12,
+            "p_falsified": 0.06,
+            "p_toy": 0.25
+          },
+          {
+            "challenge_claim_sha256": "120ff650908d1c7a3421225b729f9fed69b445f75e8383ec46448732b192c17f",
+            "p_verified": 0.12,
+            "p_falsified": 0.06,
+            "p_toy": 0.25
+          }
+        ],
+        "judged_before_deadline_probability": 0.84,
+        "remaining_hours_p90": 3.0,
+        "reusable_implementation": false,
+        "direct_artifact_score": 5,
+        "full_score_claim_paths": 3,
+        "remaining_time_variance_hours2": 0.5,
+        "primary_risk": "The pinned Hugging Face dataset exposes ten public JSON files for Solar, Electricity, Car-parts, Hierarchical Sales, Bitbrains Fast Storage, Web Traffic, Traffic, NYC Taxi, Amazon pricing, and Apple pricing plus a dataset README. Static benchmark composition and reasoning-output schema can be verified CPU-only. Correlation, prompting-improvement, and domain-failure claims require reproducing model/judge evaluations and are not selected as primary targets."
+      }
+    },
+    {
+      "paper_id": "8m30ogkPk2",
+      "score": 23,
+      "target_claims": [
+        "RoboMME defines 16 manipulation tasks organized by temporal, spatial, object, and procedural memory demands (Table 1, Table 2).",
+        "The MME-VLA suite evaluates symbolic, perceptual, and recurrent memory representations with multiple memory-integration mechanisms on a pi0.5-based architecture (Figure 2, Appendix A).",
+        "RoboMME includes 770K high-quality training timesteps for systematic evaluation of memory-augmented policies (Section 3).",
+        "The paper builds 14 memory-augmented VLA variants on the pi0.5 backbone to compare memory representations and integration strategies (Section 4)."
+      ],
+      "claim_bindings": [
+        {
+          "target_claim": "RoboMME defines 16 manipulation tasks organized by temporal, spatial, object, and procedural memory demands (Table 1, Table 2).",
+          "challenge_claim": "RoboMME defines 16 manipulation tasks organized by temporal, spatial, object, and procedural memory demands (Table 1, Table 2).",
+          "challenge_claim_sha256": "36b8db60ef193ce6da36b30be54d33856b268a93ea4582487650146b7ff27cec"
+        },
+        {
+          "target_claim": "The MME-VLA suite evaluates symbolic, perceptual, and recurrent memory representations with multiple memory-integration mechanisms on a pi0.5-based architecture (Figure 2, Appendix A).",
+          "challenge_claim": "The MME-VLA suite evaluates symbolic, perceptual, and recurrent memory representations with multiple memory-integration mechanisms on a pi0.5-based architecture (Figure 2, Appendix A).",
+          "challenge_claim_sha256": "44a693f9fed0a7d249d8c4caa696205797c7ea344d6cc73560267c8b91d288aa"
+        },
+        {
+          "target_claim": "RoboMME includes 770K high-quality training timesteps for systematic evaluation of memory-augmented policies (Section 3).",
+          "challenge_claim": "RoboMME includes 770K high-quality training timesteps for systematic evaluation of memory-augmented policies (Section 3).",
+          "challenge_claim_sha256": "9c421693d19a62760e4fb953af3c3bb3f43ed1e9f1ad8b3afbdcf2eee67e6e60"
+        },
+        {
+          "target_claim": "The paper builds 14 memory-augmented VLA variants on the pi0.5 backbone to compare memory representations and integration strategies (Section 4).",
+          "challenge_claim": "The paper builds 14 memory-augmented VLA variants on the pi0.5 backbone to compare memory representations and integration strategies (Section 4).",
+          "challenge_claim_sha256": "dd2f1bba318425211ac424545696fa9a23b2d2fc5eba76cdcb7123ab03bd0958"
+        }
+      ],
+      "upstream_revision": "arxiv:2603.04639+arxiv-source-sha256:55861691d3059ac94933c6abec6aa517eee75521485740315d249724c11b6879+github:RoboMME/robomme_benchmark@03a8faf57cfbd334dfea1bb7e60079a888d70453+github:RoboMME/robomme_policy_learning@ecf086c3be7c2223167d9bb2f6ef1f0a6e24353b+hf-dataset:Yinpei/robomme_data_h5@a5e4e25ffe8af34f64944f9533d06455ce5f8337+hf-dataset:Yinpei/robomme_preprocessed_data@ddf0baf55b633cc6657dcd53ac0e089a273de612+hf-model:Yinpei/mme_vla_suite@5db4d53ddb98c7f80cab08792dd53d985d712ab1",
+      "artifact_access": true,
+      "cpu_only": true,
+      "safety_blocker": null,
+      "licensing_blocker": null,
+      "estimated_api_cost_usd": 0.0,
+      "score_rate": {
+        "claim_expectations": [
+          {
+            "challenge_claim_sha256": "36b8db60ef193ce6da36b30be54d33856b268a93ea4582487650146b7ff27cec",
+            "p_verified": 0.75,
+            "p_falsified": 0.03,
+            "p_toy": 0.15
+          },
+          {
+            "challenge_claim_sha256": "44a693f9fed0a7d249d8c4caa696205797c7ea344d6cc73560267c8b91d288aa",
+            "p_verified": 0.6,
+            "p_falsified": 0.03,
+            "p_toy": 0.25
+          },
+          {
+            "challenge_claim_sha256": "bad32c116e29ccf046b4084c7dad5b034de267e52aa88daf418e86f73e158be5",
+            "p_verified": 0.08,
+            "p_falsified": 0.05,
+            "p_toy": 0.2
+          },
+          {
+            "challenge_claim_sha256": "ca4566da4a880a5a5a3258600a8ae67b3b10182ad22feacdd57db7fc155d45fd",
+            "p_verified": 0.03,
+            "p_falsified": 0.03,
+            "p_toy": 0.08
+          },
+          {
+            "challenge_claim_sha256": "639b3790a948698778fd4071568d830df55e834072d4b54d3323c6156f3c3c39",
+            "p_verified": 0.03,
+            "p_falsified": 0.03,
+            "p_toy": 0.08
+          },
+          {
+            "challenge_claim_sha256": "ace0db759e9148080496489333a720d0bccc995732b283988778ef98930f8e7d",
+            "p_verified": 0.65,
+            "p_falsified": 0.03,
+            "p_toy": 0.2
+          },
+          {
+            "challenge_claim_sha256": "17170c58082006ea8f9f1b9b1e4034156df8327cc7d841593a0bd960a3d737e1",
+            "p_verified": 0.78,
+            "p_falsified": 0.03,
+            "p_toy": 0.12
+          },
+          {
+            "challenge_claim_sha256": "9c421693d19a62760e4fb953af3c3bb3f43ed1e9f1ad8b3afbdcf2eee67e6e60",
+            "p_verified": 0.75,
+            "p_falsified": 0.04,
+            "p_toy": 0.1
+          },
+          {
+            "challenge_claim_sha256": "dd2f1bba318425211ac424545696fa9a23b2d2fc5eba76cdcb7123ab03bd0958",
+            "p_verified": 0.7,
+            "p_falsified": 0.03,
+            "p_toy": 0.15
+          },
+          {
+            "challenge_claim_sha256": "4cd522815a53fd8dea19c326c097cd4c006952394249a42617b1631f20be45a2",
+            "p_verified": 0.08,
+            "p_falsified": 0.05,
+            "p_toy": 0.22
+          }
+        ],
+        "judged_before_deadline_probability": 0.82,
+        "remaining_hours_p90": 4.0,
+        "reusable_implementation": false,
+        "direct_artifact_score": 5,
+        "full_score_claim_paths": 4,
+        "remaining_time_variance_hours2": 1.0,
+        "primary_risk": "The released repositories, dataset metadata, and model-suite file structure support CPU-only static verification of benchmark composition, training timestep count, and MME-VLA variant structure. Headline success-rate, resource-efficiency, and real-world claims require GPU/simulator or physical-robot evidence and are not selected as targets."
+      }
+    }
+  ]
+}

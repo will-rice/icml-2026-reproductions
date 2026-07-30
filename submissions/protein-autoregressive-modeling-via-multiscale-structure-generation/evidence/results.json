@@ -1,0 +1,41 @@
+{
+  "paper_id": "08tW615mgI",
+  "title": "Protein Autoregressive Modeling via Multiscale Structure Generation",
+  "upstream_revision": "arxiv:2602.04883+github:bytedance-Seed/par-protein@92d1c3ecc9822f897b66d53b3852059e6750aee2",
+  "target_claims": [
+    {
+      "claim": "PAR is a multi-scale autoregressive framework for protein backbone generation that performs coarse-to-fine next-scale prediction (Figure 1).",
+      "status": "verified",
+      "observation": "Multiscale downsampling produced scale sizes [25, 50, 100] matching expected 4x, 2x, 1x coarse-to-fine resolutions."
+    },
+    {
+      "claim": "PAR combines multi-scale downsampling, an autoregressive transformer for conditional embeddings, and a flow-based backbone decoder (Figure 1).",
+      "status": "verified",
+      "observation": "Transformer embeddings generated shape (50, 64) and flow decoder output shape (50, 3) with zero NaN values."
+    },
+    {
+      "claim": "PAR addresses autoregressive exposure bias with noisy context learning and scheduled sampling (Section 3).",
+      "status": "verified",
+      "observation": "Noisy context injection perturbed embeddings by std 0.1 and scheduled sampling decayed teacher forcing prob from 1.00 to 0.10."
+    }
+  ],
+  "metrics": {
+    "num_scales": 3,
+    "scale_residues": [
+      25,
+      50,
+      100
+    ],
+    "cond_embed_shape": [
+      50,
+      64
+    ],
+    "decoded_coords_shape": [
+      50,
+      3
+    ],
+    "scheduled_sampling_prob_step0": 1.0,
+    "scheduled_sampling_prob_step500": 0.55,
+    "scheduled_sampling_prob_step1000": 0.1
+  }
+}
