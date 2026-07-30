@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/top_w_repro/__init__.py
+src/top_w_repro/decoder.py
+src/top_w_repro/evidence.py
+src/top_w_repro.egg-info/PKG-INFO
+src/top_w_repro.egg-info/SOURCES.txt
+src/top_w_repro.egg-info/dependency_links.txt
+src/top_w_repro.egg-info/requires.txt
+src/top_w_repro.egg-info/top_level.txt
+tests/test_top_w_decoder.py

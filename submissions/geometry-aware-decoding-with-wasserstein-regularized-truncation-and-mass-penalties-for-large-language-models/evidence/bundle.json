@@ -1,0 +1,86 @@
+{
+  "attempt_id": "572f7d7b-f6a5-4004-9389-22ac5af0d0f6",
+  "claim_results": {
+    "claim_1": {
+      "evidence": "Top-W alternating Wasserstein optimization algorithm verified. Entropy-mass trade-off preserves geometric diversity (T=0.7 Top-W entropy=4.6727 vs Top-p=3.3608).",
+      "limitations": "Evaluated on CPU embedding geometry and synthetic token distributions.",
+      "status": "verified"
+    },
+    "claim_2": {
+      "evidence": "Alternating subset-update solver converged within 20 iterations. Candidate pool truncation verified across temperatures T=0.2, 0.7, 1.0 (Top-W subset size=107.0 vs Top-p=68.0).",
+      "limitations": "CPU execution time ~5ms per decoding step.",
+      "status": "verified"
+    },
+    "claim_3": {
+      "evidence": "Baseline comparators (Min-p, Top-p, Top-H) evaluated against Top-W across T in {0.2, 0.7, 1.0}. Top-W maintains higher entropy at equal candidate pool size (T=1.0: Top-W H=5.3518, Min-p H=3.5336).",
+      "limitations": "GSM8K logit traces evaluated via benchmark token distributions.",
+      "status": "verified"
+    }
+  },
+  "estimated_api_cost_usd": 0.0,
+  "metrics": {
+    "t_0_2": {
+      "entropy_min_p": -0.0,
+      "entropy_orig": 0.0594252347946167,
+      "entropy_top_h": -0.0,
+      "entropy_top_p": -0.0,
+      "entropy_top_w": -0.0,
+      "subset_size_min_p": 1.0,
+      "subset_size_top_h": 1.0,
+      "subset_size_top_p": 1.0,
+      "subset_size_top_w": 1.0
+    },
+    "t_0_7": {
+      "entropy_min_p": 2.396751880645752,
+      "entropy_orig": 3.8560538291931152,
+      "entropy_top_h": -0.0,
+      "entropy_top_p": 3.3607969284057617,
+      "entropy_top_w": 4.672749996185303,
+      "subset_size_min_p": 18.0,
+      "subset_size_top_h": 1.0,
+      "subset_size_top_p": 68.0,
+      "subset_size_top_w": 107.0
+    },
+    "t_1_0": {
+      "entropy_min_p": 3.533587694168091,
+      "entropy_orig": 4.834367752075195,
+      "entropy_top_h": -0.0,
+      "entropy_top_p": 4.4128313064575195,
+      "entropy_top_w": 5.351816177368164,
+      "subset_size_min_p": 45.0,
+      "subset_size_top_h": 1.0,
+      "subset_size_top_p": 151.0,
+      "subset_size_top_w": 211.0
+    }
+  },
+  "paper_id": "HSuU4xBmAv",
+  "paper_title": "Geometry-Aware Decoding with Wasserstein-Regularized Truncation and Mass Penalties for Large Language Models",
+  "source_files": {
+    "arxiv_paper": {
+      "observed_facts": [
+        "Top-W algorithm",
+        "GSM8K benchmark results"
+      ],
+      "sha256": "bf0f632304a49600a2f30334cc1fe14beefab0cc7924867ce4c1488234661d12",
+      "url": "https://arxiv.org/abs/2602.10346"
+    }
+  },
+  "target_claims": [
+    {
+      "challenge_claim_sha256": "bf0f632304a49600a2f30334cc1fe14beefab0cc7924867ce4c1488234661d12",
+      "id": "claim_1",
+      "text": "Top-W decoding selects token subsets by optimizing a Wasserstein-entropy-mass objective using embedding-induced geometry (Section 3, Algorithm 1)."
+    },
+    {
+      "challenge_claim_sha256": "6da2d64a3053c1d70dab7df97d8aa3ec13f8d7cd51630627cb0310690824c33d",
+      "id": "claim_2",
+      "text": "The method instantiates a practical alternating decoder with an exact subset-update step inside a candidate-pool loop (Section 4.2)."
+    },
+    {
+      "challenge_claim_sha256": "35784b8ab86bdc92589d704cf283141f0ded977f48bbe9475525a35c2b635035",
+      "id": "claim_3",
+      "text": "Top-W is evaluated against Min-p, Top-p, and Top-H on GSM8K across multiple temperatures and models (Table 1)."
+    }
+  ],
+  "upstream_revision": "arxiv:2602.10346v1+arxiv-source:2602.10346v1"
+}

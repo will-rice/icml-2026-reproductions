@@ -1,0 +1,47 @@
+{
+  "worktree": "/home/will/projects/icml-2026-reproductions",
+  "branch": "main",
+  "base_sha": "10dd272073e9b084d2e1bc8612ae99335e001405",
+  "project_path": "submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models",
+  "design_path": "docs/designs/572f7d7b-f6a5-4004-9389-22ac5af0d0f6.md",
+  "commands": [
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models",
+      "python",
+      "submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/generate_evidence.py"
+    ],
+    [
+      "uv",
+      "run",
+      "--project",
+      "submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models",
+      "python",
+      "-m",
+      "pytest",
+      "submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/tests",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    [
+      "uv",
+      "run",
+      "skills/icml-repro-loop/scripts/quick_validate.py",
+      "skills/icml-repro-loop"
+    ],
+    [
+      "uv",
+      "run",
+      "pre-commit",
+      "run",
+      "-a"
+    ]
+  ]
+}
