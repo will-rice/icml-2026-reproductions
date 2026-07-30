@@ -50,3 +50,11 @@ submissions/latent-laplace-diffusion-for-irregular-multivariate-time-series/**/_
 submissions/latent-laplace-diffusion-for-irregular-multivariate-time-series/**/*.egg-info/
 
 !docs/reproductions/55b598c6-dda8-441d-93b6-b0284034a8e6-design.md
+
+!submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/
+!submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/**
+!submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/uv.lock
+submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/.venv/
+submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/.pytest_cache/
+submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-from-scratch/**/__pycache__/
+
