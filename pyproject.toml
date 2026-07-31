@@ -17,6 +17,3 @@ dev = ["pre-commit>=4.2.0", "pytest>=8.4.0"]
 testpaths = ["tests"]
 pythonpath = [".", "skills/icml-repro-loop/scripts"]
 addopts = "--ignore=submissions"
-
-[tool.uv.workspace]
-members = ["submissions/*"]
