@@ -1,9 +1,0 @@
-{
-  "acquired_at": "2026-07-29T19:56:05.054666+00:00",
-  "attempt_id": "b2b5899c-43a1-4c91-8b1f-9122d746f4c6",
-  "expires_at": "2026-07-29T21:56:05.054666+00:00",
-  "fencing_token": 6,
-  "owner": "agy-paper-owner-02",
-  "released_at": null,
-  "resource": "attempt:b2b5899c-43a1-4c91-8b1f-9122d746f4c6"
-}

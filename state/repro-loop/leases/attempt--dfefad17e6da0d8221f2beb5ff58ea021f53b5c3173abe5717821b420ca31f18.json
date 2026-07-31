@@ -1,9 +1,0 @@
-{
-  "acquired_at": "2026-07-28T21:19:06.937216+00:00",
-  "attempt_id": "eb10c79b-fc26-47c4-88c1-6f45cb592833",
-  "expires_at": "2026-07-28T23:19:06.937216+00:00",
-  "fencing_token": 5,
-  "owner": "controller-task5-verdict-sync-20260728",
-  "released_at": "2026-07-28T21:21:00+00:00",
-  "resource": "attempt:eb10c79b-fc26-47c4-88c1-6f45cb592833"
-}

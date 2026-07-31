@@ -1,9 +1,0 @@
-{
-  "acquired_at": "2026-07-27T20:08:38.921175+00:00",
-  "attempt_id": "cb04ab1a-a526-4137-862b-a26d68563737",
-  "expires_at": "2026-07-27T20:13:38.921175+00:00",
-  "fencing_token": 2,
-  "owner": "judgment-cb04ab1a-a526-4137-862b-a26d68563737",
-  "released_at": "2026-07-27T20:08:38.921175+00:00",
-  "resource": "judgment-space:wrice/repro-posttrainbench"
-}

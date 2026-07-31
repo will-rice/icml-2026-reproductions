@@ -1,7 +1,20 @@
 import re
+import subprocess
 from pathlib import Path
 
 import yaml
+
+
+def test_live_coordinator_state_is_not_git_tracked() -> None:
+    """Tracked state/ files get reverted by git resets, corrupting live
+    coordination (lost claims, stale leases, duplicate paper assignment)."""
+    tracked = subprocess.run(
+        ["git", "ls-files", "--", "state"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    assert tracked == []
 
 
 def test_pre_commit_excludes_byte_exact_upstream_evidence() -> None:

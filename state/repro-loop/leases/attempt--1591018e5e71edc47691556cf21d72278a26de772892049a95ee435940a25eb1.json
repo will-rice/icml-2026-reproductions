@@ -1,9 +1,0 @@
-{
-  "acquired_at": "2026-07-29T01:01:47.883695+00:00",
-  "attempt_id": "97e213a5-7ca3-4a1b-a500-1ec52d94d87a",
-  "expires_at": "2026-07-29T03:01:47.883695+00:00",
-  "fencing_token": 6,
-  "owner": "codex-paper-owner-01",
-  "released_at": "2026-07-29T01:03:02.494364+00:00",
-  "resource": "attempt:97e213a5-7ca3-4a1b-a500-1ec52d94d87a"
-}
