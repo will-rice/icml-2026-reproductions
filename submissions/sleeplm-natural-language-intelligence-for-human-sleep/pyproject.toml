@@ -1,0 +1,18 @@
+[project]
+name = "sleeplm-reproduction"
+version = "0.1.0"
+description = "CPU-only SleepLM reproduction evidence for ICML 2026 Agent Repro Challenge"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=5.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
