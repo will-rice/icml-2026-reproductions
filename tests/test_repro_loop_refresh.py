@@ -412,7 +412,7 @@ def test_assessment_with_invalid_claim_binding_is_not_merged(
     assert snapshot["assessments"]["records"] == assessments["assessments"]
 
 
-def test_verdict_keys_are_authoritative_and_only_unjudged_spaces_are_queued(
+def test_verdict_keys_are_authoritative_and_unjudged_revisions_are_queued(
     recorded_hub_client, assessments_path
 ):
     refresh = load_module("refresh")
@@ -428,6 +428,32 @@ def test_verdict_keys_are_authoritative_and_only_unjudged_spaces_are_queued(
         "org/repro-paper-c",
     ]
     assert snapshot["verdicts"][0]["space_id"] == "org/repro-paper-c"
+    assert snapshot["queued_submissions"] == [
+        {
+            "paper_id": "paper-b",
+            "space_id": "org/repro-paper-b",
+            "revision": "space-sha-paper-b",
+            "status": "pending",
+        },
+        {
+            "paper_id": "paper-c",
+            "space_id": "org/repro-paper-c",
+            "revision": "space-sha-paper-c",
+            "status": "pending",
+        },
+    ]
+
+
+def test_revision_matching_its_official_verdict_is_not_queued(
+    recorded_hub_client,
+):
+    refresh = load_module("refresh")
+    for space in recorded_hub_client.spaces:
+        if space.id == "org/repro-paper-c":
+            space.sha = "judged-space-sha"
+
+    snapshot = refresh.fetch_live_snapshot(recorded_hub_client, OBSERVED_AT)
+
     assert snapshot["queued_submissions"] == [
         {
             "paper_id": "paper-b",

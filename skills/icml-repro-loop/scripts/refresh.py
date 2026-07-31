@@ -127,7 +127,19 @@ def fetch_live_snapshot(
         ),
         key=lambda record: record["space_id"],
     )
-    verdict_space_ids = {record["space_id"] for record in verdicts}
+    # A judged revision is terminal for that revision only: a space whose
+    # current revision differs from every judged sha is pending again, so
+    # improved redeployments can be attested and re-judged. A verdict
+    # without a sha cannot be bound to one revision and keeps the whole
+    # space out of the queue.
+    fully_judged_space_ids = set()
+    judged_revisions: dict[str, set[str]] = {}
+    for record in verdicts:
+        sha = record.get("sha")
+        if type(sha) is str and sha:
+            judged_revisions.setdefault(record["space_id"], set()).add(sha)
+        else:
+            fully_judged_space_ids.add(record["space_id"])
     tagged_spaces = [
         {
             "paper_id": paper_id,
@@ -145,7 +157,8 @@ def fetch_live_snapshot(
             "status": "pending",
         }
         for space in spaces
-        if space["space_id"] not in verdict_space_ids
+        if space["space_id"] not in fully_judged_space_ids
+        and space["revision"] not in judged_revisions.get(space["space_id"], set())
         for paper_id in space["paper_ids"]
     ]
     sources = {

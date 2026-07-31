@@ -557,6 +557,105 @@ def test_predeployment_correction_allows_next_numbered_improvement(
     assert validated["phase"] == "validated"
 
 
+def persist_verdict_snapshot(paths, *, sha="space-sha-1", paper_id="p1"):
+    refresh = load_module("refresh")
+    return refresh.persist_snapshot(
+        paths,
+        {
+            "fetched_at": "2026-07-24T13:00:00+00:00",
+            "source_revision": "source-a",
+            "sources": {},
+            "assessments": None,
+            "candidates": [],
+            "queued_submissions": [],
+            "tagged_spaces": [],
+            "verdicts": [
+                {
+                    "paper_id": paper_id,
+                    "space_id": "wrice/repro-paper-1",
+                    "sha": sha,
+                    "judged_at": "2026-07-24T12:30:00+00:00",
+                }
+            ],
+            "spaces": [],
+        },
+    )
+
+
+def deploy_attempt(attempts, attestations, paths, attempt_id, lease, now):
+    for target, updates in (
+        ("validated", {}),
+        (
+            "deployed",
+            {
+                "space_id": "wrice/repro-paper-1",
+                "deployed_sha": "space-sha-1",
+            },
+        ),
+    ):
+        attestation_id = attestations.persist(
+            paths, attestation_record(PHASE_KINDS[target], attempt_id)
+        )
+        attempts.transition_attested(
+            paths, attempt_id, target, attestation_id, updates, lease, now
+        )
+
+
+def test_deployed_attempt_allows_postverdict_correction(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    deploy_attempt(attempts, attestations, paths, attempt_id, lease, now)
+    snapshot_id = persist_verdict_snapshot(paths)
+
+    improving = attempts.transition_attempt(
+        paths,
+        attempt_id,
+        "improving",
+        lease,
+        now,
+        improvement_attempts=1,
+        improvement_reason="Official verdict scored every claim inconclusive",
+        verdict_snapshot_id=snapshot_id,
+    )
+
+    assert improving["phase"] == "improving"
+    assert improving["improvement_attempts"] == 1
+    assert "verdict_snapshot_id" not in improving
+
+
+def test_postverdict_correction_requires_matching_official_verdict(
+    paths, attempts_and_leases, attempts, attestations, now
+):
+    attempt_id, lease, _, _ = attempts_and_leases
+    deploy_attempt(attempts, attestations, paths, attempt_id, lease, now)
+    unjudged = persist_verdict_snapshot(paths, sha="other-sha")
+
+    with pytest.raises(ValueError, match="verdict"):
+        attempts.transition_attempt(
+            paths,
+            attempt_id,
+            "improving",
+            lease,
+            now,
+            improvement_attempts=1,
+            improvement_reason="Official verdict scored every claim inconclusive",
+            verdict_snapshot_id=unjudged,
+        )
+    with pytest.raises(ValueError, match="verdict_snapshot_id"):
+        attempts.transition_attempt(
+            paths,
+            attempt_id,
+            "improving",
+            lease,
+            now,
+            improvement_attempts=1,
+            improvement_reason="Official verdict scored every claim inconclusive",
+        )
+
+    assert attempts.read_attempt(paths, attempt_id)["phase"] == "deployed"
+
+
 @pytest.mark.parametrize(
     "deployed_update",
     [

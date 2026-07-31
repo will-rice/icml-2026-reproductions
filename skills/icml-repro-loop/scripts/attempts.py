@@ -163,6 +163,8 @@ def transition_attempt(
             raise ValueError("attestation")
         if attempt["phase"] == "validated" and phase == "improving":
             _require_no_deployment(paths, attempt, transition_updates)
+        if attempt["phase"] == "deployed" and phase == "improving":
+            _validate_postverdict_correction(paths, attempt, transition_updates)
         return _apply_transition(
             attempt, phase, lease, timestamp, transition_updates
         )
@@ -507,6 +509,7 @@ def _apply_transition(
     is_resume = source == "blocked" and phase == attempt.get("blocked_from")
     is_abandon = source == "blocked" and phase == "idle"
     is_predeployment_correction = source == "validated" and phase == "improving"
+    is_postverdict_correction = source == "deployed" and phase == "improving"
     is_improving_entry = phase == "improving" and not is_resume
     if is_predeployment_correction:
         _validate_predeployment_correction(attempt, updates)
@@ -525,6 +528,7 @@ def _apply_transition(
             and not is_resume
             and not is_abandon
             and not is_predeployment_correction
+            and not is_postverdict_correction
         )
     ):
         raise ValueError("phase")
@@ -562,6 +566,46 @@ def _apply_transition(
         transition["attestation_id"] = attestation_id
     attempt.setdefault("transitions", []).append(transition)
     return phase == "complete" or is_abandon
+
+
+def _validate_postverdict_correction(
+    paths: store.StatePaths, attempt: dict, updates: dict
+) -> None:
+    """Allow deployed→improving only for an officially judged deployment.
+
+    The official judge crawls tagged Spaces independently of local
+    attestations, so a verdict can exist for a deployed revision whose
+    submission was never locally attested. The correction requires an
+    immutable snapshot proving the feed judged this attempt's exact
+    space and deployed revision.
+    """
+    extra = set(updates) - IMPROVEMENT_FIELDS - {"verdict_snapshot_id"}
+    if extra:
+        raise ValueError(sorted(extra)[0])
+    snapshot_id = updates.pop("verdict_snapshot_id", None)
+    if type(snapshot_id) is not str or not snapshot_id:
+        raise ValueError("verdict_snapshot_id")
+    space_id = attempt.get("space_id")
+    deployed_sha = attempt.get("deployed_sha")
+    if (
+        type(space_id) is not str
+        or not space_id
+        or type(deployed_sha) is not str
+        or not deployed_sha
+    ):
+        raise ValueError("deployment")
+    import refresh
+
+    snapshot = refresh.read_snapshot(paths, snapshot_id)
+    matches = [
+        record
+        for record in snapshot["verdicts"]
+        if record.get("paper_id") == attempt["paper_id"]
+        and record.get("space_id") == space_id
+        and record.get("sha") == deployed_sha
+    ]
+    if len(matches) != 1:
+        raise ValueError("verdict")
 
 
 def _validate_predeployment_correction(attempt: dict, updates: dict) -> None:
