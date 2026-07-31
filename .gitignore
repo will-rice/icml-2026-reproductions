@@ -85,11 +85,19 @@ submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-pol
 submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/**/__pycache__/
 
 !submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/
-!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/src/
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/src/**
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/tests/
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/tests/**
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/evidence/
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/evidence/**
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/pages/
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/pages/**
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/README.md
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/app.py
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/poster.html
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/pyproject.toml
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/generate_evidence.py
 !submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/uv.lock
-submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/.venv/
-submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/.pytest_cache/
-submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**/__pycache__/
-submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**/*.egg-info/
 
 validation-manifest.json
