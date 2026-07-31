@@ -25,6 +25,10 @@ submissions/*
 !submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/
 !submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/**
 !submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/evidence/**
+submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/**/__pycache__/
+submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/**/*.egg-info/
+submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/.pytest_cache/
+submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/.venv/
 !submissions/protein-autoregressive-modeling-via-multiscale-structure-generation/
 !submissions/protein-autoregressive-modeling-via-multiscale-structure-generation/**
 !submissions/latent-laplace-diffusion-for-irregular-multivariate-time-series/

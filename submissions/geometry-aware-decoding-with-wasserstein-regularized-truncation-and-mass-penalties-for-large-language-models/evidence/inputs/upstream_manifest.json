@@ -1,0 +1,10 @@
+{
+ "repository": "https://github.com/arashgholami/top-w-decoding",
+ "revision": "5949bfae5e6a81bc279c65923f1adc1c9f2e2059",
+ "imported_at": "2026-07-31T23:40:00+00:00",
+ "files": {
+  "logit_processor_w1.py": "a13d6e416ede9fd9788ca016e4e9d23f8e0c1bb57e58cd14dc3552081247d54c",
+  "LICENSE": "dc7fb9e02ec7b836ab71eb2904a9c4eaa573ff830e3e3ddf28d570118b45c74b"
+ },
+ "method": "git clone --depth 1; byte-exact copy of the audited files"
+}

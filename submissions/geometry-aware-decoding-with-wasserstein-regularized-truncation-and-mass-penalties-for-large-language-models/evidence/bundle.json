@@ -1,70 +1,158 @@
 {
-  "attempt_id": "572f7d7b-f6a5-4004-9389-22ac5af0d0f6",
+  "attempt_id": "c1b6dd10-f227-4d24-89a0-17fb00ec9147",
+  "audits": {
+    "alternating_convergence": {
+      "converged": 40,
+      "max_iterations": 2,
+      "mean_iterations": 2.0,
+      "passed": true,
+      "trials": 40
+    },
+    "geometry_mechanism": {
+      "mean_shuffle_jaccard": 1.0,
+      "passed": true,
+      "potential_max_error": 1.1920928955078125e-07,
+      "probability_prefix_matches": 20,
+      "trials": 20,
+      "uniform_metric_prefix_matches": 20
+    },
+    "official_crosscheck": {
+      "identical_kept_sets": 25,
+      "mean_kept_size": 1.48,
+      "passed": true,
+      "trials": 25
+    },
+    "prefix_vs_bruteforce": {
+      "configs": [
+        {
+          "beta": 2.8,
+          "geom_scale": 0.6,
+          "lam": 2.2
+        },
+        {
+          "beta": 2.4,
+          "geom_scale": 0.3,
+          "lam": 1.5
+        },
+        {
+          "beta": 3.5,
+          "geom_scale": 1.0,
+          "lam": 3.0
+        },
+        {
+          "beta": 2.2,
+          "geom_scale": 0.6,
+          "lam": 2.2
+        }
+      ],
+      "max_objective_gap": 0.0,
+      "mean_brute_force_ms": 43.83717284848293,
+      "mean_prefix_scan_ms": 0.1038817223161459,
+      "optimal_value_matches": 120,
+      "passed": true,
+      "pool_size": 10,
+      "subsets_enumerated_per_trial": 1023,
+      "trials": 120
+    },
+    "theorem_relaxation": {
+      "config": {
+        "beta": 1.0,
+        "geom_scale": 0.6,
+        "lam": 2.2
+      },
+      "passed": true,
+      "prefix_suboptimal_instances": 7,
+      "trials": 120,
+      "worst_objective_gap": 0.29852426600107296
+    }
+  },
   "claim_results": {
     "claim_1": {
-      "evidence": "Top-W alternating Wasserstein optimization algorithm verified. Entropy-mass trade-off preserves geometric diversity (T=0.7 Top-W entropy=4.6727 vs Top-p=3.3608).",
-      "limitations": "Evaluated on CPU embedding geometry and synthetic token distributions.",
+      "evidence": "Numerical audit of the Wasserstein-entropy-mass objective on CPU: the f-step equals the Lemma 4.2 nearest-set W1 surrogate exactly (max error 1.2e-07); the S-step provably maximizes the geometry-dependent fixed-potential objective (see claim 2); the alternating decoder converged in 40/40 trials (mean 2.00 iterations); with a uniform metric the kept set was a top-probability prefix in 20/20 trials (Section 4.3 reduction). Sensitivity finding: at the official defaults (warm_p=0.999, geom_scale=0.6) the final subsets equaled pure probability prefixes in 20/20 synthetic trials and were invariant to shuffling the token embeddings (mean Jaccard 1.000): with a warm start covering the pool, the nearest-set potential is zero on every warm-start member, so geometry influences selection only through expansion candidates.",
+      "limitations": "Synthetic logits and synthetic embedding geometry on CPU; no language-model forward passes. The sensitivity finding is specific to these synthetic instances and official default hyperparameters; it does not measure behavior on real LLM next-token distributions.",
       "status": "verified"
     },
     "claim_2": {
-      "evidence": "Alternating subset-update solver converged within 20 iterations. Candidate pool truncation verified across temperatures T=0.2, 0.7, 1.0 (Top-W subset size=107.0 vs Top-p=68.0).",
-      "limitations": "CPU execution time ~5ms per decoding step.",
+      "evidence": "Under the theorem's beta >= lam hypothesis, the prefix-form exact S-step (Theorem 3.4a) matched brute-force enumeration of all 1023 nonempty subsets in 120/120 trials across 4 configurations (max objective gap 0.00e+00; prefix scan 0.104 ms vs enumeration 43.8 ms per instance). Relaxation control: with beta < lam the pure prefix scan was strictly suboptimal in 7/120 instances (worst gap 0.299), confirming the hypothesis is load-bearing. The reimplemented alternating decoder kept token sets identical to the vendored official implementation in 25/25 random instances.",
+      "limitations": "Brute force is feasible only for 10-token pools; larger pools rely on the theorem, not enumeration.",
       "status": "verified"
     },
     "claim_3": {
-      "evidence": "Baseline comparators (Min-p, Top-p, Top-H) evaluated against Top-W across T in {0.2, 0.7, 1.0}. Top-W maintains higher entropy at equal candidate pool size (T=1.0: Top-W H=5.3518, Min-p H=3.5336).",
-      "limitations": "GSM8K logit traces evaluated via benchmark token distributions.",
-      "status": "verified"
+      "evidence": "Not reproduced. The Table 1 comparison requires GSM8K decoding runs across three instruction-tuned models and five temperatures. No language model was executed in this reproduction; no GSM8K accuracy numbers exist here. The official evaluation harness (run.sh, huggingface.py) is pinned in the upstream manifest for an independent GPU reproduction.",
+      "limitations": "The synthetic temperature sweep in this bundle characterizes distribution shaping only and is NOT evidence for benchmark accuracy claims.",
+      "status": "unreplicated"
     }
+  },
+  "commands": [
+    "uv run --project . python generate_evidence.py",
+    "uv run --project . python -m pytest tests -q"
+  ],
+  "environment": {
+    "device": "cpu",
+    "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "torch": "2.13.0+cu130"
   },
   "estimated_api_cost_usd": 0.0,
   "metrics": {
-    "t_0_2": {
-      "entropy_min_p": -0.0,
-      "entropy_orig": 0.0594252347946167,
+    "t_0.5": {
+      "entropy_min_p": 0.796023964881897,
+      "entropy_orig": 2.506117105484009,
       "entropy_top_h": -0.0,
-      "entropy_top_p": -0.0,
+      "entropy_top_p": 1.9557108879089355,
       "entropy_top_w": -0.0,
-      "subset_size_min_p": 1.0,
+      "subset_size_min_p": 5.0,
       "subset_size_top_h": 1.0,
-      "subset_size_top_p": 1.0,
+      "subset_size_top_p": 25.0,
       "subset_size_top_w": 1.0
     },
-    "t_0_7": {
+    "t_0.7": {
       "entropy_min_p": 2.396751880645752,
       "entropy_orig": 3.8560538291931152,
       "entropy_top_h": -0.0,
       "entropy_top_p": 3.3607969284057617,
-      "entropy_top_w": 4.672749996185303,
+      "entropy_top_w": -0.0,
       "subset_size_min_p": 18.0,
       "subset_size_top_h": 1.0,
       "subset_size_top_p": 68.0,
-      "subset_size_top_w": 107.0
+      "subset_size_top_w": 1.0
     },
-    "t_1_0": {
+    "t_1.0": {
       "entropy_min_p": 3.533587694168091,
       "entropy_orig": 4.834367752075195,
       "entropy_top_h": -0.0,
       "entropy_top_p": 4.4128313064575195,
-      "entropy_top_w": 5.351816177368164,
+      "entropy_top_w": -0.0,
       "subset_size_min_p": 45.0,
       "subset_size_top_h": 1.0,
       "subset_size_top_p": 151.0,
-      "subset_size_top_w": 211.0
+      "subset_size_top_w": 1.0
+    },
+    "t_1.5": {
+      "entropy_min_p": 4.7611846923828125,
+      "entropy_orig": 5.51041841506958,
+      "entropy_top_h": 1.703399419784546,
+      "entropy_top_p": 5.172319412231445,
+      "entropy_top_w": -0.0,
+      "subset_size_min_p": 149.0,
+      "subset_size_top_h": 6.0,
+      "subset_size_top_p": 254.0,
+      "subset_size_top_w": 1.0
+    },
+    "t_2.0": {
+      "entropy_min_p": 5.476757049560547,
+      "entropy_orig": 5.793562412261963,
+      "entropy_top_h": 2.2626006603240967,
+      "entropy_top_p": 5.505085468292236,
+      "entropy_top_w": -0.0,
+      "subset_size_min_p": 300.0,
+      "subset_size_top_h": 10.0,
+      "subset_size_top_p": 311.0,
+      "subset_size_top_w": 1.0
     }
   },
   "paper_id": "HSuU4xBmAv",
   "paper_title": "Geometry-Aware Decoding with Wasserstein-Regularized Truncation and Mass Penalties for Large Language Models",
-  "source_files": {
-    "arxiv_paper": {
-      "observed_facts": [
-        "Top-W algorithm",
-        "GSM8K benchmark results"
-      ],
-      "sha256": "bf0f632304a49600a2f30334cc1fe14beefab0cc7924867ce4c1488234661d12",
-      "url": "https://arxiv.org/abs/2602.10346"
-    }
-  },
   "target_claims": [
     {
       "challenge_claim_sha256": "bf0f632304a49600a2f30334cc1fe14beefab0cc7924867ce4c1488234661d12",
@@ -82,5 +170,15 @@
       "text": "Top-W is evaluated against Min-p, Top-p, and Top-H on GSM8K across multiple temperatures and models (Table 1)."
     }
   ],
-  "upstream_revision": "arxiv:2602.10346v1+arxiv-source:2602.10346v1"
+  "upstream": {
+    "files": {
+      "LICENSE": "dc7fb9e02ec7b836ab71eb2904a9c4eaa573ff830e3e3ddf28d570118b45c74b",
+      "logit_processor_w1.py": "a13d6e416ede9fd9788ca016e4e9d23f8e0c1bb57e58cd14dc3552081247d54c"
+    },
+    "imported_at": "2026-07-31T23:40:00+00:00",
+    "method": "git clone --depth 1; byte-exact copy of the audited files",
+    "repository": "https://github.com/arashgholami/top-w-decoding",
+    "revision": "5949bfae5e6a81bc279c65923f1adc1c9f2e2059"
+  },
+  "upstream_revision": "arxiv:2602.10346v2+github.com/arashgholami/top-w-decoding@5949bfae5e6a81bc279c65923f1adc1c9f2e2059"
 }
