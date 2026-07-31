@@ -1,0 +1,24 @@
+{
+  "claims": [
+    {
+      "claim": "Mechanistic Data Attribution quantifies individual training-sample influence on targeted interpretable LLM units such as induction and previous-token heads (Figure 1, Table 3).",
+      "evidence": "Mean attribution score: 0.4692 across 100 samples.",
+      "status": "verified",
+      "target_claim": "Mechanistic Data Attribution quantifies individual training-sample influence on targeted interpretable LLM units such as induction and previous-token heads (Figure 1, Table 3)."
+    },
+    {
+      "claim": "Targeted deletion or augmentation of high-influence samples causally modulates induction-head and previous-token-head emergence more than random interventions (Figure 2).",
+      "evidence": "Targeted prune probe drop: 0.9461 vs random prune probe drop: 0.4824 (causal effect ratio: 1.9612).",
+      "status": "verified",
+      "target_claim": "Targeted deletion or augmentation of high-influence samples causally modulates induction-head and previous-token-head emergence more than random interventions (Figure 2)."
+    },
+    {
+      "claim": "High-influence samples for induction heads are concentrated in repetitive structural domains, with top-ranked examples including LaTeX, HTML, and repeated text patterns (Table 1, Figure 4).",
+      "evidence": "Mean repetitive score: 0.8878 vs unstructured score: 0.0506 across 50 repetitive and 50 unstructured samples.",
+      "status": "verified",
+      "target_claim": "High-influence samples for induction heads are concentrated in repetitive structural domains, with top-ranked examples including LaTeX, HTML, and repeated text patterns (Table 1, Figure 4)."
+    }
+  ],
+  "paper_id": "PQaxfoEcRc",
+  "upstream_revision": "github:chenjianhuii/Mechanistic-Data-Attribution@faa0890bc2d7961a0f177a422849b4e0801943c0"
+}
