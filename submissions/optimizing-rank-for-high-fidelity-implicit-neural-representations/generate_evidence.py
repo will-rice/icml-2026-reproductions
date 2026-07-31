@@ -2,7 +2,13 @@
 """Generate machine-readable evidence bundle for Optimizing Rank for High-Fidelity INRs."""
 
 import json
+import sys
 from pathlib import Path
+
+SRC_DIR = Path(__file__).resolve().parent / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
 from optimizing_rank_inr_repro.benchmarks import run_all_benchmarks
 
 

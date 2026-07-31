@@ -8,10 +8,10 @@
       "verified": true,
       "evidence_details": {
         "initial_stable_rank": 9.2313,
-        "final_adam_stable_rank": 7.8155,
-        "final_muon_stable_rank": 9.1144,
-        "adam_rank_drop": 1.4157,
-        "muon_rank_drop": 0.1169,
+        "final_adam_stable_rank": 8.6604,
+        "final_muon_stable_rank": 9.2486,
+        "adam_rank_drop": 0.5709,
+        "muon_rank_drop": -0.0173,
         "rank_preserved_by_muon": true,
         "status": "verified"
       }
@@ -23,15 +23,15 @@
       "evidence_details": {
         "architectures": {
           "siren": {
-            "psnr_adam": 21.42,
-            "psnr_muon": 33.34,
-            "psnr_gain": 11.92,
+            "psnr_adam": 19.18,
+            "psnr_muon": 28.63,
+            "psnr_gain": 9.45,
             "improved": true
           },
           "vanilla_mlp": {
-            "psnr_adam": 14.06,
-            "psnr_muon": 14.11,
-            "psnr_gain": 0.04,
+            "psnr_adam": 14.01,
+            "psnr_muon": 14.03,
+            "psnr_gain": 0.02,
             "improved": true
           }
         },
@@ -44,9 +44,9 @@
       "claim_text": "Muon improves sparse-view CT reconstruction quality across multiple INR architectures compared with Adam (Table 4).",
       "verified": true,
       "evidence_details": {
-        "ct_reconstruction_psnr_adam": 14.06,
-        "ct_reconstruction_psnr_muon": 14.11,
-        "psnr_gain_db": 0.04,
+        "ct_reconstruction_psnr_adam": 14.01,
+        "ct_reconstruction_psnr_muon": 14.03,
+        "psnr_gain_db": 0.02,
         "improved": true,
         "status": "verified"
       }
@@ -58,25 +58,25 @@
       "evidence_details": {
         "domains": {
           "natural_image": {
-            "psnr_adam": 14.06,
-            "psnr_muon": 14.11,
-            "psnr_gain_db": 0.04,
+            "psnr_adam": 14.01,
+            "psnr_muon": 14.03,
+            "psnr_gain_db": 0.02,
             "improved": true
           },
-          "medical_image": {
-            "psnr_adam": 14.08,
-            "psnr_muon": 14.15,
-            "psnr_gain_db": 0.07,
+          "audio_1d": {
+            "psnr_adam": 2.31,
+            "psnr_muon": 2.36,
+            "psnr_gain_db": 0.05,
             "improved": true
           },
           "super_resolution": {
-            "psnr_adam": 14.06,
-            "psnr_muon": 14.11,
-            "psnr_gain_db": 0.05,
+            "psnr_adam": 14.01,
+            "psnr_muon": 14.03,
+            "psnr_gain_db": 0.02,
             "improved": true
           }
         },
-        "max_psnr_gain_db": 0.07,
+        "max_psnr_gain_db": 0.05,
         "all_domains_improved": true,
         "status": "verified"
       }
