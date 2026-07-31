@@ -1,3 +1,20 @@
+---
+title: Enhancing Reasoning for Diffusion LLMs via Distribution Matching Policy Optimization
+emoji: "🎲"
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: 6.20.0
+app_file: app.py
+pinned: false
+license: mit
+tags:
+  - icml2026-repro
+  - paper-09CSjVeDug
+  - dmpo
+  - diffusion-llm
+---
+
 # DMPO Reproduction
 
 CPU-only evidence for selected implementation claims from
