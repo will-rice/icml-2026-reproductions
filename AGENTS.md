@@ -100,6 +100,9 @@ or claim external phases. Full host permissions do not transfer this authority.
 ## Constraints
 
 - Never commit credentials or unredacted environment dumps.
+- Never track `state/` in Git (no `git add -f` of coordinator state); the
+  sharded store is the durability layer. Never rewind a shared branch to an
+  ancestor commit.
 - Do not modify another submission to implement a new paper.
 - Do not claim unsupported results. Mark unavailable evidence as unreplicated.
 - Keep the canonical NAPE repository at `will-rice/icml-2026-repro` unchanged.

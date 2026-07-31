@@ -113,7 +113,9 @@ Stop when any of these appears:
 - a launch uses `--dangerously-skip-permissions`, `--dangerously-bypass-approvals-and-sandbox`, danger-full-access, or `--add-dir`;
 - a subordinate environment inherits `HF_TOKEN`, `HUGGING_FACE_HUB_TOKEN`, `GH_TOKEN`, a credential helper, or an existing Hugging Face cache;
 - a lifecycle claim lacks its dedicated controller attestation;
-- verdict data was typed by a caller, inferred from evidence, normalized to a better status, or copied from paper prose.
+- verdict data was typed by a caller, inferred from evidence, normalized to a better status, or copied from paper prose;
+- a commit stages any `state/` path: live coordinator state is never git-tracked; durability comes from the sharded store, and tracked copies get reverted by git operations, destroying claims and leases;
+- a branch is moved to one of its own ancestors (`git reset --hard <older-sha>`, `git checkout -B`): in a shared checkout this discards other workers' commits.
 
 Use these counters verbatim:
 
