@@ -83,4 +83,13 @@ submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/**
 submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/.venv/
 submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/.pytest_cache/
 submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/**/__pycache__/
+
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**
+!submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/uv.lock
+submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/.venv/
+submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/.pytest_cache/
+submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**/__pycache__/
+submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**/*.egg-info/
+
 validation-manifest.json
