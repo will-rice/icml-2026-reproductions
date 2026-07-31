@@ -98,6 +98,10 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
             "XDG_CONFIG_HOME": str(isolated_home / "config"),
         }
     )
+    if "PRE_COMMIT_HOME" not in environment:
+        default_precommit = Path("/home/will/.cache/pre-commit")
+        if default_precommit.exists():
+            environment["PRE_COMMIT_HOME"] = str(default_precommit)
     return environment
 
 
