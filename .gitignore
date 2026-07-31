@@ -64,4 +64,22 @@ submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/.v
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/.pytest_cache/
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/**/__pycache__/
 !docs/superpowers/specs/2026-07-31-optimizing-rank-inr-reproduction-design.md
+!docs/superpowers/specs/2026-07-31-dmpo-reproduction-design-agy-paper-owner-03.md
+
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/dmpo_repro/
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/dmpo_repro/*.py
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/tests/
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/tests/*.py
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/evidence/
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/evidence/*.json
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/README.md
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/app.py
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/pyproject.toml
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/requirements.txt
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/generate_evidence.py
+!submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/uv.lock
+submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/.venv/
+submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/.pytest_cache/
+submissions/enhancing-reasoning-for-diffusion-llms-via-distribution-matching-policy-optimization/**/__pycache__/
 
