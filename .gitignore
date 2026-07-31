@@ -60,6 +60,7 @@ submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-fro
 
 !submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/
 !submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/**
+!submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/uv.lock
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/.venv/
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/.pytest_cache/
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/**/__pycache__/
