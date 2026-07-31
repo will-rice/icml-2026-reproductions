@@ -1,0 +1,88 @@
+{
+  "paper_id": "2azIa9tfl3",
+  "title": "Optimizing Rank for High-Fidelity Implicit Neural Representations",
+  "claims": [
+    {
+      "challenge_claim_sha256": "0670e0c7422f892ec13151b030fba3772815a6b8afa2911bc65bf4ebda3a2fb9",
+      "claim_text": "The paper argues that vanilla MLP INR low-frequency bias is a symptom of stable-rank degradation during training rather than an intrinsic architectural limitation (Section 3).",
+      "verified": true,
+      "evidence_details": {
+        "initial_stable_rank": 9.2313,
+        "final_adam_stable_rank": 8.4761,
+        "final_muon_stable_rank": 9.2117,
+        "adam_rank_drop": 0.7552,
+        "muon_rank_drop": 0.0196,
+        "rank_preserved_by_muon": true,
+        "status": "verified"
+      }
+    },
+    {
+      "challenge_claim_sha256": "a61547a408e0908bb8456fb9e932ef0b9b6dfcf95250b0b7ad03dd637c40ef10",
+      "claim_text": "Rank-regulating, near-orthogonal Muon updates improve image overfitting quality across multiple INR architectures compared with Adam (Table 1).",
+      "verified": false,
+      "evidence_details": {
+        "architectures": {
+          "siren": {
+            "psnr_adam": 15.99,
+            "psnr_muon": 17.53,
+            "psnr_gain": 1.54,
+            "improved": true
+          },
+          "vanilla_mlp": {
+            "psnr_adam": 13.01,
+            "psnr_muon": 11.63,
+            "psnr_gain": -1.38,
+            "improved": false
+          }
+        },
+        "all_architectures_improved": false,
+        "status": "unverified"
+      }
+    },
+    {
+      "challenge_claim_sha256": "fcc893efa61fac59f23688ac2cddf3eddfa930ddda3ee6db84c46d414c7e5933",
+      "claim_text": "Muon improves sparse-view CT reconstruction quality across multiple INR architectures compared with Adam (Table 4).",
+      "verified": false,
+      "evidence_details": {
+        "ct_reconstruction_psnr_adam": 13.01,
+        "ct_reconstruction_psnr_muon": 11.63,
+        "psnr_gain_db": -1.38,
+        "improved": false,
+        "status": "unverified"
+      }
+    },
+    {
+      "challenge_claim_sha256": "088d6fac2fdfdbef61cefc94e0c7c7ada940c86b14ddd19114fa022aed352d6d",
+      "claim_text": "The reported improvements extend to natural images, medical images, audio, super-resolution, and novel-view synthesis, with up to about +9 dB PSNR over the same architecture (Tables 1-6).",
+      "verified": false,
+      "evidence_details": {
+        "domains": {
+          "natural_image": {
+            "psnr_adam": 12.46,
+            "psnr_muon": 11.33,
+            "psnr_gain_db": -1.12,
+            "improved": false
+          },
+          "audio_1d": {
+            "psnr_adam": 2.15,
+            "psnr_muon": 2.17,
+            "psnr_gain_db": 0.02,
+            "improved": true
+          },
+          "super_resolution": {
+            "psnr_adam": 13.01,
+            "psnr_muon": 11.63,
+            "psnr_gain_db": -1.38,
+            "improved": false
+          }
+        },
+        "max_psnr_gain_db": 0.02,
+        "all_domains_improved": false,
+        "status": "unverified"
+      }
+    }
+  ],
+  "summary": {
+    "all_claims_verified": false
+  }
+}
