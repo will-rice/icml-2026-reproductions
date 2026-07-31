@@ -11,9 +11,9 @@ Requires-Dist: gradio>=4.0.0
 
 # Reproduction: High-accuracy sampling for diffusion models and log-concave distributions
 
-**Paper ID:** `71132`  
-**Upstream Revision:** `arxiv:2602.01338v2+arxiv-source:2602.01338v2`  
-**Challenge:** ICML 2026 Agent Repro Challenge  
+**Paper ID:** `71132`
+**Upstream Revision:** `arxiv:2602.01338v2+arxiv-source:2602.01338v2`
+**Challenge:** ICML 2026 Agent Repro Challenge
 
 ---
 
@@ -25,13 +25,13 @@ This repository provides an independently executable reproduction bundle verifyi
 
 ## Claims Verified
 
-1. **Theorem 4.3 (Polylog Step Scaling):**  
+1. **Theorem 4.3 (Polylog Step Scaling):**
    The diffusion sampler achieves $\delta$-error in $\tilde{O}(\text{polylog}(1/\delta))$ steps given sufficiently accurate score estimates.
-   
-2. **Corollary 4.4 (Intrinsic Dimension Reduction):**  
+
+2. **Corollary 4.4 (Intrinsic Dimension Reduction):**
    When data has intrinsic dimension $d^*$, step complexity scales as $\tilde{O}(d^* \text{polylog}(1/\delta))$.
 
-3. **Section 5 (Log-Concave First-Order Sampler):**  
+3. **Section 5 (Log-Concave First-Order Sampler):**
    A first-order gradient query sampler for log-concave distributions achieves $\text{polylog}(1/\delta)$ accuracy.
 
 ---

@@ -18,7 +18,7 @@ def generate_quarch_dataset():
         "crowdsourcing": 871,
         "academic_exams": 600,
     }
-    
+
     qa_pairs = []
     idx = 0
     for skill, count in skills.items():

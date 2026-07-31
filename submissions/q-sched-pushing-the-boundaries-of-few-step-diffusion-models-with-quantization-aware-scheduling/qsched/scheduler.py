@@ -4,7 +4,7 @@ import numpy as np
 
 class QSchedScheduler:
     """Quantization-Aware Scheduler (Q-Sched) for few-step diffusion models.
-    
+
     Q-Sched optimizes timestep discretization and noise scaling schedules for post-training
     quantized diffusion models without altering model weights.
     """
@@ -30,17 +30,17 @@ class QSchedScheduler:
         # Baseline uniform linear spacing
         step_ratio = self.num_timesteps // num_inference_steps
         base_steps = np.arange(0, self.num_timesteps, step_ratio)[:num_inference_steps]
-        
+
         # Q-Sched refinement: shift timesteps toward regions of higher alpha curvature
         curvature = np.abs(np.gradient(np.gradient(self.alphas_cumprod)))
         curvature /= curvature.sum()
-        
+
         optimized_steps = []
         cumulative_curv = np.cumsum(curvature)
         target_quantiles = np.linspace(0, 1, num_inference_steps + 1)[1:]
-        
+
         for q in target_quantiles:
             idx = np.searchsorted(cumulative_curv, q)
             optimized_steps.append(min(idx, self.num_timesteps - 1))
-            
+
         return np.array(optimized_steps)

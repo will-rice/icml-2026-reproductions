@@ -87,9 +87,14 @@ def clone_upstream() -> Path:
     return path
 
 
+FIXED_UPSTREAM = Path("/tmp/icml-dmpo-upstream-1785350300")
+
+
 def resolve_upstream(path: Path | None) -> Path:
     if path is not None and path.exists():
         return path
+    if FIXED_UPSTREAM.exists():
+        return FIXED_UPSTREAM
     return clone_upstream()
 
 

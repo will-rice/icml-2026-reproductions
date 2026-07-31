@@ -82,7 +82,7 @@ def top_w_filter(
         cost = torch.mv(dist_matrix, q)
         penalty = lambda_mass * (1.0 - q.sum())
         entropy_grad = lambda_ent * (torch.log(q + 1e-12) + 1.0)
-        
+
         logits_update = -cost - entropy_grad + penalty
         q_next = F.softmax(logits_update, dim=-1)
         if torch.norm(q_next - q) < 1e-4:

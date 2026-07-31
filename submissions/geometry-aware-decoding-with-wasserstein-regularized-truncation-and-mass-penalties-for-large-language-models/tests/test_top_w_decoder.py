@@ -35,7 +35,7 @@ def test_top_w_filter_properties():
     torch.manual_seed(42)
     logits = torch.randn(100) * 2.0
     embeddings = torch.randn(100, 32)
-    
+
     probs = top_w_filter(logits, embeddings, temperature=0.7)
     assert torch.isclose(probs.sum(), torch.tensor(1.0), atol=1e-4)
     assert (probs >= 0).all()

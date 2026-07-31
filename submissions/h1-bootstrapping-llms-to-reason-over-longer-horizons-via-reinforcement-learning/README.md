@@ -17,4 +17,3 @@ tags:
 
 This Space hosts evidence and reproduction artifacts for ICML 2026 Paper `3BW15kSPfN`.
 Validation attestation verified on 2026-07-29.
-

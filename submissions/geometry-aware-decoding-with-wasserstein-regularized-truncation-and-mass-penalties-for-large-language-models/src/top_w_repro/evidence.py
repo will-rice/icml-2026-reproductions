@@ -14,7 +14,7 @@ def build_bundle() -> dict:
     torch.manual_seed(42)
     vocab_size = 500
     dim = 64
-    
+
     # Synthetic logit distribution and token embeddings
     logits = torch.randn(vocab_size) * 2.0
     embeddings = torch.randn(vocab_size, dim)

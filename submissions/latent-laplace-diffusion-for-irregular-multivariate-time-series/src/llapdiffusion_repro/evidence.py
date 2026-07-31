@@ -43,7 +43,7 @@ def verify_latent_horizon_generation(t: np.ndarray, A: np.ndarray, B: np.ndarray
         decay = np.exp(poles[k] * t)[:, None]
         trajectory += np.real(A[k:k+1] * decay)
     trajectory += B
-    
+
     return {
         "num_eval_timestamps": len(t),
         "ode_solver_steps": 0,
