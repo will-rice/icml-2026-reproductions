@@ -26,6 +26,16 @@
     }
   ],
   "cpu_only": true,
+  "design": {
+    "author": "codex-paper-owner-03-design-author",
+    "path": "docs/superpowers/specs/2026-07-31-steer-like-llm-codex-paper-owner-03-design.md",
+    "recorded_at": "2026-07-31T19:35:02.312174+00:00"
+  },
+  "design_review": {
+    "decision": "approved",
+    "reviewed_at": "2026-07-31T19:35:07.123685+00:00",
+    "reviewer": "codex-paper-owner-03-independent-reviewer"
+  },
   "estimated_api_cost_usd": 0.0,
   "hf": "2605.03907",
   "i": 6072,
@@ -62,7 +72,7 @@
   "or": "https://openreview.net/forum?id=06Nk3dJDMq",
   "orid": "06Nk3dJDMq",
   "paper_id": "06Nk3dJDMq",
-  "phase": "selected",
+  "phase": "implementing",
   "pid": "66813",
   "safety_blocker": null,
   "score": 18,
@@ -123,9 +133,26 @@
     "PSR models estimate token-specific steering coefficients from activations and are trained with log-likelihood or MSE objectives to imitate prompt steering (Sections 3.4 and 3.5)."
   ],
   "title": "Steer Like the LLM: Activation Steering that Mimics Prompting",
-  "transitions": [],
+  "transitions": [
+    {
+      "at": "2026-07-31T19:34:56.026572+00:00",
+      "fencing_token": 1,
+      "from": "selected",
+      "owner": "codex-paper-owner-03",
+      "snapshot_id": "d84e8174f494825bf70b4d9201754ddbb3e065bbea0b46d1f90da85949bb882b",
+      "to": "design-pending"
+    },
+    {
+      "at": "2026-07-31T19:35:07.123685+00:00",
+      "fencing_token": 1,
+      "from": "design-pending",
+      "owner": "codex-paper-owner-03",
+      "snapshot_id": "d84e8174f494825bf70b4d9201754ddbb3e065bbea0b46d1f90da85949bb882b",
+      "to": "implementing"
+    }
+  ],
   "type": "Poster",
-  "updated_at": "2026-07-29T01:07:23.744883+00:00",
+  "updated_at": "2026-07-31T19:35:07.123685+00:00",
   "upstream_revision": "arxiv:2605.03907+github:Nokia-Bell-Labs/steer-like-the-llm@3d916c618d146c5d657f055e432a432b0fa493c6",
   "vs": "https://icml.cc/virtual/2026/poster/66813"
 }

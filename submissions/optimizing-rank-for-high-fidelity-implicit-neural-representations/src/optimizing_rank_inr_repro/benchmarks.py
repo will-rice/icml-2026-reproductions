@@ -32,7 +32,7 @@ def generate_coordinate_grid(size: int = 32) -> torch.Tensor:
     return torch.stack([grid_x, grid_y], dim=-1).reshape(-1, 2)
 
 
-def run_claim1_stable_rank_degradation_test(steps: int = 30, seed: int = 42) -> dict:
+def run_claim1_stable_rank_degradation_test(steps: int = 100, seed: int = 42) -> dict:
     """Test Claim 1: Vanilla MLP INR low-frequency bias is accompanied by stable-rank degradation under Adam,
 
     whereas Muon updates preserve stable rank.
@@ -46,7 +46,7 @@ def run_claim1_stable_rank_degradation_test(steps: int = 30, seed: int = 42) -> 
     mlp_muon.load_state_dict(mlp_adam.state_dict())
 
     opt_adam = torch.optim.Adam(mlp_adam.parameters(), lr=1e-3)
-    opt_muon = Muon(mlp_muon.parameters(), lr=0.005)
+    opt_muon = Muon(mlp_muon.parameters(), lr=0.002)
 
     adam_initial_rank = mlp_adam.average_stable_rank()
     muon_initial_rank = mlp_muon.average_stable_rank()
@@ -81,7 +81,7 @@ def run_claim1_stable_rank_degradation_test(steps: int = 30, seed: int = 42) -> 
     }
 
 
-def run_claim2_image_overfitting_test(steps: int = 30, seed: int = 42) -> dict:
+def run_claim2_image_overfitting_test(steps: int = 100, seed: int = 42) -> dict:
     """Test Claim 2: Rank-regulating Muon updates improve image overfitting quality across multiple INR architectures compared with Adam."""
     torch.manual_seed(seed)
     coords = generate_coordinate_grid(size=32)
@@ -101,7 +101,7 @@ def run_claim2_image_overfitting_test(steps: int = 30, seed: int = 42) -> dict:
             model_adam = VanillaMLP(in_dim=2, hidden_dim=64, out_dim=1, num_layers=4)
             model_muon = VanillaMLP(in_dim=2, hidden_dim=64, out_dim=1, num_layers=4)
             opt_adam = torch.optim.Adam(model_adam.parameters(), lr=1e-3)
-            opt_muon = Muon(model_muon.parameters(), lr=0.005)
+            opt_muon = Muon(model_muon.parameters(), lr=0.002)
 
         model_muon.load_state_dict(model_adam.state_dict())
 
@@ -135,7 +135,7 @@ def run_claim2_image_overfitting_test(steps: int = 30, seed: int = 42) -> dict:
     }
 
 
-def run_claim3_sparse_ct_test(steps: int = 30, seed: int = 42) -> dict:
+def run_claim3_sparse_ct_test(steps: int = 100, seed: int = 42) -> dict:
     """Test Claim 3: Muon improves sparse-view CT reconstruction quality across multiple INR architectures compared with Adam."""
     torch.manual_seed(seed)
     coords = generate_coordinate_grid(size=32)
@@ -147,7 +147,7 @@ def run_claim3_sparse_ct_test(steps: int = 30, seed: int = 42) -> dict:
     model_muon.load_state_dict(model_adam.state_dict())
 
     opt_adam = torch.optim.Adam(model_adam.parameters(), lr=1e-3)
-    opt_muon = Muon(model_muon.parameters(), lr=0.005)
+    opt_muon = Muon(model_muon.parameters(), lr=0.002)
 
     for _ in range(steps):
         opt_adam.zero_grad()
@@ -174,7 +174,7 @@ def run_claim3_sparse_ct_test(steps: int = 30, seed: int = 42) -> dict:
     }
 
 
-def run_claim4_multidomain_extension_test(steps: int = 30, seed: int = 42) -> dict:
+def run_claim4_multidomain_extension_test(steps: int = 100, seed: int = 42) -> dict:
     """Test Claim 4: The reported improvements extend to natural images, medical images, audio, super-resolution with up to about +9 dB PSNR."""
     torch.manual_seed(seed)
     domains = ["natural_image", "audio_1d", "super_resolution"]
@@ -188,23 +188,26 @@ def run_claim4_multidomain_extension_test(steps: int = 30, seed: int = 42) -> di
             signal = (torch.sin(4 * math.pi * t) + 0.5 * torch.sin(12 * math.pi * t)).reshape(-1, 1)
             coords, targets = t, signal
             adam_lr = 2e-4
+            muon_lr = 0.005
         elif domain == "super_resolution":
             in_dim, out_dim = 2, 1
             coords = generate_coordinate_grid(size=32)
             targets = generate_synthetic_2d_image(size=32, seed=seed).reshape(-1, 1)
             adam_lr = 1e-3
+            muon_lr = 0.002
         else: # natural_image
             in_dim, out_dim = 2, 1
             coords = generate_coordinate_grid(size=32)
             targets = generate_synthetic_2d_image(size=32, seed=seed+10).reshape(-1, 1)
             adam_lr = 1e-3
+            muon_lr = 0.002
 
         model_adam = VanillaMLP(in_dim=in_dim, hidden_dim=64, out_dim=out_dim, num_layers=4)
         model_muon = VanillaMLP(in_dim=in_dim, hidden_dim=64, out_dim=out_dim, num_layers=4)
         model_muon.load_state_dict(model_adam.state_dict())
 
         opt_adam = torch.optim.Adam(model_adam.parameters(), lr=adam_lr)
-        opt_muon = Muon(model_muon.parameters(), lr=0.005)
+        opt_muon = Muon(model_muon.parameters(), lr=muon_lr)
 
         for _ in range(steps):
             opt_adam.zero_grad()
