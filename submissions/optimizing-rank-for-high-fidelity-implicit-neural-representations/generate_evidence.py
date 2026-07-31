@@ -59,7 +59,7 @@ def main():
     out_file = out_dir / "evidence.json"
     with open(out_file, "w") as f:
         json.dump(evidence, f, indent=2)
-
+        f.write("\n")
     print(f"Evidence successfully generated and written to {out_file}")
 
 
