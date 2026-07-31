@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate evidence for Mechanistic Data Attribution reproduction."""
+"""Generate evidence bundle and JSON outputs for Mechanistic Data Attribution reproduction."""
 
 import json
 from pathlib import Path
