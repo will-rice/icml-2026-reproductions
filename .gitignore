@@ -663,3 +663,12 @@ submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-wei
 submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/.pytest_cache/
 submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/**/__pycache__/
 submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/**/*.egg-info/
+
+# RelaxFlow reproduction source
+!submissions/relaxflow-text-driven-amodal-3d-generation/
+!submissions/relaxflow-text-driven-amodal-3d-generation/**
+submissions/relaxflow-text-driven-amodal-3d-generation/.cache/
+submissions/relaxflow-text-driven-amodal-3d-generation/.venv/
+submissions/relaxflow-text-driven-amodal-3d-generation/.pytest_cache/
+submissions/relaxflow-text-driven-amodal-3d-generation/**/__pycache__/
+submissions/relaxflow-text-driven-amodal-3d-generation/**/*.egg-info/

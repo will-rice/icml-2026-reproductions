@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "relaxflow_repro"
+version = "0.1.0"
+description = "Reproduction package for RelaxFlow: Text-Driven Amodal 3D Generation"
+authors = [{ name = "ICML 2026 Reproduction Agent" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pytest",
+    "gradio",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
