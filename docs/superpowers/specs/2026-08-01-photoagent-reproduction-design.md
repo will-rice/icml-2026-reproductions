@@ -1,10 +1,10 @@
 # PhotoAgent Reproduction Design Specification
 
-**Paper Title:** PhotoAgent: Exploratory Visual Aesthetic Planning with Large Vision Models  
-**Paper ID:** `Ws8swqL5ob`  
-**ArXiv ID:** `2602.22809`  
-**Worker ID:** `agy-paper-owner-09`  
-**Attempt ID:** `784f6b71-9223-4c65-9b52-9957a6f3fe03`  
+**Paper Title:** PhotoAgent: Exploratory Visual Aesthetic Planning with Large Vision Models
+**Paper ID:** `Ws8swqL5ob`
+**ArXiv ID:** `2602.22809`
+**Worker ID:** `agy-paper-owner-09`
+**Attempt ID:** `784f6b71-9223-4c65-9b52-9957a6f3fe03`
 
 ## Executive Summary
 PhotoAgent introduces exploratory visual aesthetic planning for autonomous photo editing using Large Vision Models (LVMs), incorporating long-horizon tree-search decision making, aesthetic-intent reasoning, closed-loop execution, and memory.
