@@ -1,1 +1,30 @@
-
+{
+  "status": "success",
+  "paper_id": "4yzY0GFIJj",
+  "claims_verified": [
+    "Q-Sched modifies the few-step diffusion scheduler rather than the model weights for post-training quantization (Figure 1).",
+    "The JAQ loss combines text-image compatibility with an image-quality metric and is described as reference-free with only a handful of calibration prompts (Abstract)."
+  ],
+  "results": {
+    "4_step_schedule": [
+      71,
+      252,
+      428,
+      999
+    ],
+    "8_step_schedule": [
+      34,
+      71,
+      117,
+      252,
+      352,
+      428,
+      520,
+      999
+    ],
+    "w4a8_quantization_noise_mse": 0.019418973475694656,
+    "jaq_total_loss": -0.3648875057697296,
+    "jaq_alignment_score": -0.0017806710675358772,
+    "jaq_quality_score": 0.731555700302124
+  }
+}
