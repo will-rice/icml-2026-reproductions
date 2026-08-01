@@ -1,6 +1,6 @@
 ---
 title: RGR-GRPO Evidence
-emoji: "R"
+emoji: "📜"
 colorFrom: indigo
 colorTo: green
 sdk: gradio
