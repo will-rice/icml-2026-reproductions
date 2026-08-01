@@ -776,3 +776,13 @@ submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contra
 submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contrastive-trajectory-balance/.pytest_cache/
 submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contrastive-trajectory-balance/**/__pycache__/
 submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contrastive-trajectory-balance/**/*.egg-info/
+
+!docs/reproductions/3cd57e67-ca36-44a7-8dde-449feb4c64ff-maxrl-design.md
+
+!submissions/maximum-likelihood-reinforcement-learning/
+!submissions/maximum-likelihood-reinforcement-learning/**
+submissions/maximum-likelihood-reinforcement-learning/.venv/
+submissions/maximum-likelihood-reinforcement-learning/.pytest_cache/
+submissions/maximum-likelihood-reinforcement-learning/.cache/
+submissions/maximum-likelihood-reinforcement-learning/**/__pycache__/
+submissions/maximum-likelihood-reinforcement-learning/**/*.egg-info/

@@ -1,0 +1,216 @@
+{
+  "bernoulli_checks": [
+    {
+      "estimator_expectation": 0.04750000000000004,
+      "gap_to_ml": 0.9025,
+      "ml_gradient": 0.95,
+      "n": 1,
+      "p": 0.05,
+      "truncated_gradient": 0.0475
+    },
+    {
+      "estimator_expectation": 0.09262500000000003,
+      "gap_to_ml": 0.857375,
+      "ml_gradient": 0.95,
+      "n": 2,
+      "p": 0.05,
+      "truncated_gradient": 0.092625
+    },
+    {
+      "estimator_expectation": 0.1762190625000001,
+      "gap_to_ml": 0.7737809375,
+      "ml_gradient": 0.95,
+      "n": 4,
+      "p": 0.05,
+      "truncated_gradient": 0.1762190625
+    },
+    {
+      "estimator_expectation": 0.3197505902753908,
+      "gap_to_ml": 0.6302494097246094,
+      "ml_gradient": 0.95,
+      "n": 8,
+      "p": 0.05,
+      "truncated_gradient": 0.3197505902753906
+    },
+    {
+      "estimator_expectation": 0.5318796647808229,
+      "gap_to_ml": 0.4181203352191776,
+      "ml_gradient": 0.95,
+      "n": 16,
+      "p": 0.05,
+      "truncated_gradient": 0.5318796647808224
+    },
+    {
+      "estimator_expectation": 0.15999999999999998,
+      "gap_to_ml": 0.64,
+      "ml_gradient": 0.8,
+      "n": 1,
+      "p": 0.2,
+      "truncated_gradient": 0.16000000000000003
+    },
+    {
+      "estimator_expectation": 0.2879999999999999,
+      "gap_to_ml": 0.512,
+      "ml_gradient": 0.8,
+      "n": 2,
+      "p": 0.2,
+      "truncated_gradient": 0.28800000000000003
+    },
+    {
+      "estimator_expectation": 0.47231999999999996,
+      "gap_to_ml": 0.3276799999999999,
+      "ml_gradient": 0.8,
+      "n": 4,
+      "p": 0.2,
+      "truncated_gradient": 0.47232000000000013
+    },
+    {
+      "estimator_expectation": 0.665782272,
+      "gap_to_ml": 0.13421772799999987,
+      "ml_gradient": 0.8,
+      "n": 8,
+      "p": 0.2,
+      "truncated_gradient": 0.6657822720000002
+    },
+    {
+      "estimator_expectation": 0.7774820018631475,
+      "gap_to_ml": 0.02251799813685229,
+      "ml_gradient": 0.8,
+      "n": 16,
+      "p": 0.2,
+      "truncated_gradient": 0.7774820018631478
+    },
+    {
+      "estimator_expectation": 0.25,
+      "gap_to_ml": 0.25,
+      "ml_gradient": 0.5,
+      "n": 1,
+      "p": 0.5,
+      "truncated_gradient": 0.25
+    },
+    {
+      "estimator_expectation": 0.375,
+      "gap_to_ml": 0.125,
+      "ml_gradient": 0.5,
+      "n": 2,
+      "p": 0.5,
+      "truncated_gradient": 0.375
+    },
+    {
+      "estimator_expectation": 0.46875,
+      "gap_to_ml": 0.03125,
+      "ml_gradient": 0.5,
+      "n": 4,
+      "p": 0.5,
+      "truncated_gradient": 0.46875
+    },
+    {
+      "estimator_expectation": 0.498046875,
+      "gap_to_ml": 0.001953125,
+      "ml_gradient": 0.5,
+      "n": 8,
+      "p": 0.5,
+      "truncated_gradient": 0.498046875
+    },
+    {
+      "estimator_expectation": 0.49999237060546875,
+      "gap_to_ml": 7.62939453125e-06,
+      "ml_gradient": 0.5,
+      "n": 16,
+      "p": 0.5,
+      "truncated_gradient": 0.49999237060546875
+    },
+    {
+      "estimator_expectation": 0.15999999999999998,
+      "gap_to_ml": 0.03999999999999998,
+      "ml_gradient": 0.19999999999999996,
+      "n": 1,
+      "p": 0.8,
+      "truncated_gradient": 0.15999999999999998
+    },
+    {
+      "estimator_expectation": 0.19199999999999995,
+      "gap_to_ml": 0.008000000000000007,
+      "ml_gradient": 0.19999999999999996,
+      "n": 2,
+      "p": 0.8,
+      "truncated_gradient": 0.19199999999999995
+    },
+    {
+      "estimator_expectation": 0.19967999999999994,
+      "gap_to_ml": 0.00031999999999998696,
+      "ml_gradient": 0.19999999999999996,
+      "n": 4,
+      "p": 0.8,
+      "truncated_gradient": 0.19967999999999997
+    },
+    {
+      "estimator_expectation": 0.19999948799999995,
+      "gap_to_ml": 5.120000000080616e-07,
+      "ml_gradient": 0.19999999999999996,
+      "n": 8,
+      "p": 0.8,
+      "truncated_gradient": 0.19999948799999995
+    },
+    {
+      "estimator_expectation": 0.19999999999868923,
+      "gap_to_ml": 1.3107293028724598e-12,
+      "ml_gradient": 0.19999999999999996,
+      "n": 16,
+      "p": 0.8,
+      "truncated_gradient": 0.19999999999868923
+    }
+  ],
+  "claims": [
+    {
+      "id": "objective_family",
+      "status": "toy",
+      "summary": "Toy Bernoulli checks verify finite-N MaxRL gradients interpolate from RL toward ML."
+    },
+    {
+      "id": "unbiased_estimator",
+      "status": "toy",
+      "summary": "Exact enumeration expectation matches the truncated MaxRL gradient for small Bernoulli tasks."
+    },
+    {
+      "id": "infinite_compute_limit",
+      "status": "toy",
+      "summary": "The truncation gap decreases monotonically with rollout count in deterministic checks."
+    },
+    {
+      "id": "pareto_dominance",
+      "status": "unavailable",
+      "summary": "Full multi-task Pareto claim requires released large-scale evaluation logs or rerunning GPU training."
+    },
+    {
+      "id": "twenty_x_scaling",
+      "status": "unavailable",
+      "summary": "The 20x scaling claim is not recomputed in this CPU-only evidence bundle."
+    }
+  ],
+  "generated_at": "2026-08-01T20:12:00Z",
+  "paper_id": "EeuLO2BjFN",
+  "title": "Maximum Likelihood Reinforcement Learning",
+  "upstream": {
+    "commit": "7197bbb46a2ecd866da52f6b401ff20a34fe9390",
+    "core_algos": {
+      "has_grpo_branch": true,
+      "has_maxrl_branch": true,
+      "has_mean_reward_denominator": true,
+      "has_p_normalized_advantage": true,
+      "path": "verl/trainer/ppo/core_algos.py"
+    },
+    "qwen3_script": {
+      "documents_grpo_toggle": true,
+      "path": "qwen3_experiments/run_qwen3_training.sh",
+      "sets_maxrl_estimator": true,
+      "uses_h200_scale": true
+    },
+    "readme": {
+      "mentions_official_implementation": true,
+      "mentions_weights": true,
+      "states_gpu_installation": true
+    },
+    "repo": "https://github.com/tajwarfahim/maxrl"
+  }
+}
