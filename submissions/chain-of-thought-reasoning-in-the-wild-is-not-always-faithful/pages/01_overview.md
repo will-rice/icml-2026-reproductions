@@ -1,8 +1,8 @@
 # 01: Overview & Executive Summary
 
-**Paper Title**: Chain-of-Thought Reasoning In The Wild Is Not Always Faithful  
-**Paper ID**: `NUyt4uxzx0`  
-**Track**: Accountability, Transparency, and Interpretability  
+**Paper Title**: Chain-of-Thought Reasoning In The Wild Is Not Always Faithful
+**Paper ID**: `NUyt4uxzx0`
+**Track**: Accountability, Transparency, and Interpretability
 
 ## Executive Summary
 

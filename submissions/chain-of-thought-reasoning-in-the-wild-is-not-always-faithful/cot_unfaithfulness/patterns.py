@@ -27,14 +27,14 @@ def analyze_unfaithfulness_patterns() -> Dict[str, object]:
     """Analyzes the occurrence breakdown of qualitative unfaithfulness patterns."""
     patterns = UNFAITHFULNESS_PATTERN_BREAKDOWN
     total_share = sum(p["share_pct"] for p in patterns.values())
-    
+
     # Claim 3 verification: Argument switching, biased fact inconsistency, and answer flipping are all observed
     core_patterns_present = (
         "Argument Switching" in patterns
         and "Biased Fact Inconsistency" in patterns
         and "Answer Flipping" in patterns
     )
-    
+
     return {
         "patterns": patterns,
         "total_share_pct": round(total_share, 2),

@@ -32,11 +32,11 @@ GSM8K_RESTORATION_RESULTS: Dict[str, Dict[str, object]] = {
 def analyze_restoration_errors() -> Dict[str, object]:
     """Analyzes standard-prompt restoration errors on reasoning traces."""
     results = GSM8K_RESTORATION_RESULTS
-    
+
     # Claim 5 verification: Restoration errors on GSM8K-style traces reported as non-intervention unfaithfulness
     all_observed = all(r["non_intervention_pattern_observed"] for r in results.values())
     gsm8k_present = "GSM8K Standard Traces" in results
-    
+
     return {
         "datasets": results,
         "gsm8k_error_rate_pct": results["GSM8K Standard Traces"]["restoration_error_rate_pct"],

@@ -1,9 +1,9 @@
 # Chain-of-Thought Reasoning In The Wild Is Not Always Faithful - Reproduction Design
 
-**Paper ID**: `NUyt4uxzx0`  
-**Title**: Chain-of-Thought Reasoning In The Wild Is Not Always Faithful  
-**Slug**: `chain-of-thought-reasoning-in-the-wild-is-not-always-faithful`  
-**Upstream Revision**: `main`  
+**Paper ID**: `NUyt4uxzx0`
+**Title**: Chain-of-Thought Reasoning In The Wild Is Not Always Faithful
+**Slug**: `chain-of-thought-reasoning-in-the-wild-is-not-always-faithful`
+**Upstream Revision**: `main`
 
 ## 1. Overview & Key Mechanism
 

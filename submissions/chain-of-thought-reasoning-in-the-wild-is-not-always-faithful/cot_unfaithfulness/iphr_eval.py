@@ -89,10 +89,10 @@ def evaluate_iphr_unfaithfulness() -> Dict[str, object]:
     rates = [m["unfaithfulness_rate_pct"] for m in models_data.values()]
     min_rate = min(rates)
     max_rate = max(rates)
-    
+
     # Claim 1 verification: Non-adversarial unfaithfulness demonstrated without artificial biasing
     all_demonstrate = all(m["demonstrated_non_adversarial_unfaithfulness"] for m in models_data.values())
-    
+
     # Claim 2 verification: Unfaithfulness rates range near 0% up to ~13%
     range_verified = (min_rate <= 1.0) and (max_rate <= 13.5 and max_rate >= 12.0)
 

@@ -34,17 +34,17 @@ HARD_MATH_SHORTCUT_RESULTS: Dict[str, Dict[str, object]] = {
 def evaluate_hard_math_shortcuts() -> Dict[str, object]:
     """Evaluates illogical shortcuts in thinking and non-thinking frontier models."""
     results = HARD_MATH_SHORTCUT_RESULTS
-    
+
     thinking_models = [m for m in results.values() if m["model_type"] == "thinking"]
     non_thinking_models = [m for m in results.values() if m["model_type"] == "non-thinking"]
-    
+
     thinking_exhibit = all(m["exhibits_illogical_shortcuts"] for m in thinking_models)
     non_thinking_exhibit = all(m["exhibits_illogical_shortcuts"] for m in non_thinking_models)
-    
+
     # Rates vary across models
     rates = [m["illogical_shortcut_rate_pct"] for m in results.values()]
     rates_vary = len(set(rates)) > 1
-    
+
     # Claim 4 verification: Thinking and non-thinking frontier models both exhibit illogical shortcuts with varying rates
     claim4_verified = thinking_exhibit and non_thinking_exhibit and rates_vary
 
