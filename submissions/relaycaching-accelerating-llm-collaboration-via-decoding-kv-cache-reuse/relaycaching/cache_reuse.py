@@ -43,11 +43,14 @@ class RelayCacheEngine:
         reuse_target_ratio: float = 0.85,
     ) -> dict[str, Any]:
         """Simulates multi-agent workflow execution with RelayCaching decode-to-prefill reuse."""
-        np.random.seed(hash(workflow_name) % (2**32))
+        import zlib
+        seed_val = zlib.crc32(workflow_name.encode("utf-8")) % (2**32)
+        rng = np.random.RandomState(seed_val)
 
         # Generate realistic decoding KV cache and prefill KV cache with sparse localized deviations
-        decoding_kv = np.random.randn(self.num_layers, seq_len, self.hidden_dim)
-        noise = np.random.randn(self.num_layers, seq_len, self.hidden_dim) * 0.05
+        decoding_kv = rng.randn(self.num_layers, seq_len, self.hidden_dim)
+        noise = rng.randn(self.num_layers, seq_len, self.hidden_dim) * 0.05
+
         prefill_kv = decoding_kv + noise
 
         # Measure alignment
