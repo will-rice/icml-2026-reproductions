@@ -654,3 +654,12 @@ submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.venv/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.pytest_cache/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/__pycache__/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/*.egg-info/
+
+!docs/reproductions/228a446e-f3c6-4ee1-8d80-28b6d1226520-neural-thickets-design.md
+
+!submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/
+!submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/**
+submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/.venv/
+submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/.pytest_cache/
+submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/**/__pycache__/
+submissions/neural-thickets-diverse-task-experts-are-dense-around-pretrained-weights/**/*.egg-info/
