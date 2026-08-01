@@ -1,13 +1,13 @@
 {
   "paper_id": "1tbhBSXcyX",
   "title": "RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse",
-  "macro_alignment_similarity": 0.9995505091699112,
+  "macro_alignment_similarity": 0.9995504435863188,
   "workflows": {
     "GSM8K": {
       "workflow": "GSM8K",
       "seq_len": 1024,
       "num_agents": 4,
-      "macro_alignment": 0.9987517154573358,
+      "macro_alignment": 0.9987539654087685,
       "reuse_rate": 1.0,
       "full_prefill_ttft_ms": 90.0,
       "relay_ttft_ms": 16.200000000000003,
@@ -18,7 +18,7 @@
       "workflow": "MMLU",
       "seq_len": 2048,
       "num_agents": 3,
-      "macro_alignment": 0.9987526906681186,
+      "macro_alignment": 0.9987534077668287,
       "reuse_rate": 1.0,
       "full_prefill_ttft_ms": 180.0,
       "relay_ttft_ms": 32.400000000000006,
@@ -29,7 +29,7 @@
       "workflow": "HumanEval",
       "seq_len": 1536,
       "num_agents": 3,
-      "macro_alignment": 0.9987514083647291,
+      "macro_alignment": 0.9987525207757032,
       "reuse_rate": 1.0,
       "full_prefill_ttft_ms": 135.0,
       "relay_ttft_ms": 24.300000000000008,

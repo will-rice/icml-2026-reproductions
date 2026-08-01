@@ -12,12 +12,14 @@ from relaycaching.cache_reuse import RelayCacheEngine
 
 
 def main():
+    np.random.seed(42)
     engine = RelayCacheEngine(num_layers=32, hidden_dim=128)
 
     # 1. Macro alignment evaluation (Claim 2)
     decoding_kv = np.random.randn(32, 1024, 128)
     prefill_kv = decoding_kv + np.random.randn(32, 1024, 128) * 0.03
     macro_alignment = engine.aligner.measure_macro_alignment(decoding_kv, prefill_kv)
+
 
     # 2. Multi-agent workflows: GSM8K, MMLU, HumanEval (Claim 1, 3, 4)
     gsm8k_res = engine.run_multi_agent_workflow("GSM8K", seq_len=1024, num_agents=4)
