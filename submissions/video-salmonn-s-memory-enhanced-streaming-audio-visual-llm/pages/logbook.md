@@ -1,9 +1,9 @@
 # Reproduction Logbook: video-SALMONN S
 
-**Paper ID:** `tJP3FxzSPs`  
-**Attempt ID:** `90bf5a14-ca7f-49d8-9085-a633e800b5ca`  
-**Title:** video-SALMONN S: Memory-Enhanced Streaming Audio-Visual LLM  
-**Date:** 2026-08-01  
+**Paper ID:** `tJP3FxzSPs`
+**Attempt ID:** `90bf5a14-ca7f-49d8-9085-a633e800b5ca`
+**Title:** video-SALMONN S: Memory-Enhanced Streaming Audio-Visual LLM
+**Date:** 2026-08-01
 
 ---
 

@@ -236,11 +236,18 @@ docs/reproductions/*
 !docs/reproductions/4cc7dbc5-6b48-4c31-b964-f8e9badf9829-design.md
 !docs/reproductions/d519b868-cf79-4771-96cd-25c295996ad4-formal-problem-solving-design.md
 !docs/reproductions/020e5035-01ad-40a7-9ab0-9147289ab70c-dhsa-design.md
+!docs/reproductions/dcf0cca7-d415-4513-9f1c-787cb6f20182-beyond-log-likelihood-design.md
 docs/superpowers/plans/
 docs/superpowers/specs/*
 !docs/superpowers/specs/2026-08-01-q-sched-reproduction-design.md
 evidence/
 submissions/*
+!submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fine-tuning-across-the-model-capability-continuum/
+!submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fine-tuning-across-the-model-capability-continuum/**
+submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fine-tuning-across-the-model-capability-continuum/.venv/
+submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fine-tuning-across-the-model-capability-continuum/.pytest_cache/
+submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fine-tuning-across-the-model-capability-continuum/**/__pycache__/
+submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fine-tuning-across-the-model-capability-continuum/**/*.egg-info/
 !submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/
 !submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/**
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/
@@ -620,5 +627,3 @@ submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.venv/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.pytest_cache/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/__pycache__/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/*.egg-info/
-
-

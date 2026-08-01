@@ -15,11 +15,11 @@ class TTTStreamingMemoryLayer:
         self.hidden_dim = hidden_dim
         self.memory_dim = memory_dim
         self.learning_rate = learning_rate
-        
+
         # Base projection matrices
         self.W_key = [[0.01 * (i + j) for j in range(memory_dim)] for i in range(hidden_dim)]
         self.W_val = [[0.01 * (i - j) for j in range(memory_dim)] for i in range(hidden_dim)]
-        
+
         # Fast weights identity matrix W_fast: shape (memory_dim, memory_dim)
         self.reset_fast_weights()
         self.ttt_frozen = False
@@ -47,7 +47,7 @@ class TTTStreamingMemoryLayer:
         pred = self._matmul_vec(k, self.W_fast)
         err = [p - val for p, val in zip(pred, v)]
         loss = sum(e ** 2 for e in err) / max(1, len(err))
-        
+
         if not self.ttt_frozen:
             # Gradient update step
             for i in range(self.memory_dim):
@@ -69,7 +69,7 @@ class TTTStreamingMemoryLayer:
             outputs.append(pred)
             step_loss = self.fast_weight_update(k, v)
             total_loss += step_loss
-            
+
         avg_loss = total_loss / max(1, len(sequence))
         return outputs, avg_loss
 
@@ -86,7 +86,7 @@ def compute_memory_token_reduction(
     ttt_token_footprint = memory_dim
     similarity_token_footprint = int(seq_len * similarity_merge_ratio)
     ratio = ttt_token_footprint / max(1, similarity_token_footprint)
-    
+
     return {
         "sequence_length": seq_len,
         "ttt_tokens": ttt_token_footprint,
