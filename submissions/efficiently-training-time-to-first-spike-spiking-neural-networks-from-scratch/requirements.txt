@@ -1,5 +1,5 @@
 gradio==4.44.0
-huggingface_hub==0.24.0
+huggingface-hub==0.24.7
 audioop-lts
 torch>=2.0.0
 numpy>=1.24.0
