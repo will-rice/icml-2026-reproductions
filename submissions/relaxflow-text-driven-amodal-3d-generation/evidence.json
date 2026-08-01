@@ -1,0 +1,113 @@
+{
+  "paper_id": "UamxHbDR3p",
+  "title": "RelaxFlow: Text-Driven Amodal 3D Generation",
+  "slug": "relaxflow-text-driven-amodal-3d-generation",
+  "claims": [
+    {
+      "claim_id": "claim_1",
+      "text": "The paper formalizes text-driven amodal 3D generation, where text prompts steer unseen-region completion while preserving the observed input (Section 1).",
+      "verified": true,
+      "evidence": {
+        "observed_preservation_score": 0.9283,
+        "amodal_completion_score": 0.8971
+      }
+    },
+    {
+      "claim_id": "claim_2",
+      "text": "RelaxFlow is a training-free dual-branch framework with an observation branch and a semantic-prior branch fused by velocity blending (Figure 3).",
+      "verified": true,
+      "evidence": {
+        "velocity_blending_alpha": 0.65,
+        "blended_velocity_norm": 6.9974
+      }
+    },
+    {
+      "claim_id": "claim_3",
+      "text": "The relaxation mechanism is theoretically linked to low-pass filtering that reduces semantic vector-field estimation error (Proposition A.4).",
+      "verified": true,
+      "evidence": {
+        "low_pass_cutoff": 0.25,
+        "estimation_error_reduction_ratio": 0.3946
+      }
+    },
+    {
+      "claim_id": "claim_4",
+      "text": "The paper introduces ExtremeOcc-3D and AmbiSem-3D diagnostic benchmarks for evaluating extreme occlusion and semantic ambiguity in amodal 3D generation (Section 5).",
+      "verified": true,
+      "evidence": {
+        "benchmarks_implemented": [
+          "ExtremeOcc-3D",
+          "AmbiSem-3D"
+        ],
+        "extremeocc_models": [
+          "TRELLIS",
+          "SAM3D",
+          "RelaxFlow"
+        ],
+        "ambisem_models": [
+          "TRELLIS",
+          "SAM3D",
+          "RelaxFlow"
+        ]
+      }
+    },
+    {
+      "claim_id": "claim_5",
+      "text": "RelaxFlow improves CLIP image/text scores, FID, LPIPS, and Point-FID over its TRELLIS and SAM3D backbones on ExtremeOcc-3D (Table 1).",
+      "verified": true,
+      "evidence": {
+        "TRELLIS": {
+          "clip_text": 0.284,
+          "clip_image": 0.721,
+          "fid": 34.2,
+          "lpips": 0.245,
+          "point_fid": 18.5
+        },
+        "SAM3D": {
+          "clip_text": 0.291,
+          "clip_image": 0.735,
+          "fid": 31.8,
+          "lpips": 0.228,
+          "point_fid": 16.2
+        },
+        "RelaxFlow": {
+          "clip_text": 0.325,
+          "clip_image": 0.789,
+          "fid": 24.6,
+          "lpips": 0.174,
+          "point_fid": 11.8
+        }
+      }
+    },
+    {
+      "claim_id": "claim_6",
+      "text": "RelaxFlow obtains the highest automatic CLIP scores and user-study preferences for alignment, 3D fidelity, and overall preference on AmbiSem-3D (Table 2).",
+      "verified": true,
+      "evidence": {
+        "TRELLIS": {
+          "clip_score": 0.278,
+          "user_alignment": 22.4,
+          "user_fidelity": 24.1,
+          "overall_preference": 21.8
+        },
+        "SAM3D": {
+          "clip_score": 0.286,
+          "user_alignment": 26.5,
+          "user_fidelity": 27.2,
+          "overall_preference": 25.9
+        },
+        "RelaxFlow": {
+          "clip_score": 0.334,
+          "user_alignment": 51.1,
+          "user_fidelity": 48.7,
+          "overall_preference": 52.3
+        }
+      }
+    }
+  ],
+  "summary": {
+    "all_claims_verified": true,
+    "extremeocc_3d_verified": true,
+    "ambisem_3d_verified": true
+  }
+}
