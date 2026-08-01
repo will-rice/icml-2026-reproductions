@@ -96,4 +96,21 @@ submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpr
 submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**/__pycache__/
 submissions/mechanistic-data-attribution-tracing-the-training-origins-of-interpretable-llm-units/**/*.egg-info/
 
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/src/
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/src/**
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/tests/
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/tests/**
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/evidence/
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/evidence/**
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/README.md
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/UPSTREAM.md
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/pyproject.toml
+!submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/uv.lock
+submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/.venv/
+submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/.pytest_cache/
+submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/**/__pycache__/
+
+
 validation-manifest.json
+

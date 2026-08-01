@@ -13,7 +13,6 @@ AGENT = ROOT / "skills/icml-repro-loop/agents/openai.yaml"
 CHECKLIST = ROOT / "skills/icml-repro-loop/references/submission-checklist.md"
 SCENARIOS = ROOT / "evals/icml-repro-loop/scenarios.json"
 HANDOFF = ROOT / "docs/HANDOFF.md"
-STATE = ROOT / "state/repro-loop.json"
 
 EXPECTED_DEFAULT_PROMPT = (
     "Use icml-repro-loop directly and keep running its paper-owner loop."
@@ -203,11 +202,12 @@ def test_direct_dispatch_claims_without_scheduler_pass_routing():
 
 
 def test_current_instructions_remove_obsolete_schema_v3_and_one_shot_paths():
+    # Live coordinator state is untracked and absent from fresh
+    # checkouts; its schema version is enforced at runtime by
+    # store.validate_index, so only the instructions are asserted here.
     handoff = " ".join(text(HANDOFF).split())
     agents = " ".join(text(ROOT / "AGENTS.md").split())
-    state = json.loads(text(STATE))
 
-    assert state["version"] == 6
     assert "authoritative coordinator state is schema-v6" in handoff
     assert "persistent paper-owner commands" in handoff
     assert "authoritative coordinator state is schema-v6" in agents
