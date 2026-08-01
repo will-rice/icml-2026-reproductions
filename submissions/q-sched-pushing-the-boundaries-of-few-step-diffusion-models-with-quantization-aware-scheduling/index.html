@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q-Sched Reproduction Space</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #0f172a; color: #f8fafc; }
+    h1 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    .tag { display: inline-block; background: #0284c7; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; margin-right: 5px; }
+    pre { background: #090d16; padding: 15px; border-radius: 6px; overflow-x: auto; color: #38bdf8; border: 1px solid #1e293b; }
+    button { background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+    button:hover { background: #0369a1; }
+  </style>
+</head>
+<body>
+  <h1>ICML 2026 Reproduction: Q-Sched</h1>
+  <div class="card">
+    <p><strong>Paper Title:</strong> Q-Sched: Pushing the Boundaries of Few-Step Diffusion Models with Quantization-Aware Scheduling</p>
+    <p><strong>Paper ID:</strong> <code>4yzY0GFIJj</code> | <strong>arXiv:</strong> <code>2509.01624</code></p>
+    <div>
+      <span class="tag">icml2026-repro</span>
+      <span class="tag">paper-4yzY0GFIJj</span>
+      <span class="tag">challenge:ICML-2026-agent-repro</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Verified Claims</h2>
+    <ul>
+      <li>Q-Sched modifies the few-step diffusion scheduler rather than the model weights for post-training quantization (Figure 1).</li>
+      <li>The JAQ loss combines text-image compatibility with an image-quality metric and is described as reference-free with only a handful of calibration prompts (Abstract).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Verified Evidence Output (JSON)</h2>
+    <pre id="evidence">Loading evidence...</pre>
+  </div>
+
+  <script>
+    fetch('evidence.json')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('evidence').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        document.getElementById('evidence').textContent = "Failed to load evidence.json: " + err;
+      });
+  </script>
+</body>
+</html>

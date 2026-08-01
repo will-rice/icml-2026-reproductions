@@ -3,9 +3,8 @@ title: Q-Sched Reproduction Space
 emoji: ⚡
 colorFrom: blue
 colorTo: indigo
-sdk: gradio
-sdk_version: 5.20.0
-app_file: app.py
+sdk: static
+app_file: index.html
 pinned: false
 tags:
 - icml2026-repro
