@@ -1,0 +1,172 @@
+{
+  "attempt_id": "464da858-71f3-498e-a567-dc4fbba10d42",
+  "claims": [
+    {
+      "claim_id": "two_stage_generator",
+      "evidence": [
+        "Pinned upstream contains data_generation/ and README-described Stage 1/Stage 2 pipeline.",
+        "No paper-reported benchmark values were used as reproduced measurements."
+      ],
+      "sha256": "14103fb0e4104687d642e8f62103e018dcad4f5422c176a6115999f7f9b9a936",
+      "status": "verified",
+      "text": "ThreadWeaver introduces a two-stage parallel trajectory generator for producing parallel chain-of-thought data for supervised fine-tuning (Abstract)."
+    },
+    {
+      "claim_id": "trie_rollout_design",
+      "evidence": [
+        "Pinned upstream implements prefix-tree training utilities.",
+        "Toy trie check confirms sibling branches cannot attend to each other while descendants attend to shared ancestors."
+      ],
+      "sha256": "e0947fee5089612e1401263eef8ae3aa49c0df19a20a714031ee1e4b3e4f1bce",
+      "status": "toy",
+      "text": "ThreadWeaver uses a trie-based rollout design to enable parallel reasoning on off-the-shelf autoregressive inference engines (Abstract)."
+    },
+    {
+      "claim_id": "parallelization_aware_rl",
+      "evidence": [
+        "Pinned RL training command disables GRPO standard-deviation normalization.",
+        "Toy reward check shows mean-centered P-GRPO preserves small acceleration scale where standard normalization inflates it."
+      ],
+      "sha256": "1a30a8a25ac3eee77f42eec9eb71e9fa4e803bf2b5bed938498f0a23fa126ef1",
+      "status": "toy",
+      "text": "The framework includes parallelization-aware reinforcement learning to balance reasoning accuracy with effective parallelization (Abstract)."
+    },
+    {
+      "claim_id": "six_benchmark_accuracy",
+      "evidence": [
+        "The public artifact documents the reported table, but recomputing Qwen3-8B six-benchmark accuracy requires 8x80G GPUs.",
+        "This CPU-only attempt did not train or evaluate Qwen3-8B and does not claim the paper value as reproduced."
+      ],
+      "sha256": "63287f3a10d2f5882c76cb40aa8453996521da594ae056e43c3158fc2348fd46",
+      "status": "unreplicated",
+      "text": "On six math reasoning benchmarks, ThreadWeaver trained on Qwen3-8B reaches 79.9% on AIME24 and 71.9% average performance (Abstract)."
+    },
+    {
+      "claim_id": "reported_token_latency_speedup",
+      "evidence": [
+        "The CPU toy check recomputes critical-path token accounting only.",
+        "The paper's reported token-latency speedup and wall-clock measurements require the released multi-GPU evaluation path."
+      ],
+      "sha256": "12f521e3f0f73c78c88d24b6d272f553368a94b5b0357b881c378e7b05ae026a",
+      "status": "unreplicated",
+      "text": "ThreadWeaver reports up to 1.53x token-latency speedup while matching comparably sized sequential reasoning models (Abstract)."
+    }
+  ],
+  "costs": {
+    "gpu_hours": 0.0,
+    "metered_api_usd": 0.0,
+    "notes": "CPU-only static and toy checks; no paid API calls."
+  },
+  "generated_at": "2026-08-01T00:00:00+00:00",
+  "limitations": [
+    "Qwen3-8B training and six-benchmark evaluation were not run.",
+    "The 1.53x reported token-latency claim was not recomputed on released model outputs.",
+    "The public README states SFT and RL require a single node with 8x80G A100 or H100 GPUs."
+  ],
+  "paper_id": "Efq2VvYk1o",
+  "title": "ThreadWeaver: Adaptive Threading for Efficient Parallel Reasoning in Language Models",
+  "toy_checks": {
+    "critical_path_latency": {
+      "critical_path_token_latency": 21,
+      "sequential_token_latency": 33,
+      "token_latency_speedup": 1.5714285714285714
+    },
+    "p_grpo_advantages": {
+      "mean_reward": 1.01,
+      "p_grpo_advantages": [
+        -0.01,
+        0.0,
+        0.01
+      ],
+      "rewards": [
+        1.0,
+        1.01,
+        1.02
+      ],
+      "standard_grpo_advantages": [
+        -1.224744871392,
+        0.0,
+        1.224744871392
+      ]
+    },
+    "parallel_trajectory_parser": {
+      "outline_thread_ids_match": true,
+      "outlines": {
+        "1": "derive identity",
+        "2": "numeric check"
+      },
+      "threads": {
+        "1": "Use product-to-sum.",
+        "2": "Substitute decimals."
+      },
+      "threads_are_independent": true
+    },
+    "trie_attention": {
+      "alpha_attends_beta": false,
+      "alpha_attends_parallel": true,
+      "beta_attends_alpha": false,
+      "beta_attends_parallel": true,
+      "parents": [
+        -1,
+        0,
+        1,
+        2,
+        3,
+        1,
+        5,
+        6
+      ],
+      "tokens": [
+        "prompt",
+        "<Parallel>",
+        "<Thread>1",
+        "alpha",
+        "</Thread>",
+        "<Thread>2",
+        "beta",
+        "</Thread>"
+      ]
+    }
+  },
+  "upstream": {
+    "arxiv_id": "2512.07843",
+    "expected_revision": "b944f0139209258caa34fa7dea6a58c2502912fa",
+    "file_sha256": {
+      "README.md": "fb36be019ec7ec766aeb4f5c43183904b9153b71e84eadd6a9475c2c84bd2359",
+      "data_generation/README.md": "3763866f6d823221ddb9f676cccdc1ae0db023f376c93a5c79abeedabd62cf42",
+      "data_generation/src/generate_trajectories.py": "740c59da06837d0a4e0c8dd0f013211806a47ff73926bdc386107b7320fd34cd",
+      "threadweaver_rl/deepscaler/rewards/math_rewardv2.py": "44b31cbe78717ac61cfaafa56f9b5c2155dca85f0b96d7bb5db7f8f442192fdc",
+      "threadweaver_rl/deepscaler/rewards/reward_types.py": "6c27cf2ed23b4dd80f63634ab1f718743afb741cfe5c2ac9ff10df1e552a8e8d",
+      "threadweaver_rl/train_par.slurm": "1c517fce9e448e000cfe64bdca5f6e62a524464fce91f148dc25be21462b4af8",
+      "threadweaver_rl/train_seq.slurm": "e02124152e407ea6713918c17ffcbcd29b238accc23899b0ce86610e1620bdae",
+      "threadweaver_sft/src/prefix_tree_utils_v1.py": "2423249d7386cee06e75805945e2231155b6fd3577ff6df3503bb3c2aed42c46",
+      "threadweaver_sft/src/simple_eval.py": "fce2ff2221605b5531c3fb900248722523a422e662ad22d84f0d20b72d0557bc"
+    },
+    "git_revision": "b944f0139209258caa34fa7dea6a58c2502912fa",
+    "markers": {
+      "off_the_shelf_engines": true,
+      "p_grpo_mean_centered": true,
+      "parallel_branching_config": true,
+      "reported_accuracy_table_only": true,
+      "reported_speedup_table_only": true,
+      "requires_8x80g_gpu": true,
+      "reward_acceleration_term": true,
+      "trie_training": true,
+      "two_stage_generator": true
+    },
+    "project_page": "https://threadweaver-parallel.github.io/",
+    "required_paths": {
+      "README.md": true,
+      "data_generation/README.md": true,
+      "data_generation/src/generate_trajectories.py": true,
+      "threadweaver_rl/deepscaler/rewards/math_rewardv2.py": true,
+      "threadweaver_rl/deepscaler/rewards/reward_types.py": true,
+      "threadweaver_rl/train_par.slurm": true,
+      "threadweaver_rl/train_seq.slurm": true,
+      "threadweaver_sft/src/prefix_tree_utils_v1.py": true,
+      "threadweaver_sft/src/simple_eval.py": true
+    },
+    "revision_matches": true,
+    "upstream_url": "https://github.com/facebookresearch/threadweaver"
+  }
+}
