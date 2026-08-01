@@ -6,7 +6,15 @@ requires-python = ">=3.10"
 dependencies = [
     "gradio>=4.0.0",
     "pytest",
+    "torch>=2.13.0",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"

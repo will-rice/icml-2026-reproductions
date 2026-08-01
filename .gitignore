@@ -495,3 +495,9 @@ submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-perfo
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/.venv/
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/.pytest_cache/
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/**/__pycache__/
+
+!submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/
+!submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/**
+submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/.venv/
+submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/.pytest_cache/
+submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/**/__pycache__/
