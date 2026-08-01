@@ -21,3 +21,8 @@ packages = ["lime_peft"]
 dev = [
     "pytest>=8.0.0",
 ]
+
+[tool.pytest.ini_options]
+dont_write_bytecode = true
+addopts = "-p no:cacheprovider"
+
