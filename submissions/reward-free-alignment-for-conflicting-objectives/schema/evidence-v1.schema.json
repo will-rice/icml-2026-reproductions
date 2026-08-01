@@ -80,7 +80,7 @@
     "audits": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["theorem_31", "theorem_32", "pairwise_loss", "cagrad_clip", "claim6_pipeline"],
+      "required": ["theorem_31", "theorem_32", "pairwise_loss", "cagrad_clip", "claim6_pipeline", "pareto_proxy"],
       "properties": {
         "theorem_31": {
           "type": "object",
@@ -171,7 +171,29 @@
         "theorem_32": { "type": "object" },
         "pairwise_loss": { "type": "object" },
         "cagrad_clip": { "type": "object" },
-        "claim6_pipeline": { "type": "object" }
+        "claim6_pipeline": { "type": "object" },
+        "pareto_proxy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "config",
+            "frontier",
+            "raco_hypervolume",
+            "baseline_hypervolume",
+            "raco_dominates_baseline_count",
+            "weight_settings",
+            "ablation"
+          ],
+          "properties": {
+            "config": { "type": "object" },
+            "frontier": { "type": "array", "items": { "type": "object" } },
+            "raco_hypervolume": { "type": "number" },
+            "baseline_hypervolume": { "type": "number" },
+            "raco_dominates_baseline_count": { "type": "integer" },
+            "weight_settings": { "type": "integer" },
+            "ablation": { "type": "array", "items": { "type": "object" } }
+          }
+        }
       }
     },
     "environment": {

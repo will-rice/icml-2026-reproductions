@@ -475,3 +475,10 @@ submissions/warmserve-enabling-one-for-many-gpu-prewarming-for-multi-llm-serving
 submissions/warmserve-enabling-one-for-many-gpu-prewarming-for-multi-llm-serving/.pytest_cache/
 submissions/warmserve-enabling-one-for-many-gpu-prewarming-for-multi-llm-serving/**/__pycache__/
 submissions/warmserve-enabling-one-for-many-gpu-prewarming-for-multi-llm-serving/**/*.egg-info/
+
+!submissions/reward-free-alignment-for-conflicting-objectives/
+!submissions/reward-free-alignment-for-conflicting-objectives/**
+submissions/reward-free-alignment-for-conflicting-objectives/.venv/
+submissions/reward-free-alignment-for-conflicting-objectives/.pytest_cache/
+submissions/reward-free-alignment-for-conflicting-objectives/**/__pycache__/
+submissions/reward-free-alignment-for-conflicting-objectives/**/*.egg-info/

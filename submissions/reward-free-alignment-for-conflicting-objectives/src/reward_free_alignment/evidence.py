@@ -9,6 +9,8 @@ import jsonschema
 import torch
 from torch import tensor
 
+from reward_free_alignment import pareto_proxy
+
 from reward_free_alignment.provenance import (
     load_live_claims,
     load_manifest,
@@ -227,6 +229,7 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
     cagrad_audit = _run_cagrad_audit()
     t31_audit = _run_theorem_31_audit()
     t32_strict_audit, t32_identity_audit = _run_theorem_32_audit()
+    pareto_audit = pareto_proxy.run_pareto_proxy()
 
     # Derive claim outcomes from executed audit values
     claim_outcome_map = _derive_claim_outcomes(
@@ -235,6 +238,7 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
         cagrad_audit=cagrad_audit,
         t31_audit=t31_audit,
         t32_strict_audit=t32_strict_audit,
+        pareto_audit=pareto_audit,
     )
 
     claims_list: list[dict[str, Any]] = []
@@ -268,6 +272,7 @@ def build_evidence(project_root: Path) -> dict[str, Any]:
             "pairwise_loss": pairwise_audit,
             "cagrad_clip": cagrad_audit,
             "claim6_pipeline": claim6_audit,
+            "pareto_proxy": pareto_audit,
         },
         "environment": {
             "device": "cpu",
@@ -294,6 +299,7 @@ def _derive_claim_outcomes(
     cagrad_audit: dict[str, Any],
     t31_audit: dict[str, Any],
     t32_strict_audit: dict[str, Any],
+    pareto_audit: dict[str, Any],
 ) -> dict[int, tuple[str, str]]:
     """Derive local_outcome and notes for each claim from executed audit values."""
     results: dict[int, tuple[str, str]] = {}
@@ -321,13 +327,34 @@ def _derive_claim_outcomes(
         f"coordinate-wise clipping verified without renormalization.",
     )
 
-    # Claims 3, 4, 5: Empirical benchmark claims (unreplicated)
+    # Claims 3, 4, 5: Empirical benchmark claims (paper scale unreplicated;
+    # executed CPU-scale Pareto proxy provides mechanism-level measurements)
+    proxy_summary = (
+        f"Executed seeded CPU Pareto proxy (nonconvex tanh scorer, "
+        f"{pareto_audit['config']['train_pairs']} preference pairs/objective, "
+        f"conflict cosine {pareto_audit['config']['conflict_cosine']}): "
+        f"RACO hypervolume={pareto_audit['raco_hypervolume']} vs "
+        f"linear-scalarization hypervolume={pareto_audit['baseline_hypervolume']} "
+        f"over {pareto_audit['weight_settings']} weight settings; "
+        f"RACO dominates baseline in "
+        f"{pareto_audit['raco_dominates_baseline_count']} settings."
+    )
+    ablation_summary = (
+        "Clip-radius ablation (w=0.5): min validation accuracy per radius "
+        + ", ".join(
+            f"c={row['clip_radius']}: {row['min_val_acc']}"
+            for row in pareto_audit["ablation"]
+        )
+        + "."
+    )
     for ordinal in (3, 4, 5):
+        extra = ablation_summary if ordinal == 5 else proxy_summary
         results[ordinal] = (
             "limited",
             f"Claim {ordinal} depends on full LLM fine-tuning benchmarks "
-            f"(Qwen3/Gemma3/Llama3 training), which are out of scope for CPU reproduction. "
-            f"No paper-reported values are entered as reproduced measurements.",
+            f"(Qwen3/Gemma3/Llama3 training), which are out of scope for CPU "
+            f"reproduction. No paper-reported values are entered as reproduced "
+            f"measurements. {extra}",
         )
 
     # Claim 6: Direct conflict-averse gradient descent on objective-specific pairwise losses

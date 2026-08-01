@@ -10,6 +10,7 @@ EXPECTED_PAGES = (
     "03-theorem-31.md",
     "04-theorem-32.md",
     "05-limitations-and-provenance.md",
+    "06-pareto-proxy.md",
 )
 
 EXPECTED_HASHES = (

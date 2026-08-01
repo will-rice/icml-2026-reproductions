@@ -248,6 +248,15 @@ def test_claim8_mutation_regressions(project_root):
     cagrad_audit = _run_cagrad_audit()
     t31_audit = _run_theorem_31_audit()
     t32_strict_audit, _ = _run_theorem_32_audit()
+    pareto_stub = {
+        "config": {"train_pairs": 400, "conflict_cosine": -0.3},
+        "frontier": [],
+        "raco_hypervolume": 0.0,
+        "baseline_hypervolume": 0.0,
+        "raco_dominates_baseline_count": 0,
+        "weight_settings": 5,
+        "ablation": [],
+    }
 
     # Control: all dependencies hold -> Claim 8 supported
     control = _derive_claim_outcomes(
@@ -256,6 +265,7 @@ def test_claim8_mutation_regressions(project_root):
         cagrad_audit=cagrad_audit,
         t31_audit=t31_audit,
         t32_strict_audit=t32_strict_audit,
+        pareto_audit=pareto_stub,
     )
     assert control[8][0] == "supported"
 
@@ -270,6 +280,7 @@ def test_claim8_mutation_regressions(project_root):
         cagrad_audit=cagrad_audit,
         t31_audit=t31_mut1,
         t32_strict_audit=t32_strict_audit,
+        pareto_audit=pareto_stub,
     )
     assert out1[8][0] == "not-supported"
 
@@ -284,6 +295,7 @@ def test_claim8_mutation_regressions(project_root):
         cagrad_audit=cagrad_audit,
         t31_audit=t31_mut2,
         t32_strict_audit=t32_strict_audit,
+        pareto_audit=pareto_stub,
     )
     assert out2[8][0] == "not-supported"
 
@@ -296,6 +308,7 @@ def test_claim8_mutation_regressions(project_root):
         cagrad_audit=cagrad_audit,
         t31_audit=t31_mut3,
         t32_strict_audit=t32_strict_audit,
+        pareto_audit=pareto_stub,
     )
     assert out3[8][0] == "not-supported"
 
@@ -308,6 +321,7 @@ def test_claim8_mutation_regressions(project_root):
         cagrad_audit=cagrad_audit,
         t31_audit=t31_mut4,
         t32_strict_audit=t32_strict_audit,
+        pareto_audit=pareto_stub,
     )
     assert out4[8][0] == "not-supported"
 

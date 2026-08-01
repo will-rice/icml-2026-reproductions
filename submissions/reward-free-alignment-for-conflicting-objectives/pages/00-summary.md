@@ -24,6 +24,7 @@ This directory contains deterministic CPU reproduction evidence for the paper **
 - **Theorem 3.1:** Executed deterministic T=10 step trajectory on nonneg quadratic ($f_1 = x^2, f_2 = (x-1)^2$, $x_0 = 1.0 \to x_{10} = 0.244$). Finite-horizon bound: $\min_{t} \|\nabla L_w\|^2 = 0.026 \le 2 L_w(\theta_0) / (\eta(1-c^2)T) = 1.429$. Every $M(\theta_t)$ and $\|\nabla L_w(\theta_t)\|$ persisted.
 - **Theorem 3.2:** Interior strict witness with all 8 paper conditions. $\Gamma(\tilde{\rho}) - \Gamma(\rho) = 0.2091 > 0$ (genuine positive difference, not a near-zero boundary artifact). Identity residual $= 0$.
 - **Claim 6 Pipeline:** End-to-end from 3-parameter model through two objective-specific pairwise losses ($L_1 = 0.554$, $L_2 = 0.493$) through gradient extraction (non-colinear) to CAGrad-Clip application. Audit persisted under `audits.claim6_pipeline`.
+- **Executed Pareto Proxy (page 06):** Seeded nonconvex CPU proxy of the paper's optimization problem. RACO vs linear scalarization over 5 weight settings: hypervolume 0.739775 vs 0.748675 (comparable frontiers at toy scale), plus a clip-radius ablation showing the radius measurably shifts the converged operating point. Real executed numbers, byte-reproducible; paper-scale Claims 3-4 remain limited.
 - **Provenance:** Duplicate JSON keys rejected. Extra manifest keys rejected. Git blob IDs verified. Schema validation mandatory. All outcomes derived from audit results.
 
 ## Controller Correction Gate Addressed (Round 5)
