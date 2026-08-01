@@ -1,0 +1,96 @@
+{
+  "attempt_id": "9db24b0e-865b-43ab-b5a9-204b7f8a4843",
+  "claims": [
+    {
+      "claim": "RGR-GRPO constructs rubrics from the input question and reference answer to provide dense reward signals during GRPO training (Figure 2).",
+      "claim_sha256": "5c0d4622dc06cf2d2dc4ccc24627cfd9e4a2776441d9039d8546733a71f25566",
+      "evidence": "The pinned TeX source contains the rubric construction and normalized rubric-reward equations; no LLM judge or RL training was run.",
+      "status": "toy"
+    },
+    {
+      "claim": "The framework uses exploration assessment to trigger off-policy rubric-guided refinement only when on-policy exploration is insufficient (Figure 2).",
+      "claim_sha256": "c8f80b119663d66a805f4e39fb1f378f72edc3e3a0e825c1f0baa574c899344f",
+      "evidence": "The source contains Exploration Assessment, failed-criteria self-refinement, and Mix-Policy GRPO structure; a toy branch check verifies the control-flow condition.",
+      "status": "toy"
+    },
+    {
+      "claim": "RGR-GRPO improves over the verifiable online RL baseline by average margins of +7.0% on mathematics, +5.4% on physics, +8.4% on chemistry, and +6.6% on general reasoning benchmarks (Table 1).",
+      "claim_sha256": "3ac159e9611c46f76f06a1a093e676d0d26bfa21efd9c9f3c5a099544e0f4a1d",
+      "evidence": "Table 1 text is present, but model training and benchmark evaluation logs are not released or recomputed.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "The method is evaluated across 14 benchmarks spanning mathematics, physics, chemistry, and general reasoning domains (Section 3).",
+      "claim_sha256": "83e66bb936646bee611aa929a4e9008bcf874d91a6baf1388d4a60843a2c7772",
+      "evidence": "The Table 1 header exposes 12 benchmark columns across four domains; the broader 14-benchmark claim is not independently executed.",
+      "status": "toy"
+    },
+    {
+      "claim": "Ablations show rubric categories, off-policy shaping, and exploration assessment each contribute to average performance (Table 2).",
+      "claim_sha256": "d147e319b78c360815a3378c904f5c4dad76d1a3d1071f36a25fd4e6725c5ff9",
+      "evidence": "Ablation claim surfaces are present in source, but no ablation runs or logs are available for recomputation.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "The paper proves exploration assessment acts as a necessary adaptive variance controller for stabilizing RGR-GRPO training under its analysis assumptions (Theorem C.1).",
+      "claim_sha256": "0883b7c9c50d1208e49d991d449af0fde85baf37f4a4189a84aa926d483fa756",
+      "evidence": "The theorem claim is source-audited only; this bundle does not mechanically verify the proof.",
+      "status": "inconclusive"
+    }
+  ],
+  "estimated_paid_api_cost_usd": 0.0,
+  "limitations": [
+    "No official code repository, RL training run, model checkpoint, benchmark log, or judge transcript was found or recomputed.",
+    "Paper table values are treated as claim text, not reproduced measurements."
+  ],
+  "observations": {
+    "source_audit": {
+      "algorithm_components_present": true,
+      "benchmark_header_count": 12,
+      "benchmark_headers": [
+        "MATH",
+        "MATH500",
+        "SMath",
+        "PIQA",
+        "SPhys",
+        "Chem",
+        "SChem",
+        "MMLU",
+        "MMLU$^{+}$",
+        "GPQA$^{*}$",
+        "GPQA",
+        "OLY"
+      ],
+      "domain_headers": [
+        "Math",
+        "Physics",
+        "Chemistry",
+        "General"
+      ],
+      "has_ablation_claim_surface": true,
+      "has_table_1_claim_surface": true,
+      "has_theorem_claim_surface": true,
+      "rubric_reward_equations": 2
+    },
+    "toy_exploration_assessment": {
+      "all_criteria_satisfied": {
+        "failed_criteria": [],
+        "uses_off_policy_refinement": false
+      },
+      "one_failed_criterion": {
+        "failed_criteria": [
+          "process_2"
+        ],
+        "uses_off_policy_refinement": true
+      }
+    }
+  },
+  "paper_id": "AfqsNFzJcs",
+  "paper_title": "Reward and Guidance through Rubrics: Promoting Exploration to Improve Multi-Domain Reasoning",
+  "snapshot_id": "1564266f7b6b9982addaa7519d20795d476826ed5088911b2974317851458640",
+  "upstream": {
+    "arxiv_id": "2511.12344v2",
+    "source_sha256": "88d55bd8dcfc59a77e0c03586146450da6e52d129a35e79ed7aae24a30b21e3c",
+    "source_url": "https://arxiv.org/e-print/2511.12344v2"
+  }
+}

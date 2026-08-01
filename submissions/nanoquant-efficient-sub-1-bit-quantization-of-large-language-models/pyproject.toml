@@ -1,0 +1,12 @@
+[project]
+name = "nanoquant-reproduction"
+version = "0.1.0"
+description = "CPU evidence for NanoQuant source and metadata claims"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=4.0.0",
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

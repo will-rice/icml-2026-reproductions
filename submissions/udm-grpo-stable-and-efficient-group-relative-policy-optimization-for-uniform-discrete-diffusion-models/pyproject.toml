@@ -1,0 +1,15 @@
+[project]
+name = "udm-grpo-repro"
+version = "0.1.0"
+description = "CPU-only source/config audit for UDM-GRPO"
+requires-python = ">=3.10"
+dependencies = [
+  "pytest>=8.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/udm_grpo_repro"]

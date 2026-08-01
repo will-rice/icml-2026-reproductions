@@ -1,0 +1,193 @@
+{
+  "artifact_revisions": {
+    "arxiv": "2601.15417",
+    "model": "7fe372764f0486d834a666ac0c71748bf4d84710",
+    "space": "7360baf66f929ad297b2b7d5684209e7c04b7414"
+  },
+  "claims": [
+    {
+      "claim": "Ambient Dataloops iteratively trains a diffusion model on a noisy dataset and uses posterior sampling to refine that same dataset for subsequent loops.",
+      "evidence": {
+        "found": true,
+        "matched_patterns": [
+          "Algorithm 1",
+          "posterior sampling",
+          "restored point"
+        ],
+        "path": "/tmp/ambient_dataloops_combined_sources.txt",
+        "sha256": "9f496b4ed3efb2f0936ae0029c5ae3194ec6346ab49709e6a5e6dc2f47ec5166",
+        "snippets": {
+          "Algorithm 1": "of this algorithm to achieve, and in practice, it can be tuned as a hyperparameter. A complete description of the algorithm is provided in Algorithm 1. Discussion.The crux of this algorithm is dataset refinement; at each loop, we use the best model we have to improve the dataset by reducin",
+          "posterior sampling": "ain noise levels. We train a model on this noisy dataset using Ambient Diffusion (green), and then we use it to improve the dataset through posterior sampling (blue). We propose a dataset-model co-evolution process, termedAmbient Dataloops. At each iteration of this process, we start with a noisy",
+          "restored point": "ion cycle starts. 19:x ti/2l \u223cp \u03b8(l),ti/2l (\u00b7|xti , ti)\u25b7Perform posterior sampling fromt i tot i/2l. 20:D (l) \u2190 D(l) \u222a(x ti/2l , ti/2l)\u25b7Add restored point to dataset. 21:end for 22:end for and the finite number of rounds in our algorithm have a similar effect. Tuning the number of rounds wisel"
+        }
+      },
+      "id": 1,
+      "patterns": [
+        "Algorithm 1",
+        "posterior sampling",
+        "restored point"
+      ],
+      "reason": "The released paper text and model card describe the loop structure and posterior-sampling restoration step.",
+      "status": "verified"
+    },
+    {
+      "claim": "On CIFAR-10 with 90% corrupted and 10% clean data, one Ambient Dataloops iteration improves unconditional and conditional generation metrics over baselines.",
+      "evidence": {
+        "found": true,
+        "matched_patterns": [
+          "Table 1",
+          "CIFAR-10",
+          "90%"
+        ],
+        "path": "/tmp/ambient_dataloops_combined_sources.txt",
+        "sha256": "9f496b4ed3efb2f0936ae0029c5ae3194ec6346ab49709e6a5e6dc2f47ec5166",
+        "snippets": {
+          "90%": "ith Lemma 1, one needs an adapation of the latter for KL. 7 --- PAGE 8 --- Table 1:Unconditional and conditional results for CIFAR-10 with 90% corrupted and 10% clean data. CorruptionFiltering No Filtering Ambient Omni (Loop 0) Ambient DataLoops (Loop 1)\u03c3min FID (\u2193)\u03c3min FID (\u2193)Blur",
+          "CIFAR-10": "t of Lemma 2 with Lemma 1, one needs an adapation of the latter for KL. 7 --- PAGE 8 --- Table 1:Unconditional and conditional results for CIFAR-10 with 90% corrupted and 10% clean data. CorruptionFiltering No Filtering Ambient Omni (Loop 0) Ambient DataLoops (Loop 1)\u03c3min FID (\u2193)\u03c3min FI",
+          "Table 1": "ithms A or B. 1Formally, to combine the second part of Lemma 2 with Lemma 1, one needs an adapation of the latter for KL. 7 --- PAGE 8 --- Table 1:Unconditional and conditional results for CIFAR-10 with 90% corrupted and 10% clean data. CorruptionFiltering No Filtering Ambient Omni (Lo"
+        }
+      },
+      "id": 2,
+      "patterns": [
+        "Table 1",
+        "CIFAR-10",
+        "90%"
+      ],
+      "reason": "The table is located in the paper, but the audit did not find released executable result artifacts or checkpoints sufficient to recompute the FID/C-FID values on CPU.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "The denoising rate per loop has a non-monotonic effect and can enter a madness regime.",
+      "evidence": {
+        "found": true,
+        "matched_patterns": [
+          "Figure 3",
+          "madness regime",
+          "Table 3"
+        ],
+        "path": "/tmp/ambient_dataloops_combined_sources.txt",
+        "sha256": "9f496b4ed3efb2f0936ae0029c5ae3194ec6346ab49709e6a5e6dc2f47ec5166",
+        "snippets": {
+          "Figure 3": "ise Level for Different Loops (Initial noise = 2.0, divided by trust rate per loop) Loop 1 Loop 2 Loop 3 Loop 4 Optimal noise level: 0.0312 Figure 3: Multiple loops and ablation on the rate of progress.The horizontal axis is the noise level we denoise a corrupted CIFAR-10 dataset afterkl",
+          "Table 3": "s to do with the optimization (looping) process, i.e. withhow we reach the denoising limit. We investigate this extensively in Figure 3 and Table 3. The figure shows the effect of bringing the dataset to a noise level by running one or more loops. Going too fast or too slow is hurtful,",
+          "madness regime": "by the availability of data, not compute. 10 4 10 3 10 2 10 1 100 Dataset Noise Level 4.6 4.8 5.0 5.2 5.4 5.6 5.8 6.0 6.2Unconditional FID Madness Regime FID vs Dataset Noise Level for Different Loops (Initial noise = 2.0, divided by trust rate per loop) Loop 1 Loop 2 Loop 3 Loop 4 Optimal no"
+        }
+      },
+      "id": 3,
+      "patterns": [
+        "Figure 3",
+        "madness regime",
+        "Table 3"
+      ],
+      "reason": "The ablation is located in the paper text, but the training/evaluation sweep was not recomputed.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "Ambient Dataloops improves COCO zero-shot text-to-image generation and GenEval scores relative to using the initial synthetic dataset as clean.",
+      "evidence": {
+        "found": true,
+        "matched_patterns": [
+          "Table 2",
+          "COCO",
+          "GenEval"
+        ],
+        "path": "/tmp/ambient_dataloops_combined_sources.txt",
+        "sha256": "9f496b4ed3efb2f0936ae0029c5ae3194ec6346ab49709e6a5e6dc2f47ec5166",
+        "snippets": {
+          "COCO": "oise the DiffusionDB dataset to level\u03c3 DiffusionDB = 2.0and only use it to train for diffusion timest:\u03c3 t \u22652.0. This leads to a significant COCO FID improvement compared to using it as clean; FID drops from12.37to10.61. We now attempt to further improve the performance by taking the",
+          "GenEval": "2, as usual. The resulting model achieves further improvements to COCO FID and CLIP-FD score, as shown in Table 2 and scores comparable at GenEval (GPT-4o evaluations) across different categories. Figure 1 shows examples of images from DiffDB and their evolution across our looping proc",
+          "Table 2": "ion training objective equa- tion 2, as usual. The resulting model achieves further improvements to COCO FID and CLIP-FD score, as shown in Table 2 and scores comparable at GenEval (GPT-4o evaluations) across different categories. Figure 1 shows examples of images from DiffDB and their"
+        }
+      },
+      "id": 4,
+      "patterns": [
+        "Table 2",
+        "COCO",
+        "GenEval"
+      ],
+      "reason": "The HF model card and Space support the text-to-image artifact lineage, but the COCO/GenEval metrics are not recomputed here.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "In de novo protein backbone design, one Ambient Dataloops iteration produces a new Pareto point with a 14.3% diversity increase for a 0.2% designability decrease.",
+      "evidence": {
+        "found": true,
+        "matched_patterns": [
+          "Figure 4",
+          "14.3%",
+          "0.2%",
+          "designability"
+        ],
+        "path": "/tmp/ambient_dataloops_combined_sources.txt",
+        "sha256": "9f496b4ed3efb2f0936ae0029c5ae3194ec6346ab49709e6a5e6dc2f47ec5166",
+        "snippets": {
+          "0.2%": "joint space. Results.Just one loop of our procedure is enough to achieve a new Pareto point, as shown in Figure 4a. In particular, we trade0.2%decrease in designability for a14.3%increase in diversity, significantly expanding the creativity boundaries of the loop 0 model for the sam",
+          "14.3%": "of our procedure is enough to achieve a new Pareto point, as shown in Figure 4a. In particular, we trade0.2%decrease in designability for a14.3%increase in diversity, significantly expanding the creativity boundaries of the loop 0 model for the same inference param- eters. Both model",
+          "Figure 4": "25b) model to denoise its training set and we start a new training run on the denoised dataset. One example of such a denoising is given in Figure 4b. In agreement with the rest of the paper, we also treat the denoised dataset as noisy, but at a lower noise level. In this particular doma",
+          "designability": "djustments that led to inferior results. To assess the quality of the trained models, we use the two most established metrics in the field: Designability and Diversity. There is a trade-off between the two metrics that defines a Pareto frontier in the joint space. Results.Just one loop of our"
+        }
+      },
+      "id": 5,
+      "patterns": [
+        "Figure 4",
+        "14.3%",
+        "0.2%",
+        "designability"
+      ],
+      "reason": "The protein metric claim is located in the paper, but no released CPU-executable protein evaluation artifact was found.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "The paper provides theoretical justification that idealized dataset refinement can reduce estimation error after looping.",
+      "evidence": {
+        "found": true,
+        "matched_patterns": [
+          "Theoretical Modeling",
+          "estimation error",
+          "Proof of Lemma 1"
+        ],
+        "path": "/tmp/ambient_dataloops_combined_sources.txt",
+        "sha256": "9f496b4ed3efb2f0936ae0029c5ae3194ec6346ab49709e6a5e6dc2f47ec5166",
+        "snippets": {
+          "Proof of Lemma 1": "ithm A, according to Criterion 5, Al- gorithm C is weakly preferable to Algorithm B, and it is strictly preferable if equation 9 is strict. Proof of Lemma 1:We bound the estimation error made by Algorithms B and C using equation 3. The bounds are the same except that the bound for the error of A",
+          "Theoretical Modeling": "ver, if there is lack of data, our framework is useful as it attempts to extract as much utility as possible from the given training set. 4 Theoretical Modeling In this section, we study the theoretical aspects of the proposed method. We consider a stylized set- ting and version of the algorithm, ar",
+          "estimation error": "if the score function is sufficiently well-approximated after the first iteration, then performing adataset refinementstep can improve the estimation error. Setting.For the purposes of the theoretical analysis, we adopt the theoretical setting from Ambient Omni (Daras et al., 2025c), and identi"
+        }
+      },
+      "id": 6,
+      "patterns": [
+        "Theoretical Modeling",
+        "estimation error",
+        "Proof of Lemma 1"
+      ],
+      "reason": "The extracted paper text contains the theory section and proof structure for the idealized refinement claim.",
+      "status": "verified"
+    }
+  ],
+  "environment": {
+    "python_requirement": ">=3.10,<3.13"
+  },
+  "generated_at": "2026-08-01T13:15:00+00:00",
+  "limitations": [
+    "No diffusion training was run.",
+    "No FID, C-FID, COCO, GenEval, or protein designability/diversity metrics were recomputed.",
+    "Paper-reported metric values are reported only as located claims, not reproduced measurements."
+  ],
+  "paper_id": "Li5ki5Dopo",
+  "source_files": {
+    "model_card": {
+      "path": "submissions/ambient-dataloops-generative-models-for-dataset-refinement/evidence/sources/model-card/README.md",
+      "sha256": "73ae34f3a58ad84ed7cc2041e9ea6d1aab2962fcc64115001d6511c52d25495d"
+    },
+    "paper_text": {
+      "path": "submissions/ambient-dataloops-generative-models-for-dataset-refinement/evidence/sources/arxiv/2601.15417.txt",
+      "sha256": "03e0ea26dc0db0308f8f4150096975e239b244ce711ed1eae2c584066227095a"
+    },
+    "space_app": {
+      "path": "submissions/ambient-dataloops-generative-models-for-dataset-refinement/evidence/sources/source-space/app.py",
+      "sha256": "99a667ffb037786d0de4660b1132e220b59c82abae8eb3a9061be6f11b4e5a8c"
+    }
+  },
+  "title": "Ambient Dataloops: Generative Models for Dataset Refinement"
+}

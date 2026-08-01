@@ -1,0 +1,97 @@
+{
+  "attempt_id": "9bdedd5e-7e42-43cc-a356-bab8f5d9c344",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "claims": [
+    {
+      "challenge_claim": "DFlash uses a lightweight block diffusion draft model to generate speculative draft tokens in parallel, conditioned on hidden features extracted from the target LLM (Figure 2).",
+      "challenge_claim_sha256": "2637cad1833ecb87f838786ba8aee2364688f5c9a645ece89d4cf1fddbb26f68",
+      "observation": "The pinned source implements target hidden-state extraction, non-causal DFlash draft attention, mask/noise-token block drafting, and speculative prefix verification.",
+      "status": "verified",
+      "target_claim": "DFlash uses a lightweight block diffusion draft model to generate speculative draft tokens in parallel, conditioned on hidden features extracted from the target LLM (Figure 2)."
+    },
+    {
+      "challenge_claim": "On Qwen3 models with thinking disabled, DFlash consistently outperforms EAGLE-3 and reaches about 4.9x average greedy-decoding speedup over autoregressive decoding (Table 1).",
+      "challenge_claim_sha256": "83c2b07156c4deb43c365e160990f0cb39c9190c14d7ba862aac88079bce1551",
+      "observation": "No GPU serving benchmark was run for non-thinking Qwen3 speedup or EAGLE-3 comparison.",
+      "status": "inconclusive",
+      "target_claim": "On Qwen3 models with thinking disabled, DFlash consistently outperforms EAGLE-3 and reaches about 4.9x average greedy-decoding speedup over autoregressive decoding (Table 1)."
+    },
+    {
+      "challenge_claim": "With thinking mode enabled, DFlash maintains high acceptance length and roughly 4.5x speedups on reasoning-model settings (Table 2).",
+      "challenge_claim_sha256": "03c7bbcd902aee67b70a33a633fb2d90d249e2dceeca4971cd1771969db65076",
+      "observation": "No thinking-mode reasoning benchmark was run.",
+      "status": "inconclusive",
+      "target_claim": "With thinking mode enabled, DFlash maintains high acceptance length and roughly 4.5x speedups on reasoning-model settings (Table 2)."
+    },
+    {
+      "challenge_claim": "On SGLang with the FA4 backend, DFlash provides throughput speedups across Qwen3-4B, Qwen3-8B, and Qwen3-Coder-30B-A3B-Instruct up to 5.1x (Table 3).",
+      "challenge_claim_sha256": "1c22abd30516043736ec10d93a157de5fc2216ef069661335d1c04d49c919ddf",
+      "observation": "The README exposes SGLang FA4 commands, but no SGLang FA4 throughput run was executed.",
+      "status": "inconclusive",
+      "target_claim": "On SGLang with the FA4 backend, DFlash provides throughput speedups across Qwen3-4B, Qwen3-8B, and Qwen3-Coder-30B-A3B-Instruct up to 5.1x (Table 3)."
+    },
+    {
+      "challenge_claim": "Long-context fine-tuning preserves or improves DFlash acceptance length as LongBench context length increases beyond 4K (Table 4).",
+      "challenge_claim_sha256": "a591774b2149b43146f956d59c5df39775bd15ff9090f19e15a8bd91d141bdd1",
+      "observation": "No LongBench or long-context fine-tuning acceptance-length run was executed.",
+      "status": "inconclusive",
+      "target_claim": "Long-context fine-tuning preserves or improves DFlash acceptance length as LongBench context length increases beyond 4K (Table 4)."
+    },
+    {
+      "challenge_claim": "Ablations show that draft depth, number of target hidden features, block-size choice, and KV injection all materially affect DFlash acceptance length and speedup (Table 6; Table 7; Table 8; Table 9).",
+      "challenge_claim_sha256": "4e4cbcaf9b48d19f5fb2e11c9f92b04b30bcd8d97de43a3c95f4a3a20da1561e",
+      "observation": "No draft-depth, hidden-feature-count, block-size, or KV-injection ablation runs were executed.",
+      "status": "inconclusive",
+      "target_claim": "Ablations show that draft depth, number of target hidden features, block-size choice, and KV injection all materially affect DFlash acceptance length and speedup (Table 6; Table 7; Table 8; Table 9)."
+    }
+  ],
+  "cost_usd": 0.0,
+  "cpu_only": true,
+  "paper_id": "Oz335dV48X",
+  "reproduced_ablation_measurements": [],
+  "reproduced_speedup_measurements": [],
+  "snapshot_id": "db4e589075a6516afc06f7748ed6fdf9614a97cc6172a1eb9cbc91996483d48d",
+  "source_audit": {
+    "archive_url": "https://github.com/z-lab/dflash/archive/94e4abc5e0c31b67bc1a9d30f1cc34ece28a8756.zip",
+    "benchmark_backends": [
+      "mlx",
+      "sglang",
+      "transformers",
+      "vllm"
+    ],
+    "benchmark_datasets": [
+      "gsm8k",
+      "humaneval",
+      "math500",
+      "mbpp",
+      "mt-bench"
+    ],
+    "files_audited": [
+      "README.md",
+      "dflash/benchmark.py",
+      "dflash/model.py",
+      "dflash/model_mlx.py",
+      "pyproject.toml"
+    ],
+    "github_repo": "z-lab/dflash",
+    "github_revision": "94e4abc5e0c31b67bc1a9d30f1cc34ece28a8756",
+    "has_context_feature_extraction": true,
+    "has_dflash_generate": true,
+    "has_noise_embedding_draft_block": true,
+    "has_noncausal_draft_attention": true,
+    "has_parallel_block_acceptance": true,
+    "has_target_hidden_conditioning": true,
+    "readme_mentions_fa4": true,
+    "readme_mentions_qwen3_drafts": true
+  },
+  "upstream": {
+    "github": "github:z-lab/dflash@94e4abc5e0c31b67bc1a9d30f1cc34ece28a8756",
+    "model_cards": [
+      "z-lab/Qwen3-4B-DFlash-b16@b74e3a329c4d963783143b1e970d95b002be72bd",
+      "z-lab/Qwen3-8B-DFlash-b16@9b41424b7109f9c5413454f481b09a82b85333f4",
+      "z-lab/Qwen3-Coder-30B-A3B-DFlash@98ca0e3e2e6a372f2789d3a5e146566194084317"
+    ],
+    "openreview": "https://openreview.net/forum?id=Oz335dV48X",
+    "paper": "arxiv:2602.06036v2"
+  }
+}

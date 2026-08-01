@@ -1,0 +1,13 @@
+[project]
+name = "medmosaic-repro"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "huggingface-hub>=0.34",
+  "pandas>=2.2",
+  "pyarrow>=17",
+  "pytest>=8",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

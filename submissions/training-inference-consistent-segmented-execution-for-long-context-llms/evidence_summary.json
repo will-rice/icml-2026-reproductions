@@ -1,0 +1,128 @@
+{
+  "attempt_id": "18872478-4b49-464f-b63c-0ee39d354284",
+  "paper_id": "PoRigyDOcC",
+  "title": "Training-Inference Consistent Segmented Execution for Long-Context LLMs",
+  "upstream_revision": "arxiv:2605.11744v1",
+  "source_urls": {
+    "arxiv_abs": "https://arxiv.org/abs/2605.11744",
+    "arxiv_pdf": "https://arxiv.org/pdf/2605.11744",
+    "openreview": "https://openreview.net/forum?id=PoRigyDOcC"
+  },
+  "source_hashes": {
+    "generate_evidence.py": "63bc8bdb1f1dbec6085ed4de73d17e20603c34033887b649464c6848b6ad55f5",
+    "design": "1a880ddeb187bd808a7ea1d14ec1d441580b61001347442f68dcf5569e04f9d3"
+  },
+  "commands": [
+    "uv run pytest -q submissions/training-inference-consistent-segmented-execution-for-long-context-llms/tests/test_segmented_execution.py",
+    "uv run python submissions/training-inference-consistent-segmented-execution-for-long-context-llms/generate_evidence.py"
+  ],
+  "checks": {
+    "tbptt_gradient": {
+      "max_abs_gradient_error": 0.0,
+      "parameter_count": 21,
+      "num_segments": 5,
+      "segment_width": 4,
+      "state_width": 3,
+      "seed": 13
+    },
+    "retrieval_gradient_isolation": {
+      "retrieved_prefix_gradient_norm": 0.0,
+      "carried_state_gradient_norm": 0.6286930506648615,
+      "retrieval_changes_forward_output": true,
+      "seed": 19
+    },
+    "memory_scaling": [
+      {
+        "context_length": 4096,
+        "full_attention_units": 131072.0,
+        "segmented_execution_units": 307515.07692307694,
+        "full_to_segmented_ratio": 0.4262295081967213
+      },
+      {
+        "context_length": 8192,
+        "full_attention_units": 262144.0,
+        "segmented_execution_units": 320118.1538461539,
+        "full_to_segmented_ratio": 0.8188976377952755
+      },
+      {
+        "context_length": 16384,
+        "full_attention_units": 524288.0,
+        "segmented_execution_units": 345324.3076923077,
+        "full_to_segmented_ratio": 1.5182481751824817
+      },
+      {
+        "context_length": 32768,
+        "full_attention_units": 1048576.0,
+        "segmented_execution_units": 395736.6153846154,
+        "full_to_segmented_ratio": 2.6496815286624202
+      },
+      {
+        "context_length": 65536,
+        "full_attention_units": 2097152.0,
+        "segmented_execution_units": 496561.23076923075,
+        "full_to_segmented_ratio": 4.223350253807107
+      },
+      {
+        "context_length": 131072,
+        "full_attention_units": 4194304.0,
+        "segmented_execution_units": 698210.4615384615,
+        "full_to_segmented_ratio": 6.007220216606498
+      }
+    ]
+  },
+  "claims": [
+    {
+      "challenge_claim_sha256": "25f3ccef60346b8971c84ae4c1198d71df76526f54ddcc120fb772587ffbbbd4",
+      "claim": "The framework defines segment-level execution semantics where training and inference process sequences segment by segment with the same cross-segment interface (Definition 3.1)",
+      "status": "toy",
+      "observations": [
+        "The local surrogate uses one segment operator for all segment steps.",
+        "The carried state interface is identical in the TBPTT and explicit truncated-objective checks."
+      ]
+    },
+    {
+      "challenge_claim_sha256": "33d8cc56b976c169c14c76ef6e694d9e3a621db03a950d4f38c39c85a1cdd53b",
+      "claim": "For the stated truncated consistent objective, TBPTT computes the exact gradient rather than an approximation (Theorem 3.3)",
+      "status": "verified",
+      "observations": [
+        "Maximum absolute gradient error between TBPTT and explicit truncated objective: 0.000e+00."
+      ]
+    },
+    {
+      "challenge_claim_sha256": "8266ddd98e721ca3097a423634a36e7172a09f5c37ee4e5f10ff36d45ef20728",
+      "claim": "Training-inference alignment follows when the same segmented execution semantics and truncated objective are used for training and inference (Corollary 3.4)",
+      "status": "toy",
+      "observations": [
+        "The executable check aligns training and inference semantics in a small deterministic recurrence.",
+        "This supports the formal mechanism but does not reproduce a trained long-context LLM."
+      ]
+    },
+    {
+      "challenge_claim_sha256": "e6ef1ca7199ebaa42b363cd4677889ab91c4d5771563ad54aba748ffc5fbdcd7",
+      "claim": "The architecture uses head- and layer-sparse long-range retrieval with carried KV tails and forward-only retrieved prefixes (Figure 3)",
+      "status": "toy",
+      "observations": [
+        "Retrieved prefixes change the forward output while their gradient norm remains zero.",
+        "Carried state gradient norm: 0.628693."
+      ]
+    },
+    {
+      "challenge_claim_sha256": "76e754cb3680c6a2392c6547586848a704fc161b1d83279c3737aa4b6abaf68a",
+      "claim": "The method achieves comparable LongBench-E performance while lowering prefill memory and latency relative to full-context attention and other efficient baselines (Table 1)",
+      "status": "inconclusive",
+      "observations": [
+        "No released LongBench-E outputs, model checkpoints, or executable benchmark scripts were found.",
+        "The evidence does not treat table values from the paper as reproduced measurements."
+      ]
+    },
+    {
+      "challenge_claim_sha256": "391d5f95dceaeca03b50bf7ab344648fbf9517646d884cf93c9c4f2332d1a1c0",
+      "claim": "At 128K context, segmented execution provides approximately 6x lower peak prefill memory than full-context attention with FlashAttention (Figure 5)",
+      "status": "toy",
+      "observations": [
+        "Analytic peak-memory proxy gives a 128K full/segmented ratio of 6.007.",
+        "This validates scaling direction only, not the paper's FlashAttention GPU measurement."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+[project]
+name = "interplay-repro"
+version = "0.1.0"
+description = "CPU-only evidence audit for Interplay-LM reasoning artifacts"
+requires-python = ">=3.10"
+dependencies = [
+  "huggingface-hub>=0.34.0",
+  "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

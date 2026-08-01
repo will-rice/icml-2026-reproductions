@@ -1,0 +1,115 @@
+{
+  "attempt_id": "cd23c17f-37ff-4fb6-bda1-edd5d13d1f98",
+  "claims": [
+    {
+      "challenge_claim_sha256": "6dbb0db6591f750dcaa3e6399a3231244a03336bc82c62180cf6694197fc275e",
+      "claim": "RLER maintains a fixed-size rubric buffer that is updated with rubrics generated from current rollouts and pruned by rollout-score variance (Figure 2).",
+      "claim_index": 1,
+      "evidence": "Pinned code shows adaptive rubric reward, rubric-buffer initialization, generated-rubric append, a fixed max_active_rubrics cap of 5, and standard-deviation based active/inactive filtering.",
+      "observations": {
+        "appends_generated_rubrics": true,
+        "computes_score_std": true,
+        "has_active_inactive_persistent_fields": true,
+        "max_active_rubrics": 5,
+        "moves_inactive_rubrics": true,
+        "prunes_by_score_std": true,
+        "sources": [
+          "rl/open-instruct/train_dr_tulu.sh",
+          "rl/open-instruct/open_instruct/grpo_fast.py",
+          "rl/open-instruct/open_instruct/search_rewards/utils/rubric_utils.py"
+        ],
+        "uses_adaptive_rubric_reward": true,
+        "uses_rubric_buffer": true
+      },
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "2435861b841086c41c3abd36817b6070dc2958674879ae0f19c37c35e6cff5f2",
+      "claim": "DR Tulu-8B is trained as an open long-form deep-research agent using supervised cold start followed by online RL with asynchronous tool calls (Sections 4.2 and 4.3).",
+      "claim_index": 2,
+      "evidence": "Model and dataset cards show DR-Tulu-8B as an RL checkpoint on top of DR-Tulu-SFT-8B using dr-tulu-rl-data, while repository code and scripts show MCP tool use and async tool execution.",
+      "observations": {
+        "cards": {
+          "data_card_mentions_rl_training_data": true,
+          "data_card_mentions_search_rubrics": true,
+          "license": "apache-2.0",
+          "main_card_mentions_rl_checkpoint": true,
+          "main_card_mentions_tool_use": true,
+          "main_model_base": "rl-research/DR-Tulu-SFT-8B",
+          "main_model_dataset": "rl-research/dr-tulu-rl-data",
+          "no_rler_ablation_present": true,
+          "reported_table_present": true,
+          "sources": [
+            "submissions/reinforcement-learning-with-evolving-rubrics-for-deep-research/evidence/sources/DR-Tulu-8B/README.md",
+            "submissions/reinforcement-learning-with-evolving-rubrics-for-deep-research/evidence/sources/DR-Tulu-No-RLER-8B/README.md",
+            "submissions/reinforcement-learning-with-evolving-rubrics-for-deep-research/evidence/sources/dr-tulu-rl-data/README.md"
+          ]
+        },
+        "tooling": {
+          "sources": [
+            "agent/dr_agent/client.py",
+            "rl/open-instruct/train_dr_tulu.sh"
+          ],
+          "tool_names": [
+            "snippet_search",
+            "google_search",
+            "browse_webpage"
+          ],
+          "uses_async_tool_execution": true,
+          "uses_mcp_tools": true
+        }
+      },
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "da087d994a8c179dd208b35289af9d584d0bf234a6e10631dbf07fd119db4ea6",
+      "claim": "Across ScholarQA-CSv2, HealthBench, ResearchQA, and DeepResearchBench, DR Tulu-8B RL averages 65.6 and exceeds the best prior open baseline by 15.6 points (Table 1).",
+      "claim_index": 3,
+      "evidence": "A reported table is present in the model card, but this audit did not rerun ScholarQA-CSv2, HealthBench, ResearchQA, or DeepResearchBench evaluations and found no machine-readable primary result artifact that independently recomputes the 65.6 average or 15.6-point margin.",
+      "observations": {
+        "reported_table_present": true
+      },
+      "status": "inconclusive"
+    },
+    {
+      "challenge_claim_sha256": "69b717e22362e5c42f9c722d89b74a81248198ef5c016d4dcf4b5bdbfc6b036b",
+      "claim": "DR Tulu-8B lies on the performance-cost Pareto frontier and is reported as about 1000x cheaper per ScholarQA-CSv2 query than OpenAI Deep Research (Figure 1).",
+      "claim_index": 4,
+      "evidence": "The cost/Pareto-frontier claim requires benchmark scores plus query-cost accounting. This CPU audit did not rerun the agent, paid search/judge APIs, or cost measurements, so paper/card cost values are not reproduced evidence.",
+      "observations": {
+        "gpu_training_run": false,
+        "metered_api_cost_usd": 0.0
+      },
+      "status": "inconclusive"
+    },
+    {
+      "challenge_claim_sha256": "9358b526181e7b7e8711ac46603922ae2861891b5525b7cda3fe12deb88c0e13",
+      "claim": "Evolving rubrics outperform using only initial search-based rubrics during RL training, with the gap widening over training (Figure 6).",
+      "claim_index": 5,
+      "evidence": "The no-RLER ablation model card exists and the RLER mechanism is present in code, but the widening training-gap claim requires training-curve or evaluation artifacts that were not recomputed by this CPU audit.",
+      "observations": {
+        "no_rler_ablation_present": true
+      },
+      "status": "inconclusive"
+    },
+    {
+      "challenge_claim_sha256": "94f1bd76ff91fdbdff5a2d50679af9c7807e4826cf43eac84bc66c0514c5b074",
+      "claim": "Using Qwen3-8B as both judge and rubric generator still improves over the SFT baseline, though it underperforms GPT-based judging by 1.3 points (Table 4).",
+      "claim_index": 6,
+      "evidence": "The released code exposes configurable judge and rubric-generation models, but this audit did not find or recompute a machine-readable Qwen3-8B judge ablation table supporting the 1.3-point gap.",
+      "observations": {
+        "qwen3_mentions_available": true
+      },
+      "status": "inconclusive"
+    }
+  ],
+  "paper_id": "97NEP1pyS3",
+  "paper_title": "Reinforcement Learning with Evolving Rubrics for Deep Research",
+  "provenance": {
+    "data_card": "submissions/reinforcement-learning-with-evolving-rubrics-for-deep-research/evidence/sources/dr-tulu-rl-data/README.md",
+    "model_card": "submissions/reinforcement-learning-with-evolving-rubrics-for-deep-research/evidence/sources/DR-Tulu-8B/README.md",
+    "no_rler_card": "submissions/reinforcement-learning-with-evolving-rubrics-for-deep-research/evidence/sources/DR-Tulu-No-RLER-8B/README.md",
+    "upstream_commit": "9d7b0371c085e9311ddec483ed39768c0bd9fe99",
+    "upstream_repo": "https://github.com/rlresearch/dr-tulu"
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "arxiv": "2601.22651",
+  "attempt_id": "3ffbc4da-8f54-4a81-b70e-8103fe8eda1d",
+  "claims": [
+    {
+      "claim": "GUDA approximates leave-one-group-out counterfactual diffusion models by unlearning each group from a shared full-data model, then scores group influence by ELBO differences (Figure 1; Algorithm 1).",
+      "claim_sha256": "106c8d047410261b6f3b2038b498207ec9be867e354c567664d5f4cdd33c0917",
+      "evidence": "Pinned source contains LOGO/GUDA scoring paths and deterministic toy ranking evidence, but no diffusion checkpoint was trained in this CPU-only run.",
+      "status": "toy"
+    },
+    {
+      "claim": "On CIFAR-10 group attribution, GUDA achieves the best or tied-best head-focused attribution metrics while reducing wall-clock cost versus LOGO retraining (Table 1).",
+      "claim_sha256": "8cfe641882a49b33f0db50a94de87d4f60cbdda050fc34364c2267d024e9254d",
+      "evidence": "CIFAR-10 LOGO, GUDA-U, ranking, and summary source paths are present, but full CIFAR-10 training/checkpoints/results were not distributed or recomputed.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "On UnlearnCanvas artistic style attribution, GUDA outperforms semantic similarity and gradient/instance-level baselines on head-identification metrics (Table 2; Figure 2).",
+      "claim_sha256": "f2148792206d4cebe4304f05bcc130d9f83a77acab08a5df4e5b21d69930e619",
+      "evidence": "UnlearnCanvas prompt metadata and scoring/ranking source paths are verified; Stable Diffusion fine-tuning and image attribution metrics were not recomputed.",
+      "status": "toy"
+    },
+    {
+      "claim": "GUDA's weighted style-selection anchor strategy improves UnlearnCanvas attribution over simpler anchor alternatives (Table 3).",
+      "claim_sha256": "9c7f6323ad0541e5afe3f24417bbbe62c2510b3a1bd286cbae41f473122bd4ed",
+      "evidence": "Weighted-style-select and uniform/weighted ablation configurations are distinct and internally consistent, without running SD training.",
+      "status": "toy"
+    },
+    {
+      "claim": "Detailed cost analysis reports about 100x speedup over LOGOA on CIFAR-10 and 5.9x speedup over LOGOA on UnlearnCanvas (Table 11; Table 12).",
+      "claim_sha256": "dcd3d556206571fbe9121fac83ded756c044b9b7ff14ff48058d3c319b7d1338",
+      "evidence": "Timing/cost source and reproduction artifact paths exist, but the 100x and 5.9x wall-clock ratios were not recomputed from generated checkpoints.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "GUDA remains robust under a 5% noisy group partition on CIFAR-10 relative to compared attribution baselines (Table 16).",
+      "claim_sha256": "1821ab64dbe97bf7121de7694c3a3715844bb37300235ffb5b4451e878ba17ab",
+      "evidence": "The CPU source audit found noise/partition-related source references, but no runnable 5% noisy-partition robustness artifact was recomputed.",
+      "status": "inconclusive"
+    }
+  ],
+  "estimated_paid_api_cost_usd": 0.0,
+  "limitations": [
+    "No GPU training, diffusion checkpoint generation, Stable Diffusion fine-tuning, CIFAR-10 download, or UnlearnCanvas image download was performed.",
+    "Paper table values are not used as reproduced measurements."
+  ],
+  "observations": {
+    "anchor_configs": {
+      "ablation_sampling_config_present": true,
+      "ablation_sampling_modes": [
+        "uniform",
+        "weighted"
+      ],
+      "weighted_anchor_strategy": "weighted_style_select",
+      "weighted_differs_from_uniform": true,
+      "weighted_select_config_present": true
+    },
+    "python_syntax": {
+      "checked_python_files": 69,
+      "syntax_failures": []
+    },
+    "source_paths": {
+      "all_required_paths_present": true,
+      "noisy_partition_source_hits": [
+        "CIFAR10/cifar10_diffusion/diffusion_utils.py",
+        "CIFAR10/cifar10_diffusion/siss_trainer.py",
+        "CIFAR10/cifar10_diffusion/trainer.py",
+        "CIFAR10/cifar10_diffusion/esd_trainer.py",
+        "CIFAR10/cifar10_diffusion/base_unlearning_trainer.py",
+        "CIFAR10/cifar10_diffusion/erasediff_noise_trainer.py",
+        "CIFAR10/cifar10_diffusion/sampler.py",
+        "CIFAR10/cifar10_diffusion/retrack_trainer.py",
+        "CIFAR10/cifar10_diffusion/__init__.py",
+        "CIFAR10/tools/sample.py",
+        "CIFAR10/tools/create_fixed_noise.py",
+        "CIFAR10/evaluation/attribution_utils.py",
+        "CIFAR10/evaluation/precompute_base_elbo.py",
+        "CIFAR10/evaluation/seed_utils.py",
+        "CIFAR10/evaluation/data_manifests.py",
+        "CIFAR10/evaluation/compute_delta_elbo_unlearned.py",
+        "CIFAR10/evaluation/compute_class_attribution_logo_images.py",
+        "CIFAR10/evaluation/compute_delta_elbo_logo.py",
+        "UnlearnCanvas/evaluation/elbo_utils.py",
+        "UnlearnCanvas/evaluation/gradient_utils.py",
+        "UnlearnCanvas/evaluation/compute_logoa_ffsd.py",
+        "UnlearnCanvas/evaluation/compute_una_ffsd.py",
+        "UnlearnCanvas/evaluation/precompute_allclass_elbo_cache.py",
+        "UnlearnCanvas/machine_unlearning/retrack_latent/src/train_retrack_full.py",
+        "UnlearnCanvas/machine_unlearning/retrack_latent/src/train_retrack_ffsd.py",
+        "UnlearnCanvas/machine_unlearning/retrack_latent/src/dataset_prompts.py",
+        "UnlearnCanvas/machine_unlearning/retrack_latent/src/dataset_pairing.py",
+        "UnlearnCanvas/machine_unlearning/retrack_latent/src/train_prompts_full_base.py",
+        "UnlearnCanvas/machine_unlearning/retrack_latent/src/utils.py",
+        "UnlearnCanvas/machine_unlearning/retrack_latent/src/train_retrack_with_una.py"
+      ],
+      "required_paths": {
+        "cifar10_guda_scores": "CIFAR10/evaluation/compute_delta_elbo_unlearned.py",
+        "cifar10_logo_scores": "CIFAR10/evaluation/compute_delta_elbo_logo.py",
+        "cifar10_ranking": "CIFAR10/evaluation/ranking_metrics.py",
+        "cifar10_timing": "CIFAR10/evaluation/summarize_metrics.py",
+        "unlearncanvas_anchor_ablation": "UnlearnCanvas/scripts/run_anchor_ablation.sh",
+        "unlearncanvas_guda": "UnlearnCanvas/evaluation/compute_una_ffsd.py",
+        "unlearncanvas_logoa": "UnlearnCanvas/evaluation/compute_logoa_ffsd.py",
+        "unlearncanvas_ranking": "UnlearnCanvas/evaluation/ranking_metrics.py",
+        "unlearncanvas_timing": "UnlearnCanvas/evaluation/timing_utils.py",
+        "unlearncanvas_weighted_select": "UnlearnCanvas/evaluation/analyze_weighted_select.py"
+      },
+      "required_paths_present": {
+        "cifar10_guda_scores": true,
+        "cifar10_logo_scores": true,
+        "cifar10_ranking": true,
+        "cifar10_timing": true,
+        "unlearncanvas_anchor_ablation": true,
+        "unlearncanvas_guda": true,
+        "unlearncanvas_logoa": true,
+        "unlearncanvas_ranking": true,
+        "unlearncanvas_timing": true,
+        "unlearncanvas_weighted_select": true
+      }
+    },
+    "synthetic_ranking_metrics": {
+      "mean_reciprocal_rank": 1.0,
+      "ndcg_at_3": 1.0,
+      "top1_accuracy": 1.0
+    },
+    "unlearncanvas_metadata": {
+      "checked_config_files": [
+        "UnlearnCanvas/param_configs.json",
+        "UnlearnCanvas/param_configs_ablation_sampling_paperfaithful.json",
+        "UnlearnCanvas/param_configs_ablation_descriptor_count_paperfaithful.json",
+        "UnlearnCanvas/param_configs_ablation_temperature_paperfaithful.json"
+      ],
+      "eval_prompts": {
+        "objects": 20,
+        "rows": 1200,
+        "styles": 60
+      },
+      "paper_faithful_configs_match": true,
+      "paper_faithful_style_count": 16,
+      "paper_faithful_styles": [
+        "Abstractionism",
+        "Artist Sketch",
+        "Blossom Season",
+        "Blue Blooming",
+        "Bricks",
+        "Byzantine",
+        "Cartoon",
+        "Cold Warm",
+        "Color Fantasy",
+        "Comic Etch",
+        "Crayon",
+        "Crypto Punks",
+        "Cubism",
+        "Dadaism",
+        "Dapple",
+        "Defoliation"
+      ],
+      "train_prompts": {
+        "objects": 20,
+        "rows": 24000,
+        "styles": 60
+      }
+    }
+  },
+  "paper_id": "5f0gw9YpZC",
+  "paper_title": "GUDA: Counterfactual Group-wise Training Data Attribution for Diffusion Models via Unlearning",
+  "snapshot_id": "9ae380ff9f17dd30f9726665c69853999fb8026241d4923c916c735f5db1a2ec",
+  "upstream": {
+    "acquisition_commands": [
+      "git fetch --depth 1 https://github.com/sony/guda.git 9fcf10cc4362199efc4f975e4a950df826fada07",
+      "git checkout --detach 9fcf10cc4362199efc4f975e4a950df826fada07"
+    ],
+    "commit": "9fcf10cc4362199efc4f975e4a950df826fada07",
+    "key_file_sha256": {
+      "CIFAR10/evaluation/ranking_metrics.py": "5b9e875f05c31b27ec469e7dd4fb0b9039978cdad2b414bb1a6d10fbb8651969",
+      "LICENSE": "416110320ac7c53798530c5c1318ab57af8a1a4d63c3c25c848cbccf4965dde5",
+      "README.md": "836a244c38cc0d34fca231fdd7582a31f7ba5227a89607a9bb37ab66510a0703",
+      "REPRODUCTION.md": "9d4601e4be4a0ebc3cf561b9a29970f3e0f6987377fec8af2c33418c1f1d7dcc",
+      "UnlearnCanvas/evaluation/ranking_metrics.py": "e63e33beb9daa9e0267654fb59d99dede4727986485e4bb85af9e696550422ec",
+      "UnlearnCanvas/param_configs_ablation_sampling_paperfaithful.json": "e138bdae108f1b16f4084e7a6c26823078c674f56be71154454a72462510fbc5",
+      "UnlearnCanvas/param_configs_weighted_select.json": "6ed8912fa6b138169bba598b631ede7476b819e8404f9bff1dea422904aadc64"
+    },
+    "license": "MIT",
+    "repository": "https://github.com/sony/guda.git"
+  }
+}

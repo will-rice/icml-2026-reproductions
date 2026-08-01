@@ -1,0 +1,8 @@
+accelerate
+git+https://github.com/huggingface/diffusers.git
+torch
+transformers==4.42.4
+xformers
+gradio
+Pillow
+git+https://github.com/giannisdaras/ambient-omni.git@main#subdirectory=text-to-image

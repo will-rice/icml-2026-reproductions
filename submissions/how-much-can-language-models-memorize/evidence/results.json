@@ -1,0 +1,76 @@
+{
+  "attempt_id": "8de87cc9-1d39-49a6-b552-4b4dd7e67e0e",
+  "claims": [
+    {
+      "claim": "GPT-style transformers trained on uniform random data show an empirical memorization-capacity plateau of about 3.6 bits per parameter (Figure 1)",
+      "evidence": "Tiny CPU GPT-style models were trained on seeded uniform random token data. The measured bits-per-parameter values are toy-scale observations and are not the paper-reported 3.6 bits-per-parameter plateau.",
+      "status": "toy"
+    },
+    {
+      "claim": "Capacity estimates across model widths and depths support a roughly linear bits-per-parameter scaling law, with bfloat16 to float32 increasing capacity only modestly (Table 1)",
+      "evidence": "The run compares tiny model sizes under the same seeded random-data protocol. Precision effects are not reproduced because deterministic CPU bfloat16 training was not used.",
+      "status": "toy"
+    }
+  ],
+  "measurements": [
+    {
+      "bits_per_parameter": 0.020081370484595205,
+      "dataset_size": 8,
+      "mean_train_nll_bits_per_token": 3.615943670272827,
+      "memorized_bits": 24.57959747314453,
+      "model_name": "tiny-8",
+      "parameter_count": 1224,
+      "sequence_length": 8,
+      "train_steps": 2,
+      "vocab_size": 16
+    },
+    {
+      "bits_per_parameter": 0.03153133080675711,
+      "dataset_size": 16,
+      "mean_train_nll_bits_per_token": 3.7002005577087402,
+      "memorized_bits": 38.5943489074707,
+      "model_name": "tiny-8",
+      "parameter_count": 1224,
+      "sequence_length": 8,
+      "train_steps": 2,
+      "vocab_size": 16
+    },
+    {
+      "bits_per_parameter": 0.016512558825554385,
+      "dataset_size": 8,
+      "mean_train_nll_bits_per_token": 2.9762213230133057,
+      "memorized_bits": 65.5218334197998,
+      "model_name": "tiny-16",
+      "parameter_count": 3968,
+      "sequence_length": 8,
+      "train_steps": 2,
+      "vocab_size": 16
+    },
+    {
+      "bits_per_parameter": 0.019214594556439306,
+      "dataset_size": 16,
+      "mean_train_nll_bits_per_token": 3.4043474197387695,
+      "memorized_bits": 76.24351119995117,
+      "model_name": "tiny-16",
+      "parameter_count": 3968,
+      "sequence_length": 8,
+      "train_steps": 2,
+      "vocab_size": 16
+    }
+  ],
+  "paper_id": "bA6BgSbaUi",
+  "paper_reported_context": {
+    "context_only": true,
+    "plateau_bits_per_parameter": 3.6,
+    "source": "arxiv:2505.24832v3"
+  },
+  "provenance": {
+    "attempt_id": "8de87cc9-1d39-49a6-b552-4b4dd7e67e0e",
+    "paid_api_cost_usd": 0.0,
+    "paper_id": "bA6BgSbaUi",
+    "seed_policy": "Python random and torch manual seeds are fixed per run.",
+    "upstream_revision": "arxiv:2505.24832v3"
+  },
+  "title": "How much can language models memorize?",
+  "upstream_revision": "arxiv:2505.24832v3"
+}

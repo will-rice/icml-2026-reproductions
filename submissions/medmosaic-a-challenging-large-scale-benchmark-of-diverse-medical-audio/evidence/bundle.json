@@ -1,0 +1,99 @@
+{
+  "attempt_id": "32f2eefb-2f74-40c6-a98d-f7d9eed154e6",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "claims": [
+    {
+      "challenge_claim": "MedMosaic contains 46,701 medical audio question-answer pairs spanning physiological sounds, clinical conversations, and combined speech-sound scenarios (Figure 1)",
+      "challenge_claim_sha256": "7892ea8680906a105db8288b33fb04b6639d319047078eadd54a461c89d0dc09",
+      "observation": "The pinned released dataset index contains 4,661 rows, not the paper-claimed 46,701 QA pairs.",
+      "status": "falsified",
+      "target_claim": "MedMosaic contains 46,701 medical audio question-answer pairs spanning physiological sounds, clinical conversations, and combined speech-sound scenarios (Figure 1)"
+    },
+    {
+      "challenge_claim": "The benchmark includes multiple QA categories, including sound-only, speech-plus-sound, short and long clinical conversations, multi-turn MCQ, and open-ended QA (Table 1)",
+      "challenge_claim_sha256": "ab4285e365e2ada727ae3ccdb719a9c64ef075ed0fa1a6327daeb3d0955134cc",
+      "observation": "The pinned index contains the expected QA categories and folder-level coverage for sound-only, speech-plus-sound, speech-only, long-form, multi-turn, open-ended, and voice QA.",
+      "status": "verified",
+      "target_claim": "The benchmark includes multiple QA categories, including sound-only, speech-plus-sound, short and long clinical conversations, multi-turn MCQ, and open-ended QA (Table 1)"
+    },
+    {
+      "challenge_claim": "Benchmarking 13 audio-language systems shows Gemini-2.5-Pro is the strongest evaluated model but reaches only about 68.1% weighted accuracy (Table 1)",
+      "challenge_claim_sha256": "951f2c0da2384aa8130bf0d3a2901537d2cb167416f2888dd9b38d69b2720538",
+      "observation": "No primary model-evaluation logs or score tables for the 13-system benchmark are present in the pinned dataset artifact.",
+      "status": "inconclusive",
+      "target_claim": "Benchmarking 13 audio-language systems shows Gemini-2.5-Pro is the strongest evaluated model but reaches only about 68.1% weighted accuracy (Table 1)"
+    },
+    {
+      "challenge_claim": "Removing audio materially reduces model performance, indicating MedMosaic is not trivially solvable from question text alone (Table 5)",
+      "challenge_claim_sha256": "6a2e0745b8a74511913de8cf606b6f3ea8504f58db131c96406ac365b2671b8c",
+      "observation": "The pinned dataset index contains questions, labels, and audio paths, but no audio-removal ablation outputs.",
+      "status": "inconclusive",
+      "target_claim": "Removing audio materially reduces model performance, indicating MedMosaic is not trivially solvable from question text alone (Table 5)"
+    },
+    {
+      "challenge_claim": "Model accuracy generally declines from easy to hard difficulty strata across categories, supporting the benchmark's reasoning-difficulty labels (Table 6)",
+      "challenge_claim_sha256": "1ce471213ab62dad6a22534ed55da70a22b4664e8afdd603bd3d94507109b0a3",
+      "observation": "Difficulty labels are present, but the artifact does not include per-difficulty model accuracy outputs.",
+      "status": "inconclusive",
+      "target_claim": "Model accuracy generally declines from easy to hard difficulty strata across categories, supporting the benchmark's reasoning-difficulty labels (Table 6)"
+    },
+    {
+      "challenge_claim": "Clinical expert review accepted 72.4% of assessed synthetic QA examples without modification, supporting the synthetic generation pipeline's clinical validity (Section 4)",
+      "challenge_claim_sha256": "e7429633bf76cc769e78c999e472562cdcf2d0ea0c11017548dc54d4bfdf6254",
+      "observation": "The artifact does not include the clinical expert review sheets needed to reproduce the 72.4% acceptance rate.",
+      "status": "inconclusive",
+      "target_claim": "Clinical expert review accepted 72.4% of assessed synthetic QA examples without modification, supporting the synthetic generation pipeline's clinical validity (Section 4)"
+    }
+  ],
+  "cost_usd": 0.0,
+  "cpu_only": true,
+  "dataset_index_summary": {
+    "audio_folder_counts": {
+      "long_form": 106,
+      "multi_turn": 6,
+      "open_ended": 691,
+      "sound_only": 1417,
+      "speech_only": 1174,
+      "speech_sound": 1087,
+      "voice_qa_v2": 180
+    },
+    "dataset_file": "data/test.parquet",
+    "dataset_repo": "icml-anon-submission/medmosaic-dataset",
+    "dataset_revision": "a6ea67bd4a65b87248c6651e559656b2c31fa669",
+    "difficulty_counts": {
+      "easy": 930,
+      "hard": 2329,
+      "medium": 1396,
+      "null": 6
+    },
+    "ground_truth_answer_marker_rows": 3964,
+    "multi_turn_rows": 6,
+    "multi_turn_turns": 18,
+    "multi_turn_turns_with_answer_markers": 18,
+    "qa_type_counts": {
+      "Long_Form": 106,
+      "Multi_Turn": 6,
+      "Open_Ended": 691,
+      "Sound_Only": 1417,
+      "Speech_Only": 1174,
+      "Speech_Sound": 1087,
+      "voice_qa": 180
+    },
+    "row_count": 4661,
+    "rows_with_audio_path": 4661,
+    "rows_with_ground_truth": 4655,
+    "rows_with_question": 4655,
+    "standard_mcq_rows": 3964,
+    "standard_mcq_rows_with_ten_options": 3964
+  },
+  "paper_id": "OMdQJQwp26",
+  "reproduced_expert_review_measurements": [],
+  "reproduced_model_measurements": [],
+  "snapshot_id": "b09826f921a7d1649e5071df82e7a9f8f6211ac6dfa0e2589aa54651661eb283",
+  "upstream": {
+    "dataset": "icml-anon-submission/medmosaic-dataset@a6ea67bd4a65b87248c6651e559656b2c31fa669",
+    "dataset_file": "data/test.parquet",
+    "openreview": "https://openreview.net/forum?id=OMdQJQwp26",
+    "paper": "arxiv:2605.00969v2"
+  }
+}

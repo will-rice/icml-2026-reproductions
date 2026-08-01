@@ -1,0 +1,188 @@
+{
+  "attempt_id": "8d3d77be-6e6a-48a0-b50e-3a078786181d",
+  "challenge_snapshot_id": "b4f93b39c8b36e72a5c6e1cb4712583e6f78510e414749bc064f46a09ce81885",
+  "claim_bindings": [
+    {
+      "challenge_claim": "SimpleMem uses a three-stage memory pipeline: semantic structured compression, online semantic synthesis, and intent-aware retrieval planning (Figure 2).",
+      "challenge_claim_sha256": "c447ee8488120566377eecb650e62b3b423204b6facb5d5847e9a6d667f6f438",
+      "target_claim": "SimpleMem uses a three-stage memory pipeline: semantic structured compression, online semantic synthesis, and intent-aware retrieval planning (Figure 2)."
+    },
+    {
+      "challenge_claim": "On LoCoMo with high-capability backends, SimpleMem achieves a superior F1/token-cost trade-off over baseline memory systems (Figure 1; Table 1).",
+      "challenge_claim_sha256": "e6e9fc9c337f6c86aabec2bbd55b0cb537bee0cb2e47fe49c7481532978d742d",
+      "target_claim": "On LoCoMo with high-capability backends, SimpleMem achieves a superior F1/token-cost trade-off over baseline memory systems (Figure 1; Table 1)."
+    },
+    {
+      "challenge_claim": "On LongMemEval-S, SimpleMem obtains the best overall performance while maintaining balanced sub-task accuracy (Table 2).",
+      "challenge_claim_sha256": "e23d442bfe5504a53e95a3d90213c1af85a36777d7f6b136fb81e8ab749508fe",
+      "target_claim": "On LongMemEval-S, SimpleMem obtains the best overall performance while maintaining balanced sub-task accuracy (Table 2)."
+    },
+    {
+      "challenge_claim": "SimpleMem remains effective with small models, with 1.5B/3B backends often outperforming larger models using baseline memory systems (Table 3).",
+      "challenge_claim_sha256": "7860b82b3959720fe3736730a0965082b8e688a9a1919587994e23128f39eccb",
+      "target_claim": "SimpleMem remains effective with small models, with 1.5B/3B backends often outperforming larger models using baseline memory systems (Table 3)."
+    },
+    {
+      "challenge_claim": "On LoCoMo-10 with GPT-4.1-mini, SimpleMem reduces construction and retrieval time versus graph- or summary-based baselines while achieving the highest average F1 (Table 4).",
+      "challenge_claim_sha256": "a025d2297e521330de7565c181e5bd5fc11600ed721695c68001f15db54fa44b",
+      "target_claim": "On LoCoMo-10 with GPT-4.1-mini, SimpleMem reduces construction and retrieval time versus graph- or summary-based baselines while achieving the highest average F1 (Table 4)."
+    },
+    {
+      "challenge_claim": "Ablations show that semantic structured compression, online synthesis, and intent-aware retrieval planning each contribute materially to reasoning performance (Table 5).",
+      "challenge_claim_sha256": "240a8b0158dff372ed76fde5954fa36aec3f12501b1227938cc74280143f8ae4",
+      "target_claim": "Ablations show that semantic structured compression, online synthesis, and intent-aware retrieval planning each contribute materially to reasoning performance (Table 5)."
+    }
+  ],
+  "claims": [
+    {
+      "claim_index": 1,
+      "evidence_basis": [
+        "pinned_github_source",
+        "pinned_arxiv_source"
+      ],
+      "observed": {
+        "component_paths_present": {
+          "answer_generator": true,
+          "hybrid_retriever": true,
+          "memory_builder": true
+        },
+        "pipeline_terms": {
+          "intent_aware_retrieval_planning": true,
+          "online_semantic_synthesis": true,
+          "semantic_structured_compression": true
+        }
+      },
+      "status": "toy",
+      "summary": "The pinned source and arXiv source expose the three SimpleMem stages and corresponding implementation modules, but no end-to-end benchmark run was executed."
+    },
+    {
+      "claim_index": 2,
+      "evidence_basis": [
+        "api_backed_runner",
+        "artifact_absence"
+      ],
+      "observed": {
+        "evolvemem_runner_present": true,
+        "llm_judge_present": true,
+        "locomo_runner_present": true,
+        "raw_result_artifact_count": 0,
+        "raw_result_artifacts": [],
+        "requires_openai_api_key": true
+      },
+      "status": "unavailable",
+      "summary": "The pinned repository exposes API-backed benchmark runners, but no raw result artifacts are present; paper table values are not reproduced evidence."
+    },
+    {
+      "claim_index": 3,
+      "evidence_basis": [
+        "api_backed_runner",
+        "artifact_absence"
+      ],
+      "observed": {
+        "evolvemem_runner_present": true,
+        "llm_judge_present": true,
+        "locomo_runner_present": true,
+        "raw_result_artifact_count": 0,
+        "raw_result_artifacts": [],
+        "requires_openai_api_key": true
+      },
+      "status": "unavailable",
+      "summary": "The pinned repository exposes API-backed benchmark runners, but no raw result artifacts are present; paper table values are not reproduced evidence."
+    },
+    {
+      "claim_index": 4,
+      "evidence_basis": [
+        "api_backed_runner",
+        "artifact_absence"
+      ],
+      "observed": {
+        "evolvemem_runner_present": true,
+        "llm_judge_present": true,
+        "locomo_runner_present": true,
+        "raw_result_artifact_count": 0,
+        "raw_result_artifacts": [],
+        "requires_openai_api_key": true
+      },
+      "status": "unavailable",
+      "summary": "The pinned repository exposes API-backed benchmark runners, but no raw result artifacts are present; paper table values are not reproduced evidence."
+    },
+    {
+      "claim_index": 5,
+      "evidence_basis": [
+        "api_backed_runner",
+        "artifact_absence"
+      ],
+      "observed": {
+        "evolvemem_runner_present": true,
+        "llm_judge_present": true,
+        "locomo_runner_present": true,
+        "raw_result_artifact_count": 0,
+        "raw_result_artifacts": [],
+        "requires_openai_api_key": true
+      },
+      "status": "unavailable",
+      "summary": "The pinned repository exposes API-backed benchmark runners, but no raw result artifacts are present; paper table values are not reproduced evidence."
+    },
+    {
+      "claim_index": 6,
+      "evidence_basis": [
+        "pinned_arxiv_source",
+        "artifact_absence"
+      ],
+      "observed": {
+        "ablation_table_label_present": true,
+        "raw_result_artifact_count": 0
+      },
+      "status": "unavailable",
+      "summary": "The arXiv source contains the ablation table label, but the release does not include raw ablation outputs or a CPU-only rerun path without model APIs."
+    }
+  ],
+  "generated_at": "2026-08-01T14:05:00+00:00",
+  "observations": {
+    "benchmark_release": {
+      "evolvemem_runner_present": true,
+      "llm_judge_present": true,
+      "locomo_runner_present": true,
+      "raw_result_artifact_count": 0,
+      "raw_result_artifacts": [],
+      "requires_openai_api_key": true
+    },
+    "source_release": {
+      "arxiv_table_labels_present": {
+        "ablation": true,
+        "efficient_results": true,
+        "high_capacity_results": true,
+        "longmemeval_full": true,
+        "memory_time_accuracy": true
+      },
+      "code_revision": "db80b6a7c591e0ea730a058e9f5fc4eb06572299",
+      "component_paths_present": {
+        "answer_generator": true,
+        "hybrid_retriever": true,
+        "memory_builder": true
+      },
+      "pipeline_terms": {
+        "intent_aware_retrieval_planning": true,
+        "online_semantic_synthesis": true,
+        "semantic_structured_compression": true
+      },
+      "tracked_file_count": 461
+    }
+  },
+  "paper_id": "oBgLvd5YC6",
+  "provenance": {
+    "arxiv_pdf_sha256": "8752aa223e004ca286995bc1e8cbde8e89e67ad3aeb9ba0266f3ccab3cc11078",
+    "arxiv_source_sha256": "d75d00ede2529a7656b6c6030161d489630dcf03a9f538dbd20322aa6a69f08a",
+    "code": {
+      "repo": "https://github.com/aiming-lab/SimpleMem.git",
+      "revision": "db80b6a7c591e0ea730a058e9f5fc4eb06572299"
+    },
+    "commands": [
+      "git clone https://github.com/aiming-lab/SimpleMem.git /tmp/simplemem-upstream-codex03",
+      "git -C /tmp/simplemem-upstream-codex03 checkout db80b6a7c591e0ea730a058e9f5fc4eb06572299",
+      "curl -L https://arxiv.org/e-print/2601.02553 -o /tmp/simplemem-2601.02553-src.tar",
+      "curl -L https://arxiv.org/pdf/2601.02553 -o /tmp/simplemem-2601.02553.pdf"
+    ],
+    "license": "MIT"
+  }
+}

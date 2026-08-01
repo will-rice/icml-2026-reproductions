@@ -1,0 +1,16 @@
+[project]
+name = "motion-attribution-for-video-generation"
+version = "0.1.0"
+description = "CPU reproduction evidence for Motion Attribution for Video Generation"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "torch",
+    "pytest>=7.0.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["src"]

@@ -1,0 +1,15 @@
+[project]
+name = "normuon-repro"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=6.20.0",
+    "torch>=2.0.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.4.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

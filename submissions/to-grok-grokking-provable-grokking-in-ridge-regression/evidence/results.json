@@ -1,0 +1,141 @@
+{
+  "attempt_id": "4b8e5145-c432-4786-ace1-6270e8a2e192",
+  "claims": [
+    {
+      "claim": "The paper proves end-to-end grokking for zero-teacher ridge regression, including early training overfitting, delayed poor generalization, and eventual low generalization error (Theorem 4.1)",
+      "evidence": "ArXiv v4 theorem-structure audit only; no formal proof checker is run.",
+      "status": "paper-audit"
+    },
+    {
+      "claim": "Separate theorems decompose grokking into training-loss convergence, poor generalization during overfitting, and eventual generalization (Theorems 4.4-4.6)",
+      "evidence": "ArXiv v4 theorem decomposition is recorded as audit evidence, separate from reproduced measurements.",
+      "status": "paper-audit"
+    },
+    {
+      "claim": "Decreasing weight decay and sample size can amplify grokking time in ridge-regression simulations, matching the paper's quantitative hyperparameter predictions (Figure 2)",
+      "evidence": "A deterministic CPU toy sweep reports delay metrics across sample sizes and weight decay values.",
+      "status": "toy"
+    },
+    {
+      "claim": "Two-layer ReLU experiments qualitatively reproduce the predicted grokking-time dependence on hyperparameters beyond the linear setting (Figures 3 and 4)",
+      "evidence": "The two-layer ReLU experiments are out of scope for this CPU evidence bundle.",
+      "status": "unreplicated"
+    }
+  ],
+  "measurements": [
+    {
+      "condition_proxy": 3.20586349530471,
+      "delay_steps": null,
+      "final_test_loss": 0.3887116232106479,
+      "final_train_loss": 4.248354255291589e-18,
+      "grokking_step": null,
+      "overfit_step": 7,
+      "sample_size": 8,
+      "weight_decay": 0.03
+    },
+    {
+      "condition_proxy": 3.2404821043757415,
+      "delay_steps": 19,
+      "final_test_loss": 0.22677011195058586,
+      "final_train_loss": 4.248354255291589e-18,
+      "grokking_step": 26,
+      "overfit_step": 7,
+      "sample_size": 8,
+      "weight_decay": 0.08
+    },
+    {
+      "condition_proxy": 2.511253673739941,
+      "delay_steps": 16,
+      "final_test_loss": 0.16033892923206391,
+      "final_train_loss": 4.248354255291589e-18,
+      "grokking_step": 23,
+      "overfit_step": 7,
+      "sample_size": 8,
+      "weight_decay": 0.16
+    },
+    {
+      "condition_proxy": 4.30020850774001,
+      "delay_steps": null,
+      "final_test_loss": 0.3892899586177598,
+      "final_train_loss": 1.1837745124958396e-10,
+      "grokking_step": null,
+      "overfit_step": 12,
+      "sample_size": 14,
+      "weight_decay": 0.03
+    },
+    {
+      "condition_proxy": 4.6653954715820145,
+      "delay_steps": 13,
+      "final_test_loss": 0.2271970567971033,
+      "final_train_loss": 1.1837745124958396e-10,
+      "grokking_step": 25,
+      "overfit_step": 12,
+      "sample_size": 14,
+      "weight_decay": 0.08
+    },
+    {
+      "condition_proxy": 4.669670224217971,
+      "delay_steps": 11,
+      "final_test_loss": 0.16033892923206391,
+      "final_train_loss": 1.1837745124958396e-10,
+      "grokking_step": 23,
+      "overfit_step": 12,
+      "sample_size": 14,
+      "weight_decay": 0.16
+    },
+    {
+      "condition_proxy": 21.675192210472858,
+      "delay_steps": null,
+      "final_test_loss": 0.3866774333232843,
+      "final_train_loss": 4.819359837781834e-07,
+      "grokking_step": null,
+      "overfit_step": 18,
+      "sample_size": 22,
+      "weight_decay": 0.03
+    },
+    {
+      "condition_proxy": 8.795109615032892,
+      "delay_steps": 11,
+      "final_test_loss": 0.22597572390011447,
+      "final_train_loss": 4.819359837781834e-07,
+      "grokking_step": 29,
+      "overfit_step": 18,
+      "sample_size": 22,
+      "weight_decay": 0.08
+    },
+    {
+      "condition_proxy": 9.406699074849513,
+      "delay_steps": 10,
+      "final_test_loss": 0.1592822160435559,
+      "final_train_loss": 4.819359837781834e-07,
+      "grokking_step": 28,
+      "overfit_step": 18,
+      "sample_size": 22,
+      "weight_decay": 0.16
+    }
+  ],
+  "paper_id": "5nNNVY8NW4",
+  "provenance": {
+    "attempt_id": "4b8e5145-c432-4786-ace1-6270e8a2e192",
+    "paid_api_cost_usd": 0.0,
+    "paper_id": "5nNNVY8NW4",
+    "seed": 20260801,
+    "upstream_revision": "arxiv:2601.19791v4"
+  },
+  "theorem_audit": [
+    {
+      "audit_status": "paper-structure-recorded",
+      "claim": "The paper proves end-to-end grokking for zero-teacher ridge regression, including early training overfitting, delayed poor generalization, and eventual low generalization error (Theorem 4.1)",
+      "note": "The reproduction records the theorem dependency structure but does not machine-check the proof.",
+      "paper_location": "Theorem 4.1"
+    },
+    {
+      "audit_status": "paper-structure-recorded",
+      "claim": "Separate theorems decompose grokking into training-loss convergence, poor generalization during overfitting, and eventual generalization (Theorems 4.4-4.6)",
+      "note": "The reproduction separates training fit, delayed generalization, and eventual generalization as distinct evidence categories.",
+      "paper_location": "Theorems 4.4-4.6"
+    }
+  ],
+  "title": "To Grok Grokking: Provable Grokking in Ridge Regression",
+  "upstream_revision": "arxiv:2601.19791v4"
+}

@@ -1,0 +1,125 @@
+{
+  "artifact_access": {
+    "code_files": [
+      "scripts/eval_checkpoints.py",
+      "utils/dataset.py",
+      "utils/solution_dependency_graph.py",
+      "verl/dataset.py",
+      "verl/dataset_context.py",
+      "verl/reward_fn.py"
+    ],
+    "dataset_samples": [
+      "composition/heldout/op14-50k.jsonl",
+      "composition/test/op10-1k.jsonl",
+      "context/crazy_zootopia/test/op10_1k.jsonl"
+    ],
+    "raw_result_artifacts": []
+  },
+  "attempt_id": "02e96ad2-d870-4525-89c9-c5758aca0255",
+  "audits": {
+    "dataset_splits": {
+      "composition_depths": [
+        10,
+        14
+      ],
+      "context_depths": [
+        10
+      ],
+      "sample_hashes": {
+        "composition/heldout/op14-50k.jsonl": "9d7bdcca4b59d08710273b4b356907da1285128a496a733433f55b9fbe7090c7",
+        "composition/test/op10-1k.jsonl": "1051651820f6920486c7a28456b58378c12b0a1ea4b0f14edbe4edc4a1153abf",
+        "context/crazy_zootopia/test/op10_1k.jsonl": "4d1f472d77e8fd521838e9fb9a6c956d83afe5032aafc0b5ddf31df10d34ad0a"
+      },
+      "sample_record_count": 9
+    },
+    "official_code": {
+      "context_dataset_code": {
+        "status": "present"
+      },
+      "dataset_generation_code": {
+        "status": "present"
+      },
+      "dependency_graph_code": {
+        "status": "present"
+      },
+      "evaluation_code": {
+        "status": "present"
+      },
+      "process_reward_code": {
+        "status": "present"
+      },
+      "source_hashes": {
+        "scripts/eval_checkpoints.py": "f9467b5e46ae7fb48c42fc312c9bf22698580330d1830c82fcb00af2ecac7937",
+        "utils/dataset.py": "346a9f05395b70708c5f2598e7f905204b2fb09851706f392fcd3fdf12fac5c7",
+        "utils/solution_dependency_graph.py": "be6afc8e1cce83ff1db573405a46c0c7fcb098378afe21f8783fca43c895ab95",
+        "verl/dataset.py": "68e536b900e02c39f13983ba7523734182630a903f1423a3d180bc40b568b45e",
+        "verl/dataset_context.py": "9ec43829396fffc0d9f10c6a739e8a260afd6d852f24ba0d1dfe68a8a5c244c3",
+        "verl/reward_fn.py": "ce4910caa84f14c81d197564f4d4cce838cf2a04813e961485a254dde67bfcb7"
+      }
+    },
+    "raw_result_hashes": {}
+  },
+  "claim_results": [
+    {
+      "claim": "The paper uses a controlled synthetic reasoning framework with explicit dependency graphs, contextual templates, and process-verified evaluation (Figure 2).",
+      "claim_index": 1,
+      "claim_sha256": "e037801af94157ca0c71cae1f8902e9a3c3e67d13fc4dab05069d8b05f4106f3",
+      "limitation": "This is a source and dataset audit, not a rerun of full language-model training.",
+      "observation": "Pinned source exposes dependency graph, contextual dataset, process reward, and evaluation code paths; sampled datasets expose composition and context splits.",
+      "status": "verified"
+    },
+    {
+      "claim": "RL yields extrapolative pass@128 gains only when the post-training tasks sit near the model's edge of competence; gains vanish when tasks are already covered or too far out-of-distribution (Figure 1; Figure 3).",
+      "claim_index": 2,
+      "claim_sha256": "ba98c93e3789f48414096a4fd3644a76ce48697f12be53e256f2583397c551d9",
+      "limitation": "No raw official result artifact was found; paper-reported numeric gains are not treated as reproduced measurements.",
+      "observation": "Pinned artifacts expose the experiment family and lightweight provenance needed for a structural audit.",
+      "status": "toy"
+    },
+    {
+      "claim": "Contextual generalization requires minimal but nonzero pre-training exposure to long-tail contexts; exposure of at least about 1% enables RL to reinforce transfer (Figure 1; Figure 4).",
+      "claim_index": 3,
+      "claim_sha256": "d1d108be7d95ffa3d12c92756ab25471bd5b7ece916235312f6a8a5fc0f9f81e",
+      "limitation": "No raw official result artifact was found; paper-reported numeric gains are not treated as reproduced measurements.",
+      "observation": "Pinned artifacts expose the experiment family and lightweight provenance needed for a structural audit.",
+      "status": "toy"
+    },
+    {
+      "claim": "Mid-training plus RL outperforms RL alone on OOD-hard reasoning under fixed compute, with reported +10.8% gains (Figure 1; Figure 6).",
+      "claim_index": 4,
+      "claim_sha256": "c17b28c07811eb2e0552d7f127266442364beee489cd0613083cfd077ecde2b3",
+      "limitation": "No raw official result artifact was found; paper-reported numeric gains are not treated as reproduced measurements.",
+      "observation": "Pinned artifacts expose the experiment family and lightweight provenance needed for a structural audit.",
+      "status": "toy"
+    },
+    {
+      "claim": "Process-aware reward compositions reduce shortcut exploitation and improve reasoning performance relative to pure outcome rewards (Figure 7).",
+      "claim_index": 5,
+      "claim_sha256": "50a8391594f6917bc3fd908cd2934de69435745b010cc2286cdeca300f475739",
+      "limitation": "No raw official result artifact was found; paper-reported numeric gains are not treated as reproduced measurements.",
+      "observation": "Pinned artifacts expose the experiment family and lightweight provenance needed for a structural audit.",
+      "status": "toy"
+    },
+    {
+      "claim": "Training dynamics show reward stagnates when RL data are too easy or too hard, but improves when tasks are calibrated to the edge of competence (Figure 11).",
+      "claim_index": 6,
+      "claim_sha256": "5fcb84a1b21ff1cccbcd627802ea55fd68ef0eadc5fa58fe1c997c24de10c4e3",
+      "limitation": "No raw official result artifact was found; paper-reported numeric gains are not treated as reproduced measurements.",
+      "observation": "Pinned artifacts expose the experiment family and lightweight provenance needed for a structural audit.",
+      "status": "toy"
+    }
+  ],
+  "paper_id": "TBaUfO9znF",
+  "snapshot_id": "e24ef4f585f2af51c2a85898401421e84ff4d6e8b74fb53e138c9164f1e83d57",
+  "title": "On the Interplay of Pre-Training, Mid-Training, and RL on Reasoning Language Models",
+  "upstream_pins": {
+    "composition_dataset": "hf-dataset:Interplay-LM-Reasoning/composition@a09d5c14c02bfa339143fb00a93274d1a84aa31d",
+    "context_dataset": "hf-dataset:Interplay-LM-Reasoning/context@bb09a75f1d667931e19e9715521b59f5b4574791",
+    "context_pretrain": "hf-model:Interplay-LM-Reasoning/context_pretrain@588760f1ce30ad5d1d99d55421ff016a27461c83",
+    "context_pretrain_2": "hf-model:Interplay-LM-Reasoning/context_pretrain_2@b499d182df85b065d2dfe3b446e6b63e87c740ec",
+    "extrapolation_midtrain": "hf-model:Interplay-LM-Reasoning/extrapolation_midtrain@bf457d416f825011cae11dad0372e10f4c323b73",
+    "extrapolation_rl": "hf-model:Interplay-LM-Reasoning/extrapolation_rl@4861bd030e6fb92d94be3a1cecab89c2fac4b94a",
+    "official_code": "github:Interplay-LM-Reasoning/Interplay-LM-Reasoning@ab728f05d81de9af38d0ca155a84166b037e355a",
+    "paper": "arxiv:2512.07783v1"
+  }
+}

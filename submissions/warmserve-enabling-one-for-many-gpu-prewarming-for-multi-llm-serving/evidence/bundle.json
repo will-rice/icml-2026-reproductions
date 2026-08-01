@@ -1,0 +1,168 @@
+{
+  "attempt_id": "3d8acf83-97a0-43d3-a2fb-ea3e2b3c2b12",
+  "claim_results": {
+    "claim-1": {
+      "challenge_claim_sha256": "0c0a74f9b2474f2a5c7861cd114a8540f6a35cad8376727574edc2deb6595b72",
+      "status": "verified",
+      "summary": "Pinned source contains scheduler, prewarm manager, CUDA VMM, worker hooks, model config, and trace generator paths for the WarmServe design."
+    },
+    "claim-2": {
+      "challenge_claim_sha256": "74062b2b618fbcd71336f1910dc2ca3c093fb405878a352dc4025c9b85680135",
+      "status": "toy",
+      "summary": "Trace-character generation and 5-minute windows are present, but AzureConv 7.3% prediction error is not recomputed without the dataset."
+    },
+    "claim-3": {
+      "challenge_claim_sha256": "554d16b3aacae8ab9f26fda580eea541c9a22b74a2a4597602f63057eae3a5ac",
+      "status": "unavailable",
+      "summary": "TTFT prewarming measurements require CUDA/Ray/vLLM deployment and raw logs absent from the pinned repo."
+    },
+    "claim-4": {
+      "challenge_claim_sha256": "aa8aacfa03b2d61f40b5bc023835e12031c912f34805afa06ac9c0cb99970ad2",
+      "status": "unavailable",
+      "summary": "End-to-end 50.8x tail TTFT claim was not rerun on a GPU cluster."
+    },
+    "claim-5": {
+      "challenge_claim_sha256": "6182c76e4e228313cf3145aae8dc6e915d9645424f5b5f8d8032b07ec05264a0",
+      "status": "unavailable",
+      "summary": "Ablation claims require benchmark logs or reruns that are not available in this CPU audit."
+    },
+    "claim-6": {
+      "challenge_claim_sha256": "b6ad7a59b380d5d0e26e414fc8d831d0da015dc23ed944cd1e5d1bdd7f2e44c8",
+      "status": "unavailable",
+      "summary": "512-GPU P99 TTFT simulation was not rerun and no raw simulation artifact was found."
+    }
+  },
+  "generated_at": "2026-08-01T12:58:00+00:00",
+  "observations": {
+    "arxiv": {
+      "pdf": {
+        "available": true,
+        "bytes": 885773,
+        "expected_sha256": "9ac0e419ccfb3f8132f73ad662bbbaca842535b0e882346bac0b9882f2399ed2",
+        "label": "arxiv-pdf-v2",
+        "matches_expected": true,
+        "path": "/tmp/warmserve-artifacts-codex03/2512.09472v2.pdf",
+        "sha256": "9ac0e419ccfb3f8132f73ad662bbbaca842535b0e882346bac0b9882f2399ed2"
+      },
+      "source": {
+        "available": true,
+        "bytes": 566973,
+        "expected_sha256": "c945e654f3309f6de207c29c6151305a8ae4e53163846946958befc30a9d05d5",
+        "label": "arxiv-source-v2",
+        "matches_expected": true,
+        "path": "/tmp/warmserve-artifacts-codex03/2512.09472v2.tar",
+        "sha256": "c945e654f3309f6de207c29c6151305a8ae4e53163846946958befc30a9d05d5"
+      }
+    },
+    "files": [
+      {
+        "bytes": 6362,
+        "path": "README.md",
+        "sha256": "2790e6cee5343e7bb8014529bf5401d17fa887886ec733699870990b48da0cc8"
+      },
+      {
+        "bytes": 11357,
+        "path": "LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      {
+        "bytes": 18868,
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/scheduler.py",
+        "sha256": "8b68849475e9e9626384b9f299f730f0e41c7b6fa7a17bb843c93107b3ebe882"
+      },
+      {
+        "bytes": 67065,
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/prewarm_manager.py",
+        "sha256": "7820b1aa74e56986e8eefa02124ca122d69b9da242ff8700b0d602f0f83d2bb5"
+      },
+      {
+        "bytes": 13048,
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/vmm.py",
+        "sha256": "498813c1335413b7a2c84d39147acc5ed0986ed9571e8db4b6904b3b3a96d320"
+      },
+      {
+        "bytes": 35340,
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/utils.py",
+        "sha256": "74ed4fccfce3ed048a9cf7fd8269fe1b581f3f6d6511a31c6cf8519d75f5d6cc"
+      },
+      {
+        "bytes": 18396,
+        "path": "trace-generator/trace_generator.py",
+        "sha256": "874dd69cb109ceb0a9b9849d643f2ab45c08713e66a714f4d09d284bbff371e3"
+      },
+      {
+        "bytes": 646,
+        "path": "trace-generator/models.yaml",
+        "sha256": "1937dd8474b587319de40648271afe295ebd19e221ebc5441b0101cd697ba1fe"
+      }
+    ],
+    "raw_result_artifacts": [],
+    "runtime_constraints": {
+      "cpu_only_reproduction": true,
+      "gpu_cluster_required": true,
+      "requires_cuda_extension": true,
+      "requires_ray_vllm_models_and_traces": true
+    },
+    "source_indicators": {
+      "model_config": {
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/ModelConfig.py",
+        "present": true,
+        "snippet": "hat both K cache and V cache are included for block_size_per_gpu_mb. The block_size_per_gpu_mb should satisfy that a single K block (or V block)'s size is the multiple of 2MB. ''' ModelKVConfig = { os.path.join(model_path, \"llama-7b/tp1_pp1\"): (256, 32), os.path.join(model_path, \"llama-13b/tp2_pp1\"): (256, 100), os.path.join(model_path, \"llama-70b/tp4_pp1\"):"
+      },
+      "prewarm_manager": {
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/prewarm_manager.py",
+        "present": true,
+        "snippet": "[By creating workers in prior.] 2. Model. [By loading model to workers in prior.] 3. Engine. [By creating subprocess that imports libraries in prior.] \"\"\" @ray.remote(num_cpus=1) class PrewarmManager: def __init__(self, args): self.node_id = ray.get_runtime_context().get_node_id() self.use_unified_memory = args.use_unified_memory self.disable_all_pr"
+      },
+      "scheduler": {
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/scheduler.py",
+        "present": true,
+        "snippet": "lStatus @dataclass class Replica: model_id: int = -1 tp: int = -1 mem_per_gpu: int = -1 score: int = -1 worker_ids: Tuple[int] = () \"\"\" Prewarm Scheduler \"\"\" class Scheduler: def __init__(self, model_info: Dict[str, Tuple[int, int, str]], num_servers: int, num_gpu_per_server: int, disable_placement: bool, window_size: int = 300): self.mod"
+      },
+      "trace_generator": {
+        "path": "trace-generator/trace_generator.py",
+        "present": true,
+        "snippet": "pend(sampled) generate_workload(workload_infos=workload_info, output_file=output_file, sampled_requests=sampled_requests) def get_prewarm_placement(model_yaml: str, alpha: float, output_file: str, character_output_file: str,"
+      },
+      "vmm": {
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/vmm.py",
+        "present": true,
+        "snippet": "pes from ctypes import POINTER, c_void_p, c_size_t, c_uint64, c_int, byref, c_uint import time import cupy as cp import numpy as np from typing import Dict, Tuple, Optional, List class CUDAVMMPool: def __init__(self): self._init_cuda_driver() self.pool_size = 0 self.block_size = 0 self.device_id = -1 self.granularity = 0 s"
+      },
+      "worker_hooks": {
+        "path": "vllm-0.6.3.post1/vllm/entrypoints/controller/utils.py",
+        "present": true,
+        "snippet": "logger.info(f\"Rank {self.local_rank} prewarmed model {model_info.model_name} rank {rank} on slot {prewarm_model.slot}. Time cost = {'%.2f' % (time.time() - stime)} seconds\") class MyWorkerWrapper(RayWorkerWrapper): def __init__(self, *args, **kwargs): super().__init__(*args, **kwargs) self._init_libraries() self.model_info = None self.wo"
+      }
+    },
+    "source_tree": {
+      "commit": "a60121519e077d2f128b597cbabc947e3e618aaf",
+      "repo": "https://github.com/LLMServe/WarmServe.git",
+      "tracked_file_count": 1294
+    },
+    "trace_generator": {
+      "cluster": {
+        "ngpus_per_node": 8,
+        "nnodes": 2
+      },
+      "interval_seconds": 300,
+      "model_yaml_models": 4
+    }
+  },
+  "paper_id": "DVHpvumD60",
+  "snapshot_id": "98fe583a0a55974d2d28e1beba12e398eb7e8b7f05fadb6d33fdd243b1988644",
+  "unreplicated": [
+    "AzureConv 7.3% peak-load prediction error was not recomputed because the released repository contains dataset paths, not the trace CSV.",
+    "TTFT reductions require CUDA memory extension, Ray, vLLM, model checkpoints, and generated workloads.",
+    "Ablation and end-to-end benchmark claims were not rerun without GPU cluster logs.",
+    "512-GPU simulation P99 TTFT was not rerun and no raw simulation output was found."
+  ],
+  "upstream": {
+    "arxiv_pdf_sha256": "9ac0e419ccfb3f8132f73ad662bbbaca842535b0e882346bac0b9882f2399ed2",
+    "arxiv_source_sha256": "c945e654f3309f6de207c29c6151305a8ae4e53163846946958befc30a9d05d5",
+    "code_license": "Apache-2.0",
+    "github": "LLMServe/WarmServe@a60121519e077d2f128b597cbabc947e3e618aaf",
+    "paper": "arxiv:2512.09472v2",
+    "url": "https://github.com/LLMServe/WarmServe.git"
+  }
+}

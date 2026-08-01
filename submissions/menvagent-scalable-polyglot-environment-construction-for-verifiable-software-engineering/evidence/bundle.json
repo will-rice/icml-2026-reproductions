@@ -1,0 +1,234 @@
+{
+  "attempt_id": "9d2896b2-1cf9-41ad-ba71-0cf34fceb55e",
+  "challenge_snapshot_id": "bdb659717fc36b718f037c86e25b07c732c5efdb270b366a2fb8ac135476a0e6",
+  "claims": [
+    {
+      "claim_index": 1,
+      "evidence_basis": [
+        "pinned_github_readme",
+        "pinned_arxiv_source"
+      ],
+      "observed": {
+        "core_code_public_release_note": "The core code is currently being organized for public release.",
+        "env_patch_agent_present": true,
+        "environment_reuse_terms_present": true,
+        "p_e_v_terms_present": true
+      },
+      "status": "toy",
+      "summary": "The pinned source and arXiv source describe Planning-Execution-Verification and environment reuse, but the core runtime code is not fully released."
+    },
+    {
+      "claim_index": 2,
+      "evidence_basis": [
+        "hf_dataset_viewer_size",
+        "hf_dataset_viewer_statistics"
+      ],
+      "observed": {
+        "language_frequencies": {
+          "C": 100,
+          "C++": 100,
+          "Go": 100,
+          "Java": 100,
+          "JavaScript": 100,
+          "PHP": 100,
+          "Python": 100,
+          "Ruby": 100,
+          "Rust": 100,
+          "TypeScript": 100
+        },
+        "num_rows": 1000,
+        "schema_fields": [
+          "repo",
+          "pull_number",
+          "instance_id",
+          "issue_numbers",
+          "base_commit",
+          "patch",
+          "test_patch",
+          "problem_statement",
+          "hints_text",
+          "all_hints_text",
+          "commit_urls",
+          "created_at",
+          "version",
+          "language"
+        ],
+        "unique_languages": 10,
+        "unique_repositories": 200
+      },
+      "status": "verified",
+      "summary": "Released MEnvBench metadata and statistics show 1,000 rows, 200 repositories, and 10 languages."
+    },
+    {
+      "claim_index": 3,
+      "evidence_basis": [
+        "artifact_absence"
+      ],
+      "status": "unavailable",
+      "summary": "Kimi-K2/Gemini-3-Flash versus SWE-Factory results require proprietary or paid model runs and raw logs not present in the release."
+    },
+    {
+      "claim_index": 4,
+      "evidence_basis": [
+        "artifact_absence"
+      ],
+      "status": "unavailable",
+      "summary": "EnvPatchAgent and reuse ablation metrics require benchmark reruns or raw ablation logs not present in the release."
+    },
+    {
+      "claim_index": 5,
+      "evidence_basis": [
+        "artifact_absence"
+      ],
+      "status": "unavailable",
+      "summary": "Fine-tuning claims require training/evaluation runs and checkpoints/logs that were not released as executable evidence."
+    },
+    {
+      "claim_index": 6,
+      "evidence_basis": [
+        "pinned_hf_jsonl_stream",
+        "hf_dataset_viewer_size"
+      ],
+      "observed": {
+        "menvdata_swe": {
+          "num_rows": 3005,
+          "schema_fields": [
+            "all_hints_text",
+            "base_commit",
+            "commit_urls",
+            "created_at",
+            "env_setup_script",
+            "eval_script",
+            "hints_text",
+            "image_name",
+            "instance_id",
+            "issue_numbers",
+            "language",
+            "original_env_setup_script",
+            "patch",
+            "problem_statement",
+            "pull_number",
+            "repo",
+            "test_patch",
+            "version"
+          ],
+          "unique_languages": 10,
+          "unique_repositories": 942
+        },
+        "menvdata_swe_trajectory": {
+          "claimed_trajectory_count": 3872,
+          "matches_claimed_trajectory_count": false,
+          "viewer_num_rows": 3918
+        }
+      },
+      "status": "falsified",
+      "summary": "MEnvData-SWE matches 3,005 rows, 942 repositories, and 10 languages, but the trajectory viewer reports 3,918 rows rather than the claimed 3,872."
+    }
+  ],
+  "generated_at": "2026-08-01T13:25:00+00:00",
+  "observations": {
+    "menvbench": {
+      "language_frequencies": {
+        "C": 100,
+        "C++": 100,
+        "Go": 100,
+        "Java": 100,
+        "JavaScript": 100,
+        "PHP": 100,
+        "Python": 100,
+        "Ruby": 100,
+        "Rust": 100,
+        "TypeScript": 100
+      },
+      "num_rows": 1000,
+      "schema_fields": [
+        "repo",
+        "pull_number",
+        "instance_id",
+        "issue_numbers",
+        "base_commit",
+        "patch",
+        "test_patch",
+        "problem_statement",
+        "hints_text",
+        "all_hints_text",
+        "commit_urls",
+        "created_at",
+        "version",
+        "language"
+      ],
+      "unique_languages": 10,
+      "unique_repositories": 200
+    },
+    "menvdata_swe": {
+      "num_rows": 3005,
+      "schema_fields": [
+        "all_hints_text",
+        "base_commit",
+        "commit_urls",
+        "created_at",
+        "env_setup_script",
+        "eval_script",
+        "hints_text",
+        "image_name",
+        "instance_id",
+        "issue_numbers",
+        "language",
+        "original_env_setup_script",
+        "patch",
+        "problem_statement",
+        "pull_number",
+        "repo",
+        "test_patch",
+        "version"
+      ],
+      "unique_languages": 10,
+      "unique_repositories": 942
+    },
+    "menvdata_swe_trajectory": {
+      "claimed_trajectory_count": 3872,
+      "matches_claimed_trajectory_count": false,
+      "viewer_num_rows": 3918
+    },
+    "source_release": {
+      "code_revision": "d9e63881f7c4a4670bb536c89add24573459bbee",
+      "core_code_public_release_note": "The core code is currently being organized for public release.",
+      "curation_script_count": 18,
+      "curation_scripts_present": true,
+      "env_patch_agent_present": true,
+      "environment_reuse_terms_present": true,
+      "p_e_v_terms_present": true,
+      "tracked_file_count": 32
+    }
+  },
+  "paper_id": "Mkal0hTCnh",
+  "provenance": {
+    "arxiv_pdf_sha256": "ea8483bc1ab4e47fb3b0a824cf61f364e07287d5b98f0da6aafc90132cf4341f",
+    "arxiv_source_sha256": "1cd2573993bd41a200a225da3f17af2b927dc5c307844166e5b5ec4a37ddd8d0",
+    "code": {
+      "repo": "https://github.com/ernie-research/MEnvAgent.git",
+      "revision": "d9e63881f7c4a4670bb536c89add24573459bbee"
+    },
+    "datasets": {
+      "MEnvBench": {
+        "filename": "MEnvBench.jsonl",
+        "lfs_oid": "2f81e7edd4202eb0d3eda5598d22b64f43e2df29eda093a580ec87e58cbd93f4",
+        "repo": "ernie-research/MEnvBench",
+        "revision": "4e312f11663e2ccdbd11f5cc3421de117ef4e118"
+      },
+      "MEnvData-SWE": {
+        "filename": "swe-images.jsonl",
+        "lfs_oid": "e111fa1a8c4565f427d928652fddde7ce36a9d32973bb554beb60fba2c6055aa",
+        "repo": "ernie-research/MEnvData-SWE",
+        "revision": "edfaa7bf15ada849c3bd63f55a5e3ab9e85359c2"
+      },
+      "MEnvData-SWE-Trajectory": {
+        "filename": "final_trajectories.jsonl",
+        "lfs_oid": "ec3d932bad7a81dcaeb29b9d53eff7042fa955c0999e23a5b32054ec5ab1cc46",
+        "repo": "ernie-research/MEnvData-SWE-Trajectory",
+        "revision": "7da0792504710d476297936765e40de3fd387097"
+      }
+    },
+    "license": "Apache-2.0"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "attempt_id": "8de87cc9-1d39-49a6-b552-4b4dd7e67e0e",
+  "paid_api_cost_usd": 0.0,
+  "paper_id": "bA6BgSbaUi",
+  "seed_policy": "Python random and torch manual seeds are fixed per run.",
+  "upstream_revision": "arxiv:2505.24832v3"
+}

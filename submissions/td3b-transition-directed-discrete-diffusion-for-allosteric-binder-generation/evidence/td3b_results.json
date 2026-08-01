@@ -1,0 +1,441 @@
+{
+  "challenge": {
+    "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+    "snapshot_id": "d32beb9e79859f40a37e565155ef84fb3bdc6bf3679e8f79e8f5414cc3f60600"
+  },
+  "checkpoint_lfs": {
+    "checkpoints/direction_oracle.pt": {
+      "sha256": "5ee476c8100752caab069d17569beaece06728d3c8a92223b603c3cba6a9246d",
+      "size": 2850095568
+    },
+    "checkpoints/pretrained.ckpt": {
+      "sha256": "b259f022c21121f5c755fed61230d6fdf2626ee4ab8a23df479b3cf553fd4aef",
+      "size": 1386966244
+    },
+    "checkpoints/td3b.ckpt": {
+      "sha256": "9b8aeecbfe29b4652860028135c2d7abd2688cfa51aa939b419dd3aec41495d4",
+      "size": 231462144
+    }
+  },
+  "claims": [
+    {
+      "challenge_claim": "TD3B formulates allosteric binder design as control over sequence-conditioned transition operators rather than optimization toward static conformations (Section 4.2).",
+      "challenge_claim_sha256": "4c03c406b80c7586ceeec169ec719b66f053855a3b250c7a2170f26cb39b920b",
+      "claim": "TD3B formulates allosteric binder design as control over sequence-conditioned transition operators rather than optimization toward static conformations (Section 4.2).",
+      "evidence_keys": [
+        "gated_reward",
+        "masked_diffusion"
+      ],
+      "id": 1,
+      "reason": "Pinned source implements directional reward over a masked discrete diffusion policy.",
+      "status": "verified"
+    },
+    {
+      "challenge_claim": "The framework combines a target-aware Direction Oracle, a soft binding-affinity gate, and amortized fine-tuning of a masked discrete diffusion model (Figure 2).",
+      "challenge_claim_sha256": "f2193780f1188d5831fb48a1c4c4523020c2902f23770f5fadb2462b128b7ade",
+      "claim": "The framework combines a target-aware Direction Oracle, a soft binding-affinity gate, and amortized fine-tuning of a masked discrete diffusion model (Figure 2).",
+      "evidence_keys": [
+        "direction_oracle",
+        "soft_affinity_gate",
+        "td3b_losses",
+        "amortized_finetuning",
+        "masked_diffusion",
+        "mcts",
+        "inference_resampling"
+      ],
+      "id": 2,
+      "reason": "Pinned source contains the Direction Oracle, affinity gate, TD3B losses, MCTS fine-tuning path, and inference resampling path.",
+      "status": "verified"
+    },
+    {
+      "challenge_claim": "The Direction Oracle achieves 0.93 accuracy, 0.90 precision, 0.91 recall, and 0.90 F1 for binary direction classification (Table 1).",
+      "challenge_claim_sha256": "cc33f8c244f27be35b9006bbd6d99bd875c2d6fa6cab81fb9451eb9a79e9dee8",
+      "claim": "The Direction Oracle achieves 0.93 accuracy, 0.90 precision, 0.91 recall, and 0.90 F1 for binary direction classification (Table 1).",
+      "evidence_keys": [
+        "direction_oracle"
+      ],
+      "id": 3,
+      "reason": "Direction Oracle metrics require primary test labels or evaluation outputs; paper table values are not recomputed here.",
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim": "TD3B obtains the highest gated reward among compared pre-trained, classifier guidance, SMC, TDS, and PepTune baselines (Table 2).",
+      "challenge_claim_sha256": "67d3dc8eeaabacb07317c1b837d2ccae801da52fed96a0a02b7af6e5f9e07244",
+      "claim": "TD3B obtains the highest gated reward among compared pre-trained, classifier guidance, SMC, TDS, and PepTune baselines (Table 2).",
+      "evidence_keys": [
+        "gated_reward"
+      ],
+      "id": 4,
+      "reason": "Baseline gated-reward comparison requires generated results for TD3B and baselines; no table-scale result artifact is present.",
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim": "For targeted transition control, generated binders achieve 61% success for forward transitions and 100% success for reverse transitions under the paper's success definition (Table 3).",
+      "challenge_claim_sha256": "d39d13be6063d0070e6119f9735af15cc915956d5addf1985bfc926141e738ee",
+      "claim": "For targeted transition control, generated binders achieve 61% success for forward transitions and 100% success for reverse transitions under the paper's success definition (Table 3).",
+      "evidence_keys": [],
+      "id": 5,
+      "reason": "Forward/reverse transition success requires generated binders and success labels; the bundled generated_binders artifacts are absent.",
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim": "The paper evaluates TD3B-designed agonist and antagonist binders on GLP-1R and OX1R case studies (Figures 4 and 5).",
+      "challenge_claim_sha256": "d43987363a226bf0bbd1ac9258f468e012665ede2029ee7804d69dae85be8123",
+      "claim": "The paper evaluates TD3B-designed agonist and antagonist binders on GLP-1R and OX1R case studies (Figures 4 and 5).",
+      "evidence_keys": [],
+      "id": 6,
+      "reason": "The pinned README documents GLP-1R and OX1R case-study artifacts, but absent generated binders prevent independent case-study evaluation.",
+      "status": "unavailable"
+    }
+  ],
+  "generated_at": "2026-08-01T13:52:00+00:00",
+  "limitations": [
+    "The default evidence path avoids multi-GB checkpoint downloads.",
+    "Training, baseline sweeps, Direction Oracle metrics, and transition-success rates are not recomputed without the missing primary data/generated-binder artifacts.",
+    "Paper-reported table values are not used as reproduced measurements."
+  ],
+  "missing_artifacts": [
+    "data/test.csv",
+    "data/train.csv",
+    "data/td3b_data_new.csv",
+    "generated_binders/agonist",
+    "generated_binders/antagonist.tar.gz"
+  ],
+  "paper_id": "RNuC8Nj6rD",
+  "source_facts": {
+    "amortized_finetuning": {
+      "exists": true,
+      "matched_patterns": [
+        "td3b_finetune|amortized",
+        "fine"
+      ],
+      "passed": true,
+      "path": "td3b/td3b_finetune.py",
+      "required_patterns": [
+        "td3b_finetune|amortized",
+        "fine"
+      ],
+      "sha256": "21014f6dfd6d8d204a4caeecfbfad0ca01796a15042b8127d98a4be42ff4d49c"
+    },
+    "direction_oracle": {
+      "exists": true,
+      "matched_patterns": [
+        "DirectionalOracle|DirectionOracle"
+      ],
+      "passed": true,
+      "path": "td3b/direction_oracle.py",
+      "required_patterns": [
+        "DirectionalOracle|DirectionOracle"
+      ],
+      "sha256": "7f81df52a8d0b5ca55ede9be1d2090325a9b0be479f043274ac1d89dfba297e5"
+    },
+    "gated_reward": {
+      "exists": true,
+      "matched_patterns": [
+        "gated_reward"
+      ],
+      "passed": true,
+      "path": "td3b/td3b_scoring.py",
+      "required_patterns": [
+        "gated_reward"
+      ],
+      "sha256": "d303527d8f0efae0385bde1ceca78f8177cf98c52202520ab8c04ca8861b2dec"
+    },
+    "inference_resampling": {
+      "exists": true,
+      "matched_patterns": [
+        "direction_oracle",
+        "affinity",
+        "resample"
+      ],
+      "passed": true,
+      "path": "inference.py",
+      "required_patterns": [
+        "direction_oracle",
+        "affinity",
+        "resample"
+      ],
+      "sha256": "2fea321a06eb938d7f842c3dcf2a53e858dd32e2b28491e274a94bc1b7a28147"
+    },
+    "masked_diffusion": {
+      "exists": true,
+      "matched_patterns": [
+        "MASK",
+        "Diffusion"
+      ],
+      "passed": true,
+      "path": "models/diffusion.py",
+      "required_patterns": [
+        "MASK",
+        "Diffusion"
+      ],
+      "sha256": "3e9284f32473a60e8a25a6d2799ee241a81acb84dff31aec413ee43231ef9a45"
+    },
+    "mcts": {
+      "exists": true,
+      "matched_patterns": [
+        "MCTS"
+      ],
+      "passed": true,
+      "path": "mcts/peptide_mcts.py",
+      "required_patterns": [
+        "MCTS"
+      ],
+      "sha256": "741d582e9fdaa91f725e1044a492cdd254fd972f3ba2d4d66fa80a1029c1056b"
+    },
+    "soft_affinity_gate": {
+      "exists": true,
+      "matched_patterns": [
+        "affinity_predictor|binding_affinity",
+        "direction_oracle"
+      ],
+      "passed": true,
+      "path": "td3b/td3b_scoring.py",
+      "required_patterns": [
+        "affinity_predictor|binding_affinity",
+        "direction_oracle"
+      ],
+      "sha256": "d303527d8f0efae0385bde1ceca78f8177cf98c52202520ab8c04ca8861b2dec"
+    },
+    "td3b_losses": {
+      "exists": true,
+      "matched_patterns": [
+        "L_WDCE",
+        "L_ctr",
+        "L_KL"
+      ],
+      "passed": true,
+      "path": "td3b/td3b_losses.py",
+      "required_patterns": [
+        "L_WDCE",
+        "L_ctr",
+        "L_KL"
+      ],
+      "sha256": "f4ce7ba2261019e8955d12d7107657fb730e8aa1f1b757c7a72a450fd737fbfe"
+    }
+  },
+  "source_files": {
+    "CLAUDE.md": {
+      "bytes": 20754,
+      "sha256": "e6942c746b45c5b142b8fa28ecc06730aa03d9cacd8f20376cdeb0e273f9e87a"
+    },
+    "README.md": {
+      "bytes": 12818,
+      "sha256": "586394f8f3d236d36b6153afbdbc12d90681d8c4b377849abd8b24e2aaeaaaff"
+    },
+    "baselines/__init__.py": {
+      "bytes": 407,
+      "sha256": "351dc9ed7031601ae87ebc652ec1cc974a504d4f3ff6db44cb91e741b6b72c73"
+    },
+    "baselines/baselines.py": {
+      "bytes": 28194,
+      "sha256": "b185bbf6d15e0469ab4cd3c9ebe5d486618a92d9f332e83393809945bf349f0a"
+    },
+    "baselines/run.sh": {
+      "bytes": 2295,
+      "sha256": "5354c131e134284bff214e9d8e8373efe14da0525af8333464d122595ce4fea4"
+    },
+    "baselines/run_mcts_tr2d2.py": {
+      "bytes": 18067,
+      "sha256": "34db9f411e0f29c6fbb0f5fe17c13d4953c78e8c52e6d1a4a6a4f922552cee93"
+    },
+    "baselines/run_validation_td3b.py": {
+      "bytes": 25251,
+      "sha256": "6d9cce68f475d670d3c66fbeecea39617d02432beb8aef1227875d19fa72c2ee"
+    },
+    "baselines/sampling_setup.py": {
+      "bytes": 22008,
+      "sha256": "b774dee8cff60da95509e6d8f7b58bb17de1601eefb0fd7c3fbd64d4a8de6f38"
+    },
+    "configs/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "configs/finetune_config.py": {
+      "bytes": 3203,
+      "sha256": "55fb5b93fe5677efe3ecdcea98bf1fd2071c286b4710d2aec3fc8e618121772b"
+    },
+    "configs/peptune_config.yaml": {
+      "bytes": 3747,
+      "sha256": "9e1c3aca1cd97cc9ecaa8a0428f81ee27ea11865bb4ac12eab6ecaad0794ece1"
+    },
+    "env.yml": {
+      "bytes": 677,
+      "sha256": "ceed8162a2b9c2796fad25629000b9e27c3271071831181bbd8af10180f3a5e9"
+    },
+    "finetune_multi_target.py": {
+      "bytes": 47583,
+      "sha256": "8c4cdd4840680ba9d8bcc62984ed1fffeb9b4ab8b0bda3782bd1cc982e5776d8"
+    },
+    "finetune_on_target.py": {
+      "bytes": 37354,
+      "sha256": "88cc4d2374c740b59b76f5b73b81781432f9995239dbebc39885fbbc6a2772d7"
+    },
+    "generate_valid.py": {
+      "bytes": 7507,
+      "sha256": "817984c2955ea84555beeed8a1e0f5394b1fcef8f948da0b5881faee1824ada6"
+    },
+    "inference.py": {
+      "bytes": 17034,
+      "sha256": "2fea321a06eb938d7f842c3dcf2a53e858dd32e2b28491e274a94bc1b7a28147"
+    },
+    "launch_multi_target.sh": {
+      "bytes": 6752,
+      "sha256": "37214661821a58e5b77d4dd8578eff6d90c07dc2fe642096b020bf5fc8b064db"
+    },
+    "mcts/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mcts/peptide_mcts.py": {
+      "bytes": 27815,
+      "sha256": "741d582e9fdaa91f725e1044a492cdd254fd972f3ba2d4d66fa80a1029c1056b"
+    },
+    "models/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "models/diffusion.py": {
+      "bytes": 61243,
+      "sha256": "3e9284f32473a60e8a25a6d2799ee241a81acb84dff31aec413ee43231ef9a45"
+    },
+    "models/noise_schedule.py": {
+      "bytes": 4387,
+      "sha256": "c2bc7d4b1de271cc54e62aa1f2ce50675f1db7f50ca14cbe6cde889e2c1e93dc"
+    },
+    "models/roformer.py": {
+      "bytes": 2703,
+      "sha256": "2a33042f9e3a1d330b689341abea998aa5301383b05bbbd870b1e4ae76a4df00"
+    },
+    "sampling_strategies.py": {
+      "bytes": 22227,
+      "sha256": "814c716f860cdb2ad0592734fec3352771b26d178f1de0af3d69008ac2175dff"
+    },
+    "scoring/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scoring/functions/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scoring/functions/binding.py": {
+      "bytes": 19760,
+      "sha256": "ec95f7e63d738168515daf4bbdef7fa51374ce7bf4b2765342ed9f0b868a9f0e"
+    },
+    "scoring/functions/classifiers/hemolysis-xgboost.json": {
+      "bytes": 1932562,
+      "sha256": "66acdb9fc2d1e42e5c43dfd619ded549851bb1e7380679fe4295038d1fc9ec4e"
+    },
+    "scoring/functions/classifiers/nonfouling-xgboost.json": {
+      "bytes": 645479,
+      "sha256": "65f24ef758162bb930ce775e1e271106ab90bc5d60a5425ff95d73f4c74698d2"
+    },
+    "scoring/functions/classifiers/solubility-xgboost.json": {
+      "bytes": 196888,
+      "sha256": "fe829d97b5cd83a8e88b057032611120aba2170abd70b5ef72535dea4cd9950d"
+    },
+    "scoring/functions/hemolysis.py": {
+      "bytes": 2527,
+      "sha256": "966992bb00304309923137257b1ef1c1902dd362015547083c37b1d14e7614a0"
+    },
+    "scoring/functions/nonfouling.py": {
+      "bytes": 2521,
+      "sha256": "1a7ff64683d1034253ecebb159a8658fcfc642e98d6730484689edcb95ba5f1b"
+    },
+    "scoring/functions/permeability.py": {
+      "bytes": 5859,
+      "sha256": "c8052b49af0b0cfca16a058a86a10fcff97242b28876bf19090a51b3736c1b05"
+    },
+    "scoring/functions/solubility.py": {
+      "bytes": 2514,
+      "sha256": "576203283733ce83774df412dbdeac73dc08b29a7a8c8633a36ba6fe3b113adf"
+    },
+    "scoring/scoring_functions.py": {
+      "bytes": 4345,
+      "sha256": "9416ca4f6dfb1c3893bcc753b73f36b04b51b247c7d160c836ca731d258ce5d1"
+    },
+    "setup.py": {
+      "bytes": 249,
+      "sha256": "733231db10537cae74c8377988533c6cfccb15029192a7129ff78afaefb82c14"
+    },
+    "td3b/__init__.py": {
+      "bytes": 938,
+      "sha256": "a976d9c9ce37dbdcebe3ad665b910aa993eb56dd818a07fbe130a241dd89355c"
+    },
+    "td3b/data_utils.py": {
+      "bytes": 13324,
+      "sha256": "717ed674ca0666e3cb19309fbcdc25f7130b679425532f89ea189e128fb0888b"
+    },
+    "td3b/direction_oracle.py": {
+      "bytes": 26891,
+      "sha256": "7f81df52a8d0b5ca55ede9be1d2090325a9b0be479f043274ac1d89dfba297e5"
+    },
+    "td3b/td3b_finetune.py": {
+      "bytes": 26187,
+      "sha256": "21014f6dfd6d8d204a4caeecfbfad0ca01796a15042b8127d98a4be42ff4d49c"
+    },
+    "td3b/td3b_losses.py": {
+      "bytes": 20722,
+      "sha256": "f4ce7ba2261019e8955d12d7107657fb730e8aa1f1b757c7a72a450fd737fbfe"
+    },
+    "td3b/td3b_mcts.py": {
+      "bytes": 12823,
+      "sha256": "8e87c2844fbb13f1ce0b502bedfa36f1243c79543be5a9d0a2f4497b3fe07e01"
+    },
+    "td3b/td3b_scoring.py": {
+      "bytes": 16097,
+      "sha256": "d303527d8f0efae0385bde1ceca78f8177cf98c52202520ab8c04ca8861b2dec"
+    },
+    "tokenizer/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "tokenizer/my_tokenizers.py": {
+      "bytes": 18988,
+      "sha256": "b91320ad692c23e25d92b3f99dc2d49a311e8f2090ba598462b1d0245744afd5"
+    },
+    "tokenizer/new_splits.txt": {
+      "bytes": 717,
+      "sha256": "c779422f2bdc509a7102b01b53e0f8fc379fe4d306a546cd2c2b1bfdddf07a59"
+    },
+    "tokenizer/new_vocab.txt": {
+      "bytes": 2998,
+      "sha256": "af08e449a00cf9273a0d9c84ec79652b89b8622e32838772649a7bd2dacc05a2"
+    },
+    "training/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "training/distributed_utils.py": {
+      "bytes": 848,
+      "sha256": "04576234e9f40978d06ebde9727ef3738859a4e5fb94c063c7863a5dfb269cb0"
+    },
+    "training/finetune_utils.py": {
+      "bytes": 19090,
+      "sha256": "14304cdb1a4b1f0051f304fc104bd982a3e308b848159537c5073b3aa71f1f2c"
+    },
+    "utils/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "utils/app.py": {
+      "bytes": 52650,
+      "sha256": "b1dc9c1f59952286da864ec9afa7071f6ea947dc3bdcb2635349b6333840f65a"
+    },
+    "utils/timer.py": {
+      "bytes": 1163,
+      "sha256": "5e58193301b96b1bf46b9c3f981608425ad107893100be272533cc4281a3f69b"
+    },
+    "utils/utils.py": {
+      "bytes": 3853,
+      "sha256": "15624a5f6b4528fe01c995baa9b49b6463458f380958f8233b5a44547d359be8"
+    }
+  },
+  "title": "TD3B: Transition-Directed Discrete Diffusion for Allosteric Binder Generation",
+  "upstream": {
+    "repo_id": "ChatterjeeLab/TD3B",
+    "revision": "7d3c9bfe171a1db77e7b5431c572dadce8520bb5",
+    "source_root": "submissions/td3b-transition-directed-discrete-diffusion-for-allosteric-binder-generation/upstream/TD3B"
+  }
+}

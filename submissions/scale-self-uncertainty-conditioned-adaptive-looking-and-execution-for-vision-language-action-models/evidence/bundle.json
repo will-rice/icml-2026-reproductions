@@ -1,0 +1,146 @@
+{
+  "attempt_id": "092b120a-9cf1-4351-b4fc-fcbf51f6565f",
+  "claim_results": {
+    "claim-1": {
+      "challenge_claim_sha256": "9c25ef590bdbf95cd8dfa64cbaf7ce7093649e4b304868d51d028bf9eedd135d",
+      "evidence": [
+        "prismatic/extern/hf/modeling_prismatic.py",
+        "prismatic/extern/hf/modeling_prismatic.py",
+        "prismatic/extern/hf/modeling_prismatic.py",
+        "configs/scale.yaml",
+        "experiments/robot/libero/run_libero_eval.py"
+      ],
+      "status": "verified",
+      "summary": "Pinned source implements self-uncertainty, action temperature, visual attention temperature, and SCALE decoding mode."
+    },
+    "claim-2": {
+      "challenge_claim_sha256": "cbc5ac391b72f156b9229ebbd6fd474bcd84acb791c85b3e7d93fc537345c2f7",
+      "evidence": {
+        "inference_uses_no_grad": true,
+        "readme_claims_no_training_no_verifier": true,
+        "runner_loads_pretrained_checkpoint": true,
+        "training_entrypoint_absent": true,
+        "verifier_module_absent": true
+      },
+      "status": "toy",
+      "summary": "source-level checks support inference-only execution with no verifier, but this CPU audit does not time a deployed robot control step."
+    },
+    "claim-3": {
+      "challenge_claim_sha256": "e946bc551380587b07c7a39952aef70e9539dd26a46b5df3dc46d45963e348db",
+      "status": "unavailable",
+      "summary": "OpenVLA/LIBERO benchmark success-rate comparisons were not rerun and no machine-readable raw result artifact was found in the pinned repo."
+    },
+    "claim-4": {
+      "challenge_claim_sha256": "87c4598a405ffcb991b98ba21002ffadf3a7264de33d976ac9115ad0fa188b85",
+      "status": "unavailable",
+      "summary": "pi0-FAST/LIBERO average success rates were not rerun and are not backed by a machine-readable raw result artifact in the pinned repo."
+    },
+    "claim-5": {
+      "challenge_claim_sha256": "24299b74015bef4a7cda614376d95a087770cb7778111a19908e23f2760cbb28",
+      "status": "unavailable",
+      "summary": "SIMPLER-WidowX pi0-FAST and SpatialVLA claims require non-CPU benchmark reruns or raw logs absent from the pinned repo."
+    },
+    "claim-6": {
+      "challenge_claim_sha256": "08067e64cb7b51dab32b1853168b874e9914dd2231f273310e2799d8745c81e3",
+      "status": "unavailable",
+      "summary": "Real-world pick-and-place success rates require physical robot evaluations; no reproduced measurements are available here."
+    }
+  },
+  "generated_at": "2026-08-01T12:32:47+00:00",
+  "observations": {
+    "files": [
+      {
+        "bytes": 5693,
+        "path": "README.md",
+        "sha256": "75c5dc087590d59483518f77ba7d3e78d748786d66836e7d0fe23a97d2017bca"
+      },
+      {
+        "bytes": 1153,
+        "path": "LICENSE",
+        "sha256": "e395abe05584ad8f265bb85c25720fb9a6df9043671f25402f5ed99bf8ee58f7"
+      },
+      {
+        "bytes": 1341,
+        "path": "configs/scale.yaml",
+        "sha256": "0287ac363e45c631ae7fdd105560722ecb8a27a02cf4c9fe99ae80d59bed27d7"
+      },
+      {
+        "bytes": 17485,
+        "path": "experiments/robot/libero/run_libero_eval.py",
+        "sha256": "fd325a7132d68809a29360446d49d8943f87e1dfe98ad3f9498df815f73d4c27"
+      },
+      {
+        "bytes": 43958,
+        "path": "prismatic/extern/hf/modeling_prismatic.py",
+        "sha256": "176b2e9c2b382fc617530ff93997272ec65ad100a865eba220131fde59bda4ba"
+      }
+    ],
+    "no_training_no_verifier_indicators": {
+      "inference_uses_no_grad": true,
+      "readme_claims_no_training_no_verifier": true,
+      "runner_loads_pretrained_checkpoint": true,
+      "training_entrypoint_absent": true,
+      "verifier_module_absent": true
+    },
+    "raw_result_artifacts": [],
+    "runtime_constraints": {
+      "cpu_only_reproduction": true,
+      "gpu_robot_eval_required": true,
+      "reason": "LIBERO, SIMPLER-WidowX, and real-world robot evaluations require GPU simulation or physical robot execution."
+    },
+    "source_indicators": {
+      "action_temperature": {
+        "path": "prismatic/extern/hf/modeling_prismatic.py",
+        "present": true,
+        "snippet": "ncertainty(step_logits, num_logits, epsilon) new_u.append(u_k) # Per-token sampling temperature tau_k = T0 * sigmoid(u_k) (Eq. 4) tau_k = T0 * torch.sigmoid(torch.tensor(u_k)).item() if tau_k < 1e-3: # Near-greedy execution under low uncertainty (tau ~ 0) selected_token = top_in"
+      },
+      "decoding_modes": {
+        "path": "experiments/robot/libero/run_libero_eval.py",
+        "present": true,
+        "snippet": "ale.yaml\") # SCALE hyperparameters: any left as None on the CLI are filled from `scale_config` SCALE_PARAMS = (\"T0\", \"kappa\", \"alpha\", \"epsilon\", \"num_logits\", \"attn_sensitivity\") VALID_DECODING_MODES = (\"greedy\", \"temp\", \"topk\", \"topp\", \"scale\") @dataclass class GenerateConfig: # fmt: off ##############################################################################"
+      },
+      "scale_config": {
+        "path": "configs/scale.yaml",
+        "present": true,
+        "sha256": "0287ac363e45c631ae7fdd105560722ecb8a27a02cf4c9fe99ae80d59bed27d7",
+        "values": {
+          "T0": 1.0,
+          "alpha": 0.8,
+          "attn_sensitivity": 0.3,
+          "epsilon": 1e-12,
+          "kappa": 2.0,
+          "num_logits": 256
+        }
+      },
+      "self_uncertainty": {
+        "path": "prismatic/extern/hf/modeling_prismatic.py",
+        "present": true,
+        "snippet": "n -- revert added \"multiple of\" self.vocab_size = self.config.text_config.vocab_size - self.config.pad_to_multiple_of # === Self-Uncertainty (SCALE, Sec. 3.2) === def _compute_self_uncertainty(self, step_logits, num_logits, epsilon): \"\"\"Compute the token-level self-uncertainty u_k for a single decoding step (Eq. 2-3). u_k = D_KL(p || q_low) - D_KL(p"
+      },
+      "visual_attention_temperature": {
+        "path": "prismatic/extern/hf/modeling_prismatic.py",
+        "present": true,
+        "snippet": "x = attn @ v x = x.transpose(1, 2).reshape(B, N, C) x = attn_module.proj(x) x = attn_module.proj_drop(x) return x return custom_forward def apply_visual_attention_temperature(vision_backbone: nn.Module, temperature: float) -> None: \"\"\" Apply temperature scaling (gamma) to every self-attention layer of the vision encoder (SCALE, Eq. 9). Arg"
+      }
+    },
+    "source_tree": {
+      "commit": "b4ad2a69d14f91712704711e810cf9830e2b7121",
+      "repo": "https://github.com/snumprlab/scale.git",
+      "tracked_file_count": 17
+    }
+  },
+  "paper_id": "7MlfE2Da2W",
+  "snapshot_id": "00263d6d9b331596d4be77a4cd17a4b1b6592f2ac7a72401cd62b751eaaef9bb",
+  "unreplicated": [
+    "LIBERO benchmark success rates were not rerun because they require GPU robot simulation and pretrained VLA checkpoints.",
+    "SIMPLER-WidowX benchmark claims were not rerun because the pinned repository does not include a CPU-rerunnable evaluation path or raw result artifacts.",
+    "real-world pick-and-place success rates were not rerun because they require physical robot hardware and task resets."
+  ],
+  "upstream": {
+    "code_license": "MIT",
+    "github": "snumprlab/scale@b4ad2a69d14f91712704711e810cf9830e2b7121",
+    "paper": "arxiv:2602.04208",
+    "project_page": "https://dcahn12.github.io/projects/scale/",
+    "url": "https://github.com/snumprlab/scale.git"
+  }
+}

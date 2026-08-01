@@ -1,0 +1,13 @@
+[project]
+name = "scale-reproduction"
+version = "0.1.0"
+description = "CPU evidence for SCALE source-level reproduction claims"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=4.0.0",
+    "pytest",
+    "pyyaml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

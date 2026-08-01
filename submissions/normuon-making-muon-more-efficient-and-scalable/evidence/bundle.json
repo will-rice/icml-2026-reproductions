@@ -1,0 +1,82 @@
+{
+  "attempt_id": "daee6151-3f6d-429d-a01b-c6d91b72dd1c",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "claims": [
+    {
+      "challenge_claim_sha256": "c2b6b1756f6922c77ecc6915c14be6996d0b2111cc654462c685bebfce5d1b32",
+      "claim": "NorMuon combines Muon's orthogonalized updates with neuron-wise adaptive normalization based on second-order momentum statistics (Algorithm 1).",
+      "evidence": "The pinned official normuon.py update matches an independently implemented Algorithm 1 reference on deterministic synthetic gradients.",
+      "observations": {
+        "max_abs_second_momentum_delta": 0.0,
+        "max_abs_update_delta": 0.0,
+        "second_momentum_shape": [
+          3,
+          1
+        ]
+      },
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "ed5bd5aaea367741a42e41f1b0dc573013283967c88896699d9893b32942e08e",
+      "claim": "The optimizer analysis shows Muon lowers update condition numbers but leaves high variance in per-neuron update norms, while NorMuon normalizes neuron contributions (Figure 1).",
+      "evidence": "A CPU synthetic update with deliberately uneven row norms shows the NorMuon adaptive normalization step reduces row-norm dispersion while restoring total update norm.",
+      "observations": {
+        "row_norm_cv_after": 0.0,
+        "row_norm_cv_before": 0.9258200526,
+        "second_momentum_shape": [
+          3,
+          1
+        ],
+        "total_norm_after": 8.2613544464,
+        "total_norm_before": 8.2613554001
+      },
+      "status": "toy"
+    },
+    {
+      "challenge_claim_sha256": "4a7dae74da0fb8136463ae2c090dfc7c32194619f23a57c7b340b867fc5ecf40",
+      "claim": "NorMuon achieves 21.74% better step efficiency than Adam and 11.31% improvement over Muon on the 1.1B pretraining setting (Table 1).",
+      "evidence": "Not reproduced: this claim requires GPU-scale LLM pretraining or large model benchmark runs outside the CPU-only budget.",
+      "observations": {},
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim_sha256": "af7240033e51f295e515e5451ec065b2792a868a9a88d0b1af74f36acb186684",
+      "claim": "NorMuon also improves validation-loss trajectories over Muon and AdamW at the 5.4B scale (Figure 2).",
+      "evidence": "Not reproduced: this claim requires GPU-scale LLM pretraining or large model benchmark runs outside the CPU-only budget.",
+      "observations": {},
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim_sha256": "c6c7f62e3ee644b96ef6ac1c3127eaa7483ebe1b04569dd098c0088c36ba8dbf",
+      "claim": "On 5.4B training, NorMuon keeps optimizer-state memory close to Muon and below AdamW, with about 2.9% total training-step time overhead over AdamW (Table 2).",
+      "evidence": "Not reproduced: this claim requires GPU-scale LLM pretraining or large model benchmark runs outside the CPU-only budget.",
+      "observations": {},
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim_sha256": "f5e30e2f743849b30aea2822e34321d6e31ae28cba4912d2b0542f62af1ffcb3",
+      "claim": "NorMuon outperforms Muon in Modded-NanoGPT pretraining at 124M and 350M parameter scales (Figure 5).",
+      "evidence": "Not reproduced: this claim requires GPU-scale LLM pretraining or large model benchmark runs outside the CPU-only budget.",
+      "observations": {},
+      "status": "unavailable"
+    }
+  ],
+  "commands": [
+    "git clone --depth 1 https://github.com/zichongli5/NorMuon.git",
+    "python generate_evidence.py",
+    "python -m pytest tests -q"
+  ],
+  "estimated_api_cost_usd": 0.0,
+  "inputs": {
+    "LICENSE_sha256": "a0b7a8e69c46fc2328f140d1ecba5cb18581bb895df08c9b3893968efd264186",
+    "license": "MIT",
+    "normuon.py_sha256": "706c1a35fb35342f6ff207f8310b814a1c8f55c6ffba0e843537db434a696141"
+  },
+  "limitations": [
+    "GPU-scale LLM pretraining efficiency, 5.4B validation loss, memory, and Modded-NanoGPT claims were not reproduced.",
+    "The mechanism tests use deterministic CPU synthetic gradients and do not claim paper-scale training performance."
+  ],
+  "paper_id": "m1IRWFAMsa",
+  "snapshot_id": "0692f289e0163260c616a30969f5e5d5db781c4d463ff6b123403db29926e574",
+  "upstream_revision": "arxiv:2510.05491+github:zichongli5/NorMuon@c6989a8354730695d9f5a9faa6c55eeb24865209"
+}
