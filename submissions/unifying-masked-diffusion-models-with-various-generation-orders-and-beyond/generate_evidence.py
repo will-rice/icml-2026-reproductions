@@ -64,7 +64,7 @@ def main():
         "all_target_claims_verified": nelbo_decomp_verified and ar_res["verified"] and lomdm_res["verified"],
     }
 
-    out_path = Path("evidence_summary.json")
+    out_path = Path(__file__).resolve().parent / "evidence_summary.json"
     with open(out_path, "w") as f:
         json.dump(evidence_summary, f, indent=2)
 
