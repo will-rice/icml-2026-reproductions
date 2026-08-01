@@ -12,4 +12,3 @@ This directory contains the reproducible evidence, evaluation scripts, unit test
 - `evidence/evidence.json`: Generated evidence record.
 - `pages/logbook.md`: Reproduction logbook.
 - `app.py`: Gradio app serving the reproduction report.
- 
