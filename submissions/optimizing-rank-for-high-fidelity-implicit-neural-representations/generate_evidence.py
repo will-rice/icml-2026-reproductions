@@ -1,42 +1,44 @@
 import json
 from pathlib import Path
+from optimizing_rank_inr_repro.benchmarks import run_all_benchmarks
 
 def main():
-    # Verify claims
-    c1_ver = True
-    c2_ver = True
-    c3_ver = True
-    c4_ver = True
+    bench_res = run_all_benchmarks()
+    c1_ver = bench_res["claim1_stable_rank"]["status"] == "verified"
+    c2_ver = bench_res["claim2_image_overfitting"]["status"] == "verified"
+    c3_ver = bench_res["claim3_sparse_ct"]["status"] == "verified"
+    c4_ver = bench_res["claim4_multidomain"]["status"] == "verified"
 
     evidence = {
+        "paper_id": "2azIa9tfl3",
         "claims": [
             {
                 "claim_id": "claim_1",
-                "statement": "Optimizing rank via singular value truncation improves INR reconstruction fidelity on signal fitting benchmarks.",
+                "statement": "The paper argues that vanilla MLP INR low-frequency bias is a symptom of stable-rank degradation during training rather than an intrinsic architectural limitation (Section 3).",
                 "verified": c1_ver,
                 "evidence_type": "empirical_benchmark",
-                "details": "Singular value truncation applied to INR weight matrices yields higher PSNR across standard test images compared to baseline unregularized INRs."
+                "details": bench_res["claim1_stable_rank"]
             },
             {
                 "claim_id": "claim_2",
-                "statement": "The rank-optimization objective introduces a low-rank regularization term that bounds effective spectral norm.",
+                "statement": "Rank-regulating, near-orthogonal Muon updates improve image overfitting quality across multiple INR architectures compared with Adam (Table 1).",
                 "verified": c2_ver,
-                "evidence_type": "theoretical_and_code",
-                "details": "Implementation of low-rank penalty in loss function constrains spectral norm while maintaining reconstruction accuracy."
+                "evidence_type": "empirical_benchmark",
+                "details": bench_res["claim2_image_overfitting"]
             },
             {
                 "claim_id": "claim_3",
-                "statement": "Rank-optimized INRs achieve faster convergence rate during early-stage gradient descent optimization.",
+                "statement": "Muon improves sparse-view CT reconstruction quality across multiple INR architectures compared with Adam (Table 4).",
                 "verified": c3_ver,
                 "evidence_type": "empirical_benchmark",
-                "details": "Convergence metrics show 20% fewer iterations needed to reach target MSE threshold under rank optimization."
+                "details": bench_res["claim3_sparse_ct"]
             },
             {
                 "claim_id": "claim_4",
-                "statement": "The proposed method is robust across diverse activation functions including SIREN (sine) and Wire (gabor).",
+                "statement": "The reported improvements extend to natural images, medical images, audio, super-resolution, and novel-view synthesis, with up to about +9 dB PSNR over the same architecture (Tables 1-6).",
                 "verified": c4_ver,
                 "evidence_type": "empirical_ablation",
-                "details": "Ablation tests confirm consistent performance gains with both sine and complex Gabor activation functions."
+                "details": bench_res["claim4_multidomain"]
             }
         ],
         "summary": {
@@ -56,3 +58,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
