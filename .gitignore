@@ -284,6 +284,7 @@ submissions/efficiently-training-time-to-first-spike-spiking-neural-networks-fro
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/.venv/
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/.pytest_cache/
 submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/**/__pycache__/
+submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/**/*.egg-info/
 !docs/superpowers/specs/2026-07-31-optimizing-rank-inr-reproduction-design.md
 !docs/superpowers/specs/2026-07-31-dmpo-reproduction-design-agy-paper-owner-03.md
 

@@ -1,25 +1,31 @@
-# Optimizing Rank for High-Fidelity Implicit Neural Representations Reproduction Summary
+# Optimizing Rank for High-Fidelity INRs — Reproduction Summary
 
-## Paper Overview
-- **Paper ID**: 2azIa9tfl3
-- **Title**: Optimizing Rank for High-Fidelity Implicit Neural Representations
-- **ArXiv**: 2512.14366
-- **Upstream Revision**: arxiv:2512.14366v1
+Reproduction of **"Optimizing Rank for High-Fidelity Implicit Neural
+Representations"** (paper `2azIa9tfl3`, arXiv:2512.14366).
 
-## Reproduction Objectives and Verification Results
-This reproduction package provides independent, CPU-only verification of the four core target claims in the Muon INR rank optimization paper:
+Every number on these pages is computed by this repository on CPU with pinned
+seeds. Adam and Muon runs always start from **identical initial weights** and
+receive the same number of steps, so reported PSNR gaps are attributable to
+the optimizer. No paper value is copied into a measurement field, and results
+that contradict the paper are reported as measured rather than tuned until
+they agree: **claim 3 does not reproduce at this scale, and claim 4
+reproduces in only 2 of 4 modalities.**
 
-1. **Stable-Rank Degradation Mechanism (Claim 1)**:
-   - Verifies that Adam optimization exhibits stable-rank decay ($||W||_F^2 / ||W||_2^2$) as low-frequency components dominate during continuous coordinate fitting, whereas near-orthogonal Muon updates maintain stable rank and prevent rank collapse during training.
+## Claim status
 
-2. **Image Overfitting Quality Comparison (Claim 2)**:
-   - Demonstrates that rank-regulating Muon updates consistently improve PSNR/MSE metrics across multiple INR architectures (Siren, Wire, vanilla MLP) on 2D image overfitting tasks compared to Adam under identical budgets.
+| Claim | Status | Scale of the evidence |
+| --- | --- | --- |
+| 1 | `reproduced` | toy-scale: 4-layer 64-unit MLP fitting a 32x32 multi-frequency image |
+| 2 | `reproduced` | toy-scale: Siren and vanilla-MLP INRs, 32x32 target, 100 steps |
+| 3 | `not_reproduced` | toy-scale: 8-view discrete Radon operator on a 32x32 ellipse phantom |
+| 4 | `partially_reproduced` | toy-scale: 4 of the paper's modalities; novel-view synthesis not attempted |
 
-3. **Sparse-View CT Reconstruction Quality (Claim 3)**:
-   - Evaluates sparse-view tomographic reconstruction using INRs with a Radon transform operator, confirming superior PSNR and feature restoration for Muon over Adam.
+## Reproducing
 
-4. **Multi-Domain Extension Evaluation (Claim 4)**:
-   - Confirms that PSNR improvements extend across diverse data modalities including 1D audio signals, 2D medical/natural images, and 2D super-resolution tasks.
+```bash
+uv run --project . python generate_evidence.py
+uv run --project . python -m pytest tests -q
+```
 
-## Evidence Generation
-All claims are independently verified without using reported paper values as evidence. Running `uv run python generate_evidence.py` generates `evidence/evidence.json` with all target claims verified.
+`generate_evidence.py` regenerates `evidence/evidence.json` and every page in
+`pages/`; it is deterministic and byte-identical across runs.

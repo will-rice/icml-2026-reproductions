@@ -1,10 +1,15 @@
 {
   "paper_id": "2azIa9tfl3",
+  "upstream_pins": [
+    "arxiv:2512.14366"
+  ],
+  "execution_mode": "CPU-only, deterministic (pinned seeds, no wall-clock measurements)",
   "claims": [
     {
       "claim_id": "claim_1",
       "statement": "The paper argues that vanilla MLP INR low-frequency bias is a symptom of stable-rank degradation during training rather than an intrinsic architectural limitation (Section 3).",
-      "verified": true,
+      "status": "reproduced",
+      "scale": "toy-scale: 4-layer 64-unit MLP fitting a 32x32 multi-frequency image",
       "evidence_type": "empirical_benchmark",
       "details": {
         "initial_stable_rank": 9.2313,
@@ -19,7 +24,8 @@
     {
       "claim_id": "claim_2",
       "statement": "Rank-regulating, near-orthogonal Muon updates improve image overfitting quality across multiple INR architectures compared with Adam (Table 1).",
-      "verified": true,
+      "status": "reproduced",
+      "scale": "toy-scale: Siren and vanilla-MLP INRs, 32x32 target, 100 steps",
       "evidence_type": "empirical_benchmark",
       "details": {
         "architectures": {
@@ -43,20 +49,37 @@
     {
       "claim_id": "claim_3",
       "statement": "Muon improves sparse-view CT reconstruction quality across multiple INR architectures compared with Adam (Table 4).",
-      "verified": true,
+      "status": "not_reproduced",
+      "scale": "toy-scale: 8-view discrete Radon operator on a 32x32 ellipse phantom",
       "evidence_type": "empirical_benchmark",
       "details": {
-        "ct_reconstruction_psnr_adam": 14.01,
-        "ct_reconstruction_psnr_muon": 14.03,
-        "psnr_gain_db": 0.02,
-        "improved": true,
-        "status": "verified"
+        "n_views": 8,
+        "n_detector_bins": 32,
+        "n_measurements": 256,
+        "n_pixels": 1024,
+        "architectures": {
+          "siren": {
+            "recon_psnr_adam": 14.44,
+            "recon_psnr_muon": 13.95,
+            "psnr_gain_db": -0.49,
+            "improved": false
+          },
+          "vanilla_mlp": {
+            "recon_psnr_adam": 11.54,
+            "recon_psnr_muon": 10.54,
+            "psnr_gain_db": -1.0,
+            "improved": false
+          }
+        },
+        "all_architectures_improved": false,
+        "status": "unverified"
       }
     },
     {
       "claim_id": "claim_4",
       "statement": "The reported improvements extend to natural images, medical images, audio, super-resolution, and novel-view synthesis, with up to about +9 dB PSNR over the same architecture (Tables 1-6).",
-      "verified": true,
+      "status": "partially_reproduced",
+      "scale": "toy-scale: 4 of the paper's modalities; novel-view synthesis not attempted",
       "evidence_type": "empirical_ablation",
       "details": {
         "domains": {
@@ -66,11 +89,17 @@
             "psnr_gain_db": 0.02,
             "improved": true
           },
+          "medical_phantom": {
+            "psnr_adam": 11.54,
+            "psnr_muon": 9.74,
+            "psnr_gain_db": -1.8,
+            "improved": false
+          },
           "audio_1d": {
-            "psnr_adam": 2.31,
-            "psnr_muon": 2.36,
-            "psnr_gain_db": 0.05,
-            "improved": true
+            "psnr_adam": 3.52,
+            "psnr_muon": 2.22,
+            "psnr_gain_db": -1.29,
+            "improved": false
           },
           "super_resolution": {
             "psnr_adam": 14.01,
@@ -79,13 +108,10 @@
             "improved": true
           }
         },
-        "max_psnr_gain_db": 0.05,
-        "all_domains_improved": true,
-        "status": "verified"
+        "max_psnr_gain_db": 0.02,
+        "all_domains_improved": false,
+        "status": "unverified"
       }
     }
-  ],
-  "summary": {
-    "all_claims_verified": true
-  }
+  ]
 }
