@@ -15,7 +15,7 @@ auto-reclaim unresolved blocked attempts.
 | `worker-exited` | `validate-or-correct`: inspect proposal commit/diff and run fresh controller validation | continue same attempt |
 | `worker-noop` | `repair-permissions-and-relaunch`: fix scoped runtime permission or change runtime/model | continue same attempt |
 | `validation-rejected` | `correct-and-relaunch`: give exact scientific/integrity findings to the same attempt | continue same attempt |
-| `validated` | `publish`: publish only the exact attested source | continue same attempt |
+| `validated` | `commit-then-publish`: commit the exact attested source to the shared repository on `main` (`submissions/<slug>/` with its `.gitignore` negation block), then publish only that attested source | continue same attempt |
 | `deployment-invalid` | `repair-publication`: correct SHA/tags/runtime before attestation | continue same attempt |
 | `submitted` | `remain-dedicated` | watch; do not select another paper |
 | `pending` | `keep-watching`: verify exact healthy visibility; do not alter evidence solely for queue age | continue same attempt |

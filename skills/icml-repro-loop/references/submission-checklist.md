@@ -86,6 +86,23 @@ exact live observation. Intention and worker self-report are not evidence.
 - [ ] Record the immutable validation attestation ID. Without it, validation
   and all later writes are unperformed.
 
+## Durable Source In The Shared Repository
+
+- [ ] After validation and before publication, commit the exact validated
+  source to the shared repository on `main` under `submissions/<slug>/`.
+  Ephemeral staging worktrees under `/tmp` do not survive a reboot; a
+  validated source that exists only in `/tmp` is one restart away from
+  forcing full reimplementation.
+- [ ] `.gitignore` ignores `submissions/*` by default. Every new submission
+  commit must include its negation block — `!submissions/<slug>/` and
+  `!submissions/<slug>/**` plus per-submission cache re-ignores — or the
+  source is invisible to git and lost on resets.
+- [ ] When the shared checkout is not on `main`, land the commit through a
+  linked worktree under `.worktrees/` instead of switching the shared HEAD.
+  Never rewind or force-move shared branches.
+- [ ] Record repo-relative paths (never `/tmp` paths) in `next_action` and
+  blocker text so a reclaiming owner can resume from the repository.
+
 ## Deployment And Submission
 
 - [ ] Use `publish-deployment` for one dedicated Space. Require the allowlisted
@@ -100,6 +117,10 @@ exact live observation. Intention and worker self-report are not evidence.
   conflicting attempt, missing tag, missing Space, or wrong revision.
 - [ ] Record deployment and submission attestation IDs. Space existence or an
   invented submission ID is never authority.
+- [ ] After publication, list the live Space files and require every project
+  file — especially every `pages/*.md` — to be present. Partial uploads have
+  produced summary-only logbooks that judges score zero; the judge reads only
+  what the Space actually serves.
 
 ## Judging And Official Verdict
 
