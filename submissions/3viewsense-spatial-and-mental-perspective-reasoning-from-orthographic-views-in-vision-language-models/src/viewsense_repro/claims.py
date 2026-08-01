@@ -295,4 +295,6 @@ def write_report_pages(bundle: dict[str, object], pages_dir: Path) -> None:
                 "",
             ]
         )
+    while lines and lines[-1] == "":
+        lines.pop()
     (pages_dir / "00-summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

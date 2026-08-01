@@ -16,4 +16,3 @@ requires-python = ">=3.10"
 [tool.pytest.ini_options]
 dont_write_bytecode = true
 addopts = "-p no:cacheprovider"
-

@@ -1,5 +1,5 @@
 {
-  "attempt_id": "72481d5a-6899-4880-94ac-47e5525c0778",
+  "attempt_id": "29efb851-aeef-4989-b74d-a83e2c481384",
   "claims": [
     {
       "challenge_claim_sha256": "f3c921a44400a59b56213973efcf334f326cf8f9f3f1ede152eba85119c08faf",
@@ -107,12 +107,12 @@
     }
   ],
   "paper_id": "kR4iOTaAOJ",
-  "snapshot_id": "8a76dd68f25c012b70bdd330d35d5b8b73785cf9665b0e886a4d4bd868c88081",
+  "snapshot_id": "ebb6ed5d2cfc196369f149f52b51f716251ae6b3ba2cfabce1d2642aefdf3aa0",
   "source_hashes": {
     "ThunderAgent/app.py": "1001e9c094aef8d075739a057a955fd0b2263ba8b34403413a95543cf15f0438",
-    "ThunderAgent/backend/state.py": "b0a6167497c46df9f945f0da0be704d5a646edcadbe7cd17dbe95a806da988a1",
-    "ThunderAgent/program/state.py": "bd7664a37abf4c45cd1cb77bc321d290a8110db66636fc2dd0361aa34ae6e441",
-    "ThunderAgent/scheduler/router.py": "87f946f62a4e8c81fe7939aa6a2a16bcf1ba554bd5b6c110f166a943a7bde752"
+    "ThunderAgent/backend/state.py": "a0677b136650c07852e359742140c6d2d4fd3903a96fa27a88b77d9d8c853198",
+    "ThunderAgent/program/state.py": "fa6821658a2d5a46f6ca6e2482c9b00efc9b18298912420c31604df9df2c0337",
+    "ThunderAgent/scheduler/router.py": "d6d29d14c826ba3b45109fe41ee2fe9dbe2de4287610aa86d2a1bcba688440a6"
   },
   "upstream_revision": "arxiv:2602.13692+github:ThunderAgent-org/ThunderAgent@7ddc8610270e56d3b109eed8796b3a4360fc67c9"
 }

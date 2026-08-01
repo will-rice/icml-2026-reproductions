@@ -9,9 +9,9 @@ from pathlib import Path
 from typing import Any
 
 
-ATTEMPT_ID = "72481d5a-6899-4880-94ac-47e5525c0778"
+ATTEMPT_ID = "29efb851-aeef-4989-b74d-a83e2c481384"
 PAPER_ID = "kR4iOTaAOJ"
-SNAPSHOT_ID = "8a76dd68f25c012b70bdd330d35d5b8b73785cf9665b0e886a4d4bd868c88081"
+SNAPSHOT_ID = "ebb6ed5d2cfc196369f149f52b51f716251ae6b3ba2cfabce1d2642aefdf3aa0"
 UPSTREAM_REVISION = (
     "arxiv:2602.13692+"
     "github:ThunderAgent-org/ThunderAgent@7ddc8610270e56d3b109eed8796b3a4360fc67c9"

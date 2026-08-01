@@ -93,3 +93,27 @@ def test_evidence_bundle_uses_bound_claims_and_conservative_statuses(tmp_path):
         "inconclusive",
     ]
     assert all(len(claim["challenge_claim_sha256"]) == 64 for claim in bundle["claims"])
+
+
+def test_report_pages_end_with_single_newline(tmp_path):
+    claims = load_claims_module()
+    upstream = tmp_path / "upstream"
+    for relative in [
+        "README.md",
+        "orthomind-3d-synthetic/block-count-synthetic/build_cube_views_json.py",
+        "orthomind-3d-synthetic/object-synthetic/blender_renderer.py",
+        "orthomind-3d-synthetic/ood-image/call_api_for_aigc.py",
+        "sft-stage/README.md",
+        "rl-stage/README.md",
+        "evaluation/eval_vlm.py",
+    ]:
+        path = upstream / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("fixture\n", encoding="utf-8")
+
+    bundle = claims.build_evidence_bundle(upstream)
+    claims.write_report_pages(bundle, tmp_path / "pages")
+
+    report = (tmp_path / "pages" / "00-summary.md").read_text(encoding="utf-8")
+    assert report.endswith("\n")
+    assert not report.endswith("\n\n")

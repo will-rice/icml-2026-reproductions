@@ -110,6 +110,7 @@ def main():
     output_path = Path(__file__).parent / "evidence.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, sort_keys=True)
+        f.write("\n")
     print(f"Successfully wrote deterministic evidence to {output_path}")
 
 

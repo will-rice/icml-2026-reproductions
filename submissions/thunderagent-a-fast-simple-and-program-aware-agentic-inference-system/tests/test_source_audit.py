@@ -40,9 +40,9 @@ def test_audit_detects_program_abstraction_scheduler_and_release_paths():
 def test_evidence_bundle_binds_live_claim_hashes_and_source_hashes():
     bundle = build_evidence_bundle(FIXTURE_ROOT)
 
-    assert bundle["attempt_id"] == "72481d5a-6899-4880-94ac-47e5525c0778"
+    assert bundle["attempt_id"] == "29efb851-aeef-4989-b74d-a83e2c481384"
     assert bundle["paper_id"] == "kR4iOTaAOJ"
-    assert bundle["snapshot_id"] == "8a76dd68f25c012b70bdd330d35d5b8b73785cf9665b0e886a4d4bd868c88081"
+    assert bundle["snapshot_id"] == "ebb6ed5d2cfc196369f149f52b51f716251ae6b3ba2cfabce1d2642aefdf3aa0"
     assert {claim["challenge_claim_sha256"] for claim in bundle["claims"]} == {
         "f3c921a44400a59b56213973efcf334f326cf8f9f3f1ede152eba85119c08faf",
         "030df6bacd99e5a892294e6960768d02e9e6f7b561ec4d24cf44a5d0606ee9f1",
