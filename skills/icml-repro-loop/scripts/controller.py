@@ -333,12 +333,16 @@ def publish_and_attest_deployment(
     _require_current_validated_tree(worktree, actual_source, validation)
     _require_scoring_pages(actual_source)
 
-    client.create_repo(
-        repo_id=space_id,
-        repo_type="space",
-        space_sdk="gradio",
-        exist_ok=True,
-    )
+    try:
+        client.create_repo(
+            repo_id=space_id,
+            repo_type="space",
+            space_sdk="gradio",
+            exist_ok=True,
+        )
+    except Exception:
+        if not client.repo_exists(repo_id=space_id, repo_type="space"):
+            raise
     upload = client.upload_folder(
         repo_id=space_id,
         folder_path=actual_source,

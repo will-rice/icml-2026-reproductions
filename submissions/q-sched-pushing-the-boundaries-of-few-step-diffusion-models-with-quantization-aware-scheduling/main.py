@@ -18,6 +18,7 @@ def main():
     evidence_path = Path(__file__).resolve().parent / "evidence.json"
     with open(evidence_path, "w") as f:
         json.dump(results, f, indent=2)
+        f.write("\n")
     print(f"Evidence written to {evidence_path}")
 
 
