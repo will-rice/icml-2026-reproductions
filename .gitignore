@@ -604,9 +604,21 @@ submissions/plugmem-a-task-agnostic-plugin-memory-module-for-llm-agents/**/*.egg
 !docs/reproductions/90bf5a14-ca7f-49d8-9085-a633e800b5ca-video-salmonn-design.md
 
 !submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/
-!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/video_salmonn_s/
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/video_salmonn_s/**
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/tests/
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/tests/**
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/evidence/
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/evidence/**
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/pages/
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/pages/**
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/README.md
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/app.py
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/pyproject.toml
+!submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/generate_evidence.py
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.venv/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.pytest_cache/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/__pycache__/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/*.egg-info/
+
 
