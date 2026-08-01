@@ -82,10 +82,18 @@ For every iteration:
    or above the daily Hugging Face Space-creation quota (20), selecting a
    NEW paper is forbidden — the backlog already saturates publishing
    capacity. Spend the iteration instead on, in priority order: (a)
-   reclaiming and publishing a publish-ready lane if quota remains today;
-   (b) an improvement cycle on a judged attempt with a correctable
+   reclaiming and publishing a publish-ready lane whose dedicated Space
+   already exists — republishing consumes no creation quota; (b)
+   reclaiming and publishing the highest-value publish-ready lane that
+   needs a NEW Space, only while creation quota remains today: rank the
+   whole backlog by `score_rate` expected points
+   (2·p_verified + 2·p_falsified + p_toy per claim), break ties by
+   strongest committed evidence (executed, deterministic, judge-visible
+   pages) and then by `score_rate.priority`, and never spend a creation
+   slot on a lane while a higher-ranked lane sits unpublished; (c) an
+   improvement cycle on a judged attempt with a correctable
    zero/toy/inconclusive verdict (real computed evidence, rendered into
-   the served pages); (c) preparing improvements in an isolated clone for
+   the served pages); (d) preparing improvements in an isolated clone for
    a lane whose submission is pending judgment, without touching its live
    Space. Before selecting new work, inspect every active released blocked attempt.
    If its recorded blocker is resolved or its `next_action` is actionable,
