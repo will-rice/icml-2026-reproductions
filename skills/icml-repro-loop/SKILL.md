@@ -93,12 +93,17 @@ For every iteration:
    reclaiming and publishing a publish-ready lane whose dedicated Space
    already exists — republishing consumes no creation quota; (b)
    reclaiming and publishing the highest-value publish-ready lane that
-   needs a NEW Space, only while creation quota remains today: rank the
-   whole backlog by `score_rate` expected points
-   (2·p_verified + 2·p_falsified + p_toy per claim), break ties by
-   strongest committed evidence (executed, deterministic, judge-visible
-   pages) and then by `score_rate.priority`, and never spend a creation
-   slot on a lane while a higher-ranked lane sits unpublished; (c) an
+   needs a NEW Space, only while creation quota remains today. Rank the
+   backlog FIRST by evidence class — lanes whose committed evidence is
+   executed, deterministic, and rendered as concrete numbers in the
+   served pages outrank everything else; judged results 2026-08-01 show
+   such lanes earn verified/toy credit while high-self-estimate lanes
+   with inspection-only or summary evidence judge to zero — and only
+   THEN by `score_rate` expected points and `score_rate.priority` as
+   tie-breaks. Never spend a creation slot on a lane while a
+   higher-ranked lane sits unpublished; if a lane's evidence would not
+   survive the fabrication/visibility audit, improve it before
+   publishing it; (c) an
    improvement cycle on a judged attempt with a correctable
    zero/toy/inconclusive verdict (real computed evidence, rendered into
    the served pages); (d) preparing improvements in an isolated clone for
