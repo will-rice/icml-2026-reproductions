@@ -18,6 +18,7 @@ docs/designs/
 docs/reproductions/
 docs/superpowers/plans/
 docs/superpowers/specs/*
+!docs/superpowers/specs/2026-08-01-q-sched-reproduction-design.md
 evidence/
 submissions/*
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/
@@ -111,6 +112,20 @@ submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augm
 submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/.pytest_cache/
 submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/**/__pycache__/
 
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/qsched/
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/qsched/*.py
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/tests/
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/tests/*.py
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/README.md
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/app.py
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/main.py
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/pyproject.toml
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/requirements.txt
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/uv.lock
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/evidence.json
+submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/.venv/
+submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/.pytest_cache/
+submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/**/__pycache__/
 
 validation-manifest.json
-
