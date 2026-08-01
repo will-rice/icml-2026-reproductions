@@ -102,6 +102,12 @@ exact live observation. Intention and worker self-report are not evidence.
   Never rewind or force-move shared branches.
 - [ ] Record repo-relative paths (never `/tmp` paths) in `next_action` and
   blocker text so a reclaiming owner can resume from the repository.
+- [ ] Create every validation worktree, staging clone, and scratch checkout
+  under the workspace root (`.worktrees/` for linked worktrees), never in
+  `/tmp`: systemd wipes `/tmp` on boot, `candidate-census` polices only
+  workspace worktrees, and `/tmp` staging is how sixty gigabytes of
+  validated sources nearly vanished. Remove your worktree when the
+  iteration releases.
 
 ## Deployment And Submission
 
