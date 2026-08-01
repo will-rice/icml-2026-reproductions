@@ -6,73 +6,109 @@
     {
       "claim": "Hibiki-Zero trains simultaneous speech translation from sentence-level aligned speech data rather than word-level aligned interpretation data (Section 3).",
       "challenge_claim_sha256": "310f55e2cd40a1374585824423d21f54a01ecdec7102aa9316ca7d973e7fd024",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "toy-scale mechanism only",
       "evidence_details": {
-        "sentence_level_loss": 0.15,
-        "word_level_loss": 2.1,
-        "alignment_difference_verified": true
+        "training_signal": "whole-sentence pairs only; no word-level timing labels",
+        "wait_k_results": [
+          {
+            "k": 0,
+            "train_ce": 1.1521,
+            "test_token_accuracy": 0.3125
+          },
+          {
+            "k": 1,
+            "train_ce": 0.6841,
+            "test_token_accuracy": 1.0
+          },
+          {
+            "k": 2,
+            "train_ce": 0.7518,
+            "test_token_accuracy": 1.0
+          }
+        ],
+        "observation": "a streaming emitter trained purely from sentence-aligned pairs reaches high held-out accuracy once one token of lookahead is allowed"
       }
     },
     {
       "claim": "Hibiki-Zero casts latency-quality optimization as reinforcement learning with GRPO over multistream speech/text outputs (Section 3.3).",
       "challenge_claim_sha256": "a2d979ea27e93db2e93cfb538c494963132c3dbce9ccf245fd8333e9c87ea12a",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "toy-scale mechanism only",
       "evidence_details": {
-        "quality_reward": 51.239999999999995,
-        "latency_penalty": 0.84,
-        "net_grpo_reward": 50.39999999999999,
-        "grpo_multistream_verified": true
+        "algorithm": "group-relative advantages over sampled rollouts, policy-gradient update on a wait/emit policy",
+        "grpo_results": [
+          {
+            "beta": 0.0,
+            "initial_quality": 0.75,
+            "initial_avg_lag": 3.1315,
+            "final_quality": 1.0,
+            "final_avg_lag": 4.1094
+          },
+          {
+            "beta": 0.05,
+            "initial_quality": 0.75,
+            "initial_avg_lag": 3.1315,
+            "final_quality": 0.9974,
+            "final_avg_lag": 2.0052
+          },
+          {
+            "beta": 0.2,
+            "initial_quality": 0.75,
+            "initial_avg_lag": 3.1315,
+            "final_quality": 1.0,
+            "final_avg_lag": 2.0143
+          }
+        ],
+        "observation": "the latency weight beta measurably moves the trained operating point along the latency-quality trade-off"
       }
     },
     {
       "claim": "The final Hibiki-Zero architecture is a 3B-parameter decoder-only multistream model built on RQ-Transformer audio token modeling (Section 4.1).",
       "challenge_claim_sha256": "e10d20674ea4c23070d396a3afa51d1d8f210f0857c721cff9f3837f43153988",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "residual-quantization and multistream factorization mechanisms only; the 3B-parameter model is not instantiated",
       "evidence_details": {
-        "parameters_billions": 3.0,
-        "num_codebooks": 4,
-        "quantization_loss": 1.36875,
-        "rq_transformer_verified": true
+        "reconstruction_mse_by_depth": [
+          0.3089,
+          0.1927,
+          0.1213,
+          0.0763
+        ],
+        "flat_joint_vocabulary": 1048576,
+        "factorized_vocabulary": 128,
+        "depth_conditional_ce_by_level": [
+          2.8958,
+          2.8735,
+          2.8632
+        ],
+        "unigram_ce_by_level": [
+          3.33,
+          3.3198,
+          3.3004
+        ],
+        "parameters_billions_instantiated": null
       }
     },
     {
       "claim": "On Europarl-ST and Audio-NTREX-4L, Hibiki-Zero reports better long-form ASR BLEU, speaker similarity, and latency than Seamless, and improves over Hibiki on French short-form ASR BLEU (Table 1).",
       "challenge_claim_sha256": "d47209f34cc0571a559617af94213e6528e9c2202c1e33c30e9d2e18ddd8dd13",
-      "status": "verified",
-      "evidence_details": {
-        "europarl_bleu": 29.4,
-        "audio_ntrex_bleu": 31.8,
-        "speaker_similarity": 0.84,
-        "latency_ms": 1420.0,
-        "french_shortform_bleu": 34.2,
-        "beats_seamless": true,
-        "beats_hibiki_baseline": true
-      }
+      "status": "unreplicated",
+      "reason": "requires the released 3B checkpoint and the Europarl-ST/Audio-NTREX-4L evaluation harnesses, none of which are runnable in this CPU-only package; no benchmark numbers are reported rather than fabricating them"
     },
     {
       "claim": "Human MOS evaluations rate Hibiki-Zero higher than Seamless on audio quality, speaker similarity, and speech naturalness across evaluated input languages (Table 2).",
       "challenge_claim_sha256": "0633e795738f02f728b6021c9aab27d41459050df55c2f3b193c725a0151553f",
-      "status": "verified",
-      "evidence_details": {
-        "audio_quality_mos": 4.15,
-        "speaker_similarity_mos": 4.08,
-        "speech_naturalness_mos": 4.22,
-        "average_mos": 4.15
-      }
+      "status": "unreplicated",
+      "reason": "a human mean-opinion-score study requires human raters; it cannot be reproduced computationally and must not be synthesized"
     },
     {
       "claim": "The model adapts to Italian-to-English simultaneous translation using 850 hours of fine-tuning data and reports Seamless-level quality/latency with better speaker similarity after RL (Table 3).",
       "challenge_claim_sha256": "8e9bc171f3a60d469d7aa6c5f3f9fbc56e1a89d70474de93f73de5046d9a0b50",
-      "status": "verified",
-      "evidence_details": {
-        "fine_tuning_hours": 850.0,
-        "rl_enabled": true,
-        "bleu_score": 32.88,
-        "speaker_similarity": 0.87,
-        "latency_ms": 1350.0,
-        "matches_seamless_quality": true
-      }
+      "status": "unreplicated",
+      "reason": "requires 850 hours of Italian-English speech and large-scale fine-tuning infrastructure unavailable to this package"
     }
   ],
-  "all_target_claims_verified": true
+  "all_target_claims_verified": false,
+  "provenance": "all numbers computed by generate_evidence.py with pinned seeds; fabricated benchmark/MOS tables removed 2026-08-01"
 }
