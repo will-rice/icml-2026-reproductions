@@ -1,4 +1,4 @@
-"""Generate evidence summary JSON for paper ATpOQt9VVd reproduction."""
+"""Generate evidence summary JSON for paper ATpOQt9VVd reproduction (OeMDM)."""
 
 import json
 from pathlib import Path
