@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video-salmonn-s"
+version = "0.1.0"
+dependencies = [
+    "torch",
+    "pytest",
+    "gradio",
+]
+
+[tool.setuptools.packages.find]
+include = ["video_salmonn_s*"]
