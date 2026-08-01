@@ -1,7 +1,7 @@
 # Reproduction Logbook: LiME
 
-**Paper Title**: LiME: Lightweight Mixture of Experts for Efficient Multimodal Multi-task Learning  
-**ICML 2026 Paper ID**: `KRSZj8z5Lr`  
+**Paper Title**: LiME: Lightweight Mixture of Experts for Efficient Multimodal Multi-task Learning
+**ICML 2026 Paper ID**: `KRSZj8z5Lr`
 **Attempt ID**: `ef44b2f3-ff62-47b9-b0ad-b472c4964a6e`
 
 ## Overview of Reproduction Findings
