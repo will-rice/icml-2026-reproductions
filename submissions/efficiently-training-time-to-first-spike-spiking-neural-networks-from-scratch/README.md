@@ -1,3 +1,17 @@
+---
+title: Efficiently Training Time-to-First-Spike Spiking Neural Networks from Scratch
+emoji: ⚡
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+tags:
+  - icml2026-repro
+  - paper-3EcT46wsdc
+---
+
 # Reproduction of "Efficiently Training Time-to-First-Spike Spiking Neural Networks from Scratch"
 
 Paper: ICML 2026 Candidate Paper (arXiv:2410.23619)
