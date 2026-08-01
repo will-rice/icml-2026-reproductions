@@ -1,8 +1,8 @@
 # Reproduction Logbook: RelayCaching
 
-**Paper Title**: RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse  
-**ICML 2026 Paper ID**: `1tbhBSXcyX`  
-**Attempt ID**: `4c0f6594-72fa-4291-a680-0d0a3d6f0bea`  
+**Paper Title**: RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse
+**ICML 2026 Paper ID**: `1tbhBSXcyX`
+**Attempt ID**: `4c0f6594-72fa-4291-a680-0d0a3d6f0bea`
 
 ## Overview of Reproduction Findings
 

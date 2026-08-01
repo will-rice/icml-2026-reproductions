@@ -17,12 +17,12 @@ tags:
 
 # ICML 2026 Reproduction: RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse
 
-**Paper Title:** RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse  
-**Paper ID:** `1tbhBSXcyX`  
-**Authors:** Yingsheng Geng, Yuchong Gao, Weihong Wu, Guyue Liu, Jiang Liu  
-**Upstream Revision:** `main`  
-**License:** MIT License  
-**Space:** `wrice/repro-relaycaching-accelerating-llm-collaboration-via-decoding-kv-cache-reuse`  
+**Paper Title:** RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse
+**Paper ID:** `1tbhBSXcyX`
+**Authors:** Yingsheng Geng, Yuchong Gao, Weihong Wu, Guyue Liu, Jiang Liu
+**Upstream Revision:** `main`
+**License:** MIT License
+**Space:** `wrice/repro-relaycaching-accelerating-llm-collaboration-via-decoding-kv-cache-reuse`
 
 ---
 

@@ -1,9 +1,9 @@
 # RelayCaching Reproduction Design
 
-**Paper ID**: `1tbhBSXcyX`  
-**Title**: RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse  
-**Slug**: `relaycaching-accelerating-llm-collaboration-via-decoding-kv-cache-reuse`  
-**Upstream Revision**: `main`  
+**Paper ID**: `1tbhBSXcyX`
+**Title**: RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse
+**Slug**: `relaycaching-accelerating-llm-collaboration-via-decoding-kv-cache-reuse`
+**Upstream Revision**: `main`
 
 ## 1. Overview & Key Mechanism
 
