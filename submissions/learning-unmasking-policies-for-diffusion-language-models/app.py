@@ -26,8 +26,8 @@ else:
         inputs=None,
         outputs=gr.Markdown(),
         title="Learning Unmasking Policies Evidence",
-        allow_flagging="never",
     )
+
 
     if __name__ == "__main__":
         demo.launch()
