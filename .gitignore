@@ -237,6 +237,8 @@ docs/reproductions/*
 !docs/reproductions/d519b868-cf79-4771-96cd-25c295996ad4-formal-problem-solving-design.md
 !docs/reproductions/020e5035-01ad-40a7-9ab0-9147289ab70c-dhsa-design.md
 !docs/reproductions/dcf0cca7-d415-4513-9f1c-787cb6f20182-beyond-log-likelihood-design.md
+!docs/reproductions/ad256d96-a7c2-424d-bfcf-b43daace444e-metaphorvu-design.md
+!docs/reproductions/cacb1796-7495-4440-845c-1002729bea1b-mind-omni-design.md
 docs/superpowers/plans/
 docs/superpowers/specs/*
 !docs/superpowers/specs/2026-08-01-q-sched-reproduction-design.md
@@ -511,6 +513,21 @@ submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solver
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/.pytest_cache/
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/**/__pycache__/
 
+!submissions/metaphorvu-towards-metaphorical-video-understanding/
+!submissions/metaphorvu-towards-metaphorical-video-understanding/**
+submissions/metaphorvu-towards-metaphorical-video-understanding/.venv/
+submissions/metaphorvu-towards-metaphorical-video-understanding/.pytest_cache/
+submissions/metaphorvu-towards-metaphorical-video-understanding/**/__pycache__/
+submissions/metaphorvu-towards-metaphorical-video-understanding/**/*.egg-info/
+
+!submissions/mind-omni-a-unified-multi-task-framework-for-brain-vision-language-modeling-via-discrete-diffusion/
+!submissions/mind-omni-a-unified-multi-task-framework-for-brain-vision-language-modeling-via-discrete-diffusion/**
+submissions/mind-omni-a-unified-multi-task-framework-for-brain-vision-language-modeling-via-discrete-diffusion/.cache/
+submissions/mind-omni-a-unified-multi-task-framework-for-brain-vision-language-modeling-via-discrete-diffusion/.venv/
+submissions/mind-omni-a-unified-multi-task-framework-for-brain-vision-language-modeling-via-discrete-diffusion/.pytest_cache/
+submissions/mind-omni-a-unified-multi-task-framework-for-brain-vision-language-modeling-via-discrete-diffusion/**/__pycache__/
+submissions/mind-omni-a-unified-multi-task-framework-for-brain-vision-language-modeling-via-discrete-diffusion/**/*.egg-info/
+
 !submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/
 !submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/**
 submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/.venv/
@@ -589,6 +606,15 @@ submissions/frigid-scaling-diffusion-based-molecular-generation-from-mass-spectr
 submissions/frigid-scaling-diffusion-based-molecular-generation-from-mass-spectra-at-training-and-inference-time/.pytest_cache/
 submissions/frigid-scaling-diffusion-based-molecular-generation-from-mass-spectra-at-training-and-inference-time/**/__pycache__/
 submissions/frigid-scaling-diffusion-based-molecular-generation-from-mass-spectra-at-training-and-inference-time/**/*.egg-info/
+
+!docs/reproductions/7d593978-effc-492a-90f4-819a0d244840-meteora-design.md
+
+!submissions/ranking-free-rag-replacing-re-ranking-with-selection-in-rag-for-sensitive-domains/
+!submissions/ranking-free-rag-replacing-re-ranking-with-selection-in-rag-for-sensitive-domains/**
+submissions/ranking-free-rag-replacing-re-ranking-with-selection-in-rag-for-sensitive-domains/.venv/
+submissions/ranking-free-rag-replacing-re-ranking-with-selection-in-rag-for-sensitive-domains/.pytest_cache/
+submissions/ranking-free-rag-replacing-re-ranking-with-selection-in-rag-for-sensitive-domains/**/__pycache__/
+submissions/ranking-free-rag-replacing-re-ranking-with-selection-in-rag-for-sensitive-domains/**/*.egg-info/
 
 !docs/reproductions/cf7c63f8-693d-423a-a3aa-0928521589fe-diyhealth-design.md
 

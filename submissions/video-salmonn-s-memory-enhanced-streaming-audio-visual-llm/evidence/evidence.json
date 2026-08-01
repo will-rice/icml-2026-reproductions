@@ -14,7 +14,7 @@
       "claim_id": "claim_2",
       "text": "The model uses a TTT layer as streaming memory, with fast-weight updates plus a long-span prediction objective for long-range dependency modeling (Figure 2)",
       "status": "toy",
-      "evidence": "TTT fast-weight update step computed loss=572845964424457.0000 in 0.05ms over 50 timesteps, validating fast-weight update and prediction loss propagation."
+      "evidence": "TTT fast-weight update step computed loss=572846692455386.7500 in 0.05ms over 50 timesteps, validating fast-weight update and prediction loss propagation."
     },
     {
       "claim_id": "claim_3",
@@ -47,6 +47,6 @@
     "similarity_merge_tokens": 5400,
     "token_ratio_pct": 0.15,
     "stage2_parameters_frozen": true,
-    "synthetic_pred_loss": 572845964424457.0
+    "synthetic_pred_loss": 572846692455386.8
   }
 }
