@@ -4,10 +4,13 @@ Produces evidence/evidence.json and pages/logbook.md.
 """
 
 import os
+import sys
+sys.dont_write_bytecode = True
 import json
 import time
 from pathlib import Path
 import torch
+
 
 from video_salmonn_s.ttt_memory import (
     TTTStreamingMemoryLayer,

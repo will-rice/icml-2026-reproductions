@@ -18,7 +18,7 @@ This logbook documents the independent CPU-only reproduction audit of **video-SA
 | Claim | Target Description | Status | Recomputed Evidence Summary |
 |---|---|---|---|
 | **Claim 1** | Fixed memory budget 3-hour video streaming at 1 FPS | `toy` | Fixed TTT memory footprint maintained at 64 token vectors for 10800 frames (3.0 hours at 1 FPS). |
-| **Claim 2** | TTT layer streaming memory fast-weight updates & prediction loss | `toy` | Synthetic sequence prediction loss=0.5122 computed across timesteps with fast-weight matrix updates. |
+| **Claim 2** | TTT layer streaming memory fast-weight updates & prediction loss | `toy` | Synthetic sequence prediction loss=0.5076 computed across timesteps with fast-weight matrix updates. |
 | **Claim 3** | Two-stage training scheme with TTT parameter freezing | `verified` | Code logic verified; Stage 2 parameter freeze verified (`requires_grad=False` for all base projection weights). |
 | **Claim 4** | Benchmark superiority over streaming/non-streaming baselines | `unavailable` | Requires full Qwen3-VL GPU model weights and long-video benchmark inference; uncomputed CPU-only. |
 | **Claim 5** | ELViM +14-15 point accuracy improvement | `unavailable` | Full dataset inference required GPU model evaluation; uncomputed CPU-only. |
@@ -41,7 +41,7 @@ This logbook documents the independent CPU-only reproduction audit of **video-SA
 - **Sequence Length:** 100 timesteps
 - **Hidden Dimension:** 128
 - **Memory Dimension:** 64
-- **Mean Synthetic Prediction MSE Loss:** 0.5122
+- **Mean Synthetic Prediction MSE Loss:** 0.5076
 
 ---
 

@@ -2,7 +2,7 @@
   "paper_id": "tJP3FxzSPs",
   "attempt_id": "90bf5a14-ca7f-49d8-9085-a633e800b5ca",
   "slug": "video-salmonn-s-memory-enhanced-streaming-audio-visual-llm",
-  "generated_at": "2026-08-01T17:10:28Z",
+  "generated_at": "2026-08-01T17:13:28Z",
   "claims": [
     {
       "claim_id": "claim_1",
@@ -14,7 +14,7 @@
       "claim_id": "claim_2",
       "text": "The model uses a TTT layer as streaming memory, with fast-weight updates plus a long-span prediction objective for long-range dependency modeling (Figure 2)",
       "status": "toy",
-      "evidence": "TTT fast-weight update step computed loss=0.5122 in 22225.85ms over 100 timesteps, validating fast-weight update and prediction loss propagation."
+      "evidence": "TTT fast-weight update step computed loss=0.5076 in 22510.87ms over 100 timesteps, validating fast-weight update and prediction loss propagation."
     },
     {
       "claim_id": "claim_3",
@@ -47,6 +47,6 @@
     "similarity_merge_tokens": 5400,
     "token_ratio_pct": 1.19,
     "stage2_parameters_frozen": true,
-    "synthetic_pred_loss": 0.5122
+    "synthetic_pred_loss": 0.5076
   }
 }
