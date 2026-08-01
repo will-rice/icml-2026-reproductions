@@ -1,9 +1,9 @@
 # Reproduction Design: Q-Sched (Quantization-Aware Scheduling for Few-Step Diffusion Models)
 
-**Paper ID:** 4yzY0GFIJj  
-**Slug:** q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling  
-**ArXiv:** 2509.01624  
-**Upstream Revision:** arxiv:2509.01624  
+**Paper ID:** 4yzY0GFIJj
+**Slug:** q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling
+**ArXiv:** 2509.01624
+**Upstream Revision:** arxiv:2509.01624
 
 ## 1. Overview and Core Claims
 
