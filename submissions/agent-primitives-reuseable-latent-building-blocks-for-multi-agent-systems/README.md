@@ -1,3 +1,14 @@
+---
+title: "Agent Primitives Reproduction"
+colorFrom: "blue"
+colorTo: "green"
+sdk: "static"
+pinned: false
+tags:
+  - icml2026-repro
+  - paper-CzShhpY2qU
+---
+
 # Agent Primitives Reproduction
 
 CPU-only evidence package for `Agent Primitives: Reuseable Latent Building Blocks for Multi-Agent Systems`.
