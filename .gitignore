@@ -489,3 +489,9 @@ submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-perfo
 submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/.pytest_cache/
 submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/**/__pycache__/
 submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/**/*.egg-info/
+
+!submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/
+!submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/**
+submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/.venv/
+submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/.pytest_cache/
+submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/**/__pycache__/

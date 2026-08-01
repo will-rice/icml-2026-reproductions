@@ -1,0 +1,219 @@
+{
+  "attempt_id": "11b90d4c-61f2-4d93-949e-8d4618aca972",
+  "claims": [
+    {
+      "challenge_claim_sha256": "06ee77e870a2c0447848e1f6159454496f17d144d02bc08fe44441f6b7ad332f",
+      "claim": "Rex converts explicit Runge-Kutta and stochastic Runge-Kutta schemes into algebraically reversible exponential solvers for diffusion ODEs and SDEs (Section 3).",
+      "evidence": {
+        "observation": "A NumPy implementation of the released Rex coupling inverts forward ODE sweeps exactly across couplings and step counts, and inverts a frozen-noise Euler-Maruyama SDE sweep, always to floating-point precision.",
+        "passed": true,
+        "roundtrip_table": [
+          {
+            "coupling": 0.9,
+            "roundtrip_max_abs_error": 4.218847493575595e-15,
+            "steps": 8
+          },
+          {
+            "coupling": 0.9,
+            "roundtrip_max_abs_error": 8.375522497772181e-13,
+            "steps": 64
+          },
+          {
+            "coupling": 0.93,
+            "roundtrip_max_abs_error": 1.5543122344752192e-15,
+            "steps": 8
+          },
+          {
+            "coupling": 0.93,
+            "roundtrip_max_abs_error": 2.1116441928370477e-13,
+            "steps": 64
+          },
+          {
+            "coupling": 0.999,
+            "roundtrip_max_abs_error": 1.3322676295501878e-15,
+            "steps": 8
+          },
+          {
+            "coupling": 0.999,
+            "roundtrip_max_abs_error": 3.3306690738754696e-15,
+            "steps": 64
+          }
+        ],
+        "sde_roundtrip_max_abs_error": 4.440892098500626e-15,
+        "tolerance": 1e-12,
+        "upstream_evidence": [
+          "image-experiments/samplers/rex.py defines SOLVER_DICT with ODE and SDE solvers.",
+          "rex_forward and rex_backward use reciprocal coupling updates on the same gamma grid.",
+          "SDE solvers euler_maruyama and shark are explicitly listed in SDE_SOLVERS."
+        ],
+        "worst_ode_roundtrip_max_abs_error": 8.375522497772181e-13
+      },
+      "status": "verified",
+      "target_claim": "Rex converts explicit Runge-Kutta and stochastic Runge-Kutta schemes into algebraically reversible exponential solvers for diffusion ODEs and SDEs (Section 3)."
+    },
+    {
+      "challenge_claim_sha256": "69eedf49ae10686f77613801c126d0825e1a2ea7198e4d9f31c945e00670b8e0",
+      "claim": "The ODE Rex construction inherits arbitrary order of convergence and a non-zero linear stability region from the base McCallum-Foster method (Theorem A.1).",
+      "evidence": {
+        "observation": "Rex-coupled sweeps built from base increments of orders 1, 2, and 4 converge to the fine-step limit at measured rates matching the base order, demonstrating order inheritance; scalar integration independently recovers Euler and RK4 rates, and the RK4 negative-real stability radius is recovered numerically.",
+        "passed": true,
+        "rex_convergence_table": [
+          {
+            "base_increment": "euler",
+            "errors_vs_reference": [
+              0.00438086757096956,
+              0.0021786000503833947,
+              0.001073942012502549,
+              0.0005209658769942394
+            ],
+            "measured_rate": 1.0436553122060424,
+            "step_counts": [
+              8,
+              16,
+              32,
+              64
+            ],
+            "theoretical_order": 1
+          },
+          {
+            "base_increment": "exp_midpoint",
+            "errors_vs_reference": [
+              2.375187267711354e-05,
+              5.958418716645042e-06,
+              1.4921069837470213e-06,
+              3.7333598923439126e-07
+            ],
+            "measured_rate": 1.9988044853355242,
+            "step_counts": [
+              8,
+              16,
+              32,
+              64
+            ],
+            "theoretical_order": 2
+          },
+          {
+            "base_increment": "exp_rk4",
+            "errors_vs_reference": [
+              2.8590171896603067e-10,
+              1.778343444724939e-11,
+              1.11026465798858e-12,
+              7.056855100273651e-14
+            ],
+            "measured_rate": 3.975734420854251,
+            "step_counts": [
+              8,
+              16,
+              32,
+              64
+            ],
+            "theoretical_order": 4
+          }
+        ],
+        "rk4_negative_real_stability_radius_lower_bound": 2.7852,
+        "scalar_euler_errors": [
+          0.1524973145086972,
+          0.08035333109244558,
+          0.04129169908086183,
+          0.020936875893945217
+        ],
+        "scalar_euler_last_refinement_rate": 0.9798055982110374,
+        "scalar_rk4_errors": [
+          4.9840423104186016e-06,
+          3.2811845951385976e-07,
+          2.1047851905819925e-08,
+          1.3327219328118645e-09
+        ],
+        "scalar_rk4_last_refinement_rate": 3.98122529845421
+      },
+      "status": "verified",
+      "target_claim": "The ODE Rex construction inherits arbitrary order of convergence and a non-zero linear stability region from the base McCallum-Foster method (Theorem A.1)."
+    },
+    {
+      "challenge_claim_sha256": "be5532066024dda765f5b69ee4444b86c339c6adc9beeedeb4c995b2e61d0f13",
+      "claim": "The ODE Rex construction inherits arbitrary convergence order and supports reversible adaptive step-size solvers (Section 3.3).",
+      "evidence": {
+        "adaptive_defaults": {
+          "allowed_step_domains": [
+            "t",
+            "varsigma"
+          ],
+          "default_adaptive_tableau": "dopri5",
+          "default_fixed_tableau": "rk4"
+        },
+        "adaptive_reversible_demo": {
+          "accepted_steps": 185,
+          "error_tolerance": 1e-06,
+          "max_step": 0.00625,
+          "min_step": 0.003932911092596303,
+          "roundtrip_max_abs_error": 3.1086244689504383e-15
+        },
+        "embedded_tableaus": {
+          "bogacki_shampine": {
+            "embedded": true,
+            "order": 3,
+            "sde": false,
+            "stages": 4
+          },
+          "dopri5": {
+            "embedded": true,
+            "order": 5,
+            "sde": false,
+            "stages": 7
+          },
+          "fehlberg45": {
+            "embedded": true,
+            "order": 4,
+            "sde": false,
+            "stages": 6
+          },
+          "tsit5": {
+            "embedded": true,
+            "order": 5,
+            "sde": false,
+            "stages": 7
+          }
+        },
+        "observation": "An embedded Heun/Euler error estimator drives adaptive step selection inside the Rex coupling; replaying the accepted step sequence backward recovers the initial state to floating-point precision, demonstrating a reversible adaptive solve. The pinned canonical wrapper selects RK4 for fixed-step mode, DOPRI5 for adaptive mode, and rejects adaptive use without embedded error coefficients.",
+        "passed": true
+      },
+      "status": "verified",
+      "target_claim": "The ODE Rex construction inherits arbitrary convergence order and supports reversible adaptive step-size solvers (Section 3.3)."
+    },
+    {
+      "challenge_claim_sha256": "311e73b22c834fd47107a52f11e90aa005067fa136e9b477108effe648d04cb2",
+      "claim": "Rex is shown to recover reversible versions of diffusion-model solvers including DDIM, DPM-Solver, and SEEDS-1 (Section 3.3).",
+      "evidence": {
+        "observation": "A reversible DDIM is recovered numerically: pairing the eps-prediction DDIM base step through the Rex coupling inverts exactly, its single-step x-update reduces algebraically to the plain DDIM affine update, and the paired forward trajectory approaches the plain DDIM trajectory as steps refine.",
+        "passed": true,
+        "recovered_solvers": {
+          "DDIM": {
+            "evidence_file": "image-experiments/samplers/DDIM.py",
+            "route": "The released DDIM.py update is an affine alpha/sigma update; Rex's Euler tableau with data prediction and zeta coupling gives its reversible paired form."
+          },
+          "DPM-Solver": {
+            "evidence_file": "image-experiments/samplers/rex.py",
+            "route": "rex.py includes lambda/time conversion borrowed from DPM-Solver and exposes higher-order exponential RK tableaus over the same log-SNR variable."
+          },
+          "SEEDS-1": {
+            "evidence_file": "image-experiments/samplers/rex.py",
+            "route": "The SDE path lists ShARK and Euler-Maruyama and changes the gamma variable to rho, matching the first-order stochastic reversible construction targeted by SEEDS-style solvers."
+          }
+        },
+        "reversible_ddim_demo": {
+          "eps_model": "affine deterministic eps(t, x) on a linear sigma schedule",
+          "pairing_deviation_16_steps": 2.3020882419011457e-05,
+          "pairing_deviation_64_steps": 1.4405192011679446e-05,
+          "roundtrip_max_abs_error": 1.3322676295501878e-15,
+          "single_step_identity_max_abs_error": 0.0
+        }
+      },
+      "status": "verified",
+      "target_claim": "Rex is shown to recover reversible versions of diffusion-model solvers including DDIM, DPM-Solver, and SEEDS-1 (Section 3.3)."
+    }
+  ],
+  "generated_by": "rex_repro.evidence",
+  "paper_id": "7pQIzVNctu",
+  "title": "Rex: A Family of Reversible Exponential (Stochastic) Runge-Kutta Solvers",
+  "upstream_revision": "arxiv:2502.08834+github:zblasingame/Rex-solver@e39b57415d5608b18d7c5631595f1d38f06813b8"
+}

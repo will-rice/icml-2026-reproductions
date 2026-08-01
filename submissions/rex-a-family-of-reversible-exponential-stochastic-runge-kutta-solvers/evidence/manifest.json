@@ -1,0 +1,74 @@
+{
+  "attempt_id": "11b90d4c-61f2-4d93-949e-8d4618aca972",
+  "claim_bindings": [
+    {
+      "challenge_claim": "Rex converts explicit Runge-Kutta and stochastic Runge-Kutta schemes into algebraically reversible exponential solvers for diffusion ODEs and SDEs (Section 3).",
+      "challenge_claim_sha256": "06ee77e870a2c0447848e1f6159454496f17d144d02bc08fe44441f6b7ad332f",
+      "target_claim": "Rex converts explicit Runge-Kutta and stochastic Runge-Kutta schemes into algebraically reversible exponential solvers for diffusion ODEs and SDEs (Section 3)."
+    },
+    {
+      "challenge_claim": "The ODE Rex construction inherits arbitrary order of convergence and a non-zero linear stability region from the base McCallum-Foster method (Theorem A.1).",
+      "challenge_claim_sha256": "69eedf49ae10686f77613801c126d0825e1a2ea7198e4d9f31c945e00670b8e0",
+      "target_claim": "The ODE Rex construction inherits arbitrary order of convergence and a non-zero linear stability region from the base McCallum-Foster method (Theorem A.1)."
+    },
+    {
+      "challenge_claim": "The ODE Rex construction inherits arbitrary convergence order and supports reversible adaptive step-size solvers (Section 3.3).",
+      "challenge_claim_sha256": "be5532066024dda765f5b69ee4444b86c339c6adc9beeedeb4c995b2e61d0f13",
+      "target_claim": "The ODE Rex construction inherits arbitrary convergence order and supports reversible adaptive step-size solvers (Section 3.3)."
+    },
+    {
+      "challenge_claim": "Rex is shown to recover reversible versions of diffusion-model solvers including DDIM, DPM-Solver, and SEEDS-1 (Section 3.3).",
+      "challenge_claim_sha256": "311e73b22c834fd47107a52f11e90aa005067fa136e9b477108effe648d04cb2",
+      "target_claim": "Rex is shown to recover reversible versions of diffusion-model solvers including DDIM, DPM-Solver, and SEEDS-1 (Section 3.3)."
+    }
+  ],
+  "commands": {
+    "evidence_generation": "uv run --project submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers python -m rex_repro.evidence --project-root submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers",
+    "test_suite": "uv run --project submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers python -m pytest submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/tests -q"
+  },
+  "local_files": {
+    "pyproject.toml": {
+      "bytes": 335,
+      "sha256": "11b957dbcc859f0393f332ec54a8fd98a3def61bfa959dea14956e672b4460ac"
+    },
+    "src/rex_repro/evidence.py": {
+      "bytes": 35795,
+      "sha256": "77c01289d08268418cee9b3835d8e6827c5d8338d6db6bb9d419be8de0e28390"
+    },
+    "tests/test_rex_evidence.py": {
+      "bytes": 3298,
+      "sha256": "242cfa5a9cef7bae28c98a9fc8294e2f931312d93fc854e2838b45318e2c3ec6"
+    }
+  },
+  "paper_id": "7pQIzVNctu",
+  "python_requirement": ">=3.10",
+  "results_sha256": "dcbccca6aff60ef6edc6b60f001f826357f50342991307595ddda33f8b441683",
+  "title": "Rex: A Family of Reversible Exponential (Stochastic) Runge-Kutta Solvers",
+  "upstream_files": {
+    "LICENSE": {
+      "role": "Upstream license.",
+      "sha256": "02767abe9b2db400c3d5fe0dd048243321f573b11aa02f9cd15219c01692f73b"
+    },
+    "README.md": {
+      "role": "Repository overview, API, solver table, and GPU scope.",
+      "sha256": "8a54acc088ce91fa83cccd56e239bc886e7aeb953f794e2dbec4fd66619d9195"
+    },
+    "image-experiments/samplers/DDIM.py": {
+      "role": "Released DDIM baseline update used for solver-subsumption audit.",
+      "sha256": "84d15fd370bb4ef24c7b9c4c342e26e253b46b37157dba5355bf872f8a503282"
+    },
+    "image-experiments/samplers/rex.py": {
+      "role": "Reference Rex forward/backward coupling and canonical wrapper.",
+      "sha256": "4c6c3f085a2251c5a903c5d417d6262cc4fbc8fa98497f20c7e35a42b7aa1055"
+    },
+    "image-experiments/samplers/rk_tableaus.py": {
+      "role": "Explicit and embedded Runge-Kutta tableaus.",
+      "sha256": "4d40806e3e0ad05e8f056b23d99e936737ecda9b8d006578ac9d939de3251db4"
+    },
+    "requirements.txt": {
+      "role": "Upstream dependency declaration.",
+      "sha256": "8037be27a0b411fbfc41b9b0e6b2f0bd1fabcc03299c33189ab6520a690933b2"
+    }
+  },
+  "upstream_revision": "arxiv:2502.08834+github:zblasingame/Rex-solver@e39b57415d5608b18d7c5631595f1d38f06813b8"
+}
