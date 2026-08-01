@@ -1,0 +1,118 @@
+{
+  "attempt_id": "72481d5a-6899-4880-94ac-47e5525c0778",
+  "claims": [
+    {
+      "challenge_claim_sha256": "f3c921a44400a59b56213973efcf334f326cf8f9f3f1ede152eba85119c08faf",
+      "claim": "ThunderAgent abstracts agentic workflows as LLM Programs that unify KV cache, system state, and external tool resources (Section 3).",
+      "observations": {
+        "app_functions": [
+          "_create_router",
+          "get_program_id",
+          "register_routes",
+          "shutdown_event",
+          "startup_event"
+        ],
+        "program_enums": {
+          "ProgramState": [
+            "ACTIVE",
+            "PAUSED",
+            "TERMINATED"
+          ],
+          "ProgramStatus": [
+            "ACTING",
+            "REASONING"
+          ]
+        },
+        "program_fields": [
+          "acting_since",
+          "backend_url",
+          "context_len",
+          "marked_for_pause",
+          "origin_backend",
+          "profile",
+          "program_id",
+          "state",
+          "status",
+          "step_count",
+          "total_tokens",
+          "waiting_event"
+        ]
+      },
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "030df6bacd99e5a892294e6960768d02e9e6f7b561ec4d24cf44a5d0606ee9f1",
+      "claim": "The system adds a program-aware scheduler to improve KV cache hit rates and reduce memory imbalance across agent workflows (Section 4.2).",
+      "observations": {
+        "has_capacity_accounting": true,
+        "has_global_waiting_queue": true,
+        "scheduler_methods": [
+          "__init__",
+          "_add_to_global_waiting_queue_sync",
+          "_claim_specific_paused",
+          "_clear_mark_and_pause",
+          "_create_metrics_client",
+          "_estimate_system_prompt_tokens",
+          "_get_acting_programs_sorted",
+          "_get_paused_programs_sorted",
+          "_get_reasoning_programs_sorted",
+          "_greedy_resume",
+          "_mark_program_for_pause",
+          "_pause_program",
+          "_pause_until_safe",
+          "_remove_from_global_waiting_queue",
+          "_resume_program",
+          "_scheduled_check",
+          "_scheduler_loop",
+          "_select_backend_for_new_program",
+          "_wait_for_resume",
+          "_weight_sync_timeout",
+          "begin_weight_sync",
+          "end_weight_sync",
+          "extract_total_tokens",
+          "get_backend",
+          "get_backend_for_program",
+          "get_default_backend",
+          "get_or_create_program",
+          "get_paused_counts_by_backend",
+          "get_program_stats",
+          "get_programs_on_backend",
+          "proxy_get",
+          "proxy_request",
+          "release_program",
+          "select_backend_for_new_program_default",
+          "start",
+          "stop",
+          "update_program_after_request",
+          "update_program_before_request",
+          "update_program_tokens_streaming",
+          "weight_sync_active"
+        ]
+      },
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "733855963a596a93d707e7d5b97f94849c572b0ab5bdcf24c4c215d91c961511",
+      "claim": "The tool resource manager asynchronously prepares and reuses tool environments, including disk and port resources (Section 4.3).",
+      "observations": {
+        "missing_source_features": [
+          "No explicit disk resource manager was found in the pinned source.",
+          "No explicit port resource manager was found in the pinned source."
+        ],
+        "release_paths": [
+          "release_program"
+        ]
+      },
+      "status": "toy"
+    }
+  ],
+  "paper_id": "kR4iOTaAOJ",
+  "snapshot_id": "8a76dd68f25c012b70bdd330d35d5b8b73785cf9665b0e886a4d4bd868c88081",
+  "source_hashes": {
+    "ThunderAgent/app.py": "1001e9c094aef8d075739a057a955fd0b2263ba8b34403413a95543cf15f0438",
+    "ThunderAgent/backend/state.py": "b0a6167497c46df9f945f0da0be704d5a646edcadbe7cd17dbe95a806da988a1",
+    "ThunderAgent/program/state.py": "bd7664a37abf4c45cd1cb77bc321d290a8110db66636fc2dd0361aa34ae6e441",
+    "ThunderAgent/scheduler/router.py": "87f946f62a4e8c81fe7939aa6a2a16bcf1ba554bd5b6c110f166a943a7bde752"
+  },
+  "upstream_revision": "arxiv:2602.13692+github:ThunderAgent-org/ThunderAgent@7ddc8610270e56d3b109eed8796b3a4360fc67c9"
+}

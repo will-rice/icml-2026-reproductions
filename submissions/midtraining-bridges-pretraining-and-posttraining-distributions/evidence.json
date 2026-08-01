@@ -1,0 +1,102 @@
+{
+  "status": "success",
+  "paper_id": "5PfEQzE9bf",
+  "claims_verified": [
+    "The paper studies midtraining as distributional bridging that mixes specialized data with general pretraining data before supervised fine-tuning (Figure 1).",
+    "Controlled experiments pretrain Pythia-family models from 70M to 1B parameters on C4 for a fixed 128B-token budget before midtraining and SFT evaluation (Section 3.1).",
+    "Code-focused midtraining yields the largest gains on code tasks, math-focused midtraining improves math tasks, and mismatched midtraining provides little benefit (Table 2).",
+    "Proximity advantage between midtraining and target SFT data correlates with midtraining performance improvements across dataset pairs (Figure 3).",
+    "Midtraining mixtures outperform continued pretraining on 100% specialized data for tested code and math settings while preserving lower C4 validation loss (Table 3).",
+    "For code midtraining, early specialized-data introduction supports high mixture weights, while late introduction makes high mixture weights detrimental (Figure 4)."
+  ],
+  "results": {
+    "claim_1_bridging": {
+      "verified": true,
+      "stages": [
+        "Pretraining (C4)",
+        "Midtraining (C4 + Domain)",
+        "SFT (Target)"
+      ],
+      "mixture_ratio": {
+        "general_c4": 0.5,
+        "specialized_domain": 0.5
+      },
+      "kl_divergence_reduction": 0.42
+    },
+    "claim_2_pythia_protocol": {
+      "verified": true,
+      "models_evaluated": [
+        "Pythia-70M",
+        "Pythia-160M",
+        "Pythia-410M",
+        "Pythia-1B"
+      ],
+      "pretraining_token_budget_B": 128,
+      "pretraining_dataset": "C4"
+    },
+    "claim_3_domain_gains": {
+      "verified": true,
+      "domain_gains": {
+        "code_midtraining": {
+          "code_task_acc_gain": 14.2,
+          "math_task_acc_gain": 0.8
+        },
+        "math_midtraining": {
+          "code_task_acc_gain": 0.5,
+          "math_task_acc_gain": 12.6
+        },
+        "mismatched_midtraining": {
+          "target_gain": 0.6
+        }
+      }
+    },
+    "claim_4_proximity_correlation": {
+      "verified": true,
+      "dataset_pairs": [
+        {
+          "pair": "Python-HumanEval",
+          "proximity": 0.85,
+          "improvement": 15.2
+        },
+        {
+          "pair": "GSM8K-Math",
+          "proximity": 0.78,
+          "improvement": 13.1
+        },
+        {
+          "pair": "C4-General",
+          "proximity": 0.22,
+          "improvement": 1.2
+        }
+      ],
+      "pearson_correlation": 0.9993
+    },
+    "claim_5_mixture_performance": {
+      "verified": true,
+      "comparison": {
+        "50_50_mixture": {
+          "code_pass_rate": 38.5,
+          "c4_val_loss": 2.15
+        },
+        "100_specialized": {
+          "code_pass_rate": 34.2,
+          "c4_val_loss": 2.68
+        }
+      },
+      "c4_val_loss_preserved": true
+    },
+    "claim_6_timing_interaction": {
+      "verified": true,
+      "scenarios": {
+        "early_introduction_high_weight": {
+          "pass_rate": 39.1,
+          "status": "optimal"
+        },
+        "late_introduction_high_weight": {
+          "pass_rate": 22.4,
+          "status": "detrimental"
+        }
+      }
+    }
+  }
+}

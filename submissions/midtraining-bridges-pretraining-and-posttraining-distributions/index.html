@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Midtraining Bridges Reproduction Space</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #0f172a; color: #f8fafc; }
+    h1 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    .tag { display: inline-block; background: #0284c7; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; margin-right: 5px; }
+    pre { background: #090d16; padding: 15px; border-radius: 6px; overflow-x: auto; color: #38bdf8; border: 1px solid #1e293b; }
+  </style>
+</head>
+<body>
+  <h1>ICML 2026 Reproduction: Midtraining Bridges</h1>
+  <div class="card">
+    <p><strong>Paper Title:</strong> Midtraining Bridges Pretraining and Posttraining Distributions</p>
+    <p><strong>Paper ID:</strong> <code>5PfEQzE9bf</code> | <strong>arXiv:</strong> <code>2510.14865</code></p>
+    <div>
+      <span class="tag">icml2026-repro</span>
+      <span class="tag">paper-5PfEQzE9bf</span>
+      <span class="tag">challenge:ICML-2026-agent-repro</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Verified Claims</h2>
+    <ul>
+      <li>The paper studies midtraining as distributional bridging that mixes specialized data with general pretraining data before supervised fine-tuning (Figure 1).</li>
+      <li>Controlled experiments pretrain Pythia-family models from 70M to 1B parameters on C4 for a fixed 128B-token budget before midtraining and SFT evaluation (Section 3.1).</li>
+      <li>Code-focused midtraining yields the largest gains on code tasks, math-focused midtraining improves math tasks, and mismatched midtraining provides little benefit (Table 2).</li>
+      <li>Proximity advantage between midtraining and target SFT data correlates with midtraining performance improvements across dataset pairs (Figure 3).</li>
+      <li>Midtraining mixtures outperform continued pretraining on 100% specialized data for tested code and math settings while preserving lower C4 validation loss (Table 3).</li>
+      <li>For code midtraining, early specialized-data introduction supports high mixture weights, while late introduction makes high mixture weights detrimental (Figure 4).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Verified Evidence Output (JSON)</h2>
+    <pre id="evidence">Loading evidence...</pre>
+  </div>
+
+  <script>
+    fetch('evidence.json')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('evidence').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        document.getElementById('evidence').textContent = "Failed to load evidence.json: " + err;
+      });
+  </script>
+</body>
+</html>
