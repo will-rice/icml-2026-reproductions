@@ -1,84 +1,77 @@
 """
 Test-Time Training (TTT) Streaming Memory Layer Implementation for video-SALMONN S.
+Pure Python implementation with zero required third-party dependencies.
 """
 
-from typing import Dict, Any, Tuple
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+from typing import Dict, Any, List, Tuple
+import math
 
-class TTTStreamingMemoryLayer(nn.Module):
+class TTTStreamingMemoryLayer:
     """
     TTT Streaming Memory Layer that uses fast-weight updates
     as streaming memory for long-sequence audio-visual inputs.
     """
     def __init__(self, hidden_dim: int, memory_dim: int, learning_rate: float = 0.01):
-        super().__init__()
         self.hidden_dim = hidden_dim
         self.memory_dim = memory_dim
         self.learning_rate = learning_rate
         
-        # Base projection weights (frozen in Stage 2 during scale-up)
-        self.W_key = nn.Linear(hidden_dim, memory_dim, bias=False)
-        self.W_val = nn.Linear(hidden_dim, memory_dim, bias=False)
+        # Base projection matrices
+        self.W_key = [[0.01 * (i + j) for j in range(memory_dim)] for i in range(hidden_dim)]
+        self.W_val = [[0.01 * (i - j) for j in range(memory_dim)] for i in range(hidden_dim)]
         
-        # Fast weights matrix W_fast: shape (memory_dim, memory_dim)
-        self.register_buffer("W_fast", torch.eye(memory_dim))
-        
-        # Parameter freeze flag for Stage 2 training
+        # Fast weights identity matrix W_fast: shape (memory_dim, memory_dim)
+        self.reset_fast_weights()
         self.ttt_frozen = False
 
     def set_freeze_ttt(self, freeze: bool):
         """Freeze or unfreeze TTT base parameters (Stage 2 training control)."""
         self.ttt_frozen = freeze
-        for p in self.parameters():
-            p.requires_grad = not freeze
 
     def reset_fast_weights(self):
         """Reset fast-weight streaming memory state."""
-        self.W_fast = torch.eye(self.memory_dim, device=self.W_key.weight.device)
+        self.W_fast = [[1.0 if i == j else 0.0 for j in range(self.memory_dim)] for i in range(self.memory_dim)]
 
-    def fast_weight_update(self, k: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
-        """
-        Perform fast-weight update step:
-        W_fast_new = W_fast - lr * grad_loss(W_fast * k, v)
-        """
-        # Reconstruction / long-span prediction loss gradient update
-        pred = torch.matmul(k, self.W_fast.t()) # (batch, memory_dim)
-        err = pred - v                          # (batch, memory_dim)
-        grad = torch.matmul(err.t(), k) / k.size(0) # (memory_dim, memory_dim)
-        
-        with torch.no_grad():
-            self.W_fast = self.W_fast - self.learning_rate * grad
-        return self.W_fast
+    def _matmul_vec(self, vec: List[float], mat: List[List[float]]) -> List[float]:
+        """Vector-matrix multiplication."""
+        out = [0.0] * len(mat[0])
+        for j in range(len(mat[0])):
+            out[j] = sum(vec[i] * mat[i][j] for i in range(len(vec)))
+        return out
 
-    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def fast_weight_update(self, k: List[float], v: List[float]) -> float:
         """
-        Forward pass over input sequence x of shape (batch, seq_len, hidden_dim).
-        Returns projected memory states and prediction loss.
+        Perform fast-weight update step: W_fast = W_fast - lr * grad
+        Returns step MSE loss.
         """
-        keys = self.W_key(x) # (batch, seq_len, memory_dim)
-        vals = self.W_val(x) # (batch, seq_len, memory_dim)
+        pred = self._matmul_vec(k, self.W_fast)
+        err = [p - val for p, val in zip(pred, v)]
+        loss = sum(e ** 2 for e in err) / max(1, len(err))
         
-        # Fast weight update across time steps
-        batch_size, seq_len, _ = keys.shape
-        loss = 0.0
+        if not self.ttt_frozen:
+            # Gradient update step
+            for i in range(self.memory_dim):
+                for j in range(self.memory_dim):
+                    self.W_fast[i][j] -= self.learning_rate * err[i] * k[j]
+        return loss
+
+    def forward(self, sequence: List[List[float]]) -> Tuple[List[List[float]], float]:
+        """
+        Forward pass over input sequence of shape (seq_len, hidden_dim).
+        Returns predicted memory outputs and average prediction loss.
+        """
+        total_loss = 0.0
         outputs = []
-        for t in range(seq_len):
-            kt = keys[:, t, :]
-            vt = vals[:, t, :]
-            
-            # Predict using current fast weights
-            pred = torch.matmul(kt, self.W_fast.t())
-            step_loss = F.mse_loss(pred, vt)
-            loss += step_loss
-            
-            # Update fast weights
-            self.fast_weight_update(kt, vt)
+        for x in sequence:
+            k = self._matmul_vec(x, self.W_key)
+            v = self._matmul_vec(x, self.W_val)
+            pred = self._matmul_vec(k, self.W_fast)
             outputs.append(pred)
+            step_loss = self.fast_weight_update(k, v)
+            total_loss += step_loss
             
-        out_tensor = torch.stack(outputs, dim=1)
-        return out_tensor, loss / seq_len
+        avg_loss = total_loss / max(1, len(sequence))
+        return outputs, avg_loss
 
 
 def compute_memory_token_reduction(
@@ -90,12 +83,8 @@ def compute_memory_token_reduction(
     Compute memory token footprint comparison between TTT streaming memory
     and similarity-based token merging over a long video stream.
     """
-    # TTT maintains a fixed memory representation of size memory_dim * memory_dim tokens equivalent
-    ttt_token_footprint = memory_dim # fixed memory size independent of seq_len
-    
-    # Similarity merging retains a fraction of sequence length (e.g. 50% or linear scaling with seq_len)
+    ttt_token_footprint = memory_dim
     similarity_token_footprint = int(seq_len * similarity_merge_ratio)
-    
     ratio = ttt_token_footprint / max(1, similarity_token_footprint)
     
     return {

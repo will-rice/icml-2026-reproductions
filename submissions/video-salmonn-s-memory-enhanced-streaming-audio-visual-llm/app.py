@@ -23,7 +23,7 @@ def get_evidence():
 
 with gr.Blocks(title="video-SALMONN S Reproduction Logbook") as demo:
     gr.Markdown("# video-SALMONN S: Memory-Enhanced Streaming Audio-Visual LLM Reproduction")
-    
+
     with gr.Tabs():
         with gr.TabItem("Logbook"):
             gr.Markdown(get_logbook())

@@ -1,15 +1,9 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
 [project]
-name = "video-salmonn-s"
+name = "video-salmonn-s-repro"
 version = "0.1.0"
-dependencies = [
-    "torch",
-    "pytest",
-    "gradio",
-]
+description = "CPU-only evidence audit for video-SALMONN S ICML 2026 reproduction"
+requires-python = ">=3.10"
+dependencies = ["pytest"]
 
-[tool.setuptools.packages.find]
-include = ["video_salmonn_s*"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]

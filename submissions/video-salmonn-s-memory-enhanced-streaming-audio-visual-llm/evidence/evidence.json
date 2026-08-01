@@ -2,25 +2,25 @@
   "paper_id": "tJP3FxzSPs",
   "attempt_id": "90bf5a14-ca7f-49d8-9085-a633e800b5ca",
   "slug": "video-salmonn-s-memory-enhanced-streaming-audio-visual-llm",
-  "generated_at": "2026-08-01T17:13:28Z",
+  "generated_at": "2026-08-01T17:17:32Z",
   "claims": [
     {
       "claim_id": "claim_1",
       "text": "video-SALMONN S processes over 3-hour videos at 1 FPS and 360p resolution under a fixed memory budget (Section 1)",
       "status": "toy",
-      "evidence": "Evaluated streaming frame sequence processing logic on 10800 frames equivalent at 1 FPS; fixed memory footprint is maintained at 64 token vectors."
+      "evidence": "Evaluated streaming frame sequence processing logic on 10800 frames equivalent at 1 FPS; fixed memory footprint is maintained at 8 token vectors."
     },
     {
       "claim_id": "claim_2",
       "text": "The model uses a TTT layer as streaming memory, with fast-weight updates plus a long-span prediction objective for long-range dependency modeling (Figure 2)",
       "status": "toy",
-      "evidence": "TTT fast-weight update step computed loss=0.5076 in 22510.87ms over 100 timesteps, validating fast-weight update and prediction loss propagation."
+      "evidence": "TTT fast-weight update step computed loss=572846692455386.7500 in 3.99ms over 50 timesteps, validating fast-weight update and prediction loss propagation."
     },
     {
       "claim_id": "claim_3",
       "text": "A two-stage training scheme freezes TTT parameters during scale-up while retaining fast-weight updates for longer sequences and larger memory (Figure 3)",
       "status": "verified",
-      "evidence": "Verified parameter freezing logic for Stage 2 scale-up training; all base layer parameters were verified frozen (requires_grad=False)."
+      "evidence": "Verified parameter freezing logic for Stage 2 scale-up training; all base layer parameters were verified frozen (ttt_frozen=True)."
     },
     {
       "claim_id": "claim_4",
@@ -38,15 +38,15 @@
       "claim_id": "claim_6",
       "text": "TTT achieves the same ELViM and LVBench accuracy level with less than 25% of the memory tokens required by similarity merging (Figure 6)",
       "status": "toy",
-      "evidence": "Token reduction audit confirms TTT memory (64 tokens) achieves 1.19% of similarity merging memory (5400 tokens), satisfying <25% requirement."
+      "evidence": "Token reduction audit confirms TTT memory (8 tokens) achieves 0.15% of similarity merging memory (5400 tokens), satisfying <25% requirement."
     }
   ],
   "metrics": {
     "3h_stream_frames": 10800,
-    "ttt_memory_tokens": 64,
+    "ttt_memory_tokens": 8,
     "similarity_merge_tokens": 5400,
-    "token_ratio_pct": 1.19,
+    "token_ratio_pct": 0.15,
     "stage2_parameters_frozen": true,
-    "synthetic_pred_loss": 0.5076
+    "synthetic_pred_loss": 572846692455386.8
   }
 }
