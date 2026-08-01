@@ -706,7 +706,7 @@ def test_real_runner_uses_sanitized_environment(tmp_path: Path, monkeypatch):
         tmp_path
     )
     assert captured["env"]["PYTHONDONTWRITEBYTECODE"] == "1"
-    assert captured["env"]["PYTEST_ADDOPTS"] == "-p no:cacheprovider"
+    assert captured["env"]["PYTEST_ADDOPTS"] == "-p no:cacheprovider --ignore=submissions"
     assert captured["env"]["PRE_COMMIT_HOME"] == str(pre_commit_home)
     assert Path(captured["env"]["HF_HOME"]).parent == Path(
         captured["env"]["HOME"]

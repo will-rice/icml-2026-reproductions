@@ -246,6 +246,13 @@ docs/superpowers/specs/*
 !docs/superpowers/specs/2026-08-01-q-sched-reproduction-design.md
 evidence/
 submissions/*
+!submissions/less-is-enough-synthesizing-diverse-data-in-feature-space-of-llms/
+!submissions/less-is-enough-synthesizing-diverse-data-in-feature-space-of-llms/**
+submissions/less-is-enough-synthesizing-diverse-data-in-feature-space-of-llms/.cache/
+submissions/less-is-enough-synthesizing-diverse-data-in-feature-space-of-llms/.pytest_cache/
+submissions/less-is-enough-synthesizing-diverse-data-in-feature-space-of-llms/.venv/
+submissions/less-is-enough-synthesizing-diverse-data-in-feature-space-of-llms/**/__pycache__/
+submissions/less-is-enough-synthesizing-diverse-data-in-feature-space-of-llms/**/*.egg-info/
 !submissions/tfrbench-a-reasoning-benchmark-for-evaluating-forecasting-systems/
 !submissions/tfrbench-a-reasoning-benchmark-for-evaluating-forecasting-systems/**
 submissions/tfrbench-a-reasoning-benchmark-for-evaluating-forecasting-systems/.cache/
@@ -644,6 +651,8 @@ submissions/plugmem-a-task-agnostic-plugin-memory-module-for-llm-agents/**/__pyc
 submissions/plugmem-a-task-agnostic-plugin-memory-module-for-llm-agents/**/*.egg-info/
 
 !docs/reproductions/90bf5a14-ca7f-49d8-9085-a633e800b5ca-video-salmonn-design.md
+!docs/reproductions/5571afcf-e10a-46ac-b2c2-7dbe01e60511-obfuscation-atlas-design.md
+!docs/reproductions/4fdf8ed9-ad12-4923-b6dc-b37239a7c9b4-design.md
 
 !submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/
 !submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/video_salmonn_s/
@@ -662,3 +671,29 @@ submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.venv/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/.pytest_cache/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/__pycache__/
 submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/**/*.egg-info/
+
+!submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/
+!submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/**
+submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/.cache/
+submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/.venv/
+submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/.pytest_cache/
+submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/**/__pycache__/
+submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/**/*.egg-info/
+
+!submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/
+!submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/**
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/.cache/
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/.venv/
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/.pytest_cache/
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/**/__pycache__/
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/**/*.egg-info/
+
+!docs/reproductions/70e9a418-e919-4144-80a1-97af50c03fc8-maspob-design.md
+
+!submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/
+!submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/**
+submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/.venv/
+submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/.pytest_cache/
+submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/.cache/
+submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/**/__pycache__/
+submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/**/*.egg-info/
