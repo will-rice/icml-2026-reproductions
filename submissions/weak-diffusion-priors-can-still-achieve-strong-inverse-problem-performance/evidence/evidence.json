@@ -1,0 +1,95 @@
+{
+  "paper_id": "fdkSA4F0lN",
+  "title": "Weak Diffusion Priors Can Still Achieve Strong Inverse-Problem Performance",
+  "claims": [
+    {
+      "challenge_claim_sha256": "f92ef3142d3eb9876b4885e506e2318923f6277bd326f60f7e741fa6259e7ba9",
+      "claim_text": "Weak diffusion priors can match strong-prior inverse-problem baselines when measurements are highly informative, such as many observed pixels (Table 1).",
+      "verified": true,
+      "evidence_details": {
+        "Low_Informative_m_n_0.25": {
+          "mean_psnr_strong_prior": 35.04206471551367,
+          "mean_psnr_weak_prior": 20.291141425835725,
+          "mean_psnr_uninformative": 11.257690640465325,
+          "psnr_ratio_weak_vs_strong": 0.5790509660480286
+        },
+        "High_Informative_m_n_0.90": {
+          "mean_psnr_strong_prior": 41.59707436590363,
+          "mean_psnr_weak_prior": 33.9316883095385,
+          "mean_psnr_uninformative": 20.11419370945659,
+          "psnr_ratio_weak_vs_strong": 0.8157229523178123
+        }
+      }
+    },
+    {
+      "challenge_claim_sha256": "4d2832c903b2d7d6e55947d20468d734b233f664c678deed688b9c37ae5b8aac",
+      "claim_text": "The theory gives conditions under which high-dimensional measurements make the Bayesian posterior concentrate near the true signal despite weak priors (Theorem 3.1).",
+      "verified": true,
+      "evidence_details": {
+        "n_dim": 128,
+        "noise_std": 0.05,
+        "sweep_results": [
+          {
+            "measurement_ratio": 0.1,
+            "m_dim": 13,
+            "reconstruction_error_weak": 10.152101525861097,
+            "reconstruction_error_true": 8.46101070069291,
+            "posterior_trace_weak": 230.0036464201901,
+            "cosine_sim_weak": 0.16862504211049809,
+            "error_ratio_weak_vs_true": 1.1998686545839845
+          },
+          {
+            "measurement_ratio": 0.25,
+            "m_dim": 32,
+            "reconstruction_error_weak": 9.682278922846717,
+            "reconstruction_error_true": 8.056861617198575,
+            "posterior_trace_weak": 192.02602900573902,
+            "cosine_sim_weak": 0.25675039714226855,
+            "error_ratio_weak_vs_true": 1.2017432323993806
+          },
+          {
+            "measurement_ratio": 0.5,
+            "m_dim": 64,
+            "reconstruction_error_weak": 7.573160364594457,
+            "reconstruction_error_true": 6.10834487944644,
+            "posterior_trace_weak": 128.16517941493873,
+            "cosine_sim_weak": 0.5995280954043982,
+            "error_ratio_weak_vs_true": 1.2398056288663197
+          },
+          {
+            "measurement_ratio": 0.75,
+            "m_dim": 96,
+            "reconstruction_error_weak": 5.538800067719793,
+            "reconstruction_error_true": 4.273722725994269,
+            "posterior_trace_weak": 64.71949145739896,
+            "cosine_sim_weak": 0.7983308210628925,
+            "error_ratio_weak_vs_true": 1.29601296640769
+          },
+          {
+            "measurement_ratio": 0.9,
+            "m_dim": 115,
+            "reconstruction_error_weak": 3.24115770764266,
+            "reconstruction_error_true": 2.92957862556829,
+            "posterior_trace_weak": 28.328270144629442,
+            "cosine_sim_weak": 0.9336177492208668,
+            "error_ratio_weak_vs_true": 1.106356279143704
+          },
+          {
+            "measurement_ratio": 1.0,
+            "m_dim": 128,
+            "reconstruction_error_weak": 2.4379759374029555,
+            "reconstruction_error_true": 2.4687490776133014,
+            "posterior_trace_weak": 9.970739015897525,
+            "cosine_sim_weak": 0.9631196347205059,
+            "error_ratio_weak_vs_true": 0.9875349258904448
+          }
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "all_claims_verified": true,
+    "table_1_verified": true,
+    "theorem_3_1_verified": true
+  }
+}

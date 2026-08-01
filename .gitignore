@@ -482,3 +482,10 @@ submissions/reward-free-alignment-for-conflicting-objectives/.venv/
 submissions/reward-free-alignment-for-conflicting-objectives/.pytest_cache/
 submissions/reward-free-alignment-for-conflicting-objectives/**/__pycache__/
 submissions/reward-free-alignment-for-conflicting-objectives/**/*.egg-info/
+
+!submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/
+!submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/**
+submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/.venv/
+submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/.pytest_cache/
+submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/**/__pycache__/
+submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/**/*.egg-info/
