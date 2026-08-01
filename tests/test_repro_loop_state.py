@@ -1611,14 +1611,16 @@ def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
 
     unrelated_cwd = tmp_path / "unrelated-cwd"
     unrelated_cwd.mkdir()
-    git_common_dir = subprocess.run(
-        ["git", "rev-parse", "--git-common-dir"],
+    # A dedicated hermetic workspace: scanning the live repository's
+    # registered worktrees races concurrent workers that add and remove
+    # worktrees (including out-of-bounds ones, which census rejects).
+    workspace_root = tmp_path / "workspace"
+    workspace_root.mkdir()
+    subprocess.run(
+        ["git", "init", "-q", str(workspace_root)],
         check=True,
         capture_output=True,
-        cwd=REPOSITORY_ROOT,
-        text=True,
-    ).stdout.strip()
-    workspace_root = (REPOSITORY_ROOT / git_common_dir).resolve().parent
+    )
     result = json.loads(
         subprocess.run(
             [
