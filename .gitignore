@@ -653,6 +653,7 @@ submissions/plugmem-a-task-agnostic-plugin-memory-module-for-llm-agents/**/*.egg
 !docs/reproductions/90bf5a14-ca7f-49d8-9085-a633e800b5ca-video-salmonn-design.md
 !docs/reproductions/5571afcf-e10a-46ac-b2c2-7dbe01e60511-obfuscation-atlas-design.md
 !docs/reproductions/4fdf8ed9-ad12-4923-b6dc-b37239a7c9b4-design.md
+!docs/reproductions/c2270ea7-fabd-4292-a117-3b7181c0c5fa-agent-primitives-design.md
 
 !submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/
 !submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/video_salmonn_s/
@@ -679,6 +680,14 @@ submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-dec
 submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/.pytest_cache/
 submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/**/__pycache__/
 submissions/the-obfuscation-atlas-mapping-where-honesty-emerges-in-rlvr-with-deception-probes/**/*.egg-info/
+
+!submissions/agent-primitives-reuseable-latent-building-blocks-for-multi-agent-systems/
+!submissions/agent-primitives-reuseable-latent-building-blocks-for-multi-agent-systems/**
+submissions/agent-primitives-reuseable-latent-building-blocks-for-multi-agent-systems/.cache/
+submissions/agent-primitives-reuseable-latent-building-blocks-for-multi-agent-systems/.venv/
+submissions/agent-primitives-reuseable-latent-building-blocks-for-multi-agent-systems/.pytest_cache/
+submissions/agent-primitives-reuseable-latent-building-blocks-for-multi-agent-systems/**/__pycache__/
+submissions/agent-primitives-reuseable-latent-building-blocks-for-multi-agent-systems/**/*.egg-info/
 
 !submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/
 !submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/**
