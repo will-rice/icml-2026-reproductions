@@ -55,6 +55,7 @@ def generate_evidence_bundle(output_dir: Path) -> Path:
 
     with open(bundle_path, "w", encoding="utf-8") as f:
         json.dump(bundle, f, indent=2)
+        f.write("\n")
 
     return bundle_path
 
