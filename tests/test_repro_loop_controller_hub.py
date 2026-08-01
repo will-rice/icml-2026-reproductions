@@ -892,3 +892,82 @@ def test_state_returns_submission_result_when_observation_write_fails(
     assert active_telemetry.read_session(
         hub_case["paths"], "submission-observation-failed"
     ) == []
+
+
+def already_judged_verdict(sha: str) -> dict:
+    return {
+        "paper_id": PAPER_ID,
+        "space_id": SPACE_ID,
+        "sha": sha,
+        "source_revision": "verdict-rev",
+        "judged_at": (NOW + timedelta(minutes=1)).isoformat(),
+    }
+
+
+def test_submission_attests_already_judged_space_without_queue_entry(hub_case):
+    """A deployed Space whose exact SHA is already judged submits as judged."""
+    deploy(hub_case)
+    observed_at = NOW + timedelta(minutes=5)
+    snapshot_id = persist_snapshot(
+        hub_case,
+        snapshot_payload(
+            observed_at,
+            queued_submissions=[],
+            verdicts=[already_judged_verdict(SPACE_SHA)],
+        ),
+    )
+
+    transitioned = controller.attest_submission(
+        hub_case["paths"],
+        "a1",
+        hub_case["lease"],
+        snapshot_id,
+        observed_at,
+    )
+
+    record = attestations.read(
+        hub_case["paths"], transitioned["transitions"][-1]["attestation_id"]
+    )
+    assert transitioned["phase"] == "submitted"
+    assert record["queue_status"] == "judged"
+    assert record["space_sha"] == SPACE_SHA
+
+
+def test_submission_rejects_missing_queue_without_exact_verdict(hub_case):
+    deploy(hub_case)
+    observed_at = NOW + timedelta(minutes=5)
+    snapshot_id = persist_snapshot(
+        hub_case,
+        snapshot_payload(observed_at, queued_submissions=[], verdicts=[]),
+    )
+
+    with pytest.raises(ValueError, match="official_verdict"):
+        controller.attest_submission(
+            hub_case["paths"],
+            "a1",
+            hub_case["lease"],
+            snapshot_id,
+            observed_at,
+        )
+
+
+def test_submission_rejects_judged_verdict_at_different_sha(hub_case):
+    deploy(hub_case)
+    observed_at = NOW + timedelta(minutes=5)
+    snapshot_id = persist_snapshot(
+        hub_case,
+        snapshot_payload(
+            observed_at,
+            queued_submissions=[],
+            verdicts=[already_judged_verdict("stale-space-sha")],
+        ),
+    )
+
+    with pytest.raises(ValueError, match="queue"):
+        controller.attest_submission(
+            hub_case["paths"],
+            "a1",
+            hub_case["lease"],
+            snapshot_id,
+            observed_at,
+        )

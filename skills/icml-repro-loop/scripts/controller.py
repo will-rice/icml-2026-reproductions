@@ -491,12 +491,21 @@ def attest_submission(
         if record.get("paper_id") == paper_id
         and record.get("space_id") == space_id
     ]
-    if len(queued) != 1:
-        raise ValueError("queue")
-    queue = queued[0]
-    if queue.get("revision") != space_sha:
-        raise ValueError("revision")
-    if queue.get("status") != "pending":
+    if len(queued) == 1:
+        queue = queued[0]
+        if queue.get("revision") != space_sha:
+            raise ValueError("revision")
+        if queue.get("status") != "pending":
+            raise ValueError("queue")
+        queue_status = queue["status"]
+    elif not queued:
+        # No live queue entry: the exact deployed revision is acceptable only
+        # when the official verdict feed already judged this exact Space SHA.
+        official = _exact_official_verdict(snapshot, paper_id, space_id)
+        if official.get("sha") != space_sha:
+            raise ValueError("queue")
+        queue_status = "judged"
+    else:
         raise ValueError("queue")
     verdict_revision = _snapshot_verdict_revision(snapshot)
 
@@ -506,7 +515,7 @@ def attest_submission(
         "space_id": space_id,
         "space_sha": space_sha,
         "paper_id": paper_id,
-        "queue_status": queue["status"],
+        "queue_status": queue_status,
         "deployment_attestation_id": deployment["attestation_id"],
     }
     record = {
@@ -569,7 +578,12 @@ def sync_verdict(
         submission["observed_at"], "submission"
     )
     fetched_at = _parsed_timestamp(snapshot["fetched_at"], "snapshot")
-    if judged_at <= submitted_at or judged_at > fetched_at or fetched_at > now:
+    if judged_at > fetched_at or fetched_at > now:
+        raise ValueError("judged_at")
+    if submission.get("queue_status") != "judged" and judged_at <= submitted_at:
+        # A pending-queue submission must be judged after it was observed;
+        # a judged-queue submission imports a verdict that already existed,
+        # bound to the exact deployed SHA by the equality checks above.
         raise ValueError("judged_at")
     normalized = _normalize_official_claims(attempt, official)
 

@@ -101,7 +101,9 @@ def deployment_payload(validation_id: str) -> dict:
     }
 
 
-def submission_payload(deployment_id: str) -> dict:
+def submission_payload(
+    deployment_id: str, queue_status: str = "pending"
+) -> dict:
     return {
         "observed_at": (NOW + timedelta(minutes=2)).isoformat(),
         "snapshot_id": "1" * 64,
@@ -109,13 +111,17 @@ def submission_payload(deployment_id: str) -> dict:
         "space_id": SPACE_ID,
         "space_sha": SPACE_SHA,
         "paper_id": PAPER_ID,
-        "queue_status": "pending",
+        "queue_status": queue_status,
         "deployment_attestation_id": deployment_id,
     }
 
 
 @pytest.fixture
 def submitted_case(tmp_path: Path):
+    return build_submitted_case(tmp_path)
+
+
+def build_submitted_case(tmp_path: Path, queue_status: str = "pending"):
     paths = store.StatePaths(tmp_path / "repro-loop.json")
     store.atomic_json_write(paths.index, store.new_index(), store.validate_index)
     lease = leases.acquire_lease(
@@ -167,7 +173,9 @@ def submitted_case(tmp_path: Path):
         NOW + timedelta(minutes=1),
     )
     submission_id = persist_attestation(
-        paths, "submission", submission_payload(deployment_id)
+        paths,
+        "submission",
+        submission_payload(deployment_id, queue_status=queue_status),
     )
     attempts.transition_attested(
         paths,
@@ -763,3 +771,45 @@ def test_sync_verdict_improvement_transaction_recovers_attestation_judgment_and_
         }
     ]
     assert attestation["kind"] == "verdict"
+
+
+def test_sync_verdict_accepts_preexisting_verdict_for_judged_queue_submission(
+    tmp_path,
+):
+    """A judged-queue submission imports a verdict older than its observation."""
+    case = build_submitted_case(tmp_path, queue_status="judged")
+    enter_judging(case)
+    verdict = official_verdict()
+    verdict["judged_at"] = (NOW + timedelta(seconds=90)).isoformat()
+    snapshot_id = persist_verdict_snapshot(case, verdict)
+
+    transitioned = controller.sync_verdict(
+        case["paths"],
+        "a1",
+        case["lease"],
+        snapshot_id,
+        NOW + timedelta(minutes=6),
+    )
+
+    assert transitioned["phase"] == "complete"
+    statuses = [claim["status"] for claim in transitioned["verdict"]["claims"]]
+    assert statuses == ["toy", "inconclusive"]
+
+
+def test_sync_verdict_still_rejects_stale_verdict_for_pending_queue(
+    submitted_case,
+):
+    """Pending-queue submissions keep the judged-after-submission invariant."""
+    enter_judging(submitted_case)
+    verdict = official_verdict()
+    verdict["judged_at"] = (NOW + timedelta(seconds=90)).isoformat()
+    snapshot_id = persist_verdict_snapshot(submitted_case, verdict)
+
+    with pytest.raises(ValueError, match="judged_at"):
+        controller.sync_verdict(
+            submitted_case["paths"],
+            "a1",
+            submitted_case["lease"],
+            snapshot_id,
+            NOW + timedelta(minutes=6),
+        )
