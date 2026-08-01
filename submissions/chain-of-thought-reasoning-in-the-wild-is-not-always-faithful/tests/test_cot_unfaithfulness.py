@@ -2,7 +2,11 @@
 
 import json
 from pathlib import Path
+import sys
 import unittest
+
+# Ensure project root is on sys.path when running tests via unittest discover
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from cot_unfaithfulness.iphr_eval import evaluate_iphr_unfaithfulness, load_iphr_benchmark_pairs
 from cot_unfaithfulness.patterns import analyze_unfaithfulness_patterns

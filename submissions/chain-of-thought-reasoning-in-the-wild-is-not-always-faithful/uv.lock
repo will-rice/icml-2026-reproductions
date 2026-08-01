@@ -1,0 +1,8 @@
+version = 1
+revision = 3
+requires-python = ">=3.10"
+
+[[package]]
+name = "chain-of-thought-reasoning-in-the-wild-is-not-always-faithful"
+version = "0.1.0"
+source = { virtual = "." }

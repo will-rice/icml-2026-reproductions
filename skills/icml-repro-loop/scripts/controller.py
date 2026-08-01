@@ -91,7 +91,7 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
             "PYTHONDONTWRITEBYTECODE": "1",
             "PYTEST_ADDOPTS": "-p no:cacheprovider --ignore=submissions",
             "TMPDIR": str(isolated_home.parent / "tmp"),
-
+            "UV_OFFLINE": "1",
             "UV_PROJECT_ENVIRONMENT": str(
                 isolated_home.parent / "uv-project-environment"
             ),
@@ -160,7 +160,7 @@ def attest_validation(
     _require_clean(
         _checked(
             runner,
-            ("git", "status", "--porcelain"),
+            ("git", "status", "--porcelain", "--", manifest["project_path"]),
             worktree,
             check_results,
         )
