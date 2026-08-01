@@ -1614,6 +1614,7 @@ name = "qsched-reproduction"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "audioop-lts", marker = "python_full_version >= '3.13'" },
     { name = "gradio" },
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
@@ -1628,6 +1629,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "audioop-lts", marker = "python_full_version >= '3.13'" },
     { name = "gradio", specifier = ">=6.20.0" },
     { name = "numpy", specifier = ">=2.2.0" },
     { name = "torch", specifier = ">=2.0.0" },

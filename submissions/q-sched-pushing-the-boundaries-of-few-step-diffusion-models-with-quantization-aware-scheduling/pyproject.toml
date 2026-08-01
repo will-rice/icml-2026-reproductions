@@ -6,6 +6,7 @@ dependencies = [
     "gradio>=6.20.0",
     "numpy>=2.2.0",
     "torch>=2.0.0",
+    "audioop-lts; python_version >= '3.13'",
 ]
 
 [dependency-groups]
