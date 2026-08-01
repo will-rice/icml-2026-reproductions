@@ -64,7 +64,9 @@ class CommandResult:
 Runner = Callable[[tuple[str, ...], Path], CommandResult]
 
 
-def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
+def clean_validation_environment(
+    isolated_home: Path, worktree: Path | None = None
+) -> dict[str, str]:
     """Return a credential-free environment rooted in an empty home."""
     environment = {
         key: value
@@ -83,6 +85,14 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
             for entry in environment["PATH"].split(os.pathsep)
             if Path(entry).resolve() not in unsafe_entries
         )
+    if worktree and (worktree / ".venv").exists():
+        venv_path = worktree / ".venv"
+        environment["VIRTUAL_ENV"] = str(venv_path)
+        bin_dir = str(venv_path / "bin")
+        if "PATH" in environment:
+            environment["PATH"] = bin_dir + os.pathsep + environment["PATH"]
+        else:
+            environment["PATH"] = bin_dir
     environment.update(
         {
             "HF_HOME": str(isolated_home.parent / "hf-home"),
@@ -92,8 +102,10 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
             "PYTEST_ADDOPTS": "-p no:cacheprovider --ignore=submissions",
             "TMPDIR": str(isolated_home.parent / "tmp"),
             "UV_OFFLINE": "1",
-            "UV_PROJECT_ENVIRONMENT": str(
-                isolated_home.parent / "uv-project-environment"
+            "UV_PROJECT_ENVIRONMENT": (
+                str(worktree / ".venv")
+                if worktree and (worktree / ".venv").exists()
+                else str(isolated_home.parent / "uv-project-environment")
             ),
             "XDG_CACHE_HOME": str(isolated_home / "cache"),
             "XDG_CONFIG_HOME": str(isolated_home / "config"),
@@ -123,7 +135,7 @@ def run_command(argv: tuple[str, ...], worktree: Path) -> CommandResult:
             text=True,
             capture_output=True,
             check=False,
-            env=clean_validation_environment(isolated_home),
+            env=clean_validation_environment(isolated_home, worktree),
         )
     return CommandResult(argv, result.returncode, result.stdout, result.stderr)
 
