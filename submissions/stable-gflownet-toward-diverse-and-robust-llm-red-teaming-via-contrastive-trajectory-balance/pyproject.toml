@@ -7,11 +7,13 @@ name = "stable-gflownet-repro"
 version = "0.1.0"
 description = "Reproduction code for Stable-GFlowNet: Toward Diverse and Robust LLM Red-Teaming via Contrastive Trajectory Balance"
 dependencies = [
-    "torch>=2.0.0",
-    "numpy>=1.22.0",
-    "pytest>=7.0.0",
-    "streamlit>=1.20.0"
+    "torch",
+    "numpy",
+    "pytest"
 ]
+
+[tool.uv]
+environments = ["sys_platform == 'linux'"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
