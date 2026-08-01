@@ -1,0 +1,177 @@
+{
+  "paper_id": "aIH1jyU37z",
+  "title": "Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neural Networks",
+  "claims": [
+    {
+      "claim_id": "claim_1",
+      "statement": "The arXiv paper introduces sheaf neural networks by replacing graph Laplacian diffusion with sheaf-Laplacian diffusion that can encode asymmetric, signed, and varying-dimensional relations (Section 3).",
+      "verified": true,
+      "evidence_type": "theoretical_and_implementation",
+      "details": "Sheaf Laplacian operator correctly encodes signed and asymmetric restriction maps, generalizing standard graph diffusion."
+    },
+    {
+      "claim_id": "claim_2",
+      "statement": "The sheaf diffusion operator is presented as a drop-in generalization of the diffusion operation used in graph convolutional networks (Section 2.1).",
+      "verified": true,
+      "evidence_type": "implementation_and_verification",
+      "details": "Identity restriction maps in SheafLaplacian produce identical output structure and operator form to standard Kipf-Welling GCN graph Laplacian."
+    },
+    {
+      "claim_id": "claim_3",
+      "statement": "On synthetic semi-supervised node-classification tasks over signed graphs, sheaf neural networks outperform Kipf-Welling GCN variants across feature and edge-noise regimes (Figure 1).",
+      "verified": true,
+      "evidence_type": "empirical_benchmark",
+      "details": {
+        "noise_regimes": {
+          "noise_0.0": {
+            "noise_level": 0.0,
+            "sheaf_nn": {
+              "mean_accuracy": 0.8686,
+              "std_accuracy": 0.069,
+              "trial_accs": [
+                0.9429,
+                0.9143,
+                0.7429,
+                0.8857,
+                0.8571
+              ]
+            },
+            "kipf_welling_gcn": {
+              "mean_accuracy": 0.3771,
+              "std_accuracy": 0.0928,
+              "trial_accs": [
+                0.2286,
+                0.4286,
+                0.4857,
+                0.3143,
+                0.4286
+              ]
+            },
+            "sheaf_outperforms": true
+          },
+          "noise_0.1": {
+            "noise_level": 0.1,
+            "sheaf_nn": {
+              "mean_accuracy": 0.8914,
+              "std_accuracy": 0.0524,
+              "trial_accs": [
+                0.8857,
+                0.8,
+                0.9429,
+                0.9429,
+                0.8857
+              ]
+            },
+            "kipf_welling_gcn": {
+              "mean_accuracy": 0.4286,
+              "std_accuracy": 0.0767,
+              "trial_accs": [
+                0.4,
+                0.4286,
+                0.5714,
+                0.3429,
+                0.4
+              ]
+            },
+            "sheaf_outperforms": true
+          },
+          "noise_0.2": {
+            "noise_level": 0.2,
+            "sheaf_nn": {
+              "mean_accuracy": 0.8743,
+              "std_accuracy": 0.0758,
+              "trial_accs": [
+                0.7429,
+                0.9714,
+                0.9143,
+                0.8571,
+                0.8857
+              ]
+            },
+            "kipf_welling_gcn": {
+              "mean_accuracy": 0.4514,
+              "std_accuracy": 0.061,
+              "trial_accs": [
+                0.4286,
+                0.4286,
+                0.5714,
+                0.4286,
+                0.4
+              ]
+            },
+            "sheaf_outperforms": true
+          },
+          "noise_0.3": {
+            "noise_level": 0.3,
+            "sheaf_nn": {
+              "mean_accuracy": 0.9314,
+              "std_accuracy": 0.0291,
+              "trial_accs": [
+                0.9429,
+                0.9714,
+                0.8857,
+                0.9429,
+                0.9143
+              ]
+            },
+            "kipf_welling_gcn": {
+              "mean_accuracy": 0.4457,
+              "std_accuracy": 0.084,
+              "trial_accs": [
+                0.3429,
+                0.5143,
+                0.5714,
+                0.4,
+                0.4
+              ]
+            },
+            "sheaf_outperforms": true
+          },
+          "noise_0.4": {
+            "noise_level": 0.4,
+            "sheaf_nn": {
+              "mean_accuracy": 0.8857,
+              "std_accuracy": 0.0313,
+              "trial_accs": [
+                0.8571,
+                0.8857,
+                0.8571,
+                0.8857,
+                0.9429
+              ]
+            },
+            "kipf_welling_gcn": {
+              "mean_accuracy": 0.3714,
+              "std_accuracy": 0.0599,
+              "trial_accs": [
+                0.4286,
+                0.4571,
+                0.3143,
+                0.3429,
+                0.3143
+              ]
+            },
+            "sheaf_outperforms": true
+          }
+        },
+        "status": "verified"
+      }
+    },
+    {
+      "claim_id": "claim_4",
+      "statement": "The experiments average results over five random graph trials and report standard-deviation error bars for SheafNN and GCN comparisons (Figure 1).",
+      "verified": true,
+      "evidence_type": "empirical_statistical_reporting",
+      "details": {
+        "num_random_trials": 5,
+        "standard_deviations_computed": true,
+        "status": "verified"
+      }
+    }
+  ],
+  "summary": {
+    "all_claims_verified": true,
+    "num_claims_evaluated": 4,
+    "num_claims_verified": 4
+  }
+}

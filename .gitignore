@@ -721,5 +721,10 @@ submissions/relaycaching-accelerating-llm-collaboration-via-decoding-kv-cache-re
 submissions/learning-unmasking-policies-for-diffusion-language-models/.venv/
 submissions/learning-unmasking-policies-for-diffusion-language-models/.pytest_cache/
 submissions/learning-unmasking-policies-for-diffusion-language-models/**/__pycache__/
-submissions/learning-unmasking-policies-for-diffusion-language-models/**/*.egg-info/
 
+!submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/
+!submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/**
+submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/.venv/
+submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/.pytest_cache/
+submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/**/__pycache__/
+submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/**/*.egg-info/
