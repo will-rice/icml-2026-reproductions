@@ -101,7 +101,9 @@ def clean_validation_environment(
             "PYTHONDONTWRITEBYTECODE": "1",
             "PYTEST_ADDOPTS": "-p no:cacheprovider --ignore=submissions",
             "TMPDIR": str(isolated_home.parent / "tmp"),
+            "UV_NO_SYNC": "1",
             "UV_OFFLINE": "1",
+            "UV_SYSTEM_PYTHON": "1",
             "UV_PROJECT_ENVIRONMENT": (
                 str(worktree / ".venv")
                 if worktree and (worktree / ".venv").exists()
@@ -172,7 +174,7 @@ def attest_validation(
     _require_clean(
         _checked(
             runner,
-            ("git", "status", "--porcelain", "--", manifest["project_path"]),
+            ("git", "status", "--porcelain"),
             worktree,
             check_results,
         )
@@ -861,9 +863,7 @@ def _checked(
 
 
 def _require_clean(result: CommandResult) -> None:
-    lines = [line for line in result.stdout.splitlines() if line and not line.startswith("!!")]
-    if lines:
-        print("_require_clean failed on lines:", lines)
+    if result.stdout.strip():
         raise ValueError("clean worktree")
 
 
