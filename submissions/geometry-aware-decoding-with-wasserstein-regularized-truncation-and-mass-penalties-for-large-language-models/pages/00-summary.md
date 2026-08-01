@@ -12,6 +12,8 @@ Paid API cost USD 0.00
 | Claim 1: Wasserstein-entropy-mass objective — numerical audit |
 | Claim 2: Exact prefix-form subset update vs brute force |
 | Claim 3: GSM8K baseline table — not reproduced |
+| Claim 4: GPQA baseline table — not reproduced |
+| Claim 5: AlpacaEval / MT-Bench judge evaluations — not reproduced |
 | Methods and provenance |
 
 ## Executive summary
@@ -27,6 +29,8 @@ out of scope here.
 | 1. Objective and geometry (Sec. 3, Alg. 1) | verified | f-step surrogate max error 1.2e-07; uniform-metric reduction 20/20; 40/40 converged |
 | 2. Exact subset update (Sec. 4.2, Thm. 3.4) | verified | 120/120 brute-force matches; 25/25 identical to official code |
 | 3. GSM8K table (Table 1) | unreplicated | no model runs; no accuracy numbers claimed |
+| 4. GPQA table (Table 2) | unreplicated | no model runs; no accuracy numbers claimed |
+| 5. AlpacaEval / MT-Bench win rates (Fig. 1-2) | unreplicated | no generations or judge runs; no win rates claimed |
 
 Every number above is recomputed by `generate_evidence.py` from fixed
 seeds; the full raw values are in `evidence/bundle.json`.

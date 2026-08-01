@@ -14,7 +14,9 @@ PAGE_TITLES = {
     "01-claim-1-wasserstein-objective.md": "Claim 1: Objective audit",
     "02-claim-2-exact-subset-update.md": "Claim 2: Exact S-step",
     "03-claim-3-gsm8k-not-reproduced.md": "Claim 3: GSM8K (not reproduced)",
-    "04-methods-and-provenance.md": "Methods & provenance",
+    "04-claim-4-gpqa-not-reproduced.md": "Claim 4: GPQA (not reproduced)",
+    "05-claim-5-openended-not-reproduced.md": "Claim 5: AlpacaEval/MT-Bench (not reproduced)",
+    "06-methods-and-provenance.md": "Methods & provenance",
 }
 
 with gr.Blocks(title="Top-W Geometry-Aware Decoding Reproduction") as demo:

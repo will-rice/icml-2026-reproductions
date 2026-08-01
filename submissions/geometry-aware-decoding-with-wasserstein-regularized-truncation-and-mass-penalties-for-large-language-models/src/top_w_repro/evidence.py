@@ -43,6 +43,11 @@ CLAIMS = [
     "subset-update step inside a candidate-pool loop (Section 4.2).",
     "Top-W is evaluated against Min-p, Top-p, and Top-H on GSM8K across multiple "
     "temperatures and models (Table 1).",
+    "Top-W is evaluated against the same decoding baselines on GPQA across "
+    "multiple temperatures and models (Table 2).",
+    "Judge-based open-ended evaluations report Top-W wins on more AlpacaEval "
+    "and MT-Bench temperature-model tuples than the compared decoding methods "
+    "(Figure 1, Figure 2).",
 ]
 # Theorem 3.4(a) proves prefix optimality for beta - lam >= 0; every
 # exactness config satisfies that hypothesis. The relaxation control
@@ -385,6 +390,44 @@ def build_bundle() -> dict:
                 "The synthetic temperature sweep in this bundle characterizes "
                 "distribution shaping only and is NOT evidence for benchmark "
                 "accuracy claims."
+            ),
+        },
+        "claim_4": {
+            "status": "unreplicated",
+            "evidence": (
+                "Not reproduced. The Table 2 comparison requires GPQA decoding "
+                "runs across the same instruction-tuned models and "
+                "temperatures as Table 1. No language model was executed in "
+                "this reproduction; no GPQA accuracy numbers exist here. The "
+                "official repository pinned in the upstream manifest ships "
+                "run_gpqa.sh as the entry point for an independent GPU "
+                "reproduction. The decoding mechanism GPQA would exercise is "
+                "the same audited mechanism as claims 1-2: the objective, "
+                "exact S-step, and official-code cross-check numbers on the "
+                "claim 1 and claim 2 pages are the only mechanism-level "
+                "evidence this attempt provides."
+            ),
+            "limitations": (
+                "No GPQA decoding runs were performed; the synthetic "
+                "temperature sweep says nothing about GPQA accuracy."
+            ),
+        },
+        "claim_5": {
+            "status": "unreplicated",
+            "evidence": (
+                "Not reproduced. The AlpacaEval and MT-Bench win-rate "
+                "comparisons (Figure 1, Figure 2) require open-ended "
+                "generation with multiple models and temperatures plus a "
+                "judge model. No language model or judge was executed in this "
+                "reproduction, and the challenge budget excludes paid judge "
+                "APIs (recorded cost USD 0.00). The official repository "
+                "pinned in the upstream manifest ships alpaca_generate_w.py "
+                "for generation; judge-side evaluation would additionally "
+                "require the AlpacaEval and MT-Bench harnesses."
+            ),
+            "limitations": (
+                "No open-ended generations or judge evaluations were "
+                "performed; no win-rate numbers exist in this attempt."
             ),
         },
     }

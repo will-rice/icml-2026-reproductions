@@ -45,6 +45,8 @@ Paid API cost USD {bundle["estimated_api_cost_usd"]:.2f}
 | Claim 1: Wasserstein-entropy-mass objective — numerical audit |
 | Claim 2: Exact prefix-form subset update vs brute force |
 | Claim 3: GSM8K baseline table — not reproduced |
+| Claim 4: GPQA baseline table — not reproduced |
+| Claim 5: AlpacaEval / MT-Bench judge evaluations — not reproduced |
 | Methods and provenance |
 
 ## Executive summary
@@ -60,6 +62,8 @@ out of scope here.
 | 1. Objective and geometry (Sec. 3, Alg. 1) | {statuses["claim_1"]} | f-step surrogate max error {bundle["audits"]["geometry_mechanism"]["potential_max_error"]:.1e}; uniform-metric reduction {bundle["audits"]["geometry_mechanism"]["uniform_metric_prefix_matches"]}/{bundle["audits"]["geometry_mechanism"]["trials"]}; {bundle["audits"]["alternating_convergence"]["converged"]}/{bundle["audits"]["alternating_convergence"]["trials"]} converged |
 | 2. Exact subset update (Sec. 4.2, Thm. 3.4) | {statuses["claim_2"]} | {bundle["audits"]["prefix_vs_bruteforce"]["optimal_value_matches"]}/{bundle["audits"]["prefix_vs_bruteforce"]["trials"]} brute-force matches; {bundle["audits"]["official_crosscheck"]["identical_kept_sets"]}/{bundle["audits"]["official_crosscheck"]["trials"]} identical to official code |
 | 3. GSM8K table (Table 1) | {statuses["claim_3"]} | no model runs; no accuracy numbers claimed |
+| 4. GPQA table (Table 2) | {statuses["claim_4"]} | no model runs; no accuracy numbers claimed |
+| 5. AlpacaEval / MT-Bench win rates (Fig. 1-2) | {statuses["claim_5"]} | no generations or judge runs; no win rates claimed |
 
 Every number above is recomputed by `generate_evidence.py` from fixed
 seeds; the full raw values are in `evidence/bundle.json`.
@@ -219,6 +223,57 @@ distribution; they say nothing about GSM8K accuracy.
 """
 
 
+def claim_4_page(bundle: dict) -> str:
+    return f"""# Claim 4: GPQA comparison against Min-p, Top-p, and Top-H
+
+**Claim.** {bundle["target_claims"][3]["text"]}
+
+**Self-assessed status: {bundle["claim_results"]["claim_4"]["status"]}**
+
+## What this reproduction did NOT do
+
+{bundle["claim_results"]["claim_4"]["evidence"]}
+
+## What exists for an independent benchmark rerun
+
+The official repository (pinned at
+`{bundle["upstream_revision"].split("+", 1)[1]}`) ships `run_gpqa.sh`
+as the Table 2 entry point. Reproducing Table 2 requires GPU decoding
+of GPQA with the paper's instruction-tuned models across its
+temperature grid — outside this CPU-only attempt's budget.
+
+## Relation to the audited mechanism
+
+GPQA exercises the same Top-W decoder mechanism that this attempt
+audits numerically: the claim 1 page shows the objective and
+convergence numbers, and the claim 2 page shows exact-S-step and
+official-code cross-check numbers. No benchmark accuracy is claimed
+from that mechanism evidence.
+"""
+
+
+def claim_5_page(bundle: dict) -> str:
+    return f"""# Claim 5: AlpacaEval and MT-Bench judge-based evaluations
+
+**Claim.** {bundle["target_claims"][4]["text"]}
+
+**Self-assessed status: {bundle["claim_results"]["claim_5"]["status"]}**
+
+## What this reproduction did NOT do
+
+{bundle["claim_results"]["claim_5"]["evidence"]}
+
+## What exists for an independent rerun
+
+The official repository (pinned at
+`{bundle["upstream_revision"].split("+", 1)[1]}`) ships
+`alpaca_generate_w.py` for the generation side. Win-rate judging
+additionally requires the AlpacaEval and MT-Bench harnesses and a
+judge model; this attempt records USD 0.00 paid API cost and ran no
+judge.
+"""
+
+
 def methods_page(bundle: dict) -> str:
     files = "\n".join(
         f"| `{name}` | `{sha}` |"
@@ -263,5 +318,7 @@ def build_pages(bundle: dict) -> dict[str, str]:
         "01-claim-1-wasserstein-objective.md": claim_1_page(bundle),
         "02-claim-2-exact-subset-update.md": claim_2_page(bundle),
         "03-claim-3-gsm8k-not-reproduced.md": claim_3_page(bundle),
-        "04-methods-and-provenance.md": methods_page(bundle),
+        "04-claim-4-gpqa-not-reproduced.md": claim_4_page(bundle),
+        "05-claim-5-openended-not-reproduced.md": claim_5_page(bundle),
+        "06-methods-and-provenance.md": methods_page(bundle),
     }

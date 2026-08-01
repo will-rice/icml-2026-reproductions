@@ -30,6 +30,10 @@ def test_claim_statuses_are_honest(bundle):
     assert results["claim_2"]["status"] == "verified"
     assert results["claim_3"]["status"] == "unreplicated"
     assert "Not reproduced" in results["claim_3"]["evidence"]
+    assert results["claim_4"]["status"] == "unreplicated"
+    assert "Not reproduced" in results["claim_4"]["evidence"]
+    assert results["claim_5"]["status"] == "unreplicated"
+    assert "Not reproduced" in results["claim_5"]["evidence"]
     assert bundle["estimated_api_cost_usd"] == 0.0
 
 
@@ -49,7 +53,9 @@ def test_pages_surface_the_audit_numbers(bundle):
         "01-claim-1-wasserstein-objective.md",
         "02-claim-2-exact-subset-update.md",
         "03-claim-3-gsm8k-not-reproduced.md",
-        "04-methods-and-provenance.md",
+        "04-claim-4-gpqa-not-reproduced.md",
+        "05-claim-5-openended-not-reproduced.md",
+        "06-methods-and-provenance.md",
     }
     prefix = bundle["audits"]["prefix_vs_bruteforce"]
     claim_2 = pages["02-claim-2-exact-subset-update.md"]
@@ -77,7 +83,15 @@ def test_pages_surface_the_audit_numbers(bundle):
     assert "unreplicated" in claim_3
     assert "NOT" in claim_3
 
-    methods = pages["04-methods-and-provenance.md"]
+    claim_4 = pages["04-claim-4-gpqa-not-reproduced.md"]
+    assert "unreplicated" in claim_4
+    assert "run_gpqa.sh" in claim_4
+
+    claim_5 = pages["05-claim-5-openended-not-reproduced.md"]
+    assert "unreplicated" in claim_5
+    assert "alpaca_generate_w.py" in claim_5
+
+    methods = pages["06-methods-and-provenance.md"]
     for sha in bundle["upstream"]["files"].values():
         assert sha in methods
 
