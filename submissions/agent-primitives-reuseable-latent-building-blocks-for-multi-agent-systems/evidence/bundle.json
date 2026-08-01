@@ -1,0 +1,115 @@
+{
+  "arxiv_audit": {
+    "source_files": [],
+    "terms_found": {
+      "appendix_e": false,
+      "kv_cache": false,
+      "organizer": false,
+      "planning_execution": false,
+      "review": false,
+      "voting_selection": false
+    },
+    "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "attempt_id": "c2270ea7-fabd-4292-a117-3b7181c0c5fa",
+  "claims": [
+    {
+      "challenge_claim_sha256": "8115a999582028cd40604b3d6dd9ee69546547d4babd00b02e8c1abb1b719ff1",
+      "evidence": "Source-term audit plus deterministic Review, Voting/Selection, and Planning/Execution simulations.",
+      "status": "toy",
+      "target_claim": "Agent Primitives instantiates three reusable MAS building blocks: Review, Voting and Selection, and Planning and Execution (Section 3)."
+    },
+    {
+      "challenge_claim_sha256": "5b9aaefaf80d29d999f70165b70dde7f2e9cb90f080dffee3c41a8f4d17228b5",
+      "evidence": "Source-term audit plus local KV-cache tensor shape invariant checks.",
+      "status": "toy",
+      "target_claim": "The primitives communicate internally through KV-cache states rather than only natural-language message passing (Section 3)."
+    },
+    {
+      "challenge_claim_sha256": "3ff1e2007a7b9f313467db56636bd1e60598d8dfad968e2cec21aeff157168bc",
+      "evidence": "Source-term audit plus deterministic overlap-based primitive-pool selection.",
+      "status": "toy",
+      "target_claim": "An Organizer agent selects and composes primitives for each query using a lightweight pool of previously successful configurations (Section 3)."
+    },
+    {
+      "challenge_claim_sha256": "7eadb6ed2e71e12ea036c70a7f6c4e4ef52c30861df2d99f613d30d1b0012129",
+      "evidence": "No released raw benchmark outputs or executable evaluation artifacts were available in this package.",
+      "status": "inconclusive",
+      "target_claim": "Primitive-based MAS improve average accuracy by 12.0-16.5% over single-agent baselines across evaluated tasks (Section 4)."
+    },
+    {
+      "challenge_claim_sha256": "67bd705462e640c09cc50efc1020c8eb02746643ecc5cfa913ef7f6d80da91a1",
+      "evidence": "No released raw token or latency traces were available in this package.",
+      "status": "inconclusive",
+      "target_claim": "Compared with text-based MAS, Agent Primitives reduce token usage and inference latency by about 3-4x while adding only 1.3-1.6x overhead over single-agent inference (Appendix E)."
+    }
+  ],
+  "computed_outputs": {
+    "kv_cache": {
+      "elements": 16384,
+      "shape": [
+        2,
+        2,
+        16,
+        4,
+        64
+      ],
+      "valid": true
+    },
+    "organizer": {
+      "available": [
+        "planning",
+        "review",
+        "voting"
+      ],
+      "overlap": 2,
+      "selected": "planning"
+    },
+    "planning_execution": {
+      "completed": true,
+      "goal": "solve query",
+      "steps": [
+        "decompose",
+        "execute",
+        "check"
+      ],
+      "trace": [
+        "plan:decompose",
+        "execute:execute",
+        "verify:check"
+      ]
+    },
+    "review": {
+      "critiques": [
+        "find missing assumption",
+        "add verification"
+      ],
+      "initial": "candidate solution",
+      "revision": "candidate solution | review-1: find missing assumption | review-2: add verification",
+      "rounds": 2
+    },
+    "voting_selection": {
+      "score": 0.7,
+      "selected": "critic",
+      "tie_break": "lexicographic"
+    }
+  },
+  "fencing_token": 1,
+  "generated_at": "2026-08-01T00:00:00+00:00",
+  "limitations": [
+    "Toy statuses are limited to local mechanism checks and source-term audit.",
+    "Accuracy, token, and latency claims remain inconclusive without released raw benchmark outputs.",
+    "Paper-reported values are recorded only as claim text, not as reproduced measurements."
+  ],
+  "owner": "codex-paper-owner-05",
+  "paper_id": "CzShhpY2qU",
+  "snapshot_id": "262de4b8f7a83b9fa6af23efd0755d5e77522b789239db644faefa5ba4cf9d30",
+  "title": "Agent Primitives: Reuseable Latent Building Blocks for Multi-Agent Systems",
+  "upstream": {
+    "arxiv": "2602.03695",
+    "executable_repository": null,
+    "huggingface_paper": "https://huggingface.co/papers/2602.03695",
+    "openreview": "https://openreview.net/forum?id=CzShhpY2qU",
+    "upstream_revision": "arxiv:2602.03695"
+  }
+}
