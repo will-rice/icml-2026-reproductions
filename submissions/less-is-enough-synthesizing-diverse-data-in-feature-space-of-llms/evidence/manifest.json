@@ -1,0 +1,33 @@
+{
+  "artifacts": {
+    "arxiv_source": {
+      "sha256": "31cae9ef0d879106dd296bd9dc4a9981145c33ac18e702637168169d96f8025f",
+      "url": "https://arxiv.org/e-print/2602.10388"
+    },
+    "github": {
+      "revision": "d3622dec55123c0eff4c079db9e1a59403f08d1b",
+      "url": "https://github.com/Zhongzhi660/FAC-Synthesis.git"
+    },
+    "hf_dataset_api": {
+      "access": "unavailable",
+      "status_code": 401,
+      "url": "https://huggingface.co/api/datasets/Zhongzhi1228/datasets"
+    },
+    "hf_demo": {
+      "repo": "Zhongzhi1228/synthesis-demo",
+      "revision": "2d41421eb288434e2ecd15815ec712e5b3d80033",
+      "sdk": "streamlit"
+    },
+    "sae_checkpoints": {
+      "llama": "Zhongzhi1228/sae_llama_l16_h65536@c9e84544f6d8d1208d8251aa9700a26363dedac6",
+      "mistral": "Zhongzhi1228/sae_mistral_l16_h65536@5ec2dbdbcca19578ca1210bb8fb1d4e37d4c609f",
+      "qwen": "Zhongzhi1228/sae_qwen_l14_h65536@f505b563863a87dfd448101341c4455e88d086d3"
+    }
+  },
+  "attempt_id": "19313a84-4cd7-4266-bc6c-8588b3549670",
+  "cost_usd": 0.0,
+  "execution_mode": "cpu-only-static-and-toy-checks",
+  "paper_id": "71029",
+  "paper_title": "Less is Enough: Synthesizing Diverse Data in Feature Space of LLMs",
+  "snapshot_id": "69c8f39e61726cd423f2bebc01d57b5303b5fcd87e319f3ed7728dfce97b42d1"
+}
