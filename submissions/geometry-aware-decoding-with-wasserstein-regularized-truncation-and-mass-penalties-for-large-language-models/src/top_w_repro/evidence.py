@@ -10,8 +10,6 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-import platform
-import time
 
 import numpy as np
 import torch
@@ -60,9 +58,12 @@ TEMPERATURES = [0.5, 0.7, 1.0, 1.5, 2.0]
 
 
 def audit_prefix_vs_bruteforce(trials_per_config: int = 30, pool: int = 10) -> dict:
-    """Verify Theorem 3.4: the prefix S-step equals brute-force enumeration."""
+    """Verify Theorem 3.4: the prefix S-step equals brute-force enumeration.
+
+    Reports deterministic operation counts rather than wall-clock times
+    so the bundle is byte-stable across validation reruns.
+    """
     total, exact_matches, value_gaps = 0, 0, []
-    prefix_seconds, brute_seconds = 0.0, 0.0
     for config_index, config in enumerate(PREFIX_CONFIGS):
         for trial in range(trials_per_config):
             torch.manual_seed(1000 * config_index + trial)
@@ -73,16 +74,12 @@ def audit_prefix_vs_bruteforce(trials_per_config: int = 30, pool: int = 10) -> d
             potential = config["geom_scale"] * nearest_set_potential(
                 embeddings, torch.arange(3)
             )
-            start = time.perf_counter()
             prefix = prefix_subset_update(
                 probs, potential, lam=config["lam"], beta=config["beta"]
             )
-            prefix_seconds += time.perf_counter() - start
-            start = time.perf_counter()
             best_subset, best_value = brute_force_subset_update(
                 probs, potential, lam=config["lam"], beta=config["beta"]
             )
-            brute_seconds += time.perf_counter() - start
             prefix_value = subset_objective(
                 probs, potential, prefix, lam=config["lam"], beta=config["beta"]
             )
@@ -94,12 +91,11 @@ def audit_prefix_vs_bruteforce(trials_per_config: int = 30, pool: int = 10) -> d
     return {
         "pool_size": pool,
         "subsets_enumerated_per_trial": 2**pool - 1,
+        "prefix_candidates_per_trial": pool,
         "configs": PREFIX_CONFIGS,
         "trials": total,
         "optimal_value_matches": exact_matches,
         "max_objective_gap": max(value_gaps),
-        "mean_prefix_scan_ms": 1000.0 * prefix_seconds / total,
-        "mean_brute_force_ms": 1000.0 * brute_seconds / total,
         "passed": exact_matches == total,
     }
 
@@ -355,9 +351,10 @@ def build_bundle() -> dict:
                 f"all {prefix['subsets_enumerated_per_trial']} nonempty subsets "
                 f"in {prefix['optimal_value_matches']}/{prefix['trials']} "
                 f"trials across {len(PREFIX_CONFIGS)} configurations (max "
-                f"objective gap {prefix['max_objective_gap']:.2e}; prefix scan "
-                f"{prefix['mean_prefix_scan_ms']:.3f} ms vs enumeration "
-                f"{prefix['mean_brute_force_ms']:.1f} ms per instance). "
+                f"objective gap {prefix['max_objective_gap']:.2e}; a "
+                f"{prefix['prefix_candidates_per_trial']}-step linear scan "
+                f"replaces {prefix['subsets_enumerated_per_trial']} subset "
+                "evaluations per instance). "
                 "Relaxation control: with beta < lam the pure prefix scan was "
                 f"strictly suboptimal in "
                 f"{relaxation['prefix_suboptimal_instances']}"
@@ -399,10 +396,8 @@ def build_bundle() -> dict:
         "upstream_revision": UPSTREAM_REVISION,
         "estimated_api_cost_usd": 0.0,
         "environment": {
-            "python": platform.python_version(),
-            "torch": torch.__version__,
             "device": "cpu",
-            "platform": platform.platform(),
+            "pinned_by": "uv.lock",
         },
         "target_claims": [
             {

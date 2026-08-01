@@ -152,10 +152,10 @@ scan returned the exact optimum in
 hyperparameter configurations satisfying the theorem's beta >= lam
 hypothesis: {configs}.
 
-| Method | Mean time per instance |
+| Method | Work per instance |
 | --- | --- |
-| Prefix scan (exact S-step) | {prefix["mean_prefix_scan_ms"]:.3f} ms |
-| Brute-force enumeration | {prefix["mean_brute_force_ms"]:.1f} ms |
+| Prefix scan (exact S-step) | one sort + {prefix["prefix_candidates_per_trial"]}-prefix linear scan |
+| Brute-force enumeration | {prefix["subsets_enumerated_per_trial"]} subset objective evaluations |
 
 ## Relaxation control (beta < lam)
 
@@ -241,9 +241,8 @@ Vendored byte-exact upstream files (MIT license retained):
 
 ## Environment
 
-Python {bundle["environment"]["python"]}, torch
-{bundle["environment"]["torch"]}, {bundle["environment"]["device"]}
-({bundle["environment"]["platform"]}). Paid API cost: USD
+CPU only; exact Python and package versions are pinned by the
+project's `uv.lock`. Paid API cost: USD
 {bundle["estimated_api_cost_usd"]:.2f}.
 
 ## Reproduce these numbers

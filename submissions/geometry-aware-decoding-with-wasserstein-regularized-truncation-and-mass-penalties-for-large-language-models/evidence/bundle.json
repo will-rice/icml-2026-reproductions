@@ -46,11 +46,10 @@
         }
       ],
       "max_objective_gap": 0.0,
-      "mean_brute_force_ms": 43.83717284848293,
-      "mean_prefix_scan_ms": 0.1038817223161459,
       "optimal_value_matches": 120,
       "passed": true,
       "pool_size": 10,
+      "prefix_candidates_per_trial": 10,
       "subsets_enumerated_per_trial": 1023,
       "trials": 120
     },
@@ -73,7 +72,7 @@
       "status": "verified"
     },
     "claim_2": {
-      "evidence": "Under the theorem's beta >= lam hypothesis, the prefix-form exact S-step (Theorem 3.4a) matched brute-force enumeration of all 1023 nonempty subsets in 120/120 trials across 4 configurations (max objective gap 0.00e+00; prefix scan 0.104 ms vs enumeration 43.8 ms per instance). Relaxation control: with beta < lam the pure prefix scan was strictly suboptimal in 7/120 instances (worst gap 0.299), confirming the hypothesis is load-bearing. The reimplemented alternating decoder kept token sets identical to the vendored official implementation in 25/25 random instances.",
+      "evidence": "Under the theorem's beta >= lam hypothesis, the prefix-form exact S-step (Theorem 3.4a) matched brute-force enumeration of all 1023 nonempty subsets in 120/120 trials across 4 configurations (max objective gap 0.00e+00; a 10-step linear scan replaces 1023 subset evaluations per instance). Relaxation control: with beta < lam the pure prefix scan was strictly suboptimal in 7/120 instances (worst gap 0.299), confirming the hypothesis is load-bearing. The reimplemented alternating decoder kept token sets identical to the vendored official implementation in 25/25 random instances.",
       "limitations": "Brute force is feasible only for 10-token pools; larger pools rely on the theorem, not enumeration.",
       "status": "verified"
     },
@@ -89,9 +88,7 @@
   ],
   "environment": {
     "device": "cpu",
-    "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
-    "python": "3.10.12",
-    "torch": "2.13.0+cu130"
+    "pinned_by": "uv.lock"
   },
   "estimated_api_cost_usd": 0.0,
   "metrics": {

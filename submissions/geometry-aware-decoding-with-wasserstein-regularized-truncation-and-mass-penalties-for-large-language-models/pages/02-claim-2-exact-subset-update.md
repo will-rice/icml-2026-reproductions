@@ -15,10 +15,10 @@ scan returned the exact optimum in
 hyperparameter configurations satisfying the theorem's beta >= lam
 hypothesis: (lam=2.2, beta=2.8, geom_scale=0.6); (lam=1.5, beta=2.4, geom_scale=0.3); (lam=3.0, beta=3.5, geom_scale=1.0); (lam=2.2, beta=2.2, geom_scale=0.6).
 
-| Method | Mean time per instance |
+| Method | Work per instance |
 | --- | --- |
-| Prefix scan (exact S-step) | 0.104 ms |
-| Brute-force enumeration | 43.8 ms |
+| Prefix scan (exact S-step) | one sort + 10-prefix linear scan |
+| Brute-force enumeration | 1023 subset objective evaluations |
 
 ## Relaxation control (beta < lam)
 

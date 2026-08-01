@@ -16,9 +16,8 @@ Vendored byte-exact upstream files (MIT license retained):
 
 ## Environment
 
-Python 3.10.12, torch
-2.13.0+cu130, cpu
-(Linux-5.15.0-174-generic-x86_64-with-glibc2.35). Paid API cost: USD
+CPU only; exact Python and package versions are pinned by the
+project's `uv.lock`. Paid API cost: USD
 0.00.
 
 ## Reproduce these numbers
