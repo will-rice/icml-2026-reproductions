@@ -163,6 +163,8 @@ This logbook documents the independent CPU-only reproduction audit of **video-SA
     with open(PAGES_DIR / "logbook.md", "w") as f:
         f.write(logbook_md)
 
+
+
     print(f"Wrote logbook to {PAGES_DIR / 'logbook.md'}")
 
 if __name__ == "__main__":
