@@ -849,7 +849,8 @@ def _checked(
 
 
 def _require_clean(result: CommandResult) -> None:
-    if result.stdout.strip():
+    lines = [line for line in result.stdout.splitlines() if line and not line.startswith("!!")]
+    if lines:
         raise ValueError("clean worktree")
 
 

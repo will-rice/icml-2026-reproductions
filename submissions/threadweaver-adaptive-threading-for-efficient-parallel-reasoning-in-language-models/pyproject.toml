@@ -9,6 +9,7 @@ description = "CPU-only evidence bundle for ThreadWeaver"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "pytest",
     "streamlit",
 ]
 
