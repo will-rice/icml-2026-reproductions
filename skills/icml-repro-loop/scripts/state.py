@@ -429,7 +429,7 @@ def _run_v6_command(
     import scheduler
     import store
 
-    paths = store.StatePaths(Path(arguments.path))
+    paths = store.StatePaths(arguments.path)
     if arguments.command == "refresh-live":
         from huggingface_hub import HfApi
         import refresh

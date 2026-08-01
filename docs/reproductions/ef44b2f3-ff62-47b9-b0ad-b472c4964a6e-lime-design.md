@@ -1,8 +1,8 @@
 # Reproduction Design: LiME (Lightweight Mixture of Experts for Efficient Multimodal Multi-task Learning)
 
-**Paper ID**: `KRSZj8z5Lr`
-**Attempt ID**: `ef44b2f3-ff62-47b9-b0ad-b472c4964a6e`
-**ArXiv**: `2604.02338`
+**Paper ID**: `KRSZj8z5Lr`  
+**Attempt ID**: `ef44b2f3-ff62-47b9-b0ad-b472c4964a6e`  
+**ArXiv**: `2604.02338`  
 **Target Claims**:
 1. LiME shares a single PEFT adapter and applies lightweight expert-specific modulation vectors instead of replicating a full adapter per expert (Figure 1).
 2. LiME combines zero-parameter routing, adaptive expert selection, n-gram routing granularity, PEFT compatibility, and a shared trainable PEFT module (Table 1).

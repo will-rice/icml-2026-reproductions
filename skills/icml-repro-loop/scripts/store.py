@@ -48,10 +48,6 @@ class StatePaths:
 
     index: Path
 
-    def __post_init__(self) -> None:
-        if isinstance(self.index, str):
-            object.__setattr__(self, "index", Path(self.index))
-
     @property
     def root(self) -> Path:
         return self.index.with_suffix("")
