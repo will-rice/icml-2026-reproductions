@@ -586,7 +586,6 @@ def launch_shell_command(
                 user_cli_path,
                 credentials,
                 'HF_HOME="/tmp/icml-agy-hf-XX"',
-                'UV_CACHE_DIR="/tmp/icml-repro-uv-cache"',
                 shlex.join((*profile.argv, "--print", prompt)),
             )
         )
