@@ -1,63 +1,57 @@
-import gradio as gr
+"""Gradio Space application for the Motive reproduction."""
+
 import json
 import pathlib
-import torch
-import numpy as np
 import sys
+
+import gradio as gr
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent / "src"))
 
 from motive.attribution import (
     compute_motion_mask,
     compute_motion_weighted_attribution,
-    normalize_frame_length_bias,
-    evaluate_vbench_motion,
-    evaluate_human_preference,
+    make_moving_square_video,
 )
 
-def run_motive_demo(frames_count, patch_size, threshold):
-    frames = torch.randn(1, int(frames_count), 3, 64, 64)
-    grads = torch.randn(1, int(frames_count), 3, 64, 64)
-    mask = compute_motion_mask(frames, patch_size=int(patch_size), threshold=float(threshold))
-    attr_score = compute_motion_weighted_attribution(grads, mask, patch_size=int(patch_size))
 
-    raw_scores = [12.5, 25.0, 50.0]
-    frame_lengths = [16, 32, 64]
-    norm_scores = normalize_frame_length_bias(raw_scores, frame_lengths)
-
-    vbench = evaluate_vbench_motion([0.85, 0.88], [0.72, 0.70])
-    human = evaluate_human_preference(741, 1000)
-
+def run_motive_demo(frames_count: float, step: float) -> str:
+    """Run the real motion-mask mechanism on a deterministic synthetic video."""
+    video = make_moving_square_video(int(frames_count), step=int(step))
+    mask = compute_motion_mask(video)
+    uniform = video.new_ones(video.shape)
     results = {
-        "attribution_score": attr_score,
         "motion_mask_shape": list(mask.shape),
-        "normalized_scores": norm_scores,
-        "vbench_eval": vbench,
-        "human_eval": human
+        "mask_max": round(float(mask.max().item()), 4),
+        "mask_mean": round(float(mask.mean().item()), 4),
+        "masked_attribution_norm": round(
+            compute_motion_weighted_attribution(uniform, mask), 4
+        ),
     }
     return json.dumps(results, indent=2)
 
-def load_summary():
-    summary_path = pathlib.Path(__file__).parent / "evidence_summary.json"
-    if summary_path.exists():
-        with open(summary_path) as f:
-            return f.read()
-    return "Summary file not found."
+
+def load_file(relative: str) -> str:
+    path = pathlib.Path(__file__).parent / relative
+    return path.read_text() if path.exists() else f"{relative} not found."
+
 
 with gr.Blocks(title="Motion Attribution for Video Generation") as demo:
     gr.Markdown("# Motion Attribution for Video Generation (Motive)")
-    gr.Markdown("Interactive reproduction demo for ICML 2026 Paper ID `zAl9heLw4q`.")
+    gr.Markdown("Reproduction logbook for ICML 2026 Paper ID `zAl9heLw4q`.")
+
+    with gr.Tab("Report"):
+        gr.Markdown(load_file("pages/report.md"))
 
     with gr.Tab("Interactive Demo"):
-        frames_slider = gr.Slider(minimum=2, maximum=10, value=5, step=1, label="Frame Count")
-        patch_slider = gr.Slider(minimum=4, maximum=16, value=8, step=4, label="Patch Size")
-        thresh_slider = gr.Slider(minimum=0.01, maximum=0.5, value=0.05, step=0.01, label="Motion Threshold")
+        frames_slider = gr.Slider(minimum=2, maximum=12, value=8, step=1, label="Frame Count")
+        step_slider = gr.Slider(minimum=1, maximum=12, value=4, step=1, label="Square Speed")
         btn = gr.Button("Run Motive Attribution")
-        output_json = gr.JSON(label="Attribution Results")
-        btn.click(fn=run_motive_demo, inputs=[frames_slider, patch_slider, thresh_slider], outputs=output_json)
+        output_json = gr.Code(language="json", label="Attribution Results")
+        btn.click(fn=run_motive_demo, inputs=[frames_slider, step_slider], outputs=output_json)
 
     with gr.Tab("Evidence Summary"):
-        summary_display = gr.Code(value=load_summary(), language="json", label="evidence_summary.json")
+        gr.Code(value=load_file("evidence_summary.json"), language="json", label="evidence_summary.json")
 
 if __name__ == "__main__":
     demo.launch()

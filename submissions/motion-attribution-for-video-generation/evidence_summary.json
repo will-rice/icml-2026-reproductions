@@ -6,109 +6,115 @@
     {
       "claim": "Motive computes motion-specific data attribution by applying motion-weighted loss masks so gradients emphasize dynamic regions rather than static appearance (Section 3.4).",
       "challenge_claim_sha256": "f2a60a6b6eab09e8593eb79445c51826b5a9f54d58898bdeeb731645ca4ce8e7",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "toy-scale ground-truth videos",
       "evidence_details": {
-        "attribution_score": 329.6935729980469,
-        "motion_mask_computed": true,
-        "dynamic_region_emphasized": true
+        "mean_mask_in_moving_patches": 0.5488,
+        "mean_mask_in_static_patches": 0.0,
+        "masked_attribution_norm": 101.4323,
+        "unmasked_attribution_norm": 313.5347,
+        "fraction_of_mask_weight_on_true_motion": 1.0
       }
     },
     {
       "claim": "The method includes a video-specific frame-length bias fix to reduce spurious attribution to longer clips (Section 3.3).",
       "challenge_claim_sha256": "7a535f3a1dbe7198f27fdf3dfda0d03f6481f16a5ec10e9f0b6d55a9b5ecc78d",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "toy-scale measured gradient norms",
       "evidence_details": {
+        "clip_lengths": [
+          8,
+          16,
+          32
+        ],
         "raw_scores": [
-          12.5,
-          25.0,
-          50.0
+          101.5599,
+          141.8283,
+          205.0041
         ],
         "normalized_scores": [
-          19.094065395649334,
-          27.003086243366084,
-          38.18813079129867
+          155.1353,
+          153.1921,
+          156.5745
         ],
-        "frame_bias_fixed": true
+        "raw_growth_ratio_longest_vs_shortest": 2.02,
+        "normalized_growth_ratio_longest_vs_shortest": 1.01
       }
     },
     {
       "claim": "Fine-tuning on Motive-selected data improves VBench motion smoothness and dynamic degree over baselines while using only a fraction of the training data (Table 1).",
       "challenge_claim_sha256": "5717ff1efe49e55f86e7f9ad9a42b8f772cff43145b61db7d6287249e28af09c",
-      "status": "verified",
-      "evidence_details": {
-        "motive_motion_smoothness": 0.86,
-        "baseline_motion_smoothness": 0.7175,
-        "improvement_percentage": 19.860627177700344,
-        "vbench_improved": true
-      }
+      "status": "unreplicated",
+      "reason": "requires fine-tuning a video generation model on Motive-selected data and running the VBench harness; not feasible in this CPU-only package and not fabricated"
     },
     {
       "claim": "Human evaluation reports a 74.1% preference win rate for Motive-selected fine-tuning compared with the pretrained base model (Table 2).",
       "challenge_claim_sha256": "c42b1b15ccdaa6a62b2d93bb2865f7741b9223dec64af43daa615b221d545aa5",
-      "status": "verified",
-      "evidence_details": {
-        "win_rate_percentage": 74.1,
-        "paper_target_percentage": 74.1,
-        "matches_paper": true
-      }
+      "status": "unreplicated",
+      "reason": "a human pairwise-preference study requires human raters; it cannot be reproduced computationally and must not be synthesized"
     },
     {
       "claim": "Motive computes motion-specific influence by detecting motion, forming motion-magnitude patches, and applying motion masks to gradient-based data attribution (Figure 1)",
       "challenge_claim_sha256": "3f4ea59bc4d1902358ebcf59440b816c22b24a2a3cff44e0e000b31c25d736f5",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "toy-scale ground-truth videos",
       "evidence_details": {
-        "motion_patches_formed": true,
-        "mask_patch_sum": 120.0615005493164
+        "mean_mask_in_moving_patches": 0.5488,
+        "mean_mask_in_static_patches": 0.0,
+        "fraction_of_mask_weight_on_true_motion": 1.0
       }
     },
     {
       "claim": "Motive-selected fine-tuning data improves VBench motion smoothness and dynamic degree compared with random and baseline data-selection methods (Table 1)",
       "challenge_claim_sha256": "b791befb7947d259a5936358f6618bb77ecc93f3c563c003c17cc4ab4687c1b1",
-      "status": "verified",
-      "evidence_details": {
-        "motive_motion_smoothness": 0.86,
-        "baseline_motion_smoothness": 0.7175,
-        "improvement_percentage": 19.860627177700344,
-        "vbench_improved": true
-      }
+      "status": "unreplicated",
+      "reason": "requires fine-tuning a video generation model on Motive-selected data and running the VBench harness; not feasible in this CPU-only package and not fabricated"
     },
     {
       "claim": "Human pairwise evaluation reports a 74.1% preference win rate for Motive-selected fine-tuning over the pretrained base model (Table 2)",
       "challenge_claim_sha256": "955fbe7fdbeb7fffd0ba876b0255a7cbeeab8954a9ba829554179377f58ba3b6",
-      "status": "verified",
-      "evidence_details": {
-        "win_rate_percentage": 74.1,
-        "paper_target_percentage": 74.1,
-        "matches_paper": true
-      }
+      "status": "unreplicated",
+      "reason": "a human pairwise-preference study requires human raters; it cannot be reproduced computationally and must not be synthesized"
     },
     {
       "claim": "Frame-length normalization prevents attribution rankings from being biased toward longer clips and yields more coherent top-ranked motion samples (Figure 4)",
       "challenge_claim_sha256": "5f66baf089fb2e5f58e7e8e8b064fab2782282c721cdba8a1d47c2be8a59ed3a",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "toy-scale ranking with known ground truth",
       "evidence_details": {
-        "raw_ranks": [
-          2,
-          1,
-          0
+        "pair_raw_scores": [
+          121.3788,
+          186.0043
         ],
-        "normalized_ranks": [
-          2,
-          1,
-          0
+        "pair_normalized_scores": [
+          191.9168,
+          147.0493
         ],
-        "bias_prevented": true
+        "raw_ranking": [
+          "weak_long",
+          "strong_short"
+        ],
+        "normalized_ranking": [
+          "strong_short",
+          "weak_long"
+        ]
       }
     },
     {
       "claim": "Motive's influence scores are not merely selecting high-motion clips; influential clips are those predicted to improve target motion dynamics (Figure 6)",
       "challenge_claim_sha256": "efb00940faba0794a14bbfa17a7c2fd436d09282fd8313e8eab56799413b8855",
-      "status": "verified",
+      "status": "partially_reproduced",
+      "scope": "toy-scale proxy influence",
       "evidence_details": {
-        "dynamics_distinct_from_motion": true,
-        "target_motion_dynamics_verified": true
+        "coherent_clip_motion_energy": 0.0258,
+        "jitter_clip_motion_energy": 0.1667,
+        "jitter_has_higher_raw_motion": true,
+        "coherent_influence_cosine": 0.6433,
+        "jitter_influence_cosine": 0.1649,
+        "influence_tracks_dynamics_not_magnitude": true
       }
     }
   ],
-  "all_target_claims_verified": true
+  "all_target_claims_verified": false,
+  "provenance": "all numbers computed by generate_evidence.py with pinned seeds; fabricated VBench and human-preference values removed 2026-08-01"
 }
