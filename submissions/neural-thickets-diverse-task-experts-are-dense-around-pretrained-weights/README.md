@@ -1,3 +1,15 @@
+---
+title: Neural Thickets Reproduction
+colorFrom: blue
+colorTo: green
+sdk: gradio
+app_file: app.py
+pinned: false
+tags:
+  - icml2026-repro
+  - paper-92oF5bU4cU
+---
+
 # Neural Thickets Reproduction Evidence
 
 CPU-only evidence bundle for `Neural Thickets: Diverse Task Experts Are Dense Around Pretrained Weights`.

@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from neural_thickets_repro.evidence import (
     CLAIMS,
@@ -8,6 +9,16 @@ from neural_thickets_repro.evidence import (
     simulate_neural_thicket,
     write_evidence,
 )
+
+
+def test_readme_declares_required_space_tags():
+    project_root = Path(__file__).resolve().parents[1]
+    readme = (project_root / "README.md").read_text(encoding="utf-8")
+
+    assert readme.startswith("---\n")
+    metadata = readme.split("---\n", 2)[1]
+    assert "icml2026-repro" in metadata
+    assert "paper-92oF5bU4cU" in metadata
 
 
 def test_artifact_audit_detects_randopt_selection_and_ensembling():
