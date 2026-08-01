@@ -9,7 +9,7 @@ app_file: app.py
 pinned: false
 tags:
 - icml2026-repro
-- paper:4yzY0GFIJj
+- paper-4yzY0GFIJj
 - challenge:ICML-2026-agent-repro
 ---
 
