@@ -1,4 +1,20 @@
+---
+title: video-SALMONN S Reproduction
+emoji: 🎥
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: 5.20.0
+app_file: app.py
+pinned: false
+license: mit
+tags:
+- icml2026-repro
+- paper-tJP3FxzSPs
+---
+
 # video-SALMONN S Reproduction
+
 
 This directory contains the reproducible evidence, evaluation scripts, unit tests, and logbook for:
 
