@@ -739,3 +739,10 @@ submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-ne
 submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/.pytest_cache/
 submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/**/__pycache__/
 submissions/foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks/**/*.egg-info/
+
+!submissions/chain-of-thought-reasoning-in-the-wild-is-not-always-faithful/
+!submissions/chain-of-thought-reasoning-in-the-wild-is-not-always-faithful/**
+submissions/chain-of-thought-reasoning-in-the-wild-is-not-always-faithful/.venv/
+submissions/chain-of-thought-reasoning-in-the-wild-is-not-always-faithful/.pytest_cache/
+submissions/chain-of-thought-reasoning-in-the-wild-is-not-always-faithful/**/__pycache__/
+submissions/chain-of-thought-reasoning-in-the-wild-is-not-always-faithful/**/*.egg-info/

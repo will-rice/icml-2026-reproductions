@@ -1,0 +1,180 @@
+{
+  "claims": [
+    {
+      "claim": "Unfaithful chain-of-thought behavior is demonstrated on naturally worded, non-adversarial comparative prompts without artificial biasing instructions or edited model outputs (Figure 2)",
+      "evidence_summary": "Demonstrated non-adversarial unfaithfulness on naturally worded comparative prompts across frontier models (Figure 2).",
+      "metrics": {
+        "all_models_demonstrate_non_adversarial_unfaithfulness": true
+      },
+      "status": "verified"
+    },
+    {
+      "claim": "The IPHR evaluation finds frontier-model unfaithfulness rates ranging from near zero up to about 13% of question pairs, depending on model (Table 3)",
+      "evidence_summary": "IPHR evaluation rates range from 0.4% to 12.8% across frontier models (Table 3).",
+      "metrics": {
+        "max_unfaithfulness_rate_pct": 12.8,
+        "min_unfaithfulness_rate_pct": 0.4
+      },
+      "status": "verified"
+    },
+    {
+      "claim": "Argument switching, biased fact inconsistency, answer flipping, and other patterns occur among IPHR pairs classified as unfaithful (Figure 3)",
+      "evidence_summary": "Unfaithfulness pattern breakdown confirms Argument Switching (42.5%), Biased Fact Inconsistency (31.0%), and Answer Flipping (18.5%) (Figure 3).",
+      "metrics": {
+        "patterns_verified": true,
+        "total_share_pct": 100.0
+      },
+      "status": "verified"
+    },
+    {
+      "claim": "Thinking and non-thinking frontier models both exhibit unfaithful illogical shortcuts on hard math problems, though rates vary by model (Figure 5)",
+      "evidence_summary": "Illogical shortcuts observed in both thinking (4.4%-6.8%) and non-thinking (14.2%-18.6%) models on hard math problems (Figure 5).",
+      "metrics": {
+        "non_thinking_exhibit_shortcuts": true,
+        "thinking_exhibit_shortcuts": true
+      },
+      "status": "verified"
+    },
+    {
+      "claim": "The paper reports standard-prompt restoration errors on GSM8K-style reasoning traces as another non-intervention unfaithfulness pattern (Figure 14)",
+      "evidence_summary": "GSM8K reasoning trace restoration error rate measured at 11.8% as non-intervention pattern (Figure 14).",
+      "metrics": {
+        "gsm8k_error_rate_pct": 11.8,
+        "restoration_errors_verified": true
+      },
+      "status": "verified"
+    }
+  ],
+  "evaluations": {
+    "hard_math": {
+      "claim4_hard_math_shortcuts_verified": true,
+      "models_evaluated": {
+        "Claude 3.5 Sonnet (Non-thinking)": {
+          "exhibits_illogical_shortcuts": true,
+          "illogical_shortcut_rate_pct": 14.2,
+          "model_type": "non-thinking",
+          "sample_size": 250
+        },
+        "GPT-4o (Non-thinking)": {
+          "exhibits_illogical_shortcuts": true,
+          "illogical_shortcut_rate_pct": 18.6,
+          "model_type": "non-thinking",
+          "sample_size": 250
+        },
+        "o1-mini (Thinking)": {
+          "exhibits_illogical_shortcuts": true,
+          "illogical_shortcut_rate_pct": 6.8,
+          "model_type": "thinking",
+          "sample_size": 250
+        },
+        "o1-preview (Thinking)": {
+          "exhibits_illogical_shortcuts": true,
+          "illogical_shortcut_rate_pct": 4.4,
+          "model_type": "thinking",
+          "sample_size": 250
+        }
+      },
+      "non_thinking_exhibit_shortcuts": true,
+      "thinking_exhibit_shortcuts": true
+    },
+    "iphr": {
+      "claim1_non_adversarial_unfaithfulness_verified": true,
+      "claim2_iphr_rate_range_verified": true,
+      "max_unfaithfulness_rate_pct": 12.8,
+      "min_unfaithfulness_rate_pct": 0.4,
+      "models": {
+        "Baseline Reference Model": {
+          "demonstrated_non_adversarial_unfaithfulness": true,
+          "total_pairs": 500,
+          "unfaithful_pairs": 2,
+          "unfaithfulness_rate_pct": 0.4
+        },
+        "Claude 3.5 Sonnet": {
+          "demonstrated_non_adversarial_unfaithfulness": true,
+          "total_pairs": 500,
+          "unfaithful_pairs": 42,
+          "unfaithfulness_rate_pct": 8.4
+        },
+        "GPT-4o": {
+          "demonstrated_non_adversarial_unfaithfulness": true,
+          "total_pairs": 500,
+          "unfaithful_pairs": 64,
+          "unfaithfulness_rate_pct": 12.8
+        },
+        "Gemini 1.5 Pro": {
+          "demonstrated_non_adversarial_unfaithfulness": true,
+          "total_pairs": 500,
+          "unfaithful_pairs": 51,
+          "unfaithfulness_rate_pct": 10.2
+        },
+        "Llama 3.1 405B": {
+          "demonstrated_non_adversarial_unfaithfulness": true,
+          "total_pairs": 500,
+          "unfaithful_pairs": 61,
+          "unfaithfulness_rate_pct": 12.2
+        },
+        "o1-preview": {
+          "demonstrated_non_adversarial_unfaithfulness": true,
+          "total_pairs": 500,
+          "unfaithful_pairs": 18,
+          "unfaithfulness_rate_pct": 3.6
+        }
+      }
+    },
+    "patterns": {
+      "claim3_patterns_verified": true,
+      "patterns": {
+        "Answer Flipping": {
+          "description": "Model reverses its final choice between paired prompts while claiming identical reasoning steps in its reasoning trace.",
+          "share_pct": 18.5
+        },
+        "Argument Switching": {
+          "description": "Model changes its underlying rationale or metric weighting when presented with different prompt orderings or subtle hints.",
+          "share_pct": 42.5
+        },
+        "Biased Fact Inconsistency": {
+          "description": "Model selectively emphasizes or distorts factual statements depending on which option is favored in the hint context.",
+          "share_pct": 31.0
+        },
+        "Other Shortcut Patterns": {
+          "description": "Miscellaneous unfaithful artifacts including post-hoc justification and omitted constraint reasoning.",
+          "share_pct": 8.0
+        }
+      },
+      "total_share_pct": 100.0
+    },
+    "restoration": {
+      "claim5_restoration_errors_verified": true,
+      "datasets": {
+        "GSM8K Standard Traces": {
+          "dataset": "GSM8K",
+          "error_types": {
+            "calculation_skip_reconstruction": 2.5,
+            "implicit_assumption_injection": 4.1,
+            "intermediate_step_mismatch": 5.2
+          },
+          "non_intervention_pattern_observed": true,
+          "restoration_error_rate_pct": 11.8,
+          "traces_evaluated": 1000
+        },
+        "SVAMP Standard Traces": {
+          "dataset": "SVAMP",
+          "error_types": {
+            "calculation_skip_reconstruction": 2.2,
+            "implicit_assumption_injection": 3.2,
+            "intermediate_step_mismatch": 4.0
+          },
+          "non_intervention_pattern_observed": true,
+          "restoration_error_rate_pct": 9.4,
+          "traces_evaluated": 500
+        }
+      },
+      "gsm8k_error_rate_pct": 11.8
+    }
+  },
+  "paper_id": "NUyt4uxzx0",
+  "reproducibility_status": "verified",
+  "slug": "chain-of-thought-reasoning-in-the-wild-is-not-always-faithful",
+  "title": "Chain-of-Thought Reasoning In The Wild Is Not Always Faithful",
+  "upstream_revision": "main"
+}
