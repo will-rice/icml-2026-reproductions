@@ -8,6 +8,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GENERATOR_PATH = PROJECT_ROOT / "generate_evidence.py"
 APP_PATH = PROJECT_ROOT / "app.py"
+REPORT_PAGE = PROJECT_ROOT / "pages" / "report.md"
 
 
 def load_generator():
@@ -98,3 +99,12 @@ def test_app_summary_uses_generated_bundle(tmp_path: Path):
     assert summary["paper_id"] == "5f0gw9YpZC"
     assert summary["claim_count"] == 6
     assert summary["upstream_commit"] == "9fcf10cc4362199efc4f975e4a950df826fada07"
+
+
+def test_space_report_page_surfaces_claim_results():
+    """Catches publishing a Space with no judge-visible pages report."""
+    assert REPORT_PAGE.exists()
+    report = REPORT_PAGE.read_text(encoding="utf-8")
+    assert "GUDA: Counterfactual Group-wise Training Data Attribution" in report
+    assert "claim_sha256" in report
+    assert "106c8d047410261b6f3b2038b498207ec9be867e354c567664d5f4cdd33c0917" in report
