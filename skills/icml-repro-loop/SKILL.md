@@ -77,7 +77,17 @@ For every iteration:
 
 1. Inspect `state/repro-loop.json`. For schema-v3, run only `migrate-v6 --dry-run` and stop until the controller explicitly authorizes the real migration; no schema-v6 lifecycle command is valid before it. After migration, resume the schema-v6 index and every named shard.
 2. Run raw `refresh-live`, inspect its immutable result through `show-snapshot`, and assess pinned `challenge.json` candidates from primary artifacts. Bare challenge metadata never supplies feasibility, score, cost, targets, or an upstream pin. Write assessment JSON following [selection-rubric.md](references/selection-rubric.md), bind each target to exact challenge text and SHA-256, then run `refresh-live --assessments-json PATH`. Revision drift requires a new raw refresh and assessment.
-3. Before selecting new work, inspect every active released blocked attempt.
+3. Endgame saturation rule: count publish-ready lanes (phase `validated`
+   plus `blocked` with `blocked_from: validated`). While that count is at
+   or above the daily Hugging Face Space-creation quota (20), selecting a
+   NEW paper is forbidden — the backlog already saturates publishing
+   capacity. Spend the iteration instead on, in priority order: (a)
+   reclaiming and publishing a publish-ready lane if quota remains today;
+   (b) an improvement cycle on a judged attempt with a correctable
+   zero/toy/inconclusive verdict (real computed evidence, rendered into
+   the served pages); (c) preparing improvements in an isolated clone for
+   a lane whose submission is pending judgment, without touching its live
+   Space. Before selecting new work, inspect every active released blocked attempt.
    If its recorded blocker is resolved or its `next_action` is actionable,
    explicitly reclaim the highest-priority eligible attempt with
    `claim-next --reclaim-attempt-id ATTEMPT`, the fresh assessed immutable

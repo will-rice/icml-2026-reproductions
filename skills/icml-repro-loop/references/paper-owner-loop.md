@@ -2,6 +2,13 @@
 
 One persistent paper-owner worker owns one fenced attempt per iteration. After every mutation, reread its attempt shard and live lease. Never infer owner, fence, phase, Space SHA, or verdict. A submitted or judging attempt remains the worker's current paper; the worker may not claim another paper until the iteration is released.
 
+Endgame saturation: while publish-ready lanes (`validated` plus
+`blocked_from: validated`) number at least the daily Space-creation quota
+(20), do not select new papers — publish the backlog as quota allows and
+run improvement cycles on judged zero-score attempts instead. Improvement
+evidence must be computed, deterministic, and rendered into the served
+`pages/*.md`; honest `unreplicated` beats asserted success.
+
 Before selecting new work, inspect every active released blocked attempt
 against the fresh assessed immutable snapshot. If its recorded blocker is
 resolved or its `next_action` is actionable, explicitly reclaim the
