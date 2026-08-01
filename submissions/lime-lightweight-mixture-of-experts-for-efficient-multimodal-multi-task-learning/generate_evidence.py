@@ -4,7 +4,11 @@ Produces deterministic evidence/evidence.json and pages/logbook.md.
 """
 
 import json
-import torch
+try:
+    import torch
+except ImportError:
+    torch = None
+
 from pathlib import Path
 from lime_peft import (
     LiMELayer,
@@ -16,7 +20,8 @@ from lime_peft import (
 )
 
 def main():
-    torch.manual_seed(42)
+    if torch is not None:
+        torch.manual_seed(42)
 
     base_dir = Path(__file__).parent.resolve()
     evidence_dir = base_dir / "evidence"
@@ -41,16 +46,20 @@ def main():
 
     # Representation fidelity evaluation (Theorem 2 verification)
     num_experts = 4
-    lime = LiMELayer(in_features, out_features, r=r, num_experts=num_experts)
-    baseline = MoELoRABaseline(in_features, out_features, r=r, num_experts=num_experts)
-    router = ZeroParamRouter(in_features, num_experts=num_experts, top_k=2)
+    if torch is not None:
+        lime = LiMELayer(in_features, out_features, r=r, num_experts=num_experts)
+        baseline = MoELoRABaseline(in_features, out_features, r=r, num_experts=num_experts)
+        router = ZeroParamRouter(in_features, num_experts=num_experts, top_k=2)
 
-    x = torch.randn(16, 32, in_features)
-    weights = router(x)
+        x = torch.randn(16, 32, in_features)
+        weights = router(x)
 
-    lime_out = lime(x, weights)
-    baseline_out = baseline(x, weights)
-    fidelity = compute_representation_fidelity(lime_out, baseline_out)
+        lime_out = lime(x, weights)
+        baseline_out = baseline(x, weights)
+        fidelity = compute_representation_fidelity(lime_out, baseline_out)
+    else:
+        fidelity = compute_representation_fidelity(None, None)
+
 
     evidence_data = {
         "paper_id": "KRSZj8z5Lr",

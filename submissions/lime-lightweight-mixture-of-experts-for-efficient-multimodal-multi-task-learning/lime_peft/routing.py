@@ -1,12 +1,23 @@
+from __future__ import annotations
+
 """
 Zero-parameter routing mechanisms and adaptive top-k expert selection.
 """
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
-class ZeroParamRouter(nn.Module):
+try:
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+    _Module = nn.Module
+except ImportError:
+    torch = None
+    nn = None
+    F = None
+    _Module = object
+
+class ZeroParamRouter(_Module):
+
     """
     Zero-parameter router using fixed reference prototypes / token similarity.
     Does NOT introduce trainable router parameters.

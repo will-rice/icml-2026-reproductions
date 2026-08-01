@@ -1,12 +1,23 @@
+from __future__ import annotations
+
 """
 Core LiME Layer implementation (Shared PEFT Adapter + Expert Modulation Vectors).
 """
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
-class LiMELayer(nn.Module):
+try:
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+    _Module = nn.Module
+except ImportError:
+    torch = None
+    nn = None
+    F = None
+    _Module = object
+
+class LiMELayer(_Module):
+
     """
     LiME Layer: Shares a single LoRA adapter (A, B) across all experts
     and applies lightweight expert-specific modulation vectors (m_e).
@@ -47,7 +58,7 @@ class LiMELayer(nn.Module):
         return out
 
 
-class MoELoRABaseline(nn.Module):
+class MoELoRABaseline(_Module):
     """
     Standard MoE-LoRA baseline replicating a full LoRA adapter per expert.
     """
