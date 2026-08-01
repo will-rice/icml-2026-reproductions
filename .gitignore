@@ -124,8 +124,5 @@ submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augm
 !submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/requirements.txt
 !submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/uv.lock
 !submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/evidence.json
-submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/.venv/
-submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/.pytest_cache/
-submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/**/__pycache__/
 
 validation-manifest.json
