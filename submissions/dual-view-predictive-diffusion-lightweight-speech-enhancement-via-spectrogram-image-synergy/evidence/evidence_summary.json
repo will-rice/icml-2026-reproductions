@@ -7,43 +7,72 @@
     {
       "claim": "DVPD uses a dual-branch predictive/diffusion architecture that treats spectrograms as both acoustic frequency-domain structures and visual textures (Figure 1; Figure 2).",
       "challenge_claim_sha256": "e65804401638b4d78d121891377320c7e9c30b628db6ee5398fdbd99f1acf8bf",
-      "status": "verified",
-      "evidence": "Verified dual-branch predictive and diffusion network forward pass and interaction module."
+      "status": "partially_reproduced",
+      "scope": "small-scale architecture realization",
+      "evidence": {
+        "architecture": {
+          "forward_output_matches_input_shape": true,
+          "toy_model_parameters": 378049,
+          "toy_model_conv_macs_per_forward": 8014950400,
+          "comparable_to_paper_models": false
+        },
+        "cross_branch_coupling": {
+          "acoustic_response_to_visual_perturbation": 1.2392,
+          "visual_response_to_acoustic_perturbation": 0.7073
+        }
+      }
     },
     {
       "claim": "The FANC encoder preserves low-frequency harmonics while pruning high-frequency redundancy using frequency-adaptive non-uniform compression (Section 3.3).",
       "challenge_claim_sha256": "666d20e379eaf3e6276e53c997da0973b34e9c7e7adda53320286899edce1bfe",
-      "status": "verified",
-      "evidence": "FANC non-uniform compression encoder verified to maintain 64 low-frequency bins while compressing high-frequency bins."
+      "status": "partially_reproduced",
+      "scope": "measured resolution and compute allocation per band",
+      "evidence": {
+        "low_band_input_rows": 64,
+        "low_band_representation_rows": 64,
+        "high_band_input_rows": 193,
+        "high_band_representation_rows": 97,
+        "high_band_compression_factor": 1.99,
+        "macs_per_input_row_low_band": 57600,
+        "macs_per_input_row_high_band": 48249
+      }
     },
     {
       "claim": "DVPD attains state-of-the-art speech enhancement quality on WSJ0-UNI while using 35% of PGUSE parameters and 40% of PGUSE inference MACs (Table 1).",
       "challenge_claim_sha256": "736a19fc99850eaea352bfbad35aa1a6f2eb01bfa6945e03e1dddb7c1b858d7d",
-      "status": "verified",
-      "evidence": "Parameter ratio vs PGUSE: 2.6% (<= 35%). MACs ratio vs PGUSE: 39.5% (<= 40%)."
+      "status": "unreplicated",
+      "reason": "requires faithful full-scale DVPD and PGUSE implementations trained and evaluated on WSJ0-UNI; the small model here is not comparable, and no enhancement-quality metric on real speech exists in this package"
     },
     {
       "claim": "Training only on WSJ0-UNI, DVPD generalizes across multiple out-of-distribution speech enhancement benchmarks better than compared predictive and diffusion baselines (Figure 5).",
       "challenge_claim_sha256": "6488b252bfc515bc18780348702c196bb44a141fc7e992df1f5eed8852ce2665",
-      "status": "verified",
-      "evidence": "OOD speech enhancement benchmark evaluation setup and zero-shot generalization verified across evaluation suites."
+      "status": "unreplicated",
+      "reason": "requires training on WSJ0-UNI and evaluating on the OOD benchmark suite; not feasible in this CPU-only package"
     },
     {
       "claim": "DVPD improves over compared methods on VBDMD speech denoising and VBDMD-SR speech super-resolution evaluations (Table 2; Table 3).",
       "challenge_claim_sha256": "5abd80ace16b92c56ecc11fbcb636fa728f1e220853c08e5282995effcca1428",
-      "status": "verified",
-      "evidence": "VBDMD denoising and VBDMD-SR super-resolution performance metric evaluations verified."
+      "status": "unreplicated",
+      "reason": "requires the VBDMD and VBDMD-SR corpora and trained baselines; not available to this package"
     },
     {
       "claim": "Ablations show that FANC, the frequency-aware interaction module, LISA, and the TLB strategy each contribute to DVPD performance (Table 4; Table 5).",
       "challenge_claim_sha256": "a9b3354cc3a98a479cb07b0f866b1ccfee08e54c6768b168d637ec85b521f50d",
-      "status": "verified",
-      "evidence": "Modular ablation checks confirmed active contributions of FANC, FrequencyAwareInteraction, LISA, and TLBStrategy."
+      "status": "partially_reproduced",
+      "scope": "toy-scale trained ablation of three of four components; TLB is not wired into this package's forward pass and could not be ablated",
+      "evidence": {
+        "heldout_noisy_input_mse": 0.08933,
+        "heldout_denoised_mse_by_variant": {
+          "full": 0.00646,
+          "no_interaction": 0.0068,
+          "no_lisa": 0.01401,
+          "uniform_encoder": 0.00378
+        },
+        "tlb_note": "TLBStrategy exists in this package but is not connected to the forward pass; its ablation cannot be trained here"
+      },
+      "observation": "at toy scale, removing no_interaction, no_lisa worsens held-out MSE (supporting their contribution), while removing uniform_encoder improves it - the FANC contribution claim is not supported at this scale; TLB could not be ablated"
     }
   ],
-  "metrics": {
-    "param_ratio": 0.025549999999999996,
-    "macs_ratio": 0.3951,
-    "forward_pass_success": true
-  }
+  "all_target_claims_verified": false,
+  "provenance": "all numbers computed by generate_evidence.py with pinned seeds; fabricated MACs figure and prose-verified benchmark claims removed 2026-08-01"
 }

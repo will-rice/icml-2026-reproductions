@@ -6,8 +6,14 @@ from .model import (
     FrequencyAwareInteraction,
     LISAModule,
     TLBStrategy,
-    compute_model_efficiency,
-    run_dvpd_verification,
+    count_conv_macs,
+    count_parameters,
+    experiment_architecture_and_macs,
+    experiment_fanc_band_allocation,
+    experiment_interaction_coupling,
+    experiment_toy_ablation,
+    make_toy_denoising_batch,
+    train_denoiser,
 )
 
 __all__ = [
@@ -16,6 +22,12 @@ __all__ = [
     "FrequencyAwareInteraction",
     "LISAModule",
     "TLBStrategy",
-    "compute_model_efficiency",
-    "run_dvpd_verification",
+    "count_conv_macs",
+    "count_parameters",
+    "experiment_architecture_and_macs",
+    "experiment_fanc_band_allocation",
+    "experiment_interaction_coupling",
+    "experiment_toy_ablation",
+    "make_toy_denoising_batch",
+    "train_denoiser",
 ]
