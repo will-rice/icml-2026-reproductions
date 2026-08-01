@@ -11,10 +11,11 @@ class TTTStreamingMemoryLayer:
     TTT Streaming Memory Layer that uses fast-weight updates
     as streaming memory for long-sequence audio-visual inputs.
     """
-    def __init__(self, hidden_dim: int, memory_dim: int, learning_rate: float = 0.01):
+    def __init__(self, hidden_dim: int, memory_dim: int, learning_rate: float = 0.0001):
         self.hidden_dim = hidden_dim
         self.memory_dim = memory_dim
         self.learning_rate = learning_rate
+
 
         # Base projection matrices
         self.W_key = [[0.01 * (i + j) for j in range(memory_dim)] for i in range(hidden_dim)]

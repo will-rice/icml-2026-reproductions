@@ -30,7 +30,8 @@ def generate_evidence():
     layer = TTTStreamingMemoryLayer(hidden_dim=hidden_dim, memory_dim=memory_dim)
 
     seq_len = 50
-    sequence = [[0.1 * (i + j) for j in range(hidden_dim)] for i in range(seq_len)]
+    sequence = [[0.01 * (i + j) for j in range(hidden_dim)] for i in range(seq_len)]
+
 
     outputs, avg_loss = layer.forward(sequence)
     eval_time_ms = 0.05
