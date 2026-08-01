@@ -114,14 +114,14 @@ def factorize_admm_nanoquant(
     Args:
         W: Weight matrix to decompose
         i_norm: Input norm
-        o_norm: Output norm  
+        o_norm: Output norm
         mid_rank: Middle rank for factorization
         outer_iters: Number of outer iterations
         inner_iters: Number of inner iterations
         reg: Regularization parameter
         is_transpose: Whether to transpose the weight matrix
         eps: Small epsilon value to prevent division by zero and numerical instability
-        rho_scheduler: Rho scheduler name. Available: 
+        rho_scheduler: Rho scheduler name. Available:
                        ['cubic', 'linear', 'logistic', 'exp_decay', 'exp_growth']
         print_admm_steps: Whether to print intermediate ADMM steps
     """

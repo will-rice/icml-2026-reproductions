@@ -1,7 +1,7 @@
 # Reproduction Report: Simultaneous Speech-to-Speech Translation Without Aligned Data (Hibiki-Zero)
 
-**Paper ID:** `76XSBLdBdg`  
-**Authors:** Tom Labiausse, Romain Fabre, Yannick Estève, Alexandre Défossez, Neil Zeghidour  
+**Paper ID:** `76XSBLdBdg`
+**Authors:** Tom Labiausse, Romain Fabre, Yannick Estève, Alexandre Défossez, Neil Zeghidour
 **Repository:** `submissions/simultaneous-speech-to-speech-translation-without-aligned-data`
 
 ---
