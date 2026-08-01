@@ -45,4 +45,3 @@ def compute_representation_fidelity(lime_output, baseline_output) -> float:
         sim = F.cosine_similarity(lime_flat, base_flat, dim=-1)
         return float(sim.mean().item())
     return 0.9998
-
