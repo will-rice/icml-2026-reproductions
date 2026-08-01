@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "relaycaching-accelerating-llm-collaboration-via-decoding-kv-cache-reuse"
+version = "0.1.0"
+description = "Reproduction of RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "streamlit",
+]

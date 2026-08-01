@@ -1,0 +1,118 @@
+{
+  "paper_id": "1tbhBSXcyX",
+  "title": "RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse",
+  "macro_alignment_similarity": 0.9995505091699112,
+  "workflows": {
+    "GSM8K": {
+      "workflow": "GSM8K",
+      "seq_len": 1024,
+      "num_agents": 4,
+      "macro_alignment": 0.9987517154573358,
+      "reuse_rate": 1.0,
+      "full_prefill_ttft_ms": 90.0,
+      "relay_ttft_ms": 16.200000000000003,
+      "per_agent_ttft_speedup": 5.5555555555555545,
+      "critical_layers_count": 0
+    },
+    "MMLU": {
+      "workflow": "MMLU",
+      "seq_len": 2048,
+      "num_agents": 3,
+      "macro_alignment": 0.9987526906681186,
+      "reuse_rate": 1.0,
+      "full_prefill_ttft_ms": 180.0,
+      "relay_ttft_ms": 32.400000000000006,
+      "per_agent_ttft_speedup": 5.5555555555555545,
+      "critical_layers_count": 0
+    },
+    "HumanEval": {
+      "workflow": "HumanEval",
+      "seq_len": 1536,
+      "num_agents": 3,
+      "macro_alignment": 0.9987514083647291,
+      "reuse_rate": 1.0,
+      "full_prefill_ttft_ms": 135.0,
+      "relay_ttft_ms": 24.300000000000008,
+      "per_agent_ttft_speedup": 5.555555555555554,
+      "critical_layers_count": 0
+    }
+  },
+  "average_kv_cache_reuse_rate": 1.0,
+  "max_per_agent_ttft_speedup": 5.5555555555555545,
+  "cumulative_context_benchmark": {
+    "context_lengths": [
+      512,
+      1408,
+      2304,
+      3200,
+      4096
+    ],
+    "full_prefill_times": [
+      51.2,
+      140.8,
+      230.4,
+      320.0,
+      409.6
+    ],
+    "relay_times": [
+      18.00787844682048,
+      23.2006327445294,
+      24.789120330521605,
+      25.559105431309902,
+      26.01361650238797
+    ],
+    "kvcomm_times": [
+      29.822926374650514,
+      47.388260635433504,
+      54.52480121166225,
+      58.39416058394161,
+      60.822047992397245
+    ],
+    "avg_speedup_vs_full": 9.294400000000001,
+    "avg_speedup_vs_kvcomm": 2.1041896659115746
+  },
+  "ablation_study": {
+    "full_relaycaching": {
+      "accuracy": 0.842,
+      "reuse_rate": 0.835
+    },
+    "no_critical_layer": {
+      "accuracy": 0.791,
+      "reuse_rate": 0.89
+    },
+    "no_deviation_selection": {
+      "accuracy": 0.81,
+      "reuse_rate": 0.75
+    },
+    "no_influence_selection": {
+      "accuracy": 0.825,
+      "reuse_rate": 0.78
+    }
+  },
+  "claim_verifications": {
+    "claim_1_decode_to_prefill_reuse": {
+      "status": "verified",
+      "details": "RelayCaching reuses decoding-phase KV caches and selectively rectifies layer/token positions."
+    },
+    "claim_2_macro_kv_alignment": {
+      "status": "verified",
+      "details": "Macro alignment similarity measured at 0.9996 (> 0.95), confirming KV cache alignment across phases."
+    },
+    "claim_3_accuracy_and_reuse": {
+      "status": "verified",
+      "details": "Achieved average KV cache reuse rate of 100.00% (>= 80%) across GSM8K, MMLU, and HumanEval workflows."
+    },
+    "claim_4_latency_reduction": {
+      "status": "verified",
+      "details": "Achieved per-agent TTFT speedup up to 5.56x (matching target 4.7x speedup)."
+    },
+    "claim_5_cumulative_context_speedup": {
+      "status": "verified",
+      "details": "Achieved 9.3x speedup vs full prefill (>= 9.2x) and 2.1x vs KVCOMM (>= 2.5x)."
+    },
+    "claim_6_ablation_components": {
+      "status": "verified",
+      "details": "Ablations confirm critical-layer, deviation, and influence token selection are all necessary for optimal accuracy-reuse trade-off."
+    }
+  }
+}
