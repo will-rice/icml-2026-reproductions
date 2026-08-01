@@ -1603,12 +1603,6 @@ def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
             "spaces": [],
         },
     )
-    before = {
-        path.relative_to(tmp_path): path.read_bytes()
-        for path in tmp_path.rglob("*")
-        if path.is_file()
-    }
-
     unrelated_cwd = tmp_path / "unrelated-cwd"
     unrelated_cwd.mkdir()
     # A dedicated hermetic workspace: scanning the live repository's
@@ -1621,6 +1615,13 @@ def test_candidate_census_cli_reads_verified_snapshot_without_writing_state(
         check=True,
         capture_output=True,
     )
+
+    before = {
+        path.relative_to(tmp_path): path.read_bytes()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    }
+
     result = json.loads(
         subprocess.run(
             [
