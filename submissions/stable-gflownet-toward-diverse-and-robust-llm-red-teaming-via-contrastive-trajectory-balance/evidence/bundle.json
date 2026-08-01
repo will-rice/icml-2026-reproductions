@@ -1,0 +1,44 @@
+{
+  "paper_id": "OyPE1ganBR",
+  "title": "Stable-GFlowNet: Toward Diverse and Robust LLM Red-Teaming via Contrastive Trajectory Balance",
+  "slug": "stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contrastive-trajectory-balance",
+  "evidence": [
+    {
+      "claim": "Stable-GFN replaces explicit GFlowNet partition-function estimation with Contrastive Trajectory Balance based on pairwise trajectory comparisons (Section 4).",
+      "claim_sha256": "cf1ec75bfac2a855a3fed5c2bcc5729f1a9d281336da54cd64d4a6a0e4d78ec6",
+      "status": "verified",
+      "evidence": "Contrastive Trajectory Balance (CTB) loss evaluated to 4.1667 across 6.0 pairwise comparisons without requiring explicit partition-function Z estimation (explicit_z_used=False, partition_function_params=0)."
+    },
+    {
+      "claim": "The method adds Noisy Gradient Pruning to filter uninformative reward differences under noisy red-teaming rewards (Section 4).",
+      "claim_sha256": "ceccfa664bf91b4cbc4763640f3f92ee4a6623e0c312be7c9705896bbdb4d03d",
+      "status": "verified",
+      "evidence": "Noisy Gradient Pruning (NGP) at threshold tau=0.1 successfully filtered uninformative reward differences, pruning 20.0% of total trajectory pairs (8/10 pairs kept)."
+    },
+    {
+      "claim": "The Min-K Fluency Stabilizer penalizes non-fluent out-of-distribution prompts to reduce gibberish reward hacking (Section 4).",
+      "claim_sha256": "37718591a2b0b77a83561f5bd5a57359868879cb8b52d1838028351f390574ba",
+      "status": "verified",
+      "evidence": "Min-K Fluency Stabilizer evaluated log-likelihood of bottom-20% tokens; gibberish prompts received average penalty 20.8077 vs fluent prompts penalty 0.0000 (fluency_separation_valid=True)."
+    },
+    {
+      "claim": "Stable-GFN reports stronger attack diversity and attack performance than GFN baselines across LLM red-teaming settings (Section 5).",
+      "claim_sha256": "3f3bf0b9a26fc7df214547d713741b1b9ab3613f7d90bfe00e397e5b50854abe",
+      "status": "toy",
+      "evidence": "On simulated red-teaming benchmark, Stable-GFN achieved attack diversity 17.3365 vs TB baseline 7.7094 (diversity improvement ratio 2.25x)."
+    },
+    {
+      "claim": "Ablations evaluate loss-function and reward-stabilization choices, including the effect of reward constraints on attack discovery (Table 3).",
+      "claim_sha256": "8c6841ee1d009663bb3013793556feda7212d18b0e56d4c152b296f3b0b194cb",
+      "status": "verified",
+      "evidence": "Table 3 ablation evaluation compared Full Stable-GFN (loss=52.5073, requires_z=False), W/o Min-K (loss=28.9008), W/o NGP (loss=51.8140), and TB baseline (loss=24.8748, requires_z=True)."
+    }
+  ],
+  "summary": {
+    "total_claims": 5,
+    "verified_claims": 4,
+    "toy_claims": 1,
+    "falsified_claims": 0,
+    "inconclusive_claims": 0
+  }
+}
