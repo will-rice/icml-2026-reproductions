@@ -1,0 +1,170 @@
+{
+  "artifact_audit": {
+    "audited_file_sha256": {
+      "README.md": "14a25340fb8d79464a14dbee274d87dd7ac83de5e84161998cbd6061c52390d5",
+      "evaluation/eval_vlm.py": "49678c024805a43db703d8628aecb7005f06355f140a62066595d95cd5ad6bc4",
+      "evaluation/run_spatial_eval.sh": "fe2fafa3540f0bb9b9798cd772c5e0f88de963277ab0144cbec20429358b597e",
+      "orthomind-3d-synthetic/block-count-synthetic/build_cube_views_json.py": "601755e775f6abbe8d8b588fccf6cd6795a805c91dbfd5c8092335f3e9c01be5",
+      "orthomind-3d-synthetic/object-synthetic/blender_renderer.py": "2f6fecd7adc7eab455c2df267c7aaff015c941a8cb2562a296558f38af0789d3",
+      "orthomind-3d-synthetic/object-synthetic/scene_generator.py": "7156a121eaa865e82ab4360e7c7afd6a74c46f6242a66fdf92424121775922c5",
+      "orthomind-3d-synthetic/ood-image/call_api_for_aigc.py": "7b697a911c2385687a6fa9aba3852e02fb4fe488d8dedd9412486b1d4f527f79",
+      "rl-stage/run_qwen3_vl-4b-slack.sh": "e853de0a5cfc268ced28ebe66db12b555a7369bf7f1c54209b52d728299ea75f",
+      "rl-stage/run_qwen3_vl-4b-strict.sh": "4081e77037f96b5776ca13f0695f718378ef9968ed0466141f9b60770b5dc37b",
+      "sft-stage/OMS-stage/sft-scripts/oms-sft.sh": "a7eeb56ae5e8c729de218db698d5fc31d67fad51f28cd11f8bf1389947d99926",
+      "sft-stage/VGR-stage/sft_scripts/vgr-sft.sh": "2fe8bd8bb743c86c06bd21fadf512fc24e4ad4aba69b8617320bfd918261ba1a"
+    },
+    "dataset_sources": {
+      "game_engine_ood": false,
+      "generative_ai_ood": true,
+      "programmatic_block_counting": true,
+      "programmatic_object_reasoning": true
+    },
+    "evaluation_code_present": true,
+    "raw_evaluation_output_files": [],
+    "raw_evaluation_outputs_present": false,
+    "training_stages": {
+      "stage_i_oms_sft": true,
+      "stage_ii_vgr_sft": true,
+      "stage_iii_grpo_rl": true
+    }
+  },
+  "attempt_id": "46b633e7-4a96-4fbb-a256-c49a78994892",
+  "claims": [
+    {
+      "challenge_claim": "The OrthoMind-3D dataset combines programmatically generated in-domain scenes with out-of-domain game-engine and generative-AI scenes for block counting and object reasoning (Figure 2, Figure 6).",
+      "challenge_claim_sha256": "cba1d5df9db18ec63a583db1bbdb27ab7d4e53e22beebb01aaf7f2d74cab99c9",
+      "claim_id": "dataset-composition",
+      "evidence": {
+        "dataset_sources": {
+          "game_engine_ood": false,
+          "generative_ai_ood": true,
+          "programmatic_block_counting": true,
+          "programmatic_object_reasoning": true
+        },
+        "toy_block_count": 4
+      },
+      "observation": "Pinned source exposes programmatic block/object generation and generative-AI OOD code, but no concrete game-engine OOD artifact was found beyond README prose. Local toy projection/counting passes.",
+      "status": "toy"
+    },
+    {
+      "challenge_claim": "3ViewSense trains models in two stages: inducing canonical front/left/top orthographic views and then performing view-grounded reasoning with optional RL refinement (Figure 3).",
+      "challenge_claim_sha256": "eb9ca030fe7df167fd1bf8da901a903ef6b6f9508b4b7b771359ef8f4887b350",
+      "claim_id": "two-stage-training",
+      "evidence": {
+        "canonical_views": {
+          "front": {
+            "x=0": 2,
+            "x=1": 1
+          },
+          "left": {
+            "y=0": 2,
+            "y=1": 1
+          },
+          "top": {
+            "x=0,y=0": 2,
+            "x=1,y=0": 1,
+            "x=1,y=1": 1
+          }
+        },
+        "training_stages": {
+          "stage_i_oms_sft": true,
+          "stage_ii_vgr_sft": true,
+          "stage_iii_grpo_rl": true
+        }
+      },
+      "observation": "Pinned source contains OMS SFT, VGR SFT, RL scripts, and evaluation code; the local deterministic view helper preserves front/left/top view-grounded block counting on a hand-checked fixture.",
+      "status": "verified"
+    },
+    {
+      "challenge_claim": "On OrthoMind-3D, 3ViewSense improves block-counting and object-reasoning accuracy over evaluated VLM baselines (Table 1).",
+      "challenge_claim_sha256": "0a586ef2dbd0180ba1a00cdc43c201df84c6504e17b4aba980864ebbc2a57c59",
+      "claim_id": "id-accuracy-improvement",
+      "evidence": {
+        "evaluation_code_present": true
+      },
+      "observation": "Evaluation code is present, but the pinned repository does not release raw prediction/evaluation outputs for recomputing Table 1 on CPU.",
+      "status": "inconclusive"
+    },
+    {
+      "challenge_claim": "The method generalizes to out-of-domain OrthoMind-3D scenes and external spatial benchmarks better than the Qwen3-VL-4B-Instruct base model (Table 2).",
+      "challenge_claim_sha256": "54ad110add12150650d6e9d7e24578b1d8261f9aaa7d8295a9f04e0fec4a2a67",
+      "claim_id": "ood-generalization",
+      "evidence": {
+        "raw_evaluation_outputs_present": false
+      },
+      "observation": "OOD evaluation scripts are present, but no raw OOD/external benchmark outputs or checkpoints are released for independent CPU recomputation.",
+      "status": "inconclusive"
+    },
+    {
+      "challenge_claim": "Ablations show that supervising view-grounded reasoning and using the two-stage SFT design outperform direct QA or incomplete training variants (Table 4, Table 5).",
+      "challenge_claim_sha256": "45fde7b573dc679f5a054583203a5c6bf9611f2cd0558b85da85e5bce1e1250f",
+      "claim_id": "ablation-superiority",
+      "evidence": {
+        "raw_evaluation_output_files": []
+      },
+      "observation": "Training-stage code is present, but raw ablation outputs for Tables 4 and 5 are not released in the pinned artifacts.",
+      "status": "inconclusive"
+    }
+  ],
+  "local_checks": {
+    "canonical_views": {
+      "front": {
+        "x=0": 2,
+        "x=1": 1
+      },
+      "left": {
+        "y=0": 2,
+        "y=1": 1
+      },
+      "top": {
+        "x=0,y=0": 2,
+        "x=1,y=0": 1,
+        "x=1,y=1": 1
+      }
+    },
+    "count_from_top_view": 4,
+    "toy_blocks": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        0
+      ]
+    ]
+  },
+  "paper_id": "Hm8OEDKpiO",
+  "snapshot_id": "fa35746872844d9e69a3ae2a9089f0d62dc0fb2cc9ae4af8dda96348233cdbdd",
+  "title": "3ViewSense: Spatial and Mental Perspective Reasoning from Orthographic Views in Vision-Language Models",
+  "upstream": {
+    "audited_file_sha256": {
+      "README.md": "14a25340fb8d79464a14dbee274d87dd7ac83de5e84161998cbd6061c52390d5",
+      "evaluation/eval_vlm.py": "49678c024805a43db703d8628aecb7005f06355f140a62066595d95cd5ad6bc4",
+      "evaluation/run_spatial_eval.sh": "fe2fafa3540f0bb9b9798cd772c5e0f88de963277ab0144cbec20429358b597e",
+      "orthomind-3d-synthetic/block-count-synthetic/build_cube_views_json.py": "601755e775f6abbe8d8b588fccf6cd6795a805c91dbfd5c8092335f3e9c01be5",
+      "orthomind-3d-synthetic/object-synthetic/blender_renderer.py": "2f6fecd7adc7eab455c2df267c7aaff015c941a8cb2562a296558f38af0789d3",
+      "orthomind-3d-synthetic/object-synthetic/scene_generator.py": "7156a121eaa865e82ab4360e7c7afd6a74c46f6242a66fdf92424121775922c5",
+      "orthomind-3d-synthetic/ood-image/call_api_for_aigc.py": "7b697a911c2385687a6fa9aba3852e02fb4fe488d8dedd9412486b1d4f527f79",
+      "rl-stage/run_qwen3_vl-4b-slack.sh": "e853de0a5cfc268ced28ebe66db12b555a7369bf7f1c54209b52d728299ea75f",
+      "rl-stage/run_qwen3_vl-4b-strict.sh": "4081e77037f96b5776ca13f0695f718378ef9968ed0466141f9b60770b5dc37b",
+      "sft-stage/OMS-stage/sft-scripts/oms-sft.sh": "a7eeb56ae5e8c729de218db698d5fc31d67fad51f28cd11f8bf1389947d99926",
+      "sft-stage/VGR-stage/sft_scripts/vgr-sft.sh": "2fe8bd8bb743c86c06bd21fadf512fc24e4ad4aba69b8617320bfd918261ba1a"
+    },
+    "audited_root": "/home/will/projects/icml-2026-reproductions/scratch/3viewsense-upstream",
+    "revision": "9439d901829923d0541007e24d9d718320ee1e15",
+    "url": "https://github.com/Jasaxion/3ViewSense"
+  }
+}
