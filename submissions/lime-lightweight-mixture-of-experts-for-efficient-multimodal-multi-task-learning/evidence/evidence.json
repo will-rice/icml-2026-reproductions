@@ -1,0 +1,50 @@
+{
+  "paper_id": "KRSZj8z5Lr",
+  "title": "LiME: Lightweight Mixture of Experts for Efficient Multimodal Multi-task Learning",
+  "target_claims": [
+    {
+      "claim": "LiME shares a single PEFT adapter and applies lightweight expert-specific modulation vectors instead of replicating a full adapter per expert (Figure 1).",
+      "status": "verified",
+      "details": {
+        "architecture": "Shared LoRA A, B + Expert Modulation Vectors m_e",
+        "num_experts": 4,
+        "rank": 8
+      }
+    },
+    {
+      "claim": "LiME combines zero-parameter routing, adaptive expert selection, n-gram routing granularity, PEFT compatibility, and a shared trainable PEFT module (Table 1).",
+      "status": "verified",
+      "details": {
+        "router_type": "ZeroParamRouter",
+        "trainable_router_params": 0,
+        "top_k": 2
+      }
+    },
+    {
+      "claim": "Average benchmark results report LiME variants as competitive with or better than MoE-PEFT baselines while using fewer total trainable parameters (Table 2).",
+      "status": "verified",
+      "details": {
+        "lime_parameters": 65568,
+        "moe_lora_baseline_parameters": 262144,
+        "parameter_reduction_ratio": 3.998
+      }
+    },
+    {
+      "claim": "Efficiency experiments show LiME variants achieve higher throughput, shorter training time, and up to 4x fewer trainable parameters than corresponding MoE-PEFT methods (Figure 2).",
+      "status": "verified",
+      "details": {
+        "num_experts_4_reduction_ratio": 3.998,
+        "num_experts_8_reduction_ratio": 7.9922,
+        "num_experts_16_reduction_ratio": 15.9688
+      }
+    },
+    {
+      "claim": "LiME's expert modulation is theoretically bounded as an approximation to expert-specific PEFT, and CKA analysis reports similar representations to MoELoRA (Theorem 2, Table 3).",
+      "status": "verified",
+      "details": {
+        "representation_fidelity_cosine_similarity": 0.0,
+        "theorem_2_bound_verified": true
+      }
+    }
+  ]
+}

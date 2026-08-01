@@ -697,3 +697,14 @@ submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with
 submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/.cache/
 submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/**/__pycache__/
 submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/**/*.egg-info/
+
+!docs/reproductions/ef44b2f3-ff62-47b9-b0ad-b472c4964a6e-lime-design.md
+
+!submissions/lime-lightweight-mixture-of-experts-for-efficient-multimodal-multi-task-learning/
+!submissions/lime-lightweight-mixture-of-experts-for-efficient-multimodal-multi-task-learning/**
+submissions/lime-lightweight-mixture-of-experts-for-efficient-multimodal-multi-task-learning/.venv/
+submissions/lime-lightweight-mixture-of-experts-for-efficient-multimodal-multi-task-learning/.pytest_cache/
+submissions/lime-lightweight-mixture-of-experts-for-efficient-multimodal-multi-task-learning/**/__pycache__/
+submissions/lime-lightweight-mixture-of-experts-for-efficient-multimodal-multi-task-learning/**/*.egg-info/
+
+submissions/maspob-bandit-based-prompt-optimization-for-multi-agent-systems-with-graph-neural-networks/**/*.egg-info/
