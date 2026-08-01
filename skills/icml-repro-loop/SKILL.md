@@ -137,7 +137,17 @@ Use these counters verbatim:
 
 ## Compute And Pause Gates
 
-- Autonomous GPU work is ineligible.
+- Local GPU work is permitted (authorized 2026-08-01) under a strict
+  don't-disturb contract: before any GPU run, read `nvidia-smi`; choose one
+  GPU with at most 50% memory in use; export `CUDA_VISIBLE_DEVICES` to that
+  single index; leave at least 25% of its memory free; never kill, preempt,
+  or wait out another process, and fall back to CPU when no GPU qualifies.
+  Evidence stays byte-deterministic: seed everything, enable deterministic
+  algorithms (`torch.use_deterministic_algorithms(True)`,
+  `CUBLAS_WORKSPACE_CONFIG=:4096:8`), and prove it by regenerating twice
+  and byte-comparing; if GPU determinism cannot be achieved for an
+  experiment, run that experiment on CPU. Remote/paid GPU remains
+  ineligible.
 - Estimated or actual metered API cost above USD 10 per paper is ineligible. Codex and Antigravity subscriptions record USD 0.00.
 - Missing controller credentials, paid infrastructure approval, unsafe execution, or unenforceable subordinate isolation blocks the current iteration.
 - Use fenced `transition-attempt` to persist nonempty `blocker` and
