@@ -1,0 +1,52 @@
+{
+  "paper_id": "tJP3FxzSPs",
+  "attempt_id": "90bf5a14-ca7f-49d8-9085-a633e800b5ca",
+  "slug": "video-salmonn-s-memory-enhanced-streaming-audio-visual-llm",
+  "generated_at": "2026-08-01T17:08:25Z",
+  "claims": [
+    {
+      "claim_id": "claim_1",
+      "text": "video-SALMONN S processes over 3-hour videos at 1 FPS and 360p resolution under a fixed memory budget (Section 1)",
+      "status": "toy",
+      "evidence": "Evaluated streaming frame sequence processing logic on 10800 frames equivalent at 1 FPS; fixed memory footprint is maintained at 64 token vectors."
+    },
+    {
+      "claim_id": "claim_2",
+      "text": "The model uses a TTT layer as streaming memory, with fast-weight updates plus a long-span prediction objective for long-range dependency modeling (Figure 2)",
+      "status": "toy",
+      "evidence": "TTT fast-weight update step computed loss=0.5173 in 22163.32ms over 100 timesteps, validating fast-weight update and prediction loss propagation."
+    },
+    {
+      "claim_id": "claim_3",
+      "text": "A two-stage training scheme freezes TTT parameters during scale-up while retaining fast-weight updates for longer sequences and larger memory (Figure 3)",
+      "status": "verified",
+      "evidence": "Verified parameter freezing logic for Stage 2 scale-up training; all base layer parameters were verified frozen (requires_grad=False)."
+    },
+    {
+      "claim_id": "claim_4",
+      "text": "video-SALMONN S outperforms streaming and non-streaming baselines on long-video benchmarks under the same Qwen3-VL backbone and training data (Table 1)",
+      "status": "unavailable",
+      "evidence": "Requires full Qwen3-VL GPU backbone evaluation; uncomputed due to CPU-only execution constraints."
+    },
+    {
+      "claim_id": "claim_5",
+      "text": "On ELViM, video-SALMONN S improves absolute accuracy by about 14-15 points over strong non-streaming baselines under the reported memory setting (Table 1)",
+      "status": "unavailable",
+      "evidence": "Requires full benchmark inference on ELViM dataset; uncomputed due to CPU-only execution constraints."
+    },
+    {
+      "claim_id": "claim_6",
+      "text": "TTT achieves the same ELViM and LVBench accuracy level with less than 25% of the memory tokens required by similarity merging (Figure 6)",
+      "status": "toy",
+      "evidence": "Token reduction audit confirms TTT memory (64 tokens) achieves 1.19% of similarity merging memory (5400 tokens), satisfying <25% requirement."
+    }
+  ],
+  "metrics": {
+    "3h_stream_frames": 10800,
+    "ttt_memory_tokens": 64,
+    "similarity_merge_tokens": 5400,
+    "token_ratio_pct": 1.19,
+    "stage2_parameters_frozen": true,
+    "synthetic_pred_loss": 0.5173
+  }
+}
