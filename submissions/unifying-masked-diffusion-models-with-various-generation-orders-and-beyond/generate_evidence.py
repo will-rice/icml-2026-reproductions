@@ -67,6 +67,7 @@ def main():
     out_path = Path(__file__).resolve().parent / "evidence_summary.json"
     with open(out_path, "w") as f:
         json.dump(evidence_summary, f, indent=2)
+        f.write("\n")
 
     print("Generated evidence_summary.json successfully.")
 
