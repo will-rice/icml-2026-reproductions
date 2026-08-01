@@ -44,26 +44,13 @@ TARGET_CLAIMS = {
 
 @lru_cache(maxsize=1)
 def load_pinned_index() -> pd.DataFrame:
-    cache_path = Path("/tmp/icml-agy-hf-XX/hub/datasets--icml-anon-submission--medmosaic-dataset/snapshots/a6ea67bd4a65b87248c6651e559656b2c31fa669/data/test.parquet")
-    if cache_path.exists():
-        return pd.read_parquet(cache_path)
-    try:
-        path = hf_hub_download(
-            repo_id=DATASET_REPO,
-            filename=DATASET_FILE,
-            repo_type="dataset",
-            revision=DATASET_REVISION,
-            local_files_only=True,
-        )
-        return pd.read_parquet(path)
-    except Exception:
-        path = hf_hub_download(
-            repo_id=DATASET_REPO,
-            filename=DATASET_FILE,
-            repo_type="dataset",
-            revision=DATASET_REVISION,
-        )
-        return pd.read_parquet(path)
+    path = hf_hub_download(
+        repo_id=DATASET_REPO,
+        filename=DATASET_FILE,
+        repo_type="dataset",
+        revision=DATASET_REVISION,
+    )
+    return pd.read_parquet(path)
 
 
 def summarize_index(frame: pd.DataFrame) -> dict[str, Any]:
