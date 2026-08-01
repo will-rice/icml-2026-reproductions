@@ -1,4 +1,8 @@
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "src"))
 
 try:
     import gradio as gr
@@ -7,8 +11,6 @@ except ImportError:  # pragma: no cover
 
 from unmasking_policies_repro.evidence import write_evidence
 
-
-ROOT = Path(__file__).resolve().parent
 
 
 def load_report() -> str:
