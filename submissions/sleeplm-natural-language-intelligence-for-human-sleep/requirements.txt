@@ -1,2 +1,3 @@
-gradio>=5.0
+gradio>=5.0,<6.0
+huggingface_hub<0.25
 audioop-lts
