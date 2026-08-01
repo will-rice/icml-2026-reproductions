@@ -12,7 +12,6 @@ except ImportError:  # pragma: no cover
 from unmasking_policies_repro.evidence import write_evidence
 
 
-
 def load_report() -> str:
     _, report_path = write_evidence(ROOT)
     return report_path.read_text(encoding="utf-8")
@@ -21,13 +20,8 @@ def load_report() -> str:
 if gr is None:  # pragma: no cover
     print(load_report())
 else:
-    demo = gr.Interface(
-        fn=load_report,
-        inputs=None,
-        outputs=gr.Markdown(),
-        title="Learning Unmasking Policies Evidence",
-    )
-
+    with gr.Blocks(title="Learning Unmasking Policies Evidence") as demo:
+        gr.Markdown(load_report())
 
     if __name__ == "__main__":
         demo.launch()
