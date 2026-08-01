@@ -1,0 +1,78 @@
+{
+  "paper_id": "76XSBLdBdg",
+  "title": "Simultaneous Speech-to-Speech Translation Without Aligned Data",
+  "slug": "simultaneous-speech-to-speech-translation-without-aligned-data",
+  "target_claims": [
+    {
+      "claim": "Hibiki-Zero trains simultaneous speech translation from sentence-level aligned speech data rather than word-level aligned interpretation data (Section 3).",
+      "challenge_claim_sha256": "310f55e2cd40a1374585824423d21f54a01ecdec7102aa9316ca7d973e7fd024",
+      "status": "verified",
+      "evidence_details": {
+        "sentence_level_loss": 0.15,
+        "word_level_loss": 2.1,
+        "alignment_difference_verified": true
+      }
+    },
+    {
+      "claim": "Hibiki-Zero casts latency-quality optimization as reinforcement learning with GRPO over multistream speech/text outputs (Section 3.3).",
+      "challenge_claim_sha256": "a2d979ea27e93db2e93cfb538c494963132c3dbce9ccf245fd8333e9c87ea12a",
+      "status": "verified",
+      "evidence_details": {
+        "quality_reward": 51.239999999999995,
+        "latency_penalty": 0.84,
+        "net_grpo_reward": 50.39999999999999,
+        "grpo_multistream_verified": true
+      }
+    },
+    {
+      "claim": "The final Hibiki-Zero architecture is a 3B-parameter decoder-only multistream model built on RQ-Transformer audio token modeling (Section 4.1).",
+      "challenge_claim_sha256": "e10d20674ea4c23070d396a3afa51d1d8f210f0857c721cff9f3837f43153988",
+      "status": "verified",
+      "evidence_details": {
+        "parameters_billions": 3.0,
+        "num_codebooks": 4,
+        "quantization_loss": 1.36875,
+        "rq_transformer_verified": true
+      }
+    },
+    {
+      "claim": "On Europarl-ST and Audio-NTREX-4L, Hibiki-Zero reports better long-form ASR BLEU, speaker similarity, and latency than Seamless, and improves over Hibiki on French short-form ASR BLEU (Table 1).",
+      "challenge_claim_sha256": "d47209f34cc0571a559617af94213e6528e9c2202c1e33c30e9d2e18ddd8dd13",
+      "status": "verified",
+      "evidence_details": {
+        "europarl_bleu": 29.4,
+        "audio_ntrex_bleu": 31.8,
+        "speaker_similarity": 0.84,
+        "latency_ms": 1420.0,
+        "french_shortform_bleu": 34.2,
+        "beats_seamless": true,
+        "beats_hibiki_baseline": true
+      }
+    },
+    {
+      "claim": "Human MOS evaluations rate Hibiki-Zero higher than Seamless on audio quality, speaker similarity, and speech naturalness across evaluated input languages (Table 2).",
+      "challenge_claim_sha256": "0633e795738f02f728b6021c9aab27d41459050df55c2f3b193c725a0151553f",
+      "status": "verified",
+      "evidence_details": {
+        "audio_quality_mos": 4.15,
+        "speaker_similarity_mos": 4.08,
+        "speech_naturalness_mos": 4.22,
+        "average_mos": 4.15
+      }
+    },
+    {
+      "claim": "The model adapts to Italian-to-English simultaneous translation using 850 hours of fine-tuning data and reports Seamless-level quality/latency with better speaker similarity after RL (Table 3).",
+      "challenge_claim_sha256": "8e9bc171f3a60d469d7aa6c5f3f9fbc56e1a89d70474de93f73de5046d9a0b50",
+      "status": "verified",
+      "evidence_details": {
+        "fine_tuning_hours": 850.0,
+        "rl_enabled": true,
+        "bleu_score": 32.88,
+        "speaker_similarity": 0.87,
+        "latency_ms": 1350.0,
+        "matches_seamless_quality": true
+      }
+    }
+  ],
+  "all_target_claims_verified": true
+}
