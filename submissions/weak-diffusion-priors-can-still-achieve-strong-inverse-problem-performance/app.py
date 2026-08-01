@@ -25,9 +25,9 @@ with tab1:
         noise_std = st.slider("Noise Standard Deviation", 0.01, 0.20, 0.05, step=0.01)
     with col2:
         seed = st.number_input("Random Seed", 1, 9999, 42)
-    
+
     res = simulate_theorem_3_1_posterior_concentration(n_dim=n_dim, noise_std=noise_std, seed=seed)
-    
+
     st.success(f"Theorem 3.1 Verified: **{res['theorem_3_1_verified']}**")
 
     ratios = [r["measurement_ratio"] for r in res["sweep_results"]]

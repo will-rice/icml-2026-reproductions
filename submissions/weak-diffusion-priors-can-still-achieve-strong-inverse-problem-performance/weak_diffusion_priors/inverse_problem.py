@@ -8,7 +8,7 @@ def evaluate_table_1_inverse_problem_baselines(
     seed: int = 42,
 ) -> Dict[str, Any]:
     """Evaluate Table 1 inverse-problem performance comparing weak priors vs strong priors.
-    
+
     Verifies Claim 1: Weak diffusion priors match strong-prior inverse-problem baselines
     when measurements are highly informative (e.g. high pixel observation ratio m/n >= 0.85).
     """
@@ -44,20 +44,20 @@ def evaluate_table_1_inverse_problem_baselines(
 
     for regime_name, m_ratio in regimes.items():
         m_dim = int(np.round(signal_length * m_ratio))
-        
+
         psnr_strong_list = []
         psnr_weak_list = []
         psnr_uninformative_list = []
 
         for i in range(num_samples):
             x_true = signals[i]
-            
+
             # Measurement matrix (random pixel observation)
             obs_indices = rng.choice(signal_length, size=m_dim, replace=False)
             A = np.zeros((m_dim, signal_length))
             for idx_pos, pos in enumerate(obs_indices):
                 A[idx_pos, pos] = 1.0
-            
+
             sigma_noise = 0.05
             y = A @ x_true + rng.normal(0, sigma_noise, size=m_dim)
 
@@ -79,7 +79,7 @@ def evaluate_table_1_inverse_problem_baselines(
 
             # Calculate PSNR
             max_val = max(np.ptp(x_true), 1e-5)
-            
+
             mse_strong = float(np.mean((x_hat_strong - x_true) ** 2))
             psnr_strong = 10 * np.log10((max_val ** 2) / max(mse_strong, 1e-10))
 

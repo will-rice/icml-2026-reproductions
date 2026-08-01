@@ -9,7 +9,7 @@ def simulate_theorem_3_1_posterior_concentration(
     seed: int = 42,
 ) -> Dict[str, Any]:
     """Simulate Bayesian posterior concentration under Theorem 3.1.
-    
+
     Verifies that high-dimensional measurements make the Bayesian posterior
     concentrate near the true signal x* even when using a weak (mismatched/shifted) prior.
     """
@@ -17,10 +17,10 @@ def simulate_theorem_3_1_posterior_concentration(
         measurement_ratios = [0.1, 0.25, 0.5, 0.75, 0.9, 1.0]
 
     rng = np.random.default_rng(seed)
-    
+
     # Ground truth signal x* ~ N(0, I_n)
     true_signal = rng.standard_normal(n_dim)
-    
+
     # Weak prior: biased mean and inflated variance
     weak_prior_mean = rng.standard_normal(n_dim) * 0.5  # Prior drift
     weak_prior_var = 2.0  # Inflated/weak precision
@@ -35,7 +35,7 @@ def simulate_theorem_3_1_posterior_concentration(
         m_dim = int(np.round(n_dim * ratio))
         # Measurement matrix A in R^{m x n}
         A = rng.standard_normal((m_dim, n_dim)) / np.sqrt(m_dim)
-        
+
         # Noise
         noise = rng.normal(0, noise_std, size=m_dim)
         y = A @ true_signal + noise

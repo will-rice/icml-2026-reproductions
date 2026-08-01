@@ -30,6 +30,6 @@ def test_generate_evidence():
     evidence = generate_evidence()
     assert evidence["summary"]["all_claims_verified"] is True
     assert len(evidence["claims"]) == 2
-    
+
     evidence_path = os.path.join(os.path.dirname(__file__), "..", "evidence", "evidence.json")
     assert os.path.exists(evidence_path)

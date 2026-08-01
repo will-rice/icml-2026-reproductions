@@ -7,10 +7,10 @@ from weak_diffusion_priors.inverse_problem import evaluate_table_1_inverse_probl
 
 def generate_evidence():
     print("Generating reproduction evidence for weak diffusion priors...")
-    
+
     # Claim 2: Theorem 3.1 Posterior Concentration
     theory_results = simulate_theorem_3_1_posterior_concentration()
-    
+
     # Claim 1: Table 1 High-Informative Inverse Problem Baselines
     table_1_results = evaluate_table_1_inverse_problem_baselines()
 
@@ -45,7 +45,7 @@ def generate_evidence():
     evidence_dir = os.path.join(os.path.dirname(__file__), "evidence")
     os.makedirs(evidence_dir, exist_ok=True)
     evidence_file = os.path.join(evidence_dir, "evidence.json")
-    
+
     with open(evidence_file, "w") as f:
         json.dump(evidence, f, indent=2)
 
