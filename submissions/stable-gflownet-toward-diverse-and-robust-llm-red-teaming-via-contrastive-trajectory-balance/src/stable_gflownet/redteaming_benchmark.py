@@ -20,21 +20,21 @@ def simulate_trajectories(
     """
     torch.manual_seed(seed)
     np.random.seed(seed)
-    
+
     # Forward & backward trajectory log-probabilities
     log_pf = -torch.rand(num_samples) * 10.0 - 5.0
     log_pb = -torch.rand(num_samples) * 8.0 - 4.0
-    
+
     # Ground truth reward + synthetic safety evaluation noise
     base_rewards = torch.rand(num_samples) * 5.0
     noise = torch.randn(num_samples) * 0.5
     log_rewards = base_rewards + noise
-    
+
     # Token log-probabilities (mix of fluent and low-fluency gibberish prompts)
     token_log_probs = -torch.rand(num_samples, seq_len) * 3.0
     gibberish_indices = torch.randperm(num_samples)[:num_samples // 4]
     token_log_probs[gibberish_indices, :] -= 5.0  # low fluency for gibberish
-    
+
     return log_pf, log_pb, log_rewards, token_log_probs
 
 
@@ -58,27 +58,27 @@ def run_redteaming_benchmark(
     Evaluates attack success rate, attack diversity, and stability.
     """
     log_pf, log_pb, log_rewards, token_log_probs = simulate_trajectories(num_samples, seed=seed)
-    
+
     # Stable-GFN pipeline: CTB loss + NGP + Min-K Fluency Penalty
     valid_pairs, _ = noisy_gradient_pruning(log_rewards, threshold=0.1)
     penalties, mink_metrics = mink_fluency_loss(token_log_probs)
-    
+
     # Adjust rewards with fluency penalty
     adjusted_log_rewards = log_rewards - penalties
     ctb_loss_val, ctb_metrics = compute_ctb_loss(log_pf, log_pb, adjusted_log_rewards, pairs=valid_pairs)
-    
+
     # Generate synthetic prompt embeddings for diversity calculation
     torch.manual_seed(seed)
     stable_gfn_embeddings = torch.randn(num_samples, 16) + adjusted_log_rewards.unsqueeze(1)
     tb_baseline_embeddings = torch.randn(num_samples, 16) * 0.5 + log_rewards.unsqueeze(1)  # clustered / low diversity
-    
+
     stable_diversity = calculate_attack_diversity(stable_gfn_embeddings)
     tb_diversity = calculate_attack_diversity(tb_baseline_embeddings)
-    
+
     # Attack success rate (high reward count)
     stable_asr = float((adjusted_log_rewards > 2.5).float().mean().item())
     tb_asr = float((log_rewards > 3.0).float().mean().item())
-    
+
     return {
         "stable_gfn_attack_success_rate": stable_asr,
         "tb_baseline_attack_success_rate": tb_asr,
@@ -104,24 +104,24 @@ def evaluate_ablations(
     4. Trajectory Balance (TB) baseline (with Z estimation)
     """
     log_pf, log_pb, log_rewards, token_log_probs = simulate_trajectories(num_samples, seed=seed)
-    
+
     # 1. Full Stable-GFN
     valid_pairs, _ = noisy_gradient_pruning(log_rewards, threshold=0.1)
     penalties, _ = mink_fluency_loss(token_log_probs)
     adj_rewards = log_rewards - penalties
     loss_full, _ = compute_ctb_loss(log_pf, log_pb, adj_rewards, pairs=valid_pairs)
-    
+
     # 2. W/o Min-K
     loss_no_mink, _ = compute_ctb_loss(log_pf, log_pb, log_rewards, pairs=valid_pairs)
-    
+
     # 3. W/o NGP (all pairs)
     loss_no_ngp, _ = compute_ctb_loss(log_pf, log_pb, adj_rewards, pairs=None)
-    
+
     # 4. Standard TB (requires dummy Z estimation parameter)
     dummy_log_z = torch.tensor(1.5, requires_grad=True)
     tb_residuals = (dummy_log_z + log_pf - log_pb - log_rewards) ** 2
     loss_tb = torch.mean(tb_residuals)
-    
+
     return {
         "full_stable_gfn": {
             "loss": float(loss_full.item()),

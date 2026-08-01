@@ -14,10 +14,10 @@ evidence_file = Path(__file__).parent.parent / "evidence" / "evidence.json"
 if evidence_file.exists():
     with open(evidence_file, "r") as f:
         data = json.load(f)
-    
+
     claims = data["claims"]
     benchmark = claims[2]["details"]["noise_regimes"]
-    
+
     table_rows = []
     for k, v in benchmark.items():
         table_rows.append({
@@ -28,7 +28,7 @@ if evidence_file.exists():
             "Kipf-Welling GCN Std": v["kipf_welling_gcn"]["std_accuracy"],
             "SheafNN Outperforms": v["sheaf_outperforms"]
         })
-        
+
     st.table(table_rows)
     st.success("Verification complete: SheafNN consistently outperforms standard GCN on signed graphs across noise levels.")
 else:

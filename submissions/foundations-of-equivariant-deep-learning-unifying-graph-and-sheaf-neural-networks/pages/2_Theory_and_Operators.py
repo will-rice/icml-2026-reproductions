@@ -16,8 +16,8 @@ st.latex(r"""
 
 st.markdown("""
 ### Drop-in GCN Generalization
-When the restriction maps $\mathcal{F}_{v \to e} = I_d$ are identity maps on every edge, 
-the Sheaf Laplacian $\Delta_{\mathcal{F}}$ reduces exactly to the Kronecker product $L_G \otimes I_d$ 
+When the restriction maps $\mathcal{F}_{v \to e} = I_d$ are identity maps on every edge,
+the Sheaf Laplacian $\Delta_{\mathcal{F}}$ reduces exactly to the Kronecker product $L_G \otimes I_d$
 of the standard graph Laplacian $L_G$ and feature identity matrix $I_d$.
 """)
 

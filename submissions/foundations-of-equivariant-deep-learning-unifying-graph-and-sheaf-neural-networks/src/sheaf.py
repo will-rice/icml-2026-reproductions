@@ -11,17 +11,17 @@ def build_signed_graph(num_nodes=50, num_edges=120, feature_dim=16, num_classes=
     g = torch.Generator().manual_seed(seed)
     # Random node features
     X = torch.randn(num_nodes, feature_dim, generator=g)
-    
+
     # Random class assignments based on linear projection
     W_true = torch.randn(feature_dim, num_classes, generator=g)
     logits = X @ W_true
     y = torch.argmax(logits, dim=1)
-    
+
     # Generate edges
     edge_list = []
     signs = []
     edges_set = set()
-    
+
     # Ensure graph connectivity and homophily/heterophily based on signs
     attempts = 0
     while len(edge_list) < num_edges and attempts < 1000:
@@ -32,16 +32,16 @@ def build_signed_graph(num_nodes=50, num_edges=120, feature_dim=16, num_classes=
             continue
         edges_set.add((u, v))
         edge_list.append((u, v))
-        
+
         # If same class -> positive edge (+1), if different class -> negative edge (-1)
         if y[u] == y[v]:
             signs.append(1.0)
         else:
             signs.append(-1.0)
-            
+
     edge_index = torch.tensor(edge_list, dtype=torch.long).t()
     edge_signs = torch.tensor(signs, dtype=torch.float32)
-    
+
     return X, y, edge_index, edge_signs
 
 class SheafLaplacian(nn.Module):

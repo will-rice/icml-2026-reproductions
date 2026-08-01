@@ -46,4 +46,3 @@ Status: `inconclusive`
 Training-stage code is present, but raw ablation outputs for Tables 4 and 5 are not released in the pinned artifacts.
 
 Challenge claim SHA-256: `45fde7b573dc679f5a054583203a5c6bf9611f2cd0558b85da85e5bce1e1250f`
-

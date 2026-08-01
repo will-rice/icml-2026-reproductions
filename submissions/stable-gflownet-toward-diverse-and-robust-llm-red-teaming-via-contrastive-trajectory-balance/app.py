@@ -31,7 +31,7 @@ with tab_evidence:
         col2.metric("Toy Claims", bundle["summary"]["toy_claims"])
         col3.metric("Falsified Claims", bundle["summary"]["falsified_claims"])
         col4.metric("Inconclusive Claims", bundle["summary"]["inconclusive_claims"])
-        
+
         st.subheader("Claim Results")
         for item in bundle["evidence"]:
             with st.expander(f"[{item['status'].upper()}] {item['claim']}"):

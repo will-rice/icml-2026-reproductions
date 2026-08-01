@@ -1757,3 +1757,34 @@ def test_judgment_mutations_reject_other_attempt_writer(
             operation,
             now,
         )
+
+
+def test_claim_next_refuses_new_papers_when_backlog_fills_daily_quota(
+    paths, store, attempts, now, scheduler
+):
+    quota = scheduler.ENDGAME_DAILY_SPACE_QUOTA
+    snapshot_id = write_assessed_snapshot(
+        store,
+        paths,
+        now,
+        [paper(f"paper-{number}", 30 - number) for number in range(quota + 1)],
+    )
+    for number in range(quota):
+        assignment = scheduler.claim_next(
+            paths, snapshot_id, f"owner-{number}", now
+        )
+        lease = assignment.writer_lease
+        attempt_id = assignment.attempt_id
+        attempts.transition_attempt(
+            paths, attempt_id, "design-pending", lease, now
+        )
+        attempts.record_design(
+            paths, attempt_id, lease, "author", "design.md", now
+        )
+        attempts.record_design_review(
+            paths, attempt_id, lease, "reviewer", "approved", now
+        )
+        transition_attested(attempts, paths, attempt_id, "validated", lease, now)
+
+    with pytest.raises(scheduler.EndgameSaturated):
+        scheduler.claim_next(paths, snapshot_id, "owner-final", now)

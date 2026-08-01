@@ -51,7 +51,7 @@ def run_reproduction_experiments():
     small_edges = torch.tensor([[0, 1, 2], [1, 2, 0]], dtype=torch.long)
     sheaf_id = SheafLaplacian(3, 4, is_identity=True)
     out_sheaf = sheaf_id(small_X, small_edges)
-    
+
     # Standard graph diffusion check: P = I - 0.5 * D^{-1/2} L D^{-1/2}
     claim1_pass = out_sheaf.shape == (3, 4) and not torch.isnan(out_sheaf).any().item()
     claim2_pass = claim1_pass  # Drop-in GCN generalization verified

@@ -10,7 +10,7 @@ from src.benchmark import run_reproduction_experiments
 def main():
     print("Running Sheaf Neural Networks reproduction pipeline...")
     results = run_reproduction_experiments()
-    
+
     evidence_data = {
         "paper_id": "aIH1jyU37z",
         "title": "Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neural Networks",
@@ -67,14 +67,14 @@ def main():
             ])
         }
     }
-    
+
     out_dir = Path(__file__).resolve().parent / "evidence"
     out_dir.mkdir(exist_ok=True)
     out_file = out_dir / "evidence.json"
-    
+
     with open(out_file, "w") as f:
         json.dump(evidence_data, f, indent=2)
-        
+
     print(f"Evidence generated successfully at {out_file}")
 
 if __name__ == "__main__":

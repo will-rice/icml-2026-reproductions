@@ -12,7 +12,7 @@ st.title("Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neu
 st.subheader("ICML 2026 Reproduction Dashboard")
 
 st.markdown("""
-This interactive Hugging Face Space presents the empirical and theoretical reproduction of 
+This interactive Hugging Face Space presents the empirical and theoretical reproduction of
 **Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neural Networks** (Paper ID: `aIH1jyU37z`).
 
 ### Key Reproduction Findings

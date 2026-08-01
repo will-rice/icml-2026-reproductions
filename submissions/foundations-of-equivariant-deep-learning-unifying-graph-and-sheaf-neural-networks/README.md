@@ -17,12 +17,12 @@ tags:
 
 # ICML 2026 Reproduction: Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neural Networks
 
-**Paper Title:** Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neural Networks  
-**Paper ID:** `aIH1jyU37z`  
-**Authors:** Yoshihiro Maruyama  
-**Upstream Revision:** `arxiv:2012.06333v3+github:twitter-research/graph-neural-sheaves@57002ef2c2c0199d7990be10f0dfc8c83a54d658`  
-**License:** MIT License  
-**Space:** `will-rice/repro-foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks`  
+**Paper Title:** Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neural Networks
+**Paper ID:** `aIH1jyU37z`
+**Authors:** Yoshihiro Maruyama
+**Upstream Revision:** `arxiv:2012.06333v3+github:twitter-research/graph-neural-sheaves@57002ef2c2c0199d7990be10f0dfc8c83a54d658`
+**License:** MIT License
+**Space:** `will-rice/repro-foundations-of-equivariant-deep-learning-unifying-graph-and-sheaf-neural-networks`
 
 ---
 

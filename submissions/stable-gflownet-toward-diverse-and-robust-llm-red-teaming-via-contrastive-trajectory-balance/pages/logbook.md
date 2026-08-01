@@ -1,11 +1,11 @@
 # Stable-GFlowNet Reproduction Logbook
 
-**Attempt ID:** `7bbe8664-605d-40fe-9e55-9aa9f93b91ae`  
-**Paper ID:** `OyPE1ganBR`  
-**Paper Title:** *Stable-GFlowNet: Toward Diverse and Robust LLM Red-Teaming via Contrastive Trajectory Balance*  
-**ArXiv / OpenReview:** `arxiv:2605.00553` / `OpenReview:OyPE1ganBR`  
-**Owner:** `agy-paper-owner-05`  
-**Execution Environment:** CPU (deterministic evaluation)  
+**Attempt ID:** `7bbe8664-605d-40fe-9e55-9aa9f93b91ae`
+**Paper ID:** `OyPE1ganBR`
+**Paper Title:** *Stable-GFlowNet: Toward Diverse and Robust LLM Red-Teaming via Contrastive Trajectory Balance*
+**ArXiv / OpenReview:** `arxiv:2605.00553` / `OpenReview:OyPE1ganBR`
+**Owner:** `agy-paper-owner-05`
+**Execution Environment:** CPU (deterministic evaluation)
 
 ---
 

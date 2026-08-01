@@ -94,6 +94,13 @@ class NoEligiblePaper(RuntimeError):
     """Raised when one persistent owner has no paper it can claim."""
 
 
+class EndgameSaturated(RuntimeError):
+    """Raised when the publish-ready backlog already fills the daily quota."""
+
+
+ENDGAME_DAILY_SPACE_QUOTA = 20
+
+
 class OwnerBusy(RuntimeError):
     """Raised when one persistent owner already has a live paper lease."""
 
@@ -137,6 +144,19 @@ def scheduler_pass(
         snapshot_id,
         observed_at,
     )
+
+
+def _publish_ready_count(paths: store.StatePaths, index: dict) -> int:
+    """Count active attempts that are validated or blocked from validated."""
+    count = 0
+    for attempt_id, reference in index["attempts"].items():
+        if reference["phase"] == "validated":
+            count += 1
+        elif reference["phase"] == "blocked":
+            attempt = store.read_json(paths.attempt(attempt_id))
+            if attempt.get("blocked_from") == "validated":
+                count += 1
+    return count
 
 
 def claim_next(
@@ -187,6 +207,14 @@ def claim_next(
 
         index = store.read_json(paths.index)
         store.validate_index(index)
+        publish_ready = _publish_ready_count(paths, index)
+        if publish_ready >= ENDGAME_DAILY_SPACE_QUOTA:
+            raise EndgameSaturated(
+                f"publish-ready backlog ({publish_ready}) meets the daily "
+                f"Space-creation quota ({ENDGAME_DAILY_SPACE_QUOTA}); "
+                "new-paper selection is closed - publish the backlog or run "
+                "an improvement cycle instead"
+            )
         claimed = _claimed_paper_ids(paths, index, snapshot, observed_at)
         candidates = [
             candidate

@@ -9,10 +9,10 @@ def test_sheaf_laplacian_identity():
     num_nodes, feature_dim = 10, 8
     X = torch.randn(num_nodes, feature_dim)
     edge_index = torch.tensor([[0, 1, 2, 3], [1, 2, 3, 0]], dtype=torch.long)
-    
+
     sheaf_op = SheafLaplacian(num_nodes, feature_dim, is_identity=True)
     out = sheaf_op(X, edge_index)
-    
+
     assert out.shape == (num_nodes, feature_dim)
     assert not torch.isnan(out).any()
 
@@ -28,11 +28,11 @@ def test_signed_graph_generation():
 def test_models_forward_pass():
     """Test forward passes of SheafGCN and KipfWellingGCN."""
     X, y, edge_index, edge_signs = build_signed_graph(num_nodes=15, num_edges=30, feature_dim=8, num_classes=3, seed=42)
-    
+
     sheaf_model = SheafGCN(in_dim=8, hidden_dim=16, out_dim=3, num_nodes=15)
     out_sheaf = sheaf_model(X, edge_index, edge_signs)
     assert out_sheaf.shape == (15, 3)
-    
+
     gcn_model = KipfWellingGCN(in_dim=8, hidden_dim=16, out_dim=3, num_nodes=15)
     out_gcn = gcn_model(X, edge_index, edge_signs)
     assert out_gcn.shape == (15, 3)
