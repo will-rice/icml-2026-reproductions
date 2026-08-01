@@ -18,6 +18,7 @@ docs/designs/
 docs/reproductions/
 docs/superpowers/plans/
 docs/superpowers/specs/*
+!docs/superpowers/specs/2026-08-01-q-sched-reproduction-design.md
 evidence/
 submissions/*
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/
@@ -111,5 +112,10 @@ submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augm
 submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/.pytest_cache/
 submissions/know-more-know-clearer-a-meta-cognitive-framework-for-knowledge-augmentation-in-large-language-models/**/__pycache__/
 
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/
+!submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/**
+submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/.venv/
+submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/.pytest_cache/
+submissions/q-sched-pushing-the-boundaries-of-few-step-diffusion-models-with-quantization-aware-scheduling/**/__pycache__/
 
 validation-manifest.json

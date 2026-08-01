@@ -2,6 +2,11 @@
 
 import json
 from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
 from unifying_mdm_repro.oemdm import verify_left_to_right_ar_recovery, OeMDMNELBO
 from unifying_mdm_repro.lomdm import verify_lomdm_joint_training
 import torch
