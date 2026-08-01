@@ -77,11 +77,19 @@ For every iteration:
 
 1. Inspect `state/repro-loop.json`. For schema-v3, run only `migrate-v6 --dry-run` and stop until the controller explicitly authorizes the real migration; no schema-v6 lifecycle command is valid before it. After migration, resume the schema-v6 index and every named shard.
 2. Run raw `refresh-live`, inspect its immutable result through `show-snapshot`, and assess pinned `challenge.json` candidates from primary artifacts. Bare challenge metadata never supplies feasibility, score, cost, targets, or an upstream pin. Write assessment JSON following [selection-rubric.md](references/selection-rubric.md), bind each target to exact challenge text and SHA-256, then run `refresh-live --assessments-json PATH`. Revision drift requires a new raw refresh and assessment.
-3. Endgame saturation rule: count publish-ready lanes (phase `validated`
-   plus `blocked` with `blocked_from: validated`). While that count is at
-   or above the daily Hugging Face Space-creation quota (20), selecting a
-   NEW paper is forbidden — the backlog already saturates publishing
-   capacity. Spend the iteration instead on, in priority order: (a)
+3. IMPROVEMENT-ONLY ENDGAME (declared 2026-08-01): all capacity goes to
+   improving existing submissions and publishing the ranked backlog. Do
+   not select new papers (`claim-next` enforces this mechanically while
+   the backlog fills the daily quota). If you hold an `implementing`,
+   `design-pending`, or `selected` lane, do not push it toward
+   validation: persist it with fenced `transition-attempt ... blocked`
+   (blocker: improvement-only endgame; next_action: resume implementation
+   if capacity reopens), release it reclaimably, and switch to
+   improvement or publishing work. Endgame saturation rule: count
+   publish-ready lanes (phase `validated` plus `blocked` with
+   `blocked_from: validated`). While that count is at or above the daily
+   Hugging Face Space-creation quota (20), selecting a NEW paper is
+   forbidden — the backlog already saturates publishing capacity. Spend the iteration instead on, in priority order: (a)
    reclaiming and publishing a publish-ready lane whose dedicated Space
    already exists — republishing consumes no creation quota; (b)
    reclaiming and publishing the highest-value publish-ready lane that

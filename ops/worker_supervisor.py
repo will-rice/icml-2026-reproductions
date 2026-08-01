@@ -74,6 +74,10 @@ PROMPT = (
     "Use the shared icml-repro-loop skill directly and keep running its "
     "paper-owner loop. Read and follow "
     "/home/will/.agents/skills/icml-repro-loop/SKILL.md. "
+    "IMPROVEMENT-ONLY ENDGAME IS IN EFFECT: do not select or continue "
+    "implementing new papers; spend every iteration improving existing "
+    "judged or publish-ready submissions and publishing the ranked backlog "
+    "as Space quota allows, per the endgame rules in the skill. "
     "Persistent worker ID: {worker_id}."
 )
 AGY_IDLE_PROMPT_RE = re.compile(
