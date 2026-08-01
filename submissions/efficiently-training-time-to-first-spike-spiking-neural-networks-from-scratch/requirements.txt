@@ -1,5 +1,6 @@
+gradio==4.44.0
+huggingface_hub==0.24.0
+audioop-lts
 torch>=2.0.0
 numpy>=1.24.0
 pytest>=7.0.0
-gradio>=4.0.0
-audioop-lts
