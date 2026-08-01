@@ -1,13 +1,32 @@
 # ETTFS SNN Reproduction Summary
 
-This Space provides an interactive reproduction demonstration of **"Efficiently Training Time-to-First-Spike Spiking Neural Networks from Scratch"** (ICML 2026, arXiv:2410.23619).
+Reproduction of **"Efficiently Training Time-to-First-Spike Spiking Neural
+Networks from Scratch"** (paper `3EcT46wsdc`, arXiv:2410.23619).
 
-## Key Claims Verified
+Every number on these pages is computed by this repository on CPU with pinned
+seeds: integrate-and-fire dynamics are simulated step by step and the ablation
+networks are trained from scratch. No value is copied from the paper into a
+measurement field. Dataset-scale claims that need GPU training are reported as
+`unreplicated` rather than asserted.
 
-1. **Temporal Weighting Decoder (TWD) Step Reduction**: Replacing standard TQ-TTFS decoders with TWD reduces average inference time-steps across datasets by incorporating temporal decay weighting.
-2. **Fashion-MNIST Ablation Accuracy Gains**: Enabling ETTFS initialization, average pooling, layer normalization, affine normalization, and TWD improves accuracy from 89.61% baseline to 92.90%.
-3. **Single-Spike Pooling Constraints**: Average pooling preserves single-spike timing constraints in Time-to-First-Spike (TTFS) SNNs, whereas max pooling introduces step discontinuities.
+## Claim status
 
-## Reproduction Metrics & Benchmark
+| Claim | Status | Scale of the evidence |
+| --- | --- | --- |
+| 1 | `reproduced` | toy-scale simulation (6 layers x 128 units, 32 time-steps) |
+| 2 | `partially_reproduced` | toy-scale: four synthetic input regimes, not the paper's four datasets |
+| 3 | `reproduced` | exact numerical property check on simulated post-synaptic currents |
+| 4 | `unreplicated` | requires MNIST/Fashion-MNIST/CIFAR/DVS-Gesture training runs on GPU |
+| 5 | `partially_reproduced` | toy-scale synthetic 3-class task trained from scratch, not Fashion-MNIST |
 
-The interactive controls below allow running the ETTFS decoder comparison and component ablation experiments directly.
+Status counts: {"partially_reproduced": 2, "reproduced": 2, "unreplicated": 1}
+
+## Reproducing
+
+```bash
+uv run --project . python -m ettfs_snn.evidence
+uv run --project . python -m pytest tests -q
+```
+
+The first command regenerates `evidence/bundle.json` and every page in
+`pages/`; it is deterministic and byte-identical across runs.
