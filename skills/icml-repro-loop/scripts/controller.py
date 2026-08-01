@@ -89,8 +89,9 @@ def clean_validation_environment(isolated_home: Path) -> dict[str, str]:
             "HF_HUB_DISABLE_IMPLICIT_TOKEN": "1",
             "HOME": str(isolated_home),
             "PYTHONDONTWRITEBYTECODE": "1",
-            "PYTEST_ADDOPTS": "-p no:cacheprovider",
+            "PYTEST_ADDOPTS": "-p no:cacheprovider --ignore=submissions",
             "TMPDIR": str(isolated_home.parent / "tmp"),
+
             "UV_PROJECT_ENVIRONMENT": str(
                 isolated_home.parent / "uv-project-environment"
             ),
