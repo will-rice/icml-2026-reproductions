@@ -822,3 +822,10 @@ submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback
 submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/.pytest_cache/
 submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/**/__pycache__/
 submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/**/*.egg-info/
+
+!submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/
+!submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/.venv/
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/.pytest_cache/
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/__pycache__/
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/*.egg-info/
