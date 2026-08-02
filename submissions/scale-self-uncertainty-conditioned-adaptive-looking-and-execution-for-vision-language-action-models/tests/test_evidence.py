@@ -16,7 +16,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 def test_served_pages_include_summary_and_evidence_detail():
     pages = sorted((PROJECT_ROOT / "pages").glob("*.md"))
     assert len(pages) >= 2
-    assert all(page.read_text(encoding="utf-8").strip() for page in pages)
+    assert (PROJECT_ROOT / "pages" / "00-summary.md").exists()
+    assert (PROJECT_ROOT / "pages" / "01-claims-and-evidence.md").exists()
+    summary_text = (PROJECT_ROOT / "pages" / "00-summary.md").read_text(encoding="utf-8")
+    assert "toy mechanism checks" in summary_text.lower() or "toy" in summary_text.lower()
+    claims_text = (PROJECT_ROOT / "pages" / "01-claims-and-evidence.md").read_text(encoding="utf-8")
+    assert "9c25ef590bdbf95cd8dfa64cbaf7ce7093649e4b304868d51d028bf9eedd135d" in claims_text or "9c25ef590bdbf95cd8dfa64cbaf7ce7093649e4b304868d51d028bf9eedd135d" in summary_text
 
 
 def test_served_pages_do_not_promote_unavailable_benchmark_claims():
