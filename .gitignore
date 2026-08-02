@@ -776,3 +776,11 @@ submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contra
 submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contrastive-trajectory-balance/.pytest_cache/
 submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contrastive-trajectory-balance/**/__pycache__/
 submissions/stable-gflownet-toward-diverse-and-robust-llm-red-teaming-via-contrastive-trajectory-balance/**/*.egg-info/
+
+!submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/
+!submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/**
+!docs/reproductions/48a537d9-3320-4f51-80f5-45c226518c38-lmcc-design.md
+submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/.venv/
+submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/.pytest_cache/
+submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/**/__pycache__/
+submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/**/*.egg-info/

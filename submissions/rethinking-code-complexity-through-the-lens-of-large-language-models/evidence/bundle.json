@@ -1,0 +1,153 @@
+{
+  "attempt_id": "48a537d9-3320-4f51-80f5-45c226518c38",
+  "claims": [
+    {
+      "challenge_claim": "Traditional code complexity metrics show no stable correlation with LLM task performance after controlling for code length (Table 1).",
+      "challenge_claim_sha256": "bcc05e061b14db0c1085fe42a9dcacc70432acc24c7224079b0821751fe52cd6",
+      "observations": {},
+      "selected": false,
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim": "LM-CC builds a hierarchical semantic decomposition from token-entropy signals and syntactic delimiters to estimate model-perceived code complexity (Figure 2; Algorithm 1).",
+      "challenge_claim_sha256": "0660349f28ad245cfc3aa87b991574cf807be5678852c6a16b0d83e01e665723",
+      "observations": {
+        "alpha": 0.8,
+        "synthetic_block_count": 4,
+        "synthetic_depth_sum": 8,
+        "synthetic_lmcc": 4.0
+      },
+      "selected": true,
+      "status": "verified"
+    },
+    {
+      "challenge_claim": "LM-CC achieves statistically significant partial Spearman correlations with pass@1 across program repair, code translation, and execution reasoning while controlling for code length (Table 2).",
+      "challenge_claim_sha256": "ff509c260c341fe13c097c68328cd36dc01df72f0c91d492daa4b10e90fcf1f8",
+      "observations": {
+        "limitation": "Released cached outputs reproduce negative significant raw correlations for all three tasks, but grouped partial correlation under the upstream selection rule is significant only for program repair.",
+        "significant_grouped_partial_tasks": [
+          "program_repair"
+        ],
+        "tasks": [
+          {
+            "mean_pass_at_1": 0.23542435424354244,
+            "median_lmcc": 53.8,
+            "min_group_size": 24,
+            "partial_spearman_p": 0.03762927546855165,
+            "partial_spearman_r": -0.6303115787486464,
+            "raw_spearman_p": 3.5330851303329515e-05,
+            "raw_spearman_r": -0.2484460780481014,
+            "source_records": 271,
+            "task": "program_repair",
+            "valid_groups": 11
+          },
+          {
+            "mean_pass_at_1": 0.4613084112149533,
+            "median_lmcc": 18.799999999999997,
+            "min_group_size": null,
+            "partial_spearman_p": null,
+            "partial_spearman_r": null,
+            "raw_spearman_p": 0.0001650396033225462,
+            "raw_spearman_r": -0.16217338803261688,
+            "source_records": 535,
+            "task": "code_translation",
+            "valid_groups": 0
+          },
+          {
+            "mean_pass_at_1": 0.9436213991769548,
+            "median_lmcc": 8.7,
+            "min_group_size": null,
+            "partial_spearman_p": null,
+            "partial_spearman_r": null,
+            "raw_spearman_p": 4.0928373424194217e-07,
+            "raw_spearman_r": -0.2273057293328481,
+            "source_records": 486,
+            "task": "execution_reasoning",
+            "valid_groups": 0
+          }
+        ]
+      },
+      "selected": true,
+      "status": "toy"
+    },
+    {
+      "challenge_claim": "Semantics-preserving rewrites that reduce LM-CC improve LLM task performance, with reported gains up to 20.9% (Table 3).",
+      "challenge_claim_sha256": "0e79a2f5620552c4fd3871adb4129bc2da045163409b908b60d714f7234d5366",
+      "observations": {
+        "limitation": "The released simplified subsets show LM-CC reductions and mixed pass@1 deltas; this does not fully reproduce the headline maximum gain.",
+        "positive_mean_delta_tasks": [
+          "program_repair",
+          "code_translation"
+        ],
+        "tasks": [
+          {
+            "mean_pass_at_1_delta": 0.027586206896551727,
+            "median_lmcc_delta": -3.3999999999999986,
+            "paired_records": 58,
+            "task": "program_repair"
+          },
+          {
+            "mean_pass_at_1_delta": 0.04242424242424242,
+            "median_lmcc_delta": -3.200000000000003,
+            "paired_records": 99,
+            "task": "code_translation"
+          },
+          {
+            "mean_pass_at_1_delta": -0.006666666666666666,
+            "median_lmcc_delta": -2.6999999999999993,
+            "paired_records": 180,
+            "task": "execution_reasoning"
+          }
+        ]
+      },
+      "selected": true,
+      "status": "toy"
+    },
+    {
+      "challenge_claim": "LM-CC's correlation advantage generalizes to GPT-4o-mini and Qwen3.5-122B settings (Table 4).",
+      "challenge_claim_sha256": "820f4fd8c1d610061aa77a83215169506aba63ab03e76f8ec990f89a13f2a899",
+      "observations": {},
+      "selected": false,
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim": "Ablations show that both entropy-based decomposition and syntactic delimiter structure contribute to LM-CC's stable correlations (Table 5; Figure 3).",
+      "challenge_claim_sha256": "1c6db328fdb1320d78a8995dd9b2c268d9385d6d92f874ebd6513eb0fbd80e04",
+      "observations": {},
+      "selected": false,
+      "status": "unavailable"
+    }
+  ],
+  "estimated_api_cost_usd": 0.0,
+  "file_hashes": {
+    "code_translation_block_trees": "9024a4dad7214a0f739dafeb6845ed53377985427f5b400a083f29704be03afb",
+    "code_translation_results": "a91652227915b24c9d6ea4694389ced4d087e6c53d7b531ebddf2353272f0017",
+    "code_translation_simplified_block_trees": "d8acc5fc7d076c65805f353e11a1ef2a8e3acdacd6a4bf4418795aa586d849e8",
+    "code_translation_simplified_results": "345a1bb2c0b8b494948262ee036203939a9d3c3ebc263c81fc582a12d904f59b",
+    "correlation_source": "19e920a457914b1f1582bb3302ace328e60c271ebfc4d37972d23ab62ca6a442",
+    "execution_reasoning_block_trees": "99548b77868260137037ddcb666ded2188a24d6cefdd951a8ce6bd27c07b5c6e",
+    "execution_reasoning_results": "22ecd864e17e5a54268837491d722d933145d16d29b349ab65d5ae229ee199ed",
+    "execution_reasoning_simplified_block_trees": "8666633cda2bd7a7e424942c772f2efad0035487d2f5fd7da2697d1d89ce88ed",
+    "execution_reasoning_simplified_results": "6ece853d3b9a09992cf5c2a8fe00fba402b05ed0ee28608ec4f66515f8993f17",
+    "metric_source": "973651b1cd3e8aea726be2389bbdf7d7e4e07e149735bdb4187a1eb2aded347f",
+    "program_repair_block_trees": "9a363ccd6554109c217699be238ad646aea9fd2a1494d1212c0642c593a3a205",
+    "program_repair_results": "7e3569222f4b1ecb46dd25b305c176ba51c4863bfc5049defa8babf8a4bfd213",
+    "program_repair_simplified_block_trees": "1b5b541771d82b6eae7969126abf6eba4a8b650b23b5f39a4d618e8e4488e70e",
+    "program_repair_simplified_results": "3ae99b9f90b28b15e10e6ac3ce6dca4180af231850b5eef448771287d157e62e"
+  },
+  "generated_at": "2026-08-01T15:12:00+00:00",
+  "limitations": [
+    "No explicit upstream license file was present, so this submission clones public artifacts at runtime rather than vendoring upstream code or data.",
+    "Full hosted-LLM generation, GPT-4o-mini/Qwen generalization, and ablation claims were not selected.",
+    "The Table 2 partial-correlation claim is reported as toy because only one of three task families met the grouped partial-correlation significance rule from released cached outputs."
+  ],
+  "paper_id": "tI5CFbRhmV",
+  "snapshot_id": "ae039423cdd4ba289b7bce43249640ced01810ccdf857e862820729b4f0c9800",
+  "upstream": {
+    "checkout": "/tmp/lmcc-upstream-c38a26afdfc29ee517d734c6b677a4d6c65ec59b",
+    "commit": "c38a26afdfc29ee517d734c6b677a4d6c65ec59b",
+    "license": "not-found",
+    "url": "https://github.com/xchen121/lm-cc.git"
+  },
+  "upstream_revision": "arxiv:2602.07882+github:xchen121/lm-cc@c38a26afdfc29ee517d734c6b677a4d6c65ec59b"
+}
