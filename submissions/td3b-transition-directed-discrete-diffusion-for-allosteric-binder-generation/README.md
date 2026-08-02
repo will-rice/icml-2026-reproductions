@@ -1,3 +1,14 @@
+---
+title: TD3B Reproduction
+sdk: gradio
+app_file: app.py
+tags:
+  - icml2026-repro
+  - paper-RNuC8Nj6rD
+  - allosteric-binder-generation
+  - reproducibility
+---
+
 # TD3B Reproduction
 
 This submission builds independently executable evidence for:
