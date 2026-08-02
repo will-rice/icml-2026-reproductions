@@ -1,0 +1,87 @@
+{
+  "attempt_id": "daf2b529-c050-4cde-9218-281e985315dd",
+  "claims": [
+    {
+      "challenge_claim_sha256": "939b457e7369cf7c798a4b238ec6208bd33d8f839a33769bfcd43fc9d9b61dae",
+      "claim": "The paper frames Diffusion Bridge and Flow Matching in a shared stochastic optimal control/optimal transport framework (Section 4).",
+      "evidence": "Pinned repository exposes Flow Matching and Diffusion Bridge implementation paths; the Flow Matching formula was recomputed from the released code behavior.",
+      "status": "toy"
+    },
+    {
+      "challenge_claim_sha256": "a953b8e6d7b5dcffbee3d3d9b1cb3d3cf9a46ee79a10f58558d1d51e5dda6c5f",
+      "claim": "Theoretical analysis shows the Diffusion Bridge cost function is lower than Flow Matching under the paper's formulation, implying more stable trajectories (Proposition 4.1; Theorem 4.2).",
+      "evidence": "A deterministic one-dimensional bridge proxy pins endpoints and has lower computed action than the noisy unconstrained flow proxy; this is toy evidence only.",
+      "status": "toy"
+    },
+    {
+      "challenge_claim_sha256": "ced4be172d1a75019c9ae0670c833ae5b0bf502a6f107a2861758dc2c7fe8ed2",
+      "claim": "Under a shared Transformer architecture, Diffusion Bridge outperforms Flow Matching across image restoration and translation tasks (Table 1; Figure 2).",
+      "evidence": "Unavailable: full image restoration and translation comparisons require unreleased or unbundled datasets, checkpoints, and CUDA training.",
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim_sha256": "cc275ff75bc6ef12cbf225fa285a2205cdaf44b4046771a85b40d29cecf8ffd4",
+      "claim": "Diffusion Bridge remains stronger than Flow Matching as inpainting mask size increases, indicating better robustness under harder transformations (Table 2; Figure 3a).",
+      "evidence": "Unavailable: inpainting mask robustness requires full image experiments and metrics that were not recomputed.",
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim_sha256": "6e9f763c5188ef8a8fa6793b2a2b05ed79675ae2838a855e62f9536d9715d5e1",
+      "claim": "Flow Matching degrades more steeply than Diffusion Bridge when training data size is reduced (Figure 3b; Table 7).",
+      "evidence": "Unavailable: reduced-training-data degradation requires full data-scaling training runs that were not recomputed.",
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim_sha256": "e5a2fc71f95fa0879c7607d9a210208ca06b68436f46006101d1625618b54815",
+      "claim": "Using the same network input conditions does not eliminate the performance gap between Flow Matching and Diffusion Bridge (Table 4).",
+      "evidence": "Unavailable: same-input-condition ablation requires full model training and evaluation artifacts that were not recomputed.",
+      "status": "unavailable"
+    }
+  ],
+  "commands": [
+    "python generate_evidence.py",
+    "python -m pytest tests -q"
+  ],
+  "observations": {
+    "bridge_proxy": {
+      "bridge_action": 0.1502805366,
+      "bridge_endpoint_abs_error": 0.0,
+      "flow_noisy_action": 0.8254394387,
+      "flow_noisy_endpoint_abs_error": 0.0614979566,
+      "samples": 256,
+      "seed": 0,
+      "steps": 65
+    },
+    "flow_matching_interpolation": {
+      "formula": "x_t = t * x_1 + (1 - t) * x_0; velocity = x_1 - x_0",
+      "velocity": [
+        10.0,
+        4.0,
+        4.0
+      ],
+      "x_t": [
+        2.5,
+        3.0,
+        -1.0
+      ]
+    },
+    "repository_audit": {
+      "commit": "2def77bd3ee7a2a37cdf6ce5d5393915604619f7",
+      "file_count": 42,
+      "has_diffusion_bridge_code": true,
+      "has_flow_matching_code": true,
+      "has_released_checkpoints": false,
+      "repo": "https://github.com/zhukaizhen/diffusion_bridge_flow_matching.git",
+      "requires_cuda_configs": true,
+      "sha256": "e478848be17466c3219a0136c4a029310cac711f40a2cd9c817c94474be22cb6"
+    }
+  },
+  "paper_id": "aIFgQusnPy",
+  "snapshot_id": "4948a53d084e3dca8fd7ee52349a60cea781cb34e62c8ac156959220e98820fd",
+  "upstream_pins": {
+    "code_commit": "2def77bd3ee7a2a37cdf6ce5d5393915604619f7",
+    "code_repo": "https://github.com/zhukaizhen/diffusion_bridge_flow_matching.git",
+    "observed_commit": "2def77bd3ee7a2a37cdf6ce5d5393915604619f7",
+    "paper": "arxiv:2509.24531v2"
+  }
+}

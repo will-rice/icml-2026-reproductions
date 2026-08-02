@@ -1,0 +1,10 @@
+[project]
+name = "dbfm-repro"
+version = "0.1.0"
+description = "CPU-only evidence for Diffusion Bridge or Flow Matching reproduction"
+requires-python = ">=3.10"
+dependencies = ["pytest>=9.0.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
