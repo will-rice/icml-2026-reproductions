@@ -1,3 +1,2 @@
 gradio>=4.44.0
 numpy>=2
-pyaudioop
