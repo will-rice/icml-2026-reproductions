@@ -28,4 +28,3 @@ The evidence generator clones the pinned public upstream repository into
 `/tmp`, records file hashes, and writes `evidence/bundle.json`. It does not
 vendor upstream code or cached outputs because the probed upstream tree has no
 explicit license file.
-

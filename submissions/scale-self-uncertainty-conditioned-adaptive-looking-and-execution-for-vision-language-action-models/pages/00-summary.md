@@ -9,7 +9,6 @@
 
 SCALE jointly modulates visual attention temperature and action decoding temperature using the VLA model's self-uncertainty during decoding.
 
-- **Training-Free**: Requires zero additional training and no separate verifier module.
-- **Single Pass**: Runs in a single forward pass per control step.
-- **Backbone Compatibility**: Verified implementation for OpenVLA, pi0-FAST, and SpatialVLA backbones.
-
+- **Mechanism evidence**: Pinned SCALE source implements self-uncertainty, adaptive action temperature, adaptive visual attention temperature, and the SCALE decoding mode.
+- **Training-free evidence**: Source-level checks support inference-only execution with no verifier, marked toy because this CPU audit does not time a deployed robot control step.
+- **Unreplicated measurements**: LIBERO, SIMPLER-WidowX, and real-world robot success-rate claims require GPU simulation, pretrained VLA checkpoints, or physical robot hardware and are marked unavailable.

@@ -1,6 +1,6 @@
 ---
 title: GUDA Evidence Bundle
-emoji: "G"
+emoji: "🧪"
 colorFrom: blue
 colorTo: green
 sdk: gradio

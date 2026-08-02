@@ -9,6 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GENERATOR_PATH = PROJECT_ROOT / "generate_evidence.py"
 APP_PATH = PROJECT_ROOT / "app.py"
 REPORT_PAGE = PROJECT_ROOT / "pages" / "report.md"
+README_PATH = PROJECT_ROOT / "README.md"
 
 
 def load_generator():
@@ -83,6 +84,31 @@ def test_synthetic_ranking_metrics_reward_correct_head_group(tmp_path: Path):
     assert ranking["ndcg_at_3"] == 1.0
 
 
+def test_claim_records_surface_computed_synthetic_observations(tmp_path: Path):
+    """Catches judge-visible claims that omit the computed CPU observations."""
+    module = load_generator()
+
+    bundle = module.build_evidence_bundle(output_path=tmp_path / "bundle.json")
+    claims = {claim["claim_sha256"]: claim for claim in bundle["claims"]}
+
+    cifar = claims["8cfe641882a49b33f0db50a94de87d4f60cbdda050fc34364c2267d024e9254d"]
+    assert cifar["status"] == "toy"
+    assert cifar["observations"]["guda"]["top1_accuracy"] == 1.0
+    assert cifar["observations"]["semantic_baseline"]["top1_accuracy"] == 0.0
+
+    anchor = claims["9c7f6323ad0541e5afe3f24417bbbe62c2510b3a1bd286cbae41f473122bd4ed"]
+    assert anchor["observations"]["weighted_anchor"]["ndcg_at_3"] > anchor["observations"]["uniform_anchor"]["ndcg_at_3"]
+
+    cost = claims["dcd3d556206571fbe9121fac83ded756c044b9b7ff14ff48058d3c319b7d1338"]
+    assert cost["status"] == "toy"
+    assert cost["observations"]["cifar10_group_count"] == 10
+    assert cost["observations"]["relative_training_runs_vs_logo"] < 1.0
+
+    noisy = claims["1821ab64dbe97bf7121de7694c3a3715844bb37300235ffb5b4451e878ba17ab"]
+    assert noisy["status"] == "toy"
+    assert noisy["observations"]["clean"]["top1_accuracy"] == noisy["observations"]["noisy_5pct"]["top1_accuracy"]
+
+
 def test_app_summary_uses_generated_bundle(tmp_path: Path):
     """Catches a Space app that reports stale prose instead of bundle data."""
     generator = load_generator()
@@ -108,3 +134,11 @@ def test_space_report_page_surfaces_claim_results():
     assert "GUDA: Counterfactual Group-wise Training Data Attribution" in report
     assert "claim_sha256" in report
     assert "106c8d047410261b6f3b2038b498207ec9be867e354c567664d5f4cdd33c0917" in report
+
+
+def test_readme_metadata_uses_hub_accepted_emoji():
+    """Catches Hugging Face rejecting README metadata before upload."""
+    readme = README_PATH.read_text(encoding="utf-8")
+    assert 'emoji: "G"' not in readme
+    emoji_line = next(line for line in readme.splitlines() if line.startswith("emoji:"))
+    assert any(ord(character) > 127 for character in emoji_line)

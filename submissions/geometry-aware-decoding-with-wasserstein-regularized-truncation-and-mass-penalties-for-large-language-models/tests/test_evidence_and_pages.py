@@ -49,6 +49,7 @@ def test_bundle_pins_upstream_sources(bundle):
 def test_pages_surface_the_audit_numbers(bundle):
     pages = build_pages(bundle)
     assert set(pages) == {
+        "report.md",
         "00-summary.md",
         "01-claim-1-wasserstein-objective.md",
         "02-claim-2-exact-subset-update.md",
@@ -95,10 +96,19 @@ def test_pages_surface_the_audit_numbers(bundle):
     for sha in bundle["upstream"]["files"].values():
         assert sha in methods
 
+    report = pages["report.md"]
+    assert "Consolidated judge-visible report" in report
+    assert f"{prefix['optimal_value_matches']}/{prefix['trials']}" in report
+    assert f"{controls['potential_max_error']:.1e}" in report
+    assert "Claim 3: unreplicated" in report
+    assert "Claim 4: unreplicated" in report
+    assert "Claim 5: unreplicated" in report
+
 
 def test_generated_artifacts_match_current_code():
     """The committed bundle and pages must be regenerable from source."""
     bundle_path = ROOT / "evidence" / "bundle.json"
     pages_dir = ROOT / "pages"
     assert bundle_path.exists()
+    assert (pages_dir / "report.md").exists()
     assert (pages_dir / "00-summary.md").exists()

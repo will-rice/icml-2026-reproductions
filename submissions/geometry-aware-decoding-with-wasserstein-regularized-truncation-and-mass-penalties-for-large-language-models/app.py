@@ -10,6 +10,7 @@ PAGES_DIR = ROOT / "pages"
 BUNDLE_PATH = ROOT / "evidence" / "bundle.json"
 
 PAGE_TITLES = {
+    "report.md": "Report",
     "00-summary.md": "Executive summary",
     "01-claim-1-wasserstein-objective.md": "Claim 1: Objective audit",
     "02-claim-2-exact-subset-update.md": "Claim 2: Exact S-step",

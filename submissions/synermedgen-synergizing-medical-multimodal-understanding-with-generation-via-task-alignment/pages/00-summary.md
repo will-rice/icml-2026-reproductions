@@ -10,4 +10,3 @@
 2. **Dataset Scale Claims**: Claims 1M paired medical image synthesis samples and 2M generation-aligned understanding instances.
 3. **Synthesis Performance**: Outperforms specialized synthesis methods across SynthRAD2023, AutoPET, and BraTS cross-modality synthesis benchmarks.
 4. **Generalization**: Demonstrates zero-shot cross-modality generalization on MyoPS cardiac MRI and SynthRAD2025 datasets.
-

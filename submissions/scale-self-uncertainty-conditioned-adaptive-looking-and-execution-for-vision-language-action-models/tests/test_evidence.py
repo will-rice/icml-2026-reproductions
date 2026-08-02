@@ -1,12 +1,38 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from generate_evidence import build_evidence, main
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_served_pages_include_summary_and_evidence_detail():
+    pages = sorted((PROJECT_ROOT / "pages").glob("*.md"))
+    assert len(pages) >= 2
+    assert all(page.read_text(encoding="utf-8").strip() for page in pages)
+
+
+def test_served_pages_do_not_promote_unavailable_benchmark_claims():
+    rendered_pages = "\n".join(
+        page.read_text(encoding="utf-8") for page in (PROJECT_ROOT / "pages").glob("*.md")
+    )
+    bundle = build_evidence()
+    unavailable_claims = [
+        claim_id
+        for claim_id, result in bundle["claim_results"].items()
+        if result["status"] == "unavailable"
+    ]
+    assert unavailable_claims == ["claim-3", "claim-4", "claim-5", "claim-6"]
+    for claim_id in unavailable_claims:
+        display_id = claim_id.replace("claim-", "Claim ")
+        assert not re.search(rf"\|\s*{re.escape(display_id)}\s*\|[^\n]*\|\s*Verified\s*\|", rendered_pages)
 
 
 def test_bundle_provenance_is_pinned():
