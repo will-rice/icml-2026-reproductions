@@ -729,3 +729,10 @@ submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffus
 submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/.pytest_cache/
 submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/**/__pycache__/
 submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/**/*.egg-info/
+
+!submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/
+!submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/**
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/.venv/
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/.pytest_cache/
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/**/__pycache__/
+submissions/tic-vla-a-think-in-control-vision-language-action-model-for-robot-navigation-in-dynamic-environments/**/*.egg-info/
