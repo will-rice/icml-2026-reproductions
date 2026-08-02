@@ -1,0 +1,13 @@
+[project]
+name = "textatlas5m-reproduction"
+version = "0.1.0"
+description = "Deterministic TextAtlas5M reproduction evidence for the ICML 2026 Agent Repro Challenge"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=5.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]

@@ -1,0 +1,112 @@
+{
+  "attempt_id": "c21b9754-4227-4943-b26f-ac9afd5712a4",
+  "claims": [
+    {
+      "challenge_claim_sha256": "012c780c0991f038c727283e4810bf52d104984e1d7d15795cf31b06583df262",
+      "claim": "TextAtlas5M contains 5M real and synthetic images with Caption+OCR+Text annotations and an average OCR token length of 148.82.",
+      "id": "textatlas5m_scale_and_annotations",
+      "limits": "The full 1.2 TB image corpus was not downloaded; this verifies released metadata scale and configuration structure.",
+      "observed": {
+        "annotation_fields": [
+          "caption",
+          "ocr",
+          "text"
+        ],
+        "config_count": 10,
+        "dataset": "CSU-JPG/TextAtlas5M",
+        "paper_average_ocr_tokens": 148.82,
+        "rows": 5398826
+      },
+      "source": "huggingface_dataset_viewer_metadata",
+      "status": "metadata_verified"
+    },
+    {
+      "challenge_claim_sha256": "3d776d93ce1b57ad3fc4001a7d158063133a1f895aa68bf61a3509c02d33c101",
+      "claim": "TextAtlasEval contains 4,000 test cases across four domains.",
+      "id": "textatlaseval_size",
+      "limits": "The metadata check does not independently assess whether examples were human-improved.",
+      "observed": {
+        "dataset": "CSU-JPG/TextAtlasEval",
+        "domain_count": 4,
+        "rows": 4000,
+        "rows_per_domain": 1000
+      },
+      "source": "huggingface_dataset_viewer_metadata",
+      "status": "metadata_verified"
+    },
+    {
+      "challenge_claim_sha256": "9584a1587318079e27dfc62ace606f83c566e5d7bfb3b0018f32d83eeb9fff1e",
+      "claim": "The dataset spans synthetic, interleaved text-vision, styled synthetic scenes, and real dense-text domains.",
+      "id": "dataset_domain_coverage",
+      "limits": "This checks released domain/config coverage, not visual sample quality.",
+      "observed": {
+        "domains": [
+          "synthetic_clean_text",
+          "interleaved_text_vision",
+          "styled_synthetic_scenes",
+          "ppt",
+          "book_covers",
+          "papers",
+          "textsceneshq"
+        ],
+        "paper_figure": "Figure 1"
+      },
+      "source": "dataset_config_names_and_paper_taxonomy",
+      "status": "metadata_verified"
+    },
+    {
+      "challenge_claim_sha256": "c0be8fd383689923a489285d230bd1844fe2448bda2ba7fe4b304f4a5b9fcd91",
+      "claim": "The paper evaluates text-to-image models using CLIP, OCR accuracy, F1, and character error rate.",
+      "id": "model_eval_metrics",
+      "limits": "No model evaluation was run in this CPU-only reproduction.",
+      "observed": {
+        "independent_model_runs": 0,
+        "metrics": [
+          "CLIP",
+          "OCR accuracy",
+          "F1",
+          "character error rate"
+        ]
+      },
+      "source": "paper_prose",
+      "status": "unavailable"
+    },
+    {
+      "challenge_claim_sha256": "8788571a79de59b46cd6402fb5318d0bfcc3c220352b4837c5d2eee117f80e0a",
+      "claim": "Fine-tuning diffusion and autoregressive models on TextAtlas5M improves text rendering.",
+      "id": "finetuning_improvement",
+      "limits": "The training-improvement claim is not independently reproduced.",
+      "observed": {
+        "reason": "full-model fine-tuning is outside the CPU-only budget",
+        "training_runs": 0
+      },
+      "source": "paper_prose",
+      "status": "unavailable"
+    }
+  ],
+  "dataset_metadata": {
+    "config_count": 10,
+    "domain_map": [
+      "synthetic_clean_text",
+      "interleaved_text_vision",
+      "styled_synthetic_scenes",
+      "ppt",
+      "book_covers",
+      "papers",
+      "textsceneshq"
+    ],
+    "is_gated": false,
+    "is_private": false,
+    "license": "mit",
+    "total_examples": 5398826
+  },
+  "paper": {
+    "paper_id": "5vufrrbi4N",
+    "title": "TextAtlas5M: A Large-Scale Dataset for Long Text Image Generation"
+  },
+  "snapshot_id": "367354e797e820ffc39729ded717a4c02df0c72eee85303de50ba3c181ddde47",
+  "upstream": {
+    "code_commit": "f13e9926689de1bc4d671b3f21a1c62255be738d",
+    "hf_dataset_commit": "f9f2a0f5000fbb078f718197acb45cfb9ceed551"
+  }
+}
