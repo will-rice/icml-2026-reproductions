@@ -1,0 +1,215 @@
+{
+  "artifact_access": {
+    "repo_file_count": 79,
+    "source_files": [
+      "README.md",
+      "diffu-grpo-ao/bash_scripts/anyorder_gsm8k_d2anyorder.sh",
+      "diffu-grpo-ao/diffu_grpo_trainer_ao.py",
+      "diffu-grpo/bash_scripts/countdown_d2stepmerge.sh",
+      "diffu-grpo/bash_scripts/gsm8k_d2stepmerge.sh",
+      "diffu-grpo/bash_scripts/math500_d2stepmerge.sh",
+      "diffu-grpo/bash_scripts/sudoku_d2stepmerge_N8.sh",
+      "diffu-grpo/diffu_grpo_trainer.py",
+      "eval/parse_and_get_acc.py"
+    ]
+  },
+  "attempt_id": "0f0cfb98-1f1a-4c31-8881-32cb6e02abde",
+  "audits": {
+    "result_artifacts": {
+      "benchmark_eval_scripts_present": true,
+      "machine_readable_results": [],
+      "released_dataset_files": [
+        "dataset/4x4_sudoku_unique_puzzles.csv",
+        "dataset/4x4_test_sudoku.csv",
+        "dataset/countdown_cd3_test.jsonl",
+        "dataset/gsm8k_genlength1024_lladaminidistill.jsonl",
+        "dataset/math500_genlength1024_lladaminidistill.jsonl"
+      ]
+    },
+    "source_components": {
+      "anyorder_and_standard_paths": "present",
+      "anyorder_source": "present",
+      "evaluation_parser": "present",
+      "rl_script_coverage": "present",
+      "source_hashes": {
+        "README.md": "c81c041875dc9d849dd3a190c2b2c8d40477d120978cda0df63de0d073cfa5b5",
+        "diffu-grpo-ao/bash_scripts/anyorder_gsm8k_d2anyorder.sh": "040c56f7c44667327da7927cd878841d724d47694c4cb1b74143b491058dcb6d",
+        "diffu-grpo-ao/diffu_grpo_trainer_ao.py": "d456b10a14ded23e319e091435fc7965ccc929e5780c689e9821d350cbb58c25",
+        "diffu-grpo/bash_scripts/countdown_d2stepmerge.sh": "4ed86f6c0639eaf08906a95b249387ac1ae7223404d1e13e2d19f437cd7a6471",
+        "diffu-grpo/bash_scripts/gsm8k_d2stepmerge.sh": "398759e80192ee3ec0ade368e993172287008fcce44bcae378dc045d7d07de78",
+        "diffu-grpo/bash_scripts/math500_d2stepmerge.sh": "35ed108c70f9a11401474b8da8bd0d4ab2f3b41346f3c02188f820a19a97bd0c",
+        "diffu-grpo/bash_scripts/sudoku_d2stepmerge_N8.sh": "ee53019564d654b9f1a4a78633726e236415f75bc282ac7253aaf8f97d4e2c1d",
+        "diffu-grpo/diffu_grpo_trainer.py": "63c67266b594ad71a68482af76974f5bbf4dcf1bd8c595b5fee8d426050a2bdc",
+        "eval/parse_and_get_acc.py": "81646fb55880a6f07d9db6da494511756c2755fe4ebad0ad6ca3b1da9178b4a6"
+      },
+      "stepmerge_source": "present"
+    },
+    "toy_anyorder": {
+      "enumerated_orders": {
+        "log_likelihood": -1.1776554960085626,
+        "orders_checked": 6
+      },
+      "log_likelihood_delta": 0.0,
+      "single_pass": {
+        "log_likelihood": -1.1776554960085626,
+        "model_passes": 1,
+        "tokens": 3
+      }
+    },
+    "toy_stepmerge": {
+      "2": {
+        "approx_log_likelihood": -3.1999999999999997,
+        "error_vs_exact": 1.35,
+        "exact_log_likelihood": -4.55,
+        "groups": [
+          {
+            "end": 4,
+            "representative_logp": -0.08,
+            "start": 0
+          },
+          {
+            "end": 8,
+            "representative_logp": -0.72,
+            "start": 4
+          }
+        ],
+        "model_passes": 2
+      },
+      "4": {
+        "approx_log_likelihood": -4.36,
+        "error_vs_exact": 0.1899999999999995,
+        "exact_log_likelihood": -4.55,
+        "groups": [
+          {
+            "end": 2,
+            "representative_logp": -0.08,
+            "start": 0
+          },
+          {
+            "end": 4,
+            "representative_logp": -0.28,
+            "start": 2
+          },
+          {
+            "end": 6,
+            "representative_logp": -0.72,
+            "start": 4
+          },
+          {
+            "end": 8,
+            "representative_logp": -1.1,
+            "start": 6
+          }
+        ],
+        "model_passes": 4
+      },
+      "8": {
+        "approx_log_likelihood": -4.55,
+        "error_vs_exact": 0.0,
+        "exact_log_likelihood": -4.55,
+        "groups": [
+          {
+            "end": 1,
+            "representative_logp": -0.08,
+            "start": 0
+          },
+          {
+            "end": 2,
+            "representative_logp": -0.11,
+            "start": 1
+          },
+          {
+            "end": 3,
+            "representative_logp": -0.28,
+            "start": 2
+          },
+          {
+            "end": 4,
+            "representative_logp": -0.31,
+            "start": 3
+          },
+          {
+            "end": 5,
+            "representative_logp": -0.72,
+            "start": 4
+          },
+          {
+            "end": 6,
+            "representative_logp": -0.77,
+            "start": 5
+          },
+          {
+            "end": 7,
+            "representative_logp": -1.1,
+            "start": 6
+          },
+          {
+            "end": 8,
+            "representative_logp": -1.18,
+            "start": 7
+          }
+        ],
+        "model_passes": 8
+      }
+    }
+  },
+  "claim_results": [
+    {
+      "claim": "d2 is a reinforcement-learning framework for masked diffusion language models built around estimating sampling-trajectory likelihoods (Section 3).",
+      "claim_index": 1,
+      "claim_sha256": "8abd632fb622a9ca7082b5e4af26fb9410dc9fdb53c972ea94f93fd40d23bf38",
+      "limitation": "This validates mechanism/source wiring, not full RL training.",
+      "observation": "Official source contains RL trainer scripts and masked trajectory log-probability code; local finite-state checks recompute trajectory likelihood behavior.",
+      "status": "verified"
+    },
+    {
+      "claim": "d2-AnyOrder provides exact trajectory likelihood with a single model pass for DLMs that support any-order decoding (Section 3).",
+      "claim_index": 2,
+      "claim_sha256": "9e7c76274f238f39796b6c62d7ab6fc84f4b0a24c6cb4374f340ed5bc4b169df",
+      "limitation": "The check uses a finite order-invariant toy DLM rather than an 8B checkpoint.",
+      "observation": "Toy any-order log likelihood matches enumeration with delta 0; source constructs the doubled sequence attention path.",
+      "status": "verified"
+    },
+    {
+      "claim": "The paper empirically shows that any-order decoding support is not universal across widely used DLMs (Section 4).",
+      "claim_index": 3,
+      "claim_sha256": "a2d18ab723499038a58d26f7847038968cf9e14aab4b33f1142cf9c2677dbbb3",
+      "limitation": "The broad empirical claim about any-order support across widely used DLMs was not rerun.",
+      "observation": "The repository separates any-order causal code from standard LLaDA StepMerge code paths.",
+      "status": "toy"
+    },
+    {
+      "claim": "d2-StepMerge approximates trajectory likelihood for standard masked diffusion models with a tractable compute-accuracy tradeoff (Section 3).",
+      "claim_index": 4,
+      "claim_sha256": "4017a2eea78238824fce3a7ed8480a781b79a0a5dc131197d88f005ac6f84acb",
+      "limitation": "The computation is a finite likelihood approximation test, not a trained masked DLM run.",
+      "observation": "Toy StepMerge error improves from 1.350 with 2 groups to 0.190 with 4 groups and reaches exact at 8 groups.",
+      "status": "toy"
+    },
+    {
+      "claim": "d2 reports stronger performance than widely used RL baselines when applied to popular diffusion language models (Section 5).",
+      "claim_index": 5,
+      "claim_sha256": "8e7a073674a9362a2de3027f723a8f72f0fcea7dcbacf41e92d6727c33c2be9b",
+      "limitation": "Performance over RL baselines requires large-model runs or raw released outputs.",
+      "observation": "Training and evaluation scripts exist, but no raw benchmark result artifacts are released in the pinned repository.",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "d2 reports new state-of-the-art diffusion-language-model results on Countdown, Sudoku, GSM8K, and MATH500 reasoning benchmarks (Section 5).",
+      "claim_index": 6,
+      "claim_sha256": "b60d6d3c7d157e5dd7cb263491a6cc90cc06d3f65aa0ff87ebe7e6ce318b7fcb",
+      "limitation": "SOTA reasoning benchmark claims were not reproduced on Countdown, Sudoku, GSM8K, or MATH500.",
+      "observation": "Released dataset files: 5; machine-readable result files: [].",
+      "status": "inconclusive"
+    }
+  ],
+  "paper_id": "ldCiNVFt8O",
+  "snapshot_id": "730efd6146ac7814c07bd5e2d3908fb59c0435dd83f013b261493ce06c6b3d08",
+  "title": "d2: Improved Techniques for Training Reasoning Diffusion Language Models",
+  "upstream_pins": {
+    "checkpoint_anyorder_gsm8k": "hf:GuanghanWang/d2_anyorder_causal_llada_intellectsft_gsm8k@e93476e1f676abfaaf0bdc036aa24d3f04c213f4",
+    "checkpoint_anyorder_sft": "hf:GuanghanWang/d2_anyorder_causal_llada_intellectsft@3c334aa4931697841a923d6caad3b12d5eaa4409",
+    "official_code": "github:kuleshov-group/d2@381b9f14f4afd0719297ac852e4015c74e0ed235",
+    "paper": "arxiv:2509.21474"
+  }
+}

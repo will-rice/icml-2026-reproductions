@@ -799,3 +799,11 @@ submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/
 submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/.pytest_cache/
 submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/**/__pycache__/
 submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/**/*.egg-info/
+
+!submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/
+!submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/**
+!docs/reproductions/0f0cfb98-1f1a-4c31-8881-32cb6e02abde-d2-design.md
+submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/.venv/
+submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/.pytest_cache/
+submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/**/__pycache__/
+submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/**/*.egg-info/
