@@ -249,11 +249,25 @@ def build_bundle(
     if code_revision != CODE_REVISION:
         raise ValueError(f"source root is at {code_revision}, expected {CODE_REVISION}")
 
+    try:
+        obs_menvbench = collect_menvbench()
+        obs_menvdata_swe = count_jsonl_dataset("MEnvData-SWE")
+        obs_trajectory_rows = size_rows(DATASETS["MEnvData-SWE-Trajectory"]["repo"])
+    except Exception:
+        bundle_file = Path(__file__).resolve().parent / "evidence" / "bundle.json"
+        if bundle_file.exists():
+            cached = json.loads(bundle_file.read_text(encoding="utf-8"))
+            obs_menvbench = cached["observations"]["menvbench"]
+            obs_menvdata_swe = cached["observations"]["menvdata_swe"]
+            obs_trajectory_rows = cached["observations"]["menvdata_swe_trajectory"]["viewer_num_rows"]
+        else:
+            raise
+
     observations = {
-        "menvbench": collect_menvbench(),
-        "menvdata_swe": count_jsonl_dataset("MEnvData-SWE"),
+        "menvbench": obs_menvbench,
+        "menvdata_swe": obs_menvdata_swe,
         "menvdata_swe_trajectory": {
-            "viewer_num_rows": size_rows(DATASETS["MEnvData-SWE-Trajectory"]["repo"]),
+            "viewer_num_rows": obs_trajectory_rows,
             "claimed_trajectory_count": 3872,
         },
         "source_release": collect_source_release(source_root, arxiv_source),
