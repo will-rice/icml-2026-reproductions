@@ -1,0 +1,64 @@
+{
+  "attempt_id": "69599dee-e0f4-4f62-b6cf-2f4c6d35493d",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "claims": [
+    {
+      "challenge_claim": "ProcMEM/Skill-Pro learns reusable procedural skills from interaction experience without updating model parameters (Section 3).",
+      "challenge_claim_sha256": "28eea780f130523e50495149accae17c64cf5e4759450530b8362166ca67b8eb",
+      "observation": "A synthetic Skill-MDP update path proposes executable procedural skills and records zero model parameter updates.",
+      "paper_reported_context": "The paper describes non-parametric procedural-memory learning in Section 3; this bundle does not run the paper's agent benchmark.",
+      "status": "toy",
+      "target_claim": "ProcMEM/Skill-Pro learns reusable procedural skills from interaction experience without updating model parameters (Section 3)."
+    },
+    {
+      "challenge_claim": "The Skill-MDP formalism converts passive episodic narratives into executable skills with activation, execution, and termination conditions (Section 3).",
+      "challenge_claim_sha256": "ac04b54896fef8a79d03b25254f0520f6e42f41064e8ae3a7818c550f5af0157",
+      "observation": "The local Skill object enforces activation, execution, and termination fields and executes them on a controlled synthetic state.",
+      "paper_reported_context": "The paper defines this structure in Section 3; this is a mechanism check, not a full environment reproduction.",
+      "status": "toy",
+      "target_claim": "The Skill-MDP formalism converts passive episodic narratives into executable skills with activation, execution, and termination conditions (Section 3)."
+    },
+    {
+      "challenge_claim": "Non-Parametric PPO uses semantic gradients for candidate skill generation and a PPO Gate for robust skill verification (Section 4).",
+      "challenge_claim_sha256": "9f1c59f31d308e29ade8bc2006442c0de5c2e35d79136a6a55410984a87528b6",
+      "observation": "The local semantic-gradient proposal and clipped-surrogate gate reproduce the decision logic on deterministic numeric fixtures.",
+      "paper_reported_context": "The paper presents the NP-PPO gate in Section 4; no LLM-generated semantic gradients are sampled here.",
+      "status": "toy",
+      "target_claim": "Non-Parametric PPO uses semantic gradients for candidate skill generation and a PPO Gate for robust skill verification (Section 4)."
+    },
+    {
+      "challenge_claim": "Skill-Pro achieves higher reuse rates than baselines in in-domain, cross-task, and cross-agent evaluations (Table 1).",
+      "challenge_claim_sha256": "80ca84d9709de610ffda4e7b701cace2e858c289369ecb206b1b3216f4fa0d7b",
+      "observation": "No primary raw run outputs or executable benchmark harness were available in this reproduction.",
+      "paper_reported_context": "Table 1 reports reuse-rate comparisons; those values are not emitted as reproduced measurements.",
+      "status": "inconclusive",
+      "target_claim": "Skill-Pro achieves higher reuse rates than baselines in in-domain, cross-task, and cross-agent evaluations (Table 1)."
+    },
+    {
+      "challenge_claim": "Skill-Pro maintains only 816 memory tokens while achieving the highest reported ALFWorld success rate of 0.90 under extreme compression (Table 2).",
+      "challenge_claim_sha256": "b4d70952d1bd41fb322bcd2a426ca41e2a1462811db71e2edae967f6cdefd599",
+      "observation": "The local SkillPool accounts deterministic memory tokens, but it does not reproduce the ALFWorld evaluation or the reported 816-token/0.90 result.",
+      "paper_reported_context": "Table 2 values remain paper-reported context only.",
+      "status": "inconclusive",
+      "target_claim": "Skill-Pro maintains only 816 memory tokens while achieving the highest reported ALFWorld success rate of 0.90 under extreme compression (Table 2)."
+    },
+    {
+      "challenge_claim": "Ablations evaluate the contribution of skill use, online score, and PPO Gate pass rate to Skill-Pro performance (Table 3).",
+      "challenge_claim_sha256": "f9714af3f3e8a942bd55ce3d364f074b63d501d02047991857e28ddaa9d1b9f4",
+      "observation": "The local code checks online-score pruning and PPO Gate behavior independently, but no benchmark ablation runs were executed.",
+      "paper_reported_context": "Table 3 ablation values are not reproduced measurements.",
+      "status": "inconclusive",
+      "target_claim": "Ablations evaluate the contribution of skill use, online score, and PPO Gate pass rate to Skill-Pro performance (Table 3)."
+    }
+  ],
+  "cost_usd": 0.0,
+  "cpu_only": true,
+  "paper_id": "9kJQjx2B80",
+  "reproduced_table_measurements": [],
+  "snapshot_id": "c797d3cfc3dccc0d6e34854ee2969147dce439e23c7dac0f6a8a57e3baeb54e9",
+  "upstream": {
+    "code": null,
+    "openreview": "https://openreview.net/forum?id=9kJQjx2B80",
+    "paper": "arxiv:2602.01869v1"
+  }
+}

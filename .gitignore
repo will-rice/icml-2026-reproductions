@@ -702,3 +702,12 @@ submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-
 submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/.pytest_cache/
 submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/**/__pycache__/
 submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/**/*.egg-info/
+
+!docs/reproductions/69599dee-e0f4-4f62-b6cf-2f4c6d35493d-procmem-design.md
+
+!submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/
+!submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/.venv/
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/.pytest_cache/
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/__pycache__/
+submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/*.egg-info/
