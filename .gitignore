@@ -784,3 +784,10 @@ submissions/rethinking-code-complexity-through-the-lens-of-large-language-models
 submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/.pytest_cache/
 submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/**/__pycache__/
 submissions/rethinking-code-complexity-through-the-lens-of-large-language-models/**/*.egg-info/
+
+!submissions/dimension-free-diffusion-gmm/
+!submissions/dimension-free-diffusion-gmm/**
+submissions/dimension-free-diffusion-gmm/.venv/
+submissions/dimension-free-diffusion-gmm/.pytest_cache/
+submissions/dimension-free-diffusion-gmm/**/__pycache__/
+submissions/dimension-free-diffusion-gmm/**/*.egg-info/

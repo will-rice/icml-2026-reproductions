@@ -1,0 +1,15 @@
+{
+  "inputs": [
+    {
+      "acquisition_command": "curl -L --fail https://arxiv.org/pdf/2504.05300v1 -o 2504.05300v1.pdf",
+      "artifact": "paper-pdf",
+      "bytes": 510602,
+      "license": "Paper-specific reuse license not independently verified; used as read-only research context.",
+      "revision": "arxiv:2504.05300v1",
+      "sha256": "dc5811244e849e37e2b5b6f48a9f899e5760ab4430701ac0f4dcc1b009bde7b0",
+      "url": "https://arxiv.org/pdf/2504.05300v1"
+    }
+  ],
+  "paper_id": "HMu24dTKkJ",
+  "schema_version": 1
+}

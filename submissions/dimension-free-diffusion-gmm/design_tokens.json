@@ -1,0 +1,16 @@
+{
+  "concept": "A theorem ledger: three claims, three finite audits, and two controls on a quiet paper-blue field.",
+  "dark_ground": false,
+  "fonts": {
+    "mono": [],
+    "sans": ["Arial"],
+    "serif": ["Georgia"]
+  },
+  "tokens": {
+    "accent": "#24577A",
+    "accent_deep": "#17384F",
+    "accent_soft": "#DDEAF2",
+    "emph": "#A2521C",
+    "emph_soft": "#F5E7DE"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "cell_id": "42b16158829a85d865f6b242cb807926281d7c70f3d00936f22170a10d38db6e",
+  "code_revision": "848a54d6041268cc4897671ee4fea0678f19cf6e",
+  "config": {
+    "epsilon_score": 0.02,
+    "kind": "score_error",
+    "samples": 64,
+    "score_profile": "front-loaded",
+    "seed": 0,
+    "steps": 256
+  },
+  "content_hash": "e3b5dbf2eb7495b190f841e81a8671bd753a3ea6d3447b24db2777639b26fb8c",
+  "elapsed_seconds": 0.0589,
+  "observations": {
+    "assumption_satisfied": true,
+    "empirical_mean_shift_l2": 0.0,
+    "epsilon_score": 0.02,
+    "samples": 64,
+    "score_profile": "front-loaded",
+    "seed": 0,
+    "steps": 256,
+    "tv_bound_additive_term": 0.002
+  },
+  "status": "complete"
+}

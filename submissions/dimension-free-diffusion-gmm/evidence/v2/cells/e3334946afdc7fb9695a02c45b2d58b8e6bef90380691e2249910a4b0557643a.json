@@ -1,0 +1,24 @@
+{
+  "cell_id": "e3334946afdc7fb9695a02c45b2d58b8e6bef90380691e2249910a4b0557643a",
+  "code_revision": "848a54d6041268cc4897671ee4fea0678f19cf6e",
+  "config": {
+    "family": "rank1-k2",
+    "kind": "convergence",
+    "samples": 64,
+    "seed": 0,
+    "steps": 128
+  },
+  "content_hash": "24ed61337881bc9b046f42099360b43920d4d8a8a86fc183bce5361aace90427",
+  "elapsed_seconds": 0.1579,
+  "observations": {
+    "convergence_metric": 2.2250738585072014e-308,
+    "family": "rank1-k2",
+    "linear_mmd_estimate": 0.0,
+    "linear_mmd_lower_95": 0.0,
+    "linear_mmd_upper_95": 0.14572372738239578,
+    "samples": 64,
+    "seed": 0,
+    "steps": 128
+  },
+  "status": "complete"
+}

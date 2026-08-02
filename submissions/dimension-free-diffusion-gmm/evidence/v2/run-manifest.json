@@ -1,0 +1,11 @@
+{
+  "cell_count": 76,
+  "code_revision": "848a54d6041268cc4897671ee4fea0678f19cf6e",
+  "completed_cell_count": 76,
+  "environment": {
+    "numpy": "2.2.6",
+    "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12"
+  },
+  "schema_version": 2
+}

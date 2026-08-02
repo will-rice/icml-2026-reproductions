@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "title": "Reproduction: Dimension-Free Convergence of Diffusion Models for Approximate Gaussian Mixtures",
+  "emoji": "🎯",
+  "space_id": "wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures",
+  "paper": {
+    "arxiv_id": "2504.05300"
+  },
+  "tags": [
+    "icml2026-repro",
+    "paper-HMu24dTKkJ"
+  ],
+  "updated_at": "2026-07-22T14:07:19+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Reproduction: Dimension-Free Convergence of Diffusion Models for Approximate Gaussian Mixtures",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "executive-summary",
+        "title": "Executive summary",
+        "file": "pages/executive-summary/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-1-dimension-free-ddpm-discretization",
+        "title": "Claim 1: Dimension-free DDPM discretization",
+        "file": "pages/claim-1-dimension-free-ddpm-discretization/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-2-robustness-to-score-estimation-error",
+        "title": "Claim 2: Robustness to score-estimation error",
+        "file": "pages/claim-2-robustness-to-score-estimation-error/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-3-dimension-free-score-jacobian-trace-bound",
+        "title": "Claim 3: Dimension-free score-Jacobian trace bound",
+        "file": "pages/claim-3-dimension-free-score-jacobian-trace-bound/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      }
+    ]
+  },
+  "traces": [
+    {
+      "id": "019f876c-dbd7-7c92-b01d-7721ffdbbedd",
+      "title": "Codex reproduction session (scrubbed)",
+      "provider": "Codex",
+      "model": "gpt-5.6-sol",
+      "started_at": "2026-07-22T01:24:53.341000+00:00",
+      "ended_at": "2026-07-22T14:07:17.430000+00:00",
+      "duration_ms": 45744089,
+      "event_count": 372,
+      "turn_count": 4,
+      "source_available": true,
+      "attached_at": "2026-07-22T01:29:50+00:00",
+      "index_file": "traces/019f876c-dbd7-7c92-b01d-7721ffdbbedd/index.json"
+    }
+  ],
+  "workspace": {
+    "file": "workspace.json",
+    "file_count": 1,
+    "total_size": 5665,
+    "bucket_id": "wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures-artifacts"
+  },
+  "agent_view_tokens": 1967,
+  "trace_view_tokens": 26396,
+  "workspace_view_tokens": 17,
+  "revision": "d52587e8a48a94e53c9f"
+}

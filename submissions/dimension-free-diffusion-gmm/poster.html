@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dimension-Free Diffusion/GMM — Numerical Audit</title>
+  <!-- DESIGN DIRECTION
+    Concept: a theorem ledger—three claims, three finite audits, two controls.
+    Canvas: ICML 2026 main-conference 60×36 inch landscape.
+    Layout: four-column evidence report with one quiet headline band.
+    Palette: field-derived paper blue #24577A; rust register #A2521C.
+    Typography: Georgia display with Arial body; balanced density.
+    Hero moment: the three computed audit outcomes in the headline band.
+    User decisions: light editorial; no logos; QR to reproduction Space;
+    normal density and card count.
+  -->
+  <style>
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --u: 1.6px;
+      --bg-page: #F5F8FA;
+      --bg-card: #FFFFFF;
+      --ink: #17232B;
+      --muted: #53646F;
+      --line: #B8CAD5;
+      --accent: #24577A;
+      --accent-deep: #17384F;
+      --accent-light: #EAF2F7;
+      --accent-soft: #DDEAF2;
+      --accent-ink: #FFFFFF;
+      --emph: #A2521C;
+      --emph-soft: #F5E7DE;
+      --emph-ink: #FFFFFF;
+      --shadow: rgba(23, 56, 79, 0.14);
+      --font-serif: Georgia, "Times New Roman", serif;
+      --font-sans: Arial, sans-serif;
+      --fs-1: calc(10 * var(--u));
+      --fs-2: calc(16.5 * var(--u));
+      --fs-3: calc(18 * var(--u));
+      --fs-4: calc(22 * var(--u));
+      --fs-5: calc(18 * var(--u));
+      --fs-6: calc(22 * var(--u));
+      --rs: calc(3 * var(--u));
+    }
+    /* ===== END DESIGN TOKENS ===== */
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg-page); color: var(--ink); }
+    body { font-family: var(--font-sans); }
+    .poster {
+      width: calc(1524 * var(--u));
+      height: calc(914.4 * var(--u));
+      padding: calc(22 * var(--u));
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      gap: calc(8 * var(--u));
+      background: var(--bg-page);
+      overflow: hidden;
+      position: relative;
+    }
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: calc(12 * var(--u));
+      border-bottom: calc(.8 * var(--u)) solid var(--accent);
+      padding-bottom: calc(7 * var(--u));
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: calc(3 * var(--u));
+      font-family: var(--font-serif);
+      font-size: var(--fs-6);
+      line-height: 1.02;
+      color: var(--accent-deep);
+      letter-spacing: calc(-.15 * var(--u));
+      text-wrap: balance;
+    }
+    .subtitle { margin: 0; font-size: var(--fs-2); color: var(--muted); }
+    .authors { margin-top: calc(2 * var(--u)); font-size: var(--fs-1); color: var(--muted); }
+    .qr-block { display: flex; align-items: center; gap: calc(4 * var(--u)); max-width: calc(190 * var(--u)); }
+    .qr-block img { width: calc(45 * var(--u)); height: calc(45 * var(--u)); image-rendering: pixelated; }
+    .qr-copy { font-size: var(--fs-1); line-height: 1.25; color: var(--accent-deep); }
+    .qr-copy, .banner-copy, .metric, .equation { text-wrap: pretty; }
+    .banner {
+      background: var(--accent-deep);
+      color: var(--accent-ink);
+      border-radius: var(--rs);
+      padding: calc(7 * var(--u)) calc(10 * var(--u));
+      display: grid;
+      grid-template-columns: 1.3fr repeat(3, .72fr);
+      align-items: center;
+      gap: calc(8 * var(--u));
+    }
+    .banner-copy { font-family: var(--font-serif); font-size: var(--fs-3); line-height: 1.18; }
+    .metric { border-left: calc(.7 * var(--u)) solid var(--emph); padding-left: calc(7 * var(--u)); }
+    .metric strong { display: block; color: var(--emph-soft); font-size: var(--fs-5); line-height: .95; }
+    .metric span { font-size: var(--fs-1); line-height: 1.2; text-wrap: pretty; }
+    .body-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: calc(8 * var(--u)); min-height: 0; }
+    .column { display: flex; flex-direction: column; gap: calc(7 * var(--u)); min-width: 0; }
+    .card {
+      background: var(--bg-card);
+      border: calc(.55 * var(--u)) solid var(--line);
+      border-top: calc(2 * var(--u)) solid var(--accent);
+      border-radius: var(--rs);
+      box-shadow: 0 calc(1.2 * var(--u)) calc(4 * var(--u)) var(--shadow);
+      padding: calc(8 * var(--u));
+      flex: 1 1 0;
+      overflow: hidden;
+    }
+    .card:first-child { flex-grow: 1.7; }
+    .card:last-child { flex-grow: 1; }
+    .column:nth-child(1) .card:first-child { flex-grow: 1.32; }
+    .column:nth-child(2) .card:first-child { flex-grow: 1.45; }
+    .column:nth-child(3) .card:first-child { flex-grow: 2; }
+    .card.control { border-top-color: var(--emph); background: var(--emph-soft); }
+    h2 { font-family: var(--font-serif); font-size: var(--fs-4); color: var(--accent-deep); margin-bottom: calc(5 * var(--u)); line-height: 1.12; }
+    h3 { font-size: var(--fs-3); color: var(--accent); margin-bottom: calc(4 * var(--u)); line-height: 1.15; }
+    p, li { font-size: var(--fs-2); line-height: 1.27; text-wrap: pretty; }
+    p { margin-bottom: calc(4 * var(--u)); }
+    ul { margin: calc(2 * var(--u)) 0 0; padding-left: calc(7 * var(--u)); }
+    li { margin-bottom: calc(2 * var(--u)); }
+    .eyebrow { color: var(--emph); font-weight: 700; text-transform: uppercase; letter-spacing: calc(.35 * var(--u)); font-size: var(--fs-1); }
+    .equation { padding: calc(5 * var(--u)); background: var(--accent-light); border-left: calc(1.5 * var(--u)) solid var(--accent); font-family: var(--font-serif); font-size: var(--fs-3); line-height: 1.3; }
+    .ledger { width: 100%; border-collapse: collapse; margin-top: calc(4 * var(--u)); font-size: var(--fs-1); }
+    .ledger th, .ledger td { border-bottom: calc(.35 * var(--u)) solid var(--line); padding: calc(2.5 * var(--u)); text-align: left; vertical-align: top; }
+    .ledger th { color: var(--accent-deep); }
+    .bar-row { display: grid; grid-template-columns: calc(48 * var(--u)) 1fr calc(38 * var(--u)); align-items: center; gap: calc(3 * var(--u)); margin: calc(6 * var(--u)) 0; font-size: var(--fs-1); }
+    .bar { height: calc(9 * var(--u)); background: var(--accent-soft); border-radius: calc(3 * var(--u)); overflow: hidden; }
+    .fill { display: block; height: 100%; background: var(--accent); }
+    .w-0 { width: 0; }
+    .w-20 { width: 20%; }
+    .w-40 { width: 40%; }
+    .w-100 { width: 100%; }
+    .tiny { font-size: var(--fs-1); color: var(--muted); }
+    footer { display: flex; justify-content: space-between; align-items: center; border-top: calc(.7 * var(--u)) solid var(--accent); padding-top: calc(4 * var(--u)); color: var(--muted); font-size: var(--fs-1); }
+    .corner-signature { color: var(--accent); font-size: var(--fs-3); }
+    @page { size: 60in 36in; margin: 0; }
+    @media print {
+      :root { --u: 1mm; }
+      html, body { width: 60in; height: 36in; margin: 0; padding: 0; }
+      .poster { width: 60in; height: 36in; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+<main class="poster" data-measure-role="poster">
+  <header data-measure-role="header">
+    <div>
+      <h1>Dimension-Free Diffusion for Approximate Gaussian Mixtures</h1>
+      <p class="subtitle">Independent CPU numerical audit · three finite checks · not a proof replacement</p>
+      <p class="authors">Paper: Gen Li, Changxiao Cai, Yuting Wei · Audit revision: arxiv:2504.05300v1</p>
+    </div>
+    <div class="qr-block">
+      <img src="qr.png" alt="QR code for the reproduction Space">
+      <div class="qr-copy"><strong>Evidence &amp; rerun</strong><br>Open the Trackio logbook</div>
+    </div>
+  </header>
+
+  <section class="banner" data-measure-role="banner">
+    <div class="banner-copy">Within deliberately narrow synthetic settings, all three checks support their target behavior. Controls separate when assumptions are relaxed.</div>
+    <div class="metric"><strong>0</strong><span>analytic variance-error range across d=1…64</span></div>
+    <div class="metric"><strong>linear</strong><span>mean shift under additive score error</span></div>
+    <div class="metric"><strong>3.6e−15</strong><span>range of max tr(I+J) across dimensions</span></div>
+  </section>
+
+  <section class="body-grid" data-measure-role="body">
+    <div class="column" data-measure-role="column">
+      <article class="card" data-measure-role="card">
+        <div class="eyebrow">01 · Paper context</div>
+        <h2>What the theorem says</h2>
+        <p>For targets close in total variation to a unit-covariance isotropic GMM, the paper bounds DDPM error by discretization, score-estimation, and approximation terms.</p>
+        <div class="equation">TV(X₀,Y₁) ≲ log²(KT)log²(T)/T + εscore√log(T) + √(d εapprox)log³ᐟ²(dT)</div>
+        <ul>
+          <li>Every behavior test visibly failed before its code was added.</li>
+          <li>Analytic identities are checked independently by finite differences where applicable.</li>
+          <li>JSON and CSV evidence is byte-identical in repeated executions.</li>
+        </ul>
+        <p class="tiny">Context only: a paraphrase of Theorem 1 from the pinned paper source; paper values are never reproduced measurements.</p>
+      </article>
+      <article class="card" data-measure-role="card">
+        <h3>Conditions kept visible</h3>
+        <ul>
+          <li>GMM components have covariance I<sub>d</sub>.</li>
+          <li>Component means obey the paper’s polynomial norm condition.</li>
+          <li>Score error is an average L² error over time.</li>
+          <li>The theorem uses TV distance; these checks use finite diagnostic proxies.</li>
+        </ul>
+        <h3>Evidence boundary</h3>
+        <p>This synthetic CPU audit trains no score network and estimates no end-to-end TV distance. It does not establish the paper’s asymptotic complexity.</p>
+      </article>
+    </div>
+
+    <div class="column" data-measure-role="column">
+      <article class="card" data-measure-role="card">
+        <div class="eyebrow">02 · Computed output</div>
+        <h2>One-step discretization</h2>
+        <p>At the stationary standard Gaussian with exact score −x, one Euler/DDPM-like step has coordinate variance 1+h². With h=0.125, the analytic per-coordinate error is 0.015625 for every tested dimension.</p>
+        <table class="ledger">
+          <tr><th>dimension</th><th>analytic error</th><th>empirical diagnostic</th></tr>
+          <tr><td>1</td><td>0.015625</td><td>0.06203</td></tr>
+          <tr><td>4</td><td>0.015625</td><td>0.04681</td></tr>
+          <tr><td>16</td><td>0.015625</td><td>0.01685</td></tr>
+          <tr><td>64</td><td>0.015625</td><td>0.01130</td></tr>
+        </table>
+        <h3>Independent identity</h3>
+        <div class="equation">x′=(1−h)x+√(2h)z ⇒ Var(x′)=1+h²</div>
+        <p>The identity holds coordinate-wise. The empirical column is retained to expose finite-sample variation, while the claim decision uses the analytic range.</p>
+      </article>
+      <article class="card control" data-measure-role="card">
+        <h3>Scope verdict: toy support</h3>
+        <p>The zero analytic range audits dimension independence in a single exact-score Gaussian step. It does not reproduce the theorem’s complete multi-step TV guarantee.</p>
+        <ul>
+          <li>Threshold: analytic range ≤ 1e−12.</li>
+          <li>Observed range: exactly 0.</li>
+          <li>Dimensions: 1, 4, 16, 64.</li>
+        </ul>
+        <p>The empirical deviations shrink irregularly with dimension because they are Monte Carlo diagnostics, not the analytic decision statistic.</p>
+        <p class="tiny">Seed 2026 · 2,048 samples per dimension · CPU execution only</p>
+      </article>
+    </div>
+
+    <div class="column" data-measure-role="column">
+      <article class="card" data-measure-role="card">
+        <div class="eyebrow">03 · Computed output</div>
+        <h2>Controlled score error</h2>
+        <p>A constant score perturbation with L² norm ε shifts the one-step mean by hε. The measured analytic shifts are monotone and exactly separable in this construction.</p>
+        <div class="bar-row"><span>ε=0</span><div class="bar"><span class="fill w-0"></span></div><strong>0</strong></div>
+        <div class="bar-row"><span>ε=.05</span><div class="bar"><span class="fill w-20"></span></div><strong>.00625</strong></div>
+        <div class="bar-row"><span>ε=.10</span><div class="bar"><span class="fill w-40"></span></div><strong>.0125</strong></div>
+        <div class="bar-row"><span>ε=.25</span><div class="bar"><span class="fill w-100"></span></div><strong>.03125</strong></div>
+        <h3>Decision rule</h3>
+        <p>The analytic mean shift must be nondecreasing with perturbation norm. Here it follows hε exactly at h=0.125, isolating the score-error term from sampling noise.</p>
+        <p class="tiny">The empirical mean norm is logged as a diagnostic but is not substituted for the analytic controlled construction.</p>
+        <p>The paper’s theorem permits time-averaged L² score error; this one-step construction audits only the separability and monotonicity of a calibrated additive perturbation.</p>
+      </article>
+      <article class="card control" data-measure-role="card">
+        <h3>Misspecification control</h3>
+        <p>Replacing the calibrated constant perturbation with a state-dependent cubic term violates the controlled-error setup. Its empirical second moment rises to 1.393.</p>
+        <ul>
+          <li>Control: 0.5x³ state-dependent perturbation.</li>
+          <li>Observed empirical mean norm: 0.218.</li>
+          <li>Recorded separately with assumption_satisfied=false.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="column" data-measure-role="column">
+      <article class="card" data-measure-role="card">
+        <div class="eyebrow">04 · Computed output</div>
+        <h2>The trace that matters</h2>
+        <p>For a symmetric two-component unit-covariance GMM embedded in dimensions 1, 4, 16, and 64, the audit computes the paper-aligned quantity tr(I+J).</p>
+        <table class="ledger">
+          <tr><th>d</th><th>max tr(I+J)</th><th>FD error</th></tr>
+          <tr><td>1</td><td>3.9999389</td><td>5.6e−10</td></tr>
+          <tr><td>4</td><td>3.9999389</td><td>6.1e−10</td></tr>
+          <tr><td>16</td><td>3.9999389</td><td>6.9e−10</td></tr>
+          <tr><td>64</td><td>3.9999389</td><td>9.2e−10</td></tr>
+        </table>
+        <h3>Why dimension cancels</h3>
+        <p>The component means occupy one fixed active coordinate. For unit covariance, the ambient −I term cancels inside tr(I+J), leaving the posterior covariance of component means.</p>
+        <div class="equation">tr(I+J)=tr(Cov[μₖ | x])</div>
+        <p class="tiny">The implementation compares the analytic trace against centered finite differences at 2,048 deterministic evaluation points.</p>
+      </article>
+      <article class="card control" data-measure-role="card">
+        <h3>Unit-covariance control</h3>
+        <p>Setting component variance to 0.05 breaks the unit-covariance setup and makes tr(I+J) strongly dimension-dependent. The baseline max range is 3.6e−15.</p>
+        <ul>
+          <li>Baseline variance: 1.0.</li>
+          <li>Control variance: 0.05.</li>
+          <li>Control mean tr(I+J) changes from −9.0 at d=1 to −1206.0 at d=64.</li>
+        </ul>
+        <p class="tiny">The analytic trace is checked independently by centered finite differences.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer data-measure-role="footer">
+    <span>Deterministic NumPy audit · Python 3.12.6 · NumPy 2.5.1 · USD 0.00 paid API cost</span>
+    <span>Evidence: results.json + measurements.csv + provenance.json</span>
+    <span class="corner-signature" aria-label="Posterly identity mark">⊕</span>
+  </footer>
+</main>
+</body>
+</html>

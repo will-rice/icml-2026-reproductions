@@ -1,0 +1,23 @@
+{
+  "cell_id": "7c3afce8bb81943139642c394d2538e305f7b2ac6eee87f5026b2f34deef28da",
+  "code_revision": "848a54d6041268cc4897671ee4fea0678f19cf6e",
+  "config": {
+    "dimension": 4,
+    "family": "rank1-k2",
+    "kind": "jacobian",
+    "samples": 64,
+    "seed": 1
+  },
+  "content_hash": "fd15fdb1e9475325eeaae805850b763e55a4c99d702bb4613243169e2af86a16",
+  "elapsed_seconds": 0.0004,
+  "observations": {
+    "assumption_satisfied": true,
+    "dimension": 4,
+    "family": "rank1-k2",
+    "max_trace_i_plus_j": 3.9989394658360715,
+    "mean_trace_i_plus_j": 1.5318289498425504,
+    "samples": 64,
+    "seed": 1
+  },
+  "status": "complete"
+}

@@ -1,0 +1,27 @@
+{
+  "space_id": "wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures",
+  "emoji": "🎯",
+  "created_at": "2026-07-22T01:29:39+00:00",
+  "last_page": "conclusion",
+  "tags": [
+    "icml2026-repro",
+    "paper-HMu24dTKkJ"
+  ],
+  "paper": {
+    "arxiv_id": "2504.05300"
+  },
+  "local_artifacts": [
+    "repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures/repro-bundle:v0",
+    "repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures/repro-bundle:v1",
+    "repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures/repro-bundle:v2"
+  ],
+  "private": false,
+  "repos_public": false,
+  "embed_content": false,
+  "trace_dataset": "wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures-traces",
+  "artifacts_bucket": "wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures-artifacts",
+  "workspace_bucket": "wrice/repro-dimension-free-convergence-of-diffusion-models-for-approximate-gaussian-mixtures-artifacts",
+  "trace_publication": "private",
+  "workspace_publication": "private",
+  "local_dashboards": {}
+}

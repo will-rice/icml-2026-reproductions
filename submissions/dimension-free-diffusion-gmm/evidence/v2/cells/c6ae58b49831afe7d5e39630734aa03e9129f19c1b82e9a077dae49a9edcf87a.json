@@ -1,0 +1,19 @@
+{
+  "cell_id": "c6ae58b49831afe7d5e39630734aa03e9129f19c1b82e9a077dae49a9edcf87a",
+  "code_revision": "848a54d6041268cc4897671ee4fea0678f19cf6e",
+  "config": {
+    "family": "rank4-k8",
+    "kind": "assumption1",
+    "seed": 1
+  },
+  "content_hash": "731f0308e83b10d5f723cf580e2a2fcd954763ec3186c9980425ad5e2bbf9bf7",
+  "elapsed_seconds": 0.0002,
+  "observations": {
+    "assumption_satisfied": true,
+    "family": "rank4-k8",
+    "max_component_mean_norm": 2.5,
+    "seed": 1,
+    "tail_bound": 5.4524460850857337e-17
+  },
+  "status": "complete"
+}

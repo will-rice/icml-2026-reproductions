@@ -1,0 +1,291 @@
+{
+  "claims": [
+    {
+      "claim_id": "dimension-free-ddpm-discretization",
+      "observations": {
+        "analytic_error_range": 0.0,
+        "dimensions": [
+          1,
+          4,
+          16,
+          64
+        ]
+      },
+      "scope": "one exact-score Euler/DDPM step at a stationary standard Gaussian",
+      "status": "supports",
+      "threshold": "range of analytic per-coordinate variance error <= 1e-12"
+    },
+    {
+      "claim_id": "robustness-to-score-error",
+      "observations": {
+        "analytic_mean_shift_l2": [
+          0.0,
+          0.00625,
+          0.0125,
+          0.03125
+        ],
+        "score_error_l2": [
+          0.0,
+          0.05,
+          0.1,
+          0.25
+        ]
+      },
+      "scope": "controlled constant additive score error in one Gaussian step",
+      "status": "supports",
+      "threshold": "analytic mean shift is nondecreasing in additive score-error norm"
+    },
+    {
+      "claim_id": "dimension-free-score-jacobian-trace",
+      "observations": {
+        "assumption_breaking_control_separates": true,
+        "baseline_trace_range": 3.552713678800501e-15
+      },
+      "scope": "analytic two-component isotropic-GMM score with a unit-covariance violation control",
+      "status": "supports",
+      "threshold": "baseline tr(I+J) range <= 1e-12 and every unit-covariance control exceeds baseline"
+    }
+  ],
+  "computed_outputs": {
+    "audits": {
+      "dimension": [
+        {
+          "analytic_per_coordinate_variance_error": 0.015625,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 1,
+          "empirical_per_coordinate_variance_error": 0.062034703259087554,
+          "sample_checksum": -57.810714543868,
+          "samples": 2048,
+          "seed": 2026,
+          "step_size": 0.125
+        },
+        {
+          "analytic_per_coordinate_variance_error": 0.015625,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 4,
+          "empirical_per_coordinate_variance_error": 0.046810340666804784,
+          "sample_checksum": 54.083173925396,
+          "samples": 2048,
+          "seed": 2026,
+          "step_size": 0.125
+        },
+        {
+          "analytic_per_coordinate_variance_error": 0.015625,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 16,
+          "empirical_per_coordinate_variance_error": 0.016846350790644227,
+          "sample_checksum": -58.919653443055,
+          "samples": 2048,
+          "seed": 2026,
+          "step_size": 0.125
+        },
+        {
+          "analytic_per_coordinate_variance_error": 0.015625,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 64,
+          "empirical_per_coordinate_variance_error": 0.011301136049826965,
+          "sample_checksum": 587.038875249724,
+          "samples": 2048,
+          "seed": 2026,
+          "step_size": 0.125
+        }
+      ],
+      "jacobian": [
+        {
+          "assumption_satisfied": true,
+          "components": 2,
+          "control": null,
+          "dimension": 1,
+          "finite_difference_error": 5.604410269199889e-10,
+          "max_trace_i_plus_j": 3.999938905817512,
+          "mean_trace_i_plus_j": 0.49975574777167703,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 1.0,
+          "variance_floor": 0.5
+        },
+        {
+          "assumption_satisfied": true,
+          "components": 2,
+          "control": null,
+          "dimension": 4,
+          "finite_difference_error": 6.054972099883357e-10,
+          "max_trace_i_plus_j": 3.9999389058175114,
+          "mean_trace_i_plus_j": 0.499755747771677,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 1.0,
+          "variance_floor": 0.5
+        },
+        {
+          "assumption_satisfied": true,
+          "components": 2,
+          "control": null,
+          "dimension": 16,
+          "finite_difference_error": 6.943157160321789e-10,
+          "max_trace_i_plus_j": 3.99993890581751,
+          "mean_trace_i_plus_j": 0.499755747771677,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 1.0,
+          "variance_floor": 0.5
+        },
+        {
+          "assumption_satisfied": true,
+          "components": 2,
+          "control": null,
+          "dimension": 64,
+          "finite_difference_error": 9.202452133649786e-10,
+          "max_trace_i_plus_j": 3.9999389058175083,
+          "mean_trace_i_plus_j": 0.4997557477716772,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 1.0,
+          "variance_floor": 0.5
+        },
+        {
+          "assumption_satisfied": false,
+          "components": 2,
+          "control": "unit-covariance-violation",
+          "dimension": 1,
+          "finite_difference_error": 8.326289662363706e-05,
+          "max_trace_i_plus_j": 1571.2645080016064,
+          "mean_trace_i_plus_j": -9.004882812499991,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 0.05,
+          "variance_floor": 0.5
+        },
+        {
+          "assumption_satisfied": false,
+          "components": 2,
+          "control": "unit-covariance-violation",
+          "dimension": 4,
+          "finite_difference_error": 8.326289662363706e-05,
+          "max_trace_i_plus_j": 1514.2645080016064,
+          "mean_trace_i_plus_j": -66.0048828125,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 0.05,
+          "variance_floor": 0.5
+        },
+        {
+          "assumption_satisfied": false,
+          "components": 2,
+          "control": "unit-covariance-violation",
+          "dimension": 16,
+          "finite_difference_error": 8.326289662363706e-05,
+          "max_trace_i_plus_j": 1286.2645080016064,
+          "mean_trace_i_plus_j": -294.0048828125,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 0.05,
+          "variance_floor": 0.5
+        },
+        {
+          "assumption_satisfied": false,
+          "components": 2,
+          "control": "unit-covariance-violation",
+          "dimension": 64,
+          "finite_difference_error": 8.326289650995022e-05,
+          "max_trace_i_plus_j": 374.26450800160626,
+          "mean_trace_i_plus_j": -1206.0048828125,
+          "samples": 2048,
+          "seed": 2026,
+          "variance": 0.05,
+          "variance_floor": 0.5
+        }
+      ],
+      "score_error": [
+        {
+          "analytic_mean_shift_l2": 0.0,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 64,
+          "empirical_mean_l2": 0.18287486289643662,
+          "samples": 2048,
+          "score_error_l2": 0.0,
+          "seed": 2026,
+          "step_size": 0.125
+        },
+        {
+          "analytic_mean_shift_l2": 0.00625,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 64,
+          "empirical_mean_l2": 0.18333144448000618,
+          "samples": 2048,
+          "score_error_l2": 0.05,
+          "seed": 2026,
+          "step_size": 0.125
+        },
+        {
+          "analytic_mean_shift_l2": 0.0125,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 64,
+          "empirical_mean_l2": 0.18399931138691986,
+          "samples": 2048,
+          "score_error_l2": 0.1,
+          "seed": 2026,
+          "step_size": 0.125
+        },
+        {
+          "analytic_mean_shift_l2": 0.03125,
+          "assumption_satisfied": true,
+          "control": null,
+          "dimension": 64,
+          "empirical_mean_l2": 0.1872444411940342,
+          "samples": 2048,
+          "score_error_l2": 0.25,
+          "seed": 2026,
+          "step_size": 0.125
+        },
+        {
+          "analytic_mean_shift_l2": null,
+          "assumption_satisfied": false,
+          "control": "state-dependent-misspecified-score",
+          "dimension": 64,
+          "empirical_mean_l2": 0.21763361154814273,
+          "empirical_second_moment": 1.3934562270250135,
+          "samples": 2048,
+          "score_error_l2": null,
+          "seed": 2026,
+          "step_size": 0.125
+        }
+      ]
+    },
+    "source": "this-code"
+  },
+  "environment": {
+    "numpy": "2.5.1",
+    "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
+    "python": "3.12.6"
+  },
+  "evidence_kind": "independent-numerical-audit",
+  "paper": {
+    "id": "HMu24dTKkJ",
+    "revision": "arxiv:2504.05300v1",
+    "title": "Dimension-Free Convergence of Diffusion Models for Approximate Gaussian Mixtures"
+  },
+  "paper_context": {
+    "note": "The theorem claims define audit targets; paper values are not reproduced measurements.",
+    "source": "paper"
+  },
+  "parameters": {
+    "dimensions": [
+      1,
+      4,
+      16,
+      64
+    ],
+    "samples": 2048,
+    "seed": 2026
+  },
+  "provenance_file": "provenance.json",
+  "schema_version": 1
+}
