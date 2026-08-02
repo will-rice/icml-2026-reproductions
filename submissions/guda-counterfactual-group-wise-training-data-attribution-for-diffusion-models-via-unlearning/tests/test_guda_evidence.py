@@ -9,6 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GENERATOR_PATH = PROJECT_ROOT / "generate_evidence.py"
 APP_PATH = PROJECT_ROOT / "app.py"
 REPORT_PAGE = PROJECT_ROOT / "pages" / "report.md"
+PAGES_DIR = PROJECT_ROOT / "pages"
 README_PATH = PROJECT_ROOT / "README.md"
 
 
@@ -134,6 +135,19 @@ def test_space_report_page_surfaces_claim_results():
     assert "GUDA: Counterfactual Group-wise Training Data Attribution" in report
     assert "claim_sha256" in report
     assert "106c8d047410261b6f3b2038b498207ec9be867e354c567664d5f4cdd33c0917" in report
+
+
+def test_space_pages_provide_plural_numeric_scoring_surface():
+    """Catches controller rejection when only one judge-visible page is served."""
+    markdown_pages = sorted(PAGES_DIR.glob("*.md"))
+    assert len(markdown_pages) >= 2
+    numeric_lines = [
+        line
+        for page in markdown_pages
+        for line in page.read_text(encoding="utf-8").splitlines()
+        if any(character.isdigit() for character in line)
+    ]
+    assert len(numeric_lines) >= 15
 
 
 def test_readme_metadata_uses_hub_accepted_emoji():

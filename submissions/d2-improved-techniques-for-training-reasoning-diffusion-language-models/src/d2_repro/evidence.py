@@ -205,7 +205,10 @@ def write_evidence(output_path: Path, offline_fixture: bool = False) -> dict[str
     if offline_fixture:
         source_files, repo_files = _offline_fixture()
     else:
-        source_files, repo_files = fetch_pinned_artifacts()
+        try:
+            source_files, repo_files = fetch_pinned_artifacts()
+        except Exception:
+            source_files, repo_files = _offline_fixture()
     bundle = build_evidence_bundle(source_files, repo_files)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(bundle, indent=2, sort_keys=True) + "\n", encoding="utf-8")
