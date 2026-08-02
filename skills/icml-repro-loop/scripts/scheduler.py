@@ -172,7 +172,18 @@ def _reclaim_publish_ready(
         if blocked_from == "validated" and not has_space:
             blocker = str(attempt.get("blocker") or "")
             quota_blocked = "quota" in blocker.casefold() or "429" in blocker
-            tier = 2 if quota_blocked else 0
+            if quota_blocked:
+                # The creation quota is a rolling 24h window, so a slot may
+                # free at any time; a quota block older than two hours is
+                # worth retrying ahead of improvement work again.
+                try:
+                    blocked_at = datetime.fromisoformat(attempt["updated_at"])
+                    stale = observed_at - blocked_at >= timedelta(hours=2)
+                except (KeyError, TypeError, ValueError):
+                    stale = False
+                tier = 0 if stale else 2
+            else:
+                tier = 0
         elif has_space and blocked_from in {
             "validated",
             "deployed",
