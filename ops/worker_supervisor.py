@@ -78,6 +78,11 @@ PROMPT = (
     "implementing new papers; spend every iteration improving existing "
     "judged or publish-ready submissions and publishing the ranked backlog "
     "as Space quota allows, per the endgame rules in the skill. "
+    "Plain claim-next WILL refuse with EndgameSaturated - that is expected "
+    "and is NOT a reason to stop: use "
+    "claim-next --reclaim-attempt-id ATTEMPT to take a blocked "
+    "publish-ready or judged lane and keep looping. Your loop never exits; "
+    "if refused or blocked, pick a reclaimable lane and continue. "
     "Persistent worker ID: {worker_id}."
 )
 AGY_IDLE_PROMPT_RE = re.compile(
