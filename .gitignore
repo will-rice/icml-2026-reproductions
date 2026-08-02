@@ -829,3 +829,10 @@ submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-
 submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/.pytest_cache/
 submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/__pycache__/
 submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/*.egg-info/
+
+!submissions/relaxflow-text-driven-amodal-3d-generation/
+!submissions/relaxflow-text-driven-amodal-3d-generation/**
+submissions/relaxflow-text-driven-amodal-3d-generation/.venv/
+submissions/relaxflow-text-driven-amodal-3d-generation/.pytest_cache/
+submissions/relaxflow-text-driven-amodal-3d-generation/**/__pycache__/
+submissions/relaxflow-text-driven-amodal-3d-generation/**/*.egg-info/
