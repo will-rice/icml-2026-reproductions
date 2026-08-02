@@ -103,7 +103,12 @@ For every iteration:
    tie-breaks. Never spend a creation slot on a lane while a
    higher-ranked lane sits unpublished; if a lane's evidence would not
    survive the fabrication/visibility audit, improve it before
-   publishing it; (c) an
+   publishing it. A publish-ready lane whose recorded `/tmp` staging no
+   longer exists is NOT blocked: the committed source under
+   `submissions/<slug>/` on `main` is authoritative — create a fresh
+   worktree under `.worktrees/`, rerun `attest-validation` there with a
+   fresh manifest, and publish. Never re-block a lane solely because a
+   stale staging path is gone; (c) an
    improvement cycle on a judged attempt with a correctable
    zero/toy/inconclusive verdict (real computed evidence, rendered into
    the served pages); (d) preparing improvements in an isolated clone for
