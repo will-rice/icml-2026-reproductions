@@ -85,6 +85,19 @@ def test_space_pages_include_scoring_surface():
     assert "0.50" in text
 
 
+def test_space_readme_declares_controller_tags():
+    """Space metadata must carry the challenge and paper tags."""
+    project = Path(__file__).resolve().parents[1]
+    readme = project / "README.md"
+
+    text = readme.read_text(encoding="utf-8")
+
+    assert "sdk: gradio" in text
+    assert "app_file: app.py" in text
+    assert "icml2026-repro" in text
+    assert "paper-oCNT5PcMSQ" in text
+
+
 def test_evidence_writer_preserves_precommit_final_newline(tmp_path):
     """Generated evidence should already satisfy end-of-file-fixer."""
     out_file = tmp_path / "bundle.json"
