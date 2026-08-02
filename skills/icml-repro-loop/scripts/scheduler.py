@@ -146,6 +146,44 @@ def scheduler_pass(
     )
 
 
+def _reclaim_publish_ready(
+    paths: store.StatePaths,
+    index: dict,
+    snapshot: dict,
+    owner: str,
+    observed_at: datetime,
+) -> PaperOwnerAssignment | None:
+    """Route a saturated claim onto the best reclaimable publish-ready lane."""
+    ranked = []
+    for attempt_id, reference in index["attempts"].items():
+        if reference["phase"] != "blocked":
+            continue
+        attempt = store.read_json(paths.attempt(attempt_id))
+        if attempt.get("blocked_from") != "validated":
+            continue
+        try:
+            expected = score_rate.expected_points(attempt["score_rate"])
+        except (KeyError, TypeError, ValueError):
+            expected = 0.0
+        ranked.append((-expected, attempt_id, attempt["paper_id"]))
+    for _, attempt_id, paper_id in sorted(ranked):
+        try:
+            _current_assessed_candidate(snapshot, paper_id)
+            prior = _attempt_lease(paths, attempt_id)
+            expected_token = 0 if prior is None else prior.fencing_token
+            writer = leases._claim_attempt_locked(
+                paths,
+                attempt_id,
+                owner,
+                expected_token,
+                observed_at,
+            )
+        except (ValueError, leases.LeaseBusy, leases.StaleFence):
+            continue
+        return PaperOwnerAssignment(attempt_id, paper_id, writer, True)
+    return None
+
+
 def _publish_ready_count(paths: store.StatePaths, index: dict) -> int:
     """Count active attempts that are validated or blocked from validated."""
     count = 0
@@ -209,11 +247,16 @@ def claim_next(
         store.validate_index(index)
         publish_ready = _publish_ready_count(paths, index)
         if publish_ready >= ENDGAME_DAILY_SPACE_QUOTA:
+            routed = _reclaim_publish_ready(
+                paths, index, snapshot, owner, observed_at
+            )
+            if routed is not None:
+                return routed
             raise EndgameSaturated(
                 f"publish-ready backlog ({publish_ready}) meets the daily "
-                f"Space-creation quota ({ENDGAME_DAILY_SPACE_QUOTA}); "
-                "new-paper selection is closed - publish the backlog or run "
-                "an improvement cycle instead"
+                f"Space-creation quota ({ENDGAME_DAILY_SPACE_QUOTA}) and no "
+                "lane was reclaimable; run an improvement cycle on a judged "
+                "attempt instead"
             )
         claimed = _claimed_paper_ids(paths, index, snapshot, observed_at)
         candidates = [

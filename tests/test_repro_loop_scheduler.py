@@ -1788,3 +1788,50 @@ def test_claim_next_refuses_new_papers_when_backlog_fills_daily_quota(
 
     with pytest.raises(scheduler.EndgameSaturated):
         scheduler.claim_next(paths, snapshot_id, "owner-final", now)
+
+
+def test_saturated_claim_next_routes_to_reclaimable_publish_ready_lane(
+    paths, store, attempts, now, scheduler
+):
+    quota = scheduler.ENDGAME_DAILY_SPACE_QUOTA
+    papers = [paper(f"paper-{number}", 30 - number) for number in range(quota + 1)]
+    snapshot_id = write_assessed_snapshot(store, paths, now, papers)
+    blocked_attempt = None
+    for number in range(quota):
+        assignment = scheduler.claim_next(
+            paths, snapshot_id, f"owner-{number}", now
+        )
+        lease = assignment.writer_lease
+        attempt_id = assignment.attempt_id
+        attempts.transition_attempt(
+            paths, attempt_id, "design-pending", lease, now
+        )
+        attempts.record_design(
+            paths, attempt_id, lease, "author", "design.md", now
+        )
+        attempts.record_design_review(
+            paths, attempt_id, lease, "reviewer", "approved", now
+        )
+        transition_attested(attempts, paths, attempt_id, "validated", lease, now)
+        if number == 0:
+            attempts.transition_attempt(
+                paths,
+                attempt_id,
+                "blocked",
+                lease,
+                now,
+                blocker="daily Space quota exhausted",
+                next_action="publish after quota reset",
+            )
+            blocked_attempt = attempt_id
+
+    later = now + timedelta(hours=3)
+    later_snapshot = write_assessed_snapshot(store, paths, later, papers)
+
+    assignment = scheduler.claim_next(
+        paths, later_snapshot, "owner-final", later
+    )
+
+    assert assignment.reclaimed is True
+    assert assignment.attempt_id == blocked_attempt
+    assert assignment.writer_lease.owner == "owner-final"
