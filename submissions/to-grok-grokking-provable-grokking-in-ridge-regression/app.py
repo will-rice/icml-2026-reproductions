@@ -16,7 +16,7 @@ def show_bundle() -> str:
 
 with gr.Blocks(title="To Grok Grokking Reproduction") as demo:
     gr.Markdown(SUMMARY)
-    gr.Code(show_bundle, language="json", label="Evidence bundle")
+    gr.Code(value=show_bundle(), language="json", label="Evidence bundle")
 
 
 if __name__ == "__main__":
