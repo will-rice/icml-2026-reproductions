@@ -74,9 +74,11 @@ def test_space_pages_include_scoring_surface():
     """Ensure the Space exposes numeric evidence for controller scoring."""
     project = Path(__file__).resolve().parents[1]
     pages = sorted((project / "pages").glob("*.md"))
-    assert pages
+    assert len(pages) >= 2
 
     text = "\n".join(page.read_text(encoding="utf-8") for page in pages)
+    numeric_lines = [line for line in text.splitlines() if any(character.isdigit() for character in line)]
+    assert len(numeric_lines) >= 15
     assert "56.52%" in text
     assert "565/1000" in text
     assert "2.206809e-05" in text
