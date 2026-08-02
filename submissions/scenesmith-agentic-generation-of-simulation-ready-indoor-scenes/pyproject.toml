@@ -2,7 +2,8 @@
 name = "scenesmith-reproduction"
 version = "0.1.0"
 description = "Evidence harness for SceneSmith ICML 2026 reproduction"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
+
 dependencies = [
     "gradio>=5.0.0",
     "pytest>=8.4.0",
