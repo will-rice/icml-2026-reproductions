@@ -7,7 +7,7 @@ repos:
       - id: check-json
       - id: check-yaml
       - id: end-of-file-fixer
-        exclude: ^(?:submissions/efficient-parallel-samplers-for-recurrent-depth-models/vendor/arxiv/arxiv_submission\.tex|submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/evidence/inputs/sampled_mixture\.json|submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/admm_nq_upstream\.py|submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/evidence/evidence\.json)$
+        exclude: ^(?:submissions/efficient-parallel-samplers-for-recurrent-depth-models/vendor/arxiv/arxiv_submission\.tex|submissions/decouple-searching-from-training-scaling-data-mixing-via-model-merging-for-large-language-model-pre-training/evidence/inputs/sampled_mixture\.json|submissions/nanoquant-efficient-sub-1-bit-quantization-of-large-language-models/admm_nq_upstream\.py|submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-performance/evidence/evidence\.json|submissions/optimizing-rank-for-high-fidelity-implicit-neural-representations/generate_evidence\.py)$
       - id: trailing-whitespace
         exclude: ^submissions/efficient-parallel-samplers-for-recurrent-depth-models/vendor/arxiv/arxiv_submission\.tex$
       - id: check-added-large-files
