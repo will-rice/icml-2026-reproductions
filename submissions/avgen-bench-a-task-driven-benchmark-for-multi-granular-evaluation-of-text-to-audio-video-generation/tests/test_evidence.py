@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from avgen_repro.evidence import (
     CLAIMS,
@@ -107,3 +108,18 @@ def test_artifact_availability_requires_raw_human_and_repeat_outputs():
     assert audit["stability_code_present"] is True
     assert audit["repeat_output_artifacts"] == []
     assert audit["human_correlation_artifacts"] == []
+
+
+def test_served_pages_meet_controller_scoring_gate():
+    pages = sorted((Path(__file__).resolve().parents[1] / "pages").glob("*.md"))
+    texts = [path.read_text(encoding="utf-8") for path in pages]
+    numeric_lines = sum(
+        1
+        for text in texts
+        for line in text.splitlines()
+        if any(character.isdigit() for character in line)
+    )
+
+    assert len(pages) >= 2
+    assert sum(len(text.strip()) for text in texts) >= 200
+    assert numeric_lines >= 15

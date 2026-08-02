@@ -1,0 +1,26 @@
+# AVGen-Bench Numeric Evidence
+
+- Attempt id: `dca81643-55fa-4d3c-9244-d3d1a00119aa`.
+- Paper id: `aJdgt8xDMy`.
+- Snapshot id: `41692f328d154e4fad790fb8c89aa276452ce49b8aaa18064abb9c47a897d622`.
+- ArXiv pin: `2604.08540`.
+- Official code revision: `1049eabac472d479fe5feeb1ee202961f8e0982a`.
+- Hugging Face dataset revision: `69eb2a20b2d47659be7cd40984baf02b7f2395a8`.
+- Prompt category files parsed: `11`.
+- Prompt records parsed: `235`.
+- Mean prompt length: `70.2` words.
+- Prompt files with audio cues: `161`.
+- Metric groups found in aggregate code: `3`.
+- Metric dimensions found in aggregate code: `11`.
+- Expected evaluator modules present: `11`.
+- Released leaderboard rows parsed: `13`.
+- Models with high basic scores and low fine-grained scores: `4`.
+- Lowest mean fine-grained dimension rank 1: `Music` at `5.8246`.
+- Lowest mean fine-grained dimension rank 2: `Face` at `49.8038`.
+- Lowest mean fine-grained dimension rank 3: `Text` at `56.3677`.
+- Claim 1 status: `verified`.
+- Claim 2 status: `verified`.
+- Claim 3 status: `toy`.
+- Claim 4 status: `toy`.
+- Claim 5 status: `inconclusive`.
+- Claim 6 status: `toy`.
