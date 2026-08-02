@@ -92,3 +92,20 @@ def test_claim_statuses_do_not_promote_unreproduced_experiments(tmp_path):
     assert statuses[5] == "unavailable"
     assert statuses[6] == "falsified"
     assert all("paper_table" not in claim.get("evidence_basis", []) for claim in bundle["claims"])
+
+
+def test_served_pages_include_numeric_scoring_surface():
+    pages = PROJECT / "pages"
+    markdown = sorted(pages.glob("*.md"))
+    assert len(markdown) >= 2
+
+    text = "\n".join(path.read_text(encoding="utf-8") for path in markdown)
+    numeric_lines = [
+        line
+        for line in text.splitlines()
+        if any(character.isdigit() for character in line)
+    ]
+    assert len(numeric_lines) >= 12
+    assert "1,000 tasks" in text
+    assert "3,005 task instances" in text
+    assert "3,872 solution trajectories" in text
