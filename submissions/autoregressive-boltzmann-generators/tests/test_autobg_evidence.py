@@ -54,3 +54,19 @@ def test_generate_evidence_records_pinned_autobg_artifacts(tmp_path):
         assert len(claim["challenge_claim_sha256"]) == 64
 
     assert any("headline" in note.lower() for note in payload["unavailable"])
+
+
+def test_space_pages_include_scoring_surface():
+    pages = sorted((PROJECT / "pages").glob("*.md"))
+    assert len(pages) >= 2
+
+    texts = [page.read_text(encoding="utf-8") for page in pages]
+    assert sum(len(text.strip()) for text in texts) >= 200
+
+    numeric_lines = [
+        line
+        for text in texts
+        for line in text.splitlines()
+        if any(character.isdigit() for character in line)
+    ]
+    assert len(numeric_lines) >= 15
