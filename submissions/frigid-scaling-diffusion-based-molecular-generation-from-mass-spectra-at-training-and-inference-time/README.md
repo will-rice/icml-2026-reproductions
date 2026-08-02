@@ -23,3 +23,4 @@ The bundle pins upstream `coleygroup/FRIGID` at commit
 artifacts, and audits the architecture/refinement paths. Large NPLIB1,
 MassSpecGym, checkpoint, ICEBERG, and GPU baseline claims are marked limited;
 paper-reported metrics are not presented as reproduced measurements.
+

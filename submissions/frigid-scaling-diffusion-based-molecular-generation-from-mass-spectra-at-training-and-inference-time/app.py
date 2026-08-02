@@ -23,3 +23,4 @@ for claim in bundle["claims"]:
 
 st.subheader("Pinned Artifacts")
 st.json(bundle["artifact_hashes"])
+
