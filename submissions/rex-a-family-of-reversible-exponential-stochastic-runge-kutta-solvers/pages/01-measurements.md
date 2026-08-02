@@ -22,3 +22,4 @@ Detailed numerical metrics and claim surface audits from the REX-Solver reproduc
 - Total Claims Audited: 5
 - Total Solvers Verified: 3 (Euler-Rex, RK4-Rex, SDE-Rex)
 - Estimated Paid API Cost: USD 0.00
+
