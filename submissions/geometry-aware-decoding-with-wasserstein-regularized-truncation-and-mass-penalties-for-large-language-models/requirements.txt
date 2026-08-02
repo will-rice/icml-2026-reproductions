@@ -3,5 +3,3 @@ numpy>=1.24.0
 scipy>=1.10.0
 torch>=2.0.0
 pytest>=7.0.0
-audioop-lts
-huggingface_hub==0.25.2
