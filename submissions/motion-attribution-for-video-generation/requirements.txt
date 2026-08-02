@@ -1,5 +1,3 @@
 gradio>=4.0.0
-numpy
-torch
-audioop-lts
-huggingface_hub<0.24.0
+torch>=2.0.0
+pytest>=7.0.0

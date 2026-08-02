@@ -54,4 +54,4 @@ with gr.Blocks(title="Motion Attribution for Video Generation") as demo:
         gr.Code(value=load_file("evidence_summary.json"), language="json", label="evidence_summary.json")
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(server_name="0.0.0.0", server_port=7860)
