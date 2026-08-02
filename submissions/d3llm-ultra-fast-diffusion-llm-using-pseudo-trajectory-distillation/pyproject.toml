@@ -7,3 +7,4 @@ dependencies = ["pytest"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "-o cache_dir=/tmp/pytest_cache"
