@@ -17,7 +17,7 @@ Evaluated path action and endpoint pinning for Diffusion Bridge proxy vs noisy F
 - Diffusion Bridge Path Action ($S_{DB}$): `0.1502805366`
 - Noisy Flow Matching Action ($S_{FM}$): `0.8254394387`
 - Action Difference ($S_{FM} - S_{DB}$): `0.6751589021`
-- Diffusion Bridge Endpoint Error ($e_{DB}$): `0.0000000000`
+- Diffusion Bridge Endpoint Error ($e_{DB}$): `0.0`
 - Noisy Flow Endpoint Error ($e_{FM}$): `0.0614979566`
 - Verification status: `PASSED` ($S_{DB} < S_{FM}$ confirmed)
 
