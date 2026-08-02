@@ -105,7 +105,7 @@ def test_served_pages_include_numeric_scoring_surface():
         for line in text.splitlines()
         if any(character.isdigit() for character in line)
     ]
-    assert len(numeric_lines) >= 12
+    assert len(numeric_lines) >= 15
     assert "1,000 tasks" in text
     assert "3,005 task instances" in text
     assert "3,872 solution trajectories" in text

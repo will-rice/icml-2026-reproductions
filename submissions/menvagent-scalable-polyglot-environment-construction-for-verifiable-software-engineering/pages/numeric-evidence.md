@@ -18,6 +18,9 @@ This page renders the computed values from `evidence/bundle.json` so the served 
 | Trajectory count match | false | falsified boundary |
 | Challenge claim bindings | 6 claims | recorded |
 | Claims with unavailable experiment evidence | 3 claims | explicit boundary |
+| Claims with recomputed dataset evidence | 2 claims | verified/toy boundary |
+| Claims with public source mechanism evidence | 1 claim | toy boundary |
+| Claims with trajectory-count contradiction | 1 claim | falsified boundary |
 
 ## Source Release Checks
 
