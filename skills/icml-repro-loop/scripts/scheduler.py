@@ -153,20 +153,42 @@ def _reclaim_publish_ready(
     owner: str,
     observed_at: datetime,
 ) -> PaperOwnerAssignment | None:
-    """Route a saturated claim onto the best reclaimable publish-ready lane."""
+    """Route a saturated claim onto the best reclaimable endgame lane.
+
+    Tier 0: unpublished validated lanes not recently quota-blocked (spend
+    creation slots while they last). Tier 1: lanes with an existing Space
+    (improvement and republish work, quota-free). Tier 2: lanes whose
+    latest blocker reports creation-quota exhaustion (retry last).
+    """
     ranked = []
     for attempt_id, reference in index["attempts"].items():
         if reference["phase"] != "blocked":
             continue
         attempt = store.read_json(paths.attempt(attempt_id))
-        if attempt.get("blocked_from") != "validated":
+        blocked_from = attempt.get("blocked_from")
+        has_space = bool(attempt.get("space_id")) and bool(
+            attempt.get("deployed_sha")
+        )
+        if blocked_from == "validated" and not has_space:
+            blocker = str(attempt.get("blocker") or "")
+            quota_blocked = "quota" in blocker.casefold() or "429" in blocker
+            tier = 2 if quota_blocked else 0
+        elif has_space and blocked_from in {
+            "validated",
+            "deployed",
+            "submitted",
+            "judging",
+            "improving",
+        }:
+            tier = 1
+        else:
             continue
         try:
             expected = score_rate.expected_points(attempt["score_rate"])
         except (KeyError, TypeError, ValueError):
             expected = 0.0
-        ranked.append((-expected, attempt_id, attempt["paper_id"]))
-    for _, attempt_id, paper_id in sorted(ranked):
+        ranked.append((tier, -expected, attempt_id, attempt["paper_id"]))
+    for _, _, attempt_id, paper_id in sorted(ranked):
         try:
             _current_assessed_candidate(snapshot, paper_id)
             prior = _attempt_lease(paths, attempt_id)
