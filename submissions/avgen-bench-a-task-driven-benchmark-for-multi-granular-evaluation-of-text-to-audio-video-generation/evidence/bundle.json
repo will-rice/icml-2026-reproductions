@@ -1,0 +1,198 @@
+{
+  "artifact_access": {
+    "hf_file_count": 3730,
+    "leaderboard_rows": 13,
+    "prompt_files": [
+      "ads.json",
+      "animals.json",
+      "asmr.json",
+      "chemical_reaction.json",
+      "cooking.json",
+      "gameplays.json",
+      "movie_trailer.json",
+      "musical_instrument_tutorial.json",
+      "news.json",
+      "physical_experiment.json",
+      "sports.json"
+    ],
+    "repo_file_count": 668
+  },
+  "attempt_id": "dca81643-55fa-4d3c-9244-d3d1a00119aa",
+  "audits": {
+    "artifact_availability": {
+      "generated_video_present": true,
+      "human_correlation_artifacts": [],
+      "metadata_present": true,
+      "repeat_output_artifacts": [],
+      "stability_code_present": true
+    },
+    "leaderboard_failure_modes": {
+      "lowest_mean_dimensions": [
+        {
+          "dimension": "Music",
+          "mean": 5.8246153846153845
+        },
+        {
+          "dimension": "Face",
+          "mean": 49.80384615384616
+        },
+        {
+          "dimension": "Text",
+          "mean": 56.36769230769231
+        },
+        {
+          "dimension": "Hi-Phy",
+          "mean": 64.93307692307692
+        },
+        {
+          "dimension": "Holistic",
+          "mean": 74.83769230769231
+        },
+        {
+          "dimension": "Lo-Phy",
+          "mean": 77.35384615384615
+        },
+        {
+          "dimension": "Speech",
+          "mean": 85.6576923076923
+        }
+      ],
+      "models_with_high_basic_and_low_fine": [
+        "Veo 3.1-fast",
+        "Veo 3.1-quality",
+        "Wan2.6",
+        "Seedance-1.5 Pro"
+      ],
+      "row_count": 13
+    },
+    "metric_inventory": {
+      "aggregate_source_sha256": "e8be9efa0655cbae5c5b34f0e862b4f001cd733a33dda3d6a89dcb781b71064a",
+      "group_count": 3,
+      "groups": {
+        "basic": [
+          "Vis",
+          "Aud"
+        ],
+        "cross": [
+          "AV",
+          "Lip"
+        ],
+        "fine": [
+          "Text",
+          "Face",
+          "Music",
+          "Speech",
+          "Lo-Phy",
+          "Hi-Phy",
+          "Holistic"
+        ]
+      },
+      "metric_count": 11,
+      "missing_modules": [],
+      "module_presence": {
+        "audio_quality": "present",
+        "av_sync": "present",
+        "face": "present",
+        "high_physics": "present",
+        "holistic": "present",
+        "lip_sync": "present",
+        "low_physics": "present",
+        "music_or_pitch": "present",
+        "speech": "present",
+        "text": "present",
+        "visual_quality": "present"
+      }
+    },
+    "prompt_inventory": {
+      "category_count": 11,
+      "category_counts": {
+        "ads": 20,
+        "animals": 20,
+        "asmr": 20,
+        "chemical_reaction": 20,
+        "cooking": 20,
+        "gameplays": 20,
+        "movie_trailer": 20,
+        "musical_instrument_tutorial": 35,
+        "news": 20,
+        "physical_experiment": 20,
+        "sports": 20
+      },
+      "mean_prompt_words": 70.22978723404255,
+      "prompt_count": 235,
+      "prompts_with_audio_cues": 161,
+      "sha256_by_file": {
+        "ads.json": "41e8c05bb6def482e912a86fe39be722b148bca2c1ebc759a5022fe3a6d7284c",
+        "animals.json": "8159f5afbb7f510f7f54bacdbbf80f947170dc62e35ad0f614abf8aac2bc5367",
+        "asmr.json": "3c63987489bb0e8140d97df5e19c45a62b99480be5571925bc244fa03dcf1a28",
+        "chemical_reaction.json": "77cec5027cc7673bc0e4a11931d6147302db01c39dd2be1a8934e0dc70112dbe",
+        "cooking.json": "56acd5091bb6d3085c545dbfc7ca6e7f188da7432b81cb35f73ddae93f5dc0cb",
+        "gameplays.json": "2a41e019a759abbed0beb803c271f3dabf662873ca9454e847baa22148203711",
+        "movie_trailer.json": "5d874feadf7dd5810a956b2410d419e3dee0b0b24b46a54dd1c98f188d82a675",
+        "musical_instrument_tutorial.json": "05a03cfc2fc597367c5529e6dae1657bc2d544524df0fc57a5b1d757509763dd",
+        "news.json": "8679c5dd61e623d8f82d44a8e489fabb7663650364d509264cc8c2182c0003dd",
+        "physical_experiment.json": "047d8114ab32d80969ce084bbdcd05461f38024eaa7d185b9db4f4ec313e7cea",
+        "sports.json": "c482413b449b9095806660e38f299a3aa3372533a5fe523afd599746babc69b6"
+      }
+    },
+    "readme_sha256": "6166fee9482c7368902730b496ae6d84768581c9f29f0de385b222bfd91d295c"
+  },
+  "claim_results": [
+    {
+      "claim": "AVGen-Bench defines a task-driven text-to-audio-video prompt set spanning 3 main domains and 11 real-world sub-categories (Figure 3; Figure 4).",
+      "claim_index": 1,
+      "claim_sha256": "1c19020c9c880185418148720050194b2615d522a0a923bd475444da0d9e83d7",
+      "limitation": "The raw prompt JSON verifies subcategory coverage; the domain wording is inferred from released benchmark/scoring structure.",
+      "observation": "Released prompts contain 235 prompts across 11 category files; scoring code exposes 3 evaluation groups.",
+      "status": "verified"
+    },
+    {
+      "claim": "AVGen-Bench evaluates T2AV systems with joint audio-visual metrics plus fine-grained modules for scene text, face identity, pitch, speech, physics, and holistic semantic alignment (Figure 5).",
+      "claim_index": 2,
+      "claim_sha256": "25d43bc1f8efa8482f310d00b3f0a9703018ccad0cf53319883cf04b9efa0465",
+      "limitation": "This verifies metric/module availability and score formula, not full model evaluation reruns.",
+      "observation": "Aggregate code defines 11 dimensions across 3 groups and released source exposes 11 expected evaluator modules.",
+      "status": "verified"
+    },
+    {
+      "claim": "Compared with existing benchmarks, AVGen-Bench uses higher-complexity prompts and covers all audio modalities with a broader metric set (Table 1).",
+      "claim_index": 3,
+      "claim_sha256": "de1223581cc3744a8ca5d3ccced5f6d6052731ed9601247e911f0c4a0b7079b0",
+      "limitation": "No independent rerun or audit of prior benchmark prompt complexity was performed.",
+      "observation": "The release includes a benchmark-comparison asset and 11 metric dimensions; prompt mean length is 70.2 words.",
+      "status": "toy"
+    },
+    {
+      "claim": "Quantitative evaluation reveals that current T2AV models can score well on aesthetics while failing fine-grained semantic reliability, including text rendering, speech coherence, physical reasoning, and pitch control (Table 2; Figure 2).",
+      "claim_index": 4,
+      "claim_sha256": "46282c68984bc5c2331b43d7170ddcdca860e9ccba0c6363057fbf87c4aa2db7",
+      "limitation": "The evidence recomputes patterns from released aggregate README values, not raw evaluator outputs.",
+      "observation": "Parsed 13 released leaderboard rows; high-basic/low-fine models: ['Veo 3.1-fast', 'Veo 3.1-quality', 'Wan2.6', 'Seedance-1.5 Pro'].",
+      "status": "toy"
+    },
+    {
+      "claim": "Automated fine-grained scores correlate with expert human judgments across six evaluated dimensions (Table 3).",
+      "claim_index": 5,
+      "claim_sha256": "6993580cccb8453f48c1e582c223972cda4a64c95c81e33fb264732be633c895",
+      "limitation": "Expert human judgment data are required to recompute correlations and were not found in released artifacts.",
+      "observation": "Human-correlation artifacts found: [].",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "Repeated-run and prompt-subset analyses show AVGen-Bench produces stable model comparisons under MLLM-assisted evaluation and prompt resampling (Table 5; Figure 6).",
+      "claim_index": 6,
+      "claim_sha256": "f3ac97e89590cc2c500df024212e328fcc02dc90c564d002693c53e7877ce82e",
+      "limitation": "Prompt-subset/repeated-run cached outputs are required for numeric stability reproduction and were not found.",
+      "observation": "Stability script present: True; repeat output artifacts found: [].",
+      "status": "toy"
+    }
+  ],
+  "paper_id": "aJdgt8xDMy",
+  "snapshot_id": "41692f328d154e4fad790fb8c89aa276452ce49b8aaa18064abb9c47a897d622",
+  "title": "AVGen-Bench: A Task-Driven Benchmark for Multi-Granular Evaluation of Text-to-Audio-Video Generation",
+  "upstream_pins": {
+    "generated_outputs": "hf-dataset:microsoft/AVGen-Bench@69eb2a20b2d47659be7cd40984baf02b7f2395a8",
+    "official_code": "github:microsoft/AVGen-Bench@1049eabac472d479fe5feeb1ee202961f8e0982a",
+    "paper": "arxiv:2604.08540"
+  }
+}

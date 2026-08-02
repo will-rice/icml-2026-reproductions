@@ -711,3 +711,12 @@ submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-
 submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/.pytest_cache/
 submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/__pycache__/
 submissions/procmem-learning-reusable-procedural-memory-from-experience-via-non-parametric-ppo-for-llm-agents/**/*.egg-info/
+
+!docs/reproductions/dca81643-55fa-4d3c-9244-d3d1a00119aa-avgen-bench-design.md
+
+!submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/
+!submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/**
+submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/.venv/
+submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/.pytest_cache/
+submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/**/__pycache__/
+submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/**/*.egg-info/
