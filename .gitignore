@@ -639,6 +639,15 @@ submissions/plugmem-a-task-agnostic-plugin-memory-module-for-llm-agents/.pytest_
 submissions/plugmem-a-task-agnostic-plugin-memory-module-for-llm-agents/**/__pycache__/
 submissions/plugmem-a-task-agnostic-plugin-memory-module-for-llm-agents/**/*.egg-info/
 
+!docs/reproductions/1ff17cfb-669a-4192-90f0-c014220f7f12-autobg-design.md
+
+!submissions/autoregressive-boltzmann-generators/
+!submissions/autoregressive-boltzmann-generators/**
+submissions/autoregressive-boltzmann-generators/.venv/
+submissions/autoregressive-boltzmann-generators/.pytest_cache/
+submissions/autoregressive-boltzmann-generators/**/__pycache__/
+submissions/autoregressive-boltzmann-generators/**/*.egg-info/
+
 !docs/reproductions/90bf5a14-ca7f-49d8-9085-a633e800b5ca-video-salmonn-design.md
 
 !submissions/video-salmonn-s-memory-enhanced-streaming-audio-visual-llm/
