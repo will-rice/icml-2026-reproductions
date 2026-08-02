@@ -1,4 +1,4 @@
-# REX-Solver Executive Summary
+# Rex ICML 2026 Reproduction Summary
 
 This page summarizes the reproduction results for paper `7pQIzVNctu`: "Rex: A Family of Reversible Exponential (Stochastic) Runge-Kutta Solvers".
 
@@ -9,4 +9,3 @@ This page summarizes the reproduction results for paper `7pQIzVNctu`: "Rex: A Fa
 - Order of Convergence: First-order Euler (1.00) and Fourth-order RK4 (4.00) verified
 - SDE Path Reversibility: SDE drift and diffusion step-reversibility confirmed
 - Multi-Step Inversion Metric: 8-step ODE forward/backward reconstruction error 1.42e-14
-
