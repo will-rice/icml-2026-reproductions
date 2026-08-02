@@ -807,11 +807,3 @@ submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-mod
 submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/.pytest_cache/
 submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/**/__pycache__/
 submissions/d2-improved-techniques-for-training-reasoning-diffusion-language-models/**/*.egg-info/
-
-!submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/
-!submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/.venv/
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/.pytest_cache/
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/__pycache__/
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/*.egg-info/
-
