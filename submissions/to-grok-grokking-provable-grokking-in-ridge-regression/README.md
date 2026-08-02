@@ -1,3 +1,17 @@
+---
+title: To Grok Grokking Reproduction
+emoji: 🧪
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+tags:
+  - icml2026-repro
+  - paper-5nNNVY8NW4
+---
+
 # To Grok Grokking reproduction
 
 CPU-only reproduction package for ICML 2026 paper `5nNNVY8NW4`.
