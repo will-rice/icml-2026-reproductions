@@ -1,7 +1,7 @@
 # Detailed Benchmark Results: RelaxFlow
 
-**Paper ID:** UamxHbDR3p  
-**Title:** RelaxFlow: Text-Driven Amodal 3D Generation  
+**Paper ID:** UamxHbDR3p
+**Title:** RelaxFlow: Text-Driven Amodal 3D Generation
 
 ---
 
