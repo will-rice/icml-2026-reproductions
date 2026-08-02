@@ -816,9 +816,9 @@ submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/_
 submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/*.egg-info/
 
 
-!submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/
-!submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/.venv/
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/.pytest_cache/
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/__pycache__/
-submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/*.egg-info/
+!submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/
+!submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/**
+submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/.venv/
+submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/.pytest_cache/
+submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/**/__pycache__/
+submissions/advancing-llm-reasoning-with-natural-language-and-numerical-feedback/**/*.egg-info/
