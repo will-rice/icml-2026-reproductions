@@ -253,6 +253,10 @@ submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fi
 submissions/beyond-log-likelihood-probability-based-objectives-for-supervised-fine-tuning-across-the-model-capability-continuum/**/*.egg-info/
 !submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/
 !submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/**
+submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/.venv/
+submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/.pytest_cache/
+submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/**/__pycache__/
+submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/**/*.egg-info/
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/**
 !submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/

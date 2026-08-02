@@ -1,0 +1,148 @@
+{
+  "attempt_id": "020e5035-01ad-40a7-9ab0-9147289ab70c",
+  "checks": {
+    "density_curve": [
+      {
+        "density": 0.125,
+        "estimated_recall": 0.312711,
+        "relative_attention_work": 6.485e-05,
+        "retained_chunks": 2,
+        "retained_tokens": 512
+      },
+      {
+        "density": 0.25,
+        "estimated_recall": 0.527633,
+        "relative_attention_work": 0.00024796,
+        "retained_chunks": 4,
+        "retained_tokens": 1024
+      },
+      {
+        "density": 0.5,
+        "estimated_recall": 0.77687,
+        "relative_attention_work": 0.00098038,
+        "retained_chunks": 8,
+        "retained_tokens": 2048
+      }
+    ],
+    "dynamic_router": {
+      "block_selected_tokens": 24,
+      "block_sparse_mass": 10.734840025638773,
+      "block_sparse_recall": 0.25,
+      "chunk_candidates": 4,
+      "chunk_size": 12,
+      "dynamic_mass": 17.299817891188706,
+      "dynamic_recall": 0.4583333333333333,
+      "dynamic_selected_tokens": 24,
+      "oracle_mass": 22.639393547369753,
+      "seed": 251024606,
+      "sequence_length": 96,
+      "token_budget": 24
+    },
+    "upstream_audit": {
+      "bucket_ranges": {
+        "16k_32k": {
+          "max": 32768,
+          "min": 16384
+        },
+        "32k_64k": {
+          "max": 65536,
+          "min": 32768
+        },
+        "64k_128k": {
+          "max": 131072,
+          "min": 65536
+        },
+        "8k_16k": {
+          "max": 16384,
+          "min": 8192
+        },
+        "gt_128k": {
+          "max": null,
+          "min": 131072
+        },
+        "lt_8k": {
+          "max": 8192,
+          "min": 0
+        }
+      },
+      "data_card_sha256": "b400ae023342ff22da3c39b08c6cfbdeb47f9bea97f418d5f7ab6ab54fcc73ca",
+      "fine_tune_total_from_buckets": 98557,
+      "has_128k_examples": true,
+      "long_data_summary_sha256": "a3b650f2ef90a9c52a86e4420d88066de1844bcb52cbbfc3b6382e39b63d39e7",
+      "model_card_architecture_terms": {
+        "feature_fusion": true,
+        "frozen_backbone": false,
+        "mlp_classifier": true,
+        "shared_encoder": true
+      },
+      "model_card_sha256": "4087837350c6b6e96c512c51e0c9559c6330527f7fbb172a92a82f2a4e649716",
+      "pretrain_total_from_buckets": 9383848,
+      "upstream_revisions": {
+        "long_data_collections": "sxiong/DHSA_Long-Data-Collections@61d64f96ff3983e176362a0500e2ddd2ee26c210",
+        "model": "sxiong/DHSA@0b3bc22abfb03923e7dd00a54ba01375fef0e79b"
+      }
+    }
+  },
+  "claims": [
+    {
+      "challenge_claim_sha256": "cc2810b3712d97dac5c4ef31ff712a89cbe6d0fd54a805726a9c64716445b062",
+      "claim": "DHSA predicts content-adaptive sparse attention online using hierarchical chunk-level routing followed by token-level sparsification while keeping the LLM backbone frozen (Figure 3).",
+      "observations": [
+        "Pinned model card names the boundary predictor as a lightweight transformer with Shared Encoder, Feature Fusion, and MLP Classifier stages.",
+        "The model card supports dynamic boundary prediction, but it does not itself prove that a deployed LLM backbone stayed frozen."
+      ],
+      "status": "toy"
+    },
+    {
+      "challenge_claim_sha256": "8f498ed44034578b35a389c120d292d97ef0c74f11cd43f2ab1987ce538e0496",
+      "claim": "DHSA achieves higher attention recall than block-sparse attention under comparable sparsity budgets (Figure 2).",
+      "observations": [
+        "Synthetic sparse-routing check at equal 24-token budget: dynamic recall=0.458, block-sparse recall=0.250.",
+        "This is an independently computed mechanism check, not the paper's Figure 2 attention-recall experiment."
+      ],
+      "status": "toy"
+    },
+    {
+      "challenge_claim_sha256": "7f69a4a2195e81c970b02f20e4d11a220417d84aab77bbae91aa5cad6680e244",
+      "claim": "At 12.5% token density, DHSA improves LongBench accuracy over Block Sparse Attention across Llama-3.1-8B, Mistral-7B, and Qwen2.5-7B settings (Table 1).",
+      "observations": [
+        "No LongBench model inference was run for Llama-3.1-8B, Mistral-7B, or Qwen2.5-7B.",
+        "The submission therefore does not reproduce the paper-reported Table 1 accuracy margins."
+      ],
+      "status": "inconclusive"
+    },
+    {
+      "challenge_claim_sha256": "9bafe807d3c1daa5aaa8c8ab00386d06295d876ba1751070795a56c86ccb27fe",
+      "claim": "Across token densities, DHSA maintains higher LongBench performance than Block Sparse Attention and improves monotonically with larger attention budgets (Table 3).",
+      "observations": [
+        "Monotone density proxy: [0.312711, 0.527633, 0.77687] for densities [0.125, 0.25, 0.5].",
+        "The proxy verifies the expected direction of a larger attention budget, but not LongBench accuracy."
+      ],
+      "status": "toy"
+    },
+    {
+      "challenge_claim_sha256": "d7dfa8bb0e8f2e086edadfbc155268bade452058c8e20912ae274df00ec66f44",
+      "claim": "On 4-bit Llama-3.1-8B-Instruct, DHSA reduces prefill latency over FlashAttention-2 up to 128K context length (Figure 6).",
+      "observations": [
+        "No 4-bit Llama-3.1-8B-Instruct latency benchmark or FlashAttention-2 comparison was executed.",
+        "The local density work proxy is insufficient to claim Figure 6 latency reproduction."
+      ],
+      "status": "inconclusive"
+    },
+    {
+      "challenge_claim_sha256": "999014e0aa1e212f55e6b1bcb32e1e5897bce7e26a9ac91a3e01b35f0a9bd98c",
+      "claim": "Dynamic chunking and robust chunk representations are both necessary for DHSA's LongBench gains in the ablation study (Table 4).",
+      "observations": [
+        "Length-bucket artifact contains 9383848 pretrain and 98557 fine-tune examples, including gt_128k examples.",
+        "The artifact supports long-context data availability, but no ablation training was run."
+      ],
+      "status": "toy"
+    }
+  ],
+  "paper_id": "o3gN27ITWV",
+  "title": "Long-Context Modeling with Dynamic Hierarchical Sparse Attention for Memory-Constrained LLM Inference",
+  "upstream_revisions": {
+    "long_data_collections": "sxiong/DHSA_Long-Data-Collections@61d64f96ff3983e176362a0500e2ddd2ee26c210",
+    "model": "sxiong/DHSA@0b3bc22abfb03923e7dd00a54ba01375fef0e79b"
+  }
+}
