@@ -46,13 +46,13 @@ def run_git(args: list[str], cwd: Path | None = None) -> str:
 
 def ensure_source(source_root: str | None = None) -> Path:
     configured = source_root or os.environ.get("WARMSERVE_SOURCE_ROOT")
-    if configured:
+    if configured and Path(configured).exists():
         root = Path(configured).resolve()
         commit = run_git(["rev-parse", "HEAD"], root)
-        if commit != UPSTREAM_COMMIT:
-            raise ValueError(f"source root is at {commit}, expected {UPSTREAM_COMMIT}")
-        return root
-    root = Path("/tmp/warmserve-upstream-cache") / UPSTREAM_COMMIT
+        if commit == UPSTREAM_COMMIT:
+            return root
+    repo_dir = Path(__file__).resolve().parents[2]
+    root = repo_dir / "scratch" / "warmserve-upstream-cache" / UPSTREAM_COMMIT
     if not (root / ".git").exists():
         root.parent.mkdir(parents=True, exist_ok=True)
         run_git(["clone", "--filter=blob:none", UPSTREAM_REPO, str(root)])
@@ -77,13 +77,13 @@ def contains_all(text: str, needles: list[str]) -> bool:
 
 
 def arxiv_record(path: str | None, expected: str, label: str) -> dict[str, Any]:
-    if not path:
+    if not path or not Path(path).exists():
         return {"label": label, "available": False, "expected_sha256": expected}
     p = Path(path)
     actual = sha256_file(p)
     return {
         "label": label,
-        "available": p.exists(),
+        "available": True,
         "path": str(p),
         "sha256": actual,
         "expected_sha256": expected,
