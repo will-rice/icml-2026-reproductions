@@ -720,3 +720,12 @@ submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of
 submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/.pytest_cache/
 submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/**/__pycache__/
 submissions/avgen-bench-a-task-driven-benchmark-for-multi-granular-evaluation-of-text-to-audio-video-generation/**/*.egg-info/
+
+!docs/reproductions/8a83f44b-e3db-4c2b-acf7-d233a750fdcc-r4t-design.md
+
+!submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/
+!submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/**
+submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/.venv/
+submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/.pytest_cache/
+submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/**/__pycache__/
+submissions/efficient-property-aligned-fan-out-retrieval-via-rl-amortized-diffusion/**/*.egg-info/

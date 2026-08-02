@@ -1,0 +1,28 @@
+# R4T Numeric Evidence
+
+- Attempt id: `8a83f44b-e3db-4c2b-acf7-d233a750fdcc`.
+- Paper id: `4P9cEcinYP`.
+- Snapshot id: `34237d5702ab85038fbe25e4409a2115b90ef0257ab437d9511f2d66ded5fdd5`.
+- ArXiv pin: `2603.06397`.
+- ArXiv source sha256: `3602626196bb2747970029de2a6f9b8086e4450a8f67c105d2954911a1d8a568`.
+- Source manifest file count: `22`.
+- Python implementation files released upstream: `0`.
+- Dataset files released upstream: `0`.
+- Model checkpoint files released upstream: `0`.
+- Table 1 R4T mentions parsed: `5`.
+- Table 2 R4T mentions parsed: `4`.
+- Table values recomputed from raw outputs: `false`.
+- Toy collapsed groundedness: `1.000000`.
+- Toy collapsed alignment: `1.000000`.
+- Toy collapsed diversity: `0.000000`.
+- Toy collapsed total reward: `0.700000`.
+- Toy diverse groundedness: `0.902369`.
+- Toy diverse alignment: `0.569036`.
+- Toy diverse diversity: `0.528595`.
+- Toy diverse total reward: `0.706904`.
+- Synthetic supervision target count: `3`.
+- Claim 1 status: `toy`.
+- Claim 2 status: `inconclusive`.
+- Claim 3 status: `inconclusive`.
+- Claim 4 status: `toy`.
+- Claim 5 status: `inconclusive`.
