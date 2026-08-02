@@ -156,7 +156,13 @@ def hub_case(tmp_path: Path, monkeypatch):
     pages = source_dir / "pages"
     pages.mkdir()
     (pages / "reproduction.md").write_text(
-        "Reproduced evidence. " * 20, encoding="utf-8"
+        "Reproduced evidence. " * 20
+        + "".join(f"\n| metric-{n} | {n}.{n} |" for n in range(16)),
+        encoding="utf-8",
+    )
+    (pages / "results.md").write_text(
+        "".join(f"claim {n}: measured {n}.0e-{n}\n" for n in range(16)),
+        encoding="utf-8",
     )
     git(worktree, "init", "-b", "attempt-paper-a")
     git(worktree, "config", "user.name", "Test Controller")
@@ -214,6 +220,8 @@ def deploy(case: dict) -> dict:
         ("space/pages/reproduction.md", "nested evidence " * 20),
         ("pages/reproduction.md", "x" * 199),
         ("pages/reproduction.txt", "valid evidence " * 20),
+        ("pages/summary-only.md", "single page 1.0 2.0 " * 30),
+        ("pages/no-numbers.md", "asserted reproduced verified " * 30),
     ],
 )
 def test_scoring_pages_require_direct_substantive_markdown(
