@@ -1,0 +1,14 @@
+[project]
+name = "frigid-repro"
+version = "0.1.0"
+description = "Reproduction evidence for FRIGID mass-spectra molecular generation"
+requires-python = ">=3.10"
+dependencies = [
+    "pytest>=7.0.0",
+    "streamlit>=1.25.0",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+

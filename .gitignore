@@ -534,6 +534,7 @@ submissions/weak-diffusion-priors-can-still-achieve-strong-inverse-problem-perfo
 !submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/**
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/.venv/
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/.pytest_cache/
+submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/evidence/
 submissions/rex-a-family-of-reversible-exponential-stochastic-runge-kutta-solvers/**/__pycache__/
 
 !submissions/metaphorvu-towards-metaphorical-video-understanding/

@@ -1,0 +1,140 @@
+{
+  "artifact_hashes": {
+    "README.md": {
+      "relative_path": "evidence/inputs/upstream/README.md",
+      "sha256": "d9134f3ed21eea01e754840abd726848a85160f316d663549531decbb1cc860c"
+    },
+    "fp2mol_pretraining.yaml": {
+      "relative_path": "evidence/inputs/upstream/fp2mol_pretraining.yaml",
+      "sha256": "0fa294bba15f594151c1a5573a0465d23c101ee27a6a71282ff4cdc9dfee2aa1"
+    },
+    "iceberg_sampler.py": {
+      "relative_path": "evidence/inputs/upstream/iceberg_sampler.py",
+      "sha256": "08011ec81ce55d967a7aecdcc1570a8634fe36d169a05af0d370ed9173a90bcb"
+    },
+    "spec2mol_benchmark_msg.yaml": {
+      "relative_path": "evidence/inputs/upstream/spec2mol_benchmark_msg.yaml",
+      "sha256": "15d5b487e4b464a6fb874536ddd212892cdc85f76c5cd12d185d4f5aee863663"
+    },
+    "spec2mol_model.py": {
+      "relative_path": "evidence/inputs/upstream/spec2mol_model.py",
+      "sha256": "30438babe63959e93750604c1dad09901253dc731680abf63cb5650cefdb0e7c"
+    }
+  },
+  "attempt_id": "86bd82c3-48c0-4260-be38-045e8aa0fb29",
+  "claims": [
+    {
+      "details": {
+        "checks": {
+          "model_uses_fingerprint_conditioner": true,
+          "model_uses_formula_encoder": true,
+          "model_uses_masked_diffusion": true,
+          "model_uses_mist_encoder": true,
+          "msg_config_uses_4096_bit_fingerprints": true,
+          "pretraining_enables_fingerprint_conditioning": true,
+          "pretraining_enables_formula_conditioning": true,
+          "readme_names_safe_generation": true
+        },
+        "supported": true
+      },
+      "local_outcome": "supported",
+      "ordinal": 1,
+      "reproduction_notes": "Pinned upstream source/configs support the MIST fingerprint, formula, SAFE, and masked-diffusion conditioning path.",
+      "text": "FRIGID-base is a masked diffusion language model that generates SAFE molecular sequences conditioned on precursor formulae and MIST-predicted fingerprints (Figure 2)"
+    },
+    {
+      "details": {
+        "checks": {
+          "has_iceberg_sampler": true,
+          "identifies_hallucinated_peaks": true,
+          "iterates_refinement_rounds": true,
+          "maps_to_masked_tokens": true,
+          "simulates_spectra": true
+        },
+        "supported": true
+      },
+      "local_outcome": "supported",
+      "ordinal": 2,
+      "reproduction_notes": "Pinned upstream sampler source supports the ICEBERG simulation, hallucinated-peak, token masking, and iterative refinement path.",
+      "text": "ICEBERG-guided inference-time scaling identifies spectrum-inconsistent fragments and refines molecules through targeted remasking and denoising (Figure 3)"
+    },
+    {
+      "details": {
+        "local_scope": "CPU source/configuration audit only",
+        "no_paper_values_recomputed": true,
+        "unavailable_requirements": [
+          "released DLM and MIST checkpoints",
+          "NPLIB1/CANOPUS and MassSpecGym test data",
+          "ICEBERG model weights and ms-pred submodule runtime",
+          "single-GPU timing baseline for graph diffusion comparisons"
+        ]
+      },
+      "local_outcome": "limited",
+      "ordinal": 3,
+      "reproduction_notes": "Full benchmark reproduction requires unavailable large datasets, checkpoints, and GPU baseline runs; no paper-reported metric is treated as reproduced.",
+      "text": "FRIGID achieves state-of-the-art de novo structural elucidation on NPLIB1 and MassSpecGym under known chemical formulae, including surpassing 18% Top-1 accuracy on MassSpecGym (Table 1)"
+    },
+    {
+      "details": {
+        "local_scope": "CPU source/configuration audit only",
+        "no_paper_values_recomputed": true,
+        "unavailable_requirements": [
+          "released DLM and MIST checkpoints",
+          "NPLIB1/CANOPUS and MassSpecGym test data",
+          "ICEBERG model weights and ms-pred submodule runtime",
+          "single-GPU timing baseline for graph diffusion comparisons"
+        ]
+      },
+      "local_outcome": "limited",
+      "ordinal": 4,
+      "reproduction_notes": "Full benchmark reproduction requires unavailable large datasets, checkpoints, and GPU baseline runs; no paper-reported metric is treated as reproduced.",
+      "text": "FRIGID triples prior Top-1 exact-match accuracy on NPLIB1 and improves structural similarity when exact recovery fails (Table 1)"
+    },
+    {
+      "details": {
+        "local_scope": "CPU source/configuration audit only",
+        "no_paper_values_recomputed": true,
+        "unavailable_requirements": [
+          "released DLM and MIST checkpoints",
+          "NPLIB1/CANOPUS and MassSpecGym test data",
+          "ICEBERG model weights and ms-pred submodule runtime",
+          "single-GPU timing baseline for graph diffusion comparisons"
+        ]
+      },
+      "local_outcome": "limited",
+      "ordinal": 5,
+      "reproduction_notes": "Full benchmark reproduction requires unavailable large datasets, checkpoints, and GPU baseline runs; no paper-reported metric is treated as reproduced.",
+      "text": "FRIGID inference-time refinement shows log-linear Top-1 accuracy gains with increasing compute on NPLIB1 and MassSpecGym (Figure 4)"
+    },
+    {
+      "details": {
+        "local_scope": "CPU source/configuration audit only",
+        "no_paper_values_recomputed": true,
+        "unavailable_requirements": [
+          "released DLM and MIST checkpoints",
+          "NPLIB1/CANOPUS and MassSpecGym test data",
+          "ICEBERG model weights and ms-pred submodule runtime",
+          "single-GPU timing baseline for graph diffusion comparisons"
+        ]
+      },
+      "local_outcome": "limited",
+      "ordinal": 6,
+      "reproduction_notes": "Full benchmark reproduction requires unavailable large datasets, checkpoints, and GPU baseline runs; no paper-reported metric is treated as reproduced.",
+      "text": "The FRIGID backbone has substantially faster inference throughput than graph diffusion baselines on NPLIB1 random samples (Table 2)"
+    }
+  ],
+  "costs": {
+    "api_cost_usd": 0.0,
+    "metered_service_usd": 0.0
+  },
+  "environment": {
+    "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
+    "python_version": "3.10.12"
+  },
+  "generated_files": {
+    "evidence_json": "/home/will/projects/icml-2026-reproductions/submissions/frigid-scaling-diffusion-based-molecular-generation-from-mass-spectra-at-training-and-inference-time/evidence/evidence.json"
+  },
+  "paper_id": "wTgx7b2D9r",
+  "title": "FRIGID: Scaling Diffusion-Based Molecular Generation from Mass Spectra at Training and Inference Time",
+  "upstream_revision": "github:coleygroup/FRIGID@4914e52424278ac7de7b699fa7dfbee528cbc751"
+}
