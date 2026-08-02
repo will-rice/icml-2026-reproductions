@@ -791,3 +791,11 @@ submissions/dimension-free-diffusion-gmm/.venv/
 submissions/dimension-free-diffusion-gmm/.pytest_cache/
 submissions/dimension-free-diffusion-gmm/**/__pycache__/
 submissions/dimension-free-diffusion-gmm/**/*.egg-info/
+
+!submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/
+!submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/**
+!docs/reproductions/063c65c5-a8aa-4679-a184-fc83b92a820f-d3llm-design.md
+submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/.venv/
+submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/.pytest_cache/
+submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/**/__pycache__/
+submissions/d3llm-ultra-fast-diffusion-llm-using-pseudo-trajectory-distillation/**/*.egg-info/

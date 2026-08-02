@@ -1,0 +1,331 @@
+{
+  "attempt_id": "063c65c5-a8aa-4679-a184-fc83b92a820f",
+  "claims": [
+    {
+      "claim_id": "claim_1_aup_definition",
+      "evidence": "AUP implementation follows released formula and passes a hand-computed fixture.",
+      "status": "verified"
+    },
+    {
+      "claim_id": "claim_2_pseudo_trajectory",
+      "evidence": "Toy trajectory audit exercises the released mask-ratio trajectory index rule.",
+      "status": "toy_verified"
+    },
+    {
+      "claim_id": "claim_3_entropy_multiblock",
+      "evidence": "Toy decoder chooses low-entropy tokens across parallel blocks and records cache refresh.",
+      "status": "toy_verified"
+    },
+    {
+      "claim_id": "claim_4_llada_aup_ranking",
+      "evidence": [
+        {
+          "all_scores": {
+            "D2F": 213.75642318967476,
+            "Fast-dLLM-LLaDA": 205.78111501189068,
+            "LLaDA": 72.55,
+            "Qwen-2.5-7B-it": 74.1,
+            "d3LLM-LLaDA": 637.6549264841269,
+            "dParallel-LLaDA": 358.142183536418
+          },
+          "best_aup": 637.6549264841269,
+          "best_method": "d3LLM-LLaDA",
+          "excluded_non_family_methods": [
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "D2F": 213.75642318967476,
+            "Fast-dLLM-LLaDA": 205.78111501189068,
+            "LLaDA": 72.55,
+            "d3LLM-LLaDA": 637.6549264841269,
+            "dParallel-LLaDA": 358.142183536418
+          },
+          "target_aup": 637.6549264841269,
+          "target_method": "d3LLM-LLaDA",
+          "task": "GSM8K-CoT"
+        },
+        {
+          "all_scores": {
+            "D2F": 48.99583269644512,
+            "Fast-dLLM-LLaDA": 47.18731015291648,
+            "LLaDA": 32.2,
+            "Qwen-2.5-7B-it": 41.15,
+            "d3LLM-LLaDA": 107.64192720243037,
+            "dParallel-LLaDA": 64.53561169036588
+          },
+          "best_aup": 107.64192720243037,
+          "best_method": "d3LLM-LLaDA",
+          "excluded_non_family_methods": [
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "D2F": 48.99583269644512,
+            "Fast-dLLM-LLaDA": 47.18731015291648,
+            "LLaDA": 32.2,
+            "d3LLM-LLaDA": 107.64192720243037,
+            "dParallel-LLaDA": 64.53561169036588
+          },
+          "target_aup": 107.64192720243037,
+          "target_method": "d3LLM-LLaDA",
+          "task": "MATH"
+        },
+        {
+          "all_scores": {
+            "D2F": 52.96056062594131,
+            "Fast-dLLM-LLaDA": 56.601080688912774,
+            "LLaDA": 41.72,
+            "Qwen-2.5-7B-it": 63.6,
+            "d3LLM-LLaDA": 88.3560100633047,
+            "dParallel-LLaDA": 60.451277101568984
+          },
+          "best_aup": 88.3560100633047,
+          "best_method": "d3LLM-LLaDA",
+          "excluded_non_family_methods": [
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "D2F": 52.96056062594131,
+            "Fast-dLLM-LLaDA": 56.601080688912774,
+            "LLaDA": 41.72,
+            "d3LLM-LLaDA": 88.3560100633047,
+            "dParallel-LLaDA": 60.451277101568984
+          },
+          "target_aup": 88.3560100633047,
+          "target_method": "d3LLM-LLaDA",
+          "task": "MBPP"
+        },
+        {
+          "all_scores": {
+            "D2F": 61.98227854073703,
+            "Fast-dLLM-LLaDA": 54.02448434631386,
+            "LLaDA": 38.28,
+            "Qwen-2.5-7B-it": 67.73,
+            "d3LLM-LLaDA": 96.64048037013227,
+            "dParallel-LLaDA": 83.6855048528218
+          },
+          "best_aup": 96.64048037013227,
+          "best_method": "d3LLM-LLaDA",
+          "excluded_non_family_methods": [
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "D2F": 61.98227854073703,
+            "Fast-dLLM-LLaDA": 54.02448434631386,
+            "LLaDA": 38.28,
+            "d3LLM-LLaDA": 96.64048037013227,
+            "dParallel-LLaDA": 83.6855048528218
+          },
+          "target_aup": 96.64048037013227,
+          "target_method": "d3LLM-LLaDA",
+          "task": "HumanEval"
+        },
+        {
+          "all_scores": {
+            "D2F": 176.94802224463527,
+            "Fast-dLLM-LLaDA": 175.37437930782278,
+            "LLaDA": 78.58,
+            "Qwen-2.5-7B-it": 82.56,
+            "d3LLM-LLaDA": 441.1296309795399,
+            "dParallel-LLaDA": 309.0755528854472
+          },
+          "best_aup": 441.1296309795399,
+          "best_method": "d3LLM-LLaDA",
+          "excluded_non_family_methods": [
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "D2F": 176.94802224463527,
+            "Fast-dLLM-LLaDA": 175.37437930782278,
+            "LLaDA": 78.58,
+            "d3LLM-LLaDA": 441.1296309795399,
+            "dParallel-LLaDA": 309.0755528854472
+          },
+          "target_aup": 441.1296309795399,
+          "target_method": "d3LLM-LLaDA",
+          "task": "Long-GSM8K"
+        }
+      ],
+      "status": "verified"
+    },
+    {
+      "claim_id": "claim_5_dream_aup_ranking",
+      "evidence": [
+        {
+          "all_scores": {
+            "Dream": 83.94,
+            "Fast-dLLM-Dream": 116.48642208365678,
+            "Fast-dLLM-v2-7B": 176.10644815712604,
+            "Qwen-2.5-7B-it": 74.1,
+            "d3LLM-Dream": 391.3277962329703,
+            "dParallel-Dream": 245.73345412832208
+          },
+          "best_aup": 391.3277962329703,
+          "best_method": "d3LLM-Dream",
+          "excluded_non_family_methods": [
+            "Fast-dLLM-v2-7B",
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "Dream": 83.94,
+            "Fast-dLLM-Dream": 116.48642208365678,
+            "d3LLM-Dream": 391.3277962329703,
+            "dParallel-Dream": 245.73345412832208
+          },
+          "target_aup": 391.3277962329703,
+          "target_method": "d3LLM-Dream",
+          "task": "GSM8K-CoT"
+        },
+        {
+          "all_scores": {
+            "Dream": 39.63,
+            "Fast-dLLM-Dream": 55.21691201998122,
+            "Fast-dLLM-v2-7B": 126.65532218082299,
+            "Qwen-2.5-7B-it": 41.15,
+            "d3LLM-Dream": 97.49669096016964,
+            "dParallel-Dream": 77.9470537394634
+          },
+          "best_aup": 97.49669096016964,
+          "best_method": "d3LLM-Dream",
+          "excluded_non_family_methods": [
+            "Fast-dLLM-v2-7B",
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "Dream": 39.63,
+            "Fast-dLLM-Dream": 55.21691201998122,
+            "d3LLM-Dream": 97.49669096016964,
+            "dParallel-Dream": 77.9470537394634
+          },
+          "target_aup": 97.49669096016964,
+          "target_method": "d3LLM-Dream",
+          "task": "MATH"
+        },
+        {
+          "all_scores": {
+            "Dream": 57.2,
+            "Fast-dLLM-Dream": 63.5891976339471,
+            "Fast-dLLM-v2-7B": 114.11510768831079,
+            "Qwen-2.5-7B-it": 63.8,
+            "d3LLM-Dream": 141.40575513701248,
+            "dParallel-Dream": 107.9665178444614
+          },
+          "best_aup": 141.40575513701248,
+          "best_method": "d3LLM-Dream",
+          "excluded_non_family_methods": [
+            "Fast-dLLM-v2-7B",
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "Dream": 57.2,
+            "Fast-dLLM-Dream": 63.5891976339471,
+            "d3LLM-Dream": 141.40575513701248,
+            "dParallel-Dream": 107.9665178444614
+          },
+          "target_aup": 141.40575513701248,
+          "target_method": "d3LLM-Dream",
+          "task": "MBPP-Instruct"
+        },
+        {
+          "all_scores": {
+            "Dream": 55.2,
+            "Fast-dLLM-Dream": 63.50123925200602,
+            "Fast-dLLM-v2-7B": 128.94142924708012,
+            "Qwen-2.5-7B-it": 72.25,
+            "d3LLM-Dream": 129.47560470007642,
+            "dParallel-Dream": 98.76769899061946
+          },
+          "best_aup": 129.47560470007642,
+          "best_method": "d3LLM-Dream",
+          "excluded_non_family_methods": [
+            "Fast-dLLM-v2-7B",
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "Dream": 55.2,
+            "Fast-dLLM-Dream": 63.50123925200602,
+            "d3LLM-Dream": 129.47560470007642,
+            "dParallel-Dream": 98.76769899061946
+          },
+          "target_aup": 129.47560470007642,
+          "target_method": "d3LLM-Dream",
+          "task": "HumanEval-Instruct"
+        },
+        {
+          "all_scores": {
+            "Dream": 78.95,
+            "Fast-dLLM-Dream": 130.3501759378793,
+            "Fast-dLLM-v2-7B": 207.24597075352779,
+            "Qwen-2.5-7B-it": 82.56,
+            "d3LLM-Dream": 348.643528609467,
+            "dParallel-Dream": 262.3936278597092
+          },
+          "best_aup": 348.643528609467,
+          "best_method": "d3LLM-Dream",
+          "excluded_non_family_methods": [
+            "Fast-dLLM-v2-7B",
+            "Qwen-2.5-7B-it"
+          ],
+          "scores": {
+            "Dream": 78.95,
+            "Fast-dLLM-Dream": 130.3501759378793,
+            "d3LLM-Dream": 348.643528609467,
+            "dParallel-Dream": 262.3936278597092
+          },
+          "target_aup": 348.643528609467,
+          "target_method": "d3LLM-Dream",
+          "task": "Long-GSM8K"
+        }
+      ],
+      "status": "verified"
+    },
+    {
+      "claim_id": "claim_6_throughput_speedups",
+      "evidence": {
+        "hf_backend": {
+          "dream_a100_speedup": 2.545472597299444,
+          "dream_h100_speedup": 4.1057222609909285,
+          "llada_a100_speedup": 3.640389197776013,
+          "llada_h100_speedup": 5.039951151430565
+        },
+        "sglang_backend": {
+          "dream_a100_speedup": 1.297210743801653,
+          "dream_h100_speedup": 2.5826887661141806,
+          "llada_a100_speedup": 2.5992768595041325,
+          "llada_h100_speedup": 5.021270718232044
+        },
+        "status": "artifact_consistency"
+      },
+      "status": "artifact_consistency"
+    }
+  ],
+  "commands": [
+    "python generate_evidence.py --output-dir evidence",
+    "python -m pytest tests -q"
+  ],
+  "environment": {
+    "execution_model": "CPU-only deterministic artifact audit",
+    "python_requirement": ">=3.10"
+  },
+  "generated_at": "2026-08-01T16:18:00+00:00",
+  "limitations": [
+    "No fresh GPU throughput benchmark was run; throughput evidence is limited to released table consistency.",
+    "The evidence does not download or redistribute 8B model weights or HF trajectory datasets.",
+    "The upstream repository and HF repos did not expose complete license metadata in discovery."
+  ],
+  "paper_id": "rzBAQT2Fkg",
+  "snapshot_id": "47a55a56d74a2cb6f717291cbcd9b076600b34c7dd06c5e5a7416e31a3ced464",
+  "upstream_pins": {
+    "arxiv": "2601.07568v2",
+    "datasets": {
+      "d3LLM/Ling-Coder-dParallel-merged-512-120k": "af094341307b09246838797620a96952eda99307",
+      "d3LLM/trajectory_data_dream_32": "16c7ad462d350e3d698886e88f92c3e8dd28b008",
+      "d3LLM/trajectory_data_llada_32": "d84877999bbd78a9f4f7208c648b0968879792e0"
+    },
+    "models": {
+      "d3LLM/d3LLM_Dream": "7d877e800934fbfe70f88b5f975170ad7afe436d",
+      "d3LLM/d3LLM_Dream_Coder": "84f9039e1d69b02bf21aff5d681ef501c94f09b9",
+      "d3LLM/d3LLM_LLaDA": "cf57f529b7dd88a9e7a7f3a274ab0568e1d10408"
+    },
+    "official_repository": "hao-ai-lab/d3LLM@e5bfcaccb775ee75759c24ccc9a28218b8372b34"
+  }
+}

@@ -1,0 +1,9 @@
+[project]
+name = "d3llm-repro"
+version = "0.1.0"
+description = "CPU-only evidence audit for d3LLM ICML 2026 reproduction"
+requires-python = ">=3.10"
+dependencies = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
