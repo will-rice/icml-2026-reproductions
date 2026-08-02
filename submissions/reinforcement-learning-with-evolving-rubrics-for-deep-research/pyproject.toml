@@ -2,9 +2,6 @@
 name = "dr-tulu-reproduction"
 version = "0.1.0"
 requires-python = ">=3.10,<3.13"
-dependencies = []
-
-[dependency-groups]
-dev = [
-  "pytest>=9.0.0",
+dependencies = [
+  "pytest>=8.0.0",
 ]

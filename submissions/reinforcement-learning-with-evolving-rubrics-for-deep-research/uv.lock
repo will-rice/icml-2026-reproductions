@@ -15,16 +15,12 @@ wheels = [
 name = "dr-tulu-reproduction"
 version = "0.1.0"
 source = { virtual = "." }
-
-[package.dev-dependencies]
-dev = [
+dependencies = [
     { name = "pytest" },
 ]
 
 [package.metadata]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.0" }]
+requires-dist = [{ name = "pytest", specifier = ">=8.0.0" }]
 
 [[package]]
 name = "exceptiongroup"
