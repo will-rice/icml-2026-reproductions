@@ -77,7 +77,19 @@ For every iteration:
 
 1. Inspect `state/repro-loop.json`. For schema-v3, run only `migrate-v6 --dry-run` and stop until the controller explicitly authorizes the real migration; no schema-v6 lifecycle command is valid before it. After migration, resume the schema-v6 index and every named shard.
 2. Run raw `refresh-live`, inspect its immutable result through `show-snapshot`, and assess pinned `challenge.json` candidates from primary artifacts. Bare challenge metadata never supplies feasibility, score, cost, targets, or an upstream pin. Write assessment JSON following [selection-rubric.md](references/selection-rubric.md), bind each target to exact challenge text and SHA-256, then run `refresh-live --assessments-json PATH`. Revision drift requires a new raw refresh and assessment.
-3. IMPROVEMENT-ONLY ENDGAME (declared 2026-08-01): all capacity goes to
+3. FINAL-DAY CREATION SPRINT (declared 2026-08-02, supersedes ordering
+   below until creation quota is exhausted): the challenge closes today
+   and the remaining Space-creation slots must all be spent as early as
+   possible, because each created Space unlocks unlimited quota-free
+   improvement rejudges for its lane. Every worker's first priority is:
+   take the highest-evidence-ranked unpublished lane, apply the minimal
+   pages uplift needed to pass the scoring-pages gate (render the real
+   numbers already in the lane's evidence bundle into two or more
+   `pages/*.md`), revalidate from `main` in a workspace worktree, publish
+   the new Space, and attest the submission. When creation quota is
+   exhausted, switch fully to improvement cycles on judged lanes
+   (existing Spaces rejudge quota-free). IMPROVEMENT-ONLY ENDGAME
+   (declared 2026-08-01): all capacity goes to
    improving existing submissions and publishing the ranked backlog. Do
    not select new papers (`claim-next` enforces this mechanically while
    the backlog fills the daily quota). If you hold an `implementing`,
