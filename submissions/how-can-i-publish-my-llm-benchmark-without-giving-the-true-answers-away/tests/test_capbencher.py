@@ -1,5 +1,7 @@
 """Unit tests for CapBencher reproduction."""
 
+from pathlib import Path
+
 import pytest
 from capbencher.core import (
     estimate_bayes_accuracy,
@@ -8,6 +10,7 @@ from capbencher.core import (
     is_contaminated,
 )
 from capbencher.simulation import run_model_merge_hacking_simulation, generate_evidence_bundle
+from generate_evidence import write_bundle
 
 
 def test_bayes_accuracy_capping():
@@ -65,3 +68,25 @@ def test_evidence_bundle_generation():
     for claim in bundle["target_claims"]:
         assert claim["status"] == "verified"
     assert "simulation_results" in bundle
+
+
+def test_space_pages_include_scoring_surface():
+    """Ensure the Space exposes numeric evidence for controller scoring."""
+    project = Path(__file__).resolve().parents[1]
+    pages = sorted((project / "pages").glob("*.md"))
+    assert pages
+
+    text = "\n".join(page.read_text(encoding="utf-8") for page in pages)
+    assert "56.52%" in text
+    assert "565/1000" in text
+    assert "2.206809e-05" in text
+    assert "0.50" in text
+
+
+def test_evidence_writer_preserves_precommit_final_newline(tmp_path):
+    """Generated evidence should already satisfy end-of-file-fixer."""
+    out_file = tmp_path / "bundle.json"
+
+    write_bundle(out_file)
+
+    assert out_file.read_bytes().endswith(b"\n")
