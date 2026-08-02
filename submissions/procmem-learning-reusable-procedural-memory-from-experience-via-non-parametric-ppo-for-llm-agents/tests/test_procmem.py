@@ -92,7 +92,7 @@ def test_evidence_bundle_records_claim_bindings_and_does_not_promote_tables():
 
 def test_space_metadata_and_scoring_page_bind_proc_mem_attempt():
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
-    report = (PROJECT_ROOT / "pages" / "report.md").read_text(encoding="utf-8")
+    report = (PROJECT_ROOT / "pages" / "00-summary.md").read_text(encoding="utf-8") + "\n" + (PROJECT_ROOT / "pages" / "01-claims-and-evidence.md").read_text(encoding="utf-8")
 
     assert "icml2026-repro" in readme
     assert "paper-9kJQjx2B80" in readme
