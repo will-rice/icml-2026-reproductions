@@ -1,0 +1,19 @@
+[project]
+name = "critique-grpo-reproduction"
+version = "0.1.0"
+description = "Evidence harness for Critique-GRPO ICML 2026 reproduction"
+requires-python = ">=3.10"
+
+dependencies = [
+    "gradio>=5.0.0",
+    "pandas>=2.2.0",
+    "pyarrow>=16.0.0",
+    "pytest>=8.4.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["generate_evidence.py", "app.py", "pages", "evidence", "upstream"]
