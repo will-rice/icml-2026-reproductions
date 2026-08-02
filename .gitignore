@@ -286,6 +286,12 @@ submissions/3viewsense-spatial-and-mental-perspective-reasoning-from-orthographi
 submissions/3viewsense-spatial-and-mental-perspective-reasoning-from-orthographic-views-in-vision-language-models/**/*.egg-info/
 !submissions/protein-autoregressive-modeling-via-multiscale-structure-generation/
 !submissions/protein-autoregressive-modeling-via-multiscale-structure-generation/**
+!submissions/diffusion-bridge-or-flow-matching-a-unifying-framework-and-comparative-analysis/
+!submissions/diffusion-bridge-or-flow-matching-a-unifying-framework-and-comparative-analysis/**
+submissions/diffusion-bridge-or-flow-matching-a-unifying-framework-and-comparative-analysis/.venv/
+submissions/diffusion-bridge-or-flow-matching-a-unifying-framework-and-comparative-analysis/.pytest_cache/
+submissions/diffusion-bridge-or-flow-matching-a-unifying-framework-and-comparative-analysis/**/__pycache__/
+submissions/diffusion-bridge-or-flow-matching-a-unifying-framework-and-comparative-analysis/**/*.egg-info/
 !submissions/latent-laplace-diffusion-for-irregular-multivariate-time-series/
 !submissions/latent-laplace-diffusion-for-irregular-multivariate-time-series/src/
 !submissions/latent-laplace-diffusion-for-irregular-multivariate-time-series/src/**
@@ -837,3 +843,11 @@ submissions/relaxflow-text-driven-amodal-3d-generation/.venv/
 submissions/relaxflow-text-driven-amodal-3d-generation/.pytest_cache/
 submissions/relaxflow-text-driven-amodal-3d-generation/**/__pycache__/
 submissions/relaxflow-text-driven-amodal-3d-generation/**/*.egg-info/
+
+!submissions/a-semantically-consistent-dataset-for-data-efficient-query-based-universal-sound-separation/
+!submissions/a-semantically-consistent-dataset-for-data-efficient-query-based-universal-sound-separation/**
+submissions/a-semantically-consistent-dataset-for-data-efficient-query-based-universal-sound-separation/.venv/
+submissions/a-semantically-consistent-dataset-for-data-efficient-query-based-universal-sound-separation/.pytest_cache/
+submissions/a-semantically-consistent-dataset-for-data-efficient-query-based-universal-sound-separation/**/__pycache__/
+submissions/a-semantically-consistent-dataset-for-data-efficient-query-based-universal-sound-separation/**/*.egg-info/
+

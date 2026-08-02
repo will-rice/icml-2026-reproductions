@@ -1,0 +1,19 @@
+[project]
+name = "hive-repro"
+version = "0.1.0"
+description = "CPU-only reproduction evidence for Hive sound-separation dataset claims."
+requires-python = ">=3.10"
+dependencies = [
+  "gradio>=5.0",
+  "huggingface-hub>=0.36",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["uv_build>=0.11.0,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
