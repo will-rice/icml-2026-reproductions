@@ -1,3 +1,15 @@
+---
+title: Segmented Execution Reproduction
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+app_file: app.py
+pinned: false
+tags:
+  - icml2026-repro
+  - paper-PoRigyDOcC
+---
+
 # Training-Inference Consistent Segmented Execution Reproduction
 
 This submission contains CPU-only evidence for ICML 2026 paper `PoRigyDOcC`.

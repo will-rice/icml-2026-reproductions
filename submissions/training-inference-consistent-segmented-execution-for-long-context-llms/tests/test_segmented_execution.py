@@ -82,3 +82,37 @@ def test_evidence_summary_covers_all_bound_claims(tmp_path):
     }
     assert all("status" in claim and "observations" in claim for claim in loaded["claims"])
     assert np.isfinite(loaded["checks"]["tbptt_gradient"]["max_abs_gradient_error"])
+
+
+def test_evidence_summary_records_tracked_design_hash(tmp_path):
+    module = load_module()
+
+    output = tmp_path / "evidence_summary.json"
+    summary = module.generate_evidence(output_path=output)
+
+    assert summary["source_hashes"]["design"] is not None
+
+
+def test_readme_declares_space_metadata_tags():
+    readme = (PROJECT / "README.md").read_text(encoding="utf-8")
+
+    assert readme.startswith("---\n")
+    assert "\nsdk: gradio\n" in readme
+    assert "\napp_file: app.py\n" in readme
+    assert "\n  - icml2026-repro\n" in readme
+    assert "\n  - paper-PoRigyDOcC\n" in readme
+
+
+def test_space_pages_provide_plural_numeric_scoring_surface():
+    pages = sorted((PROJECT / "pages").glob("*.md"))
+
+    numeric_lines = 0
+    for page in pages:
+        numeric_lines += sum(
+            1
+            for line in page.read_text(encoding="utf-8").splitlines()
+            if any(character.isdigit() for character in line)
+        )
+
+    assert len(pages) >= 2
+    assert numeric_lines >= 12

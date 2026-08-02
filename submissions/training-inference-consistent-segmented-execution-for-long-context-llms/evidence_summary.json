@@ -10,7 +10,7 @@
   },
   "source_hashes": {
     "generate_evidence.py": "63bc8bdb1f1dbec6085ed4de73d17e20603c34033887b649464c6848b6ad55f5",
-    "design": "1a880ddeb187bd808a7ea1d14ec1d441580b61001347442f68dcf5569e04f9d3"
+    "design": "26d8ec0c80563d55bc13b3c2893c117dfc4e0e92d38b8b2240aade89947b4fda"
   },
   "commands": [
     "uv run pytest -q submissions/training-inference-consistent-segmented-execution-for-long-context-llms/tests/test_segmented_execution.py",
