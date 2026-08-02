@@ -10,6 +10,7 @@ pinned: false
 license: mit
 short_description: Reproduction of Sheaf NNs (ICML 2026)
 tags:
+- icml2026-repro
 - icml-2026
 - paper-aIH1jyU37z
 - repro-challenge
