@@ -86,3 +86,20 @@ def test_build_evidence_output_is_json_serializable(tmp_path: Path) -> None:
 
     encoded = json.dumps(evidence, sort_keys=True)
     assert "Ambient Dataloops" in encoded
+
+
+def test_space_pages_include_scoring_surface() -> None:
+    project = Path(__file__).resolve().parents[1]
+    pages = sorted((project / "pages").glob("*.md"))
+    assert len(pages) >= 2
+
+    texts = [page.read_text(encoding="utf-8") for page in pages]
+    assert sum(len(text.strip()) for text in texts) >= 200
+
+    numeric_lines = [
+        line
+        for text in texts
+        for line in text.splitlines()
+        if any(character.isdigit() for character in line)
+    ]
+    assert len(numeric_lines) >= 15
