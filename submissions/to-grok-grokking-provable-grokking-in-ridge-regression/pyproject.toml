@@ -16,3 +16,5 @@ packages = ["grokking_repro"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
+
