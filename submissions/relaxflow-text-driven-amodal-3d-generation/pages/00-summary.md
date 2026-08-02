@@ -1,8 +1,8 @@
 # Reproduction Summary: RelaxFlow (Text-Driven Amodal 3D Generation)
 
-**Paper ID:** UamxHbDR3p  
-**Title:** RelaxFlow: Text-Driven Amodal 3D Generation  
-**ArXiv:** 2603.05425  
+**Paper ID:** UamxHbDR3p
+**Title:** RelaxFlow: Text-Driven Amodal 3D Generation
+**ArXiv:** 2603.05425
 
 ---
 
