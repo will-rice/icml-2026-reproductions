@@ -693,3 +693,12 @@ submissions/relaxflow-text-driven-amodal-3d-generation/.venv/
 submissions/relaxflow-text-driven-amodal-3d-generation/.pytest_cache/
 submissions/relaxflow-text-driven-amodal-3d-generation/**/__pycache__/
 submissions/relaxflow-text-driven-amodal-3d-generation/**/*.egg-info/
+
+!docs/superpowers/specs/2026-08-01-timespot-geo-temporal-reproduction-design.md
+
+!submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/
+!submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/**
+submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/.venv/
+submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/.pytest_cache/
+submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/**/__pycache__/
+submissions/timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings/**/*.egg-info/

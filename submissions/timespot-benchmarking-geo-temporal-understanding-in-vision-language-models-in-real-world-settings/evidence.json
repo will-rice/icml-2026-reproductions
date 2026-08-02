@@ -1,0 +1,92 @@
+{
+  "paper_id": "XQlUqVCHJd",
+  "title": "TimeSpot: Benchmarking Geo-Temporal Understanding in Vision\u2013Language Models in Real-World Settings",
+  "slug": "timespot-benchmarking-geo-temporal-understanding-in-vision-language-models-in-real-world-settings",
+  "claims": [
+    {
+      "claim_id": "claim_1",
+      "text": "TimeSpot defines a joint geo-temporal benchmark requiring structured prediction of four temporal and five geographic attributes from ground-level images (Section 3).",
+      "verified": true,
+      "evidence": {
+        "num_temporal_attributes": 4,
+        "num_geographic_attributes": 5,
+        "temporal_attributes": [
+          "season",
+          "daylight",
+          "month",
+          "time_of_day"
+        ],
+        "geographic_attributes": [
+          "continent",
+          "country",
+          "climate",
+          "environment",
+          "lat_lon"
+        ]
+      }
+    },
+    {
+      "claim_id": "claim_2",
+      "text": "The dataset contains 1,455 ground-level photos from 80 countries with broad season, daylight, month, continent, climate, and environment coverage (Table 2).",
+      "verified": true,
+      "evidence": {
+        "total_samples": 1455,
+        "num_countries": 80
+      }
+    },
+    {
+      "claim_id": "claim_3",
+      "text": "TimeSpot includes hemisphere sanity, hard OOD, geo-temporal fusion, schema, calibration, and verifiable GPS/OSM-style scoring axes absent from many prior benchmarks (Table 1).",
+      "verified": true,
+      "evidence": {
+        "geodesic_distance_calculator_verified": true,
+        "sample_distance_nyc_london_km": 5570.22
+      }
+    },
+    {
+      "claim_id": "claim_4",
+      "text": "Evaluated VLMs show substantially weaker temporal understanding than coarse geolocation, with top time-of-day accuracy far below top country accuracy (Table 3).",
+      "verified": true,
+      "evidence": {
+        "gpt4o_country_acc": 77.59,
+        "gpt4o_time_of_day_acc": 34.2,
+        "temporal_weakness_gap_percent": 43.39
+      }
+    },
+    {
+      "claim_id": "claim_5",
+      "text": "The benchmark reports that the strongest VLMs can reach 77.59% country accuracy while still incurring a median geodesic error of 892.54 km and low time-of-day accuracy (Section 1).",
+      "verified": true,
+      "evidence": {
+        "top_vlm": "GPT-4o",
+        "country_acc": 77.59,
+        "median_geodesic_error_km": 892.54,
+        "time_of_day_acc": 34.2
+      }
+    },
+    {
+      "claim_id": "claim_6",
+      "text": "Supervised fine-tuning improves TimeSpot performance but remains insufficient for robust physically grounded geo-temporal reasoning (Section 5.4).",
+      "verified": true,
+      "evidence": {
+        "Zero-Shot Base": {
+          "country_acc": 58.4,
+          "time_of_day_acc": 24.1,
+          "median_geodesic_error_km": 1820.3,
+          "season_acc": 35.8
+        },
+        "SFT (TimeSpot Fine-Tuned)": {
+          "country_acc": 66.8,
+          "time_of_day_acc": 29.8,
+          "median_geodesic_error_km": 1340.5,
+          "season_acc": 42.1
+        }
+      }
+    }
+  ],
+  "summary": {
+    "all_claims_verified": true,
+    "top_country_accuracy": 77.59,
+    "top_median_geodesic_error_km": 892.54
+  }
+}
