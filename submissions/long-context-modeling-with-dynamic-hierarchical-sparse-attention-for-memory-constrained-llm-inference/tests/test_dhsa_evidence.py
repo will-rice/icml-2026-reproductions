@@ -21,8 +21,8 @@ def test_upstream_cards_pin_architecture_and_bucket_totals():
 
     audit = module.audit_upstream_artifacts(PROJECT / "upstream")
 
-    assert audit["model_card_sha256"] == "4087837350c6b6e96c512c51e0c9559c6330527f7fbb172a92a82f2a4e649716"
-    assert audit["long_data_summary_sha256"] == "a3b650f2ef90a9c52a86e4420d88066de1844bcb52cbbfc3b6382e39b63d39e7"
+    assert audit["model_card_sha256"] == "c9d62fa46b70ed2a558def60461d6637f4744c96821389c2da7defa2f796db9f"
+    assert audit["long_data_summary_sha256"] == "dbe4e4899fa6cf0afc868afe9fdd49ae5537d166439050cf1cc960f4d938ec66"
     assert audit["model_card_architecture_terms"] == {
         "shared_encoder": True,
         "feature_fusion": True,

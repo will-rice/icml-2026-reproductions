@@ -18,7 +18,7 @@ The boundary predictor consists of three main parts:
 1. Shared Encoder – Uses attention and pooling layers to capture the left and right context around each token.
 2. Feature Fusion – Combines the two contextual features along with their difference, product, and similarity to represent local semantic changes.
 3. MLP Classifier – Takes the fused features and predicts whether a given position marks a boundary.
- 
+
 This lightweight design efficiently identifies semantic shifts in long text sequences.
 
 ## Training Data
@@ -42,4 +42,3 @@ If you use this model, please cite:
   booktitle={NeurIPS 2025 Workshop on Efficient Reasoning}
 }
 ```
-

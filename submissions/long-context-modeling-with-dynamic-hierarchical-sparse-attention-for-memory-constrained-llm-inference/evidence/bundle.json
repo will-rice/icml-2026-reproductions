@@ -65,17 +65,17 @@
           "min": 0
         }
       },
-      "data_card_sha256": "b400ae023342ff22da3c39b08c6cfbdeb47f9bea97f418d5f7ab6ab54fcc73ca",
+      "data_card_sha256": "f3a9696720e02e5bdfc65f412a72a7dc77c927e8764c4e7df4e5beaefdc06106",
       "fine_tune_total_from_buckets": 98557,
       "has_128k_examples": true,
-      "long_data_summary_sha256": "a3b650f2ef90a9c52a86e4420d88066de1844bcb52cbbfc3b6382e39b63d39e7",
+      "long_data_summary_sha256": "dbe4e4899fa6cf0afc868afe9fdd49ae5537d166439050cf1cc960f4d938ec66",
       "model_card_architecture_terms": {
         "feature_fusion": true,
         "frozen_backbone": false,
         "mlp_classifier": true,
         "shared_encoder": true
       },
-      "model_card_sha256": "4087837350c6b6e96c512c51e0c9559c6330527f7fbb172a92a82f2a4e649716",
+      "model_card_sha256": "c9d62fa46b70ed2a558def60461d6637f4744c96821389c2da7defa2f796db9f",
       "pretrain_total_from_buckets": 9383848,
       "upstream_revisions": {
         "long_data_collections": "sxiong/DHSA_Long-Data-Collections@61d64f96ff3983e176362a0500e2ddd2ee26c210",
