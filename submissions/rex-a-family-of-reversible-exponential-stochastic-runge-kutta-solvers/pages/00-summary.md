@@ -1,4 +1,4 @@
-# Rex ICML 2026 Reproduction Summary
+# REX-Solver Executive Summary
 
 This page summarizes the reproduction results for paper `7pQIzVNctu`: "Rex: A Family of Reversible Exponential (Stochastic) Runge-Kutta Solvers".
 
