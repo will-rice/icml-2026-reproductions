@@ -1,0 +1,281 @@
+{
+  "attempt_id": "4134f5fc-75c7-4c17-8f43-3685aa8c3ac2",
+  "claims": [
+    {
+      "claim": "SceneSmith generates simulation-ready indoor environments through hierarchical stages.",
+      "evidence": {
+        "configured_start_stage": "floor_plan",
+        "configured_stop_stage": "manipuland",
+        "evidence_files": [
+          {
+            "path": "configurations/config.yaml",
+            "sha256": "9dafdd3efeced642b65a8b35081a491f8ccc1a77753644eed1c7836d0b157cb6"
+          },
+          {
+            "path": "configurations/experiment/base_experiment.yaml",
+            "sha256": "9fd09d8c8031028a0bcb92fb3bc6093d4904166d6b0c371a2a63e4a9259d8158"
+          },
+          {
+            "path": "scenesmith/experiments/indoor_scene_generation.py",
+            "sha256": "ca92ca8cc6c492fcbc3e53787a21178577703ce92e018b196debeefdcebb1014"
+          }
+        ],
+        "expected_order": [
+          "floor_plan",
+          "furniture",
+          "wall_mounted",
+          "ceiling_mounted",
+          "manipuland"
+        ],
+        "stage_literals": {
+          "ceiling_mounted": 8,
+          "floor_plan": 9,
+          "furniture": 15,
+          "manipuland": 7,
+          "wall_mounted": 8
+        },
+        "verified": true
+      },
+      "id": "pipeline_stages",
+      "status": "source_verified"
+    },
+    {
+      "claim": "Each generation stage is implemented with designer, critic, and orchestrator/planner roles.",
+      "evidence": {
+        "evidence_files": [
+          {
+            "path": "scenesmith/floor_plan_agents/stateful_floor_plan_agent.py",
+            "sha256": "56fe1d6284bfcd9ffa075879372155d1af1d61ca4febd02b79bfa36834cf8d10"
+          },
+          {
+            "path": "scenesmith/furniture_agents/stateful_furniture_agent.py",
+            "sha256": "764432255e2f7e78605031694e78ee9a1ce1d658bfde9a8d4b679b84f742839d"
+          },
+          {
+            "path": "scenesmith/wall_agents/stateful_wall_agent.py",
+            "sha256": "f7c0a8bd5ee18abb99281453e7881d1834d7f6c8976ae2ccbbb2821b8ea4a6f0"
+          },
+          {
+            "path": "scenesmith/ceiling_agents/stateful_ceiling_agent.py",
+            "sha256": "63bbc4f1519430140839d35be7f1d391f66433f0c1b212facb03798d0a91cbfa"
+          },
+          {
+            "path": "scenesmith/manipuland_agents/stateful_manipuland_agent.py",
+            "sha256": "cb088badde4b12c7379a5c189943c1c90fb47d77c3c1591cc8f937d0d3c37448"
+          }
+        ],
+        "role_hits": {
+          "scenesmith/ceiling_agents/stateful_ceiling_agent.py": {
+            "critic": true,
+            "designer": true,
+            "planner_or_orchestrator": true
+          },
+          "scenesmith/floor_plan_agents/stateful_floor_plan_agent.py": {
+            "critic": true,
+            "designer": true,
+            "planner_or_orchestrator": true
+          },
+          "scenesmith/furniture_agents/stateful_furniture_agent.py": {
+            "critic": true,
+            "designer": true,
+            "planner_or_orchestrator": true
+          },
+          "scenesmith/manipuland_agents/stateful_manipuland_agent.py": {
+            "critic": true,
+            "designer": true,
+            "planner_or_orchestrator": true
+          },
+          "scenesmith/wall_agents/stateful_wall_agent.py": {
+            "critic": true,
+            "designer": true,
+            "planner_or_orchestrator": true
+          }
+        },
+        "verified": true
+      },
+      "id": "agent_roles",
+      "status": "source_verified"
+    },
+    {
+      "claim": "SceneSmith integrates text-to-3D synthesis, dataset retrieval, and physical-property estimation.",
+      "evidence": {
+        "source_groups": {
+          "dataset_retrieval": [
+            {
+              "path": "scenesmith/agent_utils/hssd_retrieval/retrieval.py",
+              "sha256": "e5515a86a4a814f0e2259fe1232c4c2dcd8f9f0541e66599f67dd5bceef94a59"
+            },
+            {
+              "path": "scenesmith/agent_utils/objaverse_retrieval/retrieval.py",
+              "sha256": "3abd807a43eb8d7515d3acdaebd333857ff9ecb98a837ff0d2277a317d5aa805"
+            },
+            {
+              "path": "scenesmith/agent_utils/articulated_retrieval_server/retrieval.py",
+              "sha256": "f76f9444cb37531ef6c38d5611d20594a5a39f74046cce06c9278e179b9938ca"
+            },
+            {
+              "path": "scripts/download_hssd_data.sh",
+              "sha256": "d0651df452a2296ce93c6704f3f41bfed888e857ad79103da5a755273c615eaf"
+            },
+            {
+              "path": "scripts/download_objaverse_data.sh",
+              "sha256": "e57d37ec7a7ae46b03dbf635c132bb1a75cf4f0e1951d03f151da472fb807ad9"
+            }
+          ],
+          "export_and_materials": [
+            {
+              "path": "scenesmith/agent_utils/sceneeval_exporter.py",
+              "sha256": "14b14b003f7a2fecf70e5c3167c27b8dc966a8c0c4a1d8d61b055cd19eb8636b"
+            },
+            {
+              "path": "scripts/export_scene_to_mujoco.py",
+              "sha256": "8e11fcc49fc99f228e652435d15f925b2dace74f3446f6deab7c4b74e16c5bed"
+            },
+            {
+              "path": "scripts/download_ambientcg.py",
+              "sha256": "bba9398b7be59c637d97e2b0b7120b2cdb82321b55173ebf6c37cce1bddce14a"
+            },
+            {
+              "path": "scripts/compute_ambientcg_embeddings.py",
+              "sha256": "23f5a53418e62509c64126833853eb911a28615944dca38b7d90c3df99b3dd01"
+            }
+          ],
+          "physical_properties_and_validation": [
+            {
+              "path": "scenesmith/agent_utils/mesh_physics_analyzer.py",
+              "sha256": "084ce3b1b40da7e6e36f5b8b071711ccd4d7832b5f42666010801634b4fdbfa4"
+            },
+            {
+              "path": "scenesmith/agent_utils/articulated_physics_analyzer.py",
+              "sha256": "a16442de040d42aa8e210c559ca09f2a999e2aac5dade73fa0f4839712306d2c"
+            },
+            {
+              "path": "scenesmith/agent_utils/physical_feasibility.py",
+              "sha256": "ba6202673840a4b875c69790c06e2956af43cfe3436a22eade59b85f72d178b4"
+            },
+            {
+              "path": "scenesmith/agent_utils/physics_validation.py",
+              "sha256": "d5fc493eaf6c06250bb42ccad6b6df13ed47e2cbee2f09f43e322a964147875d"
+            },
+            {
+              "path": "scenesmith/utils/inertia_utils.py",
+              "sha256": "30ae785da0ed08f390bb5059dfe2a44f595e832a24585e09e96ada54aa6fa745"
+            }
+          ],
+          "text_to_3d_generation": [
+            {
+              "path": "scenesmith/agent_utils/geometry_generation_server/sam3d_pipeline_manager.py",
+              "sha256": "68f1dcb01fc55a1a1bb040ebd2e8603b468d8b59f57cdb5a27e9b4bb56de8925"
+            },
+            {
+              "path": "scenesmith/agent_utils/geometry_generation_server/hunyuan3d_pipeline_manager.py",
+              "sha256": "96666a924763be241e3d7e81285a6a88518e85fd05be67d0d7da9119ee428daa"
+            },
+            {
+              "path": "scenesmith/agent_utils/geometry_generation_server/geometry_generation.py",
+              "sha256": "42a37379dd18636a1da3b6674e00028de53dac214295ab5efc22e646379decfa"
+            },
+            {
+              "path": "scripts/install_sam3d.sh",
+              "sha256": "400abf58cc6cc8c8dc1bf474ef5967ff1352dffa1cd902b08def4acf3b0c55a8"
+            },
+            {
+              "path": "scripts/install_hunyuan3d.sh",
+              "sha256": "2a40ca0910b67fe0b6e9b31a4edc94018a1042618855172f2b01a2a5e12dabcf"
+            }
+          ]
+        },
+        "verified": true
+      },
+      "id": "asset_integration",
+      "status": "source_verified"
+    },
+    {
+      "claim": "SceneSmith generates 3-6x more objects with under 2% collisions and 96% physics-stable objects across 210 prompts.",
+      "evidence": {
+        "reason": "No machine-readable released 210-prompt generated-scene metrics were bundled in the pinned code snapshot.",
+        "required_artifact": "210 prompt generated-scene metrics"
+      },
+      "id": "large_scale_metrics",
+      "status": "unavailable"
+    },
+    {
+      "claim": "SceneSmith achieves 92.2% realism and 91.5% prompt-faithfulness win rates in a 205-participant user study.",
+      "evidence": {
+        "reason": "No released participant-level or aggregate user-study records were found in the pinned code snapshot.",
+        "required_artifact": "205 participant user-study records"
+      },
+      "id": "user_study",
+      "status": "unavailable"
+    },
+    {
+      "claim": "SceneSmith includes an end-to-end robot policy evaluation pipeline.",
+      "evidence": {
+        "evidence_files": [
+          {
+            "path": "scenesmith/robot_eval/task_generation/scene_prompt_generator.py",
+            "sha256": "9cca7be38b1fea2d380244dc696b49e81ce9e8051caf264f5c7208a673b9cbae"
+          },
+          {
+            "path": "scenesmith/robot_eval/policy_interface/policy_agent.py",
+            "sha256": "8f2321c2a5d8b507e53472ba86a09c71cdb7f6c792fe5d90bac65a63e430455b"
+          },
+          {
+            "path": "scenesmith/robot_eval/policy_interface/predicate_resolver.py",
+            "sha256": "465f3afe62a653e7e5f70bb332ec6c6efad897e0de282393472a6ca8c103f6bc"
+          },
+          {
+            "path": "scenesmith/robot_eval/success_validation/validator_agent.py",
+            "sha256": "841779f18ca16d7a8498c689f3339606ff8ac651505da7c9a61eb5992592c9d7"
+          },
+          {
+            "path": "scenesmith/robot_eval/tools/state_tools.py",
+            "sha256": "b1cc062b29e8fee227c237383fbc6983a9adbd7b2d9954bf728a8f76cf9c6080"
+          },
+          {
+            "path": "scenesmith/robot_eval/tools/vision_tools.py",
+            "sha256": "eb65aab96b49aed31b2eb6718cdeab91e4bd192aaa002c3a391f918af529f164"
+          },
+          {
+            "path": "scenesmith/prompts/data/robot_eval/scene_prompt_generator.yaml",
+            "sha256": "2a8dbdfd3db7e38e4e1f195eb8cfe7d5a9ec1bb7e43330731fb6de315431eb1c"
+          },
+          {
+            "path": "scenesmith/prompts/data/robot_eval/policy_agent.yaml",
+            "sha256": "256d042c6b6b6741d67b21c1fc386b23e2fbe321e236885eeebcf9c16502a273"
+          },
+          {
+            "path": "scenesmith/prompts/data/robot_eval/success_validator.yaml",
+            "sha256": "d16e6d85a882bbccc3cae5938065731ebd5f2b62ddef104d3d919560624ce384"
+          }
+        ],
+        "verified": true
+      },
+      "id": "robot_eval",
+      "status": "source_verified"
+    }
+  ],
+  "commands": [
+    "python generate_evidence.py --output evidence/scenesmith_results.json",
+    "python -m pytest tests -q"
+  ],
+  "generated_at": "deterministic-recomputed-from-bundled-upstream",
+  "missing_artifacts": [
+    "210 prompt generated-scene metrics",
+    "205 participant user-study records",
+    "paper-scale generated scene outputs with collision/stability annotations",
+    "API keys, SAM3D checkpoints, ArtVIP/AmbientCG data, and >=32GB GPU runtime for full generation"
+  ],
+  "paper_id": "WwS8CTpUA6",
+  "upstream": {
+    "bundled_file_count": 319,
+    "bundled_tree_sha256": "151d1477fed4164b177bdbca3587bbd38c9644766bd3ae19e519ec9c39d3d328",
+    "commit": "67cc408fd38334b4a926efef45e284302ed5055b",
+    "public_hf_datasets": [
+      "nepfaff/scenesmith-example-scenes",
+      "nepfaff/scenesmith-preprocessed-data",
+      "nepfaff/scenesmith-sam3d-objects"
+    ],
+    "repository": "https://github.com/nepfaff/scenesmith"
+  }
+}

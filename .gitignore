@@ -240,6 +240,7 @@ docs/reproductions/*
 !docs/reproductions/dcf0cca7-d415-4513-9f1c-787cb6f20182-beyond-log-likelihood-design.md
 !docs/reproductions/ad256d96-a7c2-424d-bfcf-b43daace444e-metaphorvu-design.md
 !docs/reproductions/cacb1796-7495-4440-845c-1002729bea1b-mind-omni-design.md
+!docs/reproductions/4134f5fc-75c7-4c17-8f43-3685aa8c3ac2-scenesmith-design.md
 docs/superpowers/plans/
 docs/superpowers/specs/*
 !docs/superpowers/specs/2026-08-01-q-sched-reproduction-design.md
@@ -257,6 +258,12 @@ submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for
 submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/.pytest_cache/
 submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/**/__pycache__/
 submissions/long-context-modeling-with-dynamic-hierarchical-sparse-attention-for-memory-constrained-llm-inference/**/*.egg-info/
+!submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/
+!submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**
+submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/.venv/
+submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/.pytest_cache/
+submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/__pycache__/
+submissions/scenesmith-agentic-generation-of-simulation-ready-indoor-scenes/**/*.egg-info/
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/
 !submissions/quarch-a-benchmark-for-evaluating-llm-reasoning-in-computer-architecture/**
 !submissions/geometry-aware-decoding-with-wasserstein-regularized-truncation-and-mass-penalties-for-large-language-models/
