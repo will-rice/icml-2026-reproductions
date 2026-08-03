@@ -1,0 +1,13 @@
+[project]
+name = "autobg-static-repro"
+version = "0.1.0"
+description = "Static evidence bundle for Autoregressive Boltzmann Generators"
+requires-python = ">=3.11"
+dependencies = [
+    "huggingface-hub>=0.33",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]

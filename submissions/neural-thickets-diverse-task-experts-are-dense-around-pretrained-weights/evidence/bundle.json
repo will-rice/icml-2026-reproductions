@@ -1,0 +1,741 @@
+{
+  "artifact_audit": {
+    "baseline_protocols": {
+      "found_terms": [
+        "PPO",
+        "GRPO",
+        "ES"
+      ],
+      "inspected_paths": [
+        "baselines/README.md",
+        "baselines/run_jobs/ppo.sh",
+        "baselines/run_jobs/grpo.sh",
+        "baselines/run_jobs/es.sh"
+      ],
+      "missing_terms": [],
+      "status": "present"
+    },
+    "dataset_handlers": {
+      "found_terms": [
+        "gsm8k",
+        "math500",
+        "countdown",
+        "uspto",
+        "rocstories",
+        "gqa"
+      ],
+      "inspected_paths": [
+        "data_handlers/__init__.py"
+      ],
+      "missing_terms": [],
+      "status": "present"
+    },
+    "majority_vote": {
+      "found_terms": [
+        "Counter",
+        "majority"
+      ],
+      "inspected_paths": [
+        "randopt.py"
+      ],
+      "missing_terms": [],
+      "status": "present"
+    },
+    "model_scale_family": {
+      "found_terms": [
+        "Qwen2.5",
+        "0.5B",
+        "1.5B",
+        "3B",
+        "7B"
+      ],
+      "inspected_paths": [
+        "README.md",
+        "baselines/README.md"
+      ],
+      "missing_terms": [],
+      "status": "present"
+    },
+    "randopt_algorithm": {
+      "found_terms": [
+        "perturb",
+        "population_size",
+        "top_k",
+        "sigma"
+      ],
+      "inspected_paths": [
+        "randopt.py",
+        "simple_1D_signals_expts/posttrain.py"
+      ],
+      "missing_terms": [],
+      "status": "present"
+    },
+    "toy_1d_experiment": {
+      "found_terms": [
+        "RandOpt",
+        "perturb_weights",
+        "top",
+        "sigma"
+      ],
+      "inspected_paths": [
+        "simple_1D_signals_expts/run.py",
+        "simple_1D_signals_expts/posttrain.py",
+        "simple_1D_signals_expts/models.py"
+      ],
+      "missing_terms": [],
+      "status": "present"
+    }
+  },
+  "artifact_hashes": {
+    "README.md": "30a356dbba52e34a7910aa453fa19032e3414069ebd69ffdfa474c65d81a1578",
+    "baselines/README.md": "d1c6ac41bbd19ed32602cdfa8056d17ed767f970d0810301eae1323d83838d87",
+    "baselines/run_jobs/es.sh": "1b56dc68b261227879c1abe53cdf0dd2dfa298258a1c7310e55abe369e914b39",
+    "baselines/run_jobs/grpo.sh": "55b1a0c896a32981055d706ae7bc7f95beb370040e6365b6a569b27955bad9e1",
+    "baselines/run_jobs/ppo.sh": "e90bb01ee87745b0b26ba8f2ae8b6d6c6b89295480e30105c387be3603ea5e34",
+    "data_handlers/__init__.py": "fe65c8eca107b91dd4a542bee47b0a6cfec4dbbbbf1a201aae2aa58032f9f34c",
+    "randopt.py": "a38dda74c357ed25f54c3db860a80a71bfd1f2fcf0d3d649f82f4b6e1001833b",
+    "simple_1D_signals_expts/models.py": "19057d5394a077b9ac65392c59a8548a7b4fcc0da669ba61f34ef439ea4ed52e",
+    "simple_1D_signals_expts/posttrain.py": "baf477108d7b530b34c62c9edaaa1167b775d480a765bd93ecf3daf278e28131",
+    "simple_1D_signals_expts/run.py": "dee67db22d74892044368cb0d7e4f3744ae1f06142b223a6c2a8083d24f92fa9"
+  },
+  "artifacts": {
+    "README.md": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "30a356dbba52e34a7910aa453fa19032e3414069ebd69ffdfa474c65d81a1578",
+      "size_bytes": 2590,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/README.md"
+    },
+    "baselines/README.md": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "d1c6ac41bbd19ed32602cdfa8056d17ed767f970d0810301eae1323d83838d87",
+      "size_bytes": 4441,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/baselines/README.md"
+    },
+    "baselines/run_jobs/es.sh": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "1b56dc68b261227879c1abe53cdf0dd2dfa298258a1c7310e55abe369e914b39",
+      "size_bytes": 2152,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/baselines/run_jobs/es.sh"
+    },
+    "baselines/run_jobs/grpo.sh": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "55b1a0c896a32981055d706ae7bc7f95beb370040e6365b6a569b27955bad9e1",
+      "size_bytes": 3020,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/baselines/run_jobs/grpo.sh"
+    },
+    "baselines/run_jobs/ppo.sh": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "e90bb01ee87745b0b26ba8f2ae8b6d6c6b89295480e30105c387be3603ea5e34",
+      "size_bytes": 2954,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/baselines/run_jobs/ppo.sh"
+    },
+    "data_handlers/__init__.py": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "fe65c8eca107b91dd4a542bee47b0a6cfec4dbbbbf1a201aae2aa58032f9f34c",
+      "size_bytes": 1369,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/data_handlers/__init__.py"
+    },
+    "randopt.py": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "a38dda74c357ed25f54c3db860a80a71bfd1f2fcf0d3d649f82f4b6e1001833b",
+      "size_bytes": 20614,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/randopt.py"
+    },
+    "simple_1D_signals_expts/models.py": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "19057d5394a077b9ac65392c59a8548a7b4fcc0da669ba61f34ef439ea4ed52e",
+      "size_bytes": 2962,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/simple_1D_signals_expts/models.py"
+    },
+    "simple_1D_signals_expts/posttrain.py": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "baf477108d7b530b34c62c9edaaa1167b775d480a765bd93ecf3daf278e28131",
+      "size_bytes": 1254,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/simple_1D_signals_expts/posttrain.py"
+    },
+    "simple_1D_signals_expts/run.py": {
+      "acquisition_command": "git clone https://github.com/sunrainyg/RandOpt.git && cd RandOpt && git checkout 536df0a308f3990b6270c991fbb96bd0b779a58e",
+      "sha256": "dee67db22d74892044368cb0d7e4f3744ae1f06142b223a6c2a8083d24f92fa9",
+      "size_bytes": 5784,
+      "source_url": "https://raw.githubusercontent.com/sunrainyg/RandOpt/536df0a308f3990b6270c991fbb96bd0b779a58e/simple_1D_signals_expts/run.py"
+    }
+  },
+  "attempt_id": "228a446e-f3c6-4ee1-8d80-28b6d1226520",
+  "claim_results": [
+    {
+      "audit_dependencies": {
+        "baseline_protocols": {
+          "found_terms": [
+            "PPO",
+            "GRPO",
+            "ES"
+          ],
+          "inspected_paths": [
+            "baselines/README.md",
+            "baselines/run_jobs/ppo.sh",
+            "baselines/run_jobs/grpo.sh",
+            "baselines/run_jobs/es.sh"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "dataset_handlers": {
+          "found_terms": [
+            "gsm8k",
+            "math500",
+            "countdown",
+            "uspto",
+            "rocstories",
+            "gqa"
+          ],
+          "inspected_paths": [
+            "data_handlers/__init__.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "majority_vote": {
+          "found_terms": [
+            "Counter",
+            "majority"
+          ],
+          "inspected_paths": [
+            "randopt.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "model_scale_family": {
+          "found_terms": [
+            "Qwen2.5",
+            "0.5B",
+            "1.5B",
+            "3B",
+            "7B"
+          ],
+          "inspected_paths": [
+            "README.md",
+            "baselines/README.md"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "randopt_algorithm": {
+          "found_terms": [
+            "perturb",
+            "population_size",
+            "top_k",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "randopt.py",
+            "simple_1D_signals_expts/posttrain.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "toy_1d_experiment": {
+          "found_terms": [
+            "RandOpt",
+            "perturb_weights",
+            "top",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "simple_1D_signals_expts/run.py",
+            "simple_1D_signals_expts/posttrain.py",
+            "simple_1D_signals_expts/models.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        }
+      },
+      "claim": "The paper argues that large pretrained models are surrounded by dense neighborhoods of task-specialized perturbations, unlike smaller needle-in-haystack regimes (Figure 1, Figure 2).",
+      "claim_index": 1,
+      "claim_sha256": "6cb63fc63f77549cd1e91584ba6b16c433259190bceab4d8ca0b354c5a82bd04",
+      "evidence": "Pinned source contains the 1D RandOpt toy experiment and deterministic simulation shows denser successful perturbations for the large-model proxy.",
+      "raw_result_artifacts": {},
+      "simulation": {
+        "best_single_accuracy": 0.894334,
+        "ensemble_accuracy": 0.894334,
+        "large_model_density": 0.609375,
+        "population_curve": {
+          "12": 0.64713,
+          "128": 0.862162,
+          "24": 0.741032,
+          "48": 0.787491,
+          "96": 0.843904
+        },
+        "population_size": 128,
+        "seed": 20260801,
+        "small_model_density": 0.03125,
+        "specialty_counts": {
+          "chemistry": 20,
+          "coding": 21,
+          "math": 17,
+          "vision": 20
+        }
+      },
+      "status": "toy"
+    },
+    {
+      "audit_dependencies": {
+        "baseline_protocols": {
+          "found_terms": [
+            "PPO",
+            "GRPO",
+            "ES"
+          ],
+          "inspected_paths": [
+            "baselines/README.md",
+            "baselines/run_jobs/ppo.sh",
+            "baselines/run_jobs/grpo.sh",
+            "baselines/run_jobs/es.sh"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "dataset_handlers": {
+          "found_terms": [
+            "gsm8k",
+            "math500",
+            "countdown",
+            "uspto",
+            "rocstories",
+            "gqa"
+          ],
+          "inspected_paths": [
+            "data_handlers/__init__.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "majority_vote": {
+          "found_terms": [
+            "Counter",
+            "majority"
+          ],
+          "inspected_paths": [
+            "randopt.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "model_scale_family": {
+          "found_terms": [
+            "Qwen2.5",
+            "0.5B",
+            "1.5B",
+            "3B",
+            "7B"
+          ],
+          "inspected_paths": [
+            "README.md",
+            "baselines/README.md"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "randopt_algorithm": {
+          "found_terms": [
+            "perturb",
+            "population_size",
+            "top_k",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "randopt.py",
+            "simple_1D_signals_expts/posttrain.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "toy_1d_experiment": {
+          "found_terms": [
+            "RandOpt",
+            "perturb_weights",
+            "top",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "simple_1D_signals_expts/run.py",
+            "simple_1D_signals_expts/posttrain.py",
+            "simple_1D_signals_expts/models.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        }
+      },
+      "claim": "Solution density and diversity around Qwen2.5 instruction-tuned models increase with model scale (Figure 3).",
+      "claim_index": 2,
+      "claim_sha256": "01ac2646f70b4dd258235c7a0e2325e474a842cbd5472ea60e40d1fd12cbd923",
+      "evidence": "No raw Figure 3 Qwen2.5 sweep outputs were released in the audited artifact set.",
+      "raw_result_artifacts": {},
+      "simulation": null,
+      "status": "unavailable"
+    },
+    {
+      "audit_dependencies": {
+        "baseline_protocols": {
+          "found_terms": [
+            "PPO",
+            "GRPO",
+            "ES"
+          ],
+          "inspected_paths": [
+            "baselines/README.md",
+            "baselines/run_jobs/ppo.sh",
+            "baselines/run_jobs/grpo.sh",
+            "baselines/run_jobs/es.sh"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "dataset_handlers": {
+          "found_terms": [
+            "gsm8k",
+            "math500",
+            "countdown",
+            "uspto",
+            "rocstories",
+            "gqa"
+          ],
+          "inspected_paths": [
+            "data_handlers/__init__.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "majority_vote": {
+          "found_terms": [
+            "Counter",
+            "majority"
+          ],
+          "inspected_paths": [
+            "randopt.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "model_scale_family": {
+          "found_terms": [
+            "Qwen2.5",
+            "0.5B",
+            "1.5B",
+            "3B",
+            "7B"
+          ],
+          "inspected_paths": [
+            "README.md",
+            "baselines/README.md"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "randopt_algorithm": {
+          "found_terms": [
+            "perturb",
+            "population_size",
+            "top_k",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "randopt.py",
+            "simple_1D_signals_expts/posttrain.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "toy_1d_experiment": {
+          "found_terms": [
+            "RandOpt",
+            "perturb_weights",
+            "top",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "simple_1D_signals_expts/run.py",
+            "simple_1D_signals_expts/posttrain.py",
+            "simple_1D_signals_expts/models.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        }
+      },
+      "claim": "Randomly sampled perturbations exhibit diverse task specialties rather than all acting as generalists (Figure 4).",
+      "claim_index": 3,
+      "claim_sha256": "17e5cc68657678fbcf5fc86cc7609cb957d3cda7e7f416ed481145acd328ad36",
+      "evidence": "Deterministic simulation produces multiple task-specialty maxima among successful perturbations.",
+      "raw_result_artifacts": {},
+      "simulation": {
+        "best_single_accuracy": 0.894334,
+        "ensemble_accuracy": 0.894334,
+        "large_model_density": 0.609375,
+        "population_curve": {
+          "12": 0.64713,
+          "128": 0.862162,
+          "24": 0.741032,
+          "48": 0.787491,
+          "96": 0.843904
+        },
+        "population_size": 128,
+        "seed": 20260801,
+        "small_model_density": 0.03125,
+        "specialty_counts": {
+          "chemistry": 20,
+          "coding": 21,
+          "math": 17,
+          "vision": 20
+        }
+      },
+      "status": "toy"
+    },
+    {
+      "audit_dependencies": {
+        "baseline_protocols": {
+          "found_terms": [
+            "PPO",
+            "GRPO",
+            "ES"
+          ],
+          "inspected_paths": [
+            "baselines/README.md",
+            "baselines/run_jobs/ppo.sh",
+            "baselines/run_jobs/grpo.sh",
+            "baselines/run_jobs/es.sh"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "dataset_handlers": {
+          "found_terms": [
+            "gsm8k",
+            "math500",
+            "countdown",
+            "uspto",
+            "rocstories",
+            "gqa"
+          ],
+          "inspected_paths": [
+            "data_handlers/__init__.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "majority_vote": {
+          "found_terms": [
+            "Counter",
+            "majority"
+          ],
+          "inspected_paths": [
+            "randopt.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "model_scale_family": {
+          "found_terms": [
+            "Qwen2.5",
+            "0.5B",
+            "1.5B",
+            "3B",
+            "7B"
+          ],
+          "inspected_paths": [
+            "README.md",
+            "baselines/README.md"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "randopt_algorithm": {
+          "found_terms": [
+            "perturb",
+            "population_size",
+            "top_k",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "randopt.py",
+            "simple_1D_signals_expts/posttrain.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "toy_1d_experiment": {
+          "found_terms": [
+            "RandOpt",
+            "perturb_weights",
+            "top",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "simple_1D_signals_expts/run.py",
+            "simple_1D_signals_expts/posttrain.py",
+            "simple_1D_signals_expts/models.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        }
+      },
+      "claim": "RandOpt samples random parameter perturbations, selects top performers, and ensembles predictions; it matches or exceeds PPO, GRPO, ES, and related baselines in many LLM post-training settings (Algorithm 1, Figure 6).",
+      "claim_index": 4,
+      "claim_sha256": "f5866255ba9915db83446bbe50213137aed61bf490342383420cfdf0290b48ea",
+      "evidence": "Pinned source contains RandOpt, majority voting, PPO/GRPO/ES baseline scaffolding, but no released full-scale benchmark outputs.",
+      "raw_result_artifacts": {},
+      "simulation": null,
+      "status": "unavailable"
+    },
+    {
+      "audit_dependencies": {
+        "baseline_protocols": {
+          "found_terms": [
+            "PPO",
+            "GRPO",
+            "ES"
+          ],
+          "inspected_paths": [
+            "baselines/README.md",
+            "baselines/run_jobs/ppo.sh",
+            "baselines/run_jobs/grpo.sh",
+            "baselines/run_jobs/es.sh"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "dataset_handlers": {
+          "found_terms": [
+            "gsm8k",
+            "math500",
+            "countdown",
+            "uspto",
+            "rocstories",
+            "gqa"
+          ],
+          "inspected_paths": [
+            "data_handlers/__init__.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "majority_vote": {
+          "found_terms": [
+            "Counter",
+            "majority"
+          ],
+          "inspected_paths": [
+            "randopt.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "model_scale_family": {
+          "found_terms": [
+            "Qwen2.5",
+            "0.5B",
+            "1.5B",
+            "3B",
+            "7B"
+          ],
+          "inspected_paths": [
+            "README.md",
+            "baselines/README.md"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "randopt_algorithm": {
+          "found_terms": [
+            "perturb",
+            "population_size",
+            "top_k",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "randopt.py",
+            "simple_1D_signals_expts/posttrain.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        },
+        "toy_1d_experiment": {
+          "found_terms": [
+            "RandOpt",
+            "perturb_weights",
+            "top",
+            "sigma"
+          ],
+          "inspected_paths": [
+            "simple_1D_signals_expts/run.py",
+            "simple_1D_signals_expts/posttrain.py",
+            "simple_1D_signals_expts/models.py"
+          ],
+          "missing_terms": [],
+          "status": "present"
+        }
+      },
+      "claim": "RandOpt accuracy improves with population size and depends on sufficient pretrained model scale (Figure 7, Figure 8).",
+      "claim_index": 5,
+      "claim_sha256": "8d6a33f23f858f4759484cfa8d117749a36484a1a5f3f8466f6d137d2c9c8645",
+      "evidence": "Population-size mechanism is reproduced in toy simulation; scale-dependent full benchmark results are unavailable without GPU-scale artifacts.",
+      "raw_result_artifacts": {},
+      "simulation": {
+        "best_single_accuracy": 0.894334,
+        "ensemble_accuracy": 0.894334,
+        "large_model_density": 0.609375,
+        "population_curve": {
+          "12": 0.64713,
+          "128": 0.862162,
+          "24": 0.741032,
+          "48": 0.787491,
+          "96": 0.843904
+        },
+        "population_size": 128,
+        "seed": 20260801,
+        "small_model_density": 0.03125,
+        "specialty_counts": {
+          "chemistry": 20,
+          "coding": 21,
+          "math": 17,
+          "vision": 20
+        }
+      },
+      "status": "toy"
+    }
+  ],
+  "limitations": [
+    "No paper-reported benchmark metric is used as reproduced evidence.",
+    "GPU-scale Qwen/Llama/OLMo inference, PPO, GRPO, and ES runs are marked unavailable without released raw outputs.",
+    "Toy results test qualitative RandOpt mechanisms only."
+  ],
+  "paper_id": "92oF5bU4cU",
+  "simulation": {
+    "best_single_accuracy": 0.894334,
+    "ensemble_accuracy": 0.894334,
+    "large_model_density": 0.609375,
+    "population_curve": {
+      "12": 0.64713,
+      "128": 0.862162,
+      "24": 0.741032,
+      "48": 0.787491,
+      "96": 0.843904
+    },
+    "population_size": 128,
+    "seed": 20260801,
+    "small_model_density": 0.03125,
+    "specialty_counts": {
+      "chemistry": 20,
+      "coding": 21,
+      "math": 17,
+      "vision": 20
+    }
+  },
+  "snapshot_id": "cd566b1fc072468cea13824a2382d9be6916bd5ffb684b5affcbfa814f753528",
+  "upstream_commit_observed": "536df0a308f3990b6270c991fbb96bd0b779a58e",
+  "upstream_pins": {
+    "official_code": "github:sunrainyg/RandOpt@536df0a308f3990b6270c991fbb96bd0b779a58e",
+    "openreview": "92oF5bU4cU",
+    "paper": "arxiv:2603.12228",
+    "project_page": "https://thickets.mit.edu/"
+  }
+}

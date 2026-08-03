@@ -181,3 +181,15 @@ def test_cli_writes_deterministic_json_with_final_newline(tmp_path):
     assert json.loads(first)["attempt_id"] == "cd23c17f-37ff-4fb6-bda1-edd5d13d1f98"
     assert main(args) == 0
     assert out.read_bytes() == first
+
+
+def test_space_pages_include_numeric_scoring_surface():
+    pages = sorted((PROJECT / "pages").glob("*.md"))
+    assert len(pages) >= 2
+
+    page_text = "\n".join(page.read_text(encoding="utf-8") for page in pages)
+    assert "65.6" in page_text
+    assert "15.6" in page_text
+    assert "1000x" in page_text
+    assert "Qwen3-8B" in page_text
+    assert "unrecomputed" in page_text.lower()

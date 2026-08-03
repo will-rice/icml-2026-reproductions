@@ -1,3 +1,17 @@
+---
+title: SceneSmith Reproduction
+emoji: 📊
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: 5.42.0
+app_file: app.py
+license: apache-2.0
+tags:
+  - icml2026-repro
+  - paper-WwS8CTpUA6
+---
+
 # SceneSmith Reproduction Evidence
 
 This project contains an independently executable evidence harness for

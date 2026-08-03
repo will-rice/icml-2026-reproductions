@@ -1,0 +1,70 @@
+{
+  "attempt_id": "4fdf8ed9-ad12-4923-b6dc-b37239a7c9b4",
+  "paper_id": "9wYjjPydfe",
+  "claims": [
+    {
+      "claim": "TIC-VLA decouples slow vision-language reasoning from fast reactive control through a delayed semantic-control interface and latency-consistent training (Figure 1).",
+      "status": "toy",
+      "evidence": "A CPU-only synthetic fixture verifies the ActionExpert interface shape [2, 5, 2] and robot state fixture [2.0, -1.0, 2.0]. This confirms the delayed KV-cache interface surface, but does not reproduce training or navigation behavior.",
+      "observations": {
+        "action_expert_tensor_shape": [
+          2,
+          5,
+          2
+        ],
+        "robot_state_fixture": [
+          2.0,
+          -1.0,
+          2.0
+        ],
+        "kv_cache_layers": 4,
+        "fixture_scope": "synthetic CPU interface probe"
+      }
+    },
+    {
+      "claim": "The paper introduces DynaNav as a physics-accurate, photo-realistic simulation suite for language-guided navigation in dynamic environments (Abstract).",
+      "status": "inconclusive",
+      "evidence": "A static repository audit finds DynaNav benchmark surfaces, but Isaac Sim physics and rendering were not executed, so physics accuracy and photorealism are not reproduced.",
+      "observations": {
+        "scene_count": 4,
+        "episode_count": 85,
+        "max_dynamic_agents": 200,
+        "execution_scope": "static config audit"
+      }
+    },
+    {
+      "claim": "Using KV-cache semantic features with latency-aware training gives 47.06 success rate versus 16.47 for a waypoint interface without latency awareness (Table 2).",
+      "status": "inconclusive",
+      "evidence": "The Table 2 comparison was not reproduced: no trained checkpoint or DynaNav benchmark execution was available in this CPU-only audit.",
+      "paper_reported_context": {
+        "latency_aware_success_rate_percent": 47.06,
+        "waypoint_without_latency_success_rate_percent": 16.47
+      }
+    },
+    {
+      "claim": "In real-world tests, TIC-VLA reports 0.85 success on RTX 4060 with 85.73 ms action latency and 3430.73 ms VLM reasoning latency, outperforming Dual-VLN and NaVILA success rates in the table (Table 3).",
+      "status": "inconclusive",
+      "evidence": "The Table 3 RTX 4060 real-world result was not reproduced: physical robot trials or released raw trial logs were not available.",
+      "paper_reported_context": {
+        "success_rate": 0.85,
+        "action_latency_ms": 85.73,
+        "vlm_reasoning_latency_ms": 3430.73
+      }
+    },
+    {
+      "claim": "On Jetson Orin NX, TIC-VLA reports 0.75 real-world success despite 4831.73 ms VLM reasoning latency (Table 3).",
+      "status": "inconclusive",
+      "evidence": "The Table 3 Jetson Orin NX real-world result was not reproduced: physical robot trials or released raw trial logs were not available.",
+      "paper_reported_context": {
+        "success_rate": 0.75,
+        "vlm_reasoning_latency_ms": 4831.73
+      }
+    }
+  ],
+  "estimated_paid_api_cost_usd": 0.0,
+  "limitations": [
+    "No Isaac Sim execution was performed.",
+    "No trained checkpoint evaluation was performed.",
+    "No physical robot trial logs were available."
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "attempt_id": "8a83f44b-e3db-4c2b-acf7-d233a750fdcc",
+  "audits": {
+    "method_text_markers": {
+      "latency_text": true,
+      "reward_components": true,
+      "three_stage_method": true
+    },
+    "source_manifest": {
+      "dataset_files": [],
+      "file_count": 22,
+      "has_latency_figure": true,
+      "has_main_tex": true,
+      "has_reward_figures": true,
+      "has_table1_tex": true,
+      "has_table2_tex": true,
+      "model_files": [],
+      "python_files": []
+    },
+    "tables": {
+      "table_values_are_recomputed": false,
+      "task1_has_best_of_n": true,
+      "task1_r4t_mentions": 5,
+      "task2_has_polyvore_metrics": true,
+      "task2_r4t_mentions": 4
+    },
+    "toy_reward": {
+      "collapsed": {
+        "alignment": 1.0,
+        "diversity": 0.0,
+        "groundedness": 1.0,
+        "total": 0.7
+      },
+      "diverse": {
+        "alignment": 0.569036,
+        "diversity": 0.528595,
+        "groundedness": 0.902369,
+        "total": 0.706904
+      },
+      "supervision": [
+        {
+          "query": "bohemian festival style",
+          "target_centroid": [
+            0.566667,
+            0.566667
+          ],
+          "target_count": 3
+        }
+      ]
+    }
+  },
+  "claim_results": [
+    {
+      "claim_index": 1,
+      "claim_sha256": "fe99eceb49fc734e848266733167cf76880c7d6fd4726aab74aad2b0f2bea26e",
+      "evidence": "The pinned arXiv source describes the three R4T stages and this package exercises a tiny set-level reward plus synthetic target compilation. No released FOLM or diffusion training code is available.",
+      "status": "toy",
+      "target_claim": "R4T trains a fan-out language model with set-level rewards, synthesizes objective-consistent query-set supervision, and trains a diffusion retriever for single-pass fan-out in embedding space (Figure 1)."
+    },
+    {
+      "claim_index": 2,
+      "claim_sha256": "8c7e030e2cfe846b58cdaa4d653991565c505d5bf528472df3a6187de5565c51",
+      "evidence": "task_1_result.tex contains paper-reported OAR table rows, but no raw Polyvore/Music inputs, model outputs, or evaluation scripts are released for recomputation.",
+      "status": "inconclusive",
+      "target_claim": "R4T consistently outperforms fan-out baselines across Open-Ended Abstract Retrieval datasets and metrics (Table 1)."
+    },
+    {
+      "claim_index": 3,
+      "claim_sha256": "8a8d053c547b44507a31b61a1ae46f3fa03fff7478c0a13d9032d2663cdc9f41",
+      "evidence": "task_2_result.tex contains paper-reported WSCR values, but no Polyvore preprocessing, broad-query generation outputs, or retrieval outputs are released.",
+      "status": "inconclusive",
+      "target_claim": "R4T improves weakly supervised compositional retrieval on Polyvore relative to no-fan-out, zero-shot fan-out, and best-of-N baselines (Table 2)."
+    },
+    {
+      "claim_index": 4,
+      "claim_sha256": "56b0ccdfffbd9e358d372fd11dbd436c1328e26aadc6840efe55c4d9218dea83",
+      "evidence": "The source includes reward-collapse figure assets and text. The toy reward check gives collapsed total 0.7 and diverse total 0.706904, showing diversity/alignment terms can penalize collapse on a synthetic fixture.",
+      "status": "toy",
+      "target_claim": "Jointly optimizing groundedness, alignment, and diversity prevents reward-collapse behavior during fan-out LM training (Figure 4)."
+    },
+    {
+      "claim_index": 5,
+      "claim_sha256": "295f630a340b777a2161c8effa7c1efc13fd408e8e435ce266b10b367d3b9376",
+      "evidence": "query_fanout_efficiency.pdf and manuscript text report latency, but no executable diffusion retriever, autoregressive baseline, hardware harness, or raw latency log is released.",
+      "status": "inconclusive",
+      "target_claim": "The diffusion fan-out retriever maintains sub-second latency for small batches and reaches order-of-magnitude speedups over autoregressive LLM fan-out at larger batch sizes (Figure 5)."
+    }
+  ],
+  "commands": {
+    "generate": "python generate_evidence.py",
+    "test": "python -m pytest tests -q"
+  },
+  "generated_at": "2026-08-01T17:48:00+00:00",
+  "paper_id": "4P9cEcinYP",
+  "snapshot_id": "34237d5702ab85038fbe25e4409a2115b90ef0257ab437d9511f2d66ded5fdd5",
+  "title": "Efficient, Property-Aligned Fan-Out Retrieval via RL-Amortized Diffusion",
+  "upstream_pins": {
+    "arxiv_eprint": "arxiv:2603.06397@sha256:3602626196bb2747970029de2a6f9b8086e4450a8f67c105d2954911a1d8a568",
+    "arxiv_pdf": "arxiv:2603.06397@sha256:19b97f8264d22e28dbdced297d16d1686c68de2bbc0c756a2f9330fc023490bb",
+    "google_publication": "https://research.google/pubs/efficient-property-aligned-fan-out-retrieval-via-rl-compiled-diffusion-2/"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "artifact_access": {
+    "code_files": [
+      "MindOmni_src/tri_modal_pipeline.py",
+      "MindOmni_src/tri_modal_transformer.py",
+      "README.md",
+      "Validate_the_models/evaluate_easy_reasoning_qc.py",
+      "data_processing/stage2_dataset_prep/tokenize_QAs.py",
+      "train_fMRI_tokenizer_perceptual/fMRI_tokenizer_perceptual.py",
+      "train_stage1/train_stage1.sh",
+      "train_stage1/train_stage1_utils.py",
+      "train_stage1_2/train_stage1_2.sh",
+      "train_stage2_short_VQA/train_stage2_shortVQA.py",
+      "train_stage2_short_VQA/train_stage2_shortVQA.sh"
+    ],
+    "raw_result_artifacts": []
+  },
+  "attempt_id": "cacb1796-7495-4440-845c-1002729bea1b",
+  "audits": {
+    "official_code": {
+      "brain_qa_processing": {
+        "status": "present"
+      },
+      "brain_tokenizer": {
+        "status": "present"
+      },
+      "checkpoint_release": {
+        "status": "present"
+      },
+      "dataset_release": {
+        "status": "present"
+      },
+      "evaluation_release": {
+        "status": "missing"
+      },
+      "source_hashes": {
+        "MindOmni_src/tri_modal_pipeline.py": "de12b1b23d78949b490533852a83d761eb1ea5056e08be5790b1c88a6aaf4cd7",
+        "MindOmni_src/tri_modal_transformer.py": "5ddcaf0da3f74df8e115a38b663c39e9397bffccc23b96ac04f4665495ff023a",
+        "README.md": "df02351ef3af36bcc3a52821abbadd4eec6dc658e2f591a4bed0ce18c4290a4d",
+        "Validate_the_models/evaluate_easy_reasoning_qc.py": "0790cbf528a9f8034c76f9ae33c20fbac60054ac237c44044485ec31e4fadc08",
+        "data_processing/stage2_dataset_prep/tokenize_QAs.py": "47b81624db3f86d2e5f6f727bf8f9f87c9bf025ca50df5d724200dd87c582437",
+        "train_fMRI_tokenizer_perceptual/fMRI_tokenizer_perceptual.py": "f277904e06706e8e8440cfb494dd450127418e7ad527a6ee4a0e394419921dfc",
+        "train_stage1/train_stage1.sh": "88b07648f808e19f230986a167e7c12c2b29e7049e4ea258c70a0b867282bf00",
+        "train_stage1/train_stage1_utils.py": "e80006c1f4a932d35b46eff05fbc5687e2cb8e55376f561a33873123d768066e",
+        "train_stage1_2/train_stage1_2.sh": "24ee49628cbcc37e5035b341dd9d48b7ee89bedaedfd484ff07d98106cacdbc0",
+        "train_stage2_short_VQA/train_stage2_shortVQA.py": "288c86c8d2435b1ded22c137ac3a0b7da11c6245f3488bedcbe3cd66efb18dee",
+        "train_stage2_short_VQA/train_stage2_shortVQA.sh": "d23844fe999cf2915ead1c7363342dd4f28c46cbaa29c3aa4102a46f867b4ebd"
+      },
+      "stage_launchers": {
+        "status": "present"
+      },
+      "tri_modal_pipeline": {
+        "status": "present"
+      },
+      "tri_modal_transformer": {
+        "status": "present"
+      }
+    },
+    "raw_result_hashes": {}
+  },
+  "claim_results": [
+    {
+      "claim_index": 1,
+      "claim_sha256": "510e56e579a79e97258b2b48ab1c8b0d7bc96dc94c8ae99f00f736faf91e7e08",
+      "limitation": "This verifies released source structure and artifact pointers, not a full model training rerun.",
+      "observation": "CPU-only source audit found required components: tri_modal_pipeline, tri_modal_transformer, stage_launchers.",
+      "status": "verified",
+      "target_claim": "Mind-Omni unifies seven brain, image, and text encoding/decoding tasks in a single discrete diffusion framework (Table 1)."
+    },
+    {
+      "claim_index": 2,
+      "claim_sha256": "e846f44cd916828ca7091c8b22d7f9964616fca3b0588b823c5e58ea1fbb0d1b",
+      "limitation": "This verifies released source structure and artifact pointers, not a full model training rerun.",
+      "observation": "CPU-only source audit found required components: brain_tokenizer, tri_modal_pipeline, checkpoint_release.",
+      "status": "verified",
+      "target_claim": "The Brain Tokenizer converts continuous fMRI signals into discrete tokens aligned with image and text representations in a shared semantic space (Section 3.1)."
+    },
+    {
+      "claim_index": 3,
+      "claim_sha256": "e275bc58a479ca235b37e6e7aa1dfbf80060a8730523709b1ad910d9f20cc01a",
+      "limitation": "This verifies released source structure and artifact pointers, not a full model training rerun.",
+      "observation": "CPU-only source audit found required components: brain_qa_processing, dataset_release.",
+      "status": "verified",
+      "target_claim": "The framework curates a Brain Question Answering instruction-tuning dataset using Qwen2-VL to support reasoning over brain signals (Section 4)."
+    },
+    {
+      "claim_index": 4,
+      "claim_sha256": "69a1212c6650c1c0530dc520736bbc0e67be8d1593ebac5f6f8933e81a3093a1",
+      "limitation": "No raw evaluation output was available; paper-reported metrics are not treated as reproduced measurements.",
+      "observation": "Pinned source exposes validation entrypoints and artifact release notes.",
+      "status": "unavailable",
+      "target_claim": "Mind-Omni establishes a new state of the art among unified brain-vision-language frameworks in the multi-task evaluation (Tables 2-4)."
+    },
+    {
+      "claim_index": 5,
+      "claim_sha256": "4af5cfd5dc824050d15fc178ef13fd92b7668fb65b4768fd2f8d79e0383e4a16",
+      "limitation": "No raw evaluation output was available; paper-reported metrics are not treated as reproduced measurements.",
+      "observation": "Pinned source exposes validation entrypoints and artifact release notes.",
+      "status": "unavailable",
+      "target_claim": "Joint image-text conditioning shows synergistic gains over single-modality conditioning in neural encoding and decoding analyses (Figures 7 and 8)."
+    }
+  ],
+  "paper_id": "3gCdh3u2GK",
+  "snapshot_id": "8e1331c16c97f17ffa8b34fd6701cd91c805ab8b575818656718799d504db20e",
+  "title": "Mind-Omni: A Unified Multi-Task Framework for Brain-Vision-Language Modeling via Discrete Diffusion",
+  "upstream_pins": {
+    "checkpoint_release": "modelscope-model:LLLLLYYYYYzzz/Mind_Omni_V1_ckpt",
+    "dataset_release": "modelscope-dataset:LLLLLYYYYYzzz/NSD",
+    "official_code": "github:ReedOnePeck/Mind-Omni@818dcd160c130334bd36a7a8a7f7e7f00772084d",
+    "paper": "arxiv:2605.29591"
+  }
+}
