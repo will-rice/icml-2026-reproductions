@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "artifacts": [
+    {
+      "artifact_id": "paper-v1",
+      "url": "https://arxiv.org/pdf/2412.18134v1.pdf",
+      "relative_path": null,
+      "size_bytes": 2490520,
+      "sha256": "abaac08eabec2e77c8af7ae3ca028691b9cd862e21bfa779452b9fd729e3222f",
+      "git_blob": null,
+      "license": "arXiv non-exclusive license"
+    },
+    {
+      "artifact_id": "paper-v5",
+      "url": "https://arxiv.org/pdf/2412.18134v5.pdf",
+      "relative_path": null,
+      "size_bytes": 2004773,
+      "sha256": "93cab4aa8cec06434b704e639bab87dd15ea95ac46a335961138a94fc1bae2b8",
+      "git_blob": null,
+      "license": "arXiv non-exclusive license"
+    },
+    {
+      "artifact_id": "repo-license",
+      "url": "https://raw.githubusercontent.com/ferhaterata/learning-randomized-reductions/e13d4b59f6d23051c73e07cfc447336da84e7bd2/LICENSE",
+      "relative_path": "upstream/LICENSE",
+      "size_bytes": 1091,
+      "sha256": "04601314559ab36aa7403fbaa56ccba106be0de6671190497e6835bbd3107bdb",
+      "git_blob": "2eb9ad588c5b6e720b168588a640d7a653265c96",
+      "license": "MIT"
+    },
+    {
+      "artifact_id": "results-csv",
+      "url": "https://raw.githubusercontent.com/ferhaterata/learning-randomized-reductions/e13d4b59f6d23051c73e07cfc447336da84e7bd2/results/Bitween-Results(Sheet1-ICML).csv",
+      "relative_path": "upstream/results/Bitween-Results(Sheet1-ICML).csv",
+      "size_bytes": 502974,
+      "sha256": "7198413f93830f7903bf3b670b718f2ccfbab1a41496a1fc3fe085850af0df0b",
+      "git_blob": "0432241ef42d1be06179546c7b96d6bf6f598986",
+      "license": "MIT"
+    },
+    {
+      "artifact_id": "eval-rsr-bench-paper",
+      "url": "https://raw.githubusercontent.com/ferhaterata/learning-randomized-reductions/e13d4b59f6d23051c73e07cfc447336da84e7bd2/src/bitween/evaluation/evaluation_rsr_bench_paper.py",
+      "relative_path": "upstream/src/bitween/evaluation/evaluation_rsr_bench_paper.py",
+      "size_bytes": 47780,
+      "sha256": "6afe05589eeb08f34d63f98ed55fc38a3856a84ce7fc1d21e47327baad54ffbf",
+      "git_blob": "1aa8de34e60dcdbf77c0af53e1d5af25a673522f",
+      "license": "MIT"
+    },
+    {
+      "artifact_id": "eval-rsr-bench-paper-extended",
+      "url": "https://raw.githubusercontent.com/ferhaterata/learning-randomized-reductions/e13d4b59f6d23051c73e07cfc447336da84e7bd2/src/bitween/evaluation/evaluation_rsr_bench_paper_extended.py",
+      "relative_path": "upstream/src/bitween/evaluation/evaluation_rsr_bench_paper_extended.py",
+      "size_bytes": 29907,
+      "sha256": "02fcfb7805e1704e040ae9e854b22ab199ae7ea95a18b5e45f2f9c886c0f40e2",
+      "git_blob": "88f1ef6b3c1b280afd8d2754509a1f6f0b30df7c",
+      "license": "MIT"
+    },
+    {
+      "artifact_id": "eval-rsr-bench-agentic",
+      "url": "https://raw.githubusercontent.com/ferhaterata/learning-randomized-reductions/e13d4b59f6d23051c73e07cfc447336da84e7bd2/src/bitween/evaluation/evaluation_rsr_bench_agentic_paper.py",
+      "relative_path": "upstream/src/bitween/evaluation/evaluation_rsr_bench_agentic_paper.py",
+      "size_bytes": 34555,
+      "sha256": "c99842f831d6bf0296452e632a5b0eb24f8ae9438acc42bad92604ac61c64bb0",
+      "git_blob": "e660ab8d39b8083117097641983fe69c5efaeffb",
+      "license": "MIT"
+    },
+    {
+      "artifact_id": "rsr-checker",
+      "url": "https://raw.githubusercontent.com/ferhaterata/learning-randomized-reductions/e13d4b59f6d23051c73e07cfc447336da84e7bd2/src/bitween/evaluation/rsr_checker.py",
+      "relative_path": "upstream/src/bitween/evaluation/rsr_checker.py",
+      "size_bytes": 22751,
+      "sha256": "28e9dc80cec82d8e11dee4e867b55cba707b295c8f9d2065c7e9d286967fd3aa",
+      "git_blob": "417f5f0a8ef6789be4f01c3108f4427f2580c9d0",
+      "license": "MIT"
+    },
+    {
+      "artifact_id": "pac-py",
+      "url": "https://raw.githubusercontent.com/ferhaterata/learning-randomized-reductions/e13d4b59f6d23051c73e07cfc447336da84e7bd2/src/bitween/pac.py",
+      "relative_path": "upstream/src/bitween/pac.py",
+      "size_bytes": 1395,
+      "sha256": "69da63ffce26b7f85f306a69e13eb345a8c12be7257f60297b96c5122c2274a4",
+      "git_blob": "4dd47da9cde937e7f7074424a9cddb5f3aa523ab",
+      "license": "MIT"
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "accepted_benchmark_count": 7,
+  "accepted_benchmarks": [
+    "aime2025",
+    "arenahardwriting",
+    "bfcl",
+    "gpqamain",
+    "gsm8k",
+    "healthbench",
+    "humaneval"
+  ],
+  "accepted_model_count": 4,
+  "accepted_models": {
+    "HuggingFaceTB_SmolLM3-3B-Base": "SmolLM3-3B-Base",
+    "Qwen_Qwen3-1.7B-Base": "Qwen3-1.7B-Base",
+    "Qwen_Qwen3-4B-Base": "Qwen3-4B-Base",
+    "google_gemma-3-4b-pt": "Gemma-3-4B-PT"
+  },
+  "cell_counts": {
+    "aime2025": [
+      47,
+      48,
+      48,
+      48
+    ],
+    "arenahardwriting": [
+      47,
+      48,
+      50,
+      48
+    ],
+    "bfcl": [
+      47,
+      48,
+      48,
+      48
+    ],
+    "gpqamain": [
+      46,
+      49,
+      47,
+      49
+    ],
+    "gsm8k": [
+      47,
+      47,
+      49,
+      48
+    ],
+    "healthbench": [
+      47,
+      48,
+      48,
+      48
+    ],
+    "humaneval": [
+      47,
+      47,
+      48,
+      48
+    ]
+  },
+  "duplicate_job_pairs": 25,
+  "excluded_auxiliary_data": {
+    "counted_as_task_root": false,
+    "directory_count": 1,
+    "file_count": 2397,
+    "present": true,
+    "top_level_path": "viewer_data"
+  },
+  "excluded_dirs_count": 0,
+  "inventory": {
+    "all_entries_digest": "045ae5c714aa605b4295e345970cdf9a330600f709ef18508e8bef5eb3eec13d",
+    "dir_count": 14117,
+    "dir_entries_digest": "d480b9917811f32cfe7e055a029f475bfb2fa0c1cb02d0d08a7de0e200714132",
+    "file_count": 97209,
+    "file_entries_digest": "320253d2791e878f6539c58365ddc9ac93baffb53a5c78244910ef153f067ca4",
+    "page_count": 112,
+    "rejected_siblings_count": 85883,
+    "rejected_siblings_digest": "116dc22723f1cc13bf71461ff83dd03479c74a2740957787e6ca642a59628eea",
+    "total_entries": 111326
+  },
+  "matrix": [
+    {
+      "benchmark": "aime2025",
+      "count": 47,
+      "model": "Qwen3-1.7B-Base"
+    },
+    {
+      "benchmark": "aime2025",
+      "count": 48,
+      "model": "Qwen3-4B-Base"
+    },
+    {
+      "benchmark": "aime2025",
+      "count": 48,
+      "model": "SmolLM3-3B-Base"
+    },
+    {
+      "benchmark": "aime2025",
+      "count": 48,
+      "model": "Gemma-3-4B-PT"
+    },
+    {
+      "benchmark": "arenahardwriting",
+      "count": 47,
+      "model": "Qwen3-1.7B-Base"
+    },
+    {
+      "benchmark": "arenahardwriting",
+      "count": 48,
+      "model": "Qwen3-4B-Base"
+    },
+    {
+      "benchmark": "arenahardwriting",
+      "count": 50,
+      "model": "SmolLM3-3B-Base"
+    },
+    {
+      "benchmark": "arenahardwriting",
+      "count": 48,
+      "model": "Gemma-3-4B-PT"
+    },
+    {
+      "benchmark": "bfcl",
+      "count": 47,
+      "model": "Qwen3-1.7B-Base"
+    },
+    {
+      "benchmark": "bfcl",
+      "count": 48,
+      "model": "Qwen3-4B-Base"
+    },
+    {
+      "benchmark": "bfcl",
+      "count": 48,
+      "model": "SmolLM3-3B-Base"
+    },
+    {
+      "benchmark": "bfcl",
+      "count": 48,
+      "model": "Gemma-3-4B-PT"
+    },
+    {
+      "benchmark": "gpqamain",
+      "count": 46,
+      "model": "Qwen3-1.7B-Base"
+    },
+    {
+      "benchmark": "gpqamain",
+      "count": 49,
+      "model": "Qwen3-4B-Base"
+    },
+    {
+      "benchmark": "gpqamain",
+      "count": 47,
+      "model": "SmolLM3-3B-Base"
+    },
+    {
+      "benchmark": "gpqamain",
+      "count": 49,
+      "model": "Gemma-3-4B-PT"
+    },
+    {
+      "benchmark": "gsm8k",
+      "count": 47,
+      "model": "Qwen3-1.7B-Base"
+    },
+    {
+      "benchmark": "gsm8k",
+      "count": 47,
+      "model": "Qwen3-4B-Base"
+    },
+    {
+      "benchmark": "gsm8k",
+      "count": 49,
+      "model": "SmolLM3-3B-Base"
+    },
+    {
+      "benchmark": "gsm8k",
+      "count": 48,
+      "model": "Gemma-3-4B-PT"
+    },
+    {
+      "benchmark": "healthbench",
+      "count": 47,
+      "model": "Qwen3-1.7B-Base"
+    },
+    {
+      "benchmark": "healthbench",
+      "count": 48,
+      "model": "Qwen3-4B-Base"
+    },
+    {
+      "benchmark": "healthbench",
+      "count": 48,
+      "model": "SmolLM3-3B-Base"
+    },
+    {
+      "benchmark": "healthbench",
+      "count": 48,
+      "model": "Gemma-3-4B-PT"
+    },
+    {
+      "benchmark": "humaneval",
+      "count": 47,
+      "model": "Qwen3-1.7B-Base"
+    },
+    {
+      "benchmark": "humaneval",
+      "count": 47,
+      "model": "Qwen3-4B-Base"
+    },
+    {
+      "benchmark": "humaneval",
+      "count": 48,
+      "model": "SmolLM3-3B-Base"
+    },
+    {
+      "benchmark": "humaneval",
+      "count": 48,
+      "model": "Gemma-3-4B-PT"
+    }
+  ],
+  "missing_root_cell_pairs": 3,
+  "protocol": {
+    "commit_sh_analysis": {
+      "current_benchmarks_in_arrays": [
+        "healthbench"
+      ],
+      "current_models_in_arrays": [
+        "Qwen/Qwen3-4B-Base"
+      ],
+      "gpu_counts_found": [
+        8
+      ],
+      "has_metr_branch": true,
+      "htcondor_branch": {
+        "active_jobs": 8,
+        "gpu_spec": "default (single_task.sub num_gpus=1)",
+        "one_hour_jobs": 1,
+        "ten_hour_jobs": 7
+      },
+      "htcondor_mpi_is_branch": {
+        "active_jobs": 1,
+        "gpus": 8,
+        "hours": 100,
+        "note": "Active 100-hour, eight-GPU METR command"
+      },
+      "num_hours_values": [
+        1,
+        10,
+        100
+      ],
+      "scheduler_dependent": true
+    },
+    "cuda_device_requirement": "TARGET.CUDADeviceName == \"NVIDIA H100 80GB HBM3\"",
+    "evaluation_dir_count": 7,
+    "evaluation_dirs_present": [
+      "src/eval/tasks/aime2025",
+      "src/eval/tasks/arenahardwriting",
+      "src/eval/tasks/bfcl",
+      "src/eval/tasks/gpqamain",
+      "src/eval/tasks/gsm8k",
+      "src/eval/tasks/healthbench",
+      "src/eval/tasks/humaneval"
+    ],
+    "limitation_five_minute_grace": true,
+    "limitation_multi_gpu_extension": true,
+    "num_gpus_default": 1,
+    "receives_num_hours": true,
+    "request_gpus_binding": "request_gpus = $(num_gpus)",
+    "solve_timeout_formula": "NUM_HOURS * 60 + 5",
+    "source_references": {
+      "commit_sh_analysis.current_benchmarks_in_arrays": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "3c43144e1186a160f450e747b95861fea6d16747",
+        "lines": [
+          18
+        ],
+        "path": "src/commit_utils/commit.sh",
+        "raw_sha256": "663ecb37cc4e6a16dcfcf8135bdbadf325f0b067192fe7a71d2231ba37eaae8e"
+      },
+      "commit_sh_analysis.current_models_in_arrays": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "3c43144e1186a160f450e747b95861fea6d16747",
+        "lines": [
+          6
+        ],
+        "path": "src/commit_utils/commit.sh",
+        "raw_sha256": "663ecb37cc4e6a16dcfcf8135bdbadf325f0b067192fe7a71d2231ba37eaae8e"
+      },
+      "commit_sh_analysis.htcondor_branch": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "3c43144e1186a160f450e747b95861fea6d16747",
+        "lines": [
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90
+        ],
+        "path": "src/commit_utils/commit.sh",
+        "raw_sha256": "663ecb37cc4e6a16dcfcf8135bdbadf325f0b067192fe7a71d2231ba37eaae8e"
+      },
+      "commit_sh_analysis.htcondor_mpi_is_branch": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "3c43144e1186a160f450e747b95861fea6d16747",
+        "lines": [
+          48
+        ],
+        "path": "src/commit_utils/commit.sh",
+        "raw_sha256": "663ecb37cc4e6a16dcfcf8135bdbadf325f0b067192fe7a71d2231ba37eaae8e"
+      },
+      "cuda_device_requirement": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "ea7f8790b97301dcdb6f3c104c5555d7ddf4e06a",
+        "lines": [
+          11
+        ],
+        "path": "src/commit_utils/single_task.sub",
+        "raw_sha256": "f8ee12da42fdebfc3b4293a22ea8b232c1f8f52cb2f52b103c9f138f0ddc013a"
+      },
+      "evaluation_dirs_present": {
+        "kind": "git-tree-entries",
+        "paths": [
+          "src/eval/tasks/aime2025",
+          "src/eval/tasks/arenahardwriting",
+          "src/eval/tasks/bfcl",
+          "src/eval/tasks/gpqamain",
+          "src/eval/tasks/gsm8k",
+          "src/eval/tasks/healthbench",
+          "src/eval/tasks/humaneval"
+        ]
+      },
+      "num_gpus_default": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "ea7f8790b97301dcdb6f3c104c5555d7ddf4e06a",
+        "lines": [
+          2
+        ],
+        "path": "src/commit_utils/single_task.sub",
+        "raw_sha256": "f8ee12da42fdebfc3b4293a22ea8b232c1f8f52cb2f52b103c9f138f0ddc013a"
+      },
+      "receives_num_hours": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "0642ec47ee7acd2528cdab7d343ddba11cbc84db",
+        "lines": [
+          7,
+          24,
+          59,
+          62,
+          122,
+          162
+        ],
+        "path": "src/run_task.sh",
+        "raw_sha256": "10b0238018f202209c06f12ff05d021a0ca03b98d42c86a65e80cacd4fbe7033"
+      },
+      "request_gpus_binding": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "ea7f8790b97301dcdb6f3c104c5555d7ddf4e06a",
+        "lines": [
+          10
+        ],
+        "path": "src/commit_utils/single_task.sub",
+        "raw_sha256": "f8ee12da42fdebfc3b4293a22ea8b232c1f8f52cb2f52b103c9f138f0ddc013a"
+      },
+      "solve_timeout_formula": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "0642ec47ee7acd2528cdab7d343ddba11cbc84db",
+        "lines": [
+          122
+        ],
+        "path": "src/run_task.sh",
+        "raw_sha256": "10b0238018f202209c06f12ff05d021a0ca03b98d42c86a65e80cacd4fbe7033"
+      },
+      "timeout_grace_minutes": {
+        "commit": "d3496fa7d5788a007d6cd143167471ccdfc688d0",
+        "git_object_sha1": "0642ec47ee7acd2528cdab7d343ddba11cbc84db",
+        "lines": [
+          122
+        ],
+        "path": "src/run_task.sh",
+        "raw_sha256": "10b0238018f202209c06f12ff05d021a0ca03b98d42c86a65e80cacd4fbe7033"
+      }
+    },
+    "task_dir_10h_suffix": true,
+    "timeout_formula_found": true,
+    "timeout_grace_minutes": 5
+  },
+  "recognized_root_cell_pairs": 1313,
+  "recognized_root_count": 47,
+  "recognized_task_count": 1338,
+  "unrecognized_dirs_count": 0
+}

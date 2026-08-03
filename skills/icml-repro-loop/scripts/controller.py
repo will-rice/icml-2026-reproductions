@@ -1,7 +1,5 @@
 """Trusted controller operations for reproduction attempt authority."""
 
-from __future__ import annotations
-
 import copy
 from collections.abc import Callable
 from dataclasses import dataclass

@@ -1,0 +1,19 @@
+[project]
+name = "more-reproduction"
+version = "0.1.0"
+description = "CPU-only reproduction evidence for MORE: A Multilingual Document Parsing Benchmark and Evaluation"
+requires-python = ">=3.10"
+dependencies = [
+  "gradio>=5,<7",
+  "huggingface-hub>=0.34",
+  "requests>=2.31",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

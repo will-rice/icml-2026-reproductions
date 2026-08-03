@@ -1,0 +1,13 @@
+[project]
+name = "toksuite-reproduction"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "gradio==5.42.0",
+  "huggingface-hub==0.36.0"
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0.0"
+]

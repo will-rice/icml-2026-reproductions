@@ -1,7 +1,5 @@
 """End-to-end behavior for the leaderboard-points operating loop."""
 
-from __future__ import annotations
-
 import copy
 from datetime import datetime, timezone
 import hashlib

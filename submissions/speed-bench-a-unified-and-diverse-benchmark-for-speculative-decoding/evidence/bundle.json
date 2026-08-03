@@ -1,0 +1,272 @@
+{
+  "attempt_id": "113e8358-c223-4172-8f77-c5ba922bf74d",
+  "claims": [
+    {
+      "challenge_claim": "SPEED-Bench contains a qualitative split optimized for semantic diversity and a throughput split with fixed 1K-32K input-length buckets supporting high-concurrency evaluation (Figure 1)",
+      "challenge_claim_sha256": "acf30ca2d6ba9d93007e041eb314452cf636746f58d42da5973f5c5152f9f8a7",
+      "claim_index": 1,
+      "evidence": "Pinned HF dataset card and Model-Optimizer framework expose the qualitative split and throughput configs spanning 1K to 32K with 1,536 prompts per throughput bucket.",
+      "observations": {
+        "qualitative_examples": 880,
+        "specdec_framework_mentions_throughput": true,
+        "throughput_buckets": [
+          "1k",
+          "2k",
+          "8k",
+          "16k",
+          "32k"
+        ],
+        "throughput_examples_per_bucket": {
+          "16k": 1536,
+          "1k": 1536,
+          "2k": 1536,
+          "32k": 1536,
+          "8k": 1536
+        }
+      },
+      "status": "verified",
+      "target_claim": "SPEED-Bench contains a qualitative split optimized for semantic diversity and a throughput split with fixed 1K-32K input-length buckets supporting high-concurrency evaluation (Figure 1)"
+    },
+    {
+      "challenge_claim": "The qualitative split has lower average semantic similarity than random selection and SpecBench across categories (Figure 2)",
+      "challenge_claim_sha256": "9199267aa24773c1e42e965eebfba48b160be69a5d2d4f330f6573893d06b084",
+      "claim_index": 2,
+      "evidence": "Pinned dataset card reports category-level average semantic-similarity values; for comparable non-QA rows, SPEED greedy selection is lower than both SpecBench and random selection.",
+      "observations": {
+        "rows": [
+          {
+            "category": "Math",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.24,
+            "speed_greedy": 0.15,
+            "speed_random": 0.21
+          },
+          {
+            "category": "Coding",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.33,
+            "speed_greedy": 0.16,
+            "speed_random": 0.48
+          },
+          {
+            "category": "Multilingual",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.36,
+            "speed_greedy": 0.06,
+            "speed_random": 0.18
+          },
+          {
+            "category": "Writing",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.35,
+            "speed_greedy": 0.18,
+            "speed_random": 0.29
+          },
+          {
+            "category": "Humanities",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.26,
+            "speed_greedy": 0.12,
+            "speed_random": 0.14
+          },
+          {
+            "category": "STEM",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.24,
+            "speed_greedy": 0.12,
+            "speed_random": 0.19
+          },
+          {
+            "category": "Reasoning",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.24,
+            "speed_greedy": 0.14,
+            "speed_random": 0.21
+          },
+          {
+            "category": "RAG",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.15,
+            "speed_greedy": 0.13,
+            "speed_random": 0.17
+          },
+          {
+            "category": "Roleplay",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.28,
+            "speed_greedy": 0.24,
+            "speed_random": 0.25
+          },
+          {
+            "category": "Summarization",
+            "greedy_below_random": true,
+            "greedy_below_specbench": true,
+            "specbench": 0.21,
+            "speed_greedy": 0.11,
+            "speed_random": 0.24
+          }
+        ],
+        "similarity_rows_checked": 10
+      },
+      "status": "verified",
+      "target_claim": "The qualitative split has lower average semantic similarity than random selection and SpecBench across categories (Figure 2)"
+    },
+    {
+      "challenge_claim": "SPEED-Bench reports average acceptance length and speedups for speculative decoding methods on a unified qualitative split (Table 1)",
+      "challenge_claim_sha256": "445341382926e77a701223e5434981daeb8e507d0f07bc67d8f6dd6b7e1a43b4",
+      "claim_index": 3,
+      "evidence": "Pinned Model-Optimizer source provides a unified SPEED-Bench measurement framework with timing and acceptance-rate outputs, but No machine-readable Table 1 result artifact was found in the pinned repository; paper-reported acceptance length and speedups were not treated as reproduced measurements.",
+      "observations": {
+        "result_artifacts": [],
+        "specdec_bench_exists": true,
+        "specdec_file_count": 31
+      },
+      "status": "toy",
+      "target_claim": "SPEED-Bench reports average acceptance length and speedups for speculative decoding methods on a unified qualitative split (Table 1)"
+    }
+  ],
+  "dataset_audit": {
+    "configs": {
+      "qualitative": 880,
+      "throughput_16k": 1536,
+      "throughput_1k": 1536,
+      "throughput_2k": 1536,
+      "throughput_32k": 1536,
+      "throughput_8k": 1536
+    },
+    "dataset_readme": "/tmp/icml-repro-hf-cache/datasets--nvidia--SPEED-Bench/snapshots/487aa718444e816458d1a0a52bfce7a454285cf4/README.md",
+    "dataset_readme_sha256": "2e5ec3a30cf6afae72a32005177888f1e72513d17d2d64a0956612b91da83ad7",
+    "expected_framework_configs": [
+      "qualitative",
+      "throughput_1k",
+      "throughput_2k",
+      "throughput_8k",
+      "throughput_16k",
+      "throughput_32k"
+    ],
+    "fixed_bucket_claim_range": true,
+    "qualitative_examples": 880,
+    "throughput_buckets": [
+      "1k",
+      "2k",
+      "8k",
+      "16k",
+      "32k"
+    ],
+    "throughput_examples_per_bucket": {
+      "16k": 1536,
+      "1k": 1536,
+      "2k": 1536,
+      "32k": 1536,
+      "8k": 1536
+    }
+  },
+  "evidence_schema": "icml-repro-v1",
+  "generated_at": "2026-07-31T23:16:31.311943+00:00",
+  "paper_id": "Rl2uQlCoQX",
+  "paper_title": "SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding",
+  "similarity_audit": [
+    {
+      "category": "Math",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.24,
+      "speed_greedy": 0.15,
+      "speed_random": 0.21
+    },
+    {
+      "category": "Coding",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.33,
+      "speed_greedy": 0.16,
+      "speed_random": 0.48
+    },
+    {
+      "category": "Multilingual",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.36,
+      "speed_greedy": 0.06,
+      "speed_random": 0.18
+    },
+    {
+      "category": "Writing",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.35,
+      "speed_greedy": 0.18,
+      "speed_random": 0.29
+    },
+    {
+      "category": "Humanities",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.26,
+      "speed_greedy": 0.12,
+      "speed_random": 0.14
+    },
+    {
+      "category": "STEM",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.24,
+      "speed_greedy": 0.12,
+      "speed_random": 0.19
+    },
+    {
+      "category": "Reasoning",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.24,
+      "speed_greedy": 0.14,
+      "speed_random": 0.21
+    },
+    {
+      "category": "RAG",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.15,
+      "speed_greedy": 0.13,
+      "speed_random": 0.17
+    },
+    {
+      "category": "Roleplay",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.28,
+      "speed_greedy": 0.24,
+      "speed_random": 0.25
+    },
+    {
+      "category": "Summarization",
+      "greedy_below_random": true,
+      "greedy_below_specbench": true,
+      "specbench": 0.21,
+      "speed_greedy": 0.11,
+      "speed_random": 0.24
+    }
+  ],
+  "upstream": {
+    "dataset_id": "nvidia/SPEED-Bench",
+    "dataset_readme_sha256": "2e5ec3a30cf6afae72a32005177888f1e72513d17d2d64a0956612b91da83ad7",
+    "dataset_revision": "487aa718444e816458d1a0a52bfce7a454285cf4",
+    "expected_github_commit": "a23390dbb6e52b0c028f3e9455a74da824c88735",
+    "github_commit": "a23390dbb6e52b0c028f3e9455a74da824c88735",
+    "github_repo": "https://github.com/NVIDIA/Model-Optimizer.git",
+    "result_artifacts": [],
+    "specdec_bench_exists": true,
+    "specdec_file_count": 31,
+    "specdec_mentions_qualitative": true,
+    "specdec_mentions_throughput": true
+  }
+}

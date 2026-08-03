@@ -1,0 +1,62 @@
+{
+  "paper_id": "OC2z7iSQKa",
+  "paper_title": "$\\tau^2$-Bench: Evaluating Conversational Agents in a Dual-Control Environment",
+  "generated_at": "2026-07-29T05:33:33.167045+00:00",
+  "upstream": {
+    "revision": "arxiv:2506.07982+github:sierra-research/tau2-bench@1d244f5dca42944b67a379b44bfeb9f5748f189d",
+    "commit": "1d244f5dca42944b67a379b44bfeb9f5748f189d",
+    "commit_matches_expected": true,
+    "license": "MIT",
+    "source_hashes": {
+      "LICENSE": "e67c5aa0074dfcaefd3c3a1aedb94cb539234aecd15d5a972574e3200e6252fe",
+      "src/tau2/domains/telecom/environment.py": "7bc335d717a8cb6bda54551fa2b5c12ff073f6287878d215f4181572e551abcd",
+      "src/tau2/domains/telecom/tools.py": "388552434d1b8225e33e7958bdb6efccfe92b49e11d1838568d9b559514e9d01",
+      "src/tau2/domains/telecom/user_tools.py": "03fa751eeea3734313a3f5274223d42750fd5c1a28f2624265a678f271ac309d",
+      "src/tau2/domains/telecom/tasks/create_tasks.py": "7ce75c5afc869a344985e68f7725d18709e51f6aa1233a91e5d387ba45bfac59",
+      "data/tau2/domains/telecom/split_tasks.json": "605b488bb9a6acb3c7f4505240a855fdc8681d09aadb16a8f38b2efcfc5c3aec",
+      "data/tau2/domains/telecom/tasks.json": "37e562e1ae3242577407e1303b1548bc64e7ea68e37d36173e6747990ceaf8a4",
+      "data/tau2/domains/telecom/tasks_full.json": "37e562e1ae3242577407e1303b1548bc64e7ea68e37d36173e6747990ceaf8a4"
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "dual_control_shared_state",
+      "challenge_claim_sha256": "0199b3b43b308ce8469189f64e2310b12cb869a8c6255975c3c4cb7e9093f78a",
+      "claim": "tau2-bench introduces a telecom dual-control environment where both the conversational agent and simulated user can act with tools in a shared dynamic state (Figure 1).",
+      "status": "verified",
+      "observations": {
+        "has_agent_tools": true,
+        "has_user_tools": true,
+        "has_agent_db": true,
+        "has_user_db": true,
+        "syncs_shared_state": true
+      },
+      "provenance": "Static audit of pinned TelecomEnvironment source."
+    },
+    {
+      "claim_id": "telecom_artifact_counts",
+      "challenge_claim_sha256": "36d94de446993da42bb35022e284615dd122232225cf76fb0d3ccf26116e2788",
+      "claim": "The telecom domain is modeled with separate agent and user databases, 13 agent tools, 30 user tools, and 114 sampled tasks from a 2,285-task full set (Table 1).",
+      "status": "verified",
+      "observations": {
+        "agent_tool_count": 13,
+        "user_tool_count": 30,
+        "base_task_count": 114,
+        "full_task_count": 2285
+      },
+      "provenance": "Decorator counts and JSON split/full task lengths from pinned source."
+    },
+    {
+      "claim_id": "compositional_task_generator",
+      "challenge_claim_sha256": "9e672b1894ac3fb6b00f8fa2a33a5d31355aa5663481e563c0594d337f0356b5",
+      "claim": "The benchmark uses a compositional task generator that creates verifiable telecom tasks from intent and subtask components (Section 3.2).",
+      "status": "verified",
+      "observations": {
+        "uses_intent_task_managers": true,
+        "bins_by_intent_subtasks_persona": true,
+        "serializes_task_outputs": true
+      },
+      "provenance": "Static audit of pinned telecom task generator source."
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "attempt_id": "fe586a0f-c0ff-4290-882b-b7fadb2ec2f4",
+  "claims": [
+    {
+      "challenge_claim_sha256": "39a708c775ac4fbff63c3c664dc7739dfe4b55247d864174215b269db249921f",
+      "evidence": {
+        "github_file_count": 6,
+        "has_executable_pipeline_code": false,
+        "instance_archive_files": [
+          ".gitattributes",
+          "5k_instances.tar.gz"
+        ],
+        "repo_license_records": 2481
+      },
+      "status": "toy",
+      "summary": "README and artifact metadata expose repository filtering, a source license manifest, the training dataset, and a Docker instance subset, but the pinned GitHub tree contains no executable pipeline code.",
+      "text": "TerminalTraj filters repositories to construct Dockerized execution environments, generates Docker-aligned task instances, and synthesizes executable validated terminal trajectories (Abstract)."
+    },
+    {
+      "challenge_claim_sha256": "4908ae61e70d4225466dc1443bdb44a48ef4a6701f5b0f77a39a9fd750203268",
+      "evidence": {
+        "paper_docker_images_exact": 32325,
+        "paper_domains": 8,
+        "paper_trajectories": 50733,
+        "released_repo_license_records": 2481,
+        "released_train_examples": 20000
+      },
+      "status": "unavailable",
+      "summary": "The README states 32,325 Docker images and 50,733 verified trajectories, but the pinned public training dataset exposes 20,000 train examples and the GitHub manifest covers 2,481 released-subset repositories, so the full paper count is not reproduced from released artifacts.",
+      "text": "TerminalTraj curates 32K Docker images and generates 50,733 verified terminal trajectories across eight domains (Abstract)."
+    }
+  ],
+  "commands": [
+    "git clone https://github.com/multimodal-art-projection/TerminalTraj.git",
+    "git checkout 01305cbf0425b08b41cf8cfc3e30abb0f4953c27",
+    "huggingface_hub.dataset_info('m-a-p/TerminalTraj', revision='5c1823f4a8b9ca0cf02c27d2db52c5b35b53a308')",
+    "huggingface_hub.dataset_info('m-a-p/TerminalTraj-5k-instances', revision='cfc9f4379596bac54d09061544a83a2cfa5d6d06')"
+  ],
+  "generated_at": "2026-07-29T03:10:00+00:00",
+  "observations": {
+    "github": {
+      "files": [
+        "License",
+        "README.md",
+        "images/image1.png",
+        "images/image2.png",
+        "images/image3.png",
+        "source/repo&license.jsonl"
+      ],
+      "has_executable_pipeline_code": false,
+      "license_counts": {
+        "Apache-2.0": 610,
+        "BSD-2-Clause": 44,
+        "BSD-3-Clause": 197,
+        "MIT": 1630
+      },
+      "repo": "https://github.com/multimodal-art-projection/TerminalTraj.git",
+      "repo_license_records": 2481,
+      "revision": "01305cbf0425b08b41cf8cfc3e30abb0f4953c27"
+    },
+    "hf_dataset": {
+      "features": [
+        "query",
+        "messages"
+      ],
+      "files": [
+        ".gitattributes",
+        "README.md",
+        "data/train-00000-of-00002.parquet",
+        "data/train-00001-of-00002.parquet"
+      ],
+      "repo_id": "m-a-p/TerminalTraj",
+      "revision": "5c1823f4a8b9ca0cf02c27d2db52c5b35b53a308",
+      "train_examples": 20000
+    },
+    "hf_instances": {
+      "files": [
+        ".gitattributes",
+        "5k_instances.tar.gz"
+      ],
+      "repo_id": "m-a-p/TerminalTraj-5k-instances",
+      "revision": "cfc9f4379596bac54d09061544a83a2cfa5d6d06"
+    },
+    "paper_counts": {
+      "docker_images_exact": 32325,
+      "docker_images_rounded": 32000,
+      "domains": 8,
+      "trajectories": 50733
+    },
+    "tooling": {
+      "git_available": true,
+      "network_required": true
+    }
+  },
+  "paper_id": "PeFSCRulgy",
+  "upstream_revision": "arxiv:2602.01244v3+arxiv-source-sha256:30bae2223a3180e28bfe9b48bf3881c0d9f2719b4c7828894bb1dd062d20ce1d+github:multimodal-art-projection/TerminalTraj@01305cbf0425b08b41cf8cfc3e30abb0f4953c27+hf-dataset:m-a-p/TerminalTraj@5c1823f4a8b9ca0cf02c27d2db52c5b35b53a308+hf-dataset:m-a-p/TerminalTraj-5k-instances@cfc9f4379596bac54d09061544a83a2cfa5d6d06"
+}

@@ -1,0 +1,125 @@
+{
+  "attempt_id": "64537525-54cc-4b47-b721-72979fa954dd",
+  "challenge_revision": "81166abbeb76e5f79ff87e51061b5a0306507203",
+  "claim_bindings": [
+    {
+      "challenge_claim": "WeDLM implements diffusion-style parallel decoding entirely with standard causal attention to preserve prefix KV-cache compatibility (Section 3).",
+      "challenge_claim_sha256": "c863e0bbfdce6fe5e9f4e69ce8a845a814d954b3a0f1f1c2b39c751dd4b44798",
+      "claim_id": "causal-diffusion-prefix-cache"
+    },
+    {
+      "challenge_claim": "Topological Reordering lets each masked position condition on observed tokens under a strict causal mask by moving observed tokens into the physical prefix while preserving logical positions (Section 3).",
+      "challenge_claim_sha256": "b28ec2d483ef39319347cc164e3f8322750f95f3dfb0e595b4dc616d29cda187",
+      "claim_id": "topological-reordering"
+    },
+    {
+      "challenge_claim": "WeDLM introduces a streaming decoding procedure that commits confident tokens into a growing left-to-right prefix while maintaining a fixed parallel workload (Section 3).",
+      "challenge_claim_sha256": "cafcce7c1211fbf898f3a997b5dc99cbad90191f1878d86180b43ac2ba979f60",
+      "claim_id": "streaming-parallel-decoding"
+    },
+    {
+      "challenge_claim": "Against vLLM-served autoregressive baselines under matched deployment settings, WeDLM approaches 3x speedups on reasoning benchmarks and up to 10x speedups in low-entropy generation regimes (Section 4).",
+      "challenge_claim_sha256": "b33475be6926404f68c6a286deef74b56d8c09c291c9cdbd093423e427b463ef",
+      "claim_id": "gpu-vllm-speedup"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "causal-diffusion-prefix-cache",
+      "measured_value": {
+        "observed_prefix_count": 2,
+        "uses_strict_lower_triangular_mask": true
+      },
+      "provenance": "CPU topological-order and causal-mask check mirroring WeDLM Section 3 mechanics.",
+      "status": "toy"
+    },
+    {
+      "claim_id": "topological-reordering",
+      "measured_value": {
+        "first_mask_reachability": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "logical_positions": [
+          0,
+          2,
+          1,
+          3
+        ],
+        "physical_tokens": [
+          "The",
+          "sky",
+          "<mask>",
+          "<mask>"
+        ],
+        "second_mask_reachability": [
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "provenance": "Deterministic fixture showing observed logical futures moved to a causal physical prefix.",
+      "status": "toy"
+    },
+    {
+      "claim_id": "streaming-parallel-decoding",
+      "measured_value": {
+        "commits_by_step": [
+          [
+            "2",
+            "+"
+          ],
+          [
+            "2",
+            "="
+          ],
+          [
+            "4"
+          ]
+        ],
+        "final_tokens": [
+          "Solve:",
+          "2",
+          "+",
+          "2",
+          "=",
+          "4"
+        ],
+        "max_active_window": 3
+      },
+      "provenance": "CPU streaming decoder simulator for confidence-gated prefix commits and window refill.",
+      "status": "toy"
+    },
+    {
+      "claim_id": "gpu-vllm-speedup",
+      "measured_value": null,
+      "provenance": "No GPU serving benchmark was run; this CPU-only evidence does not reproduce vLLM latency.",
+      "status": "unreplicated"
+    }
+  ],
+  "commands": [
+    "uv run python -m pytest tests -q",
+    "uv run python generate_evidence.py --check"
+  ],
+  "cpu_only": true,
+  "environment": {
+    "cpu_count": 64,
+    "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
+    "python_version": "3.14.6"
+  },
+  "estimated_api_cost_usd": 0.0,
+  "git_commit": "43a7be16a9b6ca7b19007818f8f07b8ee1ce7385",
+  "limitations": [
+    "The vLLM-served 3x to 10x speedup claim is unreplicated because this bundle runs CPU-only toy scheduling checks.",
+    "No Tencent WeDLM model weights are loaded, and no full benchmark datasets are evaluated."
+  ],
+  "paper_id": "71142",
+  "paper_title": "WeDLM: Reconciling Diffusion Language Models with Standard Causal Attention for Fast Inference",
+  "snapshot_id": "a0ba41c847d742fd8ae3c5b36542ffd1dfe5c7dd0fc1bdbd82cf631d933dd1d1",
+  "space_id": "wrice/repro-wedlm-71142",
+  "timestamp": "2026-07-29T03:04:33.995642+00:00",
+  "upstream_revision": "arxiv:2512.22737+github:tencent/WeDLM@8d3f66b18f6a00467f8f87d3ec1f091b1da9204e+hf:tencent/WeDLM-8B-Instruct@c1e0373ec7e11bc27321a548ea54ea9728b0d9c0"
+}

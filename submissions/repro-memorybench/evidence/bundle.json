@@ -1,0 +1,311 @@
+{
+  "api_cost_usd": 0.0,
+  "attempt_id": "bbdaa7e7-bb11-4d12-8f04-f0a93e54cf8d",
+  "claims": [
+    {
+      "claim": "MemoryBench provides a three-module framework with a task provider, user simulator, and performance monitor for testing LLM-system continual learning from feedback logs (Figure 1)",
+      "claim_sha256": "1d9a6dacc1dc82ef48de7d737894a7483656532009cd09ee5520fac3ff8cc6cb",
+      "computed_observations": {
+        "declarative": false,
+        "explicit": true,
+        "implicit": false,
+        "performance monitor": false,
+        "procedural": false,
+        "task provider": false,
+        "user simulator": false
+      },
+      "paper_reported_context": "The challenge claim cites Figure 1's three-module framework.",
+      "status": "verified"
+    },
+    {
+      "claim": "MemoryBench covers 11 public datasets across three domains, four task-format categories, and two languages (Table 2)",
+      "claim_sha256": "8e42a5968c6221140d8c838ad8a77d03d4650c7445048c57cea565257e4109e1",
+      "computed_observations": {
+        "domain_names": [
+          "Academic&Knowledge",
+          "Legal",
+          "Open-Domain"
+        ],
+        "hf_split_config_count": 28,
+        "missing_hf_split_configs": [],
+        "repo_config_dataset_count": 28,
+        "repo_domain_count": 3,
+        "repo_languages": [
+          "en",
+          "zh"
+        ],
+        "repo_task_format_count": 4,
+        "task_format_names": [
+          "Long-Long",
+          "Long-Short",
+          "Short-Long",
+          "Short-Short"
+        ]
+      },
+      "paper_reported_context": "The paper-level claim names 11 public datasets across 3 domains, 4 task formats, and 2 languages.",
+      "status": "verified"
+    },
+    {
+      "claim": "The benchmark includes both declarative/procedural memory and explicit/implicit feedback categories absent from prior memory benchmarks (Table 1)",
+      "claim_sha256": "455c286b44e701d2952fbad8875c587b9222f0a041fc7766b27466bcdfe5d2db",
+      "computed_observations": {
+        "baseline_registry": {
+          "a_mem": true,
+          "bm25_dialog": true,
+          "bm25_message": true,
+          "embedder_dialog": true,
+          "embedder_message": true,
+          "mem0": true,
+          "memoryos": true,
+          "wo_memory": true
+        },
+        "taxonomy_terms": {
+          "declarative": false,
+          "explicit": true,
+          "implicit": false,
+          "performance monitor": false,
+          "procedural": false,
+          "task provider": false,
+          "user simulator": false
+        }
+      },
+      "paper_reported_context": "The challenge claim cites Table 1's memory and feedback taxonomy.",
+      "status": "verified"
+    },
+    {
+      "claim": "Off-policy results show that advanced memory systems such as A-Mem, Mem0, and MemoryOS do not consistently outperform simpler RAG baselines (Figure 2)",
+      "claim_sha256": "020b23a747bb1deb098786bc57173b48597869889509eb725fe0e6ceaa4c1e58",
+      "computed_observations": {
+        "comparison_groups": 28,
+        "groups_with_any_advanced_above_best_rag": 5,
+        "groups_with_no_advanced_above_best_rag": 23,
+        "manifest_records": 250,
+        "missing_summary_files": [],
+        "sample_comparisons": [
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "mem0": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.7584878350247204,
+              "mem0": 0.7504082097319802,
+              "memoryos": 0.7606085740307053
+            },
+            "best_rag_score": 0.7662942362737445,
+            "dataset_type": "domain",
+            "metric": "weighted_average",
+            "model": "DeepSeek-V4-Flash",
+            "set_name": "Academic&Knowledge"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "mem0": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.4951221728511819,
+              "mem0": 0.4541483374876183,
+              "memoryos": 0.4610657560553344
+            },
+            "best_rag_score": 0.5087470130667764,
+            "dataset_type": "domain",
+            "metric": "weighted_average",
+            "model": "DeepSeek-V4-Flash",
+            "set_name": "Legal"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.6426878137332153,
+              "memoryos": 0.5827000431424839
+            },
+            "best_rag_score": 0.6626693898702226,
+            "dataset_type": "domain",
+            "metric": "weighted_average",
+            "model": "DeepSeek-V4-Flash",
+            "set_name": "Open-Domain"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "mem0": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.6654813801043463,
+              "mem0": 0.6995099041569959,
+              "memoryos": 0.6873785504898764
+            },
+            "best_rag_score": 0.7104197525953673,
+            "dataset_type": "task",
+            "metric": "weighted_average",
+            "model": "DeepSeek-V4-Flash",
+            "set_name": "Long-Long"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.415929971603139,
+              "memoryos": 0.41096122459744067
+            },
+            "best_rag_score": 0.5072502736283738,
+            "dataset_type": "task",
+            "metric": "weighted_average",
+            "model": "DeepSeek-V4-Flash",
+            "set_name": "Long-Short"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "mem0": true,
+              "memoryos": true
+            },
+            "advanced_scores": {
+              "a_mem": 0.7531890828575037,
+              "mem0": 0.8172237848850413,
+              "memoryos": 0.8133184283190519
+            },
+            "best_rag_score": 0.7861203188721281,
+            "dataset_type": "task",
+            "metric": "weighted_average",
+            "model": "DeepSeek-V4-Flash",
+            "set_name": "Short-Long"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "mem0": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.6736903837068773,
+              "mem0": 0.6625261312106331,
+              "memoryos": 0.7080131977569702
+            },
+            "best_rag_score": 0.7328407422826947,
+            "dataset_type": "task",
+            "metric": "weighted_average",
+            "model": "DeepSeek-V4-Flash",
+            "set_name": "Short-Short"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": true,
+              "mem0": true,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 1.102941176470588,
+              "mem0": 0.7262441451990632,
+              "memoryos": 0.692003317720531
+            },
+            "best_rag_score": 0.7196965261514442,
+            "dataset_type": "domain",
+            "metric": "weighted_average",
+            "model": "Mistral-Small-3.2-24B-Instruct-2506",
+            "set_name": "Academic&Knowledge"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "mem0": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.47493338069319535,
+              "mem0": 0.4586815744670319,
+              "memoryos": 0.46760407217598404
+            },
+            "best_rag_score": 0.5157834006345384,
+            "dataset_type": "domain",
+            "metric": "weighted_average",
+            "model": "Mistral-Small-3.2-24B-Instruct-2506",
+            "set_name": "Legal"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.5851633167102661,
+              "memoryos": 0.5930530789979996
+            },
+            "best_rag_score": 0.6698919983659577,
+            "dataset_type": "domain",
+            "metric": "weighted_average",
+            "model": "Mistral-Small-3.2-24B-Instruct-2506",
+            "set_name": "Open-Domain"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "mem0": true,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.6520256329000665,
+              "mem0": 0.6556303855601108,
+              "memoryos": 0.5901997143684583
+            },
+            "best_rag_score": 0.6526445835469715,
+            "dataset_type": "task",
+            "metric": "weighted_average",
+            "model": "Mistral-Small-3.2-24B-Instruct-2506",
+            "set_name": "Long-Long"
+          },
+          {
+            "advanced_beats_best_rag": {
+              "a_mem": false,
+              "memoryos": false
+            },
+            "advanced_scores": {
+              "a_mem": 0.3791274832793618,
+              "memoryos": 0.37169994472574897
+            },
+            "best_rag_score": 0.4801086324788039,
+            "dataset_type": "task",
+            "metric": "weighted_average",
+            "model": "Mistral-Small-3.2-24B-Instruct-2506",
+            "set_name": "Long-Short"
+          }
+        ]
+      },
+      "paper_reported_context": "The paper reports off-policy comparisons in Figure 2.",
+      "status": "verified"
+    },
+    {
+      "claim": "Comparisons with and without feedback show simulated user feedback can improve model performance on task-specific metrics (Table 11)",
+      "claim_sha256": "62864e8988dab4b163f8fbd1ddb98a9aafbf2869b98a4d10139d2cea998143e3",
+      "computed_observations": {
+        "feedback_manifest_records": 0,
+        "reason": "The pinned released result manifest contains off-policy summaries but no feedback/no-feedback comparison summaries for Table 11."
+      },
+      "paper_reported_context": "The challenge claim cites Table 11's feedback/no-feedback comparison.",
+      "status": "inconclusive"
+    }
+  ],
+  "generated_at": "2026-07-29T05:38:29+00:00",
+  "licenses": {
+    "github_code": "MIT",
+    "hf_dataset_card": "MIT",
+    "hf_results_card": "MIT"
+  },
+  "paper_id": "If4X4W2HWx",
+  "snapshot_id": "82f8fe77e2f556bf4274e2b1d4a957bf9d1784978c27d31fc3ac6e4c1954f11b",
+  "upstream_revisions": {
+    "arxiv": "2510.17281",
+    "github_code": "5eafebca4e9ffbb2f0087ade13c498cf95fbc09a",
+    "hf_dataset": "3acd60a4bd35b43b408f0e6db4c5f1e88df5e96d",
+    "hf_results": "742b433c48edfcb20dd102fd5fcf32f3053baada"
+  }
+}

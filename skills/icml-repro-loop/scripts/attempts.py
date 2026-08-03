@@ -1,7 +1,5 @@
 """Independent fenced lifecycles for schema-v6 reproduction attempts."""
 
-from __future__ import annotations
-
 from collections.abc import Callable
 import copy
 from datetime import datetime, timedelta, timezone

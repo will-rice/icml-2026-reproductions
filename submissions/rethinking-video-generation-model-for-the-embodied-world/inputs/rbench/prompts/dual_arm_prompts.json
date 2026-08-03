@@ -1,0 +1,902 @@
+[
+  {
+    "name": "dual_arm_0001",
+    "image_path": "dual_arm/dual_arm_0001.jpg",
+    "prompt": "The robotic gripper adjust the pillow on the bed.",
+    "manipulated object": "pillow",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned in a neatly organized bedroom with a gray bedsheet and wooden headboard, carefully adjusts the patterned pillow to ensure it is properly aligned and centered on the bed. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0002",
+    "image_path": "dual_arm/dual_arm_0002.jpg",
+    "prompt": "The robotic gripper pour the coffee from the kettle into the transparent glass.",
+    "manipulated object": "kettle",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully pours the coffee from the white kettle into the transparent glass while ensuring precision, in a clean and modern kitchen setting featuring a white countertop and a beige couch in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0003",
+    "image_path": "dual_arm/dual_arm_0003.jpg",
+    "prompt": "The robotic gripper place the green bottle inside the gray container.",
+    "manipulated object": "green bottle",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up the green bottle from the wooden table and places it inside the gray container, which is situated in a well-organized indoor environment with tiled flooring and furnishing cabinets in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0004",
+    "image_path": "dual_arm/dual_arm_0004.jpg",
+    "prompt": "The robotic gripper use a stainless steel spoon to scoop cereal from the cereal jar into the bowl.",
+    "manipulated object": "stainless spoon",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper should carefully use the stainless steel spoon to scoop cereal from the transparent cereal jar and transfer it into the empty bowl on the clean, white countertop in a modern kitchen, which features a neatly arranged milk bottle, a kettle, and a bowl of fruit-topped yogurt in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0005",
+    "image_path": "dual_arm/dual_arm_0005.jpg",
+    "prompt": "The robotic gripper used a jam squeeze bottle to dispense jam onto the bread.",
+    "manipulated object": "jam squeeze bottle",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned on a wooden countertop with a toaster and a basket of bread in the background, carefully operated the jam squeeze bottle to dispense an even layer of jam onto the slice of bread placed on the \"Good Morning\" plate. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0006",
+    "image_path": "dual_arm/dual_arm_0006.jpg",
+    "prompt": "The robotic gripper position the wooden tray on the table mat.",
+    "manipulated object": "wooden tray",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully positions the wooden tray, which contains a neatly arranged plate, napkin, fork, and knife, onto the intricately designed table mat in a well-lit dining setup. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0007",
+    "image_path": "dual_arm/dual_arm_0007.jpg",
+    "prompt": "The robotic gripper places the wooden tray on the wooden table.",
+    "manipulated object": "wooden tray",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully places the wooden tray, which holds a single glass, onto the wooden table situated in a well-lit room with a polished wooden floor and modern furniture. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0008",
+    "image_path": "dual_arm/dual_arm_0008.jpg",
+    "prompt": "The robotic gripper uses a rag to push the trash into the black waste bin.",
+    "manipulated object": "rag",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned in a clean and organized indoor workspace with a white table nearby, carefully uses a rag to methodically push discarded items into the open black waste bin placed underneath. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0009",
+    "image_path": "dual_arm/dual_arm_0009.jpg",
+    "prompt": "The right robotic gripper opened the wardrobe and hung the pink hanger with pants inside.",
+    "manipulated object": "pink hanger",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robot, positioned in front of a white wardrobe with sleek silver handles, used its right gripper to open the wardrobe doors and carefully hang the pink hanger, with pants securely draped on it, inside. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0010",
+    "image_path": "dual_arm/dual_arm_0010.jpg",
+    "prompt": "The robotic gripper uses the key to open the door.",
+    "manipulated object": "key",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully manipulates the key to unlock and open the wooden door, which is situated in a minimalistic and clean indoor environment. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0011",
+    "image_path": "dual_arm/dual_arm_0011.jpg",
+    "prompt": "The robotic gripper reach into the wardrobe and grab the red shirt.",
+    "manipulated object": "red shirt",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, situated in a well-lit room with a wooden wardrobe, should extend its arm into the wardrobe and carefully grip the red shirt hanging from the leftmost hanger. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0012",
+    "image_path": "dual_arm/dual_arm_0012.jpg",
+    "prompt": "The robotic gripper picks up the steak from the plate.",
+    "manipulated object": "steak",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully lifts the steak from the white plate on a table, within an indoor environment equipped with multiple robots and surrounding equipment.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0013",
+    "image_path": "dual_arm/dual_arm_0013.jpg",
+    "prompt": "The robotic gripper picks up the green fruit from the beige plate.",
+    "manipulated object": "green fruit",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully lifts the green fruit from the transparent beige plate, which is placed on a white table in a well-lit indoor setting. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0014",
+    "image_path": "dual_arm/dual_arm_0014.jpg",
+    "prompt": "The robotic gripper picks up the pink object into the dark-colored bowl containing red fruits.",
+    "manipulated object": "pink object",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully lifts the pink object from the translucent dish located on a white tabletop in a clean, indoor environment and places it into the dark-colored bowl, which already contains red-colored fruits. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0015",
+    "image_path": "dual_arm/dual_arm_0015.jpg",
+    "prompt": "The robotic gripper picks up the red bottle from the dark-colored container.",
+    "manipulated object": "red bottle",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grasps the red bottle from within the dark-colored container, which is resting on a clean white tabletop under neutral indoor lighting. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0016",
+    "image_path": "dual_arm/dual_arm_0016.jpg",
+    "prompt": "The robotic gripper pick up the pink ball from the purple plate and place it in the blue container.",
+    "manipulated object": "pink ball",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper should delicately pick up the pink ball from the purple plate situated on a white table in a room with a gray and wooden tiled floor and carefully place it into the blue container filled with other balls. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0017",
+    "image_path": "dual_arm/dual_arm_0017.jpg",
+    "prompt": "The robotic gripper pick up the red bottle from the beige container and place it inside the green bowl.",
+    "manipulated object": "red bottle",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned above a white tabletop surrounded by a green bowl containing colorful objects and a beige container, should carefully grasp the red bottle placed inside the beige container and gently transfer it to the interior of the green bowl. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0018",
+    "image_path": "dual_arm/dual_arm_0018.jpg",
+    "prompt": "The robotic gripper move the steak from the pink plate to the white plate.",
+    "manipulated object": "steak",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The laboratory workspace is equipped with robotic units and various scattered cables on the floor, creating a technologically active environment. Using its robotic gripper, carefully pick up the steak from the pink plate and precisely place it on the white plate adjacent to it. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0019",
+    "image_path": "dual_arm/dual_arm_0019.jpg",
+    "prompt": "The robotic gripper lifted the pink plate containing food.",
+    "manipulated object": "pink plate containing food",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grasped and lifted the pink plate containing food, which was placed on a white table in a room filled with wires, robotic equipment, and other devices. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0020",
+    "image_path": "dual_arm/dual_arm_0020.jpg",
+    "prompt": "The robotic gripper picks up the red marker one the table and places it inside the pen holder compartment.",
+    "manipulated object": "red marker on the table",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up the red marker lying on the patterned tablecloth and places it inside the designated pen holder located in the cardboard organizer, which is positioned beside a shopping cart in a well-lit room. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0021",
+    "image_path": "dual_arm/dual_arm_0021.jpg",
+    "prompt": "The robotic hand picks up the carton of orange juice on the table and pours it into the white cup.",
+    "manipulated object": "carton of orange juice",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand, positioned at a wooden table in a laboratory setting with various objects and equipment in the background, carefully picks up the carton of orange juice placed on the table and precisely pours its contents into the white cup situated on a blue plate. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0022",
+    "image_path": "dual_arm/dual_arm_0022.jpg",
+    "prompt": "The robotic hand places the cube onto the upper wooden platform.",
+    "manipulated object": "cube",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully lifts the cube from the lower wooden platform and places it precisely onto the upper wooden platform in a workspace environment filled with various technical equipment and furniture. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0023",
+    "image_path": "dual_arm/dual_arm_0023.jpg",
+    "prompt": "The robotic hand moves the red apple onto the second-level wooden platform.",
+    "manipulated object": "red apple",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "In a laboratory setting filled with various pieces of equipment and furniture, the robotic hand carefully grasps the red apple and places it onto the elevated wooden platform on the second level. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0024",
+    "image_path": "dual_arm/dual_arm_0024.jpg",
+    "prompt": "The robotic hand grasps the yellow bottle on the upper shelf and places it onto the table.",
+    "manipulated object": "yellow bottle",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully grasps the yellow bottle located on the upper shelf of the black rack and places it gently onto the wooden table, in an environment resembling a laboratory workspace with various equipment and objects arranged around the room. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0025",
+    "image_path": "dual_arm/dual_arm_0025.jpg",
+    "prompt": "The robotic gripper rinse the plate under the faucet in the sink.",
+    "manipulated object": "plate",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully rinses the soiled plate under the running water from the faucet in the stainless-steel sink, which is part of a modern kitchen space featuring a dishwasher rack in the adjacent sink compartment. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0026",
+    "image_path": "dual_arm/dual_arm_0026.jpg",
+    "prompt": "The robotic gripper retrieves the red juice carton from the refrigerator.",
+    "manipulated object": "red juice carton",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully grasps and retrieves the red juice carton located in the refrigerator door compartment, within a tidy kitchen environment featuring a neatly organized fridge interior. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0027",
+    "image_path": "dual_arm/dual_arm_0027.jpg",
+    "prompt": "The robotic gripper closes the refrigerator door.",
+    "manipulated object": "refrigerator door",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned in a modern kitchen setting with a clean countertop and an open refrigerator filled with various food items, gently but firmly closes the refrigerator door using precise motion control. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0028",
+    "image_path": "dual_arm/dual_arm_0028.jpg",
+    "prompt": "The robotic gripper open the refrigerator door.",
+    "manipulated object": "refrigerator door",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grips the handle and pulls open the refrigerator door in a well-lit kitchen environment featuring a marble countertop and sink nearby. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0029",
+    "image_path": "dual_arm/dual_arm_0029.jpg",
+    "prompt": "The robotic gripper insert bread slices into the toaster.",
+    "manipulated object": "bread slices",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up individual slices of bread from the basket and inserts them into the slots of the toaster, located on a clean countertop with a marbled backsplash and adjacent kitchen tools. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0030",
+    "image_path": "dual_arm/dual_arm_0030.jpg",
+    "prompt": "The robotic gripper removes the bowl from the sink and places it onto the dish rack on the left.",
+    "manipulated object": "bowl",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully removes the beige bowl from the right sink, which is part of a clean kitchen setup illuminated by natural light coming through the window, and places it gently onto the dish rack located to the left of the sink. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0031",
+    "image_path": "dual_arm/dual_arm_0031.jpg",
+    "prompt": "The robot picks up the black mouse from the open drawer.",
+    "manipulated object": "black mouse",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robot, positioned in a neatly arranged room with a simple wooden table and a flower vase on top, carefully grasps the black computer mouse from the partially opened drawer using its mechanical arms. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0032",
+    "image_path": "dual_arm/dual_arm_0032.jpg",
+    "prompt": "The robotic gripper uses the plastic hammer to hit the pegs on the toy bench.",
+    "manipulated object": "plastic hammer",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully wields the lightweight plastic hammer to strike the pegs on the small wooden toy bench, which is positioned on a wooden table in a cozy living room with a green couch and colorful cushions in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0033",
+    "image_path": "dual_arm/dual_arm_0033.jpg",
+    "prompt": "The robotic hand places the bok choy inside the frying pan.",
+    "manipulated object": "bok choy",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand, set within a well-lit lab environment equipped with advanced machinery and workstations, carefully grips the bok choy and gently places it inside the frying pan positioned on the wooden table. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0034",
+    "image_path": "dual_arm/dual_arm_0034.jpg",
+    "prompt": "The robotic hand picks up the red wrench near the pink bucket.",
+    "manipulated object": "red wrench",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully grasps the red wrench positioned near the pink bucket on the blue-and-white checkered surface, situated in an indoor workspace with a mix of technological equipment and furniture. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0035",
+    "image_path": "dual_arm/dual_arm_0035.jpg",
+    "prompt": "The robotic hand opens the doors of the black cabinet.",
+    "manipulated object": "black cabinet",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hands carefully grasp and pull open the doors of the black cabinet, which is placed on a wooden table in a well-equipped laboratory environment featuring multiple computer stations and robotic hardware. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0036",
+    "image_path": "dual_arm/dual_arm_0036.jpg",
+    "prompt": "The robotic hand closes the door of the white box.",
+    "manipulated object": "white box",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "In a laboratory-like workspace filled with computer equipment and robotics components, the robotic hand precisely grasps the edge of the white box’s door and gently pushes it to a fully closed position. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0037",
+    "image_path": "dual_arm/dual_arm_0037.jpg",
+    "prompt": "The robotic hand picks up the orange persimmon from the table and place it inside the white box.",
+    "manipulated object": "orange persimmon",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully grasps the orange persimmon from the wooden tabletop and places it gently inside the open compartment of the white box, which is situated in a tech-filled workspace equipped with computer monitors and robotic equipment. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0038",
+    "image_path": "dual_arm/dual_arm_0038.jpg",
+    "prompt": "The robotic hand places the lemon inside the top wooden tray.",
+    "manipulated object": "lemon",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand gently picks up the lemon from the wooden surface and places it carefully inside the top wooden tray, situated in a workspace surrounded by technological equipment and cables. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0039",
+    "image_path": "dual_arm/dual_arm_0039.jpg",
+    "prompt": "The robotic hand moves the red wrench to the left of the red cup.",
+    "manipulated object": "red wrench",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "In a well-lit room with a worktable surrounded by computer equipment and cables, the robotic hand carefully grasps the red wrench and moves it precisely to the left side of the red cup on the tabletop. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0040",
+    "image_path": "dual_arm/dual_arm_0040.jpg",
+    "prompt": "The robotic hand places the tennis ball on the table.",
+    "manipulated object": "tennis ball",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully places the tennis ball onto the plate set on the teal tablecloth, in a workspace surrounded by computer equipment and other technical tools. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0041",
+    "image_path": "dual_arm/dual_arm_0041.jpg",
+    "prompt": "The robotic hand places the tennis ball inside the pink bowl.",
+    "manipulated object": "tennis ball",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully grasps the yellow tennis ball and precisely places it inside the pink bowl positioned on a turquoise cloth, within a workspace setting featuring computer monitors and equipment. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0042",
+    "image_path": "dual_arm/dual_arm_0042.jpg",
+    "prompt": "The robotic hand places the orange fruit on the lower wooden tray.",
+    "manipulated object": "orange fruit",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully places the orange fruit onto the lower wooden tray set on a light-colored table, within a workspace that features computer equipment and cables scattered across the floor. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0043",
+    "image_path": "dual_arm/dual_arm_0043.jpg",
+    "prompt": "The robotic hand picks up the black stapler from the table.",
+    "manipulated object": "black stapler",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully grasps the black stapler from the turquoise-covered table, set in a workspace equipped with computers and technical equipment. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0044",
+    "image_path": "dual_arm/dual_arm_0044.jpg",
+    "prompt": "The robotic hand picks up the blue mug from the lower shelf.",
+    "manipulated object": "blue mug",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully grasps the blue mug located on the lower shelf of the wooden two-tiered organizer in a workspace filled with technical equipment and a plain white backdrop. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0045",
+    "image_path": "dual_arm/dual_arm_0045.jpg",
+    "prompt": "The robotic hand picks up the Rubik's cube from the table.",
+    "manipulated object": "Rubik's cube",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully grasps the Rubik's cube from the wooden table, which features a two-tier wooden tray nearby, in a cluttered workspace surrounded by computers, cables, and other equipment. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0046",
+    "image_path": "dual_arm/dual_arm_0046.jpg",
+    "prompt": "The robotic hand picks up the donut from the table and place it into the upper wooden shelf.",
+    "manipulated object": "donut",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand carefully picks up the donut from the checkered red-and-white tablecloth-covered table and gently places it onto the upper wooden shelf within the structured setup surrounded by office-like equipment and a white backdrop. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0047",
+    "image_path": "dual_arm/dual_arm_0047.jpg",
+    "prompt": "The robotic hand picks up the white pen with a blue cap and places it into the black mesh pen holder.",
+    "manipulated object": "white pen with a blue cap",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand meticulously grasps the white pen with a blue cap, lifts it steadily, and places it accurately into the black mesh pen holder on the wooden table, which is situated in a workspace with computers and other equipment in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0048",
+    "image_path": "dual_arm/dual_arm_0048.jpg",
+    "prompt": "The robotic gripper picks up the red cylindrical can and places it into the plastic bag.",
+    "manipulated object": "red cylindrical can",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up the red cylindrical can resting on a wooden table in a brightly lit indoor setting and accurately places it into the transparent plastic bag positioned nearby. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0049",
+    "image_path": "dual_arm/dual_arm_0049.jpg",
+    "prompt": "The robotic gripper holds the menu folder to pass it to the person.",
+    "manipulated object": "menu folder",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned in a casual dining setting with wooden benches and tables, firmly holds the menu folder and extends it forward to hand it over to the seated person. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0050",
+    "image_path": "dual_arm/dual_arm_0050.jpg",
+    "prompt": "The robotic gripper receives the notebook handed over by the human.",
+    "manipulated object": "notebook",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully receives the notebook handed over by the seated individual in a brightly lit room furnished with wooden tables and benches. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0051",
+    "image_path": "dual_arm/dual_arm_0051.jpg",
+    "prompt": "The robotic gripper hands the notebook to the person in front.",
+    "manipulated object": "notebook",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, situated in a well-lit room adorned with framed artwork and small potted plants on a wooden desk, carefully extends its arms to hand over the notebook to the person seated in front of it. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0052",
+    "image_path": "dual_arm/dual_arm_0052.jpg",
+    "prompt": "The robot moves forward and picks up the bottle from the table.",
+    "manipulated object": "bottle",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robot moves forward across the room, which contains wooden tables and benches arranged in rows, and carefully picks up the red bottle from the table in front of a seated person. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0053",
+    "image_path": "dual_arm/dual_arm_0053.jpg",
+    "prompt": "The robotic gripper picks up the beverage bottle in the center of the table.",
+    "manipulated object": "beverage bottle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully grasps the beverage bottle positioned at the center of the white table, situated in a workspace setting with visible chairs and cables in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0054",
+    "image_path": "dual_arm/dual_arm_0054.jpg",
+    "prompt": "The robotic gripper organizes the clipboard into the blue container.",
+    "manipulated object": "clipboard",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up the clipboard from the table and arranges it neatly into the blue container, which is situated in a spacious and well-lit workspace with metallic flooring and scattered chairs in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0055",
+    "image_path": "dual_arm/dual_arm_0055.jpg",
+    "prompt": "The robotic gripper grasps the orange-yellow toy truck.",
+    "manipulated object": "orange-yellow toy truck",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned above a white table surrounded by toys and a small toy cash register, carefully grasps the orange-yellow toy truck with precision and control. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0056",
+    "image_path": "dual_arm/dual_arm_0056.jpg",
+    "prompt": "The robotic gripper moves the orange-yellow toy truck closer to the decorative plant in a green vase.",
+    "manipulated object": "orange-yellow toy truck",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up the orange-yellow toy truck positioned on the white table and moves it closer to the decorative plant in the green vase, set within a well-lit living room featuring a beige cabinet in the background. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0057",
+    "image_path": "dual_arm/dual_arm_0057.jpg",
+    "prompt": "The robotic gripper presses the button on the cash register.",
+    "manipulated object": "cash register",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned in a monitored setting with a white table and a toy cash register, carefully aligns its movements to press the button on the cash register. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0058",
+    "image_path": "dual_arm/dual_arm_0058.jpg",
+    "prompt": "The robotic hand hand over the red coffee cup to the woman.",
+    "manipulated object": "red coffee cup",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hand, located in a modern café setting with potted plants and minimalistic furniture in the background, should carefully transfer the red coffee cup to the woman standing directly in front of it. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0059",
+    "image_path": "dual_arm/dual_arm_0059.jpg",
+    "prompt": "The robotic hand place the basketball into the mini hoop.",
+    "manipulated object": "basketball",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "The robotic hands carefully place the basketball into the mini hoop, positioned in a room with beige curtains and a light gray floor. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0060",
+    "image_path": "dual_arm/dual_arm_0060.jpg",
+    "prompt": "The robotic gripper picks up a yellow bell pepper from the vegetable tray and places it into the shopping cart.",
+    "manipulated object": "yellow bell pepper",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper is tasked with carefully gripping a yellow bell pepper from the neatly organized wooden vegetable tray, which includes a colorful assortment of fresh produce under warm lighting, and precisely placing it into the adjacent shopping cart containing a plastic bag. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0061",
+    "image_path": "dual_arm/dual_arm_0061.jpg",
+    "prompt": "The robotic gripper picks up a red apple from the fruit tray and places it into the shopping cart.",
+    "manipulated object": "red apple",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully selects a red apple from the neatly arranged fruit tray, which is surrounded by bananas, peaches, and grapes, and gently places it into the shopping cart containing a plastic bag. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0062",
+    "image_path": "dual_arm/dual_arm_0062.jpg",
+    "prompt": "The robotic gripper picks up a red apple from the wooden crate.",
+    "manipulated object": "red apple",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grasps a shiny red apple from the wooden crate, which is situated next to a cluster of bananas and a small bunch of dark grapes. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0063",
+    "image_path": "dual_arm/dual_arm_0063.jpg",
+    "prompt": "The robotic gripper picks up a bunch of grapes from the wooden crate.",
+    "manipulated object": "bunch of grapes",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully grasps and lifts a bunch of dark purple grapes from the wooden crate, which is situated on a flat surface illuminated by soft ambient light. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0064",
+    "image_path": "dual_arm/dual_arm_0064.jpg",
+    "prompt": "The robotic grippers place a green packaged item into the shopping cart.",
+    "manipulated object": "green packaged item",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic grippers carefully grasp a green packaged item from the wooden shelf, surrounded by various other products in colorful packaging, and gently lower it into the shopping cart. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0065",
+    "image_path": "dual_arm/dual_arm_0065.jpg",
+    "prompt": "The robotic gripper places the peanut bag into the shopping cart.",
+    "manipulated object": "peanut bag",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up the peanut bag from the brightly lit snack shelf, which is filled with colorful packaging, and places it securely into the shopping cart. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0066",
+    "image_path": "dual_arm/dual_arm_0066.jpg",
+    "prompt": "The robotic gripper picks up and places the white bottle with a blue pump dispenser inside the plastic bag.",
+    "manipulated object": "white bottle with a blue pump dispenser",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grasps the white bottle with a blue pump dispenser, which is positioned next to a yellow container on a wooden table, and places it into the plastic bag spread open on the same table in a room decorated with a cartoon figure on the glass window. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0067",
+    "image_path": "dual_arm/dual_arm_0067.jpg",
+    "prompt": "The robotic gripper selects a yellow tube of chips from the shelf and places it into the shopping cart.",
+    "manipulated object": "yellow tube of chips",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper, positioned near a well-stocked retail shelf filled with various colorful snack containers, carefully selects a yellow tube of chips from the neatly arranged rows and gently places it into the shopping cart below. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0068",
+    "image_path": "dual_arm/dual_arm_0068.jpg",
+    "prompt": "The robotic grippers pick up the purple eggplants and place them inside the shopping cart.",
+    "manipulated object": "purple eggplants",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic grippers carefully grasp the purple eggplants, which are placed among a variety of colorful vegetables on a wooden display, and gently transfer them into the shopping cart positioned below. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0069",
+    "image_path": "dual_arm/dual_arm_0069.jpg",
+    "prompt": "The robotic gripper places the yellow tube of chips inside the plastic bag.",
+    "manipulated object": "yellow tube of chips",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully places the yellow tube of chips into the open plastic bag resting on the wooden table, which is situated in a room with a playful cartoon mural on the wall. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0070",
+    "image_path": "dual_arm/dual_arm_0070.jpg",
+    "prompt": "The robotic grippers pick a box of Franxxi biscuits from the shelf and place it in the shopping cart.",
+    "manipulated object": "Franxxi biscuits",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic grippers carefully retrieve a box of Franxxi biscuits from the neatly arranged shelf, located within the shopping aisle, and gently place it into the shopping cart waiting below. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0071",
+    "image_path": "dual_arm/dual_arm_0071.jpg",
+    "prompt": "The robotic gripper places a banana into the shopping cart.",
+    "manipulated object": "banana",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully places a single banana into the shopping cart, which is placed near a wooden produce display stocked with an assortment of fresh fruits like apples and oranges. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0072",
+    "image_path": "dual_arm/dual_arm_0072.jpg",
+    "prompt": "The robotic gripper picks up the Danisa cranberry cookies box and places it in the shopping cart.",
+    "manipulated object": "Danisa cranberry cookies box",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grasps the Danisa cranberry cookies box from the store shelf, located in a well-organized shopping aisle with various other snack items, and gently places it into the shopping cart situated directly below. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0073",
+    "image_path": "dual_arm/dual_arm_0073.jpg",
+    "prompt": "The robotic gripper picks up a blue box of snack and places it into the shopping cart.",
+    "manipulated object": "a blue box of snack ",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grasps a blue box of snacks from the neatly arranged shelf in a brightly lit grocery store and places it gently into the metal shopping cart below. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0074",
+    "image_path": "dual_arm/dual_arm_0074.jpg",
+    "prompt": "The robotic gripper picks up the green Franxxi biscuit box from the shelf.",
+    "manipulated object": "green Franxxi biscuit box",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully grasps and picks up the green Franxxi biscuit box from the neatly arranged shelf within a well-lit retail space featuring wooden shelving and a shopping cart in the foreground. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0075",
+    "image_path": "dual_arm/dual_arm_0075.jpg",
+    "prompt": "The robotic gripper places the Lay's black bags into the blue shopping basket.",
+    "manipulated object": "Lay's black bags",
+    "robotic manipulator": "robotic grippers",
+    "prompt detailed": "The robotic gripper carefully picks up the black Lay's bags from the snack shelf, located in a brightly lit retail environment with diverse colorful snack packaging, and places them gently into the blue shopping basket positioned below. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0076",
+    "image_path": "dual_arm/dual_arm_0076.jpg",
+    "prompt": "The robotic arm folds the orange paper.",
+    "manipulated object": "orange paper",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arm, situated on a display table in a busy exhibition space, carefully manipulates the orange paper to fold it into a precise shape. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0077",
+    "image_path": "dual_arm/dual_arm_0077.jpg",
+    "prompt": "The robotic arms assemble parts on the production line.",
+    "manipulated object": "assembly parts",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arms accurately and efficiently assemble parts along the production line, operating within an industrial environment surrounded by bright overhead lights and enclosed machinery. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0078",
+    "image_path": "dual_arm/dual_arm_0078.jpg",
+    "prompt": "The robotic arms pull the levers on both sides of the production line.",
+    "manipulated object": "levers",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arms, situated in a clean and organized production environment, use their precise movements to pull the levers located on both sides of the production line, ensuring smooth operation of the assembly process. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0079",
+    "image_path": "dual_arm/dual_arm_0079.jpg",
+    "prompt": "The robotic arms picks up a test tube from the rack.",
+    "manipulated object": "test tube",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robot, situated in a clean and modern laboratory environment, carefully uses its robotic arm to grasp a single test tube from the organized rack containing multiple test tubes. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0080",
+    "image_path": "dual_arm/dual_arm_0080.jpg",
+    "prompt": "The robotic arms adjusts its positioning mechanism with the orange fixtures.",
+    "manipulated object": "orange fixture",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arms, operating within a clean and minimalistic indoor environment, precisely adjust their positioning system by manipulating the orange fixtures through controlled and synchronized movements. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0081",
+    "image_path": "dual_arm/dual_arm_0081.jpg",
+    "prompt": "The robotic arms folds the piece of fabric on the table.",
+    "manipulated object": "fabric",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "In a busy exhibition space filled with people observing, the robotic arms carefully grasp and fold the piece of fabric placed on the white table, ensuring precision and smooth handling during the operation. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0082",
+    "image_path": "dual_arm/dual_arm_0082.jpg",
+    "prompt": "The robotic arms folds the blue shirt on the table.",
+    "manipulated object": "blue shirt",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "In a bustling exhibition hall, the robotic arms carefully and methodically fold the neatly placed blue shirt lying flat on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0083",
+    "image_path": "dual_arm/dual_arm_0083.jpg",
+    "prompt": "The robotic arms places the black object and the red object back into their respective boxes..",
+    "manipulated object": "red cap",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arm, operating within a brightly lit exhibition setting showcasing various national flags, carefully places the black object into its designated box and the red object into its corresponding box, ensuring precise positioning and adherence to the organized setup. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0084",
+    "image_path": "dual_arm/dual_arm_0084.jpg",
+    "prompt": "The  robotic arms places the rectangular and cylindrical components into their designated slots on the trays.",
+    "manipulated object": "black component",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "In a well-lit and organized industrial setup, the robotic arms carefully pick up the rectangular and cylindrical components from the workspace and precisely place them into their respective slots on the trays for assembly or sorting purposes. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0085",
+    "image_path": "dual_arm/dual_arm_0085.jpg",
+    "prompt": "The robotic arms pours liquid from the blue container into the test tubes.",
+    "manipulated object": "blue container",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "In a well-lit industrial showroom with a digital display screen in the background, the robotic arm carefully transfers liquid from the blue container into individual test tubes aligned on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0086",
+    "image_path": "dual_arm/dual_arm_0086.jpg",
+    "prompt": "The robotic arms uses a pipette to transfer liquid into the test tubes.",
+    "manipulated object": "pipette",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arm, operating in a clean and organized laboratory setting, carefully utilizes a pipette to precisely transfer liquid into the aligned test tubes. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0087",
+    "image_path": "dual_arm/dual_arm_0087.jpg",
+    "prompt": "The robotic arms picks up the red token labeled '4' from the table.",
+    "manipulated object": "red token labeled '4'",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "In an office-like setting with scattered objects on a white table, the robotic arm carefully identifies and picks up the red, cube-shaped token labeled '4' from the tabletop, ensuring precision in its manipulation. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0088",
+    "image_path": "dual_arm/dual_arm_0088.jpg",
+    "prompt": "The robotic arm picks up the pink bowl from the checkerboard platform.",
+    "manipulated object": "pink bowl",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arm, operating in a cluttered workspace with assorted items scattered around, delicately grips and lifts the pink bowl placed on the checkerboard-patterned platform using precise movements and calibrated control. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0089",
+    "image_path": "dual_arm/dual_arm_0089.jpg",
+    "prompt": "The robotic arms places the  cube from the table into the yellow bowl.",
+    "manipulated object": "cube",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "In a workspace setting featuring a cluttered table with everyday objects, the robotic arm carefully picks up the Rubik's cube from the table and precisely places it into the yellow bowl nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0090",
+    "image_path": "dual_arm/dual_arm_0090.jpg",
+    "prompt": "The robotic arms lifts up the yellow corn and the apple from the table.",
+    "manipulated object": "yellow corn&apple",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arms, positioned in a well-lit workspace with a modern office setting in the background, carefully lift the yellow corn and the red apple from the white table surface while utilizing precision grips. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0091",
+    "image_path": "dual_arm/dual_arm_0091.jpg",
+    "prompt": "The robotic arms turn on the faucet and fill the glass with water.",
+    "manipulated object": "glass",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "Two robotic arms operate in a kitchen sink environment. One arm reaches toward the faucet and turns it on, while the other positions a transparent glass under the running water, filling it until the glass is full. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0092",
+    "image_path": "dual_arm/dual_arm_0092.jpg",
+    "prompt": "The robotic arms rinses the plate under running water.",
+    "manipulated object": "plate",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arms carefully rinse the plate under a steady stream of running water at the kitchen sink, surrounded by a clean countertop with essential dishwashing items. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0093",
+    "image_path": "dual_arm/dual_arm_0093.jpg",
+    "prompt": "The robotic arm prepares to fold the green sweater.",
+    "manipulated object": "green sweater",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arm, located in a minimalistic workspace with a wooden table, carefully positions itself to fold the green sweater lying flat on the surface. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0094",
+    "image_path": "dual_arm/dual_arm_0094.jpg",
+    "prompt": "The robotic arms picks up the plate from the drying rack.",
+    "manipulated object": "plate",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robot, positioned in a modern kitchen setting, carefully uses its robotic arms to pick up the plate from the drying rack beside the sink. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0095",
+    "image_path": "dual_arm/dual_arm_0095.jpg",
+    "prompt": "The robotic arm picks up several plastic pellets from the tabletop.",
+    "manipulated object": "packing peanut",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arm, situated in a minimalistic setup with a plain tabletop and a gray background, carefully grasps multiple plastic pellets scattered on the flat surface. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0096",
+    "image_path": "dual_arm/dual_arm_0096.jpg",
+    "prompt": "The robotic arm grabs the pink toy figure on the blue surface.",
+    "manipulated object": "pink toy figure",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "The robotic arm in a controlled workspace environment carefully grabs the pink toy figure positioned on the smooth blue surface, ensuring a precise and steady grip. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0097",
+    "image_path": "dual_arm/dual_arm_0097.jpg",
+    "prompt": "The robotic arms pour water from the bottle into the cup.",
+    "manipulated object": "bottle",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "Two robotic arms work together on a table. The right arm grasps a water bottle and tilts it to pour water, while the left arm holds the transparent cup steady underneath, ensuring the water flows smoothly into the cup without spilling. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0098",
+    "image_path": "dual_arm/dual_arm_0098.jpg",
+    "prompt": "The robotic arms fold the pants neatly on the table.",
+    "manipulated object": "pants",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "Two robotic arms cooperate to fold a pair of black pants with yellow edges placed on the table. The arms grasp both sides of the fabric and fold it carefully toward the center, completing a tidy, symmetrical fold. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  },
+  {
+    "name": "dual_arm_0099",
+    "image_path": "dual_arm/dual_arm_0099.jpg",
+    "prompt": "The robotic arms fold the clothes neatly on the table.",
+    "manipulated object": "clothes",
+    "robotic manipulator": "robotic arms",
+    "prompt detailed": "Two robotic arms collaborate to fold a striped sweater placed on the table. The left arm lifts one side of the garment while the right arm folds the other side toward the center, working together to neatly align the sleeves and body of the clothing. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "dual_arm_0100",
+    "image_path": "dual_arm/dual_arm_0100.jpg",
+    "prompt": "The robotic hands lift the bottle with both hands.",
+    "manipulated object": "bottle",
+    "robotic manipulator": "robotic hands",
+    "prompt detailed": "Two robotic hands positioned grasp the bottle placed on the table and lift it upward using a coordinated two-handed motion, demonstrating precise and balanced control during the manipulation task. Keep the first frame of this video unchanged.",
+    "view": "first-person"
+  }
+]

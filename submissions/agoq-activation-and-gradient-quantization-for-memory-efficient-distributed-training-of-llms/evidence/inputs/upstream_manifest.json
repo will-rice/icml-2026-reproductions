@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/Eutenacity/AGoQ.git",
+  "commit": "006fa0f6318228d1fcd6727f0578c0e548e5cbff",
+  "license_file": "LICENSE",
+  "files": [
+    {
+      "path": "LICENSE",
+      "size_bytes": 14567,
+      "git_blob": "80e0a79551d81847f5d0e9e858415bf77547c31d",
+      "sha256": "41e59bea3bfd8fd8f236fbda2f86266e9041d6eaa6ef3d7522bd2460f951e093"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 3462,
+      "git_blob": "ae0df36d8d0b69cdd014c322613d02c832660431",
+      "sha256": "817622fa7ffb6daabb1a1ab9969f3f11df5ead9e0406ddd6a40045633d734b4a"
+    },
+    {
+      "path": "megatron/core/tensor_parallel/layers.py",
+      "size_bytes": 52929,
+      "git_blob": "2824feba8425ec726ccb98d8e2fd47d89584994c",
+      "sha256": "d9ad74e0e5c137203f55836a75292c007fdc5b94457a36f0588935ffc22cc4c6"
+    },
+    {
+      "path": "megatron/core/quantizer/activation_quantization.py",
+      "size_bytes": 52966,
+      "git_blob": "3e331afc6f4dd3952b9b1cf40f08f6cce0a52ba1",
+      "sha256": "84aecf446545d0df7fd64a7209189c5104caa4a5deb2ce08a5288e7085c85ee7"
+    },
+    {
+      "path": "megatron/core/distributed/distributed_data_parallel.py",
+      "size_bytes": 13706,
+      "git_blob": "43061bf6eb05c2dcf72fb56b945fc650e2909cfe",
+      "sha256": "9a382929c024030f5d2a8057355904dd1555c6e0e34ac56fbe2ebbe758a59546"
+    },
+    {
+      "path": "megatron/core/distributed/param_and_grad_buffer.py",
+      "size_bytes": 43538,
+      "git_blob": "c0ab2dca64671a28cb10bb79f638a69c0f63501e",
+      "sha256": "b5cc3378b84794f2de204ff1cfe3299075d880b66248cbb2de4fa43faffd218e"
+    },
+    {
+      "path": "changes_te/linear.py",
+      "size_bytes": 44429,
+      "git_blob": "925b84050b65361e593e50c44734f181c30c6d0f",
+      "sha256": "cb8e3625defb185d779ec4a26a9f54f69478dc218f39222a0f9aad8e75368d9a"
+    },
+    {
+      "path": "changes_te/layernorm_linear.py",
+      "size_bytes": 55176,
+      "git_blob": "b7da3015ad930eca694254070cab9da5b12f30aa",
+      "sha256": "a48fe77bd2c7bd77c8140ae490226815052c5141c6fd7c169d14ac7516e88896"
+    },
+    {
+      "path": "changes_te/layernorm_mlp.py",
+      "size_bytes": 72525,
+      "git_blob": "a32d9707e00d3e4666a8771000f6c119a9825501",
+      "sha256": "733a9113799e59d1cb96f2e8d96f9030bbec70178492747c009a5c3086085675"
+    },
+    {
+      "path": "megatron/core/pipeline_parallel/schedules.py",
+      "size_bytes": 58679,
+      "git_blob": "12484ff09549aa1d8a4ab19e9e5f59f6c6fa8dfd",
+      "sha256": "062f50f6bbb541bb90cdff1c76a4509e75cbe6096f80b3d32fe7ef81090347ba"
+    }
+  ]
+}

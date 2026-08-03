@@ -1,0 +1,802 @@
+[
+  {
+    "name": "quad_0001",
+    "image_path": "quad/quad_0001.jpg",
+    "prompt": "The quad robot inspects the industrial cooling fans in the power station.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0002",
+    "image_path": "quad/quad_0002.jpg",
+    "prompt": "The quad robot descends a carpeted staircase using its wheels.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0003",
+    "image_path": "quad/quad_0003.jpg",
+    "prompt": "he quad robot repeatedly traverses the transition zone between snow and grass.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0004",
+    "image_path": "quad/quad_0004.jpg",
+    "prompt": "The quad robot traverses through the shallow stream.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0005",
+    "image_path": "quad/quad_0005.jpg",
+    "prompt": "The red quad robot maneuvers down wet concrete stairs.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0006",
+    "image_path": "quad/quad_0006.jpg",
+    "prompt": "The quad robot analyzes its surroundings in a snowy power station.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0007",
+    "image_path": "quad/quad_0007.jpg",
+    "prompt": "The robotic gripper is prepared to pick up an object in a controlled environment.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0008",
+    "image_path": "quad/quad_0008.jpg",
+    "prompt": "The quad robot traverses over rocky terrain.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0009",
+    "image_path": "quad/quad_0009.jpg",
+    "prompt": "The yellow quad robot inspects the equipment at the electrical substation.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0010",
+    "image_path": "quad/quad_0010.jpg",
+    "prompt": "The quadruped robot inspects the machinery and QR code in the industrial environment.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0011",
+    "image_path": "quad/quad_0011.jpg",
+    "prompt": "The quad robot inspects the industrial equipment in the warehouse environment.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0012",
+    "image_path": "quad/quad_0012.jpg",
+    "prompt": "The quad robot explores the grassy area near a concrete wall and a brick building.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0013",
+    "image_path": "quad/quad_0013.jpg",
+    "prompt": "The quad robot scans the subterranean rocky surface while equipped with sensors and lights.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0014",
+    "image_path": "quad/quad_0014.jpg",
+    "prompt": "Perform a patrol in the industrial environment to inspect the area for any anomalies.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0015",
+    "image_path": "quad/quad_0015.jpg",
+    "prompt": "The quad robot patrols an outdoor path near a park.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0016",
+    "image_path": "quad/quad_0016.jpg",
+    "prompt": "The quad robot navigates an indoor environment with a mounted sensor system.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0017",
+    "image_path": "quad/quad_0017.jpg",
+    "prompt": "The quad robot patrols near the rusty metal container.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0018",
+    "image_path": "quad/quad_0018.jpg",
+    "prompt": "The robot navigates up the industrial staircase to inspect the area.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0019",
+    "image_path": "quad/quad_0019.jpg",
+    "prompt": "The robot autonomously moves through the indoor environment, following the directional arrow.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0020",
+    "image_path": "quad/quad_0020.jpg",
+    "prompt": "The robot performs a routine inspection in the exhibition area for power equipment.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0021",
+    "image_path": "quad/quad_0021.jpg",
+    "prompt": "The robot traverses through a grassy field for environmental monitoring.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0022",
+    "image_path": "quad/quad_0022.jpg",
+    "prompt": "The robot navigates a muddy construction site while avoiding obstacles.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0023",
+    "image_path": "quad/quad_0023.jpg",
+    "prompt": "The quadruped robot performs a demonstration in an indoor exhibition space.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0024",
+    "image_path": "quad/quad_0024.jpg",
+    "prompt": "The quad robot climbs up the stairs.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0025",
+    "image_path": "quad/quad_0025.jpg",
+    "prompt": "The quad robot moves along the road.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0026",
+    "image_path": "quad/quad_0026.jpg",
+    "prompt": "The quad robot navigates over the icy surface.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0027",
+    "image_path": "quad/quad_0027.jpg",
+    "prompt": "The quad robot explores the dimly lit interior space.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0028",
+    "image_path": "quad/quad_0028.jpg",
+    "prompt": "Guide the quad robot to patrol the grassy area near the building.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0029",
+    "image_path": "quad/quad_0029.jpg",
+    "prompt": "The quad robot push the soccer ball towards the group of robots.",
+    "manipulated object": "soccer ball",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0030",
+    "image_path": "quad/quad_0030.jpg",
+    "prompt": "The quadruped robot walks autonomously on a paved outdoor surface.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0031",
+    "image_path": "quad/quad_0031.jpg",
+    "prompt": "The robotic arm interacts with the blue tether while the robot balances itself.",
+    "manipulated object": "blue tether",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0032",
+    "image_path": "quad/quad_0032.jpg",
+    "prompt": "The quad robot raises its robotic arm inside an indoor industrial space.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0033",
+    "image_path": "quad/quad_0033.jpg",
+    "prompt": "The robotic quadruped inspects the room and navigates around the area.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0034",
+    "image_path": "quad/quad_0034.jpg",
+    "prompt": "The quadruped robot gives a live demonstration in front of the audience.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0035",
+    "image_path": "quad/quad_0035.jpg",
+    "prompt": "The quadruped robot interacts with the control panel on the wall.",
+    "manipulated object": "control panel",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0036",
+    "image_path": "quad/quad_0036.jpg",
+    "prompt": "The quad robot stands near the reception desk at Amazon.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0037",
+    "image_path": "quad/quad_0037.jpg",
+    "prompt": "The quad robot balances a Unitree-branded cap on its head in the outdoor area.",
+    "manipulated object": "Unitree cap",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0038",
+    "image_path": "quad/quad_0038.jpg",
+    "prompt": "The quad robot walks along the street near a building entrance and traffic cone.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0039",
+    "image_path": "quad/quad_0039.jpg",
+    "prompt": "The quad robot inspects the electrical substation area.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0040",
+    "image_path": "quad/quad_0040.jpg",
+    "prompt": "The quad robot navigates and climbs onto the sidewalk.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0041",
+    "image_path": "quad/quad_0041.jpg",
+    "prompt": "The quad robot carries a blue cap on its back while walking.",
+    "manipulated object": "blue cap",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0042",
+    "image_path": "quad/quad_0042.jpg",
+    "prompt": "The quad robot uses its robotic arm to push the door open.",
+    "manipulated object": "door",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0043",
+    "image_path": "quad/quad_0043.jpg",
+    "prompt": "The robot climbs up the stairs holding an orange cable.",
+    "manipulated object": "orange cable",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0044",
+    "image_path": "quad/quad_0044.jpg",
+    "prompt": "The robot continues ascending the stairs while managing an orange cable.",
+    "manipulated object": "orange cable",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0045",
+    "image_path": "quad/quad_0045.jpg",
+    "prompt": "Traverse the road with the wheeled configuration.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0046",
+    "image_path": "quad/quad_0046.jpg",
+    "prompt": "Operate the control panel switches.",
+    "manipulated object": "control panel",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0047",
+    "image_path": "quad/quad_0047.jpg",
+    "prompt": "The quad robot walks over the curved ramp.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0048",
+    "image_path": "quad/quad_0048.jpg",
+    "prompt": "The quad robot moves across the carpeted floor.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0049",
+    "image_path": "quad/quad_0049.jpg",
+    "prompt": "The quad robot demonstrates movements in front of an audience.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0050",
+    "image_path": "quad/quad_0050.jpg",
+    "prompt": "The quad robot climbs up the metal staircase.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0051",
+    "image_path": "quad/quad_0051.jpg",
+    "prompt": "The quad robot explores the grassy terrain for stability testing.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0052",
+    "image_path": "quad/quad_0052.jpg",
+    "prompt": "The quad robot performs a balance check on the carpeted floor.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0053",
+    "image_path": "quad/quad_0053.jpg",
+    "prompt": "The quad robot scans the industrial environment using its mounted sensors.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0054",
+    "image_path": "quad/quad_0054.jpg",
+    "prompt": "The quad robot inspects its surroundings in an industrial environment.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0055",
+    "image_path": "quad/quad_0055.jpg",
+    "prompt": "The quad robot operates an attached firearm during a demonstration.",
+    "manipulated object": "Firearm",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0056",
+    "image_path": "quad/quad_0056.jpg",
+    "prompt": "The quad robot carefully balances while stepping over a wooden log on stairs.",
+    "manipulated object": "wooden log",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0057",
+    "image_path": "quad/quad_0057.jpg",
+    "prompt": "The quad robot moves through an indoor area with a carpeted floor.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0058",
+    "image_path": "quad/quad_0058.jpg",
+    "prompt": "The quad robot patrols and surveys the industrial area for potential hazards.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0059",
+    "image_path": "quad/quad_0059.jpg",
+    "prompt": "The quad robot transports weight plates balanced on its back.",
+    "manipulated object": "weight plates",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0060",
+    "image_path": "quad/quad_0060.jpg",
+    "prompt": "The robotic quad navigates around the parked car.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0061",
+    "image_path": "quad/quad_0061.jpg",
+    "prompt": "The robotic quad climbs up the staircase.",
+    "manipulated object": "staircase",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0062",
+    "image_path": "quad/quad_0062.jpg",
+    "prompt": "The quad robot climbs up the stairs in front of the building.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0063",
+    "image_path": "quad/quad_0063.jpg",
+    "prompt": "The quad robot carefully navigates a metal staircase with yellow guardrails.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0064",
+    "image_path": "quad/quad_0064.jpg",
+    "prompt": "The quad robot traverses over a pile of wooden planks.",
+    "manipulated object": "wooden planks",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0065",
+    "image_path": "quad/quad_0065.jpg",
+    "prompt": "The quad robot inspects an industrial setting with its mounted camera arm.",
+    "manipulated object": "camera",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0066",
+    "image_path": "quad/quad_0066.jpg",
+    "prompt": "The quad robot clears banana peels from the floor to maintain cleanliness.",
+    "manipulated object": "banana peels",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0067",
+    "image_path": "quad/quad_0067.jpg",
+    "prompt": "The quad robot maneuver up the uneven dirt slope.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0068",
+    "image_path": "quad/quad_0068.jpg",
+    "prompt": "The quad robot inspects the outdoor environment near the water body.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0069",
+    "image_path": "quad/quad_0069.jpg",
+    "prompt": "The quad robot climbs over and interacts with wooden planks in the construction area.",
+    "manipulated object": "wooden planks",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0070",
+    "image_path": "quad/quad_0070.jpg",
+    "prompt": "The quad robot climbs uphill over rocky terrain.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0071",
+    "image_path": "quad/quad_0071.jpg",
+    "prompt": "The quad robot attempts to balance itself.",
+    "manipulated object": "wooden stairs",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0072",
+    "image_path": "quad/quad_0072.jpg",
+    "prompt": "The quad robot navigates across a rocky terrain.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0073",
+    "image_path": "quad/quad_0073.jpg",
+    "prompt": "the quad robot interacts with a person by holding its handle.",
+    "manipulated object": "robot handle",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0074",
+    "image_path": "quad/quad_0074.jpg",
+    "prompt": "The quadruped robot performs a balancing maneuver on the wooden platform.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0075",
+    "image_path": "quad/quad_0075.jpg",
+    "prompt": "The quadruped robot climbs the staircase outdoors.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0076",
+    "image_path": "quad/quad_0076.jpg",
+    "prompt": "The quadruped robot positions itself for a stable stance on the wooden platform.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0077",
+    "image_path": "quad/quad_0077.jpg",
+    "prompt": "The quad robot performs a balancing maneuver on the wooden platform.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0078",
+    "image_path": "quad/quad_0078.jpg",
+    "prompt": "The quad robot engages in interaction with the person standing nearby.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0079",
+    "image_path": "quad/quad_0079.jpg",
+    "prompt": "The quad robot walks along the red-brick pavement.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0080",
+    "image_path": "quad/quad_0080.jpg",
+    "prompt": "The quad robot climbs the staircase indoors.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0081",
+    "image_path": "quad/quad_0081.jpg",
+    "prompt": "The quad robot interacts with the person kneeling on the rug in the room.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0082",
+    "image_path": "quad/quad_0082.jpg",
+    "prompt": "Two quad robots move together on the paved outdoor space.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0083",
+    "image_path": "quad/quad_0083.jpg",
+    "prompt": "The quad robot inspects the grassy area surrounded by utility poles for possible hazards.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0084",
+    "image_path": "quad/quad_0084.jpg",
+    "prompt": "The quad robot climbs stairs with a load of parcels to navigate uneven terrain.",
+    "manipulated object": "parcels",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0085",
+    "image_path": "quad/quad_0085.jpg",
+    "prompt": "The robot climbs out of the water and transitions onto the pavement.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0086",
+    "image_path": "quad/quad_0086.jpg",
+    "prompt": "Follow the quad robot as it traverses the sand alongside the ATV.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0087",
+    "image_path": "quad/quad_0087.jpg",
+    "prompt": "The robot walks across shallow water in a riverbed.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0088",
+    "image_path": "quad/quad_0088.jpg",
+    "prompt": "The robot traverses a wooden plank in a forested area.",
+    "manipulated object": "wooden plank",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0089",
+    "image_path": "quad/quad_0089.jpg",
+    "prompt": "The quad robot uses its fire extinguisher to spray a large stream in the forest.",
+    "manipulated object": "fire extinguisher",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0090",
+    "image_path": "quad/quad_0090.jpg",
+    "prompt": "The quad robot approaches the skateboard next to the child.",
+    "manipulated object": "skateboard",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0091",
+    "image_path": "quad/quad_0091.jpg",
+    "prompt": "The robotic dog observes the real dog and waits for further interaction.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0092",
+    "image_path": "quad/quad_0092.jpg",
+    "prompt": "The robotic dog balances on a skateboard while in motion.",
+    "manipulated object": "skateboard",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0093",
+    "image_path": "quad/quad_0093.jpg",
+    "prompt": "The robotic dog follows a person walking a small dog on a leash.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0094",
+    "image_path": "quad/quad_0094.jpg",
+    "prompt": "The quad robot explores the tiled floor near the blue bench.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0095",
+    "image_path": "quad/quad_0095.jpg",
+    "prompt": "The quad robot approaches the middle of the carpeted room.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0096",
+    "image_path": "quad/quad_0096.jpg",
+    "prompt": "The quad robot navigates the room with wooden panels in the background.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0097",
+    "image_path": "quad/quad_0097.jpg",
+    "prompt": "The quad robot walks near the water on a sandy surface.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0098",
+    "image_path": "quad/quad_0098.jpg",
+    "prompt": "The quad robot raises its front leg to interact with the extended human hand.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0099",
+    "image_path": "quad/quad_0099.jpg",
+    "prompt": "The quad robot sits still in a public demonstration with people observing.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  },
+  {
+    "name": "quad_0100",
+    "image_path": "quad/quad_0100.jpg",
+    "prompt": "The quad robot patrols the carpeted area near a small gravel section.",
+    "manipulated object": "None",
+    "robotic manipulator": "quad robot",
+    "view": "third-person"
+  }
+]

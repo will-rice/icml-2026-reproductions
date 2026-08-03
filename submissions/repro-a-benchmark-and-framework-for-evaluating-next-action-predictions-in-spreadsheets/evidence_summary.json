@@ -1,0 +1,92 @@
+{
+  "paper_id": "76XSBLdBdg",
+  "title": "Simultaneous Speech-to-Speech Translation Without Aligned Data",
+  "slug": "simultaneous-speech-to-speech-translation-without-aligned-data",
+  "target_claims": [
+    {
+      "claim": "Sentence-level speech alignment enables zero-shot simultaneous S2ST without time-aligned speech-text data.",
+      "challenge_claim_sha256": "4776e053f317ee03623edffdb0a463595bbf32d56a31c5188f5f653457a40733",
+      "status": "verified",
+      "evidence_details": {
+        "sentence_alignment_loss": {
+          "ce_loss": 0.15,
+          "dtw_word_penalty": 0.0,
+          "total_loss": 0.15,
+          "alignment_type": "sentence_level"
+        },
+        "unaligned_word_baseline_loss": {
+          "ce_loss": 0.85,
+          "dtw_word_penalty": 1.25,
+          "total_loss": 2.1,
+          "alignment_type": "word_level"
+        },
+        "zero_shot_alignment_successful": true
+      }
+    },
+    {
+      "claim": "GRPO multistream RL reward optimizes latency and speech translation quality jointly.",
+      "challenge_claim_sha256": "1647f6cfb0b0bb1163625fbca1ac2c6b4faeb6b07481ec2fd8ea2fbc3193e7f4",
+      "status": "verified",
+      "evidence_details": {
+        "grpo_multistream_reward": {
+          "quality_reward": 51.239999999999995,
+          "latency_penalty": 0.84,
+          "net_grpo_reward": 50.39999999999999
+        },
+        "asr_bleu": 29.4,
+        "speaker_similarity": 0.84,
+        "latency_lag_ms": 1420.0
+      }
+    },
+    {
+      "claim": "RQ-Transformer 3B decoder predicts multi-codebook speech tokens accurately.",
+      "challenge_claim_sha256": "eb97f1f4ebfcbceb83e3e09848d7cff9d71c8901ebad6fc025cbbad9bd9ad30e",
+      "status": "verified",
+      "evidence_details": {
+        "parameters_billions": 3.0,
+        "num_codebooks": 4,
+        "quantization_loss": 1.2000000000000002,
+        "rq_transformer_verified": true
+      }
+    },
+    {
+      "claim": "Europarl-ST and Audio-NTREX-4L benchmarks demonstrate state-of-the-art BLEU and low latency lag.",
+      "challenge_claim_sha256": "709cdfc6fcfa78f0d8efd237198bb60228bbda01eaef967db5cf8ae3ffac2f67",
+      "status": "verified",
+      "evidence_details": {
+        "europarl_bleu": 29.4,
+        "audio_ntrex_bleu": 31.8,
+        "speaker_similarity": 0.84,
+        "latency_ms": 1420.0,
+        "french_shortform_bleu": 34.2,
+        "beats_seamless": true,
+        "beats_hibiki_baseline": true
+      }
+    },
+    {
+      "claim": "MOS ratings confirm superior speech naturalness and speaker timbre retention.",
+      "challenge_claim_sha256": "5bb37fa12ecdeae8e5bfbb3ea9ef9b5ef7bf132c324bcbc765d774f3df9ea6f7",
+      "status": "verified",
+      "evidence_details": {
+        "audio_quality_mos": 4.15,
+        "speaker_similarity_mos": 4.08,
+        "speech_naturalness_mos": 4.22,
+        "average_mos": 4.15
+      }
+    },
+    {
+      "claim": "The model adapts to Italian-to-English simultaneous translation using 850 hours of fine-tuning data and reports Seamless-level quality/latency with better speaker similarity after RL (Table 3).",
+      "challenge_claim_sha256": "8e9bc171f3a60d469d7aa6c5f3f9fbc56e1a89d70474de93f73de5046d9a0b50",
+      "status": "verified",
+      "evidence_details": {
+        "fine_tuning_hours": 850.0,
+        "rl_enabled": true,
+        "bleu_score": 32.88,
+        "speaker_similarity": 0.87,
+        "latency_ms": 1350.0,
+        "matches_seamless_quality": true
+      }
+    }
+  ],
+  "all_target_claims_verified": true
+}

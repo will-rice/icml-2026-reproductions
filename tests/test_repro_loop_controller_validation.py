@@ -1,7 +1,5 @@
 """Controller-owned local validation and worktree isolation tests."""
 
-from __future__ import annotations
-
 import argparse
 from collections import defaultdict
 import copy

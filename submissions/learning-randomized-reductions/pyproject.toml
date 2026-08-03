@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "learning-randomized-reductions"
+version = "0.1.0"
+description = "Deterministic reproduction audit for Learning Randomized Reductions"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "sympy>=1.12",
+    "pypdf>=5.0.0",
+    "jsonschema>=4.20.0",
+    "gradio>=4.0.0",
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+lrr-repro = "lrr_repro.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,7 +1,5 @@
 """Immutable attestations for authoritative external lifecycle observations."""
 
-from __future__ import annotations
-
 import copy
 from datetime import datetime
 import hashlib

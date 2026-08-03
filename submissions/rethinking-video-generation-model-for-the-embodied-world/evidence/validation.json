@@ -1,0 +1,7 @@
+{
+  "command": "env UV_CACHE_DIR=/tmp/rbench-task-uv-cache uv run rbench-repro validate evidence/results.json --schema schema/evidence-v1.schema.json",
+  "results_sha256": "b8b5f83c3e4ee433802c75743047b6cf38fd5bec6fe4ad5846f4cc2f0f0211cb",
+  "schema_sha256": "b27edb9e1d2e44e8af80f058292b1eceb4d0c8ee173e992e2754741769af659f",
+  "valid": true,
+  "validated_at": "2026-07-27T00:00:00+00:00"
+}

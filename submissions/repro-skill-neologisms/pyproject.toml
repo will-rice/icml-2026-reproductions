@@ -1,0 +1,17 @@
+[project]
+name = "qsched-reproduction"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=5.0.0",
+    "numpy>=2.2.0",
+    "torch>=2.0.0",
+    "audioop-lts; python_version >= '3.13'",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.4.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

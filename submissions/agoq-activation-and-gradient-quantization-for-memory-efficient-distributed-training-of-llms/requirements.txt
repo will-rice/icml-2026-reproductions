@@ -1,0 +1,2 @@
+huggingface-hub<1.0
+starlette<1.0

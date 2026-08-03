@@ -1,0 +1,502 @@
+[
+    {
+        "name": "multi-entity_collaboration_0001",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0001.jpg",
+        "prompt": "A dual-arm robot extends its mechanical hands to hand a clipboard to a seated woman wearing a mask, and the woman reaches out to take it while nodding her head",
+        "manipulated object": "clipboard",
+        "robotic manipulator": "robotic grippers",
+        "view": "first-person",
+        "entity1": "robotic grippers",
+        "entity2": "seated woman wearing a mask"
+    },
+    {
+        "name": "multi-entity_collaboration_0002",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0002.jpg",
+        "prompt": "A humanoid robot dressed as a maid runs toward a man, shakes his hand warmly, and then bows respectfully",
+        "manipulated object": "man's hand",
+        "robotic manipulator": "humanoid robot dressed as a maid",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0003",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0003.jpg",
+        "prompt": "A humanoid robot helps rotate the wheelchair so that the elderly man is facing the bed, while the nurse assists him in getting onto the bed",
+        "manipulated object": "wheelchair",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "elderly man"
+    },
+    {
+        "name": "multi-entity_collaboration_0004",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0004.jpg",
+        "prompt": "A humanoid robot jogs through a shallow stream alongside a brown dog, both running playfully through splashing water in a forest path",
+        "manipulated object": "shallow stream water",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "brown dog"
+    },
+    {
+        "name": "multi-entity_collaboration_0005",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0005.jpg",
+        "prompt": "A humanoid robot wearing red boxing gloves sparring with a human boxer wearing blue gloves inside a boxing ring",
+        "manipulated object": "boxing gloves",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "human boxer"
+    },
+    {
+        "name": "multi-entity_collaboration_0006",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0006.jpg",
+        "prompt": "A man crouches down on a riverside track to shake hands with a small quadruped robot standing in front of him",
+        "manipulated object": "None",
+        "robotic manipulator": "small quadruped robot",
+        "view": "third-person",
+        "entity1": "quadruped robot",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0007",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0007.jpg",
+        "prompt": "A man jogs playfully along a riverside promenade while a quadruped robot with wheels follows closely behind, keeping pace beside him",
+        "manipulated object": "None",
+        "robotic manipulator": "quadruped robot with wheels",
+        "view": "third-person",
+        "entity1": "quadruped robot with wheels",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0008",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0008.jpg",
+        "prompt": "A man runs side by side with a black quadruped robot on an outdoor track, both moving in synchronized stride",
+        "manipulated object": "None",
+        "robotic manipulator": "black quadruped robot",
+        "view": "third-person",
+        "entity1": "quadruped robot",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0009",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0009.jpg",
+        "prompt": "A robotic arm gently hands a red flower to a woman standing in front of it, and the woman happily takes the flower and claps her hands with joy",
+        "manipulated object": "red flower",
+        "robotic manipulator": "robotic arm",
+        "view": "third-person",
+        "entity1": "robotic arm",
+        "entity2": "woman"
+    },
+    {
+        "name": "multi-entity_collaboration_0010",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0010.jpg",
+        "prompt": "A robotic arm hands a large yellow bag to a woman wearing a mask, and the woman reaches out to accept it with both hands",
+        "manipulated object": "large yellow bag",
+        "robotic manipulator": "robotic arm",
+        "view": "first-person",
+        "entity1": "robotic arm",
+        "entity2": "woman wearing a mask"
+    },
+    {
+        "name": "multi-entity_collaboration_0011",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0011.jpg",
+        "prompt": "A small brown and white dog runs in circles around a black robotic dog while the robot dog playfully chases and mimics its movements",
+        "manipulated object": "small brown and white dog",
+        "robotic manipulator": "black robotic dog",
+        "view": "third-person",
+        "entity1": "black robotic dog",
+        "entity2": "small brown and white dog"
+    },
+    {
+        "name": "multi-entity_collaboration_0012",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0012.jpg",
+        "prompt": "A yellow quadruped robot steps down one stair and extends its mechanical arm toward a woman in a yellow jacket, and the woman reaches out to shake its hand",
+        "manipulated object": "woman's hand",
+        "robotic manipulator": "yellow quadruped robot",
+        "view": "third-person",
+        "entity1": "yellow quadruped robot",
+        "entity2": "woman in a yellow jacket"
+    },
+    {
+        "name": "multi-entity_collaboration_0013",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0013.jpg",
+        "prompt": "The humanoid robot hands a room key card to the woman and gestures to indicate the direction, and the woman reaches out to take the card from the robot",
+        "manipulated object": "room key card",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "woman"
+    },
+    {
+        "name": "multi-entity_collaboration_0014",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0014.jpg",
+        "prompt": "The humanoid robot hands the bouquet of flowers to the person",
+        "manipulated object": "bouquet of flowers",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0015",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0015.jpg",
+        "prompt": "The humanoid robot picks up the bottle from the table and hands it to the person sitting on its right, who reaches out with a hand resting on the table to take it",
+        "manipulated object": "bottle",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person sitting on its right"
+    },
+    {
+        "name": "multi-entity_collaboration_0016",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0016.jpg",
+        "prompt": "The humanoid robot picks up the yellow caution sign from the floor as the man in black walks over, then hands the caution sign to him",
+        "manipulated object": "yellow caution sign",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "man in black"
+    },
+    {
+        "name": "multi-entity_collaboration_0017",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0017.jpg",
+        "prompt": "The humanoid robot plays a game of table tennis with a human opponent across the ping pong table",
+        "manipulated object": "ping pong ball",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "human opponent"
+    },
+    {
+        "name": "multi-entity_collaboration_0018",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0018.jpg",
+        "prompt": "The humanoid robot shakes hands with the person in front of it and then bows politely",
+        "manipulated object": "person's hand",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0019",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0019.jpg",
+        "prompt": "The humanoid robot takes the ball from the person’s hand, tosses it gently upward, and the person catches it mid-air",
+        "manipulated object": "ball",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0020",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0020.jpg",
+        "prompt": "The humanoid robot takes the basketball from the person’s hand, then throws it back toward the person, who reaches out and catches it",
+        "manipulated object": "basketball",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0021",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0021.jpg",
+        "prompt": "The humanoid robot takes the clothes from the person and helps him put it on",
+        "manipulated object": "clothes",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0022",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0022.jpg",
+        "prompt": "The humanoid robot takes the football from the person’s hand and places it carefully into the cardboard box on the floor",
+        "manipulated object": "football",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0023",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0023.jpg",
+        "prompt": "The humanoid robot takes the notebook from the person’s hand and neatly places it onto the file tray",
+        "manipulated object": "notebook",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0024",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0024.jpg",
+        "prompt": "The humanoid robot takes the orange duster from the person’s hand and begins wiping the surface of the table to clean it",
+        "manipulated object": "orange duster",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0025",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0025.jpg",
+        "prompt": "The humanoid robot takes the piece of clothing from the person in front of it and carefully folds it with both hands",
+        "manipulated object": "piece of clothing",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0026",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0026.jpg",
+        "prompt": "The humanoid robot takes the piece of clothing from the person’s hand and spreads it out flat on the table in front of it",
+        "manipulated object": "piece of clothing",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0027",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0027.jpg",
+        "prompt": "The humanoid robot takes the plush toy from the person’s hand and then gently hands it back to the person with both hands",
+        "manipulated object": "plush toy",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0028",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0028.jpg",
+        "prompt": "The humanoid robot takes the spray bottle from the person’s hand and sprays it onto the surface of the table",
+        "manipulated object": "spray bottle",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0029",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0029.jpg",
+        "prompt": "The humanoid robot takes the stack of plates from the person’s hand and carefully places them on the table",
+        "manipulated object": "stack of plates",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0030",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0030.jpg",
+        "prompt": "The humanoid robot tears off a piece of tissue paper from the roll on the table and hands it to the person sitting on its right",
+        "manipulated object": "tissue paper",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "person sitting on its right"
+    },
+    {
+        "name": "multi-entity_collaboration_0031",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0031.jpg",
+        "prompt": "The humanoid robot throws the yellow tool bag up to the human standing on the platform above",
+        "manipulated object": "yellow tool bag",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "humanoid robot",
+        "entity2": "human standing on the platform"
+    },
+    {
+        "name": "multi-entity_collaboration_0032",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0032.jpg",
+        "prompt": "The man closes the book and hands it to the robotic arms, and the robot reaches out to take the book from him",
+        "manipulated object": "book",
+        "robotic manipulator": "robotic arms",
+        "view": "first-person",
+        "entity1": "robotic arms",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0033",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0033.jpg",
+        "prompt": "The man hands a bunch of asparagus to the robot, which takes it and places the asparagus into the frying pan",
+        "manipulated object": "asparagus",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "entity1": "robot",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0034",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0034.jpg",
+        "prompt": "The man hands the steak on the plate to the robot which uses the spatula to lift the steak and place it onto the frying pan",
+        "manipulated object": "steak",
+        "robotic manipulator": "robot with spatula",
+        "view": "third-person",
+        "entity1": "robot",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0035",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0035.jpg",
+        "prompt": "The robot hands the oil bottle to the man who takes it and pours the oil into the frying pan",
+        "manipulated object": "oil bottle",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "entity1": "robot",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0036",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0036.jpg",
+        "prompt": "The robot on the left hands the bag in front of it to the robot on the right, who opens the refrigerator, takes the bag, and places it inside.",
+        "manipulated object": "bag",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "entity1": "robot on the left",
+        "entity2": "robot on the right"
+    },
+    {
+        "name": "multi-entity_collaboration_0037",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0037.jpg",
+        "prompt": "The robot on the left hands the food package to the robot standing near the refrigerator, and the second robot places it inside the fridge",
+        "manipulated object": "food package",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "entity1": "robot on the left",
+        "entity2": "robot standing near the refrigerator"
+    },
+    {
+        "name": "multi-entity_collaboration_0038",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0038.jpg",
+        "prompt": "The robot on the left slides the bowl to the center of the table, while the robot on the right places the apple into the bowl",
+        "manipulated object": "bowl and apple",
+        "robotic manipulator": "two humanoid robots",
+        "view": "third-person",
+        "entity1": "robot on the left",
+        "entity2": "robot on the right"
+    },
+    {
+        "name": "multi-entity_collaboration_0039",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0039.jpg",
+        "prompt": "The robot picks up the tripod and hands it to the person",
+        "manipulated object": "tripod",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "entity1": "robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0040",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0040.jpg",
+        "prompt": "The robot takes the bag from the person and opens it",
+        "manipulated object": "bag",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "entity1": "robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0041",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0041.jpg",
+        "prompt": "The robot takes the book from the person and places it into the shelf",
+        "manipulated object": "book",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "entity1": "robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0042",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0042.jpg",
+        "prompt": "The robot takes the roll of paper from the person’s hand and tears off one sheet",
+        "manipulated object": "roll of paper",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "entity1": "robot",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0043",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0043.jpg",
+        "prompt": "The robotic arm takes the gray bag from the woman’s hand and places it gently on the table",
+        "manipulated object": "gray bag",
+        "robotic manipulator": "robotic arm",
+        "view": "first-person",
+        "entity1": "robotic arm",
+        "entity2": "woman"
+    },
+    {
+        "name": "multi-entity_collaboration_0044",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0044.jpg",
+        "prompt": "The robotic arms hand the large mechanical part to the person standing in front, and the person reaches out to take it from the robot",
+        "manipulated object": "large mechanical part",
+        "robotic manipulator": "robotic arms",
+        "view": "first-person",
+        "entity1": "robotic arms",
+        "entity2": "person"
+    },
+    {
+        "name": "multi-entity_collaboration_0045",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0045.jpg",
+        "prompt": "The robotic hands hold a red coffee cup and extend it forward to hand the drink to the woman standing across the counter, and the woman reaches out to take the coffee from t",
+        "manipulated object": "red coffee cup",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "entity1": "robotic hands",
+        "entity2": "woman standing across the counter"
+    },
+    {
+        "name": "multi-entity_collaboration_0046",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0046.jpg",
+        "prompt": "The robotic hands pick up the blue and white glue bottle from the table and extend it forward to hand it to the man standing on the right",
+        "manipulated object": "blue and white glue bottle",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "entity1": "robotic hands",
+        "entity2": "man standing on the right"
+    },
+    {
+        "name": "multi-entity_collaboration_0047",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0047.jpg",
+        "prompt": "The robotic hands picks up the red wrench from the table and extends it forward to hand it to the man standing nearby",
+        "manipulated object": "red wrench",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "entity1": "robotic hands",
+        "entity2": "man"
+    },
+    {
+        "name": "multi-entity_collaboration_0048",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0048.jpg",
+        "prompt": "The woman picks up the water bottle from the table and hands it forward, and the robotic claws reach out to take the bottle from her",
+        "manipulated object": "water bottle",
+        "robotic manipulator": "robotic claws",
+        "view": "first-person",
+        "entity1": "robotic claws",
+        "entity2": "woman"
+    },
+    {
+        "name": "multi-entity_collaboration_0049",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0049.jpg",
+        "prompt": "Two humanoid robots each grab a cup from the tray in front of them and clink their cups together in a cheerful toast",
+        "manipulated object": "cup",
+        "robotic manipulator": "humanoid robot",
+        "view": "first-person",
+        "entity1": "humanoid robots",
+        "entity2": "tray"
+    },
+    {
+        "name": "multi-entity_collaboration_0050",
+        "image_path": "multi-entity_collaboration/multi-entity_collaboration_0050.jpg",
+        "prompt": "Two robots work together to spread and flatten a piece of fabric smoothly on the table",
+        "manipulated object": "fabric",
+        "robotic manipulator": "two robots",
+        "view": "first-person",
+        "entity1": "robots",
+        "entity2": "piece of fabric"
+    }
+]

@@ -1,0 +1,402 @@
+[
+    {
+        "name": "visual_reasoning_0001",
+        "image_path": "visual_reasoning/visual_reasoning_0001.jpg",
+        "prompt": "The dual arm robot collaboratively picks up the sky blue book from the storage box on the bed",
+        "manipulated object": "sky blue book",
+        "robotic manipulator": "dual arm robot",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0002",
+        "image_path": "visual_reasoning/visual_reasoning_0002.jpg",
+        "prompt": "The dual robotic arms collaborate to pick up the brown piece of clothing from the box on the bed",
+        "manipulated object": "brown piece of clothing",
+        "robotic manipulator": "dual robotic arms",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0003",
+        "image_path": "visual_reasoning/visual_reasoning_0003.jpg",
+        "prompt": "The dual-arm robot performs a bimanual grasping task, with the left gripper picking up a long rectangular block and the right gripper grasping the green cube on the blue tabletop",
+        "manipulated object": "green cube",
+        "robotic manipulator": "dual-arm robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0004",
+        "image_path": "visual_reasoning/visual_reasoning_0004.jpg",
+        "prompt": "The humanoid robot grabs the blue mug in front of it and lifts it up",
+        "manipulated object": "blue mug",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0005",
+        "image_path": "visual_reasoning/visual_reasoning_0005.jpg",
+        "prompt": "The humanoid robot picks up the smaller Rubik’s cube and places it on the table next to the larger cube, aligning it with the red face of the larger cube",
+        "manipulated object": "smaller Rubik's cube",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0006",
+        "image_path": "visual_reasoning/visual_reasoning_0006.jpg",
+        "prompt": "The left gripper picking up a small pink cube labeled “4” and the right gripper grasping a large white dice with blue dots from the cluttered tabletop filled with colorful objects",
+        "manipulated object": "small pink cube labeled '4' and large white dice with blue dots",
+        "robotic manipulator": "left gripper and right gripper",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0007",
+        "image_path": "visual_reasoning/visual_reasoning_0007.jpg",
+        "prompt": "The left manipulator places the cup under the white dispenser labeled “Jasmine Tea”, and the right manipulator opens the dispenser to pour jasmine tea into the cup",
+        "manipulated object": "cup",
+        "robotic manipulator": "left and right manipulators",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0008",
+        "image_path": "visual_reasoning/visual_reasoning_0008.jpg",
+        "prompt": "The left robotic gripper picks up a yellow bell pepper from the wooden crate",
+        "manipulated object": "yellow bell pepper",
+        "robotic manipulator": "left robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0009",
+        "image_path": "visual_reasoning/visual_reasoning_0009.jpg",
+        "prompt": "The left robotic gripper picks up the pack of tissues, while the right robotic gripper grasps the pen with the blue cap on the desk",
+        "manipulated object": "pack of tissues and pen with blue cap",
+        "robotic manipulator": "left and right robotic grippers",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0010",
+        "image_path": "visual_reasoning/visual_reasoning_0010.jpg",
+        "prompt": "The left robotic gripper pours the tea bags from the transparent box onto the table, while the right robotic gripper picks up the green tea bag",
+        "manipulated object": "tea bags",
+        "robotic manipulator": "left and right robotic grippers",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0011",
+        "image_path": "visual_reasoning/visual_reasoning_0011.jpg",
+        "prompt": "The mobile manipulator robot reaches toward the tray, carefully grasps the blue canvas shoes, lifts them, and places them neatly into an empty slot on the shoe rack in the corner",
+        "manipulated object": "blue canvas shoes",
+        "robotic manipulator": "mobile manipulator robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0012",
+        "image_path": "visual_reasoning/visual_reasoning_0012.jpg",
+        "prompt": "The right robotic arm opens the green trash bin while the left robotic arm picks up a crumpled paper ball from the table and places it into the bin",
+        "manipulated object": "crumpled paper ball",
+        "robotic manipulator": "right and left robotic arms",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0013",
+        "image_path": "visual_reasoning/visual_reasoning_0013.jpg",
+        "prompt": "The robot arm grasps the green bell pepper from the woven basket and places it into the container that holds a metallic spoon",
+        "manipulated object": "green bell pepper",
+        "robotic manipulator": "robot arm",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0014",
+        "image_path": "visual_reasoning/visual_reasoning_0014.jpg",
+        "prompt": "The robot arm identifies the colored blocks on the table, finds the only block that matches the color of one of the plates, and places it into the plate of the same color",
+        "manipulated object": "colored block",
+        "robotic manipulator": "robot arm",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0015",
+        "image_path": "visual_reasoning/visual_reasoning_0015.jpg",
+        "prompt": "The robot arm picks up the small black-and-white soccer ball from the blue box and places it into the orange square plastic container on the left",
+        "manipulated object": "small black-and-white soccer ball",
+        "robotic manipulator": "robot arm",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0016",
+        "image_path": "visual_reasoning/visual_reasoning_0016.jpg",
+        "prompt": "The robot arm picks up the test tube from the back row of the rack",
+        "manipulated object": "test tube",
+        "robotic manipulator": "robot arm",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0017",
+        "image_path": "visual_reasoning/visual_reasoning_0017.jpg",
+        "prompt": "The robot arranges the blocks on the table in the order of green, red, blue, and yellow from left to right from its own perspective",
+        "manipulated object": "blocks",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0018",
+        "image_path": "visual_reasoning/visual_reasoning_0018.jpg",
+        "prompt": "The robot grasps the book with a portrait of a person on its cover",
+        "manipulated object": "book",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0019",
+        "image_path": "visual_reasoning/visual_reasoning_0019.jpg",
+        "prompt": "The robot grasps the bottle filled with cooking oil from the kitchen counter",
+        "manipulated object": "bottle filled with cooking oil",
+        "robotic manipulator": "robot",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0020",
+        "image_path": "visual_reasoning/visual_reasoning_0020.jpg",
+        "prompt": "The robot gripper picks up the blue piece of clothing from the floor and places it into the hollow laundry basket",
+        "manipulated object": "blue piece of clothing",
+        "robotic manipulator": "robot gripper",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0021",
+        "image_path": "visual_reasoning/visual_reasoning_0021.jpg",
+        "prompt": "The robot gripper picks up the red triangular block from the table",
+        "manipulated object": "red triangular block",
+        "robotic manipulator": "robot gripper",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0022",
+        "image_path": "visual_reasoning/visual_reasoning_0022.jpg",
+        "prompt": "The robot gripper places the white bottle of baby powder onto the shelf, aligning it with other identical bottles in the same column",
+        "manipulated object": "white bottle of baby powder",
+        "robotic manipulator": "robot gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0023",
+        "image_path": "visual_reasoning/visual_reasoning_0023.jpg",
+        "prompt": "The robot opens the freezer drawer and picks up the dumpling package with yellow-green packaging from the center",
+        "manipulated object": "dumpling package with yellow-green packaging",
+        "robotic manipulator": "robot",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0024",
+        "image_path": "visual_reasoning/visual_reasoning_0024.jpg",
+        "prompt": "The robot opens the pink school bag and places the green pencil case inside",
+        "manipulated object": "pink school bag",
+        "robotic manipulator": "robot arms with grippers",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0025",
+        "image_path": "visual_reasoning/visual_reasoning_0025.jpg",
+        "prompt": "The robot picks up the black dumpling from the plate with chopsticks",
+        "manipulated object": "black dumpling",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0026",
+        "image_path": "visual_reasoning/visual_reasoning_0026.jpg",
+        "prompt": "The robot picks up the bread with a hole in the middle from the table",
+        "manipulated object": "bread with a hole in the middle",
+        "robotic manipulator": "robot arm with gripper",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0027",
+        "image_path": "visual_reasoning/visual_reasoning_0027.jpg",
+        "prompt": "The robot picks up the pink plush toy from the box",
+        "manipulated object": "pink plush toy",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0028",
+        "image_path": "visual_reasoning/visual_reasoning_0028.jpg",
+        "prompt": "The robot picks up the purple cube and the yellow cube one by one and places them into the container that already contains an apple",
+        "manipulated object": "purple cube and yellow cube",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0029",
+        "image_path": "visual_reasoning/visual_reasoning_0029.jpg",
+        "prompt": "The robot picks up the tallest orange object and places it into the basket",
+        "manipulated object": "tallest orange object",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0030",
+        "image_path": "visual_reasoning/visual_reasoning_0030.jpg",
+        "prompt": "The robot picks up the yellow duck toy and places it on the cross-marked tape area on the table",
+        "manipulated object": "yellow duck toy",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0031",
+        "image_path": "visual_reasoning/visual_reasoning_0031.jpg",
+        "prompt": "The robot places the apple, water bottle, and Rubik’s cube into the bag in that order",
+        "manipulated object": "apple, water bottle, Rubik's cube",
+        "robotic manipulator": "robot",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0032",
+        "image_path": "visual_reasoning/visual_reasoning_0032.jpg",
+        "prompt": "The robot removes the three plates from the rack in order from left to right — the turquoise one, the light green one, and the white one — and places them on the table",
+        "manipulated object": "plates",
+        "robotic manipulator": "robot",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0033",
+        "image_path": "visual_reasoning/visual_reasoning_0033.jpg",
+        "prompt": "The robot sequentially picks up the red and yellow bell peppers and places them on the table from left to right from the camera’s perspective",
+        "manipulated object": "red and yellow bell peppers",
+        "robotic manipulator": "robot arm with gripper",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0034",
+        "image_path": "visual_reasoning/visual_reasoning_0034.jpg",
+        "prompt": "The robotic arm grasps the beverage bottle located at the innermost position on the refrigerator door shelf and places it on the table",
+        "manipulated object": "beverage bottle",
+        "robotic manipulator": "robotic arm",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0035",
+        "image_path": "visual_reasoning/visual_reasoning_0035.jpg",
+        "prompt": "The robotic arm grasps the yellow cube and places it into the container that already holds the blue cube",
+        "manipulated object": "yellow cube",
+        "robotic manipulator": "robotic arm",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0036",
+        "image_path": "visual_reasoning/visual_reasoning_0036.jpg",
+        "prompt": "The robotic arm picks up the pear and place it in the dark-color bowl",
+        "manipulated object": "pear",
+        "robotic manipulator": "robotic arm",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0037",
+        "image_path": "visual_reasoning/visual_reasoning_0037.jpg",
+        "prompt": "The robotic arm places the red and yellow bell peppers into the drawer in sequence",
+        "manipulated object": "red and yellow bell peppers",
+        "robotic manipulator": "robotic arm",
+        "view": "third-person"
+    },
+    {
+        "name": "visual_reasoning_0038",
+        "image_path": "visual_reasoning/visual_reasoning_0038.jpg",
+        "prompt": "The robotic arms pick up the Rubik’s cube from the yellow plate and place it into the empty bowl on the table",
+        "manipulated object": "Rubik's cube",
+        "robotic manipulator": "robotic arms",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0039",
+        "image_path": "visual_reasoning/visual_reasoning_0039.jpg",
+        "prompt": "The robotic arms pick up the green apple and place it on the white rack",
+        "manipulated object": "green apple",
+        "robotic manipulator": "robotic arms",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0040",
+        "image_path": "visual_reasoning/visual_reasoning_0040.jpg",
+        "prompt": "The robotic arms push the vegetables and fruits on the table to group them by color",
+        "manipulated object": "vegetables and fruits",
+        "robotic manipulator": "robotic arms",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0041",
+        "image_path": "visual_reasoning/visual_reasoning_0041.jpg",
+        "prompt": "The robotic arms sequentially pick up the green apple and the red apple from the shelf and place them into the brown paper bag on the table",
+        "manipulated object": "green apple and red apple",
+        "robotic manipulator": "robotic arms",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0042",
+        "image_path": "visual_reasoning/visual_reasoning_0042.jpg",
+        "prompt": "The robotic gripper pick up the pink snack box and place it into the shopping cart",
+        "manipulated object": "pink snack box",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0043",
+        "image_path": "visual_reasoning/visual_reasoning_0043.jpg",
+        "prompt": "The robotic gripper picks up the carrot and the grapes one by one and places them onto the white shelf",
+        "manipulated object": "carrot and grapes",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0044",
+        "image_path": "visual_reasoning/visual_reasoning_0044.jpg",
+        "prompt": "The robotic gripper picks up the corn on the table and places it onto the white shelf",
+        "manipulated object": "corn",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0045",
+        "image_path": "visual_reasoning/visual_reasoning_0045.jpg",
+        "prompt": "The robotic gripper picks up the longest green vegetable from the table and lifts it into the air",
+        "manipulated object": "long green leafy vegetable",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0046",
+        "image_path": "visual_reasoning/visual_reasoning_0046.jpg",
+        "prompt": "The robotic gripper picks up the milk carton and lifts it into the air",
+        "manipulated object": "milk carton",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0047",
+        "image_path": "visual_reasoning/visual_reasoning_0047.jpg",
+        "prompt": "The robotic gripper picks up the orange juice carton from the table and places it into the metal basket",
+        "manipulated object": "orange juice carton",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0048",
+        "image_path": "visual_reasoning/visual_reasoning_0048.jpg",
+        "prompt": "The robotic gripper picks up the single fruit from the shelf and places it into the paper bag",
+        "manipulated object": "fruit",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0049",
+        "image_path": "visual_reasoning/visual_reasoning_0049.jpg",
+        "prompt": "The robotic gripper places the dragon fruit onto the dark blue plate on the table",
+        "manipulated object": "dragon fruit",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person"
+    },
+    {
+        "name": "visual_reasoning_0050",
+        "image_path": "visual_reasoning/visual_reasoning_0050.jpg",
+        "prompt": "The robotic gripper pushes the fruits on the table so that they are arranged in the order red, yellow, and green from left to right from the camera’s perspective",
+        "manipulated object": "fruits",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person"
+    }
+]

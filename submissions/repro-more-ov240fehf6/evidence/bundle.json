@@ -1,0 +1,108 @@
+{
+  "api_cost_usd": 0.0,
+  "artifact_observations": {
+    "dataset_card_sha256": "1d0329c77597d3d243391f5f2674804cbd70ec5aad33b7df8ec0e9246b270271",
+    "file_count": 8584,
+    "github_sha": "f05c768e84f925fb2b14d3f8dd282d7036b46a21",
+    "hf_dataset_sha": "9395c04524a0c26dcb443a41f8655e808e18913b",
+    "language_count": 149,
+    "license": "apache-2.0",
+    "readme_observations": {
+      "annotation_pipeline_mentions_human_refinement": true,
+      "comparison_table_mentions_more_149_languages": true,
+      "six_task_coverage_claim": true
+    },
+    "script_family_count": 6,
+    "table_score_is_bottleneck": true,
+    "task_image_dirs": [
+      "catalog",
+      "code",
+      "formula",
+      "table"
+    ],
+    "task_names": [
+      "catalog",
+      "code",
+      "formula",
+      "reading_order",
+      "table",
+      "text"
+    ]
+  },
+  "attempt_id": "ccbccca4-1090-462a-9fb6-2c6a8f594010",
+  "claims": [
+    {
+      "claim": "MORE evaluates multilingual document parsing across 149 languages spanning six major script families (Figures 1 and 4)",
+      "claim_sha256": "379b2d59a921cfdbe067f56b7f37e7381b9d54e78c235ba5e81f72564f03f51e",
+      "computed_observations": [
+        "The pinned dataset card and repository metadata report 149 languages and six major script families."
+      ],
+      "paper_reported_context": [
+        "The paper frames this as multilingual coverage in Figures 1 and 4."
+      ],
+      "reproduced_from_paper_value": false,
+      "status": "verified"
+    },
+    {
+      "claim": "The benchmark extends beyond plain text to six tasks including text, formula, table, code, catalog, and reading-order recognition (Figure 6)",
+      "claim_sha256": "a88362602383931a681db4d5a8c5ba8dc853bc3309ac0010c641faffdfa2f030",
+      "computed_observations": [
+        "The pinned dataset repository exposes released artifacts for catalog, code, formula, reading_order, table, and text task groups."
+      ],
+      "paper_reported_context": [
+        "The paper identifies the six task categories in Figure 6."
+      ],
+      "reproduced_from_paper_value": false,
+      "status": "verified"
+    },
+    {
+      "claim": "MORE samples are collected from real-world documents and annotated through a model-assisted, human-refined pipeline (Figure 3)",
+      "claim_sha256": "f93ccd061ff16c49aebbe8066b7e81ac797becc2e0d3e1b61b74510875e8167b",
+      "computed_observations": [
+        "The pinned dataset card describes PDF crawling, filtering, stratified page selection, model-assisted annotation, and human refinement."
+      ],
+      "paper_reported_context": [
+        "The paper presents the full data construction pipeline in Figure 3."
+      ],
+      "reproduced_from_paper_value": false,
+      "status": "toy"
+    },
+    {
+      "claim": "Compared with prior multilingual document benchmarks, MORE has broader language coverage and annotation coverage for structural document elements (Table 3)",
+      "claim_sha256": "058defb5861b0e71fbb12437a97a7c1d314e156bad3eec0e0426bca61e4755a6",
+      "computed_observations": [
+        "The pinned dataset card comparison table lists MORE with 149 languages and all six structural coverage columns, exceeding the listed prior benchmarks on language count and task coverage."
+      ],
+      "paper_reported_context": [
+        "The paper compares multilingual document parsing benchmarks in Table 3."
+      ],
+      "reproduced_from_paper_value": false,
+      "status": "verified"
+    },
+    {
+      "claim": "Table recognition remains a bottleneck relative to text and code recognition across multilingual document parsers (Table 8)",
+      "claim_sha256": "b854f5b99d8aa58f2b4ba4fb762642a272cc806aecd9eb23e8141c392d66e4bb",
+      "computed_observations": [
+        "The pinned dataset card result discussion identifies table parsing as the largest structural bottleneck while text, code, and catalog are closer to saturation."
+      ],
+      "paper_reported_context": [
+        "The paper reports this bottleneck analysis in Table 8."
+      ],
+      "reproduced_from_paper_value": false,
+      "status": "toy"
+    }
+  ],
+  "limitations": [
+    "No OCR, VLM, or document-parser baseline is rerun.",
+    "README and dataset-card observations are released-artifact audits, not paper-prose measurements.",
+    "Table-bottleneck and annotation-pipeline claims are marked toy where the evidence is descriptive rather than a fresh model evaluation."
+  ],
+  "paper_id": "ov240fehF6",
+  "reproduction_scope": "static_artifact_reproduction",
+  "snapshot_id": "623872c58149a167039e89d31d32dd495a2864793db06d47df27a8a07157356d",
+  "upstream_revisions": {
+    "arxiv": "2607.02956",
+    "github": "zimoqingfeng/MORE@f05c768e84f925fb2b14d3f8dd282d7036b46a21",
+    "hf_dataset": "zimoqingfeng/MORE@9395c04524a0c26dcb443a41f8655e808e18913b"
+  }
+}

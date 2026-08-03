@@ -1,0 +1,186 @@
+{
+  "claims": [
+    {
+      "challenge_claim": "The paper formulates LLM text generation as a stochastic process and adapts rare-event methods including importance sampling, reweighted distributions, and transition path sampling (Section 3).",
+      "challenge_claim_sha256": "676d9200dfdcf3098ae37cbc8d61fdcffa374c5a1eeb39002379094b2aeb74bf",
+      "evidence": {
+        "evidence_type": "finite_stochastic_process",
+        "measurement": {
+          "observable_max": 1.9,
+          "observable_min": -0.8999999999999999,
+          "probability_sum": 0.9999999999999958,
+          "sequence_count": 4096
+        },
+        "observation": "A finite autoregressive text process was exactly enumerated and used for direct, biased, and trajectory-sampling estimators.",
+        "passed": true,
+        "status": "verified"
+      },
+      "status": "verified",
+      "target_claim": "The paper formulates LLM text generation as a stochastic process and adapts rare-event methods including importance sampling, reweighted distributions, and transition path sampling (Section 3)."
+    },
+    {
+      "challenge_claim": "Annealed transition path sampling generates biased text-completion trajectories that explore rare high- or low-observable completions (Figure 1, Figure 2, Algorithm 2).",
+      "challenge_claim_sha256": "a98926e8474dace301f85c8cd53326326195eb0dd80174f4c44ddb0899edea26",
+      "evidence": {
+        "evidence_type": "annealed_biased_sampling",
+        "measurement": {
+          "annealed_final_acceptance_rate": 0.382,
+          "annealed_final_mean": 1.1981199999999999,
+          "high_bias_mean": 1.218336,
+          "low_bias_mean": 0.813292,
+          "neutral_mean": 1.033344
+        },
+        "observation": "Positive and negative biasing shifts the observable tails, and an annealed Metropolis trajectory reaches the high-observable biased distribution on the finite text process.",
+        "passed": true,
+        "status": "toy"
+      },
+      "status": "toy",
+      "target_claim": "Annealed transition path sampling generates biased text-completion trajectories that explore rare high- or low-observable completions (Figure 1, Figure 2, Algorithm 2)."
+    },
+    {
+      "challenge_claim": "MBAR reweighting reconstructs the true distribution of observables such as automated readability index from biased simulations (Figure 3).",
+      "challenge_claim_sha256": "b4a93b328d67630945555047ec3e9d16b5fababa66ad04b30f81436f2a045b07",
+      "evidence": {
+        "evidence_type": "mbar_reweighting",
+        "measurement": {
+          "bins": [
+            -0.9000000009999999,
+            -0.5500000007499999,
+            -0.20000000049999989,
+            0.14999999975,
+            0.5000000000000001,
+            0.8500000002500002,
+            1.2000000004999998,
+            1.5500000007499999,
+            1.900000001
+          ],
+          "exact": [
+            6.469632000000019e-06,
+            0.0006654458880000014,
+            0.0037022659200000078,
+            0.05238457545600008,
+            0.22472541238400037,
+            0.45401942912000054,
+            0.24080350140000045,
+            0.023692900199998538
+          ],
+          "l1_error": 0.01637084762655759,
+          "max_bin_error": 0.006663943448276588,
+          "reconstructed": [
+            0.0,
+            0.000802039102180449,
+            0.003223136524224324,
+            0.04875799052863832,
+            0.23138935583227696,
+            0.4499461892618592,
+            0.2419655603770828,
+            0.023915728373737954
+          ]
+        },
+        "observation": "MBAR-style mixture reweighting reconstructs the exact observable histogram from biased samples on an enumerable toy text process.",
+        "passed": true,
+        "status": "toy"
+      },
+      "status": "toy",
+      "target_claim": "MBAR reweighting reconstructs the true distribution of observables such as automated readability index from biased simulations (Figure 3)."
+    },
+    {
+      "challenge_claim": "Error analysis compares confidence intervals for MBAR rare-event estimates against direct sampling estimates (Figure 4).",
+      "challenge_claim_sha256": "96cfc0cb94241dcf49d14841b69f766e8942dc5931d0310a5a4d4d72300b8f34",
+      "evidence": {
+        "evidence_type": "bootstrap_error_analysis",
+        "measurement": {
+          "direct_ci_high": 0.26533773167226354,
+          "direct_ci_low": 0.23146226832773645,
+          "direct_ci_width": 0.03387546334452712,
+          "direct_tail_probability": 0.2484,
+          "exact_tail_probability": 0.26449640159999993,
+          "mbar_ci_high": 0.27211838085251855,
+          "mbar_ci_low": 0.2568744223474813,
+          "mbar_ci_width": 0.015243958505037203,
+          "mbar_tail_probability": 0.26588128875082073
+        },
+        "observation": "The bootstrap-style interval comparison shows the reweighted rare-event estimator has a narrower interval than direct sampling while covering the exact enumerable tail probability.",
+        "passed": true,
+        "status": "toy"
+      },
+      "status": "toy",
+      "target_claim": "Error analysis compares confidence intervals for MBAR rare-event estimates against direct sampling estimates (Figure 4)."
+    }
+  ],
+  "estimated_api_cost_usd": 0.0,
+  "measurements": {
+    "biased_sampling": {
+      "annealed_final_acceptance_rate": 0.382,
+      "annealed_final_mean": 1.1981199999999999,
+      "high_bias_mean": 1.218336,
+      "low_bias_mean": 0.813292,
+      "neutral_mean": 1.033344
+    },
+    "direct_sampling": {
+      "mean_observable": 1.028788,
+      "tail_probability": 0.2484,
+      "tail_threshold": 1.2000000004999998
+    },
+    "error_analysis": {
+      "direct_ci_high": 0.26533773167226354,
+      "direct_ci_low": 0.23146226832773645,
+      "direct_ci_width": 0.03387546334452712,
+      "direct_tail_probability": 0.2484,
+      "exact_tail_probability": 0.26449640159999993,
+      "mbar_ci_high": 0.27211838085251855,
+      "mbar_ci_low": 0.2568744223474813,
+      "mbar_ci_width": 0.015243958505037203,
+      "mbar_tail_probability": 0.26588128875082073
+    },
+    "exact_histogram": [
+      6.469632000000019e-06,
+      0.0006654458880000014,
+      0.0037022659200000078,
+      0.05238457545600008,
+      0.22472541238400037,
+      0.45401942912000054,
+      0.24080350140000045,
+      0.023692900199998538
+    ],
+    "mbar_histogram": {
+      "bins": [
+        -0.9000000009999999,
+        -0.5500000007499999,
+        -0.20000000049999989,
+        0.14999999975,
+        0.5000000000000001,
+        0.8500000002500002,
+        1.2000000004999998,
+        1.5500000007499999,
+        1.900000001
+      ],
+      "exact": [
+        6.469632000000019e-06,
+        0.0006654458880000014,
+        0.0037022659200000078,
+        0.05238457545600008,
+        0.22472541238400037,
+        0.45401942912000054,
+        0.24080350140000045,
+        0.023692900199998538
+      ],
+      "l1_error": 0.01637084762655759,
+      "max_bin_error": 0.006663943448276588,
+      "reconstructed": [
+        0.0,
+        0.000802039102180449,
+        0.003223136524224324,
+        0.04875799052863832,
+        0.23138935583227696,
+        0.4499461892618592,
+        0.2419655603770828,
+        0.023915728373737954
+      ]
+    }
+  },
+  "paper_id": "2RJN5vDHG0",
+  "snapshot_id": "e46da29aa5232fb3983ca9e14f885c8d64ff701d343472f7a85566841e92e549",
+  "title": "Rare Event Analysis of Large Language Models",
+  "upstream_revision": "arxiv:2602.06791v2+arxiv-source-sha256:54d5438fbe581dc0cdae014290bb5db62d4aae446a7debddf3b0866c888f1d9a"
+}

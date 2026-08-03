@@ -1,0 +1,47 @@
+{
+  "approval_sha256": "1260fb284e4b808adb7a615fb5a7d851cefed2b045c0774bb54b13e03a072f81",
+  "checkpoint_bytes": 1293801866,
+  "checkpoint_sha256": "0cd9b7623f36f2c153b89a83ae9977c41d957d9f0bfbba480b55948d067b071f",
+  "converter": "codex-points-timerewarder-task1",
+  "format": "timerewarder-conversion-approval-v1",
+  "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+  "output_bytes": 603857088,
+  "output_sha256": "945dde6bcbd05027d18bd6d6caa9c2cfe299467d2b54bbed52ab83b5621d0af9",
+  "receipt": {
+    "approval_status": "pending_independent_reviewer",
+    "checkpoint_bytes": 1293801866,
+    "checkpoint_file": "lever_pull_20bins.pth",
+    "checkpoint_sha256": "0cd9b7623f36f2c153b89a83ae9977c41d957d9f0bfbba480b55948d067b071f",
+    "child_exit": 0,
+    "converter": "codex-points-timerewarder-task1",
+    "format": "timerewarder-conversion-receipt-v2",
+    "load": {
+      "map_location": "cpu",
+      "mmap": true,
+      "weights_only": true
+    },
+    "model_repository": "CowAndSheep/timerewarder",
+    "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+    "output_bytes": 603857088,
+    "output_sha256": "945dde6bcbd05027d18bd6d6caa9c2cfe299467d2b54bbed52ab83b5621d0af9",
+    "safe_globals_empty": true,
+    "sandbox": {
+      "inherited_network_fds": 0,
+      "network_namespace": "none"
+    },
+    "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+    "static_globals": [
+      "yacs.config.CfgNode"
+    ],
+    "status": "success",
+    "task": "lever-pull-v2",
+    "tensor_checks": {
+      "exact_schema": true,
+      "overlapping_storage": false
+    }
+  },
+  "receipt_sha256": "8d1fdfffab615e9d35ea1cc9623b67c9aa49b299b83cae16a31cfa424f84a63c",
+  "reviewer": "codex-independent-timerewarder-reviewer",
+  "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+  "status": "approved"
+}

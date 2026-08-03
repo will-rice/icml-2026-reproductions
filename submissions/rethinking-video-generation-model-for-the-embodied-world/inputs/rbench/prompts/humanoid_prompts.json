@@ -1,0 +1,902 @@
+[
+  {
+    "name": "humanoid_0001",
+    "image_path": "humanoid/humanoid_0001.jpg",
+    "prompt": "The robot packs items by placing a sachet inside the cardboard box.",
+    "manipulated object": "sachet",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully picks up a sachet from the nearby table and precisely places it inside an open cardboard box, working in a well-organized warehouse setting with stacked boxes in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0002",
+    "image_path": "humanoid/humanoid_0002.jpg",
+    "prompt": "The robot pulls a book out from the bookshelf.",
+    "manipulated object": "book",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully extracts a book from a neatly organized bookshelf situated in a well-lit room with other decorative items, such as a small potted plant and a model car, placed on the shelves. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0003",
+    "image_path": "humanoid/humanoid_0003.jpg",
+    "prompt": "The robotic gripper pours liquid from the kettle into the glass.",
+    "manipulated object": "kettle",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robotic gripper carefully tilts the kettle to pour liquid into the glass, in a room with a wooden table and a television screen displaying various content in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0004",
+    "image_path": "humanoid/humanoid_0004.jpg",
+    "prompt": "The robotic gripper adjusts the flowers in the vase.",
+    "manipulated object": "flowers",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robotic gripper carefully adjusts the arrangement of flowers in the golden vase, which is situated in a well-lit room adorned with modern artwork and additional flower arrangements in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0005",
+    "image_path": "humanoid/humanoid_0005.jpg",
+    "prompt": "The robotic gripper picks up the protective packaging material from the box.",
+    "manipulated object": "protective packaging material",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robotic gripper carefully lifts the transparent protective packaging material from the open cardboard box, which is positioned on a flat surface in a clean, industrial workspace with other packaging materials visible in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0006",
+    "image_path": "humanoid/humanoid_0006.jpg",
+    "prompt": "Two robots cooperatively lift and move the table together.",
+    "manipulated object": "table",
+    "robotic manipulator": "humanoid robots",
+    "prompt detailed": "Two robots work together to carefully lift and transport the table in an industrial warehouse environment surrounded by stacked cardboard boxes and yellow safety barriers. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0007",
+    "image_path": "humanoid/humanoid_0007.jpg",
+    "prompt": "The robot steams a shirt using a garment steamer.",
+    "manipulated object": "garment steamer",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot uses a garment steamer to meticulously remove wrinkles from a blue shirt, which is hanging on a white clothing rack in a modern living room with a neutral-toned sofa and a small side table decorated with a vase of flowers. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0008",
+    "image_path": "humanoid/humanoid_0008.jpg",
+    "prompt": "The robot uses a duster to clean a television screen.",
+    "manipulated object": "duster",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot uses a fluffy duster to carefully clean the screen of a television located in a neatly arranged living space with a bookshelf and a drawer in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0009",
+    "image_path": "humanoid/humanoid_0009.jpg",
+    "prompt": "The robot uses the squeegee to clean the surface of the mirror.",
+    "manipulated object": "squeegee",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot uses the squeegee to thoroughly clean the surface of the mirror, which is mounted on a tiled wall in a bathroom equipped with a sink and toiletries. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0010",
+    "image_path": "humanoid/humanoid_0010.jpg",
+    "prompt": "The robot sweeps the trash into the dustpan and dispose of it in the trash bin.",
+    "manipulated object": "dustpan and broom",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot uses the broom and dustpan to carefully collect the scattered trash from the clean, modern living space before discarding it properly into the nearby black trash bin. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0011",
+    "image_path": "humanoid/humanoid_0011.jpg",
+    "prompt": "The robot rotates the bulb and carefully removes it from the lamp socket.",
+    "manipulated object": "bulb",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, standing in a well-lit and modern interior setting with wooden shelves and a digital clock nearby, carefully rotates the bulb in its mechanical hand and removes it from the lamp socket with precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0012",
+    "image_path": "humanoid/humanoid_0012.jpg",
+    "prompt": "The robot picks up the bottle of milk from the refrigerator using its robotic hand.",
+    "manipulated object": "bottle of milk",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a well-lit modern kitchen featuring a countertop and a vibrant assortment of items inside the refrigerator, the robot carefully retrieves the bottle of milk from the fridge's lower shelf using its articulated robotic hand. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0013",
+    "image_path": "humanoid/humanoid_0013.jpg",
+    "prompt": "The robot uses its robotic hand to grasp the spatula and transfers food from the pan onto the plate.",
+    "manipulated object": "spatula",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, standing in a modern kitchen with wooden cabinets and sleek appliances, carefully grips the spatula with its robotic hand, scoops the food from the pan, and meticulously transfers it onto the plate placed on the counter. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0014",
+    "image_path": "humanoid/humanoid_0014.jpg",
+    "prompt": "The robot use ite robotic hand to pick up the green mug from the table.",
+    "manipulated object": "green mug",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, situated in a minimal workspace with a wooden table and a blank wall backdrop, uses its robotic hand to carefully grasp the green mug placed on the table in front of it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0015",
+    "image_path": "humanoid/humanoid_0015.jpg",
+    "prompt": "The robot use ite robotic hand to rearrange the colorful blocks on the table.",
+    "manipulated object": "colorful blocks",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, situated in a minimalistic and well-lit room with a plain background, should use its articulated robotic hand to carefully pick up and rearrange the colorful interlocking blocks that are placed on the wooden table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0016",
+    "image_path": "humanoid/humanoid_0016.jpg",
+    "prompt": "The robot use ite robotic hand to pick up the Pepsi bottle from the table.",
+    "manipulated object": "Pepsi bottle",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, situated at a wooden table in a plain indoor setting, carefully uses its articulated robotic hand to grasp and lift the Pepsi bottle positioned on the table.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0017",
+    "image_path": "humanoid/humanoid_0017.jpg",
+    "prompt": "The robot use ite robotic hand to move the Pepsi bottle into the plastic container.",
+    "manipulated object": "Pepsi bottle",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, positioned in a spacious room with a light-colored floor and miscellaneous items like styrofoam and wooden planks in the background, should use its robotic hand to carefully grasp the Pepsi bottle standing upright on the wooden table and place it securely into the empty plastic container nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0018",
+    "image_path": "humanoid/humanoid_0018.jpg",
+    "prompt": "The robot vacuums the carpet in the living room using the vacuum cleaner.",
+    "manipulated object": "vacuum cleaner",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot cleans the carpet in the well-lit living room, using the vacuum cleaner methodically and efficiently. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0019",
+    "image_path": "humanoid/humanoid_0019.jpg",
+    "prompt": "The robot retrieves a bag of vegetables from the refrigerator.",
+    "manipulated object": "bag of vegetables",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully reaches into the open refrigerator and retrieves a bag of vegetables, in a modern kitchen setting with sleek cabinets and appliances. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0020",
+    "image_path": "humanoid/humanoid_0020.jpg",
+    "prompt": "The robot tilts the bag and pours the vegetables onto the plate",
+    "manipulated object": "bag of vegetables",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot gently tilts the bag to pour the vegetables onto the plate, in a modern kitchen with sleek cabinetry and a large potted plant nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0021",
+    "image_path": "humanoid/humanoid_0021.jpg",
+    "prompt": "The robot places a blue sweater on a hanger.",
+    "manipulated object": "blue sweater",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully places a blue sweater on a hanger in a room with a softly lit space and large, bright windows filtering light through vertical blinds. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0022",
+    "image_path": "humanoid/humanoid_0022.jpg",
+    "prompt": "The humanoid robot performs a backward somersault (backflip) with full body rotation in the air.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot performs a backward somersault (backflip) with full body rotation in the air in the cityscape, amidst a backdrop of towering skyscrapers and open green spaces. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0023",
+    "image_path": "humanoid/humanoid_0023.jpg",
+    "prompt": "The humanoid robot makes a standing long jump forward, leaping with both legs and landing steadily ahead.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot is positioned close to the waterfront park, amidst lush green grass and calm waters. The humanoid robot makes a standing long jump forward, leaping with both legs and landing steadily ahead. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0024",
+    "image_path": "humanoid/humanoid_0024.jpg",
+    "prompt": "The humanoid robot carefully positions the metallic component into the assembly machine.",
+    "manipulated object": "metallic component",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "Inside an industrial factory setting, the humanoid robot precisely aligns and inserts the metallic component into the designated slot of the assembly machine.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0025",
+    "image_path": "humanoid/humanoid_0025.jpg",
+    "prompt": "The robot arranges the white packages on the workspace.",
+    "manipulated object": "white packages",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot arranges the white packages neatly on the workspace in a high-tech industrial facility. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0026",
+    "image_path": "humanoid/humanoid_0026.jpg",
+    "prompt": "The robot sorts the packages on the conveyor belt.",
+    "manipulated object": "white packages",
+    "robotic manipulator": "humanoid robots",
+    "prompt detailed": "The robot, operating in a spacious industrial facility, efficiently sorts and organizes packages of various sizes and shapes as they move along the conveyor belt. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0027",
+    "image_path": "humanoid/humanoid_0027.jpg",
+    "prompt": "The robot picks up the brown box from the conveyor belt.",
+    "manipulated object": "brown box",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, operating in a clean, industrial environment, carefully picks up the small brown box from the moving conveyor belt. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0028",
+    "image_path": "humanoid/humanoid_0028.jpg",
+    "prompt": "The robot hands over the packaged item to the nearby robot.",
+    "manipulated object": "packaged item",
+    "robotic manipulator": "humanoid robots",
+    "prompt detailed": "The robot carefully transfers the packaged item to the adjacent robot, while standing in a modern kitchen featuring a refrigerator stocked with assorted food items and appliances neatly arranged on the countertop. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0029",
+    "image_path": "humanoid/humanoid_0029.jpg",
+    "prompt": "The robot folds a gray towel on the table.",
+    "manipulated object": "gray towel",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully folds a gray towel placed on the white table in what appears to be a minimalistic and neutral indoor setting. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0030",
+    "image_path": "humanoid/humanoid_0030.jpg",
+    "prompt": "The robot neatly folds the gray towel and places it aside.",
+    "manipulated object": "gray towel",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully folds the gray towel with precision and places it neatly to the side on the white tabletop, which is part of a minimalistic indoor setting with a neutral gray background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0031",
+    "image_path": "humanoid/humanoid_0031.jpg",
+    "prompt": "The humanoid robot picks up a plastic waste bag and places it onto the conveyor beltsort on its right.",
+    "manipulated object": "plastic waste bag",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, operating within a modern industrial facility filled with metal beams and transparent partitions, carefully picks up a colorful plastic waste bag from the sorting bin and places it onto the conveyor belt positioned to its right for further processing. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0032",
+    "image_path": "humanoid/humanoid_0032.jpg",
+    "prompt": "The humanoid robot opens the white box.",
+    "manipulated object": "white box",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a minimalistic indoor environment with plain white walls and a wooden table, carefully uses its articulated hand to open the white box placed in front of it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0033",
+    "image_path": "humanoid/humanoid_0033.jpg",
+    "prompt": "The humanoid robot place the pink mug onto the plate.",
+    "manipulated object": "pink mug",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated at a plain wooden table in a minimalistic setting with a white background, carefully picks up the pink mug from the table and gently places it onto the blue plate. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0034",
+    "image_path": "humanoid/humanoid_0034.jpg",
+    "prompt": "The robot moves the yellow cube into the basket.",
+    "manipulated object": "yellow cube",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, situated in a minimalistic indoor environment with a light-colored wall, carefully picks up the yellow cube from the wooden table and places it into the white plastic basket. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0035",
+    "image_path": "humanoid/humanoid_0035.jpg",
+    "prompt": "The humanoid robot moves the pink mug to the right of the plate.",
+    "manipulated object": "pink mug",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, positioned in front of a light wooden table and a plain white backdrop, carefully picks up the pink mug and places it to the right side of the blue plate with precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0036",
+    "image_path": "humanoid/humanoid_0036.jpg",
+    "prompt": "The humanoid robot lifts up the pink mug from the table.",
+    "manipulated object": "pink mug",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, positioned in a minimalistic environment with a plain white wall in the background, carefully grasps and lifts the pink ceramic mug from the wooden table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0037",
+    "image_path": "humanoid/humanoid_0037.jpg",
+    "prompt": "The robot places the red mug inside the green bowl.",
+    "manipulated object": "red mug",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, situated in a minimalistic environment with a plain white background and a wooden table, carefully grasps the red mug and gently places it into the green bowl positioned in front of it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0038",
+    "image_path": "humanoid/humanoid_0038.jpg",
+    "prompt": "The robot moves the red mug in front of the pink bowl.",
+    "manipulated object": "red mug",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, positioned in a minimalistic indoor setting with a plain white background, carefully picks up the red mug from the wooden table and places it directly in front of the pink bowl. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0039",
+    "image_path": "humanoid/humanoid_0039.jpg",
+    "prompt": "The robot picks up the lemon and places it inside the white basket.",
+    "manipulated object": "lemon",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, positioned in a minimalistic indoor setting with a light-colored background, carefully picks up the yellow lemon from the wooden table using its mechanical gripper and places it inside the white perforated basket situated nearby on the same table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0040",
+    "image_path": "humanoid/humanoid_0040.jpg",
+    "prompt": "The robot places the lemon inside the white basket.",
+    "manipulated object": "lemon",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully picks up the lemon from the table and gently places it inside the white basket, which is positioned in a minimalist indoor setting with a plain white background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0041",
+    "image_path": "humanoid/humanoid_0041.jpg",
+    "prompt": "The robot picks up the lemon from the table.",
+    "manipulated object": "lemon",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully picks up the lemon from the wooden table, which is situated in a minimalistic environment with plain white walls and minimal distractions. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0042",
+    "image_path": "humanoid/humanoid_0042.jpg",
+    "prompt": "The humanoid robot carries the brown package down the hallway.",
+    "manipulated object": "brown package",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully carries the small brown package with its mechanical hand while walking down a well-lit, modern hallway lined with white lockers and surveillance cameras on one side. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0043",
+    "image_path": "humanoid/humanoid_0043.jpg",
+    "prompt": "The humanoid robot performs a weightlifting exercise with two dumbbells.",
+    "manipulated object": "dumbbells",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot performs a weightlifting exercise with two dumbbells in a modern gym environment equipped with various fitness machines, mirrors, and weight racks. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0044",
+    "image_path": "humanoid/humanoid_0044.jpg",
+    "prompt": "The humanoid robot stacks multiple cardboard boxes in a work area.",
+    "manipulated object": "cardboard boxes",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a spacious industrial facility with organized shelves, workbenches, and mobile robotic units in the vicinity, carefully stacks several cardboard boxes in the designated work area by precisely aligning them one on top of the other. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0045",
+    "image_path": "humanoid/humanoid_0045.jpg",
+    "prompt": "The robot dances in the empty blue-lit space.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot performs fluid dance movements in the spacious, empty room illuminated by a soft blue light. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0046",
+    "image_path": "humanoid/humanoid_0046.jpg",
+    "prompt": "The robot walks steadily while being supported by a hanging mechanism.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot walks forward with a controlled motion, supported by a suspended mechanism, in a well-lit indoor environment with safety barriers and equipment positioned nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0047",
+    "image_path": "humanoid/humanoid_0047.jpg",
+    "prompt": "The humanoid robot unscrews the cap from the wine bottle",
+    "manipulated object": "cap of the wine bottle",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a modern, well-lit bar area with sleek blue and metallic accents, carefully grips the wine bottle and unscrews its cap with precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0048",
+    "image_path": "humanoid/humanoid_0048.jpg",
+    "prompt": "The humanoid robot pours the wine into the glass.",
+    "manipulated object": "wine bottle",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, standing in a modern kitchen illuminated with blue ambient lighting, carefully tilts the wine bottle to pour the wine smoothly into the empty glass placed on the counter. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0049",
+    "image_path": "humanoid/humanoid_0049.jpg",
+    "prompt": "The robot decorates a dish with chopsticks in its right robotic hand.",
+    "manipulated object": "chopsticks",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, positioned in a modern kitchen with sleek blue walls and ambient lighting, uses its right robotic hand to carefully arrange the food on a dish using chopsticks, ensuring the presentation is both precise and aesthetically pleasing. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0050",
+    "image_path": "humanoid/humanoid_0050.jpg",
+    "prompt": "The robot places the transparent lid onto the food steamer.",
+    "manipulated object": "transparent lid",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, standing in a modern kitchen-like environment illuminated by vibrant neon lighting, carefully places the transparent lid onto the food steamer containing colorful ingredients. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0051",
+    "image_path": "humanoid/humanoid_0051.jpg",
+    "prompt": "The robot places the cup noodles onto the table.",
+    "manipulated object": "cup noodles",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully places the cup noodles onto the white table in a minimalistic room with plain walls and an empty chair nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0052",
+    "image_path": "humanoid/humanoid_0052.jpg",
+    "prompt": "The robot picks up the yellow toy from the table.",
+    "manipulated object": "yellow toy",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a brightly-lit, minimalist room with a plain white wall and a chair in the background, the robot carefully and precisely picks up the small yellow toy placed on the table directly in front of it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0053",
+    "image_path": "humanoid/humanoid_0053.jpg",
+    "prompt": "The humanoid robot organizes the cardboard boxes near the blue crate.",
+    "manipulated object": "cardboard boxes",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a well-lit workspace surrounded by shelves filled with blue crates, carefully arranges the scattered cardboard boxes next to the blue crate in an orderly manner. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0054",
+    "image_path": "humanoid/humanoid_0054.jpg",
+    "prompt": "The humanoid robot picks up a colorful stuffed animal from the wooden box.",
+    "manipulated object": "stuffed animal",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully reaches into the wooden box, located in a neatly arranged room with a comfortable sofa and a glass cabinet displaying decorative items, and picks up one of the colorful stuffed animals. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0055",
+    "image_path": "humanoid/humanoid_0055.jpg",
+    "prompt": "The humanoid robot places the blue plate on the drying rack beside the sink.",
+    "manipulated object": "blue plate",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully picks up the blue plate from the counter and places it on the drying rack positioned beside the sink in a modern kitchen setting, where potted plants and furniture are visible in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0056",
+    "image_path": "humanoid/humanoid_0056.jpg",
+    "prompt": "The humanoid robot places the cardboard box on the table.",
+    "manipulated object": "cardboard box",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully places the cardboard box onto the small, round wooden table in a tidy room featuring minimalistic furniture and soft lighting. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0057",
+    "image_path": "humanoid/humanoid_0057.jpg",
+    "prompt": "The humanoid robot offers assistance to the person in the wheelchair.",
+    "manipulated object": "wheelchair",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot provides thoughtful assistance to the elderly individual in the wheelchair within a bright and cozy room featuring a large window that allows natural light to illuminate the space. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0058",
+    "image_path": "humanoid/humanoid_0058.jpg",
+    "prompt": "The humanoid robot helps move the wheelchair forward.",
+    "manipulated object": "wheelchair",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully assists in propelling the wheelchair forward, ensuring smooth movement across the tiled floor of a spacious indoor corridor with large glass windows offering views of lush green hills outside. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0059",
+    "image_path": "humanoid/humanoid_0059.jpg",
+    "prompt": "The humanoid robot waves its hand to say hello.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot, standing in a dimly lit environment with a dark background, carefully waves its hand to say hello. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0060",
+    "image_path": "humanoid/humanoid_0060.jpg",
+    "prompt": "The robot runs alongside the dog in the natural environment.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot runs alongside the dog through a shallow, rocky stream in a lush forest surrounded by tall trees and vibrant greenery. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0061",
+    "image_path": "humanoid/humanoid_0061.jpg",
+    "prompt": "The humanoid robot walks through the garage past the parked vehicles.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot methodically walks through the spacious, well-lit garage, moving past the neatly parked futuristic vehicles lined up beside bright red automotive lifts. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0062",
+    "image_path": "humanoid/humanoid_0062.jpg",
+    "prompt": "The humanoid robot jumps up and lands back on the floor.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, positioned in a gym-like setting with exercise equipment such as dumbbells, kettlebells, and stability balls scattered around, performs a vertical jump by bending its knees, propelling itself into the air, and landing back on the wooden floor in a controlled manner. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0063",
+    "image_path": "humanoid/humanoid_0063.jpg",
+    "prompt": "The humanoid robot places eggs into an egg cooker.",
+    "manipulated object": "eggs",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a room with a backdrop showcasing a serene mountainous landscape and a futuristic truck, carefully picks up individual eggs from a carton and places them precisely into an egg cooker positioned on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0064",
+    "image_path": "humanoid/humanoid_0064.jpg",
+    "prompt": "The humanoid robot retrieve the orange ball from the floor.",
+    "manipulated object": "orange ball",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a well-lit, spacious room with wooden flooring and exercise equipment, the humanoid robot is instructed to carefully pick up the orange ball lying on the floor. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0065",
+    "image_path": "humanoid/humanoid_0065.jpg",
+    "prompt": "The humanoid robot lift the red tray containing battery cells from the table.",
+    "manipulated object": "red tray",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In the well-lit industrial facility surrounded by machinery and workstations, the humanoid robot carefully picks up the red tray filled with organized battery cells from the metallic table in front of it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0066",
+    "image_path": "humanoid/humanoid_0066.jpg",
+    "prompt": "The humanoid robot aligns the curtain",
+    "manipulated object": "curtain",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully adjusts the position of the curtain to ensure it hangs evenly, while working in a bustling laboratory setting filled with equipment, human operators, and other robotics systems. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0067",
+    "image_path": "humanoid/humanoid_0067.jpg",
+    "prompt": "The humanoid robot picks up the brown paper bag from the stool outside the door.",
+    "manipulated object": "brown paper bag",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, standing just outside a glass door surrounded by a modern facade with climbing vines and soft lighting, carefully grasps the brown paper bag placed on the wooden stool situated next to the entrance. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0068",
+    "image_path": "humanoid/humanoid_0068.jpg",
+    "prompt": "The humanoid robot waters the plant using a black watering can.",
+    "manipulated object": "black watering can",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully waters the tall green plant in a white pot using a sleek black watering can, in a softly lit room where sunlight filters through beige curtains along the wall. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0069",
+    "image_path": "humanoid/humanoid_0069.jpg",
+    "prompt": "The humanoid robot cleans the kitchen countertop using a cloth and spray bottle.",
+    "manipulated object": "cloth and spray bottle",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot efficiently cleans the marble kitchen countertop using a soft cloth and a spray bottle filled with cleaning solution, while the modern kitchen is illuminated by ambient lighting and features glassware neatly displayed on shelves. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0070",
+    "image_path": "humanoid/humanoid_0070.jpg",
+    "prompt": "The robot places the gray crate onto the platform cart.",
+    "manipulated object": "gray crate",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully places the gray crate onto the platform cart situated within a neatly organized warehouse filled with stacked storage containers and industrial equipment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0071",
+    "image_path": "humanoid/humanoid_0071.jpg",
+    "prompt": "The robot walks through the aisle beside the storage shelves.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot walks steadily through the well-lit, spacious warehouse aisle, carefully maneuvering beside the organized storage shelves filled with gray bins. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0072",
+    "image_path": "humanoid/humanoid_0072.jpg",
+    "prompt": "The robot picks up the small stuffed toy from the conveyor belt.",
+    "manipulated object": "small stuffed toy",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully grasps the small stuffed toy from the moving conveyor belt, in a brightly lit exhibition space filled with technological displays and onlooking visitors. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0073",
+    "image_path": "humanoid/humanoid_0073.jpg",
+    "prompt": "The humanoid robot lifts the gray crate from the pallet.",
+    "manipulated object": "gray crate",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a brightly lit, futuristic space filled with multiple humanoid robots and industrial equipment, the humanoid robot carefully bends down and firmly grips the gray crate to lift it from the blue pallet with precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0074",
+    "image_path": "humanoid/humanoid_0074.jpg",
+    "prompt": "The humanoid robot inspects the orange wheel assembly while holding a tool.",
+    "manipulated object": "tool",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully examines the large orange wheel assembly, using a handheld tool for detailed inspection, within a spacious and well-lit industrial facility featuring equipment, stairs, and a mix of orange and metallic elements. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0075",
+    "image_path": "humanoid/humanoid_0075.jpg",
+    "prompt": "The humanoid robot organizes the labeled black crates on the workstation.",
+    "manipulated object": "black crate",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a bustling automotive assembly area with partially assembled blue vehicles in the background, systematically sorts and arranges the black crates labeled with yellow alphanumeric codes on the workstation in an orderly manner. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0076",
+    "image_path": "humanoid/humanoid_0076.jpg",
+    "prompt": "The humanoid robot places the black crate onto the storage rack.",
+    "manipulated object": "black crate",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully places the black crate onto the designated tier of the metal storage rack, within the spacious and brightly lit factory environment filled with manufacturing equipment and assembly lines. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0077",
+    "image_path": "humanoid/humanoid_0077.jpg",
+    "prompt": "The humanoid robot inspects the stacked black crates on the pallet.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully examines the stacked black crates positioned on a pallet, located in a spacious and well-organized industrial facility with machinery and storage racks in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0078",
+    "image_path": "humanoid/humanoid_0078.jpg",
+    "prompt": "The humanoid robot assembles a metal frame on the work table using a drill on its right hand.",
+    "manipulated object": "drill",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, positioned in a bright workspace with minimalistic furniture and floor-to-ceiling curtains, meticulously assembles a metal frame placed on a green work table by precisely operating a drill tool affixed to its right hand. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0079",
+    "image_path": "humanoid/humanoid_0079.jpg",
+    "prompt": "The humanoid robot opens the car hood to inspect the car engine.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot carefully opens the car hood to inspect the car engine, amidst a well-lit and organized industrial assembly line environment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0080",
+    "image_path": "humanoid/humanoid_0080.jpg",
+    "prompt": "The humanoid robot holds and operates a tool near the car hood.",
+    "manipulated object": "tool",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot is operating a handheld tool with precision near the open hood of a light blue car, in a well-lit, organized factory environment filled with machinery and assembly line equipment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0081",
+    "image_path": "humanoid/humanoid_0081.jpg",
+    "prompt": "The humanoid robot dances in the room.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot performs a dance routine in a spacious room with reflective floors, bright windows, and decorations featuring red traditional elements on the walls, while its reflection in the large mirror precisely mimics every motion of its fluid movements. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0082",
+    "image_path": "humanoid/humanoid_0082.jpg",
+    "prompt": "The humanoid robot stands up from the chair.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a brightly lit exhibition booth featuring modern display screens and promotional panels, slowly and steadily rises from the chair using its articulated limbs. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0083",
+    "image_path": "humanoid/humanoid_0083.jpg",
+    "prompt": "The humanoid robot performs a stretching pose on the ground.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated on a flat, indoor stage with dark curtains in the background, performs an extended stretching pose on the ground, demonstrating flexibility by placing one arm outward and one leg bent while maintaining balance. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0084",
+    "image_path": "humanoid/humanoid_0084.jpg",
+    "prompt": "The humanoid robot runs across an open field.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot runs swiftly across an open field covered in short grass, surrounded by scattered trees and distant hills under a clear blue sky. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0085",
+    "image_path": "humanoid/humanoid_0085.jpg",
+    "prompt": "The humanoid robot turns left and ascends the stairs.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, positioned in front of a modern building with gray concrete walls and a striking red architectural feature, makes a left turn and carefully ascends the wide, white stairs. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0086",
+    "image_path": "humanoid/humanoid_0086.jpg",
+    "prompt": "The robot walks forward steadily.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot walks forward steadily along a brightly lit corridor with glass railings and arched windows lining the walls. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0087",
+    "image_path": "humanoid/humanoid_0087.jpg",
+    "prompt": "The robot performs high kick inside the office space.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot executes a precise high kick maneuver within the modern office space, which features large glass windows that provide a view of outdoor greenery and adjacent buildings. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0088",
+    "image_path": "humanoid/humanoid_0088.jpg",
+    "prompt": "The robot performs side kick in an outdoor artificial turf field.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot performs a controlled side kick on an outdoor artificial turf field, surrounded by neatly trimmed trees and buildings illuminated at dusk. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0089",
+    "image_path": "humanoid/humanoid_0089.jpg",
+    "prompt": "The robot places the green garment into the washing machine.",
+    "manipulated object": "green garment",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully picks up the green garment from the white laundry basket and places it into the front-loading washing machine, located within a clean, tiled bathroom featuring a modern vanity and a decorative plant. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0090",
+    "image_path": "humanoid/humanoid_0090.jpg",
+    "prompt": "The robotic hand picks up the gaming controller from the table.",
+    "manipulated object": "gaming controller",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robotic hand precisely grasps and lifts the gaming controller from the clean, white table in a minimalist, neutral-toned environment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0091",
+    "image_path": "humanoid/humanoid_0091.jpg",
+    "prompt": "The robot picks up the pillow from the table and places it on the sofa.",
+    "manipulated object": "pillow",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully lifts the gray pillow from the white coffee table situated near the beige sofa and places it gently on the sofa amidst a clean and modern living room featuring large windows with sheer curtains and cozy rattan chairs in the corner. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0092",
+    "image_path": "humanoid/humanoid_0092.jpg",
+    "prompt": "The robot grasps the black stool.",
+    "manipulated object": "black stool",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully grasps the black stool positioned near the marble-counter kitchen area, within a modern and spacious home setting featuring tiled floors and neutral-toned furnishings. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0093",
+    "image_path": "humanoid/humanoid_0093.jpg",
+    "prompt": "The robot pulls a chair away from the dining table.",
+    "manipulated object": "chairs",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot carefully pulls a chair away from the light-colored dining table, situated within a modern, open-plan living and dining space with neutral tones and archways. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0094",
+    "image_path": "humanoid/humanoid_0094.jpg",
+    "prompt": "The humanoid robot lifts the cardboard box on the conveyor belt.",
+    "manipulated object": "cardboard box",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a brightly lit industrial setting with large windows allowing natural light to stream in, the humanoid robot carefully lifts up the cardboard box on the conveyor belt with both hands. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0095",
+    "image_path": "humanoid/humanoid_0095.jpg",
+    "prompt": "The humanoid robot moves forward to the workspace.",
+    "manipulated object": "None",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The humanoid robot, situated in a well-lit industrial workspace with organized workstations and tools laid out on long tables, proceeds steadily and deliberately toward its designated work area. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0096",
+    "image_path": "humanoid/humanoid_0096.jpg",
+    "prompt": "The humanoid robot carries a cardboard box towards the stack of boxes.",
+    "manipulated object": "cardboard box",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a well-lit, organized warehouse setting with neatly arranged stacks of cardboard boxes and storage lockers along the walls, the humanoid robot carefully carries a medium-sized cardboard box and walks steadily towards the area where boxes are stacked. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0097",
+    "image_path": "humanoid/humanoid_0097.jpg",
+    "prompt": "The robot picks up the gray, fabric storage bag, which lies directly in front of it on the floor.",
+    "manipulated object": "gray storage bag",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "Located in a modern restroom with sleek white marble walls and floors, the robot carefully picks up the gray, fabric storage bag with handles, which lies directly in front of it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0098",
+    "image_path": "humanoid/humanoid_0098.jpg",
+    "prompt": "The robot vacuums the floor to clean the surface.",
+    "manipulated object": "vacuum",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "The robot efficiently vacuums the shiny tiled floor to remove any dirt or debris while operating in a modern, spacious bathroom with glass-enclosed shower areas and sleek surfaces. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0099",
+    "image_path": "humanoid/humanoid_0099.jpg",
+    "prompt": "The robot uses the toilet brush to clean the toilet bowl.",
+    "manipulated object": "toilet brush",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a clean and modern bathroom with white marble walls and floors, the robot carefully grips the toilet brush and thoroughly scrubs the interior surface of the toilet bowl to ensure it is clean. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "humanoid_0100",
+    "image_path": "humanoid/humanoid_0100.jpg",
+    "prompt": "The robot picks up the trash from the sink counter and place it in the trash bin.",
+    "manipulated object": "trash",
+    "robotic manipulator": "humanoid robot",
+    "prompt detailed": "In a clean and modern bathroom with a marble-tiled wall and a well-lit mirror, the robot carefully collects all trash items from the sink counter, including tissues and paper, and precisely places them into the nearby trash bin. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  }
+]

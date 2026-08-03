@@ -1,0 +1,15 @@
+[project]
+name = "direct-reproduction"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=2.2.0",
+  "gradio>=6.20.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.4.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

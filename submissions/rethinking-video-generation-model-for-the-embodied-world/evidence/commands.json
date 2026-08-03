@@ -1,0 +1,16 @@
+{
+  "commands": [
+    "env UV_CACHE_DIR=/tmp/rbench-task-uv-cache uv run rbench-repro acquire --cache-dir .cache/rbench --manifest evidence/input-manifest.json --acquired-at 2026-07-27T15:17:46Z",
+    "env UV_CACHE_DIR=/tmp/rbench-task-uv-cache uv run rbench-repro validate-inputs --manifest evidence/input-manifest.json --cache-dir .cache/rbench",
+    "env ALL_PROXY=http://127.0.0.1:9 HTTPS_PROXY=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 NO_PROXY= UV_CACHE_DIR=/tmp/rbench-task-uv-cache uv run rbench-repro audit --manifest evidence/input-manifest.json --cache-dir .cache/rbench --schema schema/evidence-v1.schema.json --output evidence/results.json --generated-at 2026-07-27T00:00:00+00:00 --tool-revision 1e92b10f4139c34012a5698031bdfe2beea95dae",
+    "env UV_CACHE_DIR=/tmp/rbench-task-uv-cache uv run rbench-repro validate evidence/results.json --schema schema/evidence-v1.schema.json"
+  ],
+  "generated_at": "2026-07-27T00:00:00+00:00",
+  "input_manifest_sha256": "1940591b11c41cba80c64106b6e7b74b4ebea98ec82dd264baaadfacd0e26854",
+  "package_lock_sha256": "a3ce9452c594ec40459d7ecccfcae49498ccf15e76cc6c5ee62865263d8cdcd2",
+  "platform": "Linux-5.15.0-174-generic-x86_64-with-glibc2.35",
+  "python_version": "3.12.11",
+  "results_sha256": "b8b5f83c3e4ee433802c75743047b6cf38fd5bec6fe4ad5846f4cc2f0f0211cb",
+  "schema_sha256": "b27edb9e1d2e44e8af80f058292b1eceb4d0c8ee173e992e2754741769af659f",
+  "tool_revision": "1e92b10f4139c34012a5698031bdfe2beea95dae"
+}

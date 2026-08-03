@@ -1,0 +1,7 @@
+.cache/
+*.mp4
+*.pth
+*.safetensors
+artifacts/acquisition.local.json
+artifacts/tmp/
+conversion/wheels/

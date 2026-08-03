@@ -1,7 +1,5 @@
 """Immutable live snapshots of challenge datasets and reproduction Spaces."""
 
-from __future__ import annotations
-
 import copy
 from datetime import datetime
 import hashlib
