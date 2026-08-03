@@ -1,0 +1,3260 @@
+{
+  "format": "timerewarder-model-schema-v1",
+  "maximum_output_bytes": 604000000,
+  "maximum_output_bytes_basis": "603822160 tensor bytes plus a conservative 177840-byte safetensors header allowance",
+  "maximum_tensor_bytes": 603822160,
+  "minimum_tensor_bytes": 603822160,
+  "source": {
+    "checkpoint": "basketball_20bins.pth",
+    "lfs_sha256": "4697468cdba176467df4ee0d8d766c6f53ad2305f87101a2511ec84e20410e50",
+    "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+    "size_bytes": 1293753599
+  },
+  "tensors": {
+    "ln_final.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "ln_final.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "order_attn.to_k.weight": {
+      "byte_size": 1572864,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        768
+      ]
+    },
+    "order_attn.to_out.0.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "order_attn.to_out.0.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "order_attn.to_q.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "order_attn.to_v.weight": {
+      "byte_size": 1572864,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        768
+      ]
+    },
+    "order_ln.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "order_ln.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "order_mlp.0.bias": {
+      "byte_size": 4096,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1024
+      ]
+    },
+    "order_mlp.0.weight": {
+      "byte_size": 4096,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1024
+      ]
+    },
+    "order_mlp.1.bias": {
+      "byte_size": 80,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        20
+      ]
+    },
+    "order_mlp.1.weight": {
+      "byte_size": 81920,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        20,
+        1024
+      ]
+    },
+    "positional_embedding": {
+      "byte_size": 157696,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        77,
+        512
+      ]
+    },
+    "text_projection": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "token_embedding.weight": {
+      "byte_size": 101187584,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        49408,
+        512
+      ]
+    },
+    "transformer.resblocks.0.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.0.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.0.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.0.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.0.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.0.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.0.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.0.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.0.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.0.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.0.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.0.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.1.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.1.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.1.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.1.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.1.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.1.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.1.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.1.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.1.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.1.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.1.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.1.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.10.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.10.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.10.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.10.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.10.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.10.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.10.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.10.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.10.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.10.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.10.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.10.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.11.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.11.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.11.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.11.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.11.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.11.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.11.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.11.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.11.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.11.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.11.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.11.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.2.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.2.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.2.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.2.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.2.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.2.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.2.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.2.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.2.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.2.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.2.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.2.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.3.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.3.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.3.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.3.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.3.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.3.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.3.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.3.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.3.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.3.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.3.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.3.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.4.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.4.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.4.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.4.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.4.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.4.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.4.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.4.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.4.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.4.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.4.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.4.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.5.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.5.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.5.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.5.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.5.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.5.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.5.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.5.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.5.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.5.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.5.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.5.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.6.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.6.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.6.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.6.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.6.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.6.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.6.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.6.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.6.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.6.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.6.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.6.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.7.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.7.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.7.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.7.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.7.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.7.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.7.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.7.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.7.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.7.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.7.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.7.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.8.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.8.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.8.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.8.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.8.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.8.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.8.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.8.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.8.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.8.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.8.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.8.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "transformer.resblocks.9.attn.in_proj_bias": {
+      "byte_size": 6144,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536
+      ]
+    },
+    "transformer.resblocks.9.attn.in_proj_weight": {
+      "byte_size": 3145728,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        1536,
+        512
+      ]
+    },
+    "transformer.resblocks.9.attn.out_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.9.attn.out_proj.weight": {
+      "byte_size": 1048576,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        512
+      ]
+    },
+    "transformer.resblocks.9.ln_1.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.9.ln_1.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.9.ln_2.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.9.ln_2.weight": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.9.mlp.c_fc.bias": {
+      "byte_size": 8192,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048
+      ]
+    },
+    "transformer.resblocks.9.mlp.c_fc.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2048,
+        512
+      ]
+    },
+    "transformer.resblocks.9.mlp.c_proj.bias": {
+      "byte_size": 2048,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512
+      ]
+    },
+    "transformer.resblocks.9.mlp.c_proj.weight": {
+      "byte_size": 4194304,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        512,
+        2048
+      ]
+    },
+    "visual.class_embedding": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.conv1.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3,
+        16,
+        16
+      ]
+    },
+    "visual.ln_post.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.ln_post.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.ln_pre.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.ln_pre.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.positional_embedding": {
+      "byte_size": 605184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        197,
+        768
+      ]
+    },
+    "visual.proj": {
+      "byte_size": 1572864,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        512
+      ]
+    },
+    "visual.transformer.resblocks.0.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.0.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.0.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.0.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.1.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.1.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.1.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.1.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.10.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.10.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.10.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.10.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.11.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.11.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.11.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.11.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.2.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.2.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.2.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.2.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.3.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.3.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.3.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.3.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.4.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.4.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.4.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.4.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.5.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.5.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.5.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.5.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.6.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.6.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.6.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.6.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.7.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.7.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.7.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.7.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.8.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.8.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.8.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.8.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.9.attn.in_proj_bias": {
+      "byte_size": 9216,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304
+      ]
+    },
+    "visual.transformer.resblocks.9.attn.in_proj_weight": {
+      "byte_size": 7077888,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        2304,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.attn.out_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.attn.out_proj.weight": {
+      "byte_size": 2359296,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.ln_1.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.ln_1.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.ln_2.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.ln_2.weight": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.mlp.c_fc.bias": {
+      "byte_size": 12288,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072
+      ]
+    },
+    "visual.transformer.resblocks.9.mlp.c_fc.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        3072,
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.mlp.c_proj.bias": {
+      "byte_size": 3072,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768
+      ]
+    },
+    "visual.transformer.resblocks.9.mlp.c_proj.weight": {
+      "byte_size": 9437184,
+      "contiguous": true,
+      "device": "cpu",
+      "dtype": "float32",
+      "layout": "torch.strided",
+      "shape": [
+        768,
+        3072
+      ]
+    }
+  },
+  "top_level_keys": [
+    "config",
+    "epoch",
+    "lr_scheduler",
+    "max_accuracy",
+    "model",
+    "optimizer"
+  ],
+  "top_level_types": {
+    "config": "yacs.config.CfgNode",
+    "epoch": "builtins.int",
+    "lr_scheduler": "builtins.dict",
+    "max_accuracy": "builtins.float",
+    "model": "collections.OrderedDict",
+    "optimizer": "builtins.dict"
+  }
+}

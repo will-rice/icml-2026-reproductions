@@ -1,0 +1,652 @@
+[
+    {
+        "name": "spatial_relationship_0001",
+        "image_path": "spatial_relationship/spatial_relationship_0001.jpg",
+        "prompt": "The dual-arm robot picks up the yellow cup and places it to the right side of the yellow saucer from the camera’s perspective",
+        "manipulated object": "yellow cup",
+        "robotic manipulator": "dual-arm robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "yellow cup",
+            "object2": "saucer"
+        }
+    },
+    {
+        "name": "spatial_relationship_0002",
+        "image_path": "spatial_relationship/spatial_relationship_0002.jpg",
+        "prompt": "The humanoid robot grabs the yellow-and-blue stacked block and positions it above the green-and-blue stacked block",
+        "manipulated object": "yellow-and-blue stacked block",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "above",
+            "object1": "yellow block",
+            "object2": "green block"
+        }
+    },
+    {
+        "name": "spatial_relationship_0003",
+        "image_path": "spatial_relationship/spatial_relationship_0003.jpg",
+        "prompt": "The humanoid robot moves backward and puts the cardboard box underneath the round wooden table with three legs",
+        "manipulated object": "cardboard box",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "under",
+            "object1": "box",
+            "object2": "table"
+        }
+    },
+    {
+        "name": "spatial_relationship_0004",
+        "image_path": "spatial_relationship/spatial_relationship_0004.jpg",
+        "prompt": "The humanoid robot picks up the lemon and moves it above the white plastic basket",
+        "manipulated object": "lemon",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "above",
+            "object1": "lemon",
+            "object2": "basket"
+        }
+    },
+    {
+        "name": "spatial_relationship_0005",
+        "image_path": "spatial_relationship/spatial_relationship_0005.jpg",
+        "prompt": "The humanoid robot picks up the lemon and places it to the right side of the white plastic basket from the camera’s perspective",
+        "manipulated object": "lemon",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "lemon",
+            "object2": "basket"
+        }
+    },
+    {
+        "name": "spatial_relationship_0006",
+        "image_path": "spatial_relationship/spatial_relationship_0006.jpg",
+        "prompt": "The humanoid robot picks up the pink cup and places it onto the blue plate",
+        "manipulated object": "pink cup",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "pink cup",
+            "object2": "blue plate"
+        }
+    },
+    {
+        "name": "spatial_relationship_0007",
+        "image_path": "spatial_relationship/spatial_relationship_0007.jpg",
+        "prompt": "The humanoid robot picks up the yellow block and places it on the red block",
+        "manipulated object": "yellow block",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "yellow block",
+            "object2": "red block"
+        }
+    },
+    {
+        "name": "spatial_relationship_0008",
+        "image_path": "spatial_relationship/spatial_relationship_0008.jpg",
+        "prompt": "The humanoid robot places the glass of coffee in its hand to the right of the salad from the camera’s perspective",
+        "manipulated object": "glass of coffee",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "glass",
+            "object2": "salad"
+        }
+    },
+    {
+        "name": "spatial_relationship_0009",
+        "image_path": "spatial_relationship/spatial_relationship_0009.jpg",
+        "prompt": "The humanoid robot wearing red boxing gloves and the human wearing blue boxing gloves switch their positions in the boxing ring",
+        "manipulated object": "positions in the boxing ring",
+        "robotic manipulator": "humanoid robot wearing red boxing gloves",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "human",
+            "object2": "robot"
+        }
+    },
+    {
+        "name": "spatial_relationship_0010",
+        "image_path": "spatial_relationship/spatial_relationship_0010.jpg",
+        "prompt": "The humanoid robot wearing red boxing gloves moves to the right side of the black punching bag from the camera’s perspective",
+        "manipulated object": "black punching bag",
+        "robotic manipulator": "humanoid robot wearing red boxing gloves",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "robot",
+            "object2": "punching-bag"
+        }
+    },
+    {
+        "name": "spatial_relationship_0011",
+        "image_path": "spatial_relationship/spatial_relationship_0011.jpg",
+        "prompt": "The robot dog moves to the background behind the pet dog from the camera’s perspective",
+        "manipulated object": "robot dog",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "behind",
+            "object1": "robot dog",
+            "object2": "dog"
+        }
+    },
+    {
+        "name": "spatial_relationship_0012",
+        "image_path": "spatial_relationship/spatial_relationship_0012.jpg",
+        "prompt": "The robot dog runs to the front of the man",
+        "manipulated object": "robot dog",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "robot dog",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0013",
+        "image_path": "spatial_relationship/spatial_relationship_0013.jpg",
+        "prompt": "The robotic arm places the peach from its gripper onto the top shelf of the standing white shelving unit",
+        "manipulated object": "peach",
+        "robotic manipulator": "robotic arm",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "peach",
+            "object2": "shelf"
+        }
+    },
+    {
+        "name": "spatial_relationship_0014",
+        "image_path": "spatial_relationship/spatial_relationship_0014.jpg",
+        "prompt": "The robotic gripper on the right picks up the green cube block and places it on top of the red cylinder block",
+        "manipulated object": "green cube block",
+        "robotic manipulator": "robotic gripper on the right",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "green block",
+            "object2": "red cylinder"
+        }
+    },
+    {
+        "name": "spatial_relationship_0015",
+        "image_path": "spatial_relationship/spatial_relationship_0015.jpg",
+        "prompt": "The robotic gripper picks up the blue cleaning cloth and places it above the stainless steel faucet",
+        "manipulated object": "blue cleaning cloth",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "above",
+            "object1": "blue cloth",
+            "object2": "faucet"
+        }
+    },
+    {
+        "name": "spatial_relationship_0016",
+        "image_path": "spatial_relationship/spatial_relationship_0016.jpg",
+        "prompt": "The robotic gripper picks up the cup and places it on the saucer",
+        "manipulated object": "cup",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "cup",
+            "object2": "saucer"
+        }
+    },
+    {
+        "name": "spatial_relationship_0017",
+        "image_path": "spatial_relationship/spatial_relationship_0017.jpg",
+        "prompt": "The robotic gripper picks up the red block and places it to the left side of the green block",
+        "manipulated object": "red block",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "red block",
+            "object2": "green block"
+        }
+    },
+    {
+        "name": "spatial_relationship_0018",
+        "image_path": "spatial_relationship/spatial_relationship_0018.jpg",
+        "prompt": "The robotic gripper picks up the red cup and places it in front of the black bowl from the camera’s perspective",
+        "manipulated object": "red cup",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "in front of",
+            "object1": "cup",
+            "object2": "bowl"
+        }
+    },
+    {
+        "name": "spatial_relationship_0019",
+        "image_path": "spatial_relationship/spatial_relationship_0019.jpg",
+        "prompt": "The robotic gripper picks up the white ceramic mug and places it to the left side of the white plate",
+        "manipulated object": "white ceramic mug",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "ceramic mug",
+            "object2": "plate"
+        }
+    },
+    {
+        "name": "spatial_relationship_0020",
+        "image_path": "spatial_relationship/spatial_relationship_0020.jpg",
+        "prompt": "The robotic hand picks up the Rubik’s cube and places it onto the top tier of the wooden rack",
+        "manipulated object": "Rubik's cube",
+        "robotic manipulator": "robotic hand",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "cube",
+            "object2": "wooden rack"
+        }
+    },
+    {
+        "name": "spatial_relationship_0021",
+        "image_path": "spatial_relationship/spatial_relationship_0021.jpg",
+        "prompt": "The robotic hand picks up the tennis ball and moves it above the pink bowl",
+        "manipulated object": "tennis ball",
+        "robotic manipulator": "robotic hand",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "above",
+            "object1": "tennis ball",
+            "object2": "bowl"
+        }
+    },
+    {
+        "name": "spatial_relationship_0022",
+        "image_path": "spatial_relationship/spatial_relationship_0022.jpg",
+        "prompt": "The humanoid robot picks up a white cup and places it onto the plate on the table in front of it",
+        "manipulated object": "white cup",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "cup",
+            "object2": "plate"
+        }
+    },
+    {
+        "name": "spatial_relationship_0023",
+        "image_path": "spatial_relationship/spatial_relationship_0023.jpg",
+        "prompt": "The robotic gripper picks up an orange and places it to the left of the teal plastic bin",
+        "manipulated object": "orange",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "orange",
+            "object2": "plastic bin"
+        }
+    },
+    {
+        "name": "spatial_relationship_0024",
+        "image_path": "spatial_relationship/spatial_relationship_0024.jpg",
+        "prompt": "The robotic gripper picks up the cup and places it onto the plate",
+        "manipulated object": "cup",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "cup",
+            "object2": "plate"
+        }
+    },
+    {
+        "name": "spatial_relationship_0025",
+        "image_path": "spatial_relationship/spatial_relationship_0025.jpg",
+        "prompt": "The humanoid robot and the human run forward, with the robot running ahead of the human",
+        "manipulated object": "running motion",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "in front of",
+            "object1": "robot",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0026",
+        "image_path": "spatial_relationship/spatial_relationship_0026.jpg",
+        "prompt": "The humanoid robot jumps to the right and lands on the right side of the wooden box",
+        "manipulated object": "wooden box",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "robot",
+            "object2": "wooden box"
+        }
+    },
+    {
+        "name": "spatial_relationship_0027",
+        "image_path": "spatial_relationship/spatial_relationship_0027.jpg",
+        "prompt": "The humanoid robot moves the tire to the right side of the table (from the camera’s perspective)",
+        "manipulated object": "tire",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "tire",
+            "object2": "table"
+        }
+    },
+    {
+        "name": "spatial_relationship_0028",
+        "image_path": "spatial_relationship/spatial_relationship_0028.jpg",
+        "prompt": "The humanoid robot picks up the frying pan and places it on the right side of the table (from the camera’s perspective)",
+        "manipulated object": "frying pan",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "pan",
+            "object2": "table"
+        }
+    },
+    {
+        "name": "spatial_relationship_0029",
+        "image_path": "spatial_relationship/spatial_relationship_0029.jpg",
+        "prompt": "The humanoid robot places the red block onto the blue plate",
+        "manipulated object": "red block",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "under",
+            "object1": "plate",
+            "object2": "red block"
+        }
+    },
+    {
+        "name": "spatial_relationship_0030",
+        "image_path": "spatial_relationship/spatial_relationship_0030.jpg",
+        "prompt": "The humanoid robot places the stool to the right side of the table (from the camera’s perspective)",
+        "manipulated object": "stool",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "stool",
+            "object2": "table"
+        }
+    },
+    {
+        "name": "spatial_relationship_0031",
+        "image_path": "spatial_relationship/spatial_relationship_0031.jpg",
+        "prompt": "The humanoid robot turns left, walks past the two blue chairs, then turns right and goes up the staircase",
+        "manipulated object": "staircase",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "above",
+            "object1": "robot",
+            "object2": "chair"
+        }
+    },
+    {
+        "name": "spatial_relationship_0032",
+        "image_path": "spatial_relationship/spatial_relationship_0032.jpg",
+        "prompt": "The quadruped robot moves to the right and positions itself on the right side of the human",
+        "manipulated object": "human",
+        "robotic manipulator": "quadruped robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "quadruped robot",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0033",
+        "image_path": "spatial_relationship/spatial_relationship_0033.jpg",
+        "prompt": "The quadruped robot moves to the right direction and positions itself on the right side of the human",
+        "manipulated object": "robot's position relative to human",
+        "robotic manipulator": "quadruped robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "quadruped robot",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0034",
+        "image_path": "spatial_relationship/spatial_relationship_0034.jpg",
+        "prompt": "The robot dog moves to the right and positions itself on the right side of the human",
+        "manipulated object": "human",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "robot dog",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0035",
+        "image_path": "spatial_relationship/spatial_relationship_0035.jpg",
+        "prompt": "The robot dog runs backward, moving away from the human holding the tablet",
+        "manipulated object": "movement direction",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "behind",
+            "object1": "robot dog",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0036",
+        "image_path": "spatial_relationship/spatial_relationship_0036.jpg",
+        "prompt": "The robot dog runs backward, moving farther into the distance",
+        "manipulated object": "robot dog",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "behind",
+            "object1": "robot dog",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0037",
+        "image_path": "spatial_relationship/spatial_relationship_0037.jpg",
+        "prompt": "The robot dog walks down the stairs and moves to the right side of the human wearing a yellow jacket",
+        "manipulated object": "stairs",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "robot dog",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0038",
+        "image_path": "spatial_relationship/spatial_relationship_0038.jpg",
+        "prompt": "The robot dog walks forward and moves farther ahead of the human",
+        "manipulated object": "robot dog",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "behind",
+            "object1": "robot dog",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0039",
+        "image_path": "spatial_relationship/spatial_relationship_0039.jpg",
+        "prompt": "The robot dog walks to the right, stepping over the rocks, and moves to the right side of the human",
+        "manipulated object": "rocks",
+        "robotic manipulator": "robot dog",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "robot dog",
+            "object2": "human"
+        }
+    },
+    {
+        "name": "spatial_relationship_0040",
+        "image_path": "spatial_relationship/spatial_relationship_0040.jpg",
+        "prompt": "The robotic hand picks up the bok choy and places it to the left of the frying pan",
+        "manipulated object": "bok choy",
+        "robotic manipulator": "robotic hand",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "bok choy",
+            "object2": "pan"
+        }
+    },
+    {
+        "name": "spatial_relationship_0041",
+        "image_path": "spatial_relationship/spatial_relationship_0041.jpg",
+        "prompt": "The robotic hands pick up the orange ball and place it on the top tier of the wooden rack",
+        "manipulated object": "orange ball",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "orange ball",
+            "object2": "wooden rack"
+        }
+    },
+    {
+        "name": "spatial_relationship_0042",
+        "image_path": "spatial_relationship/spatial_relationship_0042.jpg",
+        "prompt": "The robotic hands pick up the stapler and place it to the left of the pink bowl",
+        "manipulated object": "stapler",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "black stapler",
+            "object2": "bowl"
+        }
+    },
+    {
+        "name": "spatial_relationship_0043",
+        "image_path": "spatial_relationship/spatial_relationship_0043.jpg",
+        "prompt": "The robotic hands pick up the blue cup from the lower tier of the wooden rack and place it on the top tier",
+        "manipulated object": "blue cup",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "blue cup",
+            "object2": "wooden rack"
+        }
+    },
+    {
+        "name": "spatial_relationship_0044",
+        "image_path": "spatial_relationship/spatial_relationship_0044.jpg",
+        "prompt": "The robotic hands pick up the tennis ball and place it to the right of the plate",
+        "manipulated object": "tennis ball",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "tennis ball",
+            "object2": "plate"
+        }
+    },
+    {
+        "name": "spatial_relationship_0045",
+        "image_path": "spatial_relationship/spatial_relationship_0045.jpg",
+        "prompt": "The robotic hands pick up the donut and place it on the top tier of the wooden rack",
+        "manipulated object": "donut",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "on",
+            "object1": "donut",
+            "object2": "wooden rack"
+        }
+    },
+    {
+        "name": "spatial_relationship_0046",
+        "image_path": "spatial_relationship/spatial_relationship_0046.jpg",
+        "prompt": "The robotic hands pick up the red wrench and place it to the left of the red mug",
+        "manipulated object": "red wrench",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "red wrench",
+            "object2": "mug"
+        }
+    },
+    {
+        "name": "spatial_relationship_0047",
+        "image_path": "spatial_relationship/spatial_relationship_0047.jpg",
+        "prompt": "The humanoid robot picks up the pink cup and places it to the right of the blue plate",
+        "manipulated object": "pink cup",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "right",
+            "object1": "pink cup",
+            "object2": "plate"
+        }
+    },
+    {
+        "name": "spatial_relationship_0048",
+        "image_path": "spatial_relationship/spatial_relationship_0048.jpg",
+        "prompt": "The robotic arm moves the stainless steel pot to the left side of the table.",
+        "manipulated object": "stainless steel pot",
+        "robotic manipulator": "robotic arm",
+        "view": "third-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "pot",
+            "object2": "table"
+        }
+    },
+    {
+        "name": "spatial_relationship_0049",
+        "image_path": "spatial_relationship/spatial_relationship_0049.jpg",
+        "prompt": "The robotic hands pick up the white-and-blue-glue and place it to the left of the black container.",
+        "manipulated object": "white-and-blue glue",
+        "robotic manipulator": "robotic hands",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "white and blue glue",
+            "object2": "container"
+        }
+    },
+    {
+        "name": "spatial_relationship_0050",
+        "image_path": "spatial_relationship/spatial_relationship_0050.jpg",
+        "prompt": "The robotic arms place the white electric kettle to the left of the glass",
+        "manipulated object": "white electric kettle",
+        "robotic manipulator": "robotic arms",
+        "view": "first-person",
+        "Spatial Relationship": {
+            "spatial": "left",
+            "object1": "kettle",
+            "object2": "glass"
+        }
+    }
+]

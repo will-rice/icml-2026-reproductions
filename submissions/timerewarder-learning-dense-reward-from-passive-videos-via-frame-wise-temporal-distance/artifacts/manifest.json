@@ -1,0 +1,110 @@
+{
+  "conversion_dependencies": {
+    "cpython_setobject_c_sha256": "e633e7ae4e427ecead8879965910e27427d34ae0fc5b956142bc337f741a367c",
+    "yacs_config_py_sha256": "6d491fea3cba4030698b08ed93440db75b3ce65858300577133b13b095394b6a",
+    "yacs_wheel_sha256": "99f893e30497a4b66842821bac316386f7bd5c4f47ad35c9073ef089aa33af32"
+  },
+  "dataset": {
+    "license": "MIT",
+    "repository": "CowAndSheep/timerewarder-demos",
+    "revision": "b966abcebc110dd97dd96018e395180e069756c4"
+  },
+  "model": {
+    "license": "MIT",
+    "repository": "CowAndSheep/timerewarder",
+    "revision": "23eded140eb8c8d9f194243a115d218b5072d800"
+  },
+  "paper": {
+    "revision": "arxiv:2509.26627v3"
+  },
+  "sources": [
+    {
+      "byte_size": 1067,
+      "git_blob": "8a90960c11fe4d7e38d4bffcd9ff7099cbd00814",
+      "license": "MIT",
+      "path": "TimeRewarder/LICENSE",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "6dd7504e375e6d70c9731e4d202a8ef59909154aa2f68362ec2789e09a375c47",
+      "upstream_path": "LICENSE",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    },
+    {
+      "byte_size": 13825,
+      "git_blob": "24a8ef2ccecd17163c3e6aef844648b33f2fe7ef",
+      "license": "MIT",
+      "path": "TimeRewarder/training/datasets/build.py",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "51c80aff84c44fc58f4a8d0e3b05ce8da33d2595100eef1582117ab6d2fe156f",
+      "upstream_path": "training/datasets/build.py",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    },
+    {
+      "byte_size": 27560,
+      "git_blob": "2e5f2ff2a70fdea34ecbac3ee3616d77bfd7af38",
+      "license": "MIT",
+      "path": "TimeRewarder/models/clip_withhead.py",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "5c7483bfdae09806054a42bd7b28efba41944be89ccd016fbfe06f4de1390a6c",
+      "upstream_path": "models/clip_withhead.py",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    },
+    {
+      "byte_size": 4471,
+      "git_blob": "9e1b96e61bf0b77485af0c62abe6c797f4862073",
+      "license": "MIT",
+      "path": "TimeRewarder/models/discretesupport.py",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "46ba4a3d1491120eccec4bf057df6b21cd40cb212d5252c17266b57b97165b36",
+      "upstream_path": "models/discretesupport.py",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    },
+    {
+      "byte_size": 16463,
+      "git_blob": "8d505c99d6559978942c4f83c3233c73c9cf6a66",
+      "license": "MIT",
+      "path": "TimeRewarder/RL/agent/rl_agent.py",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "bc3bf0117373550e8b62cff557e8bd96864a4f187b49a638a65b928a9dee94be",
+      "upstream_path": "RL/agent/rl_agent.py",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    },
+    {
+      "byte_size": 23745,
+      "git_blob": "a176362faa31f4d8fe1041db148009f8883d281f",
+      "license": "MIT",
+      "path": "TimeRewarder/RL/train.py",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "3e06e41c5cf790938b948d7e5e508efdbdaca6db7753501a2ee18dad9278e2d0",
+      "upstream_path": "RL/train.py",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    },
+    {
+      "byte_size": 9215,
+      "git_blob": "2535110b1baa514f0fcba5c7babd3ae78ff409c1",
+      "license": "MIT",
+      "path": "TimeRewarder/RL/replay_buffer.py",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "f7a75b47a29b49a26f8c6b5a305ceda95b1460cb05eaf4cb263907c9e67005fb",
+      "upstream_path": "RL/replay_buffer.py",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    },
+    {
+      "byte_size": 6053,
+      "git_blob": "c769ecc088d4e50fa6ca014bdc4af00b5085b7df",
+      "license": "MIT",
+      "path": "TimeRewarder/RL/utils.py",
+      "repository": "CowAndSheep/TimeRewarder",
+      "revision": "f54234b67bd3f1fa190f62498d38513a2140f23f",
+      "sha256": "43b5d0d409dc103f923bbf7ddee9c6e627f0f3ae711fed6fb79414a541e7a8dc",
+      "upstream_path": "RL/utils.py",
+      "url": "https://github.com/CowAndSheep/TimeRewarder.git"
+    }
+  ]
+}

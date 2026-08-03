@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Learning Randomized Reductions Evidence Schema v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "paper_id",
+    "attempt_id",
+    "upstream_pins",
+    "claims",
+    "unavailable_operations",
+    "environment"
+  ],
+  "properties": {
+    "schema_version": { "type": "integer" },
+    "paper_id": { "type": "string" },
+    "attempt_id": { "type": "string" },
+    "upstream_pins": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arxiv_v1_sha256", "arxiv_v5_sha256", "git_commit"],
+      "properties": {
+        "arxiv_v1_sha256": { "type": "string" },
+        "arxiv_v5_sha256": { "type": "string" },
+        "git_commit": { "type": "string" }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "challenge_claim_sha256",
+          "title",
+          "status",
+          "expected_observation",
+          "measured_observation",
+          "supporting_sources",
+          "limitations"
+        ],
+        "properties": {
+          "claim_id": { "type": "string" },
+          "challenge_claim_sha256": { "type": "string" },
+          "title": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["verified", "partial", "falsified", "unreplicated"]
+          },
+          "expected_observation": { "type": "string" },
+          "measured_observation": { "type": "string" },
+          "supporting_sources": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "limitations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "contradictions": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "unavailable_operations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["python_version", "dependencies"],
+      "properties": {
+        "python_version": { "type": "string" },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    }
+  }
+}

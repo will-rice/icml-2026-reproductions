@@ -1,0 +1,19 @@
+{
+  "commands": [
+    {
+      "command": "uv run lrr-repro acquire --manifest evidence/inputs/upstream_manifest.json --cache-dir .cache/upstream",
+      "exit_code": 0,
+      "purpose": "Acquire and verify upstream artifacts"
+    },
+    {
+      "command": "uv run lrr-repro audit --project-root . --cache-dir .cache/upstream --schema schema/evidence-v1.schema.json --output evidence/results.json",
+      "exit_code": 0,
+      "purpose": "Generate canonical evidence JSON bundle"
+    },
+    {
+      "command": "uv run lrr-repro validate evidence/results.json --schema schema/evidence-v1.schema.json --validation-output evidence/validation.json",
+      "exit_code": 0,
+      "purpose": "Validate evidence JSON against schema and issue validation token"
+    }
+  ]
+}

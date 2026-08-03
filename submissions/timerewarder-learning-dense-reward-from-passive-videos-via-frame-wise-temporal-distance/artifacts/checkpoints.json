@@ -1,0 +1,123 @@
+{
+  "checkpoints": [
+    {
+      "approval": "artifacts/conversion-approvals/basketball_20bins.json",
+      "file": "basketball_20bins.pth",
+      "lfs_sha256": "4697468cdba176467df4ee0d8d766c6f53ad2305f87101a2511ec84e20410e50",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/basketball_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293753599,
+      "task": "basketball-v3"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/button_press_topdown_20bins.json",
+      "file": "button_press_topdown_20bins.pth",
+      "lfs_sha256": "58e4e3f60628309bacc3409e64cace215cd65c889661c2fa18b8f4e76f80de57",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/button_press_topdown_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293800381,
+      "task": "button-press-topdown-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/disassemble_20bins.json",
+      "file": "disassemble_20bins.pth",
+      "lfs_sha256": "5b095f1d22f3e6b818e01aaf08c112854235fbf97bd767be5d8e6ae711faaa40",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/disassemble_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293809178,
+      "task": "disassemble-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/door_open_20bins.json",
+      "file": "door_open_20bins.pth",
+      "lfs_sha256": "620717c2ae377653398e84a524dc31a637dde4e6d70dd5bf50aaa74abc1f55ce",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/door_open_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293800381,
+      "task": "door-open-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/drawer_open_20bins.json",
+      "file": "drawer_open_20bins.pth",
+      "lfs_sha256": "eb9ff8e925784431e0b27300f8988f1494fa68734e47b7937f4232d08ef50ef7",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/drawer_open_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293802650,
+      "task": "drawer-open-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/lever_pull_20bins.json",
+      "file": "lever_pull_20bins.pth",
+      "lfs_sha256": "0cd9b7623f36f2c153b89a83ae9977c41d957d9f0bfbba480b55948d067b071f",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/lever_pull_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293801866,
+      "task": "lever-pull-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/plate_slide_20bins.json",
+      "file": "plate_slide_20bins.pth",
+      "lfs_sha256": "cf6a4314197964b98557214a97acc1e2d23e4f106388e0cf0a619da4b3661c47",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/plate_slide_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293802650,
+      "task": "plate-slide-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/stick_push_20bins.json",
+      "file": "stick_push_20bins.pth",
+      "lfs_sha256": "f4e9f9a129073e270446038929fa12b33abc3886746fb20497eebd1d9796da02",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/stick_push_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293801866,
+      "task": "stick-push-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/window_close_20bins.json",
+      "file": "window_close_20bins.pth",
+      "lfs_sha256": "73e8b725c40193bbabca9d3165024d3d317734cddc5734ca8e640b2a1483a1a4",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/window_close_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293803434,
+      "task": "window-close-v2"
+    },
+    {
+      "approval": "artifacts/conversion-approvals/window_open_20bins.json",
+      "file": "window_open_20bins.pth",
+      "lfs_sha256": "e49184729dea8a755a0d5e982e6837b1d2c0b672c68dd3ba10a32cd0df1273cc",
+      "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+      "receipt": "artifacts/conversion-receipts/window_open_20bins.json",
+      "repository": "CowAndSheep/timerewarder",
+      "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+      "size_bytes": 1293802650,
+      "task": "window-open-v2"
+    }
+  ],
+  "format": "timerewarder-checkpoint-registry-v1",
+  "model": {
+    "repository": "CowAndSheep/timerewarder",
+    "revision": "23eded140eb8c8d9f194243a115d218b5072d800"
+  },
+  "schema": {
+    "path": "artifacts/model-schema.json",
+    "sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3"
+  }
+}

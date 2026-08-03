@@ -1,0 +1,902 @@
+[
+  {
+    "name": "single_arm_0001",
+    "image_path": "single_arm/single_arm_0001.jpg",
+    "prompt": "The robotic gripper uses the white brush it is holding to clean the bathtub.",
+    "manipulated object": "white brush",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robot, situated in a bathroom with wooden flooring and a towel hanging nearby, uses the white brush held by its gripper to thoroughly clean the surface of the bathtub, ensuring all areas are properly scrubbed. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0002",
+    "image_path": "single_arm/single_arm_0002.jpg",
+    "prompt": "The robotic gripper wipes the countertop using a white cloth near the sink.",
+    "manipulated object": "white cloth",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper wipes the white bathroom countertop near the sink with a white cloth in a well-organized space featuring various hygiene products. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0003",
+    "image_path": "single_arm/single_arm_0003.jpg",
+    "prompt": "The robotic gripper picks up the gray clothing item from the basket and put it into the washing machine.",
+    "manipulated object": "gray clothing item",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the gray clothing item from the white basket placed on the wooden floor and places it into the open washing machine. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0004",
+    "image_path": "single_arm/single_arm_0004.jpg",
+    "prompt": "The robotic gripper picks up the dark blue piece of clothing item from the floor and put it into the basket.",
+    "manipulated object": "dark blue piece of clothing",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the dark blue piece of clothing item from the carpeted floor in a tidy room and places it into the nearby white laundry basket. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0005",
+    "image_path": "single_arm/single_arm_0005.jpg",
+    "prompt": "The robotic gripper picks up the blue cup on the bathroom counter.",
+    "manipulated object": "blue cup",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully lifts the blue cup positioned on the pristine white bathroom counter, surrounded by various toiletries and containers. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0006",
+    "image_path": "single_arm/single_arm_0006.jpg",
+    "prompt": "The robotic gripper approaches the bathroom counter and pick up the longer blue bottle.",
+    "manipulated object": "blue bottle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, operating in a bathroom with a modern countertop and dark cabinetry, carefully moves towards the bathroom counter to grasp and lift the longer blue bottle placed among other similar objects. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0007",
+    "image_path": "single_arm/single_arm_0007.jpg",
+    "prompt": "The robotic gripper picks up the blue bottle on the bathroom counter and places it in the open drawer.",
+    "manipulated object": "blue bottle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, situated in a well-lit bathroom with a neatly organized counter, carefully picks up the blue bottle resting on the counter and places it inside the open drawer, ensuring it is securely positioned among the existing items. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0008",
+    "image_path": "single_arm/single_arm_0008.jpg",
+    "prompt": "The robotic gripper picks up the blue towel from the table.",
+    "manipulated object": "blue towel",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a clean and minimalistic kitchen setting, the robotic gripper carefully grasps the blue towel placed on the table with precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0009",
+    "image_path": "single_arm/single_arm_0009.jpg",
+    "prompt": "The robotic gripper picks up the lid from the blue towel and puts it on the pot.",
+    "manipulated object": "lid",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a kitchen setting with a round black table and visible appliances, the robotic gripper carefully picks up the glass lid resting on the blue towel and gently places it on top of the stainless steel pot positioned on the same table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0010",
+    "image_path": "single_arm/single_arm_0010.jpg",
+    "prompt": "The robotic gripper covers the black pot with the glass lid near the toaster on the table.",
+    "manipulated object": "glass lid",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a room with a checkered tablecloth-covered table and cardboard boxes in the background, carefully picks up the glass lid and places it to cover the black pot located near the toaster on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0011",
+    "image_path": "single_arm/single_arm_0011.jpg",
+    "prompt": "The robotic gripper moves a glass toward the right side of the kitchen counter and places it beside the plate.",
+    "manipulated object": "glass",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robot, positioned in a modern kitchen with white cabinets and stainless-steel appliances, carefully uses its gripper to moves a glass toward the right side of the kitchen counter and places it beside the plate. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0012",
+    "image_path": "single_arm/single_arm_0012.jpg",
+    "prompt": "The robotic gripper picks up the red-orange flower from the table and hands it to the person standing in front.",
+    "manipulated object": "red-orange flower",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a softly lit environment with a gradient backdrop of blue and red hues, carefully picks up the red-orange flower from the transparent table and extends it toward the person standing nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0013",
+    "image_path": "single_arm/single_arm_0013.jpg",
+    "prompt": "The robotic gripper picks up the glue stick from the table.",
+    "manipulated object": "glue stick",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a well-lit workspace filled with various office supplies and equipment, the robotic gripper carefully picks up the glue stick positioned upright on the black table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0014",
+    "image_path": "single_arm/single_arm_0014.jpg",
+    "prompt": "The robotic gripper picked up the red marker and put it into the yellow mug.",
+    "manipulated object": "red marker",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a workspace with a green surface and various tools and equipment in the background, the robotic gripper carefully grasped the red marker from the table and placed it into the yellow mug positioned nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0015",
+    "image_path": "single_arm/single_arm_0015.jpg",
+    "prompt": "The robotic gripper picks up the wooden block.",
+    "manipulated object": "wooden block",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, operating over a table covered with a bright green cloth, precisely grasps the wooden block positioned within its reach. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0016",
+    "image_path": "single_arm/single_arm_0016.jpg",
+    "prompt": "The robotic gripper picks up the red marker from the green mug.",
+    "manipulated object": "red marker",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a lab-like workspace featuring a white table marked with blue tape, the robotic gripper carefully retrieves the red marker from inside the green mug placed on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0017",
+    "image_path": "single_arm/single_arm_0017.jpg",
+    "prompt": "The robotic gripper picks up the yellow mug on the  white table.",
+    "manipulated object": "yellow mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully grasps the yellow mug positioned on the white table within a clean, minimalistic workspace. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0018",
+    "image_path": "single_arm/single_arm_0018.jpg",
+    "prompt": "The robotic arm picks up the ping pong paddle and places it into the open drawer.",
+    "manipulated object": "ping pong paddle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a well-lit kitchen environment with white cabinets and a countertop holding miscellaneous items, the robotic arm carefully grasps the ping pong paddle lying on the counter and places it into the nearby open drawer with precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0019",
+    "image_path": "single_arm/single_arm_0019.jpg",
+    "prompt": "The robotic gripper picks up the plastic water bottle from the countertop.",
+    "manipulated object": "plastic water bottle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a well-lit workspace equipped with a sink and a white countertop, the robotic gripper carefully grasps and lifts the plastic water bottle positioned on the countertop. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0020",
+    "image_path": "single_arm/single_arm_0020.jpg",
+    "prompt": "The robotic gripper puts the purple toy on the table into the black plastic plate.",
+    "manipulated object": "purple toy",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a room with a white table and various utensils scattered around, the robotic gripper carefully picks up the purple toy from the table and places it into the black plastic plate. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0021",
+    "image_path": "single_arm/single_arm_0021.jpg",
+    "prompt": "The robotic gripper holds a metal can near the microwave.",
+    "manipulated object": "metal can",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, in a clean and well-organized kitchen-like environment, carefully holds a cylindrical metal can in an upright position near the microwave placed on the counter. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0022",
+    "image_path": "single_arm/single_arm_0022.jpg",
+    "prompt": "The robotic gripper picks up the orange soda can near the blue cup on the counter.",
+    "manipulated object": "orange soda can",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully lifts the orange soda can positioned near the blue cup on the clean, tiled counter in the kitchen workspace. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0023",
+    "image_path": "single_arm/single_arm_0023.jpg",
+    "prompt": "The robotic gripper transfers the bag of chips into the bowl on the counter.",
+    "manipulated object": "bag of chips",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully lifts the bag of chips from the counter surface and places it into the nearby bowl, which rests on a clean, white countertop in a modern kitchenette. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0024",
+    "image_path": "single_arm/single_arm_0024.jpg",
+    "prompt": "The robotic gripper picks up the green can from the bowl.",
+    "manipulated object": "green can",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a clean and modern kitchen environment, the robotic gripper carefully grasps and lifts the green can that is positioned inside the transparent bowl on the countertop. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0025",
+    "image_path": "single_arm/single_arm_0025.jpg",
+    "prompt": "The robotic gripper places the white spoon onto the blue cloth near the stove.",
+    "manipulated object": "white spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully places the white spoon onto the blue cloth located on the tiled kitchen counter near the stove, in a compact kitchen setting. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0026",
+    "image_path": "single_arm/single_arm_0026.jpg",
+    "prompt": "The robot walks toward the oven and opens the oven door.",
+    "manipulated object": "oven door",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a modern kitchen environment with sleek countertops and appliances, the robot approaches the oven with deliberate motion, positions itself in front of the appliance, and carefully opens the oven door by engaging its robotic arm. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0027",
+    "image_path": "single_arm/single_arm_0027.jpg",
+    "prompt": "The robotic gripper closes the oven door.",
+    "manipulated object": "oven door",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a modern kitchen with white cabinets and stainless steel appliances, the robotic gripper carefully and firmly closes the oven door that is currently open. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0028",
+    "image_path": "single_arm/single_arm_0028.jpg",
+    "prompt": "The robotic gripper picks up the egg.",
+    "manipulated object": "egg",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully lifts the egg from the flat surface in a kitchen-like environment featuring a countertop and a cooking appliance. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0029",
+    "image_path": "single_arm/single_arm_0029.jpg",
+    "prompt": "The robotic gripper opens the refrigerator door.",
+    "manipulated object": "refrigerator door",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper opens the refrigerator door in a compact and organized kitchen environment, carefully grasping the handle to pull it open. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0030",
+    "image_path": "single_arm/single_arm_0030.jpg",
+    "prompt": "The robotic gripper opens the oven and places the loaf of bread inside the oven.",
+    "manipulated object": "loaf of bread",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, in a kitchen environment with a countertop and oven, carefully opens the oven door, grasps the loaf of bread from the surface, and places it precisely inside the oven. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0031",
+    "image_path": "single_arm/single_arm_0031.jpg",
+    "prompt": "The robotic gripper pick up the yellow object from the floor.",
+    "manipulated object": "yellow object",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in front of what appears to be an ice cream vending machine, carefully pick up the small yellow object resting on the tiled floor. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0032",
+    "image_path": "single_arm/single_arm_0032.jpg",
+    "prompt": "The robotic gripper place the green spatula in the bowl.",
+    "manipulated object": "green spatula",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned on a wooden countertop with a neatly arranged yellow cloth and a green spatula, carefully picks up the green spatula and places it into the metal bowl. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0033",
+    "image_path": "single_arm/single_arm_0033.jpg",
+    "prompt": "The robotic gripper open the refrigerator door.",
+    "manipulated object": "refrigerator door",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, in a compact and functional indoor setting, carefully grasps the refrigerator handle and opens the door with controlled precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0034",
+    "image_path": "single_arm/single_arm_0034.jpg",
+    "prompt": "The robotic gripper pick up the green mug in the dishwasher.",
+    "manipulated object": "green mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully pick up the green mug positioned among other clean glassware in the dishwasher, which is densely loaded with cups and mugs. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0035",
+    "image_path": "single_arm/single_arm_0035.jpg",
+    "prompt": "The robotic gripper opens the cabinet door.",
+    "manipulated object": "cabinet door",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully manipulates the handle to open the cabinet door, located in a clean, well-lit workspace with a tiled floor. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0036",
+    "image_path": "single_arm/single_arm_0036.jpg",
+    "prompt": "The robotic gripper places the metallic pot on the toy stove.",
+    "manipulated object": "metallic pot",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully places the metallic pot onto the blue surface of the toy stove, in an environment featuring a wooden table with a variety of colorful toy kitchen items. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0037",
+    "image_path": "single_arm/single_arm_0037.jpg",
+    "prompt": "The robotic gripper places the pot into the sink.",
+    "manipulated object": "pot",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a kitchen environment with a speckled countertop and stainless steel sink, the robotic gripper carefully picks up the pot and places it into the sink for further handling. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0038",
+    "image_path": "single_arm/single_arm_0038.jpg",
+    "prompt": "The robotic gripper moves the metal spoon with a red textured handle to the metallic bowl on the yellow cloth.",
+    "manipulated object": "metal spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully transfers the metal spoon with a red textured handle to the metallic bowl resting on the neatly spread yellow cloth, situated on a wooden countertop in a kitchen-like setup. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0039",
+    "image_path": "single_arm/single_arm_0039.jpg",
+    "prompt": "The robotic gripper picks up the purple eggplant from the sink area and puts it into the metallic bowl.",
+    "manipulated object": "purple eggplant",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a miniature kitchen setup with a sink and scattered colorful toy items, carefully grasps the purple eggplant lying in the sink area and places it into the nearby metallic bowl. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0040",
+    "image_path": "single_arm/single_arm_0040.jpg",
+    "prompt": "The robotic gripper places the laundry detergent from the tabletop into the sink.",
+    "manipulated object": "laundry detergent",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the laundry detergent bottle from the speckled tabletop and places it into the sink within a compact kitchen environment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0041",
+    "image_path": "single_arm/single_arm_0041.jpg",
+    "prompt": "The robotic gripper pick up the yellow potato.",
+    "manipulated object": "yellow potato",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robot is positioned above a sink area in a kitchen-like setting. Using its gripper, the robot should carefully pick up the yellow potato resting in the sink basin without disturbing the nearby objects. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0042",
+    "image_path": "single_arm/single_arm_0042.jpg",
+    "prompt": "The robotic gripper picks up the orange cone from the sink.",
+    "manipulated object": "orange cone",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned over a light blue sink filled with colorful plastic kitchen items, carefully grasps and lifts the orange cone from the sink basin. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0043",
+    "image_path": "single_arm/single_arm_0043.jpg",
+    "prompt": "The robotic gripper moves the toy fork onto the yellow cloth on the wooden surface.",
+    "manipulated object": "toy fork",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully places the blue-handled toy fork onto the neatly folded yellow cloth resting on the wooden tabletop in a compact kitchen-like setup. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0044",
+    "image_path": "single_arm/single_arm_0044.jpg",
+    "prompt": "The robotic gripper holds the blue brush over the wooden surface.",
+    "manipulated object": "blue brush",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully holds the blue brush above the wooden surface, which is situated in a clean workspace with various objects neatly arranged, including a red ball, a blue cloth, and a metallic bowl. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0045",
+    "image_path": "single_arm/single_arm_0045.jpg",
+    "prompt": "The robotic gripper places the pink spoon into the metal basin.",
+    "manipulated object": "pink spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully places the pink spoon, which is resting on the wooden countertop, into the small metal basin in the kitchen-like environment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0046",
+    "image_path": "single_arm/single_arm_0046.jpg",
+    "prompt": "The robotic gripper pick up the yellow potato and place it on the green cutting board.",
+    "manipulated object": "yellow potato",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper should carefully pick up the yellow potato resting on the wooden surface and precisely place it onto the green cutting board. The task takes place in a compact kitchen-like workspace with tiled walls in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0047",
+    "image_path": "single_arm/single_arm_0047.jpg",
+    "prompt": "The robotic gripper place the metallic spoon inside the metallic bowl.",
+    "manipulated object": "metallic spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully place the metallic spoon, which is lying on the countertop, inside the metallic bowl located on a wooden kitchen surface. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0048",
+    "image_path": "single_arm/single_arm_0048.jpg",
+    "prompt": "The robotic gripper pick up the blue spoon and drop it onto the purple cleaning cloth.",
+    "manipulated object": "blue spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robot is operating on a wooden countertop with a metal bowl, a green object, a purple cloth, and a blue spoon placed on it. Using its gripper, the robot should carefully grasp the blue spoon and place it gently onto the purple cleaning cloth nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0049",
+    "image_path": "single_arm/single_arm_0049.jpg",
+    "prompt": "The robotic gripper picks up the yellow spoon.",
+    "manipulated object": "yellow spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the yellow spoon from the wooden table in a kitchen-like environment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0050",
+    "image_path": "single_arm/single_arm_0050.jpg",
+    "prompt": "The robotic gripper turns on the water at the sink.",
+    "manipulated object": "None",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully activates the water flow at the sink located in a modern indoor environment with a speckled countertop. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0051",
+    "image_path": "single_arm/single_arm_0051.jpg",
+    "prompt": "The robotic gripper places the metal lid on the stainless steel pot.",
+    "manipulated object": "metal lid",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully places the metal lid onto the stainless steel pot, positioned within a simulated kitchen environment featuring a stovetop, colorful toy vegetables, and wooden cabinetry. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0052",
+    "image_path": "single_arm/single_arm_0052.jpg",
+    "prompt": "The robotic gripper places the blue spoon into the bowl.",
+    "manipulated object": "blue spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully lowers the blue spoon, which is on a wooden table along with other items like a metal bowl and a soft toy, into the bowl for precise placement. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0053",
+    "image_path": "single_arm/single_arm_0053.jpg",
+    "prompt": "The robotic gripper opens the cabinet door to access the green apple inside.",
+    "manipulated object": "green apple",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a clean and organized indoor environment with cabinets and shelves, carefully opens the cabinet door to gain access to the green apple located inside. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0054",
+    "image_path": "single_arm/single_arm_0054.jpg",
+    "prompt": "The robotic gripper picks up the red spoon from the countertop.",
+    "manipulated object": "red spoon",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, located in a setting with a wooden countertop and a backdrop of wooden paneling, carefully picks up the red spoon resting on the countertop by firmly grasping its handle. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0055",
+    "image_path": "single_arm/single_arm_0055.jpg",
+    "prompt": "The robotic gripper picks up the empty plastic cup on the table.",
+    "manipulated object": "plastic cup",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the empty plastic cup placed on the kitchen counter, set in a modern kitchen with white cabinets and stainless-steel appliances. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0056",
+    "image_path": "single_arm/single_arm_0056.jpg",
+    "prompt": "The robotic gripper pours the water from the plastic cup into the sink.",
+    "manipulated object": "plastic cup",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully lifts the plastic cup filled with water and methodically pours the water into the sink within a modern kitchen environment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0057",
+    "image_path": "single_arm/single_arm_0057.jpg",
+    "prompt": "The robotic gripper removes the trash bag from the bin.",
+    "manipulated object": "trash bag",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully grasps and lifts the tied trash bag from the white bin located in the corner of a clean, modern kitchen. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0058",
+    "image_path": "single_arm/single_arm_0058.jpg",
+    "prompt": "The robotic gripper picks up the red cloth near the laundry basket.",
+    "manipulated object": "red cloth",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the red cloth placed near the laundry basket in a well-organized laundry area featuring a washer and a countertop. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0059",
+    "image_path": "single_arm/single_arm_0059.jpg",
+    "prompt": "The robotic gripper picks up a white cloth from the basket.",
+    "manipulated object": "white cloth",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, situated in a laundry processing setup with a basket of colorful cloths near a machine, carefully retrieves a white cloth from the basket for further handling. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0060",
+    "image_path": "single_arm/single_arm_0060.jpg",
+    "prompt": "The robotic gripper holds the wooden cube near the ground.",
+    "manipulated object": "wooden cube",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a carpeted room featuring a vibrant orange sofa and a white shelving unit, holds the wooden cube securely and lowers it close to the floor. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0061",
+    "image_path": "single_arm/single_arm_0061.jpg",
+    "prompt": "The robotic gripper closes the drawer of the black cabinet.",
+    "manipulated object": "drawer",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper closes the drawer of the black cabinet in a workspace featuring an orange sofa and various office and laboratory items. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0062",
+    "image_path": "single_arm/single_arm_0062.jpg",
+    "prompt": "The robotic gripper collects the blue cloth from the floor and places it into the white laundry basket.",
+    "manipulated object": "blue cloth",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, operating in a room furnished with an orange sofa and several scattered items on a patterned carpeted floor, picks up the blue cloth lying on the ground and carefully places it into the adjacent white laundry basket. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0063",
+    "image_path": "single_arm/single_arm_0063.jpg",
+    "prompt": "The robotic gripper picks up the cream-colored cloth and places it into the white laundry basket.",
+    "manipulated object": "cream-colored cloth",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, operating within a room featuring an orange sofa and various workstations, carefully picks up the cream-colored cloth from the floor and accurately places it into the white laundry basket positioned nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0064",
+    "image_path": "single_arm/single_arm_0064.jpg",
+    "prompt": "The robotic gripper moves the pink bowl closer to the black bowl on the table.",
+    "manipulated object": "pink bowl",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper moves the pink bowl, currently held in its grasp, to a position closer to the black bowl resting on the wooden table, set against a colorful, patterned backdrop. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0065",
+    "image_path": "single_arm/single_arm_0065.jpg",
+    "prompt": "The robotic gripper places the yellow mug on the stack of books.",
+    "manipulated object": "yellow mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the yellow mug from the white table and places it on top of the neatly stacked books, which are situated in a clean and organized workspace. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0066",
+    "image_path": "single_arm/single_arm_0066.jpg",
+    "prompt": "The robotic gripper picks up the cylindrical object from the wooden tray.",
+    "manipulated object": "cylindrical object",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a brightly lit laboratory-like workspace with a desk and various small items around, carefully lifts the cylindrical object from the wooden tray, ensuring a secure grip and precise movement. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0067",
+    "image_path": "single_arm/single_arm_0067.jpg",
+    "prompt": "The robotic gripper places the yellow toy block into the blue cup.",
+    "manipulated object": "yellow toy block",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the yellow toy block and accurately places it into the blue cup, which is located on a wooden table in a room with a colorful patterned wall. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0068",
+    "image_path": "single_arm/single_arm_0068.jpg",
+    "prompt": "The robotic gripper places the lid back onto the stainless kettle.",
+    "manipulated object": "stainless lid",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a busy workspace filled with various items, the robotic gripper carefully and precisely places the detached lid back onto the stainless steel kettle positioned on the wooden table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0069",
+    "image_path": "single_arm/single_arm_0069.jpg",
+    "prompt": "The robotic gripper pick up the cloth on the purple surface.",
+    "manipulated object": "cloth",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, located in a well-lit indoor workspace with various objects such as cables and a backpack nearby, carefully grasp the patterned cloth resting on the purple surface in front of it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0070",
+    "image_path": "single_arm/single_arm_0070.jpg",
+    "prompt": "The robotic arm pours the ping pong ball from the cup into the mug.",
+    "manipulated object": "brown cup",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic arm, situated on a spacious wooden table in a well-lit industrial workspace, carefully tilts the cup to pour the ping pong ball into the mug positioned below. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0071",
+    "image_path": "single_arm/single_arm_0071.jpg",
+    "prompt": "The robotic gripper grasps the black cup and places it to the left of the blue cup",
+    "manipulated object": "black cup",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a workspace with a wooden table and a blue backdrop, carefully grasps the black cup from its current position and gently places it on the wooden surface to the left of the blue cup. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0072",
+    "image_path": "single_arm/single_arm_0072.jpg",
+    "prompt": "The robotic gripper picks up the bottle of salad dressing lying on the wooden table.",
+    "manipulated object": "bottle of salad dressing",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a workspace with a wooden table and nearby blue container, carefully picks up the bottle of salad dressing placed horizontally on the wooden surface. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0073",
+    "image_path": "single_arm/single_arm_0073.jpg",
+    "prompt": "The robotic gripper pick up the pen from the yellow mug.",
+    "manipulated object": "pen",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a simple workspace with a black table and white walls, instruct the robotic gripper to carefully grasp and lift the orange pen from within the yellow mug resting on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0074",
+    "image_path": "single_arm/single_arm_0074.jpg",
+    "prompt": "The robotic gripper picks up the small bottle from the table.",
+    "manipulated object": "small bottle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a workspace featuring a black table and a green background, the robotic gripper carefully and precisely picks up the small bottle placed on the table's surface. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0075",
+    "image_path": "single_arm/single_arm_0075.jpg",
+    "prompt": "The robotic gripper moves a cylindrical out of the container.",
+    "manipulated object": "cylindrical",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a well-lit workspace with a gray partition and a wooden container on a white tabletop, carefully extracts a cylindrical object from the designated compartment of the container. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0076",
+    "image_path": "single_arm/single_arm_0076.jpg",
+    "prompt": "The robotic gripper picks up the pen and places it inside the yellow mug.",
+    "manipulated object": "pen",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the pen from the white surface of the table in a well-lit room and places it inside the yellow mug positioned nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0077",
+    "image_path": "single_arm/single_arm_0077.jpg",
+    "prompt": "The robotic gripper picks up the pen from the table and places it on the white paper.",
+    "manipulated object": "pen",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully lifts the pen from the smooth, dark-colored table and places it precisely onto the sheet of white paper, while operating in a well-lit workspace featuring various colorful blocks and tools. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0078",
+    "image_path": "single_arm/single_arm_0078.jpg",
+    "prompt": "The robotic gripper moves to pick up the green mug on the wooden table.",
+    "manipulated object": "green mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, situated in a well-lit office space with glass partitions and neatly organized furniture, extends its arm to carefully grasp the green mug positioned on the wooden table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0079",
+    "image_path": "single_arm/single_arm_0079.jpg",
+    "prompt": "The robotic gripper pick up the white mug on the wooden table.",
+    "manipulated object": "white mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robot, situated in a modern office environment with wooden flooring and glass partitions, carefully uses its gripper to grasp the white mug placed on the wooden table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0080",
+    "image_path": "single_arm/single_arm_0080.jpg",
+    "prompt": "The robotic gripper moves the green marker to the left of the green mug on the wooden table.",
+    "manipulated object": "green marker",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, operating in a well-lit indoor workspace with a wooden floor and various equipment, carefully moves the green marker and places it to the left side of the green mug on the wooden table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0081",
+    "image_path": "single_arm/single_arm_0081.jpg",
+    "prompt": "The robotic gripper moves a ruler to the white mug on the wooden table.",
+    "manipulated object": "ruler",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, situated in a laboratory environment with a wooden table and surrounding equipment, carefully transports the ruler toward the white mug placed on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0082",
+    "image_path": "single_arm/single_arm_0082.jpg",
+    "prompt": "The robotic gripper moves a yellow mug to the coffee maker.",
+    "manipulated object": "yellow mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the yellow mug from the table and moves it toward the coffee maker in a laboratory-like workspace with desks and technical equipment visible in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0083",
+    "image_path": "single_arm/single_arm_0083.jpg",
+    "prompt": "The robotic gripper carries one white bottle on the wooden tray to the table.",
+    "manipulated object": "white bottle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a workspace featuring a table with office items and cables, the robotic gripper carefully transports a single white bottle placed on a wooden tray and sets it down on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0084",
+    "image_path": "single_arm/single_arm_0084.jpg",
+    "prompt": "The robotic gripper puts the marker into the yellow mug a white table.",
+    "manipulated object": "marker",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully places the blue-and-white marker into the yellow mug on a white table in a room with minimalistic furnishings and visible electronic devices. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0085",
+    "image_path": "single_arm/single_arm_0085.jpg",
+    "prompt": "The robotic gripper places the orange mug in front of the black bowl.",
+    "manipulated object": "orange mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned on a wooden tabletop in what appears to be a workshop or lab setting, carefully places the orange mug directly in front of the black bowl with precision. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0086",
+    "image_path": "single_arm/single_arm_0086.jpg",
+    "prompt": "The robotic gripper places the yellow block inside the blue cup.",
+    "manipulated object": "yellow block",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a workspace with a wooden table and a colorful tiled wall in the background, the robotic gripper carefully picks up the yellow block and accurately places it inside the blue cup positioned on the table. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0087",
+    "image_path": "single_arm/single_arm_0087.jpg",
+    "prompt": "The robotic gripper picks up the roll of tape from the table.",
+    "manipulated object": "roll of tape",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the roll of tape resting on the flat white table in a well-lit room with studio equipment in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0088",
+    "image_path": "single_arm/single_arm_0088.jpg",
+    "prompt": "The robotic gripper moves the pen to the yellow mug.",
+    "manipulated object": "pen",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a laboratory workspace with multiple tools and devices placed on surrounding tables, the robotic gripper carefully picks up the pen from the black surface and places it inside the yellow mug. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0089",
+    "image_path": "single_arm/single_arm_0089.jpg",
+    "prompt": "The robotic gripper closes the file cabinet drawer.",
+    "manipulated object": "file cabinet drawer",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper closes the file cabinet drawer in an office space with chairs, cabinets, and whiteboards, ensuring the drawer is securely shut by applying a gentle but firm grip. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0090",
+    "image_path": "single_arm/single_arm_0090.jpg",
+    "prompt": "The robotic gripper closes the file cabinet drawer.",
+    "manipulated object": "file cabinet drawer",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully pushes the file cabinet drawer shut within what appears to be a workspace containing desks and electronic equipment. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0091",
+    "image_path": "single_arm/single_arm_0091.jpg",
+    "prompt": "The robotic gripper picks up the marker and places it inside the black mug.",
+    "manipulated object": "marker",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a workspace featuring a wooden table surrounded by various equipment and tools, the robotic gripper carefully lifts the marker from the table and precisely places it into the black mug positioned nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0092",
+    "image_path": "single_arm/single_arm_0092.jpg",
+    "prompt": "The robotic gripper picks up the orange pen and places it inside the red cup.",
+    "manipulated object": "orange pen",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper, positioned in a modern office space with glass partitions and simple furnishings, carefully picks up the orange pen from the white table and precisely places it into the red cup located next to it. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0093",
+    "image_path": "single_arm/single_arm_0093.jpg",
+    "prompt": "The robotic gripper places the small black mug into the tray.",
+    "manipulated object": "small black mug",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In an outdoor setting with modern buildings and greenery in the background, the robotic gripper carefully picks up the small black mug from the metallic table and places it into the designated slot of the tray on the cart. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0094",
+    "image_path": "single_arm/single_arm_0094.jpg",
+    "prompt": "The robotic gripper picks up the banana from the wooden table.",
+    "manipulated object": "banana",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the banana resting on the wooden table in a room lined with bookshelves. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0095",
+    "image_path": "single_arm/single_arm_0095.jpg",
+    "prompt": "The robotic gripper picks up a test tube from the metallic test tube rack with green liquid inside.",
+    "manipulated object": "test tube with green liquid",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up a test tube containing green liquid from the metallic test tube rack, located on a wooden work surface in a laboratory setting with cabinets in the background. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0096",
+    "image_path": "single_arm/single_arm_0096.jpg",
+    "prompt": "The robotic gripper flips the pancake inside the frying pan on the stove.",
+    "manipulated object": "pancake",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully flips the pancake cooking in the frying pan on the stove, in a kitchen environment with a sleek black electric stove and condiment bottles placed on the counter nearby. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0097",
+    "image_path": "single_arm/single_arm_0097.jpg",
+    "prompt": "The robotic gripper picks up the cooking pot from the stovetop.",
+    "manipulated object": "cooking pot",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up the metal cooking pot, which contains food, from the stovetop in a minimalist kitchen setting. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0098",
+    "image_path": "single_arm/single_arm_0098.jpg",
+    "prompt": "The robotic gripper picks up the white book on the shelf.",
+    "manipulated object": "white book",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a room with a marble-textured floor, the robotic gripper carefully grasps the white book positioned on the middle shelf of the wooden bookshelf. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0099",
+    "image_path": "single_arm/single_arm_0099.jpg",
+    "prompt": "The robotic gripper retrieves the deep red glass bottle from the refrigerator.",
+    "manipulated object": "deep red glass bottle",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "In a room with a stone-textured table and a wooden bookshelf in the background, the robotic gripper carefully retrieves the deep red glass bottle with a label from the refrigerator's lower shelf. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  },
+  {
+    "name": "single_arm_0100",
+    "image_path": "single_arm/single_arm_0100.jpg",
+    "prompt": "The robotic gripper places one flower into the vase.",
+    "manipulated object": "one flower",
+    "robotic manipulator": "robotic gripper",
+    "prompt detailed": "The robotic gripper carefully picks up one flower from the marble surface and gently places it into the empty vase, which is positioned in a modern, minimalistic indoor setting. Keep the first frame of this video unchanged.",
+    "view": "third-person"
+  }
+]

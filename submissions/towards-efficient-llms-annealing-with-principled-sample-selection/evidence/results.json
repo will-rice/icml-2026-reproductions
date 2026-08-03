@@ -1,0 +1,117 @@
+{
+  "flat_direction_preference": {
+    "alignment": 1.0,
+    "claim": "flat-direction preference theorem",
+    "claim_status": "verified",
+    "flat_direction_delta": 0.4975,
+    "flat_eigenvalue": 0.02,
+    "flatness_threshold": 0.1,
+    "interpretation": "With equal gradient alignment and step size, the flatter eigendirection pays a smaller quadratic curvature penalty and therefore gives a larger surrogate-objective increase.",
+    "step_size": 0.5,
+    "stiff_direction_delta": 0.325,
+    "stiff_eigenvalue": 1.4
+  },
+  "sample_priority": {
+    "claim": "high-loss long-sequence prioritization",
+    "claim_status": "verified",
+    "deterministic": true,
+    "direct_ranking": [
+      {
+        "length": 2048,
+        "loss": 1.45,
+        "sample_id": "high_loss_long",
+        "score": 1.35
+      },
+      {
+        "length": 192,
+        "loss": 1.28,
+        "sample_id": "high_loss_short",
+        "score": 0.8700000000000001
+      },
+      {
+        "length": 1536,
+        "loss": 0.88,
+        "sample_id": "medium_loss_long",
+        "score": 0.7816666666666667
+      },
+      {
+        "length": 512,
+        "loss": 0.62,
+        "sample_id": "medium_loss_medium",
+        "score": 0.37833333333333335
+      },
+      {
+        "length": 128,
+        "loss": 0.25,
+        "sample_id": "low_loss_short",
+        "score": 0.0
+      }
+    ],
+    "high_loss_long_sequence_id": "high_loss_long",
+    "interpretation": "The DiReCT-style score rewards both high loss and long context. A short-length probing regime reverses the length term and moves a shorter high-loss sample to the top, showing the ordering is probe-dependent rather than a fixed loss-only sort.",
+    "samples": [
+      {
+        "length": 128,
+        "loss": 0.25,
+        "sample_id": "low_loss_short"
+      },
+      {
+        "length": 512,
+        "loss": 0.62,
+        "sample_id": "medium_loss_medium"
+      },
+      {
+        "length": 192,
+        "loss": 1.28,
+        "sample_id": "high_loss_short"
+      },
+      {
+        "length": 1536,
+        "loss": 0.88,
+        "sample_id": "medium_loss_long"
+      },
+      {
+        "length": 2048,
+        "loss": 1.45,
+        "sample_id": "high_loss_long"
+      }
+    ],
+    "short_length_probe_ranking": [
+      {
+        "length": 192,
+        "loss": 1.28,
+        "sample_id": "high_loss_short",
+        "score": 0.8433333333333334
+      },
+      {
+        "length": 2048,
+        "loss": 1.45,
+        "sample_id": "high_loss_long",
+        "score": 0.55
+      },
+      {
+        "length": 512,
+        "loss": 0.62,
+        "sample_id": "medium_loss_medium",
+        "score": 0.21833333333333332
+      },
+      {
+        "length": 1536,
+        "loss": 0.88,
+        "sample_id": "medium_loss_long",
+        "score": 0.19500000000000006
+      },
+      {
+        "length": 128,
+        "loss": 0.25,
+        "sample_id": "low_loss_short",
+        "score": 0.0
+      }
+    ],
+    "short_length_probe_top_id": "high_loss_short",
+    "top_selected_ids": [
+      "high_loss_long",
+      "high_loss_short"
+    ]
+  }
+}

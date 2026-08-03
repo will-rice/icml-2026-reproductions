@@ -1,0 +1,47 @@
+{
+  "approval_sha256": "9c866a99398cd0412df556c65ef59be7a2a489daa2c54a001f687b834adc199a",
+  "checkpoint_bytes": 1293753599,
+  "checkpoint_sha256": "4697468cdba176467df4ee0d8d766c6f53ad2305f87101a2511ec84e20410e50",
+  "converter": "codex-points-timerewarder-task1",
+  "format": "timerewarder-conversion-approval-v1",
+  "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+  "output_bytes": 603857088,
+  "output_sha256": "d96898faf4d4d100de65237be8eaacdeb498dc479955c6169021560e05e262ff",
+  "receipt": {
+    "approval_status": "pending_independent_reviewer",
+    "checkpoint_bytes": 1293753599,
+    "checkpoint_file": "basketball_20bins.pth",
+    "checkpoint_sha256": "4697468cdba176467df4ee0d8d766c6f53ad2305f87101a2511ec84e20410e50",
+    "child_exit": 0,
+    "converter": "codex-points-timerewarder-task1",
+    "format": "timerewarder-conversion-receipt-v2",
+    "load": {
+      "map_location": "cpu",
+      "mmap": true,
+      "weights_only": true
+    },
+    "model_repository": "CowAndSheep/timerewarder",
+    "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+    "output_bytes": 603857088,
+    "output_sha256": "d96898faf4d4d100de65237be8eaacdeb498dc479955c6169021560e05e262ff",
+    "safe_globals_empty": true,
+    "sandbox": {
+      "inherited_network_fds": 0,
+      "network_namespace": "none"
+    },
+    "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+    "static_globals": [
+      "yacs.config.CfgNode"
+    ],
+    "status": "success",
+    "task": "basketball-v3",
+    "tensor_checks": {
+      "exact_schema": true,
+      "overlapping_storage": false
+    }
+  },
+  "receipt_sha256": "fbae022b0842b46b7a5e94340e510ada50c38e4ea97dc01ecaf84212671b800d",
+  "reviewer": "codex-independent-timerewarder-reviewer",
+  "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+  "status": "approved"
+}

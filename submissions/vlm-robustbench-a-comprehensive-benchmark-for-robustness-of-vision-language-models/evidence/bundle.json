@@ -1,0 +1,206 @@
+{
+  "attempt_id": "084bfe5b-42df-4de0-8a5f-b40b17fb001f",
+  "augmentation_audit": {
+    "aug_source": "/tmp/vlm_robustbench_084bfe5b/code/aug.py",
+    "aug_source_sha256": "81c608c672f68dff64502d9ee452a8a1e419be982436ef5085dc9a42ff81ae43",
+    "binary_augmentations": [
+      "autocontrast",
+      "channel_swap",
+      "equalize",
+      "flip_h",
+      "flip_v",
+      "grayscale",
+      "invert"
+    ],
+    "binary_count": 7,
+    "categories": {
+      "Binary": [
+        "flip_h",
+        "flip_v",
+        "grayscale",
+        "invert",
+        "channel_swap",
+        "equalize",
+        "autocontrast"
+      ],
+      "Blur": [
+        "gaussian_blur",
+        "motion_blur",
+        "defocus_blur",
+        "glass_blur",
+        "zoom_blur"
+      ],
+      "Color": [
+        "brightness",
+        "brightness_up",
+        "contrast",
+        "contrast_up",
+        "saturation",
+        "saturation_up",
+        "gamma",
+        "gamma_up",
+        "hue_shift",
+        "color_jitter"
+      ],
+      "Digital": [
+        "jpeg_compression",
+        "pixelate"
+      ],
+      "Geometric": [
+        "rotate",
+        "shear",
+        "affine",
+        "perspective_transform",
+        "elastic_transform"
+      ],
+      "Noise": [
+        "gaussian_noise",
+        "shot_noise",
+        "speckle_noise",
+        "salt_pepper"
+      ],
+      "Occlusion": [
+        "center_occlusion",
+        "random_occlusion",
+        "grid_mask"
+      ],
+      "Resolution": [
+        "downsample",
+        "upsample",
+        "sharpen",
+        "posterize",
+        "solarize"
+      ],
+      "VLM-specific": [
+        "text_overlay",
+        "watermark",
+        "add_border"
+      ],
+      "Weather": [
+        "fog",
+        "frost",
+        "snow",
+        "rain",
+        "spatter"
+      ]
+    },
+    "category_count_including_binary": 10,
+    "corrupted_settings_per_model_dataset": 133,
+    "readme_source": "/tmp/vlm_robustbench_084bfe5b/README.md",
+    "readme_source_sha256": "91614cdce46383008ef7149dca80c60a238ccc4a080434b7483166cf5796cf7f",
+    "severity_based_augmentations": [
+      "add_border",
+      "affine",
+      "brightness",
+      "brightness_up",
+      "center_occlusion",
+      "color_jitter",
+      "contrast",
+      "contrast_up",
+      "defocus_blur",
+      "downsample",
+      "elastic_transform",
+      "fog",
+      "frost",
+      "gamma",
+      "gamma_up",
+      "gaussian_blur",
+      "gaussian_noise",
+      "glass_blur",
+      "grid_mask",
+      "hue_shift",
+      "jpeg_compression",
+      "motion_blur",
+      "perspective_transform",
+      "pixelate",
+      "posterize",
+      "rain",
+      "random_occlusion",
+      "rotate",
+      "salt_pepper",
+      "saturation",
+      "saturation_up",
+      "sharpen",
+      "shear",
+      "shot_noise",
+      "snow",
+      "solarize",
+      "spatter",
+      "speckle_noise",
+      "text_overlay",
+      "upsample",
+      "watermark",
+      "zoom_blur"
+    ],
+    "severity_based_count": 42,
+    "severity_category_count_excluding_binary": 9,
+    "severity_levels_used": [
+      1,
+      3,
+      5
+    ],
+    "total_augmentation_count": 49
+  },
+  "claims": [
+    {
+      "challenge_claim": "VLM-RobustBench evaluates 49 augmentations, including 42 severity-based corruptions across nine categories and 7 binary transforms (Table 1).",
+      "challenge_claim_sha256": "33e0dd682fda119548029ce6e9f553f4bd99d68ead5ca66c630149601e6dcc43",
+      "claim_index": 1,
+      "evidence": "Pinned repository aug.py and README independently enumerate 42 severity-based transforms, 7 binary transforms, and nine non-binary categories.",
+      "observations": {
+        "binary_count": 7,
+        "severity_based_count": 42,
+        "severity_category_count_excluding_binary": 9,
+        "total_augmentation_count": 49
+      },
+      "status": "verified",
+      "target_claim": "VLM-RobustBench evaluates 49 augmentations, including 42 severity-based corruptions across nine categories and 7 binary transforms (Table 1)."
+    },
+    {
+      "challenge_claim": "The benchmark yields 133 corrupted settings per model-dataset pair by applying three severities to 42 corruptions plus seven binary transforms (Section 3.2).",
+      "challenge_claim_sha256": "20bca186ddd41da1813a913f66b5218617a9f58d63833bded1646a4627dd97dd",
+      "claim_index": 2,
+      "evidence": "Computed corrupted settings from pinned source categories as 42 severity-based augmentations times levels 1, 3, and 5, plus 7 binary transforms.",
+      "observations": {
+        "corrupted_settings_per_model_dataset": 133,
+        "formula": "42 * 3 + 7",
+        "severity_levels_used": [
+          1,
+          3,
+          5
+        ]
+      },
+      "status": "verified",
+      "target_claim": "The benchmark yields 133 corrupted settings per model-dataset pair by applying three severities to 42 corruptions plus seven binary transforms (Section 3.2)."
+    },
+    {
+      "challenge_claim": "Low-severity glass blur causes an average 8.1 percentage-point MMBench accuracy drop, larger than high-severity brightness reduction, illustrating a severity mismatch (Figure 1).",
+      "challenge_claim_sha256": "3df43597a1c24deb295717216e45eae4df5f11796ba8459ad95014cc36083d8a",
+      "claim_index": 3,
+      "evidence": "Pinned project artifacts support the qualitative severity-mismatch comparison, but the exact 8.1 percentage-point glass-blur value was not found as a machine-readable primary value; paper-reported value was not used as reproduced evidence.",
+      "observations": {
+        "approximate_glass_blur_text_found": true,
+        "brightness_comparison_text_found": true,
+        "exact_8_1_primary_value_found": false,
+        "project_app_sha256_observed": "beb5b42121b17eb13cd023e55df858aecb79f44794a157472e725c9428fef900",
+        "project_page_sha256_observed": "6eac82e58ad661354943a49457d81acca3736a127f7c95eeaa2d19744963e7ed"
+      },
+      "status": "toy",
+      "target_claim": "Low-severity glass blur causes an average 8.1 percentage-point MMBench accuracy drop, larger than high-severity brightness reduction, illustrating a severity mismatch (Figure 1)."
+    }
+  ],
+  "evidence_schema": "icml-repro-v1",
+  "generated_at": "2026-07-31T22:21:41.997606+00:00",
+  "paper_id": "HwXyyvK7ZJ",
+  "paper_title": "VLM-RobustBench: A Comprehensive Benchmark for Robustness of Vision-Language Models",
+  "upstream": {
+    "expected_github_commit": "8bc793d1649e574e000f91c59cb6ce7432c95073",
+    "github_commit": "8bc793d1649e574e000f91c59cb6ce7432c95073",
+    "github_repo": "https://github.com/saxenarohit/vlm_robustbench.git",
+    "project_app_sha256_observed": "beb5b42121b17eb13cd023e55df858aecb79f44794a157472e725c9428fef900",
+    "project_app_url": "https://edinburghnlp.github.io/vlm-robustbench/app.js",
+    "project_page_sha256": "6eac82e58ad661354943a49457d81acca3736a127f7c95eeaa2d19744963e7ed",
+    "project_page_sha256_observed": "6eac82e58ad661354943a49457d81acca3736a127f7c95eeaa2d19744963e7ed",
+    "project_page_url": "https://edinburghnlp.github.io/vlm-robustbench/"
+  }
+}

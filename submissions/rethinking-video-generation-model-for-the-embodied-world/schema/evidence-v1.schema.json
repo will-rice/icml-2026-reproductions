@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence-v1.schema.json",
+  "title": "RBench Reproduction Evidence Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "paper_id",
+    "attempt_id",
+    "generated_at",
+    "tool_revision",
+    "sources",
+    "claims",
+    "environment",
+    "artifacts",
+    "unavailable",
+    "contradictions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "paper_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "unavailable": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contradiction"
+      }
+    },
+    "census": {
+      "type": "object"
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "formula": {
+      "type": "object"
+    },
+    "leaderboards": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "comparison": {
+      "type": "object"
+    },
+    "failure_modes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "repo_id",
+        "requested_revision",
+        "resolved_revision",
+        "license_id",
+        "redistributable"
+      ],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "repo_id": { "type": "string", "minLength": 1 },
+        "requested_revision": { "type": "string", "minLength": 1 },
+        "resolved_revision": { "type": "string", "minLength": 1 },
+        "license_id": { "type": "string", "minLength": 1 },
+        "redistributable": { "type": "boolean" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim",
+        "status",
+        "observations",
+        "limitations"
+      ],
+      "properties": {
+        "claim": { "type": "string", "minLength": 1 },
+        "status": {
+          "type": "string",
+          "enum": ["verified", "partial", "inconclusive", "contradicted", "unavailable"]
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/observation"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "detail"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "detail": {}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_lock_sha256"],
+      "properties": {
+        "package_lock_sha256": { "type": "string", "minLength": 1 }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "json_pointer", "sha256"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "json_pointer": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "minLength": 64, "maxLength": 64 }
+      }
+    },
+    "contradiction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_index", "description"],
+      "properties": {
+        "claim_index": { "type": "integer", "minimum": 0 },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

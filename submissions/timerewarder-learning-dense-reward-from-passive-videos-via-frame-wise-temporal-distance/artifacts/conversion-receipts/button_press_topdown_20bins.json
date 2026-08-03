@@ -1,0 +1,33 @@
+{
+  "approval_status": "pending_independent_reviewer",
+  "checkpoint_bytes": 1293800381,
+  "checkpoint_file": "button_press_topdown_20bins.pth",
+  "checkpoint_sha256": "58e4e3f60628309bacc3409e64cace215cd65c889661c2fa18b8f4e76f80de57",
+  "child_exit": 0,
+  "converter": "codex-points-timerewarder-task1",
+  "format": "timerewarder-conversion-receipt-v2",
+  "load": {
+    "map_location": "cpu",
+    "mmap": true,
+    "weights_only": true
+  },
+  "model_repository": "CowAndSheep/timerewarder",
+  "model_revision": "23eded140eb8c8d9f194243a115d218b5072d800",
+  "output_bytes": 603857088,
+  "output_sha256": "9669b379b80683f4b2958dab59fc8b90efbf9fa4f97f878f82ce804a7f865cb7",
+  "safe_globals_empty": true,
+  "sandbox": {
+    "inherited_network_fds": 0,
+    "network_namespace": "none"
+  },
+  "schema_sha256": "b85388515bb8e5eef2735b4a0a3c62889682a2d4e0958f492631b3c1fbc5bab3",
+  "static_globals": [
+    "yacs.config.CfgNode"
+  ],
+  "status": "success",
+  "task": "button-press-topdown-v2",
+  "tensor_checks": {
+    "exact_schema": true,
+    "overlapping_storage": false
+  }
+}

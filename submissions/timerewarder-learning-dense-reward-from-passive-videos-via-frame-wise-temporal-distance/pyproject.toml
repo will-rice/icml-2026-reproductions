@@ -1,0 +1,32 @@
+[project]
+name = "timerewarder-repro"
+version = "0.1.0"
+requires-python = "==3.12.11"
+dependencies = [
+  "decord==0.6.0",
+  "gradio==6.0.1",
+  "gradio-client==2.0.1",
+  "numpy==2.3.2",
+  "pillow==11.3.0",
+  "safetensors==0.6.2",
+  "torch==2.9.1",
+]
+
+[project.scripts]
+timerewarder-repro = "timerewarder_repro.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.8.0,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = ["pytest==8.4.1", "ruff==0.12.5"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.uv]
+override-dependencies = ["gradio-client==2.0.1"]
+
+[tool.uv.build-backend]
+module-name = "timerewarder_repro"

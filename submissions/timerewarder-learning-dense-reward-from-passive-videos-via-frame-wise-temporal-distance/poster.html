@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TimeRewarder reproduction evidence</title>
+<style>
+body { margin: 0; font: 16px/1.45 system-ui, sans-serif; color: #10233a;
+  background: #eef4fb; }
+main { max-width: 1120px; margin: auto; padding: 2rem; }
+h1 { font-size: 2.3rem; margin-bottom: .2rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap: 1rem; }
+section, .claim { background: white; border-radius: 12px; padding: 1rem;
+  border: 1px solid #bed1e5; }
+.claim.partial { border-left: 8px solid #e9a600; }
+.claim.unavailable { border-left: 8px solid #b33a3a; background: #fff7f7; }
+code { overflow-wrap: anywhere; }
+</style>
+</head>
+<body><main>
+<h1>TimeRewarder: independently executable evidence</h1>
+<p>Released artifacts were recomputed; paper-reported values are not presented
+as reproduced measurements.</p>
+<div class="grid">
+<section><h2>Scope and immutable inputs</h2><ul><li><strong>dataset:</strong> b966abcebc110dd97dd96018e395180e069756c4</li><li><strong>model:</strong> 23eded140eb8c8d9f194243a115d218b5072d800</li><li><strong>paper:</strong> arxiv:2509.26627v3</li><li><strong>source:</strong> f54234b67bd3f1fa190f62498d38513a2140f23f</li></ul></section>
+<section><h2>Safety boundary</h2><p>Legacy weights were converted in an isolated,
+bounded process and independently approved. Runtime inference accepts only
+approved safetensors artifacts.</p></section>
+<section><h2>Representative protocol</h2>
+<p><strong>Figure 3 diagnostic:</strong> five-video-per-task released-model
+protocol, not the paper's full comparative Figure 3 protocol.</p>
+<p>10 tasks ×
+5 videos ×
+20 ordered pairs.</p></section>
+<section><h2>Temporal-distance measurements</h2>
+<ul><li>Prediction MAE: 0.06805404378603129</li>
+<li>Zero-baseline MAE: 0.34156040443285873</li>
+<li>Relative improvement: 0.800755465496561</li>
+<li>Sign accuracy: 0.998</li>
+<li>Mean antisymmetry error: 0.001547624548833128</li>
+<li>Released-model mean VOC: 0.998</li></ul>
+</section>
+<section><h2>Theory audit</h2>
+<p>Finite Bellman recurrences and the gamma-one temporal-distance identity were
+checked (maximum absolute residual:
+1.4210854715202004e-14). Assumptions include full
+observability, deterministic transitions, an optimal trajectory, a terminal
+goal, and unaliased observations. An aliasing counterexample is retained.</p>
+</section>
+<section><h2>Deterministic fixture</h2><p>The passive-pair fixture is
+<strong>diagnostic-only</strong>; it is not a paper-scale acceptance result.</p>
+</section></div>
+<h2>Six challenge claims</h2><div class="grid"><article class="claim verified"><h3>Claim 1 · verified</h3><p>10/10 released-checkpoint task strata passed the fixed five-video-per-task temporal-distance protocol.</p><p><strong>Limitation:</strong> This verifies released-checkpoint behavior and the pinned action-free label path; it does not reproduce reward-model training.</p></article>
+<article class="claim verified"><h3>Claim 2 · verified</h3><p>All 33 pinned source spans and 106 temporal-distance plus three transition formula cases passed.</p><p><strong>Limitation:</strong> The source/formula audit verifies the implementation path, not paper-scale downstream RL outcomes.</p></article>
+<article class="claim verified"><h3>Claim 3 · verified</h3><p>All finite Bellman recurrences and the gamma-one temporal-distance identity passed under the enumerated assumptions.</p><p><strong>Limitation:</strong> The derivation assumes full observability, deterministic transitions, an optimal trajectory, a terminal goal, and unaliased observations.</p></article>
+<article class="claim partial"><h3>Claim 4 · partial</h3><p>All 50 released-model videos produced finite VOC; the fixed five-video-per-task mean was 0.998.</p><p><strong>Limitation:</strong> The comparative highest-VOC component is unavailable: baseline predictions/checkpoints and the paper&#x27;s full Figure 3 protocol were not released. This is a five-video-per-task released-model protocol.</p></article>
+<article class="claim unavailable"><h3>Claim 5 · unavailable</h3><p>No matched successful/failed rollout comparison was computed.</p><p><strong>Limitation:</strong> Released successful/failed rollout videos and matched VIP, Rank2Reward, and PROGRESSOR predictions are unavailable.</p></article>
+<article class="claim unavailable"><h3>Claim 6 · unavailable</h3><p>No Meta-World or DrQ-v2 training was run.</p><p><strong>Limitation:</strong> The CPU scope performs no Meta-World/DrQ-v2 training, multi-seed evaluation, or 200,000-interaction budget.</p></article></div>
+<section><h2>Reproduce</h2>
+<pre><code>uv run pytest -q
+uv run timerewarder-repro fixture
+uv run timerewarder-repro build-evidence --manifest artifacts/manifest.json --acquisition artifacts/acquisition.json --registry artifacts/checkpoints.json --source-root artifacts/source --representative artifacts/representative.json --output artifacts/evidence.json</code></pre>
+<p><strong>Measurement SHA-256:</strong> <code>c1a47c914a17101941a81d7de4422cd5b88ab3c74cc5822bcc9bce041ec2f305</code></p>
+</section>
+</main></body></html>

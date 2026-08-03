@@ -1,0 +1,84 @@
+{
+  "paper_id": "hCAEcqig2C",
+  "arxiv_ids": [
+    "2412.18134v1",
+    "2412.18134v5"
+  ],
+  "commit": "e13d4b59f6d23051c73e07cfc447336da84e7bd2",
+  "versions": {
+    "v1": {
+      "sha256": "abaac08eabec2e77c8af7ae3ca028691b9cd862e21bfa779452b9fd729e3222f",
+      "size_bytes": 2490520,
+      "table_2": {
+        "title": "Learned Post-Condition Example",
+        "locator": "Table 2",
+        "benchmark": "post-condition",
+        "sample_count": 20,
+        "is_backend_comparison": false
+      },
+      "rsr_bench": {
+        "locator": "Section 5.3.1",
+        "benchmark": "RSR-Bench",
+        "compared_methods": [
+          "LR",
+          "MILP"
+        ],
+        "metrics": [
+          "sample count",
+          "runtime"
+        ],
+        "lr_samples": 594,
+        "milp_samples": 1095,
+        "lr_runtime": 130.53,
+        "milp_runtime": 187.47
+      },
+      "nla_digbench": {
+        "locator": "Section 5.3.2",
+        "benchmark": "NLA-DigBench",
+        "compared_methods": [
+          "Bitween",
+          "DIG",
+          "SymInfer"
+        ],
+        "metrics": [
+          "solving count",
+          "runtime"
+        ]
+      }
+    },
+    "v5": {
+      "sha256": "93cab4aa8cec06434b704e639bab87dd15ea95ac46a335961138a94fc1bae2b8",
+      "size_bytes": 2004773,
+      "definitions": {
+        "def_4_1": {
+          "name": "Randomized Self-Reduction (RSR)",
+          "page": 4
+        },
+        "def_4_3": {
+          "name": "Correlated Query Distribution",
+          "page": 5
+        },
+        "def_4_5": {
+          "name": "RSR Learning Problem",
+          "page": 5
+        }
+      },
+      "claims": {
+        "claim_a1": {
+          "name": "PAC to RSR reduction bound",
+          "section": "Appendix A.1"
+        },
+        "claim_a2": {
+          "name": "Sample complexity of RSR learning",
+          "section": "Appendix A.2"
+        }
+      },
+      "table_2": {
+        "title": "Novel Agentic Bitween Query Functions",
+        "locator": "Table 2",
+        "benchmark": "RSR-Bench",
+        "contains_novel_queries": true
+      }
+    }
+  }
+}

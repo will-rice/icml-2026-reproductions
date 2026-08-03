@@ -1,0 +1,119 @@
+{
+  "artifact_observations": {
+    "base_model_parameter_freeze": true,
+    "baseline_coverage": {
+      "full_finetuning_or_baseline_training": true,
+      "lora": true,
+      "prompt_tuning": true
+    },
+    "composition_eval_num_ops": {
+      "max": 2,
+      "min": 2
+    },
+    "composition_eval_skill_names": [
+      "[SHIFT_RIGHT]",
+      "[INVERT_POLARITY]"
+    ],
+    "digit_sequence_composition_scripts": [
+      "sequence_map_experiment/evaluate_zs_compo_icl.py",
+      "sequence_map_experiment/run_digitseq_all.sh"
+    ],
+    "digit_sequence_new_ops": [
+      "[SHIFT_RIGHT]",
+      "[INVERT_POLARITY]"
+    ],
+    "digit_sequence_pretrain_ops": [
+      "[ASC]",
+      "[DESC]",
+      "[ADD]",
+      "[SUB]",
+      "[POLARITY]",
+      "[REVERSE]",
+      "[ID]"
+    ],
+    "generate_test_datasets_tests_up_to_ops": 3,
+    "non_skill_gradient_masking": true,
+    "run_all_crosses_skill_and_test_ops": true,
+    "skill_centered_dataset_files": [
+      "data/skill_mix/train_data_modus.csv",
+      "data/skill_mix/train_data_stat.csv"
+    ],
+    "skill_data_generator_always_includes_new_skill": true,
+    "skill_mix_composition_scripts": [
+      "scripts/skill-mix/eval_skill_mix.py",
+      "scripts/skill-mix/eval_baselines.py"
+    ],
+    "skill_mix_dataset_configs": [
+      "configs/skill_mix/dataset/main/modus.yaml",
+      "configs/skill_mix/dataset/main/stat_syllogism.yaml"
+    ],
+    "skill_mix_dataset_rows": {
+      "train_data_modus.csv": 300,
+      "train_data_stat.csv": 300
+    },
+    "skill_token_config": {
+      "init_method": "from_pretrain_skills",
+      "length": 20,
+      "save_dir": "skill_tokens"
+    },
+    "skill_token_model_files": [
+      "src/models/skill_token_model.py",
+      "src/trainer_utils.py",
+      "sequence_map_experiment/train_neologisms.py"
+    ],
+    "skill_token_operations": [
+      "[SHIFT_RIGHT]",
+      "[INVERT_POLARITY]"
+    ],
+    "trainable_embedding_parameter": true
+  },
+  "attempt_id": "6ee240d6-4363-419b-a6e8-d05aae509de4",
+  "commands": [
+    "UV_CACHE_DIR=/tmp/icml-repro-uv-cache uv run --project submissions/skill-neologisms-towards-skill-based-continual-learning python -m pytest submissions/skill-neologisms-towards-skill-based-continual-learning/tests -q"
+  ],
+  "limitations": [
+    "No paper-reported accuracy, pass rate, or table value is counted as reproduced.",
+    "No Qwen or LLaMA training/evaluation run is executed in this CPU-only artifact check.",
+    "No WandB history, Azure OpenAI generation, or GPT-5 grading output is imported."
+  ],
+  "owner": "codex-paper-owner-03",
+  "paper_id": "5VgZUEpK6W",
+  "reproduction_scope": "static_artifact_reproduction",
+  "snapshot_id": "31492eaeed30c533df53d18a5b536207a39cda717423ad7ff0b1ad2b017a82bc",
+  "target_claims": [
+    {
+      "challenge_claim_sha256": "3854fd0dd63c46d288b124aad9646ddf389e7c9e1a545f888c046a5a1a284c35",
+      "claim": "Skill neologisms extend a model vocabulary with trainable skill-token embeddings while keeping the pretrained model parameters fixed.",
+      "claim_id": "claim_1_skill_tokens",
+      "provenance": "The released SkillTokenModel registers skill-specific soft token rows, marks the embedding matrix trainable, uses an optimizer over that embedding matrix only, and the SkillTokenTrainer masks gradients for all non-skill token rows during training.",
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "9e14ca8c7f97d9e2946a4d3069a036cdf4926c1f844d9e49fe6e8e663b6ca191",
+      "claim": "The method is evaluated with skill-centered datasets in which a new skill is composed with skills already represented in the pretrained model.",
+      "claim_id": "claim_2_skill_centered_datasets",
+      "provenance": "Digit-sequence data generation separates seven pretraining operations from SHIFT_RIGHT and INVERT_POLARITY, and training data always includes the selected new skill with sampled other operations. The SkillMix release also includes Modus Ponens and Statistical Syllogism training CSV files and configs.",
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "0233b25a01dfcb99d57b734092f96ad059f555578772c7815b5276c3c350b0ab",
+      "claim": "The released experiments compare skill neologisms against LoRA, prompt tuning, and related baseline training paths.",
+      "claim_id": "claim_3_baseline_coverage",
+      "provenance": "The digit-sequence runner executes skill neologisms, prompt tuning, and LoRA for each skill/test operation pair, and the SkillMix configs and scripts contain matching LoRA and prompt-tuning baseline commands.",
+      "status": "verified"
+    },
+    {
+      "challenge_claim_sha256": "bb8e78c2fa3716b338adfb7e30bca948f8d987e2522c5faec82419c33f3075cc",
+      "claim": "On digit-sequence tasks, independently learned skill neologisms transfer to held-out two-skill and three-skill compositions.",
+      "claim_id": "claim_4_digit_sequence_composition",
+      "provenance": "The released code defines the zero-shot composition experiment for SHIFT_RIGHT and INVERT_POLARITY and the data generator can construct tests through three operations. This reproduction verifies those artifacts but does not rerun Qwen training/evaluation or reproduce paper-reported accuracies.",
+      "status": "partial"
+    }
+  ],
+  "title": "Skill Neologisms: Towards Skill-based Continual Learning",
+  "upstream": {
+    "commit": "d24f3851d1e10cf52a621ca439332c92062360e5",
+    "license": "Apache-2.0",
+    "repository": "https://github.com/vanderschaarlab/skill-neologisms"
+  }
+}

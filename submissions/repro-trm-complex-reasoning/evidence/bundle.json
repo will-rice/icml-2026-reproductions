@@ -1,0 +1,289 @@
+{
+  "attempt_id": "b4432d6d-0e2d-413d-a4dd-28720b0d335b",
+  "claims": [
+    {
+      "challenge_claim_sha256": "3e23512497a9642162ac69ed2bd7cbcef00962324c530b34e93bc60475893862",
+      "evidence": {
+        "me2_asset_present": true,
+        "me2_dimensions": [
+          "Macro-Efficiency",
+          "Macro-Effectiveness",
+          "Micro-Efficiency",
+          "Micro-Effectiveness"
+        ]
+      },
+      "status": "verified",
+      "summary": "The pinned arXiv source hash and GitHub revision expose the four ME2 dimensions and the ME2 figure asset.",
+      "text": "The ME2 principle characterizes reasoning traces along macro/micro granularity and efficiency/effectiveness axes (Figure 2)."
+    },
+    {
+      "challenge_claim_sha256": "6ccf7ef3305d4a60c6456012a0ed4fdd4d59ad28cc2c7dca5f4c0583a848a370",
+      "evidence": {
+        "dag_steps": [
+          "partition",
+          "build_dag",
+          "merge_view"
+        ],
+        "merged_parent_for_merge": [
+          1,
+          2
+        ],
+        "raw_actions": {
+          "0": "root",
+          "1": "continue",
+          "2": "backtrack",
+          "3": "merge"
+        },
+        "raw_parents": {
+          "0": [],
+          "1": [
+            0
+          ],
+          "2": [
+            0
+          ],
+          "3": [
+            1,
+            2
+          ]
+        },
+        "usage_calls": 3
+      },
+      "status": "verified",
+      "summary": "The released dag_construction package was imported at the pinned revision and produced a local DAG containing continue, backtrack, and merge actions with merged parents [1, 2].",
+      "text": "The paper represents reasoning traces as DAGs with progression, branching, and merging structures for pairwise evaluation (Figure 3)."
+    },
+    {
+      "challenge_claim_sha256": "db021919e89a8a7b8485b63b85c4e2d00a1ff7477d23fbfaf8310b1a09832d92",
+      "evidence": {
+        "architecture": "LlamaForSequenceClassification",
+        "card_tags": [
+          "generated_from_trainer",
+          "trl",
+          "reward-trainer"
+        ],
+        "dataset_revision": "0d0752035ea0e8f7d5c28e1e7a7d8f27e2e45d61",
+        "eval_accuracy": 0.8835227272727273,
+        "model_revision": "b84f02bf6b4227675284538a4deb82822371ebbd",
+        "pipeline_tag": "text-classification",
+        "sample_keys": [
+          "chosen",
+          "prompt",
+          "rejected"
+        ],
+        "test_examples": 1500,
+        "training_script": {
+          "center_rewards_coefficient_present": true,
+          "load_best_model_at_end": true,
+          "metric_for_best_model": "accuracy",
+          "script": "train_rm.sh",
+          "train_file_arg": "TRM-preference-train.json",
+          "train_py_present": false,
+          "validation_file_arg": "TRM-preference-test.json"
+        }
+      },
+      "status": "toy",
+      "summary": "TRM-Preference exposes pairwise prompt/chosen/rejected records, TRM-8B is a released reward-trainer sequence-classification model, and train_rm.sh references the pairwise train/test JSON files and accuracy selection, but train.py is not present in the pinned repository, so this does not independently rerun the stated Bradley-Terry training implementation.",
+      "text": "TRM is trained from a TRM-Preference dataset with a Bradley-Terry preference loss to score reasoning trace quality at scale (Section 5.1)."
+    }
+  ],
+  "commands": [
+    "git clone https://github.com/Simplified-Reasoning/TRM.git",
+    "git checkout --detach 82ac3778aaba9cf63b237b3db434dc2ba813ef29",
+    "download arXiv e-print 2602.08498 and verify SHA256",
+    "huggingface_hub dataset_info/model_info at pinned revisions",
+    "hf_hub_download TRM-preference-test.json, eval_results.json, config.json",
+    "import released dag_construction package and run deterministic DAG smoke"
+  ],
+  "generated_at": "2026-07-29T04:05:00+00:00",
+  "observations": {
+    "github": {
+      "dag_package_tests": [
+        "test_dag_validity.py",
+        "test_merged_view.py",
+        "test_parser.py",
+        "test_partition.py",
+        "test_pipeline_mocked.py",
+        "test_voting.py"
+      ],
+      "dag_steps": [
+        "partition",
+        "build_dag",
+        "merge_view"
+      ],
+      "file_count": 1058,
+      "license": "MIT",
+      "me2_asset_present": true,
+      "me2_dimensions": [
+        "Macro-Efficiency",
+        "Macro-Effectiveness",
+        "Micro-Efficiency",
+        "Micro-Effectiveness"
+      ],
+      "repo": "https://github.com/Simplified-Reasoning/TRM.git",
+      "revision": "82ac3778aaba9cf63b237b3db434dc2ba813ef29"
+    },
+    "paper_source": {
+      "arxiv_id": "2602.08498",
+      "source_bytes": 5721189,
+      "source_sha256": "6c01d28b97ecbc850b2813c3e0af85ce2b2ec57e6fc9173ab6a0e5ac3dfb3f7f"
+    },
+    "released_dag_smoke": {
+      "merged_nodes": [
+        {
+          "id": 0,
+          "last_raw": 0,
+          "raw": [
+            0
+          ]
+        },
+        {
+          "id": 1,
+          "last_raw": 1,
+          "raw": [
+            1
+          ]
+        },
+        {
+          "id": 2,
+          "last_raw": 2,
+          "raw": [
+            2
+          ]
+        },
+        {
+          "id": 3,
+          "last_raw": 3,
+          "raw": [
+            3
+          ]
+        }
+      ],
+      "merged_parent_for_merge": [
+        1,
+        2
+      ],
+      "raw_actions": {
+        "0": "root",
+        "1": "continue",
+        "2": "backtrack",
+        "3": "merge"
+      },
+      "raw_leaves": [
+        3
+      ],
+      "raw_parents": {
+        "0": [],
+        "1": [
+          0
+        ],
+        "2": [
+          0
+        ],
+        "3": [
+          1,
+          2
+        ]
+      },
+      "usage_calls": 3
+    },
+    "tooling": {
+      "downloads_avoided": [
+        "TRM-preference-train.json",
+        "TRM-8B safetensors shards"
+      ],
+      "git_available": true,
+      "network_required": true
+    },
+    "training_script": {
+      "center_rewards_coefficient_present": true,
+      "load_best_model_at_end": true,
+      "metric_for_best_model": "accuracy",
+      "script": "train_rm.sh",
+      "train_file_arg": "TRM-preference-train.json",
+      "train_py_present": false,
+      "validation_file_arg": "TRM-preference-test.json"
+    },
+    "trm_model": {
+      "architecture": "LlamaForSequenceClassification",
+      "card_tags": [
+        "generated_from_trainer",
+        "trl",
+        "reward-trainer"
+      ],
+      "eval_accuracy": 0.8835227272727273,
+      "eval_loss": 0.2938343286514282,
+      "files": {
+        ".gitattributes": 1570,
+        "README.md": 2204,
+        "all_results.json": 408,
+        "chat_template.jinja": 4614,
+        "config.json": 952,
+        "eval_results.json": 408,
+        "model-00001-of-00007.safetensors": 4886466168,
+        "model-00002-of-00007.safetensors": 4832007448,
+        "model-00003-of-00007.safetensors": 4999813112,
+        "model-00004-of-00007.safetensors": 4999813128,
+        "model-00005-of-00007.safetensors": 4832007496,
+        "model-00006-of-00007.safetensors": 4999813120,
+        "model-00007-of-00007.safetensors": 469828232,
+        "model.safetensors.index.json": 23984,
+        "special_tokens_map.json": 325,
+        "tokenizer.json": 17209920,
+        "tokenizer_config.json": 50554,
+        "training_args.bin": 6353
+      },
+      "license": "apache-2.0",
+      "model_type": "llama",
+      "pipeline_tag": "text-classification",
+      "repo_id": "zzzhr97/TRM-8B",
+      "revision": "b84f02bf6b4227675284538a4deb82822371ebbd"
+    },
+    "trm_preference": {
+      "files": {
+        ".gitattributes": 2627,
+        "README.md": 1536,
+        "TRM-preference-test.json": 28973005,
+        "TRM-preference-train.json": 2046546117
+      },
+      "repo_id": "zzzhr97/TRM-Preference",
+      "revision": "0d0752035ea0e8f7d5c28e1e7a7d8f27e2e45d61",
+      "sample_keys": [
+        "chosen",
+        "prompt",
+        "rejected"
+      ],
+      "sample_pair_roles": {
+        "chosen": [
+          "assistant"
+        ],
+        "rejected": [
+          "assistant"
+        ]
+      },
+      "sample_prompt_roles": [
+        "user"
+      ],
+      "test_examples": 1500
+    },
+    "webinstruct_processed": {
+      "files": {
+        ".gitattributes": 2504,
+        "README.md": 1112,
+        "test.parquet": 383950,
+        "train.parquet": 89879756
+      },
+      "repo_id": "zzzhr97/WebInstruct-Verified-Processed",
+      "revision": "7ad04734d39b71dcba52dc399213288a7602e56c"
+    }
+  },
+  "paper_id": "IMFgiWw4jd",
+  "source_urls": {
+    "arxiv": "https://arxiv.org/abs/2602.08498",
+    "github": "https://github.com/Simplified-Reasoning/TRM.git",
+    "trm_model": "https://huggingface.co/zzzhr97/TRM-8B",
+    "trm_preference": "https://huggingface.co/datasets/zzzhr97/TRM-Preference",
+    "webinstruct_processed": "https://huggingface.co/datasets/zzzhr97/WebInstruct-Verified-Processed"
+  },
+  "upstream_revision": "arxiv:2602.08498+arxiv-source-sha256:6c01d28b97ecbc850b2813c3e0af85ce2b2ec57e6fc9173ab6a0e5ac3dfb3f7f+github:Simplified-Reasoning/TRM@82ac3778aaba9cf63b237b3db434dc2ba813ef29+hf-model:zzzhr97/TRM-8B@b84f02bf6b4227675284538a4deb82822371ebbd+hf-dataset:zzzhr97/TRM-Preference@0d0752035ea0e8f7d5c28e1e7a7d8f27e2e45d61+hf-dataset:zzzhr97/WebInstruct-Verified-Processed@7ad04734d39b71dcba52dc399213288a7602e56c"
+}

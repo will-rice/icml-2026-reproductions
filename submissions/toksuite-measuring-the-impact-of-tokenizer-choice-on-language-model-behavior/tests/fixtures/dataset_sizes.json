@@ -1,0 +1,10 @@
+{
+  "toksuite/toksuite_english": {"configs": 29, "rows": 1140},
+  "toksuite/toksuite_chinese": {"configs": 13, "rows": 485},
+  "toksuite/toksuite_turkish": {"configs": 17, "rows": 621},
+  "toksuite/toksuite_italian": {"configs": 18, "rows": 1088},
+  "toksuite/toksuite_farsi": {"configs": 12, "rows": 747},
+  "toksuite/toksuite_math": {"configs": 9, "rows": 189},
+  "toksuite/toksuite_stem": {"configs": 19, "rows": 613},
+  "toksuite/toksuite_general": {"configs": 6, "rows": 68}
+}

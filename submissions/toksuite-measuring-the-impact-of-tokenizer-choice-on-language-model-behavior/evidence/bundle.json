@@ -1,0 +1,348 @@
+{
+  "claims": [
+    {
+      "claim": "TokSuite releases 14 pre-trained language models that share initialization, architecture, data, and training budget while differing only in tokenizer choice.",
+      "evidence": "The canonical Hugging Face model collection contains 14 model entries, and model-card text states the shared setup and tokenizer-only controlled variable.",
+      "status": "verified"
+    },
+    {
+      "claim": "TokSuite includes a multilingual robustness benchmark with 4,941 total examples across English, Chinese, Turkish, Italian, Farsi, Math, and STEM perturbation groups.",
+      "evidence": "Dataset Viewer size metadata gives 4883 rows across the seven named datasets, not 4941; including toksuite_general gives 4951 rows.",
+      "status": "falsified"
+    },
+    {
+      "claim": "TokSuite reports tokenizer-dependent relative performance drops under the named perturbation families.",
+      "evidence": "Released model-card tables contain the named perturbation families and tokenizer-varying numeric entries.",
+      "status": "toy"
+    }
+  ],
+  "generated_at": "2026-07-31T23:40:00+00:00",
+  "observations": {
+    "dataset_totals": {
+      "claimed_rows": 4941,
+      "matches_claimed_rows": false,
+      "named_config_count": 117,
+      "named_rows": 4883,
+      "with_general_config_count": 123,
+      "with_general_rows": 4951
+    },
+    "model_count": 14,
+    "model_ids": [
+      "toksuite/google-byt5-small",
+      "toksuite/facebook-xglm-564M",
+      "toksuite/bigscience-bloom",
+      "toksuite/gpt2",
+      "toksuite/common-pile-comma-v0.1",
+      "toksuite/google-gemma-2-2b",
+      "toksuite/microsoft-Phi-3-mini-4k-instruct",
+      "toksuite/meta-llama-Llama-3.2-1B",
+      "toksuite/CohereLabs-aya-expanse-8b",
+      "toksuite/tiktoken-gpt-4o",
+      "toksuite/google-bert-bert-base-multilingual-cased",
+      "toksuite/Qwen-Qwen3-8B",
+      "toksuite/tokenmonster-englishcode-32000-consistent-v1",
+      "toksuite/mistralai-tekken"
+    ],
+    "model_setup_terms": {
+      "toksuite/CohereLabs-aya-expanse-8b": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/Qwen-Qwen3-8B": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/bigscience-bloom": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/common-pile-comma-v0.1": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/facebook-xglm-564M": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/google-bert-bert-base-multilingual-cased": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/google-byt5-small": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/google-gemma-2-2b": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/gpt2": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": false,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/meta-llama-Llama-3.2-1B": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/microsoft-Phi-3-mini-4k-instruct": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/mistralai-tekken": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/tiktoken-gpt-4o": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      },
+      "toksuite/tokenmonster-englishcode-32000-consistent-v1": {
+        "architecture": true,
+        "initialization": true,
+        "tokenizer_only_difference": true,
+        "training_budget": true,
+        "training_data": true
+      }
+    },
+    "perturbation_terms": {
+      "toksuite/CohereLabs-aya-expanse-8b": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/Qwen-Qwen3-8B": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/bigscience-bloom": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/common-pile-comma-v0.1": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/facebook-xglm-564M": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/google-bert-bert-base-multilingual-cased": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/google-byt5-small": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/google-gemma-2-2b": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/gpt2": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/meta-llama-Llama-3.2-1B": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/microsoft-Phi-3-mini-4k-instruct": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/mistralai-tekken": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/tiktoken-gpt-4o": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      },
+      "toksuite/tokenmonster-englishcode-32000-consistent-v1": {
+        "diacritic": true,
+        "input-medium": false,
+        "latex": true,
+        "math": true,
+        "morphology": false,
+        "noise": true,
+        "orthographic": true,
+        "stem": true
+      }
+    }
+  },
+  "paper_id": "vIZz7LvObC",
+  "paper_title": "TokSuite: Measuring the Impact of Tokenizer Choice on Language Model Behavior",
+  "upstream": {
+    "arxiv": "2512.20757",
+    "benchmark_datasets": {
+      "toksuite/toksuite_chinese": {
+        "configs": 13,
+        "rows": 485
+      },
+      "toksuite/toksuite_english": {
+        "configs": 29,
+        "rows": 1140
+      },
+      "toksuite/toksuite_farsi": {
+        "configs": 12,
+        "rows": 747
+      },
+      "toksuite/toksuite_general": {
+        "configs": 6,
+        "rows": 68
+      },
+      "toksuite/toksuite_italian": {
+        "configs": 18,
+        "rows": 1088
+      },
+      "toksuite/toksuite_math": {
+        "configs": 9,
+        "rows": 189
+      },
+      "toksuite/toksuite_stem": {
+        "configs": 19,
+        "rows": 613
+      },
+      "toksuite/toksuite_turkish": {
+        "configs": 17,
+        "rows": 621
+      }
+    },
+    "model_collection": {
+      "items": [
+        "toksuite/google-byt5-small",
+        "toksuite/facebook-xglm-564M",
+        "toksuite/bigscience-bloom",
+        "toksuite/gpt2",
+        "toksuite/common-pile-comma-v0.1",
+        "toksuite/google-gemma-2-2b",
+        "toksuite/microsoft-Phi-3-mini-4k-instruct",
+        "toksuite/meta-llama-Llama-3.2-1B",
+        "toksuite/CohereLabs-aya-expanse-8b",
+        "toksuite/tiktoken-gpt-4o",
+        "toksuite/google-bert-bert-base-multilingual-cased",
+        "toksuite/Qwen-Qwen3-8B",
+        "toksuite/tokenmonster-englishcode-32000-consistent-v1",
+        "toksuite/mistralai-tekken"
+      ],
+      "last_updated": "2025-12-18T02:26:29.271000+00:00",
+      "slug": "toksuite/toksuite-model-collection-69435e80cc46b2685e53067d"
+    }
+  }
+}

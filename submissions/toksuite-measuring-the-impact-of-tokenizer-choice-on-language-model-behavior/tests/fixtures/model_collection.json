@@ -1,0 +1,19 @@
+{
+  "slug": "toksuite/toksuite-model-collection-69435e80cc46b2685e53067d",
+  "items": [
+    "toksuite/google-byt5-small",
+    "toksuite/facebook-xglm-564M",
+    "toksuite/bigscience-bloom",
+    "toksuite/gpt2",
+    "toksuite/common-pile-comma-v0.1",
+    "toksuite/google-gemma-2-2b",
+    "toksuite/microsoft-Phi-3-mini-4k-instruct",
+    "toksuite/meta-llama-Llama-3.2-1B",
+    "toksuite/CohereLabs-aya-expanse-8b",
+    "toksuite/tiktoken-gpt-4o",
+    "toksuite/google-bert-bert-base-multilingual-cased",
+    "toksuite/Qwen-Qwen3-8B",
+    "toksuite/tokenmonster-englishcode-32000-consistent-v1",
+    "toksuite/mistralai-tekken"
+  ]
+}

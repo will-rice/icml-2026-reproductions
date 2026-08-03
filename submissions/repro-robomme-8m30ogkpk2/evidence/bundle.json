@@ -1,0 +1,180 @@
+{
+  "claim_results": {
+    "mme_vla_representations": {
+      "claim": "The MME-VLA suite evaluates symbolic, perceptual, and recurrent memory representations with multiple memory-integration mechanisms on a pi0.5-based architecture (Figure 2, Appendix A).",
+      "evidence": "Counted symbolic, perceptual, and recurrent MME-VLA variants with context, modulation, and expert integration naming in the pinned model suite.",
+      "status": "verified"
+    },
+    "mme_vla_variants": {
+      "claim": "The paper builds 14 memory-augmented VLA variants on the pi0.5 backbone to compare memory representations and integration strategies (Section 4).",
+      "evidence": "Counted 14 top-level variant directories and 14 history_config.txt files in the pinned MME-VLA suite.",
+      "status": "verified"
+    },
+    "task_taxonomy": {
+      "claim": "RoboMME defines 16 manipulation tasks organized by temporal, spatial, object, and procedural memory demands (Table 1, Table 2).",
+      "evidence": "Parsed 16 task modules and matched the four memory-category task groups.",
+      "status": "verified"
+    },
+    "training_timesteps": {
+      "claim": "RoboMME includes 770K high-quality training timesteps for systematic evaluation of memory-augmented policies (Section 3).",
+      "evidence": "Read total_samples=768897 from pinned preprocessed data stats, which rounds to 770K.",
+      "status": "verified"
+    }
+  },
+  "excluded_claims": [
+    {
+      "claim": "Benchmark success-rate, efficiency, real-world, and task-dependent performance claims.",
+      "reason": "Requires GPU/simulator or physical-robot performance evidence."
+    }
+  ],
+  "observations": {
+    "mme_vla_variants": {
+      "history_config_count": 14,
+      "history_configs": [
+        "perceptual-framesamp-context/history_config.txt",
+        "perceptual-framesamp-expert/history_config.txt",
+        "perceptual-framesamp-modul/history_config.txt",
+        "perceptual-tokendrop-context/history_config.txt",
+        "perceptual-tokendrop-expert/history_config.txt",
+        "perceptual-tokendrop-modul/history_config.txt",
+        "recurrent-rmt-context/history_config.txt",
+        "recurrent-rmt-expert/history_config.txt",
+        "recurrent-rmt-modul/history_config.txt",
+        "recurrent-ttt-context/history_config.txt",
+        "recurrent-ttt-expert/history_config.txt",
+        "recurrent-ttt-modul/history_config.txt",
+        "symbolic-grounded-subgoal/history_config.txt",
+        "symbolic-simple-subgoal/history_config.txt"
+      ],
+      "integration_types": [
+        "context",
+        "expert",
+        "modulation"
+      ],
+      "representation_types": [
+        "perceptual",
+        "recurrent",
+        "symbolic"
+      ],
+      "source": "hf-model:Yinpei/mme_vla_suite@5db4d53ddb98c7f80cab08792dd53d985d712ab1",
+      "variant_count": 14,
+      "variants": [
+        "perceptual-framesamp-context",
+        "perceptual-framesamp-expert",
+        "perceptual-framesamp-modul",
+        "perceptual-tokendrop-context",
+        "perceptual-tokendrop-expert",
+        "perceptual-tokendrop-modul",
+        "recurrent-rmt-context",
+        "recurrent-rmt-expert",
+        "recurrent-rmt-modul",
+        "recurrent-ttt-context",
+        "recurrent-ttt-expert",
+        "recurrent-ttt-modul",
+        "symbolic-grounded-subgoal",
+        "symbolic-simple-subgoal"
+      ]
+    },
+    "split_records": {
+      "test": {
+        "record_count": 800,
+        "tasks": 16
+      },
+      "train": {
+        "record_count": 1600,
+        "tasks": 16
+      },
+      "val": {
+        "record_count": 800,
+        "tasks": 16
+      }
+    },
+    "task_taxonomy": {
+      "categories": {
+        "Object memory": [
+          "PickHighlight",
+          "VideoRepick",
+          "VideoPlaceButton",
+          "VideoPlaceOrder"
+        ],
+        "Procedural memory": [
+          "MoveCube",
+          "InsertPeg",
+          "PatternLock",
+          "RouteStick"
+        ],
+        "Spatial memory": [
+          "VideoUnmask",
+          "VideoUnmaskSwap",
+          "ButtonUnmask",
+          "ButtonUnmaskSwap"
+        ],
+        "Temporal memory": [
+          "BinFill",
+          "PickXtimes",
+          "SwingXtimes",
+          "StopCube"
+        ]
+      },
+      "extra_task_modules": [],
+      "missing_expected_tasks": [],
+      "task_count": 16,
+      "task_modules": [
+        "BinFill",
+        "ButtonUnmask",
+        "ButtonUnmaskSwap",
+        "InsertPeg",
+        "MoveCube",
+        "PatternLock",
+        "PickHighlight",
+        "PickXtimes",
+        "RouteStick",
+        "StopCube",
+        "SwingXtimes",
+        "VideoPlaceButton",
+        "VideoPlaceOrder",
+        "VideoRepick",
+        "VideoUnmask",
+        "VideoUnmaskSwap"
+      ]
+    },
+    "training_timestep_stats": {
+      "execution_samples": 476857,
+      "rounded_claim_value": "770K",
+      "source": "hf-dataset:Yinpei/robomme_preprocessed_data@ddf0baf55b633cc6657dcd53ac0e089a273de612/meta/stats.json",
+      "total_samples": 768897
+    }
+  },
+  "paper_id": "8m30ogkPk2",
+  "paper_title": "RoboMME: Benchmarking and Understanding Memory for Robotic Generalist Policies",
+  "target_claims": [
+    {
+      "challenge_claim_sha256": "36b8db60ef193ce6da36b30be54d33856b268a93ea4582487650146b7ff27cec",
+      "id": "task_taxonomy",
+      "text": "RoboMME defines 16 manipulation tasks organized by temporal, spatial, object, and procedural memory demands (Table 1, Table 2)."
+    },
+    {
+      "challenge_claim_sha256": "44a693f9fed0a7d249d8c4caa696205797c7ea344d6cc73560267c8b91d288aa",
+      "id": "mme_vla_representations",
+      "text": "The MME-VLA suite evaluates symbolic, perceptual, and recurrent memory representations with multiple memory-integration mechanisms on a pi0.5-based architecture (Figure 2, Appendix A)."
+    },
+    {
+      "challenge_claim_sha256": "9c421693d19a62760e4fb953af3c3bb3f43ed1e9f1ad8b3afbdcf2eee67e6e60",
+      "id": "training_timesteps",
+      "text": "RoboMME includes 770K high-quality training timesteps for systematic evaluation of memory-augmented policies (Section 3)."
+    },
+    {
+      "challenge_claim_sha256": "dd2f1bba318425211ac424545696fa9a23b2d2fc5eba76cdcb7123ab03bd0958",
+      "id": "mme_vla_variants",
+      "text": "The paper builds 14 memory-augmented VLA variants on the pi0.5 backbone to compare memory representations and integration strategies (Section 4)."
+    }
+  ],
+  "upstream_pins": {
+    "arxiv_source": "arxiv:2603.04639@55861691d3059ac94933c6abec6aa517eee75521485740315d249724c11b6879",
+    "benchmark_repo": "github:RoboMME/robomme_benchmark@03a8faf57cfbd334dfea1bb7e60079a888d70453",
+    "data_h5": "hf-dataset:Yinpei/robomme_data_h5@a5e4e25ffe8af34f64944f9533d06455ce5f8337",
+    "mme_vla_suite": "hf-model:Yinpei/mme_vla_suite@5db4d53ddb98c7f80cab08792dd53d985d712ab1",
+    "policy_repo": "github:RoboMME/robomme_policy_learning@ecf086c3be7c2223167d9bb2f6ef1f0a6e24353b",
+    "preprocessed_data": "hf-dataset:Yinpei/robomme_preprocessed_data@ddf0baf55b633cc6657dcd53ac0e089a273de612"
+  }
+}

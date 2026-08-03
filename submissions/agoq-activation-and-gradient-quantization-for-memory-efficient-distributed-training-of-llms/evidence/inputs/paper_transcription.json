@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "paper": {
+    "arxiv_id": "2605.00539v2",
+    "pdf_sha256": "6a5095edf64e730a824fc076a0cbf3d97922b370dc827f173e872e17eb95e0d7",
+    "pdf_size_bytes": 3196252,
+    "license": "CC BY 4.0"
+  },
+  "table_1_units": {
+    "bf16": {"qkv": "1", "attention": "5", "linear_1": "1", "rmsnorm": "4", "ffn_1": "1", "activation": "12", "ffn_2": "4"},
+    "coat": {"qkv": "1", "attention": "5", "linear_1": "1", "rmsnorm": "1", "ffn_1": "1/2", "activation": "6", "ffn_2": "2"},
+    "agoq": {"qkv": "0", "attention": "5", "linear_1": "1/4", "rmsnorm": "1/2", "ffn_1": "0", "activation": "2", "ffn_2": "0"}
+  },
+  "pipeline": {
+    "printed_equation": "N_i = n + 2*i - 1, 1 <= i <= n",
+    "stored_batches_device_order_n4": [11, 9, 7, 5],
+    "minimum_bits": "4",
+    "reported_bits_device_order_n4": [4, 5, 6, 8]
+  },
+  "training_tables": {
+    "table_2_required_hardware": "64 GPUs",
+    "table_3_required_hardware": "16 NVIDIA Blackwell GPUs"
+  }
+}

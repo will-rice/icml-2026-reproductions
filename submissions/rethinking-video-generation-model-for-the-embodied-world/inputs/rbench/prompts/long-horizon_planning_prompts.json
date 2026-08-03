@@ -1,0 +1,664 @@
+[
+    {
+        "name": "long-horizon_planning_0001",
+        "image_path": "long-horizon_planning/long-horizon_planning_0001.jpg",
+        "prompt": "A humanoid robot performs a short dance, claps its hands, and then bends forward gracefully to bow",
+        "manipulated object": "none",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "performs a short dance",
+            "claps its hands",
+            "bends forward gracefully to bow"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0002",
+        "image_path": "long-horizon_planning/long-horizon_planning_0002.jpg",
+        "prompt": "A humanoid robot performs several arm curls, lifts the dumbbells overhead, squats down, and then places the dumbbells on the floor",
+        "manipulated object": "dumbbells",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "perform arm curls",
+            "lift dumbbells overhead",
+            "squat down",
+            "place dumbbells on floor"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0003",
+        "image_path": "long-horizon_planning/long-horizon_planning_0003.jpg",
+        "prompt": "A humanoid robot pours wine into a glass, places the bottle on the table, and then lifts the glass to make a toast",
+        "manipulated object": "wine bottle",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "pours wine into a glass",
+            "places the bottle on the table",
+            "lifts the glass to make a toast"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0004",
+        "image_path": "long-horizon_planning/long-horizon_planning_0004.jpg",
+        "prompt": "A humanoid robot sweeps trash from the floor and then empties it into the bin",
+        "manipulated object": "trash",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "sweeps trash from the floor",
+            "empties trash into the bin"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0005",
+        "image_path": "long-horizon_planning/long-horizon_planning_0005.jpg",
+        "prompt": "A humanoid robot takes a bag of vegetables out of the refrigerator, places it on the table, and then closes the fridge door",
+        "manipulated object": "bag of vegetables",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "take bag of vegetables out of refrigerator",
+            "place bag of vegetables on table",
+            "close fridge door"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0006",
+        "image_path": "long-horizon_planning/long-horizon_planning_0006.jpg",
+        "prompt": "A humanoid robot turns to the left, walks up the stairs, and then waves at the camera",
+        "manipulated object": "camera",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "turns to the left",
+            "walks up the stairs",
+            "waves at the camera"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0007",
+        "image_path": "long-horizon_planning/long-horizon_planning_0007.jpg",
+        "prompt": "The dual robotic arms pinch the middle of the yellow towel, lift it up, fold it in half, and finally set it down",
+        "manipulated object": "yellow towel",
+        "robotic manipulator": "dual robotic arms",
+        "view": "third-person",
+        "event_list": [
+            "pinch the middle of the yellow towel",
+            "lift it up",
+            "fold it in half",
+            "set it down"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0008",
+        "image_path": "long-horizon_planning/long-horizon_planning_0008.jpg",
+        "prompt": "The dual robotic grippers grasp the lid of the paper box, place it onto the box, and then lift the entire box",
+        "manipulated object": "lid of the paper box",
+        "robotic manipulator": "dual robotic grippers",
+        "view": "third-person",
+        "event_list": [
+            "grasp the lid of the paper box",
+            "place it onto the box",
+            "lift the entire box"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0009",
+        "image_path": "long-horizon_planning/long-horizon_planning_0009.jpg",
+        "prompt": "The humanoid robot jumps onto the blue box, lands steadily, and then performs a backflip to the ground",
+        "manipulated object": "blue box",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "jumps onto the blue box",
+            "lands steadily",
+            "performs a backflip to the ground"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0010",
+        "image_path": "long-horizon_planning/long-horizon_planning_0010.jpg",
+        "prompt": "The humanoid robot opens the black bag, puts the blue item inside, and then zips the bag closed",
+        "manipulated object": "black bag",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "open the black bag",
+            "put the blue item inside",
+            "zip the bag closed"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0011",
+        "image_path": "long-horizon_planning/long-horizon_planning_0011.jpg",
+        "prompt": "The humanoid robot performs a backflip, lands steadily, executes a knee strike while standing, and then follows with a high kick",
+        "manipulated object": "none",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "performs a backflip",
+            "lands steadily",
+            "executes a knee strike while standing",
+            "follows with a high kick"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0012",
+        "image_path": "long-horizon_planning/long-horizon_planning_0012.jpg",
+        "prompt": "The humanoid robot performs a sequence of Kung Fu moves a forward palm strike, a low sweep kick, and a counter punch",
+        "manipulated object": "none",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "perform forward palm strike",
+            "perform low sweep kick",
+            "perform counter punch"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0013",
+        "image_path": "long-horizon_planning/long-horizon_planning_0013.jpg",
+        "prompt": "The humanoid robot picks up the bag, turns around, climbs up the stairs, and walks across the wooden plank",
+        "manipulated object": "bag",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "picks up the bag",
+            "turns around",
+            "climbs up the stairs",
+            "walks across the wooden plank"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0014",
+        "image_path": "long-horizon_planning/long-horizon_planning_0014.jpg",
+        "prompt": "The humanoid robot picks up the bottle, puts it into the trash bag, and then ties the bag closed",
+        "manipulated object": "bottle",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "pick up the bottle",
+            "put the bottle into the trash bag",
+            "tie the trash bag closed"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0015",
+        "image_path": "long-horizon_planning/long-horizon_planning_0015.jpg",
+        "prompt": "The humanoid robot picks up the electric kettle with one hand, presses the button to open the lid, and uses a brush with the other hand to clean the inside of the kettle",
+        "manipulated object": "electric kettle",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "pick up the electric kettle with one hand",
+            "press the button to open the lid",
+            "use a brush with the other hand to clean the inside of the kettle"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0016",
+        "image_path": "long-horizon_planning/long-horizon_planning_0016.jpg",
+        "prompt": "The humanoid robot picks up the football, turns around, and throws it onto the round table",
+        "manipulated object": "football",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "picks up the football",
+            "turns around",
+            "throws it onto the round table"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0017",
+        "image_path": "long-horizon_planning/long-horizon_planning_0017.jpg",
+        "prompt": "The humanoid robot picks up the magnetic container from the table, turns left, and attaches it to the vertical whiteboard",
+        "manipulated object": "magnetic container",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "picks up the magnetic container from the table",
+            "turns left",
+            "attaches it to the vertical whiteboard"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0018",
+        "image_path": "long-horizon_planning/long-horizon_planning_0018.jpg",
+        "prompt": "The humanoid robot picks up the plate, places it in the sink, and turns on the faucet",
+        "manipulated object": "plate",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "pick up the plate",
+            "place the plate in the sink",
+            "turn on the faucet"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0019",
+        "image_path": "long-horizon_planning/long-horizon_planning_0019.jpg",
+        "prompt": "The humanoid robot picks up the toy from the table in front, turns around, walks to the table behind, and places the toy on it",
+        "manipulated object": "toy",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "pick up the toy from the table in front",
+            "turn around",
+            "walk to the table behind",
+            "place the toy on it"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0020",
+        "image_path": "long-horizon_planning/long-horizon_planning_0020.jpg",
+        "prompt": "The humanoid robot stands on one leg, performs a yoga stretching pose, and then does a push-up",
+        "manipulated object": "humanoid robot's own body",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "stands on one leg",
+            "performs a yoga stretching pose",
+            "does a push-up"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0021",
+        "image_path": "long-horizon_planning/long-horizon_planning_0021.jpg",
+        "prompt": "The humanoid robot takes a tissue, picks up the plate in front of it, and wipes the plate",
+        "manipulated object": "plate",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "take a tissue",
+            "pick up the plate",
+            "wipe the plate"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0022",
+        "image_path": "long-horizon_planning/long-horizon_planning_0022.jpg",
+        "prompt": "The humanoid robot throws two punches at the punching bag, dodges backward, ducks down to accelerate, and moves around to the back of the bag",
+        "manipulated object": "punching bag",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "throws two punches at the punching bag",
+            "dodges backward",
+            "ducks down to accelerate",
+            "moves around to the back of the bag"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0023",
+        "image_path": "long-horizon_planning/long-horizon_planning_0023.jpg",
+        "prompt": "The humanoid robot turns around, walks to the vending refrigerator, and opens the door",
+        "manipulated object": "vending refrigerator door",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "turns around",
+            "walks to the vending refrigerator",
+            "opens the door"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0024",
+        "image_path": "long-horizon_planning/long-horizon_planning_0024.jpg",
+        "prompt": "The humanoid robot turns right, picks up the nearest chair, walks to the table closest to the camera, and places the chair under the table",
+        "manipulated object": "chair",
+        "robotic manipulator": "humanoid robot",
+        "view": "third-person",
+        "event_list": [
+            "turns right",
+            "picks up the nearest chair",
+            "walks to the table closest to the camera",
+            "places the chair under the table"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0025",
+        "image_path": "long-horizon_planning/long-horizon_planning_0025.jpg",
+        "prompt": "The left robotic arm grasps the thin yellow cylinder on the table, the right arm grasps the thick yellow cylinder, and then places the thin cylinder on top of the thick one",
+        "manipulated object": "thin yellow cylinder",
+        "robotic manipulator": "dual-arm robotic system",
+        "view": "third-person",
+        "event_list": [
+            "left arm grasps thin yellow cylinder on the table",
+            "right arm grasps thick yellow cylinder",
+            "right arm places thin cylinder on top of thick one"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0026",
+        "image_path": "long-horizon_planning/long-horizon_planning_0026.jpg",
+        "prompt": "The left robotic gripper uses a blue sponge to wipe the table surface, while the right robotic arm picks up the water bottle and pours water onto the table",
+        "manipulated object": "table surface",
+        "robotic manipulator": "dual-arm robotic system",
+        "view": "third-person",
+        "event_list": [
+            "left robotic gripper wipes the table surface with a blue sponge",
+            "right robotic arm picks up the water bottle",
+            "right robotic arm pours water onto the table"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0027",
+        "image_path": "long-horizon_planning/long-horizon_planning_0027.jpg",
+        "prompt": "The quadruped robot performs a front flip, lands steadily, then leans forward and balances upside down on its front legs",
+        "manipulated object": "quadruped robot",
+        "robotic manipulator": "quadruped robot",
+        "view": "third-person",
+        "event_list": [
+            "performs a front flip",
+            "lands steadily",
+            "leans forward",
+            "balances upside down on its front legs"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0028",
+        "image_path": "long-horizon_planning/long-horizon_planning_0028.jpg",
+        "prompt": "The quadruped robot uses its gripper to reach and hold the door handle, rotates it to open the door, walks through, and then closes the door behind it",
+        "manipulated object": "door handle",
+        "robotic manipulator": "quadruped robot with gripper",
+        "view": "third-person",
+        "event_list": [
+            "reach and hold the door handle",
+            "rotate the handle to open the door",
+            "walk through the doorway",
+            "close the door behind"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0029",
+        "image_path": "long-horizon_planning/long-horizon_planning_0029.jpg",
+        "prompt": "The robot adjusts the backpack to stand upright, opens the zipper, and then rotates the backpack by 180 degrees",
+        "manipulated object": "backpack",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "adjusts the backpack to stand upright",
+            "opens the zipper",
+            "rotates the backpack by 180 degrees"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0030",
+        "image_path": "long-horizon_planning/long-horizon_planning_0030.jpg",
+        "prompt": "The robot aglins the two books on the desktop and picks them up,then stands up",
+        "manipulated object": "two books",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "aligns the two books on the desktop",
+            "picks them up",
+            "stands up"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0031",
+        "image_path": "long-horizon_planning/long-horizon_planning_0031.jpg",
+        "prompt": "The robot closes the lid of the kettle, picks it up, and then turns around",
+        "manipulated object": "kettle",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "close the lid of the kettle",
+            "pick up the kettle",
+            "turn around"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0032",
+        "image_path": "long-horizon_planning/long-horizon_planning_0032.jpg",
+        "prompt": "The robot holds the folder with its left hand, takes out the book inside with its right hand, and then places the book on the table",
+        "manipulated object": "book",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "hold the folder with left hand",
+            "take out the book with right hand",
+            "place the book on the table"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0033",
+        "image_path": "long-horizon_planning/long-horizon_planning_0033.jpg",
+        "prompt": "The robot opens the regrigerator door,takes the green box out of the refrigerator and then closes the refrigerator door",
+        "manipulated object": "green box",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "open refrigerator door",
+            "take green box out of refrigerator",
+            "close refrigerator door"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0034",
+        "image_path": "long-horizon_planning/long-horizon_planning_0034.jpg",
+        "prompt": "The robot picks up the diary on the table, closes it, and finally places it back on the table",
+        "manipulated object": "diary",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "picks up the diary on the table",
+            "closes the diary",
+            "places the diary back on the table"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0035",
+        "image_path": "long-horizon_planning/long-horizon_planning_0035.jpg",
+        "prompt": "The robot picks up the paper cup with its left hand and the hand sanitizer with its right hand, then squeezes the sanitizer into the cup",
+        "manipulated object": "paper cup",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "pick up the paper cup with left hand",
+            "pick up the hand sanitizer with right hand",
+            "squeeze the sanitizer into the cup"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0036",
+        "image_path": "long-horizon_planning/long-horizon_planning_0036.jpg",
+        "prompt": "The robot walks to the chair closest to it, pulls the chair out, and then sits down on it",
+        "manipulated object": "chair",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "walks to the chair closest to it",
+            "pulls the chair out",
+            "sits down on it"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0037",
+        "image_path": "long-horizon_planning/long-horizon_planning_0037.jpg",
+        "prompt": "The robot walks to the table in front of it, grabs the small ball with its left hand and lifts the plastic basket with its right hand, then places the ball into the basket",
+        "manipulated object": "small ball",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "walks to the table",
+            "grabs the small ball with left hand",
+            "lifts the plastic basket with right hand",
+            "places the ball into the basket"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0038",
+        "image_path": "long-horizon_planning/long-horizon_planning_0038.jpg",
+        "prompt": "The robot walks towards the duster,cleans the desk with the tool, then turns around and walks back to the starting point",
+        "manipulated object": "duster",
+        "robotic manipulator": "robot",
+        "view": "third-person",
+        "event_list": [
+            "walks towards the duster",
+            "cleans the desk with the tool",
+            "turns around",
+            "walks back to the starting point"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0039",
+        "image_path": "long-horizon_planning/long-horizon_planning_0039.jpg",
+        "prompt": "The robotic arm places the blue ball into the orange bucket, puts the small soccer ball into the white bucket, and finally places the white strip into the orange bucket",
+        "manipulated object": "blue ball",
+        "robotic manipulator": "robotic arm",
+        "view": "third-person",
+        "event_list": [
+            "place the blue ball into the orange bucket",
+            "put the small soccer ball into the white bucket",
+            "place the white strip into the orange bucket"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0040",
+        "image_path": "long-horizon_planning/long-horizon_planning_0040.jpg",
+        "prompt": "The robotic gripper clamps onto the cup on the table, moves it onto the plate, and finally lifts the plate",
+        "manipulated object": "cup",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "event_list": [
+            "clamps onto the cup on the table",
+            "moves the cup onto the plate",
+            "lifts the plate"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0041",
+        "image_path": "long-horizon_planning/long-horizon_planning_0041.jpg",
+        "prompt": "The robotic gripper grabs a container, drags it onto the front table, picks up the white baseball, and places it into the container",
+        "manipulated object": "container",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "event_list": [
+            "grab container",
+            "drag container onto front table",
+            "pick up white baseball",
+            "place baseball into container"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0042",
+        "image_path": "long-horizon_planning/long-horizon_planning_0042.jpg",
+        "prompt": "The robotic gripper opens the drawer, places the blue cloth inside, and then closes the drawer",
+        "manipulated object": "blue cloth",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person",
+        "event_list": [
+            "open the drawer",
+            "place the blue cloth inside",
+            "close the drawer"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0043",
+        "image_path": "long-horizon_planning/long-horizon_planning_0043.jpg",
+        "prompt": "The robotic gripper opens the oven, places the foil bowl with food inside, and then closes the oven",
+        "manipulated object": "foil bowl with food",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person",
+        "event_list": [
+            "open the oven",
+            "place the foil bowl with food inside the oven",
+            "close the oven"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0044",
+        "image_path": "long-horizon_planning/long-horizon_planning_0044.jpg",
+        "prompt": "The robotic gripper opens the wardrobe, hangs the shirt inside, and then closes the wardrobe",
+        "manipulated object": "shirt",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person",
+        "event_list": [
+            "opens the wardrobe",
+            "hangs the shirt inside",
+            "closes the wardrobe"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0045",
+        "image_path": "long-horizon_planning/long-horizon_planning_0045.jpg",
+        "prompt": "The robotic gripper places the orange from the table into the green cup, then pushes the cup close to the pen holder",
+        "manipulated object": "orange",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "event_list": [
+            "place the orange from the table into the green cup",
+            "push the cup close to the pen holder"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0046",
+        "image_path": "long-horizon_planning/long-horizon_planning_0046.jpg",
+        "prompt": "The robotic gripper pours soy sauce into the frying pan, puts down the bottle, picks up the spatula, and stirs the meat",
+        "manipulated object": "soy sauce bottle",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person",
+        "event_list": [
+            "pour soy sauce into the frying pan",
+            "put down the bottle",
+            "pick up the spatula",
+            "stir the meat"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0047",
+        "image_path": "long-horizon_planning/long-horizon_planning_0047.jpg",
+        "prompt": "The robotic gripper presses the button on the trash bin to open it, throws a plastic bottle into the bin, then picks up a crumpled tissue and throws it into the bin as well",
+        "manipulated object": "trash bin",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "event_list": [
+            "presses the button on the trash bin to open it",
+            "throws a plastic bottle into the bin",
+            "picks up a crumpled tissue",
+            "throws the crumpled tissue into the bin"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0048",
+        "image_path": "long-horizon_planning/long-horizon_planning_0048.jpg",
+        "prompt": "The robotic gripper rinses the spoon under running water, places it in the container on the right, and then turns off the faucet",
+        "manipulated object": "spoon",
+        "robotic manipulator": "robotic gripper",
+        "view": "first-person",
+        "event_list": [
+            "rinse the spoon under running water",
+            "place the spoon in the container on the right",
+            "turn off the faucet"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0049",
+        "image_path": "long-horizon_planning/long-horizon_planning_0049.jpg",
+        "prompt": "The robotic gripper straightens the mug and sequentially places the green orange and the red peach into it",
+        "manipulated object": "mug",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "event_list": [
+            "straightens the mug",
+            "places the green orange into the mug",
+            "places the red peach into the mug"
+        ]
+    },
+    {
+        "name": "long-horizon_planning_0050",
+        "image_path": "long-horizon_planning/long-horizon_planning_0050.jpg",
+        "prompt": "The robotic gripper straightens the mug, places the orange inside it, and finally puts the whiteboard marker into the pen holder",
+        "manipulated object": "mug",
+        "robotic manipulator": "robotic gripper",
+        "view": "third-person",
+        "event_list": [
+            "straightens the mug",
+            "places the orange inside the mug",
+            "puts the whiteboard marker into the pen holder"
+        ]
+    }
+]
