@@ -1,7 +1,5 @@
 """Read-only official score, capacity, queue, and telemetry reporting."""
 
-from __future__ import annotations
-
 import copy
 from datetime import datetime, timezone
 import math

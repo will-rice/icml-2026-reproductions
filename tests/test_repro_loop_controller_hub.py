@@ -1,7 +1,5 @@
 """Controller-owned Space publication and live-submission observation tests."""
 
-from __future__ import annotations
-
 import argparse
 import copy
 from datetime import datetime, timedelta, timezone

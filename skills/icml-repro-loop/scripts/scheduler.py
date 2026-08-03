@@ -1,7 +1,5 @@
 """Bounded paper-pool admission and independently persisted judgments."""
 
-from __future__ import annotations
-
 import copy
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager

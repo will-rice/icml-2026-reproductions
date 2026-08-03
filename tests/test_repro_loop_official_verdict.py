@@ -1,7 +1,5 @@
 """Snapshot-only official-verdict import and atomic completion tests."""
 
-from __future__ import annotations
-
 import argparse
 import copy
 from datetime import datetime, timedelta, timezone

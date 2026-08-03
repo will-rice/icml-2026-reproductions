@@ -1,7 +1,5 @@
 """Authority classification, quarantine preservation, and repair tests."""
 
-from __future__ import annotations
-
 import copy
 from datetime import datetime, timedelta, timezone
 import hashlib

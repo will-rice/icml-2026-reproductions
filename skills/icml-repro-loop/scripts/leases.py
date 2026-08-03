@@ -1,7 +1,5 @@
 """Fenced resource leases and durable metered-cost reservations."""
 
-from __future__ import annotations
-
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, replace

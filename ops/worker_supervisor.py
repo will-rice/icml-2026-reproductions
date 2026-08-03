@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 from contextlib import contextmanager
 from dataclasses import dataclass, field, replace
