@@ -77,55 +77,12 @@ For every iteration:
 
 1. Inspect `state/repro-loop.json`. For schema-v3, run only `migrate-v6 --dry-run` and stop until the controller explicitly authorizes the real migration; no schema-v6 lifecycle command is valid before it. After migration, resume the schema-v6 index and every named shard.
 2. Run raw `refresh-live`, inspect its immutable result through `show-snapshot`, and assess pinned `challenge.json` candidates from primary artifacts. Bare challenge metadata never supplies feasibility, score, cost, targets, or an upstream pin. Write assessment JSON following [selection-rubric.md](references/selection-rubric.md), bind each target to exact challenge text and SHA-256, then run `refresh-live --assessments-json PATH`. Revision drift requires a new raw refresh and assessment.
-3. FINAL-DAY CREATION SPRINT (declared 2026-08-02, supersedes ordering
-   below until creation quota is exhausted): the challenge closes today
-   and the remaining Space-creation slots must all be spent as early as
-   possible, because each created Space unlocks unlimited quota-free
-   improvement rejudges for its lane. Every worker's first priority is:
-   take the highest-evidence-ranked unpublished lane, apply the minimal
-   pages uplift needed to pass the scoring-pages gate (render the real
-   numbers already in the lane's evidence bundle into two or more
-   `pages/*.md`), revalidate from `main` in a workspace worktree, publish
-   the new Space, and attest the submission. When creation quota is
-   exhausted, switch fully to improvement cycles on judged lanes
-   (existing Spaces rejudge quota-free). IMPROVEMENT-ONLY ENDGAME
-   (declared 2026-08-01): all capacity goes to
-   improving existing submissions and publishing the ranked backlog. Do
-   not select new papers (`claim-next` enforces this mechanically while
-   the backlog fills the daily quota). If you hold an `implementing`,
-   `design-pending`, or `selected` lane, do not push it toward
-   validation: persist it with fenced `transition-attempt ... blocked`
-   (blocker: improvement-only endgame; next_action: resume implementation
-   if capacity reopens), release it reclaimably, and switch to
-   improvement or publishing work. Endgame saturation rule: count
-   publish-ready lanes (phase `validated` plus `blocked` with
-   `blocked_from: validated`). While that count is at or above the daily
-   Hugging Face Space-creation quota (20), selecting a NEW paper is
-   forbidden — the backlog already saturates publishing capacity. Spend the iteration instead on, in priority order: (a)
-   reclaiming and publishing a publish-ready lane whose dedicated Space
-   already exists — republishing consumes no creation quota; (b)
-   reclaiming and publishing the highest-value publish-ready lane that
-   needs a NEW Space, only while creation quota remains today. Rank the
-   backlog FIRST by evidence class — lanes whose committed evidence is
-   executed, deterministic, and rendered as concrete numbers in the
-   served pages outrank everything else; judged results 2026-08-01 show
-   such lanes earn verified/toy credit while high-self-estimate lanes
-   with inspection-only or summary evidence judge to zero — and only
-   THEN by `score_rate` expected points and `score_rate.priority` as
-   tie-breaks. Never spend a creation slot on a lane while a
-   higher-ranked lane sits unpublished; if a lane's evidence would not
-   survive the fabrication/visibility audit, improve it before
-   publishing it. A publish-ready lane whose recorded `/tmp` staging no
-   longer exists is NOT blocked: the committed source under
-   `submissions/<slug>/` on `main` is authoritative — create a fresh
-   worktree under `.worktrees/`, rerun `attest-validation` there with a
-   fresh manifest, and publish. Never re-block a lane solely because a
-   stale staging path is gone; (c) an
-   improvement cycle on a judged attempt with a correctable
-   zero/toy/inconclusive verdict (real computed evidence, rendered into
-   the served pages); (d) preparing improvements in an isolated clone for
-   a lane whose submission is pending judgment, without touching its live
-   Space. Before selecting new work, inspect every active released blocked attempt.
+3. THE CHALLENGE CLOSED 2026-08-03 12:00 UTC (midnight AoE). The dated
+   endgame directives that lived here (improvement-only capacity, the
+   final-day creation sprint, evidence-class publish ranking) are retired;
+   their durable lessons are recorded in the repository README. The
+   scheduler retains the saturation gate and auto-routing in
+   `scripts/scheduler.py` as historical behavior. Before selecting new work, inspect every active released blocked attempt.
    If its recorded blocker is resolved or its `next_action` is actionable,
    explicitly reclaim the highest-priority eligible attempt with
    `claim-next --reclaim-attempt-id ATTEMPT`, the fresh assessed immutable
