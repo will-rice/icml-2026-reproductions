@@ -862,3 +862,5 @@ submissions/midtraining-bridges-pretraining-and-posttraining-distributions/**/__
 !submissions/from-seeing-to-thinking-decoupling-perception-and-reasoning-improves-post-training-of-vision-language-models/**
 submissions/from-seeing-to-thinking-decoupling-perception-and-reasoning-improves-post-training-of-vision-language-models/.venv/
 submissions/from-seeing-to-thinking-decoupling-perception-and-reasoning-improves-post-training-of-vision-language-models/**/__pycache__/
+
+submissions/*/.cache/
